@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.779
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionForce.Office", "ActionForce.Office\ActionForce.Office.csproj", "{C0050AE9-2E67-4F0E-960D-7103E9A536D5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionForce.Entity", "ActionForce.Entity\ActionForce.Entity.csproj", "{1AD5BB0D-6CC5-490A-A1B0-E2BCAC259310}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C0050AE9-2E67-4F0E-960D-7103E9A536D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0050AE9-2E67-4F0E-960D-7103E9A536D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0050AE9-2E67-4F0E-960D-7103E9A536D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0050AE9-2E67-4F0E-960D-7103E9A536D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AD5BB0D-6CC5-490A-A1B0-E2BCAC259310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AD5BB0D-6CC5-490A-A1B0-E2BCAC259310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AD5BB0D-6CC5-490A-A1B0-E2BCAC259310}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AD5BB0D-6CC5-490A-A1B0-E2BCAC259310}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1FE6DE49-4D42-41B9-9928-B02698B7BC21}
+	EndGlobalSection
+EndGlobal
