@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -15,6 +16,12 @@ namespace ActionForce.Office
             RouteConfig.RegisterRoutes(RouteTable.Routes);
 
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+
+            JsonConvert.DefaultSettings = () => new JsonSerializerSettings
+            {
+                Formatting = Newtonsoft.Json.Formatting.Indented,
+                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            };
         }
     }
 }

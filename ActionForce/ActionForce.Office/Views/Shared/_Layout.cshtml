@@ -1,0 +1,167 @@
+﻿@model LayoutControlModel
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Meta -->
+    <meta name="description" content="Responsive Bootstrap 4 Dashboard Template">
+    <meta name="author" content="ThemePixels">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/img/favicon.png">
+    <title>Ufe Grup - @ViewBag.Title </title>
+    <!-- vendor css -->
+    <link href="/lib/fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+    <link href="/lib/ionicons/css/ionicons.min.css" rel="stylesheet">
+    <link href="/lib/jqvmap/jqvmap.min.css" rel="stylesheet">
+    <!-- vendor css -->
+
+    <link href="/lib/typicons.font/typicons.css" rel="stylesheet">
+    <link href="/lib/prismjs/themes/prism-vs.css" rel="stylesheet">
+    <link href="/lib/datatables.net-dt/css/jquery.dataTables.min.css" rel="stylesheet">
+    <link href="/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css" rel="stylesheet">
+    <link href="/lib/select2/css/select2.min.css" rel="stylesheet">
+
+
+
+    <!-- DashForge CSS -->
+    <link rel="stylesheet" href="/assets/css/dashforge.css">
+
+    @RenderSection("style", false)
+
+</head>
+<body data-spy="scroll" data-target="#navSection" data-offset="120" class="app-contact">
+    <aside class="aside aside-fixed">
+        <div class="aside-header">
+            <a href="/" class="aside-logo">Action<span> Force</span></a>
+            <a href="" class="aside-menu-link">
+                <i data-feather="menu"></i>
+                <i data-feather="x"></i>
+            </a>
+        </div>
+        <div class="aside-body">
+            <div class="aside-loggedin">
+                <div class="d-flex align-items-center justify-content-start">
+                    <a href="" class="avatar"><img src="http://office.ufegrup.com/img/Employee/@Model.Authentication.ActionEmployee.FotoFile" class="rounded-circle" alt=""></a>
+                    <div class="aside-alert-link">
+                        <a href="/Logout" data-toggle="tooltip" title="Sign out"><i data-feather="log-out"></i></a>
+                    </div>
+                </div>
+                <div class="aside-loggedin-user">
+                    <a href="#loggedinMenu" class="d-flex align-items-center justify-content-between mg-b-2" data-toggle="collapse">
+                        <h6 class="tx-semibold mg-b-0">@Model.Authentication.ActionEmployee.FullName </h6>
+                        <i data-feather="chevron-down"></i>
+                    </a>
+                    <p class="tx-color-03 tx-12 mg-b-0">@Model.Authentication.ActionEmployee.RoleGroup.GroupName</p>
+                </div>
+                <div class="collapse" id="loggedinMenu">
+                    <ul class="nav nav-aside mg-b-0">
+                        <li class="nav-item"><a href="/Logout" class="nav-link"><i data-feather="log-out"></i> <span>Çıkış</span></a></li>
+                    </ul>
+                </div>
+            </div><!-- aside-loggedin -->
+            <ul class="nav nav-aside">
+
+                <li class="nav-label mg-t-25 active">Finans - Cari Hesap</li>
+                <li class="nav-item"><a href="/Action/Index" class="nav-link"><i data-feather="layers"></i> <span>Cari Hesap Ekstresi</span></a></li>
+                <li class="nav-item with-sub ">
+                    <a href="" class="nav-link"><i data-feather="hard-drive"></i> <span>Kasa Nakit İşlemleri</span></a>
+                    <ul>
+                        <li class="nav-label">Tahsilatlar (+)</li>
+
+                        <li class="active"><a href="page-profile-view.html">01 Kasa Tahsilatı</a></li>
+                        <li><a href="page-connections.html">02 Bilet Satışı</a></li>
+                        <li><a href="page-groups.html">03 Döviz Satışı</a></li>
+                        <li><a href="page-events.html">04 Kasa Açılış Fişi</a></li>
+
+                        <li class="nav-label">Ödemeler (-)</li>
+
+                        <li><a href="page-connections.html">01 Kasa Ödemesi</a></li>
+                        <li><a href="page-profile-view.html">02 Bilet Satış İadesi</a></li>
+                        <li><a href="page-groups.html">03 Masraf Ödeme Fişi</a></li>
+                        <li><a href="page-events.html">04 Havale / EFT işlemi</a></li>
+                        <li><a href="page-events.html">05 Maaş Avans Ödemesi</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item with-sub">
+                    <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Banka Pos İşlemleri</span></a>
+                    <ul>
+                        <li class="nav-label">Tahsilatlar</li>
+
+                        <li><a href="page-profile-view.html">01 Pos Tahsilatı</a></li>
+
+                        <li class="nav-label">İptal / İade</li>
+
+                        <li><a href="page-profile-view.html">01 Pos İptal (Aynı Gün)</a></li>
+                        <li><a href="page-profile-view.html">02 Pos İade </a></li>
+                    </ul>
+                </li>
+                <li class="nav-item with-sub">
+                    <a href="/Employee" class="nav-link"><i data-feather="user"></i> <span>Çalışan Cari İşlemleri</span></a>
+                    <ul>
+                        <li><a href="page-profile-view.html">01 Ücret Hakediş</a></li>
+                        <li><a href="page-profile-view.html">02 Maaş Avans Ödemesi</a></li>
+                        <li><a href="page-profile-view.html">03 Cari Hesap Ekstresi</a></li>
+
+                    </ul>
+                </li>
+                <li class="nav-item with-sub">
+                    <a href="/Employee" class="nav-link"><i data-feather="file-text"></i> <span>Yazarkasa İşlemleri</span></a>
+                    <ul>
+                        <li><a href="page-profile-view.html">01 Yazarkasa Fişleri</a></li>
+                        <li><a href="page-profile-view.html">02 Gün Sonu Zarfları</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item with-sub">
+                    <a href="/Employee" class="nav-link"><i data-feather="settings"></i> <span>Tanımlar</span></a>
+                    <ul>
+                        <li><a href="page-profile-view.html">01 Kasalar</a></li>
+                        <li><a href="page-profile-view.html">02 Bankalar</a></li>
+                        <li><a href="page-profile-view.html">03 Banka Hesapları</a></li>
+                        <li><a href="page-profile-view.html">04 POS Cihazları</a></li>
+                        <li><a href="page-profile-view.html">05 Yazarkasalar</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-label mg-t-10">Lokasyon</li>
+                <li class="nav-item"><a href="/Location" class="nav-link"><i data-feather="map-pin"></i> <span>Lokasyonlar</span></a></li>
+                <li class="nav-label mg-t-10">Çalışan</li>
+                <li class="nav-item"><a href="/Employee" class="nav-link"><i data-feather="users"></i> <span>Çalışanlar</span></a></li>
+            </ul>
+
+        </div>
+    </aside>
+    <div class="content ht-100v pd-0">
+        @RenderBody()
+    </div>
+    <script src="/lib/jquery/jquery.min.js"></script>
+    <script src="/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="/lib/feather-icons/feather.min.js"></script>
+    <script src="/lib/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+    <script src="/lib/jqvmap/jquery.vmap.min.js"></script>
+    <script src="/lib/jqvmap/maps/jquery.vmap.usa.js"></script>
+    <script src="/assets/js/dashforge.js"></script>
+    <script src="/assets/js/dashforge.aside.js"></script>
+    <script src="/lib/prismjs/prism.js"></script>
+    <script src="/lib/datatables.net/js/jquery.dataTables.min.js"></script>
+    <script src="/lib/datatables.net-dt/js/dataTables.dataTables.min.js"></script>
+    <script src="/lib/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js"></script>
+    <script src="/lib/select2/js/select2.min.js"></script>
+
+
+    <!-- append theme customizer -->
+    <script src="/lib/js-cookie/js.cookie.js"></script>
+    <script src="/assets/js/dashforge.settings.js"></script>
+
+
+
+    @RenderSection("scripts", false)
+
+
+
+</body>
+</html>

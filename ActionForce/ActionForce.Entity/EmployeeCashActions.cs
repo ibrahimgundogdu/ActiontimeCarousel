@@ -21,8 +21,10 @@ namespace ActionForce.Entity
         public Nullable<int> ProcessID { get; set; }
         public Nullable<System.DateTime> ProcessDate { get; set; }
         public string ProcessDetail { get; set; }
-        public Nullable<double> CashEarned { get; set; }
-        public Nullable<double> CashPaid { get; set; }
+        public Nullable<short> Direction { get; set; }
+        public Nullable<double> Collection { get; set; }
+        public Nullable<double> Payment { get; set; }
+        public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
         public Nullable<double> Latitude { get; set; }
         public Nullable<double> Longitude { get; set; }

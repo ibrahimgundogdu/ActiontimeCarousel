@@ -14,9 +14,11 @@ namespace ActionForce.Entity
     
     public partial class BankActions
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
         public Nullable<int> LocationID { get; set; }
+        public Nullable<int> EmployeeID { get; set; }
         public Nullable<int> BankAccountID { get; set; }
+        public Nullable<int> PosID { get; set; }
         public Nullable<int> BankActionTypeID { get; set; }
         public Nullable<System.DateTime> ActionDate { get; set; }
         public string ProcessName { get; set; }
@@ -24,6 +26,9 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> ProcessDate { get; set; }
         public string DocumentNumber { get; set; }
         public string Description { get; set; }
+        public Nullable<short> Direction { get; set; }
+        public Nullable<double> Collection { get; set; }
+        public Nullable<double> Payment { get; set; }
         public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
         public Nullable<double> Latitude { get; set; }

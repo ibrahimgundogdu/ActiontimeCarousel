@@ -41,13 +41,27 @@ namespace ActionForce.Office.Controllers
 
             if (User != null)
             {
+                var ourCompany = db.OurCompany.FirstOrDefault(x => x.CompanyID == User.OurCompanyID);
+                var roleGroup = db.RoleGroup.FirstOrDefault(x => x.ID == User.RoleGroupID);
+                
 
-                if (User.RoleGroup.RoleLevel1.LevelNumber >= 3 && User.IsTemp == false && User.IsActive == true && User.IsDismissal == false)
+                if (roleGroup != null && roleGroup.RoleLevel1.LevelNumber >= 3 && User.IsTemp == false && User.IsActive == true && User.IsDismissal == false)
                 {
 
                     var authModel = new AuthenticationModel()
                     {
-                        Employee = User
+                        ActionEmployee = new ActionEmployee() {
+                            EmployeeID = User.EmployeeID,
+                            EMail = User.EMail,
+                            FotoFile = User.FotoFile,
+                            FullName = User.FullName,
+                            RoleGroupID = User.RoleGroupID,
+                            Mobile = User.Mobile,
+                            RoleGroup = new ActionRoleGroup() {ID = roleGroup.ID, GroupName = roleGroup.GroupName, RoleLevel = roleGroup.RoleLevel.Value},
+                            OurCompanyID = User.OurCompanyID,
+                            Title = User.Title,
+                            OurCompany = ourCompany
+                        },
                     };
 
                     result.IsSuccess = true;
@@ -83,7 +97,7 @@ namespace ActionForce.Office.Controllers
                         OfficeHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, false, $"{User.Username} kullanıcısı kilitli durumdadır. Sistem yöneticinize başvurunuz.", string.Empty, DateTime.UtcNow, User.FullName, OfficeHelper.GetIPAddress(), string.Empty);
                     }
 
-                    if (User.RoleGroup.RoleLevel1.LevelNumber < 3)
+                    if (roleGroup.RoleLevel1.LevelNumber < 3)
                     {
                         result.Message += " Kullanıcı yetkiniz bulunmamaktadır. Sistem yöneticinize başvurunuz. ";
                         OfficeHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, false, $"{User.Username} kullanıcısı yetkiniz bulunmamaktadır. Sistem yöneticinize başvurunuz.", string.Empty, DateTime.UtcNow, User.FullName, OfficeHelper.GetIPAddress(), string.Empty);

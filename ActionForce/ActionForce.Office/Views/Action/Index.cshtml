@@ -1,0 +1,79 @@
+﻿@model ActionControlModel
+@{
+    ViewBag.Title = "Ana Sayfa";
+}
+
+@section style{
+    <link rel="stylesheet" href="/assets/css/dashforge.dashboard.css">
+}
+
+<div class="content-header">
+    <div class="content-search">
+        <i data-feather="search"></i>
+        <input id="SearchKey" type="search" class="form-control" placeholder="Arama..." aria-controls="example2">
+    </div>
+    <nav class="nav">
+        
+    </nav>
+</div>
+<div class="content-body">
+    <div>
+        <h4 id="section2" class="mg-b-10">Cari Hesap Ekstresi</h4>
+        <div class="table">
+            <table class="table table-sm table-hover" style="width:100% !important;">
+                <thead>
+                    <tr>
+
+                        <th class="wd-20p">Adı Soyadı</th>
+                        <th class="wd-25p">Tel GSM</th>
+                        <th class="wd-20p">Tel EV</th>
+                        <th class="wd-15p">Tel İŞ</th>
+                        <th class="wd-20p">Cinsyet</th>
+                        <th class="wd-20p">Yaş</th>
+                        <th class="wd-20p">Bilgi</th>
+                        <th class="wd-20p">Kayıt</th>
+                        <th class="wd-20p">Tür</th>
+                        <th class="wd-20p">No</th>
+                    </tr>
+                </thead>
+                @*<tbody>
+                        @foreach (var item in Model.Musteriler.OrderBy(x => x.adi).ThenBy(x => x.soyadi))
+                        {
+                            <tr>
+
+                                <td><a href="/Home/Detail/@item.musteriid" class="link-01"> @item.fullname</a></td>
+                                <td>@item.telgsm</td>
+                                <td>@item.telev</td>
+                                <td>@item.telis</td>
+                                <td>@item.cinsiyeti</td>
+                                <td>@item.yasi</td>
+                                <td>@(item.bilgi != null ? item.bilgi.ToUpper() : "")</td>
+                                <td>@(item.geltarih?.ToShortDateString())</td>
+                                <td>@item.turu</td>
+                                <td>@item.kayitno</td>
+                            </tr>
+                        }
+
+
+                    </tbody>*@
+            </table>
+        </div>
+
+
+        <footer class="content-footer">
+            <div>
+                <span>&copy; @DateTime.Now.Year UFE Group LLC </span>
+            </div>
+
+        </footer>
+
+    </div>
+</div>
+
+
+
+@section scripts {
+    <script>
+        
+    </script>
+}

@@ -18,6 +18,7 @@ namespace ActionForce.Entity
         public string Environment { get; set; }
         public string Modul { get; set; }
         public string ProcessType { get; set; }
+        public string ProcessID { get; set; }
         public string Controller { get; set; }
         public string Action { get; set; }
         public string TableName { get; set; }
@@ -31,6 +32,5 @@ namespace ActionForce.Entity
         public string RecordEmployee { get; set; }
         public string RecordIP { get; set; }
         public string RecordDevice { get; set; }
-        public string ProcessID { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using ActionForce.Entity;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,6 @@ namespace ActionForce.Office
 {
     public class AuthenticationModel
     {
-        public Employee Employee { get; set; }
+        public ActionEmployee ActionEmployee { get; set; }
     }
 }

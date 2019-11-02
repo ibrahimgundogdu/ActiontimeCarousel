@@ -6,12 +6,15 @@ using System.Web.Mvc;
 
 namespace ActionForce.Office.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         // GET: Home
         public ActionResult Index()
         {
-            return View();
+            HomeControlModel model = new HomeControlModel();
+
+
+            return View(model);
         }
     }
 }

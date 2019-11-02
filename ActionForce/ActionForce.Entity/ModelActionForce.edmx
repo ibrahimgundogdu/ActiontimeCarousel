@@ -393,9 +393,11 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LocationID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
           <Property Name="BankAccountID" Type="int" />
+          <Property Name="PosID" Type="int" />
           <Property Name="BankActionTypeID" Type="int" />
           <Property Name="ActionDate" Type="date" />
           <Property Name="ProcessName" Type="nvarchar" MaxLength="50" />
@@ -403,7 +405,10 @@
           <Property Name="ProcessDate" Type="date" />
           <Property Name="DocumentNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
-          <Property Name="Amount" Type="float" />
+          <Property Name="Direction" Type="smallint" />
+          <Property Name="Collection" Type="float" />
+          <Property Name="Payment" Type="float" />
+          <Property Name="Amount" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="Latitude" Type="float" />
           <Property Name="Longitude" Type="float" />
@@ -485,9 +490,10 @@
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CashID" Type="int" />
           <Property Name="LocationID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
           <Property Name="CashActionTypeID" Type="int" />
           <Property Name="ActionDate" Type="date" />
           <Property Name="ProcessName" Type="nvarchar" MaxLength="50" />
@@ -495,7 +501,10 @@
           <Property Name="ProcessDate" Type="date" />
           <Property Name="DocumentNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
-          <Property Name="Amount" Type="float" />
+          <Property Name="Direction" Type="smallint" />
+          <Property Name="Collection" Type="float" />
+          <Property Name="Payment" Type="float" />
+          <Property Name="Amount" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="Latitude" Type="float" />
           <Property Name="Longitude" Type="float" />
@@ -647,8 +656,10 @@
           <Property Name="ProcessID" Type="int" />
           <Property Name="ProcessDate" Type="date" />
           <Property Name="ProcessDetail" Type="nvarchar" MaxLength="500" />
-          <Property Name="CashEarned" Type="float" />
-          <Property Name="CashPaid" Type="float" />
+          <Property Name="Direction" Type="smallint" />
+          <Property Name="Collection" Type="float" />
+          <Property Name="Payment" Type="float" />
+          <Property Name="Amount" Type="float" StoreGeneratedPattern="Computed" />
           <Property Name="Currency" Type="nvarchar" MaxLength="50" />
           <Property Name="Latitude" Type="float" />
           <Property Name="Longitude" Type="float" />
@@ -2129,6 +2140,128 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashBankActions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VCashBankActions">
+          <Key>
+            <PropertyRef Name="Module" />
+          </Key>
+          <Property Name="LocationID" Type="int" />
+          <Property Name="CashID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="BankAccountID" Type="int" />
+          <Property Name="PosID" Type="int" />
+          <Property Name="Module" Type="varchar" MaxLength="4" Nullable="false" />
+          <Property Name="ActionDate" Type="date" />
+          <Property Name="ProcessName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProcessID" Type="int" />
+          <Property Name="ProcessDate" Type="date" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Direction" Type="smallint" />
+          <Property Name="CashCollection" Type="float" />
+          <Property Name="CashPaymnet" Type="float" />
+          <Property Name="CashAmount" Type="float" />
+          <Property Name="CardCollection" Type="float" />
+          <Property Name="CardPayment" Type="float" />
+          <Property Name="CardAmount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="RecordDate" Type="datetime" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VEmployee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="IdentityNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Title" Type="nvarchar" MaxLength="150" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="FullNameSearch" Type="nvarchar" MaxLength="4000" />
+          <Property Name="EMail" Type="nvarchar" MaxLength="150" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+          <Property Name="Mobile2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Whatsapp" Type="nvarchar" MaxLength="50" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="FotoFile" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="Stage" Type="int" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoleLevel" Type="int" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="IsTemp" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsDismissal" Type="bit" />
+          <Property Name="ShiftTypeID" Type="int" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Code" Type="nvarchar" MaxLength="10" />
+          <Property Name="DismissDescription" Type="nvarchar(max)" />
+          <Property Name="RoleGroupID" Type="int" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="DateStart" Type="datetime" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="DateEnd" Type="datetime" />
+          <Property Name="StatusID" Type="int" />
+          <Property Name="EmployeeUID" Type="uniqueidentifier" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VLocation">
+          <Key>
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="LocationCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="LocationTypeID" Type="int" />
+          <Property Name="LocationTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LocationName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LocationNameSearch" Type="nvarchar" MaxLength="4000" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="Latitude" Type="nvarchar" MaxLength="20" />
+          <Property Name="Longitude" Type="nvarchar" MaxLength="20" />
+          <Property Name="Timezone" Type="int" />
+          <Property Name="MapURL" Type="nvarchar" MaxLength="1000" />
+          <Property Name="OurCompanyID" Type="int" Nullable="false" />
+          <Property Name="ImageFile" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsHaveOperator" Type="bit" />
+          <Property Name="IP" Type="nvarchar" MaxLength="20" />
+          <Property Name="EnforcedWarning" Type="ntext" />
+          <Property Name="SortBy" Type="char" MaxLength="10" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="20" />
+          <Property Name="PriceCatID" Type="int" />
+          <Property Name="Weight" Type="nvarchar" MaxLength="20" />
+          <Property Name="Distance" Type="nvarchar" MaxLength="20" />
+          <Property Name="LocalDateTime" Type="datetime" />
+          <Property Name="LocalDate" Type="date" />
+          <Property Name="DateID" Type="int" />
+          <Property Name="DateKey" Type="date" />
+          <Property Name="Year" Type="int" />
+          <Property Name="Month" Type="int" />
+          <Property Name="Week" Type="int" />
+          <Property Name="Day" Type="int" />
+          <Property Name="DayOfYear" Type="int" />
+          <Property Name="MonthName" Type="nvarchar" MaxLength="50" />
+          <Property Name="DayName" Type="nvarchar" MaxLength="50" />
+          <Property Name="MonthNameTR" Type="nvarchar" MaxLength="50" />
+          <Property Name="DayNameTR" Type="nvarchar" MaxLength="50" />
+          <Property Name="Quarter" Type="int" />
+          <Property Name="WeekYear" Type="int" />
+          <Property Name="WeekNumber" Type="int" />
+          <Property Name="ShiftDate" Type="date" />
+          <Property Name="ShiftStart" Type="time" Precision="0" />
+          <Property Name="ShiftFinish" Type="time" Precision="0" />
+          <Property Name="Duration" Type="varchar" MaxLength="17" />
+          <Property Name="Status" Type="int" />
+          <Property Name="TicketTypeID" Type="int" />
+          <Property Name="LocationUID" Type="uniqueidentifier" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
+          <Property Name="POSAccountID" Type="int" />
+        </EntityType>
         <Association Name="FK_Action_ResultState">
           <End Role="ResultState" Type="Self.ResultState" Multiplicity="1" />
           <End Role="Action" Type="Self.Action" Multiplicity="*" />
@@ -2542,6 +2675,118 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
     [EmployeeX].[IsDismissal] AS [IsDismissal]
     FROM [dbo].[EmployeeX] AS [EmployeeX]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VCashBankActions" EntityType="Self.VCashBankActions" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VCashBankActions].[LocationID] AS [LocationID], 
+    [VCashBankActions].[CashID] AS [CashID], 
+    [VCashBankActions].[EmployeeID] AS [EmployeeID], 
+    [VCashBankActions].[BankAccountID] AS [BankAccountID], 
+    [VCashBankActions].[PosID] AS [PosID], 
+    [VCashBankActions].[Module] AS [Module], 
+    [VCashBankActions].[ActionDate] AS [ActionDate], 
+    [VCashBankActions].[ProcessName] AS [ProcessName], 
+    [VCashBankActions].[ProcessID] AS [ProcessID], 
+    [VCashBankActions].[ProcessDate] AS [ProcessDate], 
+    [VCashBankActions].[DocumentNumber] AS [DocumentNumber], 
+    [VCashBankActions].[Direction] AS [Direction], 
+    [VCashBankActions].[CashCollection] AS [CashCollection], 
+    [VCashBankActions].[CashPaymnet] AS [CashPaymnet], 
+    [VCashBankActions].[CashAmount] AS [CashAmount], 
+    [VCashBankActions].[CardCollection] AS [CardCollection], 
+    [VCashBankActions].[CardPayment] AS [CardPayment], 
+    [VCashBankActions].[CardAmount] AS [CardAmount], 
+    [VCashBankActions].[Currency] AS [Currency], 
+    [VCashBankActions].[RecordDate] AS [RecordDate]
+    FROM [dbo].[VCashBankActions] AS [VCashBankActions]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VEmployee" EntityType="Self.VEmployee" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VEmployee].[EmployeeID] AS [EmployeeID], 
+    [VEmployee].[IdentityNumber] AS [IdentityNumber], 
+    [VEmployee].[Title] AS [Title], 
+    [VEmployee].[FullName] AS [FullName], 
+    [VEmployee].[FullNameSearch] AS [FullNameSearch], 
+    [VEmployee].[EMail] AS [EMail], 
+    [VEmployee].[Mobile] AS [Mobile], 
+    [VEmployee].[Mobile2] AS [Mobile2], 
+    [VEmployee].[Whatsapp] AS [Whatsapp], 
+    [VEmployee].[Username] AS [Username], 
+    [VEmployee].[Password] AS [Password], 
+    [VEmployee].[FotoFile] AS [FotoFile], 
+    [VEmployee].[RoleID] AS [RoleID], 
+    [VEmployee].[Stage] AS [Stage], 
+    [VEmployee].[RoleName] AS [RoleName], 
+    [VEmployee].[RoleLevel] AS [RoleLevel], 
+    [VEmployee].[OurCompanyID] AS [OurCompanyID], 
+    [VEmployee].[Description] AS [Description], 
+    [VEmployee].[IsTemp] AS [IsTemp], 
+    [VEmployee].[IsActive] AS [IsActive], 
+    [VEmployee].[IsDismissal] AS [IsDismissal], 
+    [VEmployee].[ShiftTypeID] AS [ShiftTypeID], 
+    [VEmployee].[CompanyName] AS [CompanyName], 
+    [VEmployee].[Code] AS [Code], 
+    [VEmployee].[DismissDescription] AS [DismissDescription], 
+    [VEmployee].[RoleGroupID] AS [RoleGroupID], 
+    [VEmployee].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VEmployee].[DateStart] AS [DateStart], 
+    [VEmployee].[RecordDate] AS [RecordDate], 
+    [VEmployee].[DateEnd] AS [DateEnd], 
+    [VEmployee].[StatusID] AS [StatusID], 
+    [VEmployee].[EmployeeUID] AS [EmployeeUID]
+    FROM [dbo].[VEmployee] AS [VEmployee]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VLocation" EntityType="Self.VLocation" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VLocation].[LocationID] AS [LocationID], 
+    [VLocation].[LocationCode] AS [LocationCode], 
+    [VLocation].[LocationTypeID] AS [LocationTypeID], 
+    [VLocation].[LocationTypeName] AS [LocationTypeName], 
+    [VLocation].[LocationName] AS [LocationName], 
+    [VLocation].[LocationNameSearch] AS [LocationNameSearch], 
+    [VLocation].[Description] AS [Description], 
+    [VLocation].[State] AS [State], 
+    [VLocation].[Latitude] AS [Latitude], 
+    [VLocation].[Longitude] AS [Longitude], 
+    [VLocation].[Timezone] AS [Timezone], 
+    [VLocation].[MapURL] AS [MapURL], 
+    [VLocation].[OurCompanyID] AS [OurCompanyID], 
+    [VLocation].[ImageFile] AS [ImageFile], 
+    [VLocation].[IsHaveOperator] AS [IsHaveOperator], 
+    [VLocation].[IP] AS [IP], 
+    [VLocation].[EnforcedWarning] AS [EnforcedWarning], 
+    [VLocation].[SortBy] AS [SortBy], 
+    [VLocation].[IsActive] AS [IsActive], 
+    [VLocation].[Currency] AS [Currency], 
+    [VLocation].[PriceCatID] AS [PriceCatID], 
+    [VLocation].[Weight] AS [Weight], 
+    [VLocation].[Distance] AS [Distance], 
+    [VLocation].[LocalDateTime] AS [LocalDateTime], 
+    [VLocation].[LocalDate] AS [LocalDate], 
+    [VLocation].[DateID] AS [DateID], 
+    [VLocation].[DateKey] AS [DateKey], 
+    [VLocation].[Year] AS [Year], 
+    [VLocation].[Month] AS [Month], 
+    [VLocation].[Week] AS [Week], 
+    [VLocation].[Day] AS [Day], 
+    [VLocation].[DayOfYear] AS [DayOfYear], 
+    [VLocation].[MonthName] AS [MonthName], 
+    [VLocation].[DayName] AS [DayName], 
+    [VLocation].[MonthNameTR] AS [MonthNameTR], 
+    [VLocation].[DayNameTR] AS [DayNameTR], 
+    [VLocation].[Quarter] AS [Quarter], 
+    [VLocation].[WeekYear] AS [WeekYear], 
+    [VLocation].[WeekNumber] AS [WeekNumber], 
+    [VLocation].[ShiftDate] AS [ShiftDate], 
+    [VLocation].[ShiftStart] AS [ShiftStart], 
+    [VLocation].[ShiftFinish] AS [ShiftFinish], 
+    [VLocation].[Duration] AS [Duration], 
+    [VLocation].[Status] AS [Status], 
+    [VLocation].[TicketTypeID] AS [TicketTypeID], 
+    [VLocation].[LocationUID] AS [LocationUID], 
+    [VLocation].[CompanyName] AS [CompanyName], 
+    [VLocation].[POSAccountID] AS [POSAccountID]
+    FROM [dbo].[VLocation] AS [VLocation]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Action_ResultState" Association="Self.FK_Action_ResultState">
             <End Role="ResultState" EntitySet="ResultState" />
             <End Role="Action" EntitySet="Action" />
@@ -2616,6 +2861,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
     <edmx:ConceptualModels>
       <Schema Namespace="db293_ActionTimeDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="ActionTimeEntities" annotation:LazyLoadingEnabled="true">
+          <FunctionImport Name="AddApplicationLog">
+            <Parameter Name="Environment" Mode="In" Type="String" />
+            <Parameter Name="Modul" Mode="In" Type="String" />
+            <Parameter Name="ProcessType" Mode="In" Type="String" />
+            <Parameter Name="ProcessID" Mode="In" Type="String" />
+            <Parameter Name="Controller" Mode="In" Type="String" />
+            <Parameter Name="Action" Mode="In" Type="String" />
+            <Parameter Name="TableName" Mode="In" Type="String" />
+            <Parameter Name="FieldName" Mode="In" Type="String" />
+            <Parameter Name="OldValue" Mode="In" Type="String" />
+            <Parameter Name="NewValue" Mode="In" Type="String" />
+            <Parameter Name="IsSuccess" Mode="In" Type="Boolean" />
+            <Parameter Name="ResultMessage" Mode="In" Type="String" />
+            <Parameter Name="ErrorMessage" Mode="In" Type="String" />
+            <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
+            <Parameter Name="RecordEmployee" Mode="In" Type="String" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+            <Parameter Name="RecordDevice" Mode="In" Type="String" />
+          </FunctionImport>
           <EntitySet Name="Action" EntityType="db293_ActionTimeDbModel.Action" />
           <EntitySet Name="ActionAccounts" EntityType="db293_ActionTimeDbModel.ActionAccounts" />
           <EntitySet Name="ActionRow" EntityType="db293_ActionTimeDbModel.ActionRow" />
@@ -2637,13 +2901,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <EntitySet Name="Bank" EntityType="db293_ActionTimeDbModel.Bank" />
           <EntitySet Name="BankAccount" EntityType="db293_ActionTimeDbModel.BankAccount" />
           <EntitySet Name="BankAccountType" EntityType="db293_ActionTimeDbModel.BankAccountType" />
-          <EntitySet Name="BankActions" EntityType="db293_ActionTimeDbModel.BankActions" />
           <EntitySet Name="BankActionType" EntityType="db293_ActionTimeDbModel.BankActionType" />
           <EntitySet Name="BankNotification" EntityType="db293_ActionTimeDbModel.BankNotification" />
           <EntitySet Name="BankNotificationStatus" EntityType="db293_ActionTimeDbModel.BankNotificationStatus" />
           <EntitySet Name="BreakTypes" EntityType="db293_ActionTimeDbModel.BreakTypes" />
           <EntitySet Name="Cash" EntityType="db293_ActionTimeDbModel.Cash" />
-          <EntitySet Name="CashActions" EntityType="db293_ActionTimeDbModel.CashActions" />
           <EntitySet Name="CashActionType" EntityType="db293_ActionTimeDbModel.CashActionType" />
           <EntitySet Name="Chassis" EntityType="db293_ActionTimeDbModel.Chassis" />
           <EntitySet Name="ChassisType" EntityType="db293_ActionTimeDbModel.ChassisType" />
@@ -2754,6 +3016,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <EntitySet Name="TrampolineType" EntityType="db293_ActionTimeDbModel.TrampolineType" />
           <EntitySet Name="EmployeeShiftX" EntityType="db293_ActionTimeDbModel.EmployeeShiftX" />
           <EntitySet Name="EmployeeX" EntityType="db293_ActionTimeDbModel.EmployeeX" />
+          <EntitySet Name="VEmployee" EntityType="db293_ActionTimeDbModel.VEmployee" />
+          <EntitySet Name="VLocation" EntityType="db293_ActionTimeDbModel.VLocation" />
           <AssociationSet Name="FK_Action_ResultState" Association="db293_ActionTimeDbModel.FK_Action_ResultState">
             <End Role="ResultState" EntitySet="ResultState" />
             <End Role="Action" EntitySet="Action" />
@@ -2822,26 +3086,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
             <End Role="RoleGroup" EntitySet="RoleGroup" />
             <End Role="RoleGroupPermissions" EntitySet="RoleGroupPermissions" />
           </AssociationSet>
-          <FunctionImport Name="AddApplicationLog">
-            <Parameter Name="Environment" Mode="In" Type="String" />
-            <Parameter Name="Modul" Mode="In" Type="String" />
-            <Parameter Name="ProcessType" Mode="In" Type="String" />
-            <Parameter Name="ProcessID" Mode="In" Type="String" />
-            <Parameter Name="Controller" Mode="In" Type="String" />
-            <Parameter Name="Action" Mode="In" Type="String" />
-            <Parameter Name="TableName" Mode="In" Type="String" />
-            <Parameter Name="FieldName" Mode="In" Type="String" />
-            <Parameter Name="OldValue" Mode="In" Type="String" />
-            <Parameter Name="NewValue" Mode="In" Type="String" />
-            <Parameter Name="IsSuccess" Mode="In" Type="Boolean" />
-            <Parameter Name="ResultMessage" Mode="In" Type="String" />
-            <Parameter Name="ErrorMessage" Mode="In" Type="String" />
-            <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
-            <Parameter Name="RecordEmployee" Mode="In" Type="String" />
-            <Parameter Name="RecordIP" Mode="In" Type="String" />
-            <Parameter Name="RecordDevice" Mode="In" Type="String" />
-          </FunctionImport>
-        </EntityContainer>
+          <EntitySet Name="BankActions" EntityType="db293_ActionTimeDbModel.BankActions" />
+          <EntitySet Name="CashActions" EntityType="db293_ActionTimeDbModel.CashActions" />
+          <EntitySet Name="VCashBankActions" EntityType="db293_ActionTimeDbModel.VCashBankActions" />
+          </EntityContainer>
         <EntityType Name="Action">
           <Key>
             <PropertyRef Name="ActionID" />
@@ -3172,6 +3420,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="Environment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Modul" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ProcessType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Controller" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="Action" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="TableName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
@@ -3185,7 +3434,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="RecordEmployee" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
           <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="RecordDevice" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="ProcessID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="AuthorizedIP">
           <Key>
@@ -3233,29 +3481,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="BankActions">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="BankAccountID" Type="Int32" />
-          <Property Name="BankActionTypeID" Type="Int32" />
-          <Property Name="ActionDate" Type="DateTime" Precision="0" />
-          <Property Name="ProcessName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProcessID" Type="Int32" />
-          <Property Name="ProcessDate" Type="DateTime" Precision="0" />
-          <Property Name="DocumentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Amount" Type="Double" />
-          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="Latitude" Type="Double" />
-          <Property Name="Longitude" Type="Double" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateEmployeeID" Type="Int32" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="BankActionType">
           <Key>
@@ -3325,29 +3550,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="IsMaster" Type="Boolean" />
           <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="CashActions">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CashID" Type="Int32" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="CashActionTypeID" Type="Int32" />
-          <Property Name="ActionDate" Type="DateTime" Precision="0" />
-          <Property Name="ProcessName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProcessID" Type="Int32" />
-          <Property Name="ProcessDate" Type="DateTime" Precision="0" />
-          <Property Name="DocumentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Amount" Type="Double" />
-          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="Latitude" Type="Double" />
-          <Property Name="Longitude" Type="Double" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateEmployeeID" Type="Int32" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="CashActionType">
           <Key>
@@ -3496,8 +3698,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ProcessID" Type="Int32" />
           <Property Name="ProcessDate" Type="DateTime" Precision="0" />
           <Property Name="ProcessDetail" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="CashEarned" Type="Double" />
-          <Property Name="CashPaid" Type="Double" />
+          <Property Name="Direction" Type="Int16" />
+          <Property Name="Collection" Type="Double" />
+          <Property Name="Payment" Type="Double" />
+          <Property Name="Amount" Type="Double" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="Currency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Latitude" Type="Double" />
           <Property Name="Longitude" Type="Double" />
@@ -4996,6 +5200,97 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="IsDismissal" Type="Boolean" />
         </EntityType>
+        <EntityType Name="VEmployee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="IdentityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FullNameSearch" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="EMail" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Whatsapp" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FotoFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="Stage" Type="Int32" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleLevel" Type="Int32" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsTemp" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsDismissal" Type="Boolean" />
+          <Property Name="ShiftTypeID" Type="Int32" />
+          <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="DismissDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="RoleGroupID" Type="Int32" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="DateStart" Type="DateTime" Precision="3" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="DateEnd" Type="DateTime" Precision="3" />
+          <Property Name="StatusID" Type="Int32" />
+          <Property Name="EmployeeUID" Type="Guid" />
+        </EntityType>
+        <EntityType Name="VLocation">
+          <Key>
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="LocationCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="LocationTypeID" Type="Int32" />
+          <Property Name="LocationTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LocationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LocationNameSearch" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Longitude" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Timezone" Type="Int32" />
+          <Property Name="MapURL" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="ImageFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsHaveOperator" Type="Boolean" />
+          <Property Name="IP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="EnforcedWarning" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Currency" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PriceCatID" Type="Int32" />
+          <Property Name="Weight" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Distance" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="LocalDateTime" Type="DateTime" Precision="3" />
+          <Property Name="LocalDate" Type="DateTime" Precision="0" />
+          <Property Name="DateID" Type="Int32" />
+          <Property Name="DateKey" Type="DateTime" Precision="0" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="Month" Type="Int32" />
+          <Property Name="Week" Type="Int32" />
+          <Property Name="Day" Type="Int32" />
+          <Property Name="DayOfYear" Type="Int32" />
+          <Property Name="MonthName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DayName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MonthNameTR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DayNameTR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Quarter" Type="Int32" />
+          <Property Name="WeekYear" Type="Int32" />
+          <Property Name="WeekNumber" Type="Int32" />
+          <Property Name="ShiftDate" Type="DateTime" Precision="0" />
+          <Property Name="ShiftStart" Type="Time" Precision="0" />
+          <Property Name="ShiftFinish" Type="Time" Precision="0" />
+          <Property Name="Duration" Type="String" MaxLength="17" FixedLength="false" Unicode="false" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="TicketTypeID" Type="Int32" />
+          <Property Name="LocationUID" Type="Guid" />
+          <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="POSAccountID" Type="Int32" />
+        </EntityType>
         <Association Name="FK_Action_ResultState">
           <End Type="db293_ActionTimeDbModel.ResultState" Role="ResultState" Multiplicity="1" />
           <End Type="db293_ActionTimeDbModel.Action" Role="Action" Multiplicity="*" />
@@ -5200,12 +5495,93 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <EntityType Name="BankActions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="BankAccountID" Type="Int32" />
+          <Property Name="PosID" Type="Int32" />
+          <Property Name="BankActionTypeID" Type="Int32" />
+          <Property Name="ActionDate" Type="DateTime" Precision="0" />
+          <Property Name="ProcessName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessID" Type="Int32" />
+          <Property Name="ProcessDate" Type="DateTime" Precision="0" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Direction" Type="Int16" />
+          <Property Name="Collection" Type="Double" />
+          <Property Name="Payment" Type="Double" />
+          <Property Name="Amount" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CashActions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CashID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="CashActionTypeID" Type="Int32" />
+          <Property Name="ActionDate" Type="DateTime" Precision="0" />
+          <Property Name="ProcessName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessID" Type="Int32" />
+          <Property Name="ProcessDate" Type="DateTime" Precision="0" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Direction" Type="Int16" />
+          <Property Name="Collection" Type="Double" />
+          <Property Name="Payment" Type="Double" />
+          <Property Name="Amount" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="VCashBankActions">
+          <Key>
+            <PropertyRef Name="Module" />
+          </Key>
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="CashID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="BankAccountID" Type="Int32" />
+          <Property Name="PosID" Type="Int32" />
+          <Property Name="Module" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="ActionDate" Type="DateTime" Precision="0" />
+          <Property Name="ProcessName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessID" Type="Int32" />
+          <Property Name="ProcessDate" Type="DateTime" Precision="0" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Direction" Type="Int16" />
+          <Property Name="CashCollection" Type="Double" />
+          <Property Name="CashPaymnet" Type="Double" />
+          <Property Name="CashAmount" Type="Double" />
+          <Property Name="CardCollection" Type="Double" />
+          <Property Name="CardPayment" Type="Double" />
+          <Property Name="CardAmount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="db293_ActionTimeDbModelStoreContainer" CdmEntityContainer="ActionTimeEntities">
+          <FunctionImportMapping FunctionImportName="AddApplicationLog" FunctionName="db293_ActionTimeDbModel.Store.AddApplicationLog" />
           <EntitySetMapping Name="Action">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Action">
               <MappingFragment StoreEntitySet="Action">
@@ -5540,7 +5916,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <EntitySetMapping Name="ApplicationLog">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ApplicationLog">
               <MappingFragment StoreEntitySet="ApplicationLog">
-                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
                 <ScalarProperty Name="RecordDevice" ColumnName="RecordDevice" />
                 <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
                 <ScalarProperty Name="RecordEmployee" ColumnName="RecordEmployee" />
@@ -5554,6 +5929,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
                 <ScalarProperty Name="TableName" ColumnName="TableName" />
                 <ScalarProperty Name="Action" ColumnName="Action" />
                 <ScalarProperty Name="Controller" ColumnName="Controller" />
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
                 <ScalarProperty Name="ProcessType" ColumnName="ProcessType" />
                 <ScalarProperty Name="Modul" ColumnName="Modul" />
                 <ScalarProperty Name="Environment" ColumnName="Environment" />
@@ -5606,30 +5982,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="BankActions">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.BankActions">
-              <MappingFragment StoreEntitySet="BankActions">
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
-                <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
-                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
-                <ScalarProperty Name="ProcessName" ColumnName="ProcessName" />
-                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
-                <ScalarProperty Name="BankActionTypeID" ColumnName="BankActionTypeID" />
-                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -5704,30 +6056,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
                 <ScalarProperty Name="BlockedAmount" ColumnName="BlockedAmount" />
                 <ScalarProperty Name="CashName" ColumnName="CashName" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="CashActions">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CashActions">
-              <MappingFragment StoreEntitySet="CashActions">
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
-                <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
-                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
-                <ScalarProperty Name="ProcessName" ColumnName="ProcessName" />
-                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
-                <ScalarProperty Name="CashActionTypeID" ColumnName="CashActionTypeID" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="CashID" ColumnName="CashID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -5884,8 +6212,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
                 <ScalarProperty Name="Longitude" ColumnName="Longitude" />
                 <ScalarProperty Name="Latitude" ColumnName="Latitude" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="CashPaid" ColumnName="CashPaid" />
-                <ScalarProperty Name="CashEarned" ColumnName="CashEarned" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Payment" ColumnName="Payment" />
+                <ScalarProperty Name="Collection" ColumnName="Collection" />
+                <ScalarProperty Name="Direction" ColumnName="Direction" />
                 <ScalarProperty Name="ProcessDetail" ColumnName="ProcessDetail" />
                 <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
                 <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
@@ -7462,8 +7792,182 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AddApplicationLog" FunctionName="db293_ActionTimeDbModel.Store.AddApplicationLog" />
-        </EntityContainerMapping>
+          <EntitySetMapping Name="VEmployee">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployee">
+              <MappingFragment StoreEntitySet="VEmployee">
+                <ScalarProperty Name="EmployeeUID" ColumnName="EmployeeUID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RoleGroupID" ColumnName="RoleGroupID" />
+                <ScalarProperty Name="DismissDescription" ColumnName="DismissDescription" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="ShiftTypeID" ColumnName="ShiftTypeID" />
+                <ScalarProperty Name="IsDismissal" ColumnName="IsDismissal" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsTemp" ColumnName="IsTemp" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="RoleLevel" ColumnName="RoleLevel" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="Stage" ColumnName="Stage" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="FotoFile" ColumnName="FotoFile" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Whatsapp" ColumnName="Whatsapp" />
+                <ScalarProperty Name="Mobile2" ColumnName="Mobile2" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="FullNameSearch" ColumnName="FullNameSearch" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="IdentityNumber" ColumnName="IdentityNumber" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VLocation">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocation">
+              <MappingFragment StoreEntitySet="VLocation">
+                <ScalarProperty Name="POSAccountID" ColumnName="POSAccountID" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="LocationUID" ColumnName="LocationUID" />
+                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="ShiftFinish" ColumnName="ShiftFinish" />
+                <ScalarProperty Name="ShiftStart" ColumnName="ShiftStart" />
+                <ScalarProperty Name="ShiftDate" ColumnName="ShiftDate" />
+                <ScalarProperty Name="WeekNumber" ColumnName="WeekNumber" />
+                <ScalarProperty Name="WeekYear" ColumnName="WeekYear" />
+                <ScalarProperty Name="Quarter" ColumnName="Quarter" />
+                <ScalarProperty Name="DayNameTR" ColumnName="DayNameTR" />
+                <ScalarProperty Name="MonthNameTR" ColumnName="MonthNameTR" />
+                <ScalarProperty Name="DayName" ColumnName="DayName" />
+                <ScalarProperty Name="MonthName" ColumnName="MonthName" />
+                <ScalarProperty Name="DayOfYear" ColumnName="DayOfYear" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+                <ScalarProperty Name="Week" ColumnName="Week" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="DateKey" ColumnName="DateKey" />
+                <ScalarProperty Name="DateID" ColumnName="DateID" />
+                <ScalarProperty Name="LocalDate" ColumnName="LocalDate" />
+                <ScalarProperty Name="LocalDateTime" ColumnName="LocalDateTime" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="PriceCatID" ColumnName="PriceCatID" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="EnforcedWarning" ColumnName="EnforcedWarning" />
+                <ScalarProperty Name="IP" ColumnName="IP" />
+                <ScalarProperty Name="IsHaveOperator" ColumnName="IsHaveOperator" />
+                <ScalarProperty Name="ImageFile" ColumnName="ImageFile" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="MapURL" ColumnName="MapURL" />
+                <ScalarProperty Name="Timezone" ColumnName="Timezone" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="LocationNameSearch" ColumnName="LocationNameSearch" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="LocationTypeName" ColumnName="LocationTypeName" />
+                <ScalarProperty Name="LocationTypeID" ColumnName="LocationTypeID" />
+                <ScalarProperty Name="LocationCode" ColumnName="LocationCode" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BankActions">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.BankActions">
+              <MappingFragment StoreEntitySet="BankActions">
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Payment" ColumnName="Payment" />
+                <ScalarProperty Name="Collection" ColumnName="Collection" />
+                <ScalarProperty Name="Direction" ColumnName="Direction" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="ProcessName" ColumnName="ProcessName" />
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="BankActionTypeID" ColumnName="BankActionTypeID" />
+                <ScalarProperty Name="PosID" ColumnName="PosID" />
+                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CashActions">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CashActions">
+              <MappingFragment StoreEntitySet="CashActions">
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Payment" ColumnName="Payment" />
+                <ScalarProperty Name="Collection" ColumnName="Collection" />
+                <ScalarProperty Name="Direction" ColumnName="Direction" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="ProcessName" ColumnName="ProcessName" />
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="CashActionTypeID" ColumnName="CashActionTypeID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="CashID" ColumnName="CashID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VCashBankActions">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCashBankActions">
+              <MappingFragment StoreEntitySet="VCashBankActions">
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="CardAmount" ColumnName="CardAmount" />
+                <ScalarProperty Name="CardPayment" ColumnName="CardPayment" />
+                <ScalarProperty Name="CardCollection" ColumnName="CardCollection" />
+                <ScalarProperty Name="CashAmount" ColumnName="CashAmount" />
+                <ScalarProperty Name="CashPaymnet" ColumnName="CashPaymnet" />
+                <ScalarProperty Name="CashCollection" ColumnName="CashCollection" />
+                <ScalarProperty Name="Direction" ColumnName="Direction" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="ProcessName" ColumnName="ProcessName" />
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="Module" ColumnName="Module" />
+                <ScalarProperty Name="PosID" ColumnName="PosID" />
+                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="CashID" ColumnName="CashID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

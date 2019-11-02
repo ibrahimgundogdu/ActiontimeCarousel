@@ -48,13 +48,11 @@ namespace ActionForce.Entity
         public virtual DbSet<Bank> Bank { get; set; }
         public virtual DbSet<BankAccount> BankAccount { get; set; }
         public virtual DbSet<BankAccountType> BankAccountType { get; set; }
-        public virtual DbSet<BankActions> BankActions { get; set; }
         public virtual DbSet<BankActionType> BankActionType { get; set; }
         public virtual DbSet<BankNotification> BankNotification { get; set; }
         public virtual DbSet<BankNotificationStatus> BankNotificationStatus { get; set; }
         public virtual DbSet<BreakTypes> BreakTypes { get; set; }
         public virtual DbSet<Cash> Cash { get; set; }
-        public virtual DbSet<CashActions> CashActions { get; set; }
         public virtual DbSet<CashActionType> CashActionType { get; set; }
         public virtual DbSet<Chassis> Chassis { get; set; }
         public virtual DbSet<ChassisType> ChassisType { get; set; }
@@ -165,6 +163,11 @@ namespace ActionForce.Entity
         public virtual DbSet<TrampolineType> TrampolineType { get; set; }
         public virtual DbSet<EmployeeShiftX> EmployeeShiftX { get; set; }
         public virtual DbSet<EmployeeX> EmployeeX { get; set; }
+        public virtual DbSet<VEmployee> VEmployee { get; set; }
+        public virtual DbSet<VLocation> VLocation { get; set; }
+        public virtual DbSet<BankActions> BankActions { get; set; }
+        public virtual DbSet<CashActions> CashActions { get; set; }
+        public virtual DbSet<VCashBankActions> VCashBankActions { get; set; }
     
         public virtual int AddApplicationLog(string environment, string modul, string processType, string processID, string controller, string action, string tableName, string fieldName, string oldValue, string newValue, Nullable<bool> isSuccess, string resultMessage, string errorMessage, Nullable<System.DateTime> recordDate, string recordEmployee, string recordIP, string recordDevice)
         {
