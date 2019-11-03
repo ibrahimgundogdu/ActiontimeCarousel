@@ -2109,11 +2109,13 @@
     <Compile Include="Models\ActionEmployee.cs" />
     <Compile Include="Models\AuditTrail.cs" />
     <Compile Include="Models\AuthenticationModel.cs" />
+    <Compile Include="Models\FilterModel.cs" />
     <Compile Include="Models\FinanceControlModel.cs" />
     <Compile Include="Models\HomeControlModel.cs" />
     <Compile Include="Models\LayoutControlModel.cs" />
     <Compile Include="Models\OfficeHelper.cs" />
     <Compile Include="Models\Result.cs" />
+    <Compile Include="Models\TotalModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -2144,8 +2144,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashBankActions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VCashBankActions">
           <Key>
+            <PropertyRef Name="ID" />
             <PropertyRef Name="Module" />
           </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
           <Property Name="LocationID" Type="int" />
           <Property Name="CashID" Type="int" />
           <Property Name="EmployeeID" Type="int" />
@@ -2677,6 +2679,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
           </EntitySet>
           <EntitySet Name="VCashBankActions" EntityType="Self.VCashBankActions" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
+    [VCashBankActions].[ID] AS [ID], 
     [VCashBankActions].[LocationID] AS [LocationID], 
     [VCashBankActions].[CashID] AS [CashID], 
     [VCashBankActions].[EmployeeID] AS [EmployeeID], 
@@ -5552,8 +5555,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
         </EntityType>
         <EntityType Name="VCashBankActions">
           <Key>
+            <PropertyRef Name="ID" />
             <PropertyRef Name="Module" />
           </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
           <Property Name="LocationID" Type="Int32" />
           <Property Name="CashID" Type="Int32" />
           <Property Name="EmployeeID" Type="Int32" />
@@ -7964,6 +7969,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="CashID" ColumnName="CashID" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

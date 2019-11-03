@@ -14,6 +14,7 @@ namespace ActionForce.Entity
     
     public partial class VCashBankActions
     {
+        public long ID { get; set; }
         public Nullable<int> LocationID { get; set; }
         public Nullable<int> CashID { get; set; }
         public Nullable<int> EmployeeID { get; set; }

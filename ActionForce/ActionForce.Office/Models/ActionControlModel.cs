@@ -11,5 +11,10 @@ namespace ActionForce.Office
         public OurCompany CurrentCompany { get; set; }
         public VLocation CurrentLocation { get; set; }
         public Cash CurrentCash { get; set; }
+        public IEnumerable<Location> LocationList { get; set; }
+        public IEnumerable<VCashBankActions> ActionList { get; set; }
+        public FilterModel Filters { get; set; }
+        public IEnumerable<TotalModel> HeaderTotals { get; set; }
+        public IEnumerable<TotalModel> FooterTotals { get; set; }
     }
 }

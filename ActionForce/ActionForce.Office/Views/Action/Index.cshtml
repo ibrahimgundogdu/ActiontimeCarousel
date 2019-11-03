@@ -4,7 +4,7 @@
 }
 
 @section style{
-    <link rel="stylesheet" href="/assets/css/dashforge.dashboard.css">
+
 }
 
 <div class="content-header">
@@ -13,49 +13,331 @@
         <input id="SearchKey" type="search" class="form-control" placeholder="Arama..." aria-controls="example2">
     </div>
     <nav class="nav">
-        
+        <select class="custom-select bg-light btn-xs" id="CurrentCompany">
+            <option value="1" @(Model.Authentication.ActionEmployee.OurCompanyID == 1 ? "selected" : "")>UFE Group USA</option>
+            <option value="2" @(Model.Authentication.ActionEmployee.OurCompanyID == 2 ? "selected" : "")>UFE Grup  TUR</option>
+        </select>
     </nav>
 </div>
 <div class="content-body">
+    @using (Html.BeginForm("Filter", "Action", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-row align-items-end">
+            <div class="form-group col-md-3 d-flex align-items-end">
+                <select class="form-control select2" id="locationId" name="locationId" required>
+                    <option value="" label="Lokasyon Seçiminiz"></option>
+                    @foreach (var item in Model.LocationList) 
+                    {
+                        <option value="@item.LocationID" @(Model.Filters.LocationID == item.LocationID ? "selected":"")>@(Html.Raw($"<strong>{item.SortBy}</strong> {item.LocationName} {item.Description} {item.State}"))</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-2 d-flex align-items-end">
+                <input type="text" id="dateFrom" name="beginDate" class="form-control" placeholder="Başlangıç Tarihi" value="@(Model.Filters.DateBegin.Value.ToString("yyyy-MM-dd"))">
+            </div>
+            <div class="form-group col-md-2 d-flex align-items-end">
+                <input type="text" id="dateTo" name="endDate" class="form-control" placeholder="Bitiş Tarihi" value="@(Model.Filters.DateEnd.Value.ToString("yyyy-MM-dd"))">
+            </div>
+            <div class="form-group col-md-1 d-flex align-items-end ">
+                <button class="btn btn-primary" type="submit" id="btnsearch">Ara</button>
+            </div>
+        </div>
+    }
+
+
     <div>
         <h4 id="section2" class="mg-b-10">Cari Hesap Ekstresi</h4>
         <div class="table">
-            <table class="table table-sm table-hover" style="width:100% !important;">
+            <table class="table table-sm table-hover" >
                 <thead>
                     <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
 
-                        <th class="wd-20p">Adı Soyadı</th>
-                        <th class="wd-25p">Tel GSM</th>
-                        <th class="wd-20p">Tel EV</th>
-                        <th class="wd-15p">Tel İŞ</th>
-                        <th class="wd-20p">Cinsyet</th>
-                        <th class="wd-20p">Yaş</th>
-                        <th class="wd-20p">Bilgi</th>
-                        <th class="wd-20p">Kayıt</th>
-                        <th class="wd-20p">Tür</th>
-                        <th class="wd-20p">No</th>
+                        <th></th>
+                        <th></th>
+                        <th>TRL</th>
+                        <th class="text-right bg-light">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total.ToString("N2"))</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>TRL</th>
+                        <th class="text-right bg-light">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total.ToString("N2"))</th>
+
+                        <th class="text-right bg-light">@((Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total + Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total).ToString("N2"))</th>
+                        <th>TRL</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+
+                        <th></th>
+                        <th></th>
+                        <th>USD</th>
+                        <th class="text-right bg-light">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total.ToString("N2"))</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>USD</th>
+                        <th class="text-right bg-light">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total.ToString("N2"))</th>
+
+                        <th class="text-right bg-light">@((Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total + Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total).ToString("N2"))</th>
+                        <th>USD</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+
+                        <th></th>
+                        <th></th>
+                        <th>EUR</th>
+                        <th class="text-right bg-light">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total.ToString("N2"))</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>EUR</th>
+                        <th class="text-right bg-light">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total.ToString("N2"))</th>
+
+                        <th class="text-right bg-light">@((Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total + Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total).ToString("N2"))</th>
+                        <th>EUR</th>
+                        <th></th>
+                    </tr>
+
+
+
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th colspan="4" class="text-center">Nakit</th>
+                        <th colspan="4" class="text-center">Kart</th>
+                        <th class="text-center">Toplam</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th>Lokasyon</th>
+                        <th>Belge Tarihi</th>
+                        <th>İşlem</th>
+                        <th>Belge No</th>
+
+                        <th>Tahsilat</th>
+                        <th>Ödeme</th>
+                        <th>Toplam</th>
+                        <th>Bakiye</th>
+
+                        <th>Tahsilat</th>
+                        <th>Ödeme</th>
+                        <th>Toplam</th>
+                        <th>Bakiye</th>
+
+                        <th>Bakiye</th>
+                        <th>Para Br.</th>
+                        <th>Kayıt Tarihi</th>
                     </tr>
                 </thead>
-                @*<tbody>
-                        @foreach (var item in Model.Musteriler.OrderBy(x => x.adi).ThenBy(x => x.soyadi))
-                        {
-                            <tr>
+                <tbody>
 
-                                <td><a href="/Home/Detail/@item.musteriid" class="link-01"> @item.fullname</a></td>
-                                <td>@item.telgsm</td>
-                                <td>@item.telev</td>
-                                <td>@item.telis</td>
-                                <td>@item.cinsiyeti</td>
-                                <td>@item.yasi</td>
-                                <td>@(item.bilgi != null ? item.bilgi.ToUpper() : "")</td>
-                                <td>@(item.geltarih?.ToShortDateString())</td>
-                                <td>@item.turu</td>
-                                <td>@item.kayitno</td>
-                            </tr>
-                        }
+                    @{ 
 
 
-                    </tbody>*@
+                    }
+
+
+                    @foreach (var item in Model.ActionList)
+                    {
+                        Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == item.Module).Total += item.Module == "Cash" ? item.CashAmount ?? 0 : item.CardAmount ?? 0;
+
+
+
+
+                    <tr>
+
+                        <td class="tx-sm-13 bold">@item.LocationID</td>
+                        <td class="tx-sm-13">@item.ProcessDate.Value.ToShortDateString()</td>
+                        <td class="tx-sm-13">@item.ProcessName</td>
+                        <td class="tx-sm-13">@item.DocumentNumber</td>
+                        <td class="tx-sm-13 text-right bg-primary-light">@(item.CashCollection != null ? item.CashCollection.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13 text-right bg-primary-light">@(item.CashPaymnet != null ? item.CashPaymnet.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13 text-right bg-primary-light">@(item.CashAmount != null ? item.CashAmount.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13 text-right bg-primary font-weight-bold text-white">@(Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Cash").Total.ToString("N2"))</td>
+
+                        <td class="tx-sm-13 text-right bg-warning-light">@(item.CardCollection != null ? item.CardCollection.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13 text-right bg-warning-light">@(item.CardPayment != null ? item.CardPayment.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13 text-right bg-warning-light">@(item.CardAmount != null ? item.CardAmount.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13 text-right bg-warning font-weight-bold text-white">@(Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Bank").Total.ToString("N2"))</td>
+
+
+                        <td class="tx-sm-13 text-right bg-orange font-weight-bold text-white">@((Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Cash").Total + Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Bank").Total).ToString("N2"))</td>
+                        <td class="tx-sm-13">@item.Currency</td>
+                        <td class="tx-sm-13 text-right">@item.RecordDate</td>
+
+                    </tr>
+                    }
+
+
+                </tbody>
+                <tfoot>
+                    @*Dip Toplam*@
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Dip Toplam</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>TRL</th>
+                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total).ToString("N2"))</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>TRL</th>
+                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total).ToString("N2"))</th>
+
+                        <th class="text-right bg-light">@((((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total)) + (Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total)).ToString("N2"))</th>
+                        <th>TRL</th>
+                        <th></th>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Dip Toplam</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>USD</th>
+                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total).ToString("N2"))</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>USD</th>
+                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total).ToString("N2"))</th>
+
+                        <th class="text-right bg-light">@((((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total)) + (Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total)).ToString("N2"))</th>
+                        <th>USD</th>
+                        <th></th>
+                    </tr>
+
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Dip Toplam</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>EUR</th>
+                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total).ToString("N2"))</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>EUR</th>
+                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total).ToString("N2"))</th>
+
+                        <th class="text-right bg-light">@((((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total)) + (Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total)).ToString("N2"))</th>
+                        <th>EUR</th>
+                        <th></th>
+                    </tr>
+
+
+                    @*Seperatör*@
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>&nbsp;</th>
+
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+
+
+                    @*Genel Toplam*@
+                    <tr class="bg-light">
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Genel Toplam</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>TRL</th>
+                        <th class="text-right bg-light">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total.ToString("N2"))</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>TRL</th>
+                        <th class="text-right bg-light">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total.ToString("N2"))</th>
+
+                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total + Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total).ToString("N2"))</th>
+                        <th>TRL</th>
+                        <th></th>
+                    </tr>
+                    <tr class="bg-light">
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Genel Toplam</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>USD</th>
+                        <th class="text-right bg-light">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total.ToString("N2"))</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>USD</th>
+                        <th class="text-right bg-light">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total.ToString("N2"))</th>
+
+                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total + Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total).ToString("N2"))</th>
+                        <th>USD</th>
+                        <th></th>
+                    </tr>
+                    <tr class="bg-light">
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th>Genel Toplam</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>EUR</th>
+                        <th class="text-right bg-light">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total.ToString("N2"))</th>
+
+                        <th></th>
+                        <th></th>
+                        <th>EUR</th>
+                        <th class="text-right bg-light">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total.ToString("N2"))</th>
+
+                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total + Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total).ToString("N2"))</th>
+                        <th>EUR</th>
+                        <th></th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
 
@@ -74,6 +356,51 @@
 
 @section scripts {
     <script>
-        
+        $(function () {
+
+            $('.select2').select2({
+                placeholder: 'Lokasyon Seçiminiz',
+                searchInputPlaceholder: 'Search options'
+            });
+
+            var dateFormat = 'yy-mm-dd',
+                from = $('#dateFrom')
+                    .datepicker({
+                        defaultDate: '+1w',
+                        numberOfMonths: 2,
+                        dateFormat: "yy-mm-dd",
+                        dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                        monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                        firstDay: 1
+                    })
+                    .on('change', function () {
+                        to.datepicker('option', 'minDate', getDate(this));
+                    }),
+                to = $('#dateTo').datepicker({
+                    defaultDate: '+1w',
+                    numberOfMonths: 2,
+                    dateFormat: "yy-mm-dd",
+                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                    firstDay: 1
+                })
+                    .on('change', function () {
+                        from.datepicker('option', 'maxDate', getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+
+            }
+        });
+
+
     </script>
 }
