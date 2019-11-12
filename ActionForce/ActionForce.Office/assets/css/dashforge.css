@@ -10511,7 +10511,7 @@ textarea.form-control {
   .off-canvas-overlay.show ~ .backdrop {
     opacity: 1;
     visibility: visible;
-    z-index: 60; }
+    z-index: 1010; }
 
 .off-canvas-right {
   left: auto;

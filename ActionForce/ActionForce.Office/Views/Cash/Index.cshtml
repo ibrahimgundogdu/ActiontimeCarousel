@@ -1,0 +1,252 @@
+﻿@model CashControlModel
+@{
+    ViewBag.Title = "Kasa Tahsilat";
+}
+
+@section style{
+
+}
+
+<div class="content-header">
+    <div class="content-search">
+        <i data-feather="search"></i>
+        <input id="SearchKey" type="search" class="form-control" placeholder="Arama..." aria-controls="example2">
+    </div>
+    <nav class="nav">
+        <select class="custom-select bg-light btn-xs" id="CurrentCompany">
+            <option value="1" @(Model.Authentication.ActionEmployee.OurCompanyID == 1 ? "selected" : "")>UFE Group USA</option>
+            <option value="2" @(Model.Authentication.ActionEmployee.OurCompanyID == 2 ? "selected" : "")>UFE Grup  TUR</option>
+        </select>
+    </nav>
+</div>
+<div class="content-body">
+    <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                    <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Kasa Nakit İşlemleri</li>
+                </ol>
+            </nav>
+            <h4 class="mg-b-0 tx-spacing--1">Kasa Tahsilatı</h4>
+        </div>
+        <div class="d-none d-md-block">
+            <a href="#OffCanvasAddCashCollect" class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5 off-canvas-menu"><i data-feather="plus-square"></i> &nbsp; Kasa Tahsilatı Ekle</a>
+        </div>
+    </div>
+    <!--<div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right">
+             any content goes here
+        form
+    </div>-->
+
+
+
+
+    @using (Html.BeginForm("Filter", "Cash", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-row align-items-end">
+            <div class="form-group col-md-3 d-flex align-items-end">
+                <select class="form-control select2" id="locationId" name="locationId" required>
+                    <option value="" label="Lokasyon Seçiminiz"></option>
+                    @foreach (var item in Model.LocationList)
+                    {
+                        <option value="@item.LocationID" @(Model.Filters.LocationID == item.LocationID ? "selected" : "")>@(Html.Raw($"<strong>{item.SortBy}</strong> {item.LocationName} {item.Description} {item.State}"))</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-2 d-flex align-items-end">
+                <input type="text" id="dateFrom" name="beginDate" class="form-control" placeholder="Başlangıç Tarihi" value="@(Model.Filters.DateBegin.Value.ToString("yyyy-MM-dd"))">
+            </div>
+            <div class="form-group col-md-2 d-flex align-items-end">
+                <input type="text" id="dateTo" name="endDate" class="form-control" placeholder="Bitiş Tarihi" value="@(Model.Filters.DateEnd.Value.ToString("yyyy-MM-dd"))">
+            </div>
+            <div class="form-group col-md-1 d-flex align-items-end ">
+                <button class="btn btn-primary" type="submit" id="btnsearch">Ara</button>
+            </div>
+        </div>
+
+    }
+
+
+
+    <div>
+        <div class="table">
+            <table class="table table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th>Tarih</th>
+                        <th>Kasa</th>
+                        <th>İşlem</th>
+                        <th>Belge No</th>
+
+                        <th>Tahsilat</th>
+                        <th>Para Br.</th>
+
+
+
+                        <th>Kaydeden</th>
+
+                        <th>Kayıt Tarihi</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @*@foreach (var item in Model.ActionList)
+                        {
+                            Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == item.Module).Total += item.Module == "Cash" ? item.CashAmount ?? 0 : item.CardAmount ?? 0;
+
+                            <tr>
+
+                                <td class="tx-sm-13 bold">@item.LocationID</td>
+                                <td class="tx-sm-13">@item.ProcessDate.Value.ToShortDateString()</td>
+                                <td class="tx-sm-13">@item.ProcessName</td>
+                                <td class="tx-sm-13">@item.DocumentNumber</td>
+                                <td class="tx-sm-13 text-right bg-primary-light">@(item.CashCollection != null ? item.CashCollection.Value.ToString("N2") : "")</td>
+                                <td class="tx-sm-13 text-right bg-primary-light">@(item.CashPaymnet != null ? item.CashPaymnet.Value.ToString("N2") : "")</td>
+                                <td class="tx-sm-13 text-right bg-primary-light">@(item.CashAmount != null ? item.CashAmount.Value.ToString("N2") : "")</td>
+                                <td class="tx-sm-13 text-right bg-primary font-weight-bold text-white">@(Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Cash").Total.ToString("N2"))</td>
+
+                                <td class="tx-sm-13 text-right bg-warning-light">@(item.CardCollection != null ? item.CardCollection.Value.ToString("N2") : "")</td>
+                                <td class="tx-sm-13 text-right bg-warning-light">@(item.CardPayment != null ? item.CardPayment.Value.ToString("N2") : "")</td>
+                                <td class="tx-sm-13 text-right bg-warning-light">@(item.CardAmount != null ? item.CardAmount.Value.ToString("N2") : "")</td>
+                                <td class="tx-sm-13 text-right bg-warning font-weight-bold text-white">@(Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Bank").Total.ToString("N2"))</td>
+
+
+                                <td class="tx-sm-13 text-right bg-orange font-weight-bold text-white">@((Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Cash").Total + Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Bank").Total).ToString("N2"))</td>
+                                <td class="tx-sm-13">@item.Currency</td>
+                                <td class="tx-sm-13 text-right">@item.RecordDate</td>
+
+                            </tr>
+                        }*@
+
+                </tbody>
+            </table>
+        </div>
+
+
+        <footer class="content-footer">
+            <div>
+                <span>&copy; @DateTime.Now.Year UFE Group LLC </span>
+            </div>
+
+        </footer>
+
+    </div>
+</div>
+
+
+@section scripts {
+    <script>
+        $(function () {
+
+            $('.select2').select2({
+                placeholder: 'Lokasyon Seçiminiz',
+                searchInputPlaceholder: 'Search options'
+            });
+
+            var dateFormat = 'yy-mm-dd',
+                from = $('#dateFrom')
+                    .datepicker({
+                        defaultDate: '+1w',
+                        numberOfMonths: 2,
+                        dateFormat: "yy-mm-dd",
+                        dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                        monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                        firstDay: 1
+                    })
+                    .on('change', function () {
+                        to.datepicker('option', 'minDate', getDate(this));
+                    }),
+                to = $('#dateTo').datepicker({
+                    defaultDate: '+1w',
+                    numberOfMonths: 2,
+                    dateFormat: "yy-mm-dd",
+                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                    firstDay: 1
+                })
+                    .on('change', function () {
+                        from.datepicker('option', 'maxDate', getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+
+            }
+
+        });
+
+        $(function () {
+            'use strict'
+
+            $('.off-canvas-menu').on('click', function (e) {
+                e.preventDefault();
+                var target = $(this).attr('href');
+                $(target).addClass('show');
+            });
+
+
+            $('.off-canvas .close').on('click', function (e) {
+                e.preventDefault();
+                $(this).closest('.off-canvas').removeClass('show');
+            })
+
+            $(document).on('click touchstart', function (e) {
+                e.stopPropagation();
+
+                if (!$(e.target).closest('.off-canvas-menu').length) {
+                    var offCanvas = $(e.target).closest('.off-canvas').length;
+                    if (!offCanvas) {
+                        $('.off-canvas.show').removeClass('show');
+                    }
+                }
+            });
+
+
+        });
+
+    </script>
+}
+
+@section canvasmenu {
+    <div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right wd-400">
+        <a href="#" class="close"><i data-feather="x"></i></a>
+
+        <div class="pd-25 ht-100p tx-13">
+
+            <div>
+                <h4>Yeni Kasa Tahsilatı</h4>
+                <p class="tx-color-03">Kasaya nakit giriş işlemi yapar.</p>
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" class="form-control" placeholder="Full name">
+                </div>
+                <div class="form-group">
+                    <label>Email address</label>
+                    <input type="email" class="form-control" placeholder="yourname@yourmail.com">
+                </div>
+                <div class="form-group">
+                    <label class="mg-b-0-f">Password</label>
+                    <input type="password" class="form-control" placeholder="Enter your password">
+                </div>
+                <div class="form-group">
+                    By clicking Create an account below, you agree to our terms of service and privacy statement.
+                </div>
+                <button class="btn btn-primary btn-block">Create Account</button>
+                <div class="tx-13 mg-t-20 tx-center">Already have an account? <a href="page-signup.html">Sign In</a></div>
+            </div>
+
+
+
+        </div>
+    </div>
+
+}

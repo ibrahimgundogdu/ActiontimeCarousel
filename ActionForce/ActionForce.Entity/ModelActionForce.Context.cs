@@ -168,6 +168,21 @@ namespace ActionForce.Entity
         public virtual DbSet<BankActions> BankActions { get; set; }
         public virtual DbSet<CashActions> CashActions { get; set; }
         public virtual DbSet<VCashBankActions> VCashBankActions { get; set; }
+        public virtual DbSet<DocumentBankTransfer> DocumentBankTransfer { get; set; }
+        public virtual DbSet<DocumentCashCollections> DocumentCashCollections { get; set; }
+        public virtual DbSet<DocumentCashExpense> DocumentCashExpense { get; set; }
+        public virtual DbSet<DocumentCashOpen> DocumentCashOpen { get; set; }
+        public virtual DbSet<DocumentCashPayments> DocumentCashPayments { get; set; }
+        public virtual DbSet<DocumentCashRecorderSlip> DocumentCashRecorderSlip { get; set; }
+        public virtual DbSet<DocumentPosCollections> DocumentPosCollections { get; set; }
+        public virtual DbSet<DocumentSalaryPayment> DocumentSalaryPayment { get; set; }
+        public virtual DbSet<DocumentSaleExchange> DocumentSaleExchange { get; set; }
+        public virtual DbSet<DocumentTicketSaleReturns> DocumentTicketSaleReturns { get; set; }
+        public virtual DbSet<DocumentTicketSales> DocumentTicketSales { get; set; }
+        public virtual DbSet<DocumentPosCancel> DocumentPosCancel { get; set; }
+        public virtual DbSet<DocumentPosRefund> DocumentPosRefund { get; set; }
+        public virtual DbSet<DocumentSalaryEarn> DocumentSalaryEarn { get; set; }
+        public virtual DbSet<VDocumentCashCollections> VDocumentCashCollections { get; set; }
     
         public virtual int AddApplicationLog(string environment, string modul, string processType, string processID, string controller, string action, string tableName, string fieldName, string oldValue, string newValue, Nullable<bool> isSuccess, string resultMessage, string errorMessage, Nullable<System.DateTime> recordDate, string recordEmployee, string recordIP, string recordDevice)
         {

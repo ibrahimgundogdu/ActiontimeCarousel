@@ -29,10 +29,13 @@
     <!-- DashForge CSS -->
     <link rel="stylesheet" href="/assets/css/dashforge.css">
 
+
+
+
     @RenderSection("style", false)
 
 </head>
-<body data-spy="scroll" data-target="#navSection" data-offset="120" class="app-contact">
+<body class="pos-relative">
     <aside class="aside aside-fixed">
         <div class="aside-header">
             <a href="/" class="aside-logo">Action<span> Force</span></a>
@@ -71,8 +74,8 @@
                     <ul>
                         <li class="nav-label">Tahsilatlar (+)</li>
 
-                        <li class="active"><a href="page-profile-view.html">01 Kasa Tahsilatı</a></li>
-                        <li><a href="page-connections.html">02 Bilet Satışı</a></li>
+                        <li class="active"><a href="/Cash">01 Kasa Tahsilatı</a></li>
+                        <li><a href="/Cash">02 Bilet Satışı</a></li>
                         <li><a href="page-groups.html">03 Döviz Satışı</a></li>
                         <li><a href="page-events.html">04 Kasa Açılış Fişi</a></li>
 
@@ -146,30 +149,25 @@
     <script src="/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/lib/feather-icons/feather.min.js"></script>
     <script src="/lib/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="/assets/js/dashforge.js"></script>
 
     <script src="/lib/jqvmap/jquery.vmap.min.js"></script>
     <script src="/lib/jqvmap/maps/jquery.vmap.usa.js"></script>
-    <script src="/assets/js/dashforge.js"></script>
     <script src="/assets/js/dashforge.aside.js"></script>
     <script src="/lib/prismjs/prism.js"></script>
-    <script src="/lib/datatables.net/js/jquery.dataTables.min.js"></script>
-    <script src="/lib/datatables.net-dt/js/dataTables.dataTables.min.js"></script>
-    <script src="/lib/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-    <script src="/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js"></script>
     <script src="/lib/select2/js/select2.min.js"></script>
     <script src="/lib/jqueryui/jquery-ui.min.js"></script>
 
 
 
-    <!-- append theme customizer -->
-    <script src="/lib/js-cookie/js.cookie.js"></script>
-    <script src="/assets/js/dashforge.settings.js"></script>
+
+
 
 
 
     @RenderSection("scripts", false)
 
 
-
+    @RenderSection("canvasmenu", false)
 </body>
 </html>

@@ -20,5 +20,6 @@ namespace ActionForce.Entity
         public Nullable<double> Multiply { get; set; }
         public string SortBy { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public string Module { get; set; }
     }
 }
