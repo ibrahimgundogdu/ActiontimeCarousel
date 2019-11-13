@@ -183,6 +183,8 @@ namespace ActionForce.Entity
         public virtual DbSet<DocumentPosRefund> DocumentPosRefund { get; set; }
         public virtual DbSet<DocumentSalaryEarn> DocumentSalaryEarn { get; set; }
         public virtual DbSet<VDocumentCashCollections> VDocumentCashCollections { get; set; }
+        public virtual DbSet<Currency> Currency { get; set; }
+        public virtual DbSet<Customer> Customer { get; set; }
     
         public virtual int AddApplicationLog(string environment, string modul, string processType, string processID, string controller, string action, string tableName, string fieldName, string oldValue, string newValue, Nullable<bool> isSuccess, string resultMessage, string errorMessage, Nullable<System.DateTime> recordDate, string recordEmployee, string recordIP, string recordDevice)
         {
@@ -255,6 +257,28 @@ namespace ActionForce.Entity
                 new ObjectParameter("RecordDevice", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddApplicationLog", environmentParameter, modulParameter, processTypeParameter, processIDParameter, controllerParameter, actionParameter, tableNameParameter, fieldNameParameter, oldValueParameter, newValueParameter, isSuccessParameter, resultMessageParameter, errorMessageParameter, recordDateParameter, recordEmployeeParameter, recordIPParameter, recordDeviceParameter);
+        }
+    
+        public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
+        {
+            var ourCompanyIDParameter = ourCompanyID.HasValue ?
+                new ObjectParameter("OurCompanyID", ourCompanyID) :
+                new ObjectParameter("OurCompanyID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetFromList_Result>("GetFromList", ourCompanyIDParameter);
+        }
+    
+        public virtual ObjectResult<string> GetDocumentNumber(Nullable<int> ourCompanyID, string prefix)
+        {
+            var ourCompanyIDParameter = ourCompanyID.HasValue ?
+                new ObjectParameter("OurCompanyID", ourCompanyID) :
+                new ObjectParameter("OurCompanyID", typeof(int));
+    
+            var prefixParameter = prefix != null ?
+                new ObjectParameter("Prefix", prefix) :
+                new ObjectParameter("Prefix", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetDocumentNumber", ourCompanyIDParameter, prefixParameter);
         }
     }
 }

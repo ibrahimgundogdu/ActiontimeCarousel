@@ -102,5 +102,79 @@ namespace ActionForce.Office
             }
         }
 
+        public static IEnumerable<FromAccountModel> GetFromList(int ourCompanyID)
+        {
+
+            List<FromAccountModel> fromList = new List<FromAccountModel>();
+
+
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                fromList = db.GetFromList(ourCompanyID).Select(x => new FromAccountModel()
+                {
+                    ID = x.ID,
+                    Code = x.Code,
+                    Name = x.Name,
+                    Prefix = x.Prefix
+                }).ToList();
+            }
+
+
+            return fromList;
+        }
+
+        public static IEnumerable<Currency> GetCurrency()
+        {
+            List<Currency> currList = new List<Currency>();
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                currList = db.Currency.ToList();
+            }
+            return currList;
+        }
+
+        public static Cash GetCash(int locationID, string currency)
+        {
+            Cash cash = new Cash();
+
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                cash = db.Cash.FirstOrDefault(x => x.LocationID == locationID && x.Currency == currency);
+                if (cash != null)
+                {
+                    return cash;
+                }
+                else
+                {
+                    Cash newcash = new Cash();
+
+                    newcash.BlockedAmount = 100;
+                    newcash.CashName = $"Nakit Kasa {currency}";
+                    newcash.Currency = currency;
+                    newcash.IsActive = true;
+                    newcash.LocationID = locationID;
+                    newcash.SortBy = "01";
+
+                    db.Cash.Add(newcash);
+                    db.SaveChanges();
+
+                    return newcash;
+                }
+            }
+
+        }
+
+        public static string GetDocumentNumber(int ourCompanyID, string Prefix)
+        {
+            string documentNumber = string.Empty;
+
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                documentNumber = db.GetDocumentNumber(ourCompanyID, Prefix).FirstOrDefault();
+            }
+
+            return documentNumber;
+
+        }
     }
 }

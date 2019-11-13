@@ -33,6 +33,7 @@
 
 
     @RenderSection("style", false)
+    @RenderSection("scriptheader", false)
 
 </head>
 <body class="pos-relative">
@@ -145,6 +146,13 @@
     <div class="content ht-100v pd-0">
         @RenderBody()
     </div>
+
+
+
+
+
+    @RenderSection("canvasmenu", false)
+
     <script src="/lib/jquery/jquery.min.js"></script>
     <script src="/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="/lib/feather-icons/feather.min.js"></script>
@@ -158,16 +166,9 @@
     <script src="/lib/select2/js/select2.min.js"></script>
     <script src="/lib/jqueryui/jquery-ui.min.js"></script>
 
-
-
-
-
-
-
-
     @RenderSection("scripts", false)
 
 
-    @RenderSection("canvasmenu", false)
+
 </body>
 </html>

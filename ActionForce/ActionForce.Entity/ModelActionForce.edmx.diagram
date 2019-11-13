@@ -178,6 +178,8 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentPosRefund" Width="1.5" PointX="21.375" PointY="40.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentSalaryEarn" Width="1.5" PointX="41.375" PointY="7.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentCashCollections" Width="1.5" PointX="41.375" PointY="13.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Currency" Width="1.5" PointX="41.375" PointY="21.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Customer" Width="1.5" PointX="41.375" PointY="24.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

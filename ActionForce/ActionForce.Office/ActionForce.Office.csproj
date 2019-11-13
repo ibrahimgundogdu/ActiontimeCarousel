@@ -2113,8 +2113,10 @@
     <Compile Include="Models\CashControlModel.cs" />
     <Compile Include="Models\FilterModel.cs" />
     <Compile Include="Models\FinanceControlModel.cs" />
+    <Compile Include="Models\FromAccountModel.cs" />
     <Compile Include="Models\HomeControlModel.cs" />
     <Compile Include="Models\LayoutControlModel.cs" />
+    <Compile Include="Models\NewCashCollect.cs" />
     <Compile Include="Models\OfficeHelper.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Models\TotalModel.cs" />
@@ -2228,6 +2230,7 @@
     <Content Include="scss\util\_width.scss" />
     <Content Include="scss\_mixins.scss" />
     <Content Include="scss\_variables.scss" />
+    <Content Include="Views\Cash\_PartialAddCashMenu.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -31,7 +31,7 @@
             <h4 class="mg-b-0 tx-spacing--1">Kasa Tahsilatı</h4>
         </div>
         <div class="d-none d-md-block">
-            <a href="#OffCanvasAddCashCollect" class="btn btn-sm pd-x-15 btn-primary btn-uppercase mg-l-5 off-canvas-menu"><i data-feather="plus-square"></i> &nbsp; Kasa Tahsilatı Ekle</a>
+            @{Html.RenderPartial("_PartialAddCashMenu");}
         </div>
     </div>
     <!--<div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right">
@@ -136,7 +136,71 @@
 </div>
 
 
+@section canvasmenu {
+    <div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right wd-400">
+        <a href="#" class="close"><i data-feather="x"></i></a>
+
+        <div class="pd-25 ht-100p tx-13">
+            @using (Html.BeginForm("AddCashCollection", "Cash", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                <div>
+                    <h4>Yeni Kasa Tahsilatı</h4>
+                    <p class="tx-color-03">Kasaya nakit giriş işlemi yapar.</p>
+                    <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
+                    <div class="form-group">
+                        <label>Kimden</label>
+                        <select class="form-control" id="FromID" name="FromID" required>
+                            @foreach (var item in Model.FromList)
+                            {
+                                <option value="@item.Code">@(Html.Raw($"{item.Name}"))</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Lokasyon</label>
+                        <select class="form-control" id="LocationID" name="LocationID" required>
+                            @foreach (var item in Model.LocationList)
+                            {
+                                <option value="@item.LocationID">@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tutar</label>
+                        <input id="Amount" name="Amount" type="text" class="form-control" placeholder="Tutar" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Para Birimi</label>
+                        <select class="form-control" id="Currency" name="Currency" required>
+                            @foreach (var item in Model.CurrencyList)
+                            {
+                                <option value="@item.Code">@($"{item.Code} ({item.Sign})")</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Tarih</label>
+                        <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Açıklama</label>
+                        <textarea id="Description" name="Description" rows="4" class="form-control" placeholder="Açıklama"></textarea>
+                    </div>
+
+                    <button class="btn btn-primary btn-block">Tahsilat Ekle</button>
+                </div>
+
+            }
+
+        </div>
+    </div>
+
+}
+
 @section scripts {
+    <script src="/lib/cleave.js/cleave.min.js"></script>
+
     <script>
         $(function () {
 
@@ -170,6 +234,23 @@
                         from.datepicker('option', 'maxDate', getDate(this));
                     });
 
+            $('#DocumentDate').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+            var cleaveC = new Cleave('#DocumentDate', {
+                date: true,
+                delimiter: '-',
+                datePattern: ['Y', 'm', 'd'],
+
+            });
+            var cleave = new Cleave('#Amount', {
+                numeral: true
+            });
+
             function getDate(element) {
                 var date;
                 try {
@@ -183,6 +264,8 @@
             }
 
         });
+
+
 
         $(function () {
             'use strict'
@@ -214,39 +297,4 @@
         });
 
     </script>
-}
-
-@section canvasmenu {
-    <div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right wd-400">
-        <a href="#" class="close"><i data-feather="x"></i></a>
-
-        <div class="pd-25 ht-100p tx-13">
-
-            <div>
-                <h4>Yeni Kasa Tahsilatı</h4>
-                <p class="tx-color-03">Kasaya nakit giriş işlemi yapar.</p>
-                <div class="form-group">
-                    <label>Full Name</label>
-                    <input type="text" class="form-control" placeholder="Full name">
-                </div>
-                <div class="form-group">
-                    <label>Email address</label>
-                    <input type="email" class="form-control" placeholder="yourname@yourmail.com">
-                </div>
-                <div class="form-group">
-                    <label class="mg-b-0-f">Password</label>
-                    <input type="password" class="form-control" placeholder="Enter your password">
-                </div>
-                <div class="form-group">
-                    By clicking Create an account below, you agree to our terms of service and privacy statement.
-                </div>
-                <button class="btn btn-primary btn-block">Create Account</button>
-                <div class="tx-13 mg-t-20 tx-center">Already have an account? <a href="page-signup.html">Sign In</a></div>
-            </div>
-
-
-
-        </div>
-    </div>
-
 }
