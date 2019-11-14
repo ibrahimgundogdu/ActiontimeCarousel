@@ -2703,6 +2703,45 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashCollections' d
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentTicketSales' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VDocumentTicketSales">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="FromCustomerID" Type="int" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="Date" Type="date" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployee" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="CashID" Type="int" />
+          <Property Name="ExchangeRate" Type="float" />
+          <Property Name="SystemAmount" Type="float" />
+          <Property Name="SystemCurrency" Type="nvarchar" MaxLength="4" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="ReferenceID" Type="bigint" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
+          <Property Name="ActionTypeID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="CustomerFullName" Type="nvarchar" MaxLength="120" />
+          <Property Name="ActionName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CashName" Type="nvarchar" MaxLength="62" />
+          <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="PayMethodID" Type="int" />
+          <Property Name="PayMethodName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VEmployee">
           <Key>
@@ -3443,6 +3482,42 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
     [VDocumentCashCollections].[LocationFullName] AS [LocationFullName]
     FROM [dbo].[VDocumentCashCollections] AS [VDocumentCashCollections]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VDocumentTicketSales" EntityType="Self.VDocumentTicketSales" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VDocumentTicketSales].[ID] AS [ID], 
+    [VDocumentTicketSales].[DocumentNumber] AS [DocumentNumber], 
+    [VDocumentTicketSales].[FromCustomerID] AS [FromCustomerID], 
+    [VDocumentTicketSales].[Amount] AS [Amount], 
+    [VDocumentTicketSales].[Currency] AS [Currency], 
+    [VDocumentTicketSales].[Date] AS [Date], 
+    [VDocumentTicketSales].[RecordDate] AS [RecordDate], 
+    [VDocumentTicketSales].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VDocumentTicketSales].[RecordIP] AS [RecordIP], 
+    [VDocumentTicketSales].[UpdateDate] AS [UpdateDate], 
+    [VDocumentTicketSales].[UpdateEmployee] AS [UpdateEmployee], 
+    [VDocumentTicketSales].[UpdateIP] AS [UpdateIP], 
+    [VDocumentTicketSales].[CashID] AS [CashID], 
+    [VDocumentTicketSales].[ExchangeRate] AS [ExchangeRate], 
+    [VDocumentTicketSales].[SystemAmount] AS [SystemAmount], 
+    [VDocumentTicketSales].[SystemCurrency] AS [SystemCurrency], 
+    [VDocumentTicketSales].[LocationID] AS [LocationID], 
+    [VDocumentTicketSales].[OurCompanyID] AS [OurCompanyID], 
+    [VDocumentTicketSales].[ReferenceID] AS [ReferenceID], 
+    [VDocumentTicketSales].[IsActive] AS [IsActive], 
+    [VDocumentTicketSales].[ActionTypeName] AS [ActionTypeName], 
+    [VDocumentTicketSales].[ActionTypeID] AS [ActionTypeID], 
+    [VDocumentTicketSales].[Description] AS [Description], 
+    [VDocumentTicketSales].[CustomerFullName] AS [CustomerFullName], 
+    [VDocumentTicketSales].[ActionName] AS [ActionName], 
+    [VDocumentTicketSales].[CashName] AS [CashName], 
+    [VDocumentTicketSales].[RecorderFullName] AS [RecorderFullName], 
+    [VDocumentTicketSales].[UpdaterFullName] AS [UpdaterFullName], 
+    [VDocumentTicketSales].[LocationFullName] AS [LocationFullName], 
+    [VDocumentTicketSales].[Quantity] AS [Quantity], 
+    [VDocumentTicketSales].[PayMethodID] AS [PayMethodID], 
+    [VDocumentTicketSales].[PayMethodName] AS [PayMethodName]
+    FROM [dbo].[VDocumentTicketSales] AS [VDocumentTicketSales]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VEmployee" EntityType="Self.VEmployee" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VEmployee].[EmployeeID] AS [EmployeeID], 
@@ -3880,6 +3955,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
             <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="VDocumentTicketSales" EntityType="db293_ActionTimeDbModel.VDocumentTicketSales" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -6895,6 +6971,43 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
           <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="VDocumentTicketSales">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="FromCustomerID" Type="Int32" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CashID" Type="Int32" />
+          <Property Name="ExchangeRate" Type="Double" />
+          <Property Name="SystemAmount" Type="Double" />
+          <Property Name="SystemCurrency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="ReferenceID" Type="Int64" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerFullName" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
+          <Property Name="ActionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CashName" Type="String" MaxLength="62" FixedLength="false" Unicode="true" />
+          <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="PayMethodID" Type="Int32" />
+          <Property Name="PayMethodName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -9841,6 +9954,44 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddCashAction" FunctionName="db293_ActionTimeDbModel.Store.AddCashAction" />
+          <EntitySetMapping Name="VDocumentTicketSales">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentTicketSales">
+              <MappingFragment StoreEntitySet="VDocumentTicketSales">
+                <ScalarProperty Name="PayMethodName" ColumnName="PayMethodName" />
+                <ScalarProperty Name="PayMethodID" ColumnName="PayMethodID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="UpdaterFullName" ColumnName="UpdaterFullName" />
+                <ScalarProperty Name="RecorderFullName" ColumnName="RecorderFullName" />
+                <ScalarProperty Name="CashName" ColumnName="CashName" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="CustomerFullName" ColumnName="CustomerFullName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="SystemCurrency" ColumnName="SystemCurrency" />
+                <ScalarProperty Name="SystemAmount" ColumnName="SystemAmount" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="CashID" ColumnName="CashID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="FromCustomerID" ColumnName="FromCustomerID" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

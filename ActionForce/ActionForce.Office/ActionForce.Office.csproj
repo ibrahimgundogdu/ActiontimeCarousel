@@ -2402,6 +2402,9 @@
     <Content Include="scss\_mixins.scss" />
     <Content Include="scss\_variables.scss" />
     <Content Include="Views\Cash\_PartialAddCashMenu.cshtml" />
+    <Content Include="Views\Cash\Sale.cshtml" />
+    <Content Include="Views\Cash\_PartialDocumentForms.cshtml" />
+    <Content Include="Views\Cash\Exchange.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

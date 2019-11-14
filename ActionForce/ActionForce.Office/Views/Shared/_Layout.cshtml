@@ -70,26 +70,26 @@
 
                 <li class="nav-label mg-t-25 active">Finans - Cari Hesap</li>
                 <li class="nav-item"><a href="/Action/Index" class="nav-link"><i data-feather="layers"></i> <span>Cari Hesap Ekstresi</span></a></li>
-                <li class="nav-item with-sub ">
+                <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" ? "show" : "") ">
                     <a href="" class="nav-link"><i data-feather="hard-drive"></i> <span>Kasa Nakit İşlemleri</span></a>
                     <ul>
                         <li class="nav-label">Tahsilatlar (+)</li>
 
-                        <li class="active"><a href="/Cash">01 Kasa Tahsilatı</a></li>
-                        <li><a href="/Cash">02 Bilet Satışı</a></li>
-                        <li><a href="page-groups.html">03 Döviz Satışı</a></li>
-                        <li><a href="page-events.html">04 Kasa Açılış Fişi</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Cash">01 Kasa Tahsilatı</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "Sale" ? "class=active" : "")><a href="/Cash/Sale">02 Bilet Satışı</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "Exchange" ? "class=active" : "")><a href="/Cash/Exchange">03 Döviz Satışı</a></li>
+                        <li><a href="/Cash">04 Kasa Açılış Fişi</a></li>
 
                         <li class="nav-label">Ödemeler (-)</li>
 
-                        <li><a href="page-connections.html">01 Kasa Ödemesi</a></li>
-                        <li><a href="page-profile-view.html">02 Bilet Satış İadesi</a></li>
-                        <li><a href="page-groups.html">03 Masraf Ödeme Fişi</a></li>
-                        <li><a href="page-events.html">04 Havale / EFT işlemi</a></li>
-                        <li><a href="page-events.html">05 Maaş Avans Ödemesi</a></li>
+                        <li><a href="/Cash">01 Kasa Ödemesi</a></li>
+                        <li><a href="/Cash">02 Bilet Satış İadesi</a></li>
+                        <li><a href="/Cash">03 Masraf Ödeme Fişi</a></li>
+                        <li><a href="/Cash">04 Havale / EFT işlemi</a></li>
+                        <li><a href="/Cash">05 Maaş Avans Ödemesi</a></li>
                     </ul>
                 </li>
-                <li class="nav-item with-sub">
+                <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Bank" ? "show" : "")">
                     <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Banka Pos İşlemleri</span></a>
                     <ul>
                         <li class="nav-label">Tahsilatlar</li>

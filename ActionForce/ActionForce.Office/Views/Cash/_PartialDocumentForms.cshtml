@@ -1,0 +1,176 @@
+﻿@model CashControlModel
+<div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right wd-400">
+    <a href="#" class="close"><i data-feather="x"></i></a>
+
+    <div class="pd-25 ht-100p tx-13">
+        @using (Html.BeginForm("AddCashCollection", "Cash", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div>
+                <h4>Yeni Kasa Tahsilatı</h4>
+                <p class="tx-color-03">Kasaya nakit giriş işlemi yapar.</p>
+                <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
+                <div class="form-group">
+                    <label>Kimden</label>
+                    <select class="form-control" id="FromID" name="FromID" required>
+                        @foreach (var item in Model.FromList)
+                        {
+                            <option value="@item.Code">@(Html.Raw($"{item.Name}"))</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Lokasyon</label>
+                    <select class="form-control" id="LocationID" name="LocationID" required>
+                        @foreach (var item in Model.LocationList)
+                        {
+                            <option value="@item.LocationID">@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tutar</label>
+                    <input id="Amount" name="Amount" type="text" class="form-control" placeholder="Tutar" required>
+                </div>
+                <div class="form-group">
+                    <label>Para Birimi</label>
+                    <select class="form-control" id="Currency" name="Currency" required>
+                        @foreach (var item in Model.CurrencyList)
+                        {
+                            <option value="@item.Code">@($"{item.Code} ({item.Sign})")</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tarih</label>
+                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                </div>
+                <div class="form-group">
+                    <label>Açıklama</label>
+                    <textarea id="Description" name="Description" rows="4" class="form-control" placeholder="Açıklama"></textarea>
+                </div>
+
+                <button class="btn btn-primary btn-block">Tahsilat Ekle</button>
+            </div>
+
+        }
+
+    </div>
+</div>
+<div id="OffCanvasAddCashSale" class="off-canvas off-canvas-overlay off-canvas-right wd-400">
+    <a href="#" class="close"><i data-feather="x"></i></a>
+
+    <div class="pd-25 ht-100p tx-13">
+        @using (Html.BeginForm("AddCashSale", "Cash", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div>
+                <h4>Yeni Kasa Satışı</h4>
+                <p class="tx-color-03">Kasaya satış girişi işlemi yapar.</p>
+                <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="24" />
+                <div class="form-group">
+                    <label>Kime</label>
+                    <select class="form-control" id="FromID" name="FromID" required>
+                        @foreach (var item in Model.FromList)
+                        {
+                            <option value="@item.Code">@(Html.Raw($"{item.Name}"))</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Lokasyon</label>
+                    <select class="form-control" id="LocationID" name="LocationID" required>
+                        @foreach (var item in Model.LocationList)
+                        {
+                            <option value="@item.LocationID">@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Bilet Adeti</label>
+                    <input id="Quantity" name="Quantity" type="number" class="form-control" placeholder="Adet" required>
+                </div>
+                <div class="form-group">
+                    <label>Satış Tutarı</label>
+                    <input id="Amount" name="Amount" type="text" class="form-control" placeholder="Tutar" required>
+                </div>
+                <div class="form-group">
+                    <label>Para Birimi</label>
+                    <select class="form-control" id="Currency" name="Currency" required>
+                        @foreach (var item in Model.CurrencyList)
+                        {
+                            <option value="@item.Code">@($"{item.Code} ({item.Sign})")</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Tarih</label>
+                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                </div>
+                <div class="form-group">
+                    <label>Açıklama</label>
+                    <textarea id="Description" name="Description" rows="4" class="form-control" placeholder="Açıklama"></textarea>
+                </div>
+
+                <button class="btn btn-primary btn-block">Tahsilat Ekle</button>
+            </div>
+
+        }
+
+    </div>
+</div>
+
+<div id="OffCanvasAddExchange" class="off-canvas off-canvas-overlay off-canvas-right wd-400">
+    <a href="#" class="close"><i data-feather="x"></i></a>
+
+    <div class="pd-25 ht-100p tx-13">
+        @using (Html.BeginForm("AddCashExchange", "Cash", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+        <div>
+            <h4>Yeni Kasa Döviz Satışı</h4>
+            <p class="tx-color-03">Kasadan döviz satışı işlemi yapar.</p>
+            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="25" />
+           
+            <div class="form-group">
+                <label>Lokasyon</label>
+                <select class="form-control" id="LocationID" name="LocationID" required>
+                    @foreach (var item in Model.LocationList)
+                    {
+                        <option value="@item.LocationID">@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Döviz Tutarı</label>
+                <input id="Amount" name="Amount" type="text" class="form-control" placeholder="Tutar" required>
+            </div>
+            <div class="form-group">
+                <label>Döviz Para Birimi</label>
+                <select class="form-control" id="Currency" name="Currency" required>
+                    @foreach (var item in Model.CurrencyList)
+                    {
+                        <option value="@item.Code">@($"{item.Code} ({item.Sign})")</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Kur Değeri</label>
+                <input id="Exchange" name="Exchange" type="number" class="form-control" placeholder="Adet" required>
+            </div>
+            <div class="form-group">
+                <label>Tarih</label>
+                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+            </div>
+            <div class="form-group">
+                <label>Açıklama</label>
+                <textarea id="Description" name="Description" rows="4" class="form-control" placeholder="Açıklama"></textarea>
+            </div>
+
+            <button class="btn btn-primary btn-block">Tahsilat Ekle</button>
+        </div>
+
+        }
+
+    </div>
+</div>

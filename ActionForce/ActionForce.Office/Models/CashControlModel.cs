@@ -9,6 +9,8 @@ namespace ActionForce.Office
     public class CashControlModel : LayoutControlModel
     {
         public IEnumerable<VDocumentCashCollections> CashCollections { get; set; }
+        public IEnumerable<VDocumentTicketSales> CashSales { get; set; }
+        public IEnumerable<VDocumentTicketSales> CashSaleExchanges { get; set; }
         public IEnumerable<Cash> CashList { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
         public IEnumerable<FromAccountModel> FromList { get; set; }
