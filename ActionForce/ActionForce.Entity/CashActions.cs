@@ -21,7 +21,7 @@ namespace ActionForce.Entity
         public Nullable<int> CashActionTypeID { get; set; }
         public Nullable<System.DateTime> ActionDate { get; set; }
         public string ProcessName { get; set; }
-        public Nullable<int> ProcessID { get; set; }
+        public Nullable<long> ProcessID { get; set; }
         public Nullable<System.DateTime> ProcessDate { get; set; }
         public string DocumentNumber { get; set; }
         public string Description { get; set; }

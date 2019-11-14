@@ -12,28 +12,28 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class VCashBankActions
+    public partial class VBankActions
     {
         public long ID { get; set; }
         public Nullable<int> LocationID { get; set; }
-        public Nullable<int> CashID { get; set; }
-        public Nullable<int> EmployeeID { get; set; }
         public Nullable<int> BankAccountID { get; set; }
-        public Nullable<int> PosID { get; set; }
-        public string Module { get; set; }
+        public Nullable<int> BankActionTypeID { get; set; }
         public Nullable<System.DateTime> ActionDate { get; set; }
         public string ProcessName { get; set; }
-        public Nullable<long> ProcessID { get; set; }
         public Nullable<System.DateTime> ProcessDate { get; set; }
         public string DocumentNumber { get; set; }
-        public Nullable<short> Direction { get; set; }
-        public Nullable<double> CashCollection { get; set; }
-        public Nullable<double> CashPaymnet { get; set; }
-        public Nullable<double> CashAmount { get; set; }
-        public Nullable<double> CardCollection { get; set; }
-        public Nullable<double> CardPayment { get; set; }
-        public Nullable<double> CardAmount { get; set; }
+        public string Description { get; set; }
+        public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
+        public Nullable<double> Latitude { get; set; }
+        public Nullable<double> Longitude { get; set; }
+        public Nullable<int> RecordEmployeeID { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
+        public Nullable<int> UpdateEmployeeID { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
+        public string ActionTypeName { get; set; }
+        public Nullable<int> PosID { get; set; }
+        public Nullable<int> EmployeeID { get; set; }
+        public Nullable<long> ProcessID { get; set; }
     }
 }

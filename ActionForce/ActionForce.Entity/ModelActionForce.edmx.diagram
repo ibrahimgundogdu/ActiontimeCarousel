@@ -160,9 +160,6 @@
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_PrePaidCampaignPrices_PrePaidCampaign" />
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_RoleGroup_RoleLevel" />
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_RoleGroupPermissions_RoleGroup" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankActions" Width="1.5" PointX="38.375" PointY="0.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.CashActions" Width="1.5" PointX="19.375" PointY="38.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCashBankActions" Width="1.5" PointX="25.375" PointY="38.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentBankTransfer" Width="1.5" PointX="39.375" PointY="7.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentCashCollections" Width="1.5" PointX="39.375" PointY="14.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentCashExpense" Width="1.5" PointX="39.375" PointY="21.75" />
@@ -180,6 +177,12 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentCashCollections" Width="1.5" PointX="41.375" PointY="13.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Currency" Width="1.5" PointX="41.375" PointY="21.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Customer" Width="1.5" PointX="41.375" PointY="24.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Exchange" Width="1.5" PointX="41.375" PointY="27.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankActions" Width="1.5" PointX="17.375" PointY="40.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.CashActions" Width="1.5" PointX="23.375" PointY="40.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VBankActions" Width="1.5" PointX="41.375" PointY="30.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCashActions" Width="1.5" PointX="41.375" PointY="36.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCashBankActions" Width="1.5" PointX="42.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

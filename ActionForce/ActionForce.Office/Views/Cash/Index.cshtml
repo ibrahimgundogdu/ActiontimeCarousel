@@ -47,7 +47,7 @@
         @Html.AntiForgeryToken()
         <div class="form-row align-items-end">
             <div class="form-group col-md-3 d-flex align-items-end">
-                <select class="form-control select2" id="locationId" name="locationId" required>
+                <select class="form-control select2" id="locationId" name="locationId">
                     <option value="" label="Lokasyon Seçiminiz"></option>
                     @foreach (var item in Model.LocationList)
                     {
@@ -75,50 +75,39 @@
             <table class="table table-sm table-hover">
                 <thead>
                     <tr>
+                        <th>#</th>
                         <th>Tarih</th>
+                        <th>Lokasyon</th>
                         <th>Kasa</th>
                         <th>İşlem</th>
+                        <th>Bu Hesaptan</th>
                         <th>Belge No</th>
-
                         <th>Tahsilat</th>
                         <th>Para Br.</th>
-
-
-
                         <th>Kaydeden</th>
-
                         <th>Kayıt Tarihi</th>
                     </tr>
                 </thead>
                 <tbody>
 
-                    @*@foreach (var item in Model.ActionList)
-                        {
-                            Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == item.Module).Total += item.Module == "Cash" ? item.CashAmount ?? 0 : item.CardAmount ?? 0;
+                    @foreach (var item in Model.CashCollections)
+                    {
+                    <tr>
 
-                            <tr>
+                        <td class="tx-sm-13 bold">@item.ID</td>
+                        <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                        <td class="tx-sm-13">@item.LocationFullName</td>
+                        <td class="tx-sm-13">@item.CashName</td>
+                        <td class="tx-sm-13">@item.ActionTypeName</td>
+                        <td class="tx-sm-13">@item.CustomerFullName @item.EmployeeFullName @item.BankAccountName </td>
+                        <td class="tx-sm-13">@item.DocumentNumber</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13">@(item.Currency)</td>
+                        <td class="tx-sm-13">@item.RecorderFullName</td>
+                        <td class="tx-sm-13 text-right">@item.RecordDate</td>
 
-                                <td class="tx-sm-13 bold">@item.LocationID</td>
-                                <td class="tx-sm-13">@item.ProcessDate.Value.ToShortDateString()</td>
-                                <td class="tx-sm-13">@item.ProcessName</td>
-                                <td class="tx-sm-13">@item.DocumentNumber</td>
-                                <td class="tx-sm-13 text-right bg-primary-light">@(item.CashCollection != null ? item.CashCollection.Value.ToString("N2") : "")</td>
-                                <td class="tx-sm-13 text-right bg-primary-light">@(item.CashPaymnet != null ? item.CashPaymnet.Value.ToString("N2") : "")</td>
-                                <td class="tx-sm-13 text-right bg-primary-light">@(item.CashAmount != null ? item.CashAmount.Value.ToString("N2") : "")</td>
-                                <td class="tx-sm-13 text-right bg-primary font-weight-bold text-white">@(Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Cash").Total.ToString("N2"))</td>
-
-                                <td class="tx-sm-13 text-right bg-warning-light">@(item.CardCollection != null ? item.CardCollection.Value.ToString("N2") : "")</td>
-                                <td class="tx-sm-13 text-right bg-warning-light">@(item.CardPayment != null ? item.CardPayment.Value.ToString("N2") : "")</td>
-                                <td class="tx-sm-13 text-right bg-warning-light">@(item.CardAmount != null ? item.CardAmount.Value.ToString("N2") : "")</td>
-                                <td class="tx-sm-13 text-right bg-warning font-weight-bold text-white">@(Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Bank").Total.ToString("N2"))</td>
-
-
-                                <td class="tx-sm-13 text-right bg-orange font-weight-bold text-white">@((Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Cash").Total + Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Bank").Total).ToString("N2"))</td>
-                                <td class="tx-sm-13">@item.Currency</td>
-                                <td class="tx-sm-13 text-right">@item.RecordDate</td>
-
-                            </tr>
-                        }*@
+                    </tr>
+                    }
 
                 </tbody>
             </table>

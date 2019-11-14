@@ -46,5 +46,6 @@ namespace ActionForce.Entity
         public string CashName { get; set; }
         public string RecorderFullName { get; set; }
         public string UpdaterFullName { get; set; }
+        public string LocationFullName { get; set; }
     }
 }

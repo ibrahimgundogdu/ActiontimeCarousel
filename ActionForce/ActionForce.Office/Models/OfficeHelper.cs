@@ -1,4 +1,5 @@
 ﻿using ActionForce.Entity;
+using ActionForce.Integration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -149,7 +150,7 @@ namespace ActionForce.Office
                     Cash newcash = new Cash();
 
                     newcash.BlockedAmount = 100;
-                    newcash.CashName = $"Nakit Kasa {currency}";
+                    newcash.CashName = $"Lokasyon Kasası";
                     newcash.Currency = currency;
                     newcash.IsActive = true;
                     newcash.LocationID = locationID;
@@ -175,6 +176,67 @@ namespace ActionForce.Office
 
             return documentNumber;
 
+        }
+
+        public static Exchange GetExchange(DateTime date)
+        {
+
+
+            if (DateTime.UtcNow.Hour >= 12 && DateTime.UtcNow.Minute > 0)
+            {
+                date = date.AddDays(1).Date;
+            }
+            else
+            {
+                date = date.Date;
+            }
+
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                var exchange = db.Exchange.FirstOrDefault(x => x.Date == date);
+
+                if (exchange != null)
+                {
+                    return exchange;
+                }
+                else
+                {
+                    TCMBClient tcmbClient = new TCMBClient();
+
+                    string dateparam = date.ToString("dd-MM-yyyy");
+
+                    var newExchange = tcmbClient.GetExchangeToday(dateparam);
+
+                    if (newExchange != null)
+                    {
+                        Exchange newexchange = new Exchange();
+
+                        var item = newExchange.items.FirstOrDefault();
+                        newexchange.Date = date;
+                        newexchange.EURA = Convert.ToDouble(item.TP_DK_EUR_A.Replace(".", ","));
+                        newexchange.EURS = Convert.ToDouble(item.TP_DK_EUR_S.Replace(".", ","));
+                        newexchange.USDA = Convert.ToDouble(item.TP_DK_USD_A.Replace(".", ","));
+                        newexchange.USDS = Convert.ToDouble(item.TP_DK_USD_S.Replace(".", ","));
+
+                        db.Exchange.Add(newexchange);
+                        db.SaveChanges();
+
+                        return newexchange;
+                    }
+
+                }
+            }
+
+            return null;
+
+        }
+
+        public static void AddCashAction(int? CashID, int? LocationID, int? EmployeeID, int? CashActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? RecordEmployeeID, DateTime? RecordDate)
+        {
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                db.AddCashAction(CashID, LocationID, EmployeeID, CashActionTypeID, ActionDate, ProcessName, ProcessID, ProcessDate, DocumentNumber, Description, Direction, Collection, Payment, Currency, Latitude, Longitude, RecordEmployeeID, RecordDate);
+            }
         }
     }
 }
