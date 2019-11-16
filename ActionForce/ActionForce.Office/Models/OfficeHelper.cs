@@ -201,6 +201,13 @@ namespace ActionForce.Office
                 }
                 else
                 {
+                    var datekey = db.DateList.FirstOrDefault(x => x.DateKey == date);
+
+                    if (datekey.DayName == "Saturday" || datekey.DayName =="Sunday")
+                    {
+                        date = db.DateList.FirstOrDefault(x => x.Year == datekey.Year && x.WeekNumber == datekey.WeekNumber && x.DayName == "Friday").DateKey;
+                    }
+
                     TCMBClient tcmbClient = new TCMBClient();
 
                     string dateparam = date.ToString("dd-MM-yyyy");

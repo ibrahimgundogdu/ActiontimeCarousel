@@ -124,14 +124,14 @@
     <a href="#" class="close"><i data-feather="x"></i></a>
 
     <div class="pd-25 ht-100p tx-13">
-        @using (Html.BeginForm("AddCashExchange", "Cash", FormMethod.Post))
+        @using (Html.BeginForm("AddCashExchange", "Cash", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
         <div>
             <h4>Yeni Kasa Döviz Satışı</h4>
             <p class="tx-color-03">Kasadan döviz satışı işlemi yapar.</p>
             <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="25" />
-           
+
             <div class="form-group">
                 <label>Lokasyon</label>
                 <select class="form-control" id="LocationID" name="LocationID" required>
@@ -141,10 +141,7 @@
                     }
                 </select>
             </div>
-            <div class="form-group">
-                <label>Döviz Tutarı</label>
-                <input id="Amount" name="Amount" type="text" class="form-control" placeholder="Tutar" required>
-            </div>
+
             <div class="form-group">
                 <label>Döviz Para Birimi</label>
                 <select class="form-control" id="Currency" name="Currency" required>
@@ -155,19 +152,28 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Kur Değeri</label>
-                <input id="Exchange" name="Exchange" type="number" class="form-control" placeholder="Adet" required>
+                <label>Döviz Tutarı</label>
+                <input id="Amount" name="Amount" type="text" class="form-control" placeholder="Tutar" required>
             </div>
             <div class="form-group">
-                <label>Tarih</label>
+                <label>Kur Değeri</label>
+                <input id="Exchange" name="Exchange" type="text" class="form-control" placeholder="Kur" required>
+            </div>
+            <div class="form-group">
+                <label>Tarihi</label>
                 <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
             </div>
+            <div class="form-group">
+                <label>Dekontu</label>
+                <input type="file" name="documentFile" id="documentFile" style="width: 100%;" class="form-control" />
+            </div>
+
             <div class="form-group">
                 <label>Açıklama</label>
                 <textarea id="Description" name="Description" rows="4" class="form-control" placeholder="Açıklama"></textarea>
             </div>
 
-            <button class="btn btn-primary btn-block">Tahsilat Ekle</button>
+            <button type="submit" class="btn btn-primary btn-block">Döviz Satışı Ekle</button>
         </div>
 
         }
