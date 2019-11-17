@@ -280,6 +280,7 @@
     <Content Include="assets\css\dashforge.mail.css" />
     <Content Include="assets\css\dashforge.min.css" />
     <Content Include="assets\css\dashforge.profile.css" />
+    <Content Include="assets\css\jquery.toast.css" />
     <Content Include="assets\css\skin.charcoal.css" />
     <Content Include="assets\css\skin.cool.css" />
     <Content Include="assets\css\skin.deepblue.css" />
@@ -327,6 +328,7 @@
     <Content Include="assets\js\dashforge.mail.js" />
     <Content Include="assets\js\dashforge.sampledata.js" />
     <Content Include="assets\js\dashforge.settings.js" />
+    <Content Include="assets\js\jquery.toast.js" />
     <Content Include="assets\js\jquery.vmap.sampledata.js" />
     <Content Include="Content\bootstrap-theme.css" />
     <Content Include="Content\bootstrap-theme.min.css" />
@@ -2405,6 +2407,7 @@
     <Content Include="Views\Cash\Sale.cshtml" />
     <Content Include="Views\Cash\_PartialDocumentForms.cshtml" />
     <Content Include="Views\Cash\Exchange.cshtml" />
+    <Content Include="Views\Cash\Open.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

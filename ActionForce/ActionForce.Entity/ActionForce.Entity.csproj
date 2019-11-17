@@ -549,6 +549,9 @@
     <Compile Include="VDocumentCashCollections.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VDocumentCashOpen.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VDocumentSaleExchange.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

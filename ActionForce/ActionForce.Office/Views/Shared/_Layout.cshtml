@@ -23,6 +23,8 @@
     <link href="/lib/datatables.net-dt/css/jquery.dataTables.min.css" rel="stylesheet">
     <link href="/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css" rel="stylesheet">
     <link href="/lib/select2/css/select2.min.css" rel="stylesheet">
+    <link href="/assets/css/jquery.toast.css" rel="stylesheet" />
+
 
 
 
@@ -78,7 +80,7 @@
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Cash">01 Kasa Tahsilatı</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "Sale" ? "class=active" : "")><a href="/Cash/Sale">02 Bilet Satışı</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "Exchange" ? "class=active" : "")><a href="/Cash/Exchange">03 Döviz Satışı</a></li>
-                        <li><a href="/Cash">04 Kasa Açılış Fişi</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "Open" ? "class=active" : "")><a href="/Cash/Open">04 Kasa Açılış Fişi</a></li>
 
                         <li class="nav-label">Ödemeler (-)</li>
 
@@ -165,6 +167,7 @@
     <script src="/lib/prismjs/prism.js"></script>
     <script src="/lib/select2/js/select2.min.js"></script>
     <script src="/lib/jqueryui/jquery-ui.min.js"></script>
+    <script src="/assets/js/jquery.toast.js"></script>
 
     @RenderSection("scripts", false)
 

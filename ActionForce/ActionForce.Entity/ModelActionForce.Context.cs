@@ -168,7 +168,6 @@ namespace ActionForce.Entity
         public virtual DbSet<DocumentBankTransfer> DocumentBankTransfer { get; set; }
         public virtual DbSet<DocumentCashCollections> DocumentCashCollections { get; set; }
         public virtual DbSet<DocumentCashExpense> DocumentCashExpense { get; set; }
-        public virtual DbSet<DocumentCashOpen> DocumentCashOpen { get; set; }
         public virtual DbSet<DocumentCashPayments> DocumentCashPayments { get; set; }
         public virtual DbSet<DocumentCashRecorderSlip> DocumentCashRecorderSlip { get; set; }
         public virtual DbSet<DocumentPosCollections> DocumentPosCollections { get; set; }
@@ -190,6 +189,8 @@ namespace ActionForce.Entity
         public virtual DbSet<VCashBankActions> VCashBankActions { get; set; }
         public virtual DbSet<VDocumentTicketSales> VDocumentTicketSales { get; set; }
         public virtual DbSet<VDocumentSaleExchange> VDocumentSaleExchange { get; set; }
+        public virtual DbSet<DocumentCashOpen> DocumentCashOpen { get; set; }
+        public virtual DbSet<VDocumentCashOpen> VDocumentCashOpen { get; set; }
     
         public virtual int AddApplicationLog(string environment, string modul, string processType, string processID, string controller, string action, string tableName, string fieldName, string oldValue, string newValue, Nullable<bool> isSuccess, string resultMessage, string errorMessage, Nullable<System.DateTime> recordDate, string recordEmployee, string recordIP, string recordDevice)
         {
@@ -361,6 +362,19 @@ namespace ActionForce.Entity
                 new ObjectParameter("RecordDate", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddCashAction", cashIDParameter, locationIDParameter, employeeIDParameter, cashActionTypeIDParameter, actionDateParameter, processNameParameter, processIDParameter, processDateParameter, documentNumberParameter, descriptionParameter, directionParameter, collectionParameter, paymentParameter, currencyParameter, latitudeParameter, longitudeParameter, recordEmployeeIDParameter, recordDateParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetCashBalance(Nullable<int> locationID, Nullable<int> cashID)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var cashIDParameter = cashID.HasValue ?
+                new ObjectParameter("CashID", cashID) :
+                new ObjectParameter("CashID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetCashBalance", locationIDParameter, cashIDParameter);
         }
     }
 }

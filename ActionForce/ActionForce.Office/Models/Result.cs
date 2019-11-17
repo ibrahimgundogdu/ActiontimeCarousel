@@ -10,5 +10,13 @@ namespace ActionForce.Office
         public bool IsSuccess { get; set; }
         public string Message { get; set; }
         public T Data { get; set; }
+        public ResultType resultType { get; set; }
+    }
+    public enum ResultType
+    {
+        Information = 0,
+        Alert = 1,
+        Warning = 2
+        
     }
 }

@@ -11,6 +11,8 @@ namespace ActionForce.Office
         public IEnumerable<VDocumentCashCollections> CashCollections { get; set; }
         public IEnumerable<VDocumentTicketSales> CashSales { get; set; }
         public IEnumerable<VDocumentSaleExchange> CashSaleExchanges { get; set; }
+        public IEnumerable<VDocumentCashOpen> CashOpenSlip { get; set; }
+
         public IEnumerable<Cash> CashList { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
         public IEnumerable<FromAccountModel> FromList { get; set; }
@@ -19,6 +21,7 @@ namespace ActionForce.Office
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }
         public VLocation CurrentLocation { get; set; }
+        public Result<CashActions> Result { get; set; }
 
     }
 }

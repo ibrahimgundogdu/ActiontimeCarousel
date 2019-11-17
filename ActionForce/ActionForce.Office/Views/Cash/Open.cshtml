@@ -28,16 +28,13 @@
                     <li class="breadcrumb-item active" aria-current="page">Kasa Nakit İşlemleri</li>
                 </ol>
             </nav>
-            <h4 class="mg-b-0 tx-spacing--1">Bilet Satışı</h4>
+            <h4 class="mg-b-0 tx-spacing--1">Kasa Açılış Fişi</h4>
         </div>
         <div class="d-none d-md-block">
             @{Html.RenderPartial("_PartialAddCashMenu");}
         </div>
     </div>
-    <!--<div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right">
-             any content goes here
-        form
-    </div>-->
+    <!--<div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right"> any content goes here form </div>-->
 
 
 
@@ -80,37 +77,35 @@
                         <th>Lokasyon</th>
                         <th>Kasa</th>
                         <th>İşlem</th>
-                        <th>Bu Hesaptan</th>
                         <th>Belge No</th>
-                        <th>Adet</th>
-                        <th>Tahsilat</th>
+                        <th>Tutar</th>
                         <th>Para Br.</th>
-                        <th>Ödeme Yöntemi</th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
+                        <th>Güncelleyen</th>
+                        <th>Güncelleme Tarihi</th>
                     </tr>
                 </thead>
                 <tbody>
 
-                    @foreach (var item in Model.CashSales)
+                    @foreach (var item in Model.CashOpenSlip)
                     {
-                        <tr>
+                    <tr>
 
-                            <td class="tx-sm-13 bold">@item.ID</td>
-                            <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
-                            <td class="tx-sm-13">@item.LocationFullName</td>
-                            <td class="tx-sm-13">@item.CashName</td>
-                            <td class="tx-sm-13">@item.ActionTypeName</td>
-                            <td class="tx-sm-13">@item.CustomerFullName</td>
-                            <td class="tx-sm-13">@item.DocumentNumber</td>
-                            <td class="tx-sm-13">@item.Quantity</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
-                            <td class="tx-sm-13">@(item.Currency)</td>
-                            <td class="tx-sm-13">@(item.PayMethodName)</td>
-                            <td class="tx-sm-13">@item.RecorderFullName</td>
-                            <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                        <td class="tx-sm-13 bold">@item.ID</td>
+                        <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                        <td class="tx-sm-13">@item.LocationFullName</td>
+                        <td class="tx-sm-13">@item.CashName</td>
+                        <td class="tx-sm-13">@item.ActionTypeName</td>
+                        <td class="tx-sm-13">@item.DocumentNumber</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13">@(item.Currency)</td>
+                        <td class="tx-sm-13">@item.RecorderFullName</td>
+                        <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                        <td class="tx-sm-13">@item.UpdaterFullName</td>
+                        <td class="tx-sm-13 text-right">@item.UpdateDate</td>
 
-                        </tr>
+                    </tr>
                     }
 
                 </tbody>
@@ -185,7 +180,9 @@
             var cleave = new Cleave('#Amount', {
                 numeral: true
             });
-
+            var cleave2 = new Cleave('#Exchange', {
+                numeral: true
+            });
             function getDate(element) {
                 var date;
                 try {

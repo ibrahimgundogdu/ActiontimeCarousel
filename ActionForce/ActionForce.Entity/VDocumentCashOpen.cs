@@ -12,7 +12,7 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class DocumentCashOpen
+    public partial class VDocumentCashOpen
     {
         public long ID { get; set; }
         public string DocumentNumber { get; set; }
@@ -32,9 +32,13 @@ namespace ActionForce.Entity
         public Nullable<bool> IsActive { get; set; }
         public string ActionTypeName { get; set; }
         public Nullable<int> ActionTypeID { get; set; }
+        public string UpdaterFullName { get; set; }
+        public string RecorderFullName { get; set; }
+        public string LocationFullName { get; set; }
         public Nullable<double> ExchangeRate { get; set; }
         public Nullable<double> SystemAmount { get; set; }
         public string SystemCurrency { get; set; }
         public string Description { get; set; }
+        public string CashName { get; set; }
     }
 }

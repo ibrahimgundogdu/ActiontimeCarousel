@@ -89,24 +89,24 @@
 
                     @foreach (var item in Model.CashSaleExchanges)
                     {
-                    <tr>
+                        <tr>
 
-                        <td class="tx-sm-13 bold">@item.ID</td>
-                        <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
-                        <td class="tx-sm-13">@item.LocationFullName</td>
-                        <td class="tx-sm-13">@item.FromCashName</td>
-                        <td class="tx-sm-13">@item.ToCashName</td>
-                        <td class="tx-sm-13">@item.ActionTypeName</td>
-                        <td class="tx-sm-13">@item.DocumentNumber</td>
-                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
-                        <td class="tx-sm-13">@(item.Currency)</td>
-                        <td class="tx-sm-13">@(item.ExchangeRate != null ? item.ExchangeRate.Value.ToString("N2") : "")</td>
-                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.ToAmount != null ? item.ToAmount.Value.ToString("N2") : "")</td>
-                        <td class="tx-sm-13">@(item.ToCurrency)</td>
-                        <td class="tx-sm-13">@item.RecorderFullName</td>
-                        <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                            <td class="tx-sm-13 bold">@item.ID</td>
+                            <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                            <td class="tx-sm-13">@item.LocationFullName</td>
+                            <td class="tx-sm-13">@item.FromCashName</td>
+                            <td class="tx-sm-13">@item.ToCashName</td>
+                            <td class="tx-sm-13">@item.ActionTypeName</td>
+                            <td class="tx-sm-13">@item.DocumentNumber</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
+                            <td class="tx-sm-13">@(item.Currency)</td>
+                            <td class="tx-sm-13">@(item.ExchangeRate != null ? item.ExchangeRate.Value.ToString("N2") : "")</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.ToAmount != null ? item.ToAmount.Value.ToString("N2") : "")</td>
+                            <td class="tx-sm-13">@(item.ToCurrency)</td>
+                            <td class="tx-sm-13">@item.RecorderFullName</td>
+                            <td class="tx-sm-13 text-right">@item.RecordDate</td>
 
-                    </tr>
+                        </tr>
                     }
 
                 </tbody>
@@ -124,17 +124,16 @@
     </div>
 </div>
 
-
 @section canvasmenu {
     @{Html.RenderPartial("_PartialDocumentForms", Model);}
 }
 
 @section scripts {
     <script src="/lib/cleave.js/cleave.min.js"></script>
-
     <script>
         $(function () {
 
+            $('.toast').toast();
             $('.select2').select2({
                 placeholder: 'Lokasyon Seçiminiz',
                 searchInputPlaceholder: 'Search options'
@@ -230,4 +229,18 @@
         });
 
     </script>
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
 }
