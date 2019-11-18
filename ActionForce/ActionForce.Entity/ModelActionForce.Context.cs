@@ -191,6 +191,14 @@ namespace ActionForce.Entity
         public virtual DbSet<VDocumentSaleExchange> VDocumentSaleExchange { get; set; }
         public virtual DbSet<DocumentCashOpen> DocumentCashOpen { get; set; }
         public virtual DbSet<VDocumentCashOpen> VDocumentCashOpen { get; set; }
+        public virtual DbSet<VDocumentCashPayments> VDocumentCashPayments { get; set; }
+        public virtual DbSet<VDocumentTicketSaleReturn> VDocumentTicketSaleReturn { get; set; }
+        public virtual DbSet<Environment> Environment { get; set; }
+        public virtual DbSet<VDocumentCashExpense> VDocumentCashExpense { get; set; }
+        public virtual DbSet<Result> Result { get; set; }
+        public virtual DbSet<ResultDocuments> ResultDocuments { get; set; }
+        public virtual DbSet<ResultItemList> ResultItemList { get; set; }
+        public virtual DbSet<ResultItems> ResultItems { get; set; }
     
         public virtual int AddApplicationLog(string environment, string modul, string processType, string processID, string controller, string action, string tableName, string fieldName, string oldValue, string newValue, Nullable<bool> isSuccess, string resultMessage, string errorMessage, Nullable<System.DateTime> recordDate, string recordEmployee, string recordIP, string recordDevice)
         {
@@ -375,6 +383,15 @@ namespace ActionForce.Entity
                 new ObjectParameter("CashID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetCashBalance", locationIDParameter, cashIDParameter);
+        }
+    
+        public virtual ObjectResult<GetToList_Result> GetToList(Nullable<int> ourCompanyID)
+        {
+            var ourCompanyIDParameter = ourCompanyID.HasValue ?
+                new ObjectParameter("OurCompanyID", ourCompanyID) :
+                new ObjectParameter("OurCompanyID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetToList_Result>("GetToList", ourCompanyIDParameter);
         }
     }
 }

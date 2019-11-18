@@ -36,5 +36,7 @@ namespace ActionForce.Entity
         public Nullable<double> SystemAmount { get; set; }
         public string SystemCurrency { get; set; }
         public string Description { get; set; }
+        public Nullable<long> ResultID { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
     }
 }

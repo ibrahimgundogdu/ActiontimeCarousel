@@ -2408,6 +2408,9 @@
     <Content Include="Views\Cash\_PartialDocumentForms.cshtml" />
     <Content Include="Views\Cash\Exchange.cshtml" />
     <Content Include="Views\Cash\Open.cshtml" />
+    <Content Include="Views\Cash\CashPayment.cshtml" />
+    <Content Include="Views\Cash\SaleReturn.cshtml" />
+    <Content Include="Views\Cash\Expense.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

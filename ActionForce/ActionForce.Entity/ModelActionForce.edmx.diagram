@@ -186,6 +186,16 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentSaleExchange" Width="1.5" PointX="7.375" PointY="42.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentCashOpen" Width="1.5" PointX="25.375" PointY="38.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentCashOpen" Width="1.5" PointX="9.375" PointY="42.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentCashPayments" Width="1.5" PointX="39.375" PointY="42.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentTicketSaleReturn" Width="1.5" PointX="43.375" PointY="6.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Environment" Width="1.5" PointX="41.375" PointY="42.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentCashExpense" Width="1.5" PointX="43.375" PointY="26.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Result" Width="1.5" PointX="43.375" PointY="46" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ResultDocuments" Width="1.5" PointX="43.375" PointY="20.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ResultItemList" Width="1.5" PointX="45.625" PointY="15" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ResultItems" Width="1.5" PointX="43.375" PointY="16.25" />
+        <AssociationConnector Association="db293_ActionTimeDbModel.FK_ResultItemList_Result" />
+        <AssociationConnector Association="db293_ActionTimeDbModel.FK_ResultItemList_ResultItems" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
