@@ -84,9 +84,9 @@
 
                         <li class="nav-label">Ödemeler (-)</li>
 
-                        <li><a href="/Cash">01 Kasa Ödemesi</a></li>
-                        <li><a href="/Cash">02 Bilet Satış İadesi</a></li>
-                        <li><a href="/Cash">03 Masraf Ödeme Fişi</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "CashPayment" ? "class=active" : "")><a href="/Cash/CashPayment">01 Kasa Ödemesi</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "SaleReturn" ? "class=active" : "")><a href="/Cash/SaleReturn">02 Bilet Satışı İadesi</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "Expense" ? "class=active" : "")><a href="/Cash/Expense">03 Masraf Ödeme Fişi</a></li>
                         <li><a href="/Cash">04 Havale / EFT işlemi</a></li>
                         <li><a href="/Cash">05 Maaş Avans Ödemesi</a></li>
                     </ul>

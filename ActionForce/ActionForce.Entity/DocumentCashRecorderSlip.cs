@@ -32,5 +32,7 @@ namespace ActionForce.Entity
         public string ActionTypeName { get; set; }
         public Nullable<int> ActionTypeID { get; set; }
         public string SlipFile { get; set; }
+        public Nullable<long> ResultID { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
     }
 }

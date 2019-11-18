@@ -38,5 +38,7 @@ namespace ActionForce.Entity
         public string ActionTypeName { get; set; }
         public Nullable<int> ActionTypeID { get; set; }
         public string Description { get; set; }
+        public Nullable<long> ResultID { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
     }
 }

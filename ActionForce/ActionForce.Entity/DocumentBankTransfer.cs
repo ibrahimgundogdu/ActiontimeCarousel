@@ -41,5 +41,7 @@ namespace ActionForce.Entity
         public string SlipDocument { get; set; }
         public Nullable<int> StatusID { get; set; }
         public string ReferenceCode { get; set; }
+        public Nullable<long> ResultID { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
     }
 }

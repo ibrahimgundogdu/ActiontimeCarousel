@@ -47,4 +47,41 @@ namespace ActionForce.Office
         public string Amount { get; set; }
         public string Description { get; set; }
     }
+
+
+    public class NewCashPayments
+    {
+        public int ActinTypeID { get; set; }
+        public string FromID { get; set; }
+        public int LocationID { get; set; }
+        public string Amount { get; set; }
+        public string Currency { get; set; }
+        public string DocumentDate { get; set; }
+        public string Description { get; set; }
+    }
+    public class NewTicketSaleReturn
+    {
+        public int ActinTypeID { get; set; }
+        public string FromID { get; set; }
+        public int LocationID { get; set; }
+        public int Quantity { get; set; }
+        public string Amount { get; set; }
+        public string Currency { get; set; }
+        public string DocumentDate { get; set; }
+        public string Description { get; set; }
+    }
+
+    public class NewCashExpense
+    {
+        public int ActinTypeID { get; set; }
+        public string FromID { get; set; }
+        public int LocationID { get; set; }
+        public int Quantity { get; set; }
+        public string Amount { get; set; }
+        public string Currency { get; set; }
+        public string DocumentDate { get; set; }
+        public string Description { get; set; }
+        public string SlipNumber { get; set; }
+        public string SlipDocument { get; set; }
+    }
 }
