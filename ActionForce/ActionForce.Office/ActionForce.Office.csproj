@@ -2276,6 +2276,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LogoutController.cs" />
+    <Compile Include="Controllers\ResultController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -2292,6 +2293,7 @@
     <Compile Include="Models\NewCashCollect.cs" />
     <Compile Include="Models\OfficeHelper.cs" />
     <Compile Include="Models\Result.cs" />
+    <Compile Include="Models\ResultControlModel.cs" />
     <Compile Include="Models\TotalModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -2408,6 +2410,7 @@
     <Content Include="Views\Cash\_PartialDocumentForms.cshtml" />
     <Content Include="Views\Cash\Exchange.cshtml" />
     <Content Include="Views\Cash\Open.cshtml" />
+    <Content Include="Views\Result\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
