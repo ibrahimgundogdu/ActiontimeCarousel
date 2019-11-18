@@ -87,8 +87,8 @@
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "CashPayment" ? "class=active" : "")><a href="/Cash/CashPayment">01 Kasa Ödemesi</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "SaleReturn" ? "class=active" : "")><a href="/Cash/SaleReturn">02 Bilet Satışı İadesi</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "Expense" ? "class=active" : "")><a href="/Cash/Expense">03 Masraf Ödeme Fişi</a></li>
-                        <li><a href="/Cash">04 Havale / EFT işlemi</a></li>
-                        <li><a href="/Cash">05 Maaş Avans Ödemesi</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "BankTransfer" ? "class=active" : "")><a href="/Cash/BankTransfer">04 Havale / EFT işlemi</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "SalaryPayment" ? "class=active" : "")><a href="/Cash/SalaryPayment">05 Maaş Avans Ödemesi</a></li>
                     </ul>
                 </li>
                 <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Bank" ? "show" : "")">
