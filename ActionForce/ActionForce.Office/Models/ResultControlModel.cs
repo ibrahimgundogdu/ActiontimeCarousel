@@ -9,6 +9,8 @@ namespace ActionForce.Office
     public class ResultControlModel : LayoutControlModel
     {
 
+        public VResult CurrentResult { get; set; }
+        public Result Result { get; set; }
         public IEnumerable<VResult> ResultList { get; set; }
         public IEnumerable<Cash> CashList { get; set; }
         public IEnumerable<Location> LocationList { get; set; }

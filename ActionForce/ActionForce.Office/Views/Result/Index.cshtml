@@ -1,6 +1,6 @@
 ﻿@model ResultControlModel
 @{
-    ViewBag.Title = "Kasa Tahsilat";
+    ViewBag.Title = "Gün Sonu Zarf İşlemleri";
 }
 
 @section style{
@@ -25,12 +25,15 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                     <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Kasa Nakit İşlemleri</li>
+                    <li class="breadcrumb-item active" aria-current="page">Gün Sonu İşlemleri</li>
                 </ol>
             </nav>
-            <h4 class="mg-b-0 tx-spacing--1">Kasa Tahsilatı</h4>
+            <h4 class="mg-b-0 tx-spacing--1">Gün Sonu Zarfları</h4>
         </div>
         <div class="d-none d-md-block">
+            <a class="btn btn-primary btn-uppercase" id="AddResult" href="/Result/New">
+                <i data-feather="envelope"></i> &nbsp; Gün Sonu Zarfı Ekle
+            </a>
             @*@{Html.RenderPartial("_PartialAddCashMenu");}*@
         </div>
     </div>
@@ -72,35 +75,36 @@
                         <th>#</th>
                         <th>Tarih</th>
                         <th>Lokasyon</th>
-                        <th>Kasa</th>
-                        <th>İşlem</th>
-                        <th>Bu Hesaptan</th>
-                        <th>Belge No</th>
-                        <th>Tahsilat</th>
-                        <th>Para Br.</th>
+                        <th>Aşama</th>
+                        <th>Durum</th>
+                        <th>Kaynak</th>
                         <th>Kaydeden</th>
-                        <th>Kayıt Tarihi</th>
+                        <th>K.Tarihi</th>
+                        <th>Güncelleyen</th>
+                        <th>G.Tarihi</th>
+                        <th>Açıklama</th>
+                        <th>Aktif</th>
                     </tr>
                 </thead>
                 <tbody>
 
                     @foreach (var item in Model.ResultList)
                     {
-                        <tr>
+                    <tr>
 
-                            <td class="tx-sm-13 bold">@item.ID</td>
-                            <td class="tx-sm-13">@item.Date.ToShortDateString()</td>
-                            <td class="tx-sm-13">@item.LocationFullName</td>
-                            <td class="tx-sm-13">@item.CashName</td>
-                            <td class="tx-sm-13">@item.ActionTypeName</td>
-                            <td class="tx-sm-13">@item.CustomerFullName @item.EmployeeFullName @item.BankAccountName </td>
-                            <td class="tx-sm-13">@item.DocumentNumber</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
-                            <td class="tx-sm-13">@(item.Currency)</td>
-                            <td class="tx-sm-13">@item.RecorderFullName</td>
-                            <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                        <td class="tx-sm-13 bold">@item.ID</td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold">@item.Date.ToShortDateString()</td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold">@item.LocationFullName</td>
+                        <td class="tx-sm-13">@item.StateName</td>
+                        <td class="tx-sm-13">@item.StatusName</td>
+                        <td class="tx-sm-13">@item.Environment </td>
+                        <td class="tx-sm-13">@item.RecorderFullName</td>
+                        <td class="tx-sm-13">@(item.RecordDate)</td>
+                        <td class="tx-sm-13">@item.UpdaterFullName</td>
+                        <td class="tx-sm-13">@(item.UpdateDate)</td>
+                        <td class="tx-sm-13">@(item.IsActive)</td>
 
-                        </tr>
+                    </tr>
                     }
 
                 </tbody>
@@ -120,7 +124,7 @@
 
 
 @section canvasmenu {
-    @{Html.RenderPartial("_PartialDocumentForms", Model);}
+
 }
 
 @section scripts {
@@ -172,12 +176,7 @@
                 datePattern: ['Y', 'm', 'd'],
 
             });
-            var cleave = new Cleave('#Amount', {
-                numeral: true
-            });
-            var cleave2 = new Cleave('#Exchange', {
-                numeral: true
-            });
+           
             function getDate(element) {
                 var date;
                 try {
@@ -185,9 +184,7 @@
                 } catch (error) {
                     date = null;
                 }
-
                 return date;
-
             }
 
         });
@@ -225,12 +222,12 @@
 
     </script>
 
-    @if (Model.Result != null) //
+    @if (Model.ResultMessage != null) //
     {
         <script type="text/javascript">
         $.toast({
             heading: 'Information',
-            text: '@Model.Result.Message ',
+            text: '@Model.ResultMessage.Message ',
             showHideTransition: 'slide',
             icon: 'info',
             hideAfter: 5000,
