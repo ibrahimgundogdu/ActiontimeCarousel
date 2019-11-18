@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ActionForce.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -16,7 +17,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                //model.Result = TempData["result"] as Result<Entity.Result> ?? null;
+                model.ResultMessage = TempData["result"] as Result<Result> ?? null;
             }
 
             if (TempData["filter"] != null)
@@ -37,16 +38,42 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
-            //model.CashCollections = Db.VDocumentCashCollections.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-            //if (model.Filters.LocationID > 0)
-            //{
-            //    model.CashCollections = model.CashCollections.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.ResultList = Db.Result.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
 
-            //}
-
-
+            if (model.Filters.LocationID > 0)
+            {
+                model.ResultList = model.ResultList.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            }
 
             return View(model);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult Filter(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("Index", "Result");
+        }
+
+
     }
 }

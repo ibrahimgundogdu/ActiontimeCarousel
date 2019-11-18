@@ -31,18 +31,12 @@
             <h4 class="mg-b-0 tx-spacing--1">Kasa Tahsilatı</h4>
         </div>
         <div class="d-none d-md-block">
-            @{Html.RenderPartial("_PartialAddCashMenu");}
+            @*@{Html.RenderPartial("_PartialAddCashMenu");}*@
         </div>
     </div>
-    <!--<div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right">
-             any content goes here
-        form
-    </div>-->
 
 
-
-
-    @using (Html.BeginForm("Filter", "Cash", FormMethod.Post))
+    @using (Html.BeginForm("Filter", "Result", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         <div class="form-row align-items-end">
@@ -90,12 +84,12 @@
                 </thead>
                 <tbody>
 
-                    @foreach (var item in Model.CashCollections)
+                    @foreach (var item in Model.ResultList)
                     {
                         <tr>
 
                             <td class="tx-sm-13 bold">@item.ID</td>
-                            <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                            <td class="tx-sm-13">@item.Date.ToShortDateString()</td>
                             <td class="tx-sm-13">@item.LocationFullName</td>
                             <td class="tx-sm-13">@item.CashName</td>
                             <td class="tx-sm-13">@item.ActionTypeName</td>

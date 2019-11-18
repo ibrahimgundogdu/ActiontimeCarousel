@@ -9,7 +9,7 @@ namespace ActionForce.Office
     public class ResultControlModel : LayoutControlModel
     {
 
-        //public IEnumerable<> MyProperty { get; set; }
+        public IEnumerable<VResult> ResultList { get; set; }
         public IEnumerable<Cash> CashList { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
         public IEnumerable<FromAccountModel> FromList { get; set; }
@@ -18,6 +18,6 @@ namespace ActionForce.Office
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }
         public VLocation CurrentLocation { get; set; }
-        public Result<CashActions> Result { get; set; }
+        public Result<Result> ResultMessage { get; set; }
     }
 }
