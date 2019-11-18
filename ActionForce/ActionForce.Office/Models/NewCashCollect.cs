@@ -84,4 +84,28 @@ namespace ActionForce.Office
         public string SlipNumber { get; set; }
         public string SlipDocument { get; set; }
     }
+    public class NewCashBankTransfer
+    {
+        public int ActinTypeID { get; set; }
+        public string FromID { get; set; }
+        public int LocationID { get; set; }
+        public string Amount { get; set; }
+        public string Currency { get; set; }
+        public string DocumentDate { get; set; }
+        public string Description { get; set; }
+        public string SlipNumber { get; set; }
+        public string SlipDocument { get; set; }
+        public int StatusID { get; set; }
+        public string ReferenceCode { get; set; }
+    }
+    public class NewCashSalaryPayment
+    {
+        public int ActinTypeID { get; set; }
+        public string FromID { get; set; }
+        public int LocationID { get; set; }
+        public string Amount { get; set; }
+        public string Currency { get; set; }
+        public string DocumentDate { get; set; }
+        public string Description { get; set; }
+    }
 }

@@ -263,6 +263,9 @@
     <Compile Include="GetFromList_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetPersonList_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="GetToList_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -564,6 +567,9 @@
     <Compile Include="VCashBankActions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VDocumentBankTransfer.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VDocumentCashCollections.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -574,6 +580,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VDocumentCashPayments.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VDocumentSalaryPayment.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VDocumentSaleExchange.cs">

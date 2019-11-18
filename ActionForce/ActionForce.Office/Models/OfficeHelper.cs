@@ -143,6 +143,26 @@ namespace ActionForce.Office
 
             return fromList;
         }
+        public static IEnumerable<FromAccountModel> GetPersonList(int ourCompanyID)
+        {
+
+            List<FromAccountModel> fromList = new List<FromAccountModel>();
+
+
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                fromList = db.GetPersonList(ourCompanyID).Select(x => new FromAccountModel()
+                {
+                    ID = x.ID,
+                    Code = x.Code,
+                    Name = x.Name,
+                    Prefix = x.Prefix
+                }).ToList();
+            }
+
+
+            return fromList;
+        }
         public static IEnumerable<Currency> GetCurrency()
         {
             List<Currency> currList = new List<Currency>();
