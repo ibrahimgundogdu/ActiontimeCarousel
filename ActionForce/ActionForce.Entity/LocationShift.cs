@@ -32,5 +32,8 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
+        public Nullable<System.DateTime> ShiftDateStart { get; set; }
+        public Nullable<System.DateTime> ShiftDateFinish { get; set; }
+        public Nullable<int> DurationMinute { get; set; }
     }
 }

@@ -45,5 +45,6 @@ namespace ActionForce.Entity
         public string RecorderFullName { get; set; }
         public string UpdaterFullName { get; set; }
         public string LocationFullName { get; set; }
+        public Nullable<int> SalaryType { get; set; }
     }
 }

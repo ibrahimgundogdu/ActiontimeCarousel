@@ -199,8 +199,9 @@ namespace ActionForce.Entity
         public virtual DbSet<ResultDocuments> ResultDocuments { get; set; }
         public virtual DbSet<ResultItemList> ResultItemList { get; set; }
         public virtual DbSet<ResultItems> ResultItems { get; set; }
-        public virtual DbSet<VDocumentBankTransfer> VDocumentBankTransfer { get; set; }
         public virtual DbSet<VDocumentSalaryPayment> VDocumentSalaryPayment { get; set; }
+        public virtual DbSet<BankTransferStatus> BankTransferStatus { get; set; }
+        public virtual DbSet<VDocumentBankTransfer> VDocumentBankTransfer { get; set; }
     
         public virtual int AddApplicationLog(string environment, string modul, string processType, string processID, string controller, string action, string tableName, string fieldName, string oldValue, string newValue, Nullable<bool> isSuccess, string resultMessage, string errorMessage, Nullable<System.DateTime> recordDate, string recordEmployee, string recordIP, string recordDevice)
         {

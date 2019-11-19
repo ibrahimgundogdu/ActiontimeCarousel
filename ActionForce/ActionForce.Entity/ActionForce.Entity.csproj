@@ -128,6 +128,9 @@
     <Compile Include="BankNotificationStatus.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="BankTransferStatus.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="BreakTypes.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

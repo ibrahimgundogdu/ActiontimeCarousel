@@ -40,5 +40,6 @@ namespace ActionForce.Entity
         public string Description { get; set; }
         public Nullable<long> ResultID { get; set; }
         public Nullable<int> EnvironmentID { get; set; }
+        public Nullable<int> SalaryType { get; set; }
     }
 }

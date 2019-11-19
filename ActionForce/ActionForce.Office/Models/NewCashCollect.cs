@@ -34,7 +34,6 @@ namespace ActionForce.Office
         public string Currency { get; set; }
         public string Amount { get; set; }
         public string Exchange { get; set; }
-
         public string DocumentDate { get; set; }
         public string Description { get; set; }
     }
@@ -69,6 +68,7 @@ namespace ActionForce.Office
         public string Currency { get; set; }
         public string DocumentDate { get; set; }
         public string Description { get; set; }
+        public int PayMethodID { get; set; }
     }
 
     public class NewCashExpense
@@ -76,7 +76,6 @@ namespace ActionForce.Office
         public int ActinTypeID { get; set; }
         public string FromID { get; set; }
         public int LocationID { get; set; }
-        public int Quantity { get; set; }
         public string Amount { get; set; }
         public string Currency { get; set; }
         public string DocumentDate { get; set; }
@@ -107,5 +106,8 @@ namespace ActionForce.Office
         public string Currency { get; set; }
         public string DocumentDate { get; set; }
         public string Description { get; set; }
+        public int CashID { get; set; }
+        public int BankAccountID { get; set; }
+        public int SalaryType { get; set; }
     }
 }

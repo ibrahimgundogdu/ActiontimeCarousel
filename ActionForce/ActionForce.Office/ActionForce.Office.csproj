@@ -2411,6 +2411,11 @@
     <Content Include="Views\Cash\Exchange.cshtml" />
     <Content Include="Views\Cash\Open.cshtml" />
     <Content Include="Views\Result\Index.cshtml" />
+    <Content Include="Views\Cash\BankTransfer.cshtml" />
+    <Content Include="Views\Cash\CashPayment.cshtml" />
+    <Content Include="Views\Cash\Expense.cshtml" />
+    <Content Include="Views\Cash\SalaryPayment.cshtml" />
+    <Content Include="Views\Cash\SaleReturn.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2420,7 +2425,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Document\Bank\" />
     <Folder Include="Document\Exchange\" />
+    <Folder Include="Document\Expense\" />
     <Folder Include="Views\Actions\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Finance\" />

@@ -80,15 +80,16 @@
                         <th>Lokasyon</th>
                         <th>Kasa</th>
                         <th>İşlem</th>
-                        <th>Bu Hesaptan</th>
+                        <th>Bu Hesaba</th>
                         <th>Belge No</th>
                         <th>Tahsilat</th>
                         <th>Para Br.</th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
+                        <th>Referans</th>
                         <th>Fiş Nr.</th>
                         <th>Döküman</th>
-                        <th>Referans</th>
+                        <th>Durum</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -108,9 +109,14 @@
                         <td class="tx-sm-13">@(item.Currency)</td>
                         <td class="tx-sm-13">@item.RecorderFullName</td>
                         <td class="tx-sm-13 text-right">@item.RecordDate</td>
-                        <td class="tx-sm-13 text-right">@item.SlipNumber</td>
-                        <td class="tx-sm-13 text-right">@item.SlipDocument</td>
                         <td class="tx-sm-13 text-right">@item.ReferenceCode</td>
+                        <td class="tx-sm-13 text-right">@item.SlipNumber</td>
+                        <td>
+                            <a href="@(string.Format("/Documents/Bank/{0}",item.SlipDocument))" data-toggle="lightbox">
+                                <img src="@(string.Format("/Documents/Bank/{0}",item.SlipDocument))" class="img-fluid" width="64">
+                            </a>
+                        </td>
+                        <td class="tx-sm-13 text-right">@item.StatusName</td>
 
                     </tr>
                     }

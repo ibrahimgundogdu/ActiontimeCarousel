@@ -25,7 +25,10 @@ namespace ActionForce.Office
         public IEnumerable<FromAccountModel> ToList { get; set; }
         public IEnumerable<FromAccountModel> ToPersonList { get; set; }
         public IEnumerable<Currency> CurrencyList { get; set; }
-        
+        public IEnumerable<PayMethod> PayMethodList { get; set; }
+        public IEnumerable<BankTransferStatus> StatusList { get; set; }
+        public IEnumerable<BankAccount> BankAccountList { get; set; }
+
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }
         public VLocation CurrentLocation { get; set; }
