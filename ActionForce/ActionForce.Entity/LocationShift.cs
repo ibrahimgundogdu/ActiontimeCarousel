@@ -35,5 +35,7 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> ShiftDateStart { get; set; }
         public Nullable<System.DateTime> ShiftDateFinish { get; set; }
         public Nullable<int> DurationMinute { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
+        public Nullable<int> CloseEnvironmentID { get; set; }
     }
 }

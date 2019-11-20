@@ -1262,6 +1262,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentSalaryEarn' does no
           <Property Name="UpdateEmployeeID" Type="int" />
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="BreakTypeID" Type="int" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="CloseEnvironmentID" Type="int" />
         </EntityType>
         <EntityType Name="EmployeeShiftSet">
           <Key>
@@ -1371,6 +1373,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="USDS" Type="float" />
           <Property Name="EURA" Type="float" />
           <Property Name="EURS" Type="float" />
+        </EntityType>
+        <EntityType Name="ExpenseType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ExpenseName" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsLocation" Type="bit" />
+          <Property Name="SortBy" Type="char" MaxLength="4" />
+          <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="Inspection">
           <Key>
@@ -1529,6 +1541,29 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="Money" Type="nvarchar" MaxLength="10" />
           <Property Name="Calculate" Type="int" />
         </EntityType>
+        <EntityType Name="LocationSchedule">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusID" Type="int" Nullable="false" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="ShiftDate" Type="date" />
+          <Property Name="Year" Type="int" />
+          <Property Name="Month" Type="int" />
+          <Property Name="Week" Type="int" />
+          <Property Name="Day" Type="int" />
+          <Property Name="DayName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ShiftDateStart" Type="datetime" />
+          <Property Name="ShiftdateEnd" Type="datetime" />
+          <Property Name="DurationMinute" Type="int" />
+          <Property Name="RecordEmployee" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateEmployee" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="LocationShift">
           <Key>
             <PropertyRef Name="ID" />
@@ -1554,6 +1589,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="UpdateEmployeeID" Type="int" />
           <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="CloseEnvironmentID" Type="int" />
         </EntityType>
         <EntityType Name="LocationShiftSet">
           <Key>
@@ -2711,6 +2748,32 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="Schedule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusID" Type="int" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="ShiftDate" Type="date" />
+          <Property Name="Year" Type="int" StoreGeneratedPattern="Computed" />
+          <Property Name="Month" Type="int" StoreGeneratedPattern="Computed" />
+          <Property Name="Week" Type="int" StoreGeneratedPattern="Computed" />
+          <Property Name="Day" Type="int" StoreGeneratedPattern="Computed" />
+          <Property Name="DayName" Type="nvarchar" MaxLength="50" StoreGeneratedPattern="Computed" />
+          <Property Name="ShiftStart" Type="time" Precision="0" />
+          <Property Name="ShiftEnd" Type="time" Precision="0" />
+          <Property Name="ShiftDateStart" Type="datetime" />
+          <Property Name="ShiftdateEnd" Type="datetime" />
+          <Property Name="DurationMinute" Type="int" StoreGeneratedPattern="Computed" />
+          <Property Name="RecordEmployee" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateEmployee" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VBankActions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VBankActions">
@@ -3622,6 +3685,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySet Name="EmployeeStatus" EntityType="Self.EmployeeStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Environment" EntityType="Self.Environment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Exchange" EntityType="Self.Exchange" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ExpenseType" EntityType="Self.ExpenseType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Inspection" EntityType="Self.Inspection" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InspectionCategory" EntityType="Self.InspectionCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="InspectionItem" EntityType="Self.InspectionItem" Schema="dbo" store:Type="Tables" />
@@ -3634,6 +3698,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySet Name="LocationAnimals" EntityType="Self.LocationAnimals" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationCR" EntityType="Self.LocationCR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationParam" EntityType="Self.LocationParam" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LocationSchedule" EntityType="Self.LocationSchedule" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationShift" EntityType="Self.LocationShift" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationShiftSet" EntityType="Self.LocationShiftSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationShiftSetClose" EntityType="Self.LocationShiftSetClose" Schema="dbo" store:Type="Tables" />
@@ -3713,6 +3778,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySet Name="TrampolinePart" EntityType="Self.TrampolinePart" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TrampolinePartType" EntityType="Self.TrampolinePartType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TrampolineType" EntityType="Self.TrampolineType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="Office" store:Type="Tables" />
           <EntitySet Name="DocumentPosCancel" EntityType="Self.DocumentPosCancel" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [DocumentPosCancel].[ID] AS [ID], 
@@ -4751,8 +4817,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <FunctionImport Name="GetPersonList" ReturnType="Collection(db293_ActionTimeDbModel.GetPersonList_Result)">
           <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="VDocumentBankTransfer" EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" />
           <EntitySet Name="BankTransferStatus" EntityType="db293_ActionTimeDbModel.BankTransferStatus" />
+          <EntitySet Name="VDocumentBankTransfer" EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" />
+          <EntitySet Name="ExpenseType" EntityType="db293_ActionTimeDbModel.ExpenseType" />
+          <EntitySet Name="LocationSchedule" EntityType="db293_ActionTimeDbModel.LocationSchedule" />
+          <EntitySet Name="Schedule" EntityType="db293_ActionTimeDbModel.Schedule" />
           <EntitySet Name="VResult" EntityType="db293_ActionTimeDbModel.VResult" />
           </EntityContainer>
         <EntityType Name="Action">
@@ -5502,6 +5571,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="BreakDateStart" Type="DateTime" Precision="3" />
           <Property Name="BreakDateEnd" Type="DateTime" Precision="3" />
           <Property Name="BreakDurationMinute" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="CloseEnvironmentID" Type="Int32" />
         </EntityType>
         <EntityType Name="EmployeeShiftSet">
           <Key>
@@ -5716,6 +5787,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="ShiftDateStart" Type="DateTime" Precision="3" />
           <Property Name="ShiftDateFinish" Type="DateTime" Precision="3" />
           <Property Name="DurationMinute" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="CloseEnvironmentID" Type="Int32" />
         </EntityType>
         <EntityType Name="LocationShiftSet">
           <Key>
@@ -8187,6 +8260,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Type="String" Name="Code" Nullable="true" MaxLength="21" />
           <Property Type="String" Name="Name" Nullable="true" MaxLength="150" />
         </ComplexType>
+        <EntityType Name="BankTransferStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LevelNumber" Type="Int32" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
         <EntityType Name="VDocumentBankTransfer">
           <Key>
             <PropertyRef Name="ID" />
@@ -8226,14 +8308,64 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsActiv" Type="Boolean" />
         </EntityType>
-        <EntityType Name="BankTransferStatus">
+        <EntityType Name="ExpenseType">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LevelNumber" Type="Int32" />
-          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ExpenseName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsLocation" Type="Boolean" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="LocationSchedule">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="ShiftDate" Type="DateTime" Precision="0" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="Month" Type="Int32" />
+          <Property Name="Week" Type="Int32" />
+          <Property Name="Day" Type="Int32" />
+          <Property Name="DayName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShiftDateStart" Type="DateTime" Precision="3" />
+          <Property Name="ShiftdateEnd" Type="DateTime" Precision="3" />
+          <Property Name="DurationMinute" Type="Int32" />
+          <Property Name="RecordEmployee" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Schedule">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="ShiftDate" Type="DateTime" Precision="0" />
+          <Property Name="Year" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Month" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Week" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Day" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="DayName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="ShiftStart" Type="Time" Precision="0" />
+          <Property Name="ShiftEnd" Type="Time" Precision="0" />
+          <Property Name="ShiftDateStart" Type="DateTime" Precision="3" />
+          <Property Name="ShiftdateEnd" Type="DateTime" Precision="3" />
+          <Property Name="DurationMinute" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="RecordEmployee" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VResult">
           <Key>
@@ -9017,6 +9149,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="EmployeeShift">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeeShift">
               <MappingFragment StoreEntitySet="EmployeeShift">
+                <ScalarProperty Name="CloseEnvironmentID" ColumnName="CloseEnvironmentID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="BreakDurationMinute" ColumnName="BreakDurationMinute" />
                 <ScalarProperty Name="BreakDateEnd" ColumnName="BreakDateEnd" />
                 <ScalarProperty Name="BreakDateStart" ColumnName="BreakDateStart" />
@@ -9256,6 +9390,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="LocationShift">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationShift">
               <MappingFragment StoreEntitySet="LocationShift">
+                <ScalarProperty Name="CloseEnvironmentID" ColumnName="CloseEnvironmentID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="DurationMinute" ColumnName="DurationMinute" />
                 <ScalarProperty Name="ShiftDateFinish" ColumnName="ShiftDateFinish" />
                 <ScalarProperty Name="ShiftDateStart" ColumnName="ShiftDateStart" />
@@ -11623,6 +11759,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="BankTransferStatus">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.BankTransferStatus">
+              <MappingFragment StoreEntitySet="BankTransferStatus">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="LevelNumber" ColumnName="LevelNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="VDocumentBankTransfer">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentBankTransfer">
               <MappingFragment StoreEntitySet="VDocumentBankTransfer">
@@ -11663,13 +11809,65 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="BankTransferStatus">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.BankTransferStatus">
-              <MappingFragment StoreEntitySet="BankTransferStatus">
+          <EntitySetMapping Name="ExpenseType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseType">
+              <MappingFragment StoreEntitySet="ExpenseType">
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
-                <ScalarProperty Name="LevelNumber" ColumnName="LevelNumber" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="IsLocation" ColumnName="IsLocation" />
+                <ScalarProperty Name="ExpenseName" ColumnName="ExpenseName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LocationSchedule">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationSchedule">
+              <MappingFragment StoreEntitySet="LocationSchedule">
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployee" ColumnName="RecordEmployee" />
+                <ScalarProperty Name="DurationMinute" ColumnName="DurationMinute" />
+                <ScalarProperty Name="ShiftdateEnd" ColumnName="ShiftdateEnd" />
+                <ScalarProperty Name="ShiftDateStart" ColumnName="ShiftDateStart" />
+                <ScalarProperty Name="DayName" ColumnName="DayName" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+                <ScalarProperty Name="Week" ColumnName="Week" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="ShiftDate" ColumnName="ShiftDate" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Schedule">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Schedule">
+              <MappingFragment StoreEntitySet="Schedule">
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployee" ColumnName="RecordEmployee" />
+                <ScalarProperty Name="DurationMinute" ColumnName="DurationMinute" />
+                <ScalarProperty Name="ShiftdateEnd" ColumnName="ShiftdateEnd" />
+                <ScalarProperty Name="ShiftDateStart" ColumnName="ShiftDateStart" />
+                <ScalarProperty Name="ShiftEnd" ColumnName="ShiftEnd" />
+                <ScalarProperty Name="ShiftStart" ColumnName="ShiftStart" />
+                <ScalarProperty Name="DayName" ColumnName="DayName" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+                <ScalarProperty Name="Week" ColumnName="Week" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="ShiftDate" ColumnName="ShiftDate" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

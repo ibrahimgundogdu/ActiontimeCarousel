@@ -197,9 +197,12 @@
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_ResultItemList_Result" />
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_ResultItemList_ResultItems" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentSalaryPayment" Width="1.5" PointX="35.375" PointY="43.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" Width="1.5" PointX="43.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankTransferStatus" Width="1.5" PointX="44.375" PointY="0.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VResult" Width="1.5" PointX="45.375" PointY="3.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" Width="1.5" PointX="43.375" PointY="35.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ExpenseType" Width="1.5" PointX="44.375" PointY="3.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationSchedule" Width="1.5" PointX="45.375" PointY="6.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Schedule" Width="1.5" PointX="11.375" PointY="45.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VResult" Width="1.5" PointX="45.375" PointY="20.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
