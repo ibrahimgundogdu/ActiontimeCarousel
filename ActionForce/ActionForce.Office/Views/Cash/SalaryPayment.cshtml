@@ -80,7 +80,6 @@
                         <th>Lokasyon</th>
                         <th>Tip</th>
                         <th>Kasa</th>
-                        <th>Banka</th>
                         <th>İşlem</th>
                         <th>Bu Personele</th>
                         <th>Belge No</th>
@@ -100,8 +99,8 @@
                         <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
                         <td class="tx-sm-13">@item.LocationFullName</td>
                         <td class="tx-sm-13">@(item.SalaryType == 2 ? "Avans Ödemesi" : "Maaş Ödemesi")</td>
-                        <td class="tx-sm-13">@item.CashName</td>
-                        <td class="tx-sm-13">@item.BankAccountName</td>
+                        <td class="tx-sm-13">@(item.FromCashID != null ? item.CashName : item.BankAccountName)</td>
+                        <td class="tx-sm-13">@(item.FromCashID != null ? item.FromCashID : item.FromBankAccountID) </td>
                         <td class="tx-sm-13">@item.ActionTypeName</td>
                         <td class="tx-sm-13">@item.EmployeeFullName </td>
                         <td class="tx-sm-13">@item.DocumentNumber</td>
@@ -225,7 +224,7 @@
                 if (!$(e.target).closest('.off-canvas-menu').length) {
                     var offCanvas = $(e.target).closest('.off-canvas').length;
                     if (!offCanvas) {
-                        $('.off-canvas.show').removeClass('show');
+                        $('.off-canvas.show').addClass('show');
                     }
                 }
             });

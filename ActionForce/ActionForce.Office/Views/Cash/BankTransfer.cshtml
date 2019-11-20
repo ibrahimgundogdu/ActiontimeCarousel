@@ -112,12 +112,13 @@
                         <td class="tx-sm-13 text-right">@item.ReferenceCode</td>
                         <td class="tx-sm-13 text-right">@item.SlipNumber</td>
                         <td>
-                            <a href="@(string.Format("/Documents/Bank/{0}",item.SlipDocument))" data-toggle="lightbox">
-                                <img src="@(string.Format("/Documents/Bank/{0}",item.SlipDocument))" class="img-fluid" width="64">
-                            </a>
+                            @if (item.SlipDocument != null)
+                            {
+                                <img src="@(string.Format("../Document/Bank/{0}",item.SlipDocument))" class="img-fluid img-thumbnail" width="64">
+                            }
                         </td>
                         <td class="tx-sm-13 text-right">@item.StatusName</td>
-
+                        
                     </tr>
                     }
 
@@ -233,7 +234,7 @@
                 if (!$(e.target).closest('.off-canvas-menu').length) {
                     var offCanvas = $(e.target).closest('.off-canvas').length;
                     if (!offCanvas) {
-                        $('.off-canvas.show').removeClass('show');
+                        $('.off-canvas.show').addClass('show');
                     }
                 }
             });
