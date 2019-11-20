@@ -219,20 +219,18 @@ namespace ActionForce.Office
 
         public static Exchange GetExchange(DateTime date)
         {
-
+            DateTime processDate = date;
+            DateTime filterDate = date;
 
             if (DateTime.UtcNow.Hour >= 12 && DateTime.UtcNow.Minute > 0)
             {
-                date = date.AddDays(1).Date;
+                processDate = date.AddDays(1).Date;
             }
-            else
-            {
-                date = date.Date;
-            }
+            
 
             using (ActionTimeEntities db = new ActionTimeEntities())
             {
-                var exchange = db.Exchange.FirstOrDefault(x => x.Date == date);
+                var exchange = db.Exchange.FirstOrDefault(x => x.Date == processDate);
 
                 if (exchange != null)
                 {
@@ -240,16 +238,16 @@ namespace ActionForce.Office
                 }
                 else
                 {
-                    var datekey = db.DateList.FirstOrDefault(x => x.DateKey == date);
+                    var datekey = db.DateList.FirstOrDefault(x => x.DateKey == processDate);
 
                     if (datekey.DayName == "Saturday" || datekey.DayName =="Sunday")
                     {
-                        date = db.DateList.FirstOrDefault(x => x.Year == datekey.Year && x.WeekNumber == datekey.WeekNumber && x.DayName == "Friday").DateKey;
+                        filterDate = db.DateList.FirstOrDefault(x => x.Year == datekey.Year && x.WeekNumber == datekey.WeekNumber && x.DayName == "Friday").DateKey;
                     }
 
                     TCMBClient tcmbClient = new TCMBClient();
 
-                    string dateparam = date.ToString("dd-MM-yyyy");
+                    string dateparam = filterDate.ToString("dd-MM-yyyy");
 
                     var newExchange = tcmbClient.GetExchangeToday(dateparam);
 
@@ -258,7 +256,7 @@ namespace ActionForce.Office
                         Exchange newexchange = new Exchange();
 
                         var item = newExchange.items.FirstOrDefault();
-                        newexchange.Date = date;
+                        newexchange.Date = processDate;
                         newexchange.EURA = Convert.ToDouble(item.TP_DK_EUR_A.Replace(".", ","));
                         newexchange.EURS = Convert.ToDouble(item.TP_DK_EUR_S.Replace(".", ","));
                         newexchange.USDA = Convert.ToDouble(item.TP_DK_USD_A.Replace(".", ","));
