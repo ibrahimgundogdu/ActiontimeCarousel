@@ -3239,6 +3239,39 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
           <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
           <Property Name="POSAccountID" Type="int" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VResult">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="StateID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="StateID" Type="int" Nullable="false" />
+          <Property Name="StatusID" Type="int" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Latitude" Type="float" />
+          <Property Name="Longitude" Type="float" />
+          <Property Name="IsMobile" Type="bit" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="StateName" Type="nvarchar" MaxLength="50" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Environment" Type="nvarchar" MaxLength="20" />
+        </EntityType>
         <Association Name="FK_Action_ResultState">
           <End Role="ResultState" Type="Self.ResultState" Multiplicity="1" />
           <End Role="Action" Type="Self.Action" Multiplicity="*" />
@@ -4304,6 +4337,33 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
     [VLocation].[POSAccountID] AS [POSAccountID]
     FROM [dbo].[VLocation] AS [VLocation]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VResult" EntityType="Self.VResult" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VResult].[ID] AS [ID], 
+    [VResult].[LocationID] AS [LocationID], 
+    [VResult].[Date] AS [Date], 
+    [VResult].[StateID] AS [StateID], 
+    [VResult].[StatusID] AS [StatusID], 
+    [VResult].[EnvironmentID] AS [EnvironmentID], 
+    [VResult].[Description] AS [Description], 
+    [VResult].[Latitude] AS [Latitude], 
+    [VResult].[Longitude] AS [Longitude], 
+    [VResult].[IsMobile] AS [IsMobile], 
+    [VResult].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VResult].[RecordDate] AS [RecordDate], 
+    [VResult].[UpdateIP] AS [UpdateIP], 
+    [VResult].[UpdateEmployeeID] AS [UpdateEmployeeID], 
+    [VResult].[UpdateDate] AS [UpdateDate], 
+    [VResult].[RecordIP] AS [RecordIP], 
+    [VResult].[IsActive] AS [IsActive], 
+    [VResult].[LocationFullName] AS [LocationFullName], 
+    [VResult].[StateName] AS [StateName], 
+    [VResult].[StatusName] AS [StatusName], 
+    [VResult].[UpdaterFullName] AS [UpdaterFullName], 
+    [VResult].[RecorderFullName] AS [RecorderFullName], 
+    [VResult].[Environment] AS [Environment]
+    FROM [dbo].[VResult] AS [VResult]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_Action_ResultState" Association="Self.FK_Action_ResultState">
             <End Role="ResultState" EntitySet="ResultState" />
             <End Role="Action" EntitySet="Action" />
@@ -4691,8 +4751,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
           <FunctionImport Name="GetPersonList" ReturnType="Collection(db293_ActionTimeDbModel.GetPersonList_Result)">
           <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="BankTransferStatus" EntityType="db293_ActionTimeDbModel.BankTransferStatus" />
           <EntitySet Name="VDocumentBankTransfer" EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" />
+          <EntitySet Name="BankTransferStatus" EntityType="db293_ActionTimeDbModel.BankTransferStatus" />
+          <EntitySet Name="VResult" EntityType="db293_ActionTimeDbModel.VResult" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -8126,15 +8187,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
           <Property Type="String" Name="Code" Nullable="true" MaxLength="21" />
           <Property Type="String" Name="Name" Nullable="true" MaxLength="150" />
         </ComplexType>
-        <EntityType Name="BankTransferStatus">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LevelNumber" Type="Int32" />
-          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
         <EntityType Name="VDocumentBankTransfer">
           <Key>
             <PropertyRef Name="ID" />
@@ -8173,6 +8225,46 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
           <Property Name="ReferenceCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsActiv" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="BankTransferStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LevelNumber" Type="Int32" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="VResult">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="StateID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StateID" Type="Int32" Nullable="false" />
+          <Property Name="StatusID" Type="Int32" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="IsMobile" Type="Boolean" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Environment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -11531,16 +11623,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="BankTransferStatus">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.BankTransferStatus">
-              <MappingFragment StoreEntitySet="BankTransferStatus">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
-                <ScalarProperty Name="LevelNumber" ColumnName="LevelNumber" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="VDocumentBankTransfer">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentBankTransfer">
               <MappingFragment StoreEntitySet="VDocumentBankTransfer">
@@ -11577,6 +11659,45 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="ToBankAccountID" ColumnName="ToBankAccountID" />
                 <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="BankTransferStatus">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.BankTransferStatus">
+              <MappingFragment StoreEntitySet="BankTransferStatus">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="LevelNumber" ColumnName="LevelNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VResult">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VResult">
+              <MappingFragment StoreEntitySet="VResult">
+                <ScalarProperty Name="Environment" ColumnName="Environment" />
+                <ScalarProperty Name="RecorderFullName" ColumnName="RecorderFullName" />
+                <ScalarProperty Name="UpdaterFullName" ColumnName="UpdaterFullName" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="IsMobile" ColumnName="IsMobile" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

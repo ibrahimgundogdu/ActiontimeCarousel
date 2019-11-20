@@ -223,7 +223,7 @@
                 if (!$(e.target).closest('.off-canvas-menu').length) {
                     var offCanvas = $(e.target).closest('.off-canvas').length;
                     if (!offCanvas) {
-                        $('.off-canvas.show').removeClass('show');
+                        $('.off-canvas.show').addClass('show');
                     }
                 }
             });

@@ -1,62 +1,62 @@
 ﻿@model CashControlModel
-<div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right wd-400">
+<div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right wd-400" data-backdrop="static">
     <a href="#" class="close"><i data-feather="x"></i></a>
 
     <div class="pd-25 ht-100p tx-13">
         @using (Html.BeginForm("AddCashCollection", "Cash", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
-            <div>
-                <h4>Yeni Kasa Tahsilatı</h4>
-                <p class="tx-color-03">Kasaya nakit giriş işlemi yapar.</p>
-                <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
-                <div class="form-group">
-                    <label>Kimden</label>
-                    <select class="form-control" id="FromID" name="FromID" required>
-                        @foreach (var item in Model.FromList)
-                        {
-                            <option value="@item.Code">@(Html.Raw($"{item.Name}"))</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Lokasyon</label>
-                    <select class="form-control" id="LocationID" name="LocationID" required>
-                        @foreach (var item in Model.LocationList)
-                        {
-                            <option value="@item.LocationID">@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Tutar</label>
-                    <input id="Amount" name="Amount" type="text" class="form-control" placeholder="Tutar" required>
-                </div>
-                <div class="form-group">
-                    <label>Para Birimi</label>
-                    <select class="form-control" id="Currency" name="Currency" required>
-                        @foreach (var item in Model.CurrencyList)
-                        {
-                            <option value="@item.Code">@($"{item.Code} ({item.Sign})")</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Tarih</label>
-                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
-                </div>
-                <div class="form-group">
-                    <label>Açıklama</label>
-                    <textarea id="Description" name="Description" rows="4" class="form-control" placeholder="Açıklama"></textarea>
-                </div>
-
-                <button class="btn btn-primary btn-block">Tahsilat Ekle</button>
+        <div>
+            <h4>Yeni Kasa Tahsilatı</h4>
+            <p class="tx-color-03">Kasaya nakit giriş işlemi yapar.</p>
+            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
+            <div class="form-group">
+                <label>Kimden</label>
+                <select class="form-control" id="FromID" name="FromID" required>
+                    @foreach (var item in Model.FromList)
+                    {
+                        <option value="@item.Code">@(Html.Raw($"{item.Name}"))</option>
+                    }
+                </select>
             </div>
+            <div class="form-group">
+                <label>Lokasyon</label>
+                <select class="form-control" id="LocationID" name="LocationID" required>
+                    @foreach (var item in Model.LocationList)
+                    {
+                        <option value="@item.LocationID">@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tutar</label>
+                <input id="Amount" name="Amount" type="text" class="form-control" placeholder="Tutar" required>
+            </div>
+            <div class="form-group">
+                <label>Para Birimi</label>
+                <select class="form-control" id="Currency" name="Currency" required>
+                    @foreach (var item in Model.CurrencyList)
+                    {
+                        <option value="@item.Code">@($"{item.Code} ({item.Sign})")</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tarih</label>
+                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+            </div>
+            <div class="form-group">
+                <label>Açıklama</label>
+                <textarea id="Description" name="Description" rows="4" class="form-control" placeholder="Açıklama"></textarea>
+            </div>
+            <button class="btn btn-primary btn-block">Tahsilat Ekle</button>
+        </div>
 
         }
 
     </div>
 </div>
+
 <div id="OffCanvasAddTicketSale" class="off-canvas off-canvas-overlay off-canvas-right wd-400">
     <a href="#" class="close"><i data-feather="x"></i></a>
 
@@ -180,6 +180,7 @@
 
     </div>
 </div>
+
 <div id="OffCanvasAddCashOpen" class="off-canvas off-canvas-overlay off-canvas-right wd-400">
     <a href="#" class="close"><i data-feather="x"></i></a>
 
@@ -234,7 +235,7 @@
             <div>
                 <h4>Yeni Kasa Ödemesi</h4>
                 <p class="tx-color-03">Kasaya nakit çıkış işlemi yapar.</p>
-                <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
+                <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="27" />
                 <div class="form-group">
                     <label>Kime</label>
                     <select class="form-control" id="FromID" name="FromID" required>
@@ -291,9 +292,9 @@
         {
             @Html.AntiForgeryToken()
         <div>
-            <h4>Yeni Kasa Satışı</h4>
+            <h4>Yeni Bilet Satış İadesi</h4>
             <p class="tx-color-03">Kasadan satış iade işlemi yapar.</p>
-            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="24" />
+            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="28" />
             <div class="form-group">
                 <label>Kime</label>
                 <select class="form-control" id="FromID" name="FromID" required>
@@ -359,13 +360,13 @@
     <a href="#" class="close"><i data-feather="x"></i></a>
 
     <div class="pd-25 ht-100p tx-13">
-        @using (Html.BeginForm("AddCashExpense", "Cash", FormMethod.Post))
+        @using (Html.BeginForm("AddCashExpense", "Cash", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
         <div>
-            <h4>Yeni Kasa Tahsilatı</h4>
+            <h4>Yeni Masraf Ödeme Fişi</h4>
             <p class="tx-color-03">Masraf Ödeme Fişi giriş işlemi yapar.</p>
-            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
+            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="29" />
             <div class="form-group">
                 <label>Kimden</label>
                 <select class="form-control" id="FromID" name="FromID" required>
@@ -426,13 +427,13 @@
     <a href="#" class="close"><i data-feather="x"></i></a>
 
     <div class="pd-25 ht-100p tx-13">
-        @using (Html.BeginForm("AddCashBankTransfer", "Cash", FormMethod.Post))
+        @using (Html.BeginForm("AddCashBankTransfer", "Cash", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
         <div>
-            <h4>Yeni Kasa Tahsilatı</h4>
+            <h4>Yeni Havale EFT İşlemi</h4>
             <p class="tx-color-03">Havale / EFT giriş işlemi yapar.</p>
-            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
+            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="30" />
             <div class="form-group">
                 <label>Kimden</label>
                 <select class="form-control" id="FromID" name="FromID" required>
@@ -505,9 +506,9 @@
         {
             @Html.AntiForgeryToken()
         <div>
-            <h4>Yeni Kasa Tahsilatı</h4>
+            <h4>Yeni Maaş Avans Ödemesi</h4>
             <p class="tx-color-03">Maaş / Avans ödemesi giriş işlemi yapar.</p>
-            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
+            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="31" />
             <div class="form-group">
                 <label>Kime</label>
                 <select class="form-control" id="FromID" name="FromID" required>
@@ -529,13 +530,14 @@
             <div class="form-group">
                 <label>Ödeme Türü</label>
                 <select class="form-control" id="SalaryType" name="SalaryType" required>
-                    <option value="1">("Maaş Ödemesi")</option>
-                    <option value="2">("Avans Ödemesi")</option>
+                    <option value="1">Maaş Ödemesi</option>
+                    <option value="2">Avans Ödemesi</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Banka</label>
                 <select class="form-control" id="BankAccountID" name="BankAccountID">
+                    <option value="0">Kasa</option>
                     @foreach (var item in Model.BankAccountList)
                     {
                         <option value="@item.ID">@($"{item.Bank.Name} ({item.AccountName})")</option>
@@ -571,3 +573,4 @@
 
     </div>
 </div>
+

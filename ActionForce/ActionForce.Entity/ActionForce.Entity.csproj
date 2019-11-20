@@ -263,9 +263,6 @@
     <Compile Include="Exchange.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
-    <Compile Include="ExpenseType.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
     <Compile Include="GetFromList_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -454,9 +451,6 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="SaleChannel.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Schedule.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="Serials.cs">

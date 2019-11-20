@@ -133,8 +133,9 @@
     <script src="/lib/cleave.js/cleave.min.js"></script>
 
     <script>
+        
         $(function () {
-
+            'use strict'
             $('.select2').select2({
                 placeholder: 'Lokasyon Seçiminiz',
                 searchInputPlaceholder: 'Search options'
@@ -200,6 +201,12 @@
 
 
 
+        
+
+    </script>
+    <script>
+        
+
         $(function () {
             'use strict'
 
@@ -221,16 +228,14 @@
                 if (!$(e.target).closest('.off-canvas-menu').length) {
                     var offCanvas = $(e.target).closest('.off-canvas').length;
                     if (!offCanvas) {
-                        $('.off-canvas.show').removeClass('show');
+                        $('.off-canvas.show').addClass('show');
                     }
                 }
             });
 
 
         });
-
     </script>
-
     @if (Model.Result != null) //
     {
         <script type="text/javascript">

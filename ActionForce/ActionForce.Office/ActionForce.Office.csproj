@@ -2416,6 +2416,10 @@
     <Content Include="Views\Cash\Expense.cshtml" />
     <Content Include="Views\Cash\SalaryPayment.cshtml" />
     <Content Include="Views\Cash\SaleReturn.cshtml" />
+    <Content Include="Views\Result\Add.cshtml" />
+    <Content Include="Views\Result\Detail.cshtml" />
+    <Content Include="Views\Result\Edit.cshtml" />
+    <Content Include="Views\Result\New.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
