@@ -41,5 +41,10 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> BreakTypeID { get; set; }
         public Nullable<int> DurationMinute { get; set; }
+        public Nullable<System.DateTime> BreakDateStart { get; set; }
+        public Nullable<System.DateTime> BreakDateEnd { get; set; }
+        public Nullable<int> BreakDurationMinute { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
+        public Nullable<int> CloseEnvironmentID { get; set; }
     }
 }
