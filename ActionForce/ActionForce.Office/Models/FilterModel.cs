@@ -11,4 +11,11 @@ namespace ActionForce.Office
         public DateTime? DateBegin { get; set; }
         public DateTime? DateEnd { get; set; }
     }
+
+    public class ResultFilterModel
+    {
+        public int? LocationID { get; set; }
+        public DateTime? ResultDate { get; set; }
+        public long? ResultID { get; set; }
+    }
 }
