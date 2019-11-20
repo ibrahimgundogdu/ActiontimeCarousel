@@ -37,6 +37,7 @@ namespace ActionForce.Office.Controllers
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
+
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
