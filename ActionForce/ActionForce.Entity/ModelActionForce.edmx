@@ -655,6 +655,7 @@
           <Property Name="ReferenceCode" Type="nvarchar" MaxLength="20" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="DocumentCashCollections">
           <Key>
@@ -687,6 +688,7 @@
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="DocumentCashExpense">
           <Key>
@@ -721,6 +723,7 @@
           <Property Name="SlipDocument" Type="nvarchar" MaxLength="50" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="DocumentCashOpen">
           <Key>
@@ -750,6 +753,7 @@
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="DocumentCashPayments">
           <Key>
@@ -781,6 +785,7 @@
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="DocumentCashRecorderSlip">
           <Key>
@@ -806,6 +811,7 @@
           <Property Name="SlipFile" Type="nvarchar" MaxLength="50" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="DocumentNumber">
           <Key>
@@ -851,6 +857,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentPosCancel' does not
           <Property Name="TerminalID" Type="nvarchar" MaxLength="40" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="DocumentPosCollections">
           <Key>
@@ -882,6 +889,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentPosCancel' does not
           <Property Name="TerminalID" Type="nvarchar" MaxLength="40" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentPosRefund' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -915,6 +923,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentPosRefund' does not
           <Property Name="TerminalID" Type="nvarchar" MaxLength="40" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentSalaryEarn' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -945,6 +954,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentSalaryEarn' does no
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="DocumentSalaryPayment">
           <Key>
@@ -977,6 +987,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentSalaryEarn' does no
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="DocumentSaleExchange">
           <Key>
@@ -1009,6 +1020,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentSalaryEarn' does no
           <Property Name="SlipDocument" Type="nvarchar" MaxLength="50" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="DocumentTicketSaleReturns">
           <Key>
@@ -1041,6 +1053,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentSalaryEarn' does no
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="DocumentTicketSales">
           <Key>
@@ -1073,6 +1086,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentSalaryEarn' does no
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="DocumentType">
           <Key>
@@ -3806,7 +3820,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
     [DocumentPosCancel].[Description] AS [Description], 
     [DocumentPosCancel].[TerminalID] AS [TerminalID], 
     [DocumentPosCancel].[ResultID] AS [ResultID], 
-    [DocumentPosCancel].[EnvironmentID] AS [EnvironmentID]
+    [DocumentPosCancel].[EnvironmentID] AS [EnvironmentID], 
+    [DocumentPosCancel].[UID] AS [UID]
     FROM [dbo].[DocumentPosCancel] AS [DocumentPosCancel]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="DocumentPosRefund" EntityType="Self.DocumentPosRefund" store:Type="Tables" store:Schema="dbo">
@@ -3836,7 +3851,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
     [DocumentPosRefund].[Description] AS [Description], 
     [DocumentPosRefund].[TerminalID] AS [TerminalID], 
     [DocumentPosRefund].[ResultID] AS [ResultID], 
-    [DocumentPosRefund].[EnvironmentID] AS [EnvironmentID]
+    [DocumentPosRefund].[EnvironmentID] AS [EnvironmentID], 
+    [DocumentPosRefund].[UID] AS [UID]
     FROM [dbo].[DocumentPosRefund] AS [DocumentPosRefund]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="DocumentSalaryEarn" EntityType="Self.DocumentSalaryEarn" store:Type="Tables" store:Schema="dbo">
@@ -3863,7 +3879,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
     [DocumentSalaryEarn].[ActionTypeID] AS [ActionTypeID], 
     [DocumentSalaryEarn].[Description] AS [Description], 
     [DocumentSalaryEarn].[ResultID] AS [ResultID], 
-    [DocumentSalaryEarn].[EnvironmentID] AS [EnvironmentID]
+    [DocumentSalaryEarn].[EnvironmentID] AS [EnvironmentID], 
+    [DocumentSalaryEarn].[UID] AS [UID]
     FROM [dbo].[DocumentSalaryEarn] AS [DocumentSalaryEarn]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="EmployeeShiftX" EntityType="Self.EmployeeShiftX" store:Type="Tables" store:Schema="dbo">
@@ -7275,6 +7292,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="ReferenceCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="DocumentCashCollections">
           <Key>
@@ -7307,6 +7325,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="DocumentCashExpense">
           <Key>
@@ -7341,6 +7360,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="SlipDocument" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="DocumentCashPayments">
           <Key>
@@ -7372,6 +7392,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="DocumentCashRecorderSlip">
           <Key>
@@ -7397,6 +7418,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="SlipFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="DocumentPosCollections">
           <Key>
@@ -7428,6 +7450,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="TerminalID" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="DocumentSalaryPayment">
           <Key>
@@ -7460,6 +7483,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="SalaryType" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="DocumentSaleExchange">
           <Key>
@@ -7492,6 +7516,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="SaleExchangeRate" Type="Double" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="DocumentTicketSaleReturns">
           <Key>
@@ -7524,6 +7549,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="DocumentTicketSales">
           <Key>
@@ -7556,6 +7582,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="DocumentPosCancel">
           <Key>
@@ -7587,6 +7614,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="TerminalID" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="DocumentPosRefund">
           <Key>
@@ -7618,6 +7646,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="TerminalID" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="DocumentSalaryEarn">
           <Key>
@@ -7646,6 +7675,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="VDocumentCashCollections">
           <Key>
@@ -7956,6 +7986,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="VDocumentCashOpen">
           <Key>
@@ -10723,6 +10754,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="DocumentBankTransfer">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentBankTransfer">
               <MappingFragment StoreEntitySet="DocumentBankTransfer">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
@@ -10758,6 +10790,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="DocumentCashCollections">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentCashCollections">
               <MappingFragment StoreEntitySet="DocumentCashCollections">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -10791,6 +10824,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="DocumentCashExpense">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentCashExpense">
               <MappingFragment StoreEntitySet="DocumentCashExpense">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="SlipDocument" ColumnName="SlipDocument" />
@@ -10826,6 +10860,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="DocumentCashPayments">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentCashPayments">
               <MappingFragment StoreEntitySet="DocumentCashPayments">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -10858,6 +10893,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="DocumentCashRecorderSlip">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentCashRecorderSlip">
               <MappingFragment StoreEntitySet="DocumentCashRecorderSlip">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="SlipFile" ColumnName="SlipFile" />
@@ -10884,6 +10920,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="DocumentPosCollections">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentPosCollections">
               <MappingFragment StoreEntitySet="DocumentPosCollections">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="TerminalID" ColumnName="TerminalID" />
@@ -10916,6 +10953,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="DocumentSalaryPayment">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentSalaryPayment">
               <MappingFragment StoreEntitySet="DocumentSalaryPayment">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="SalaryType" ColumnName="SalaryType" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
@@ -10949,6 +10987,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="DocumentSaleExchange">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentSaleExchange">
               <MappingFragment StoreEntitySet="DocumentSaleExchange">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="SaleExchangeRate" ColumnName="SaleExchangeRate" />
@@ -10982,6 +11021,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="DocumentTicketSaleReturns">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentTicketSaleReturns">
               <MappingFragment StoreEntitySet="DocumentTicketSaleReturns">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -11015,6 +11055,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="DocumentTicketSales">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentTicketSales">
               <MappingFragment StoreEntitySet="DocumentTicketSales">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -11048,6 +11089,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="DocumentPosCancel">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentPosCancel">
               <MappingFragment StoreEntitySet="DocumentPosCancel">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="TerminalID" ColumnName="TerminalID" />
@@ -11080,6 +11122,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="DocumentPosRefund">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentPosRefund">
               <MappingFragment StoreEntitySet="DocumentPosRefund">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="TerminalID" ColumnName="TerminalID" />
@@ -11112,6 +11155,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="DocumentSalaryEarn">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentSalaryEarn">
               <MappingFragment StoreEntitySet="DocumentSalaryEarn">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -11439,6 +11483,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="DocumentCashOpen">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentCashOpen">
               <MappingFragment StoreEntitySet="DocumentCashOpen">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
