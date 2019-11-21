@@ -40,5 +40,6 @@ namespace ActionForce.Entity
         public string SystemCurrency { get; set; }
         public string Description { get; set; }
         public string CashName { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
     }
 }

@@ -24,6 +24,7 @@
     <link href="/lib/datatables.net-responsive-dt/css/responsive.dataTables.min.css" rel="stylesheet">
     <link href="/lib/select2/css/select2.min.css" rel="stylesheet">
     <link href="/assets/css/jquery.toast.css" rel="stylesheet" />
+    <link href="/lib/fullcalendar/fullcalendar.min.css" rel="stylesheet">
 
 
 
@@ -38,7 +39,7 @@
     @RenderSection("scriptheader", false)
 
 </head>
-<body class="pos-relative">
+<body class="">
     <aside class="aside aside-fixed">
         <div class="aside-header">
             <a href="/" class="aside-logo">Action<span> Force</span></a>
@@ -70,7 +71,20 @@
             </div><!-- aside-loggedin -->
             <ul class="nav nav-aside">
 
-                <li class="nav-label mg-t-25 active">Finans - Cari Hesap</li>
+                <li class="nav-label mg-t-10 active">Schedule</li>
+
+                <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Schedule" ? "show" : "")">
+                    <a href="/Employee" class="nav-link"><i data-feather="calendar"></i> <span>Mesai Plan Takvimi</span></a>
+                    <ul>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Schedule" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Schedule">01 Lokasyon Takvimi</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Schedule" && this.ViewContext.RouteData.Values["action"].ToString() == "Location" ? "class=active" : "")><a href="/Schedule/Location">02 Lokasyon Planları</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Schedule" && this.ViewContext.RouteData.Values["action"].ToString() == "Employee" ? "class=active" : "")><a href="/Schedule/Employee">03 Çalışan Planları</a></li>
+
+                    </ul>
+                </li>
+
+
+                <li class="nav-label mg-t-10 active">Finans - Cari Hesap</li>
                 <li class="nav-item"><a href="/Action/Index" class="nav-link"><i data-feather="layers"></i> <span>Cari Hesap Ekstresi</span></a></li>
                 <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" ? "show" : "") ">
                     <a href="" class="nav-link"><i data-feather="hard-drive"></i> <span>Kasa Nakit İşlemleri</span></a>
@@ -166,10 +180,13 @@
     <script src="/lib/prismjs/prism.js"></script>
     <script src="/lib/select2/js/select2.min.js"></script>
     <script src="/lib/jqueryui/jquery-ui.min.js"></script>
+
     <script src="/assets/js/jquery.toast.js"></script>
 
     @RenderSection("scripts", false)
 
+
+    
 
 
 </body>

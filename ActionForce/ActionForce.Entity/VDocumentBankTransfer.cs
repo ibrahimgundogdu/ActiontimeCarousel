@@ -48,5 +48,7 @@ namespace ActionForce.Entity
         public string ReferenceCode { get; set; }
         public string StatusName { get; set; }
         public Nullable<bool> IsActiv { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
+        public Nullable<int> StatusID { get; set; }
     }
 }

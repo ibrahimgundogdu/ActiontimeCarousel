@@ -45,5 +45,6 @@ namespace ActionForce.Entity
         public string LocationFullName { get; set; }
         public Nullable<double> SaleExchangeRate { get; set; }
         public string OurCompanyName { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
     }
 }
