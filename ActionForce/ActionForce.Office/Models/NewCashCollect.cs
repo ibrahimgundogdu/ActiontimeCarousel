@@ -14,6 +14,7 @@ namespace ActionForce.Office
         public string Currency { get; set; }
         public string DocumentDate { get; set; }
         public string Description { get; set; }
+        public Guid UID { get; set; }
     }
 
     public class NewCashSale
@@ -109,5 +110,39 @@ namespace ActionForce.Office
         public int CashID { get; set; }
         public int BankAccountID { get; set; }
         public int SalaryType { get; set; }
+    }
+    public class NewPosCollect
+    {
+        public int ActinTypeID { get; set; }
+        public string FromID { get; set; }
+        public int LocationID { get; set; }
+        public string Amount { get; set; }
+        public string Currency { get; set; }
+        public string DocumentDate { get; set; }
+        public string Description { get; set; }
+        public int BankAccountID { get; set; }
+        public string TerminalID { get; set; }
+    }
+    public class NewPosCancel
+    {
+        public int ActinTypeID { get; set; }
+        public string FromID { get; set; }
+        public int LocationID { get; set; }
+        public string Amount { get; set; }
+        public string Currency { get; set; }
+        public string DocumentDate { get; set; }
+        public string Description { get; set; }
+        public int BankAccountID { get; set; }
+    }
+    public class NewPosReturn
+    {
+        public int ActinTypeID { get; set; }
+        public string FromID { get; set; }
+        public int LocationID { get; set; }
+        public string Amount { get; set; }
+        public string Currency { get; set; }
+        public string DocumentDate { get; set; }
+        public string Description { get; set; }
+        public int BankAccountID { get; set; }
     }
 }

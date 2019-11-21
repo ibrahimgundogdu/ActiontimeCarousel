@@ -1,0 +1,26 @@
+﻿using ActionForce.Entity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace ActionForce.Office
+{
+    public class BankControlModel : LayoutControlModel
+    {
+        public IEnumerable<VDocumentPosCollection> PosCollections { get; set; }
+        public IEnumerable<VDocumentPosCancel> PosCancel { get; set; }
+        public IEnumerable<VDocumentPosRefund> PosRefund { get; set; }
+
+        public IEnumerable<Location> LocationList { get; set; }
+        public IEnumerable<FromAccountModel> FromList { get; set; }
+        public IEnumerable<Currency> CurrencyList { get; set; }
+        public IEnumerable<BankAccount> BankAccountList { get; set; }
+
+        public FilterModel Filters { get; set; }
+        public OurCompany CurrentCompany { get; set; }
+        public VLocation CurrentLocation { get; set; }
+        public Result<BankActions> Result { get; set; }
+
+    }
+}

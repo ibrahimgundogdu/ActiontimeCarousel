@@ -311,6 +311,9 @@
     <Compile Include="LocationParam.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="LocationPosTerminal.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="LocationSchedule.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -592,6 +595,15 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VDocumentCashPayments.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VDocumentPosCancel.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VDocumentPosCollection.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VDocumentPosRefund.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VDocumentSalaryPayment.cs">

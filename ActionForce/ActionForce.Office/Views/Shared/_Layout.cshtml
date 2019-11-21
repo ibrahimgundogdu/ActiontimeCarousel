@@ -110,12 +110,12 @@
                     <ul>
                         <li class="nav-label">Tahsilatlar</li>
 
-                        <li><a href="page-profile-view.html">01 Pos Tahsilatı</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Bank" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Bank">01 Pos Tahsilatı</a></li>
 
                         <li class="nav-label">İptal / İade</li>
 
-                        <li><a href="page-profile-view.html">01 Pos İptal (Aynı Gün)</a></li>
-                        <li><a href="page-profile-view.html">02 Pos İade </a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Bank" && this.ViewContext.RouteData.Values["action"].ToString() == "PosCancel" ? "class=active" : "")><a href="/Bank/PosCancel">01 Pos İptal (Aynı Gün)</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Bank" && this.ViewContext.RouteData.Values["action"].ToString() == "PosRefund" ? "class=active" : "")><a href="/Bank/PosReturn">02 Pos İade</a></li>
                     </ul>
                 </li>
                 <li class="nav-item with-sub">
