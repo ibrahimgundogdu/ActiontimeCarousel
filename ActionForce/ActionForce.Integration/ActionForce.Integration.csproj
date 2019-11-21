@@ -219,10 +219,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TCMB\TCMBClient.cs" />
     <Compile Include="TCMB\TcmbKurlar.cs" />
+    <Compile Include="UfeService\ShiftResult.cs" />
+    <Compile Include="UfeService\UfeServiceClient.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ActionForce.Entity\ActionForce.Entity.csproj">
+      <Project>{1ad5bb0d-6cc5-490a-a1b0-e2bcac259310}</Project>
+      <Name>ActionForce.Entity</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
