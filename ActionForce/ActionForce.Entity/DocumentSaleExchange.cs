@@ -41,5 +41,6 @@ namespace ActionForce.Entity
         public Nullable<double> SaleExchangeRate { get; set; }
         public Nullable<long> ResultID { get; set; }
         public Nullable<int> EnvironmentID { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
     }
 }
