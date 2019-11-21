@@ -46,5 +46,6 @@ namespace ActionForce.Entity
         public string UpdaterFullName { get; set; }
         public string LocationFullName { get; set; }
         public Nullable<int> SalaryType { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
     }
 }

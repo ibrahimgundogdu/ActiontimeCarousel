@@ -2269,6 +2269,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="ActionForceAuthorizeAttribute.cs" />
     <Compile Include="Controllers\ActionController.cs" />
+    <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CashController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -2284,6 +2285,7 @@
     <Compile Include="Models\ActionEmployee.cs" />
     <Compile Include="Models\AuditTrail.cs" />
     <Compile Include="Models\AuthenticationModel.cs" />
+    <Compile Include="Models\BankControlModel.cs" />
     <Compile Include="Models\CashControlModel.cs" />
     <Compile Include="Models\FilterModel.cs" />
     <Compile Include="Models\FinanceControlModel.cs" />
@@ -2420,6 +2422,12 @@
     <Content Include="Views\Result\Detail.cshtml" />
     <Content Include="Views\Result\Edit.cshtml" />
     <Content Include="Views\Result\New.cshtml" />
+    <Content Include="Views\Bank\Index.cshtml" />
+    <Content Include="Views\Bank\_PartialAddBankMenu.cshtml" />
+    <Content Include="Views\Bank\PosCancel.cshtml" />
+    <Content Include="Views\Bank\_PartialDocumentForms.cshtml" />
+    <Content Include="Views\Bank\PosRefund.cshtml" />
+    <Content Include="Views\Cash\_PartialCashDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2436,6 +2444,7 @@
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Finance\" />
     <Folder Include="Views\Logout\" />
+    <Folder Include="Views\Pos\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ActionForce.Entity\ActionForce.Entity.csproj">

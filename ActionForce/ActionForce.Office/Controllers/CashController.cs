@@ -168,6 +168,115 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Index", "Cash");
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult EditCashCollection(NewCashCollect cashCollect)
+        {
+            Result<CashActions> result = new Result<CashActions>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            CashControlModel model = new CashControlModel();
+            if (cashCollect != null)
+            {
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashCollect.ActinTypeID);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashCollect.LocationID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                var fromPrefix = cashCollect.FromID.Substring(0, 1);
+                var fromID = Convert.ToInt32(cashCollect.FromID.Substring(1, cashCollect.FromID.Length - 1));
+                var amount = Convert.ToDouble(cashCollect.Amount.Replace(".", ","));
+                var currency = cashCollect.Currency;
+                var docDate = DateTime.Now.Date;
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
+
+                if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
+                {
+                    docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
+                }
+                var cash = OfficeHelper.GetCash(cashCollect.LocationID, cashCollect.Currency);
+
+                try
+                {
+                    var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+
+                    DocumentCashCollections newCashColl = Db.DocumentCashCollections.FirstOrDefault(x => x.UID == cashCollect.UID);
+                    newCashColl.ActionTypeID = actType.ID;
+                    newCashColl.ActionTypeName = actType.Name;
+                    newCashColl.Amount = amount;
+                    newCashColl.CashID = cash.ID;
+                    newCashColl.Currency = currency;
+                    newCashColl.Date = docDate;
+                    newCashColl.Description = cashCollect.Description;
+                    newCashColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "CC");
+                    newCashColl.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                    newCashColl.FromBankAccountID = fromPrefix == "B" ? fromID : (int?)null;
+                    newCashColl.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
+                    newCashColl.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                    newCashColl.IsActive = true;
+                    newCashColl.LocationID = cashCollect.LocationID;
+                    newCashColl.OurCompanyID = location.OurCompanyID;
+                    newCashColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
+                    newCashColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    newCashColl.RecordIP = OfficeHelper.GetIPAddress();
+                    newCashColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newCashColl.ExchangeRate;
+                    newCashColl.SystemCurrency = ourcompany.Currency;
+                    newCashColl.EnvironmentID = 2;
+                    Db.SaveChanges();
+
+                    // cari hesap işlemesi
+                    OfficeHelper.AddCashAction(newCashColl.CashID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, -1, 0, newCashColl.Amount, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
+
+                    result.IsSuccess = true;
+                    result.Message = "Kasa Tahsilatı başarı ile güncellendi";
+
+                    // log atılır
+                    OfficeHelper.AddApplicationLog("Office", "Cash", "Update", newCashColl.ID.ToString(), "Cash", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                }
+                catch (Exception ex)
+                {
+
+                    result.Message = $"Kasa Tahsilatı güncellenemedi : {ex.Message}";
+                    OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                }
+            }
+
+            TempData["result"] = result;
+
+            return RedirectToAction("Index", "Cash");
+
+        }
+        public ActionResult Detail(Guid id)
+        {
+
+
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result<CashActions> ?? null;
+            }
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateTime.Now.Date;
+                model.Filters = filterModel;
+            }
+
+            model.CashDetail = Db.VDocumentCashCollections.FirstOrDefault(x => x.UID == id);
+            
+
+            return View(model);
+        }
+
         [AllowAnonymous]
         public ActionResult Sale(int? locationId)
         {
@@ -676,7 +785,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult AddCashPayment(NewCashPayments cashCollect)
+        public ActionResult AddCashPayment(NewCashPayments cashPayment)
         {
             Result<CashActions> result = new Result<CashActions>()
             {
@@ -686,24 +795,24 @@ namespace ActionForce.Office.Controllers
             };
             CashControlModel model = new CashControlModel();
 
-            if (cashCollect != null)
+            if (cashPayment != null)
             {
                 
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashCollect.ActinTypeID);
-                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashCollect.LocationID);
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashPayment.ActinTypeID);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashPayment.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var fromPrefix = cashCollect.FromID.Substring(0, 1);
-                var fromID = Convert.ToInt32(cashCollect.FromID.Substring(1, cashCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashCollect.Amount.Replace(".", ","));
-                var currency = cashCollect.Currency;
+                var fromPrefix = cashPayment.FromID.Substring(0, 1);
+                var fromID = Convert.ToInt32(cashPayment.FromID.Substring(1, cashPayment.FromID.Length - 1));
+                var amount = Convert.ToDouble(cashPayment.Amount.Replace(".", ","));
+                var currency = cashPayment.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
 
-                if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
+                if (DateTime.TryParse(cashPayment.DocumentDate, out docDate))
                 {
-                    docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
+                    docDate = Convert.ToDateTime(cashPayment.DocumentDate).Date;
                 }
-                var cash = OfficeHelper.GetCash(cashCollect.LocationID, cashCollect.Currency);
+                var cash = OfficeHelper.GetCash(cashPayment.LocationID, cashPayment.Currency);
                 // tahsilat eklenir.
 
                 try
@@ -721,13 +830,13 @@ namespace ActionForce.Office.Controllers
                         newCashColl.CashID = cash.ID;
                         newCashColl.Currency = currency;
                         newCashColl.Date = docDate;
-                        newCashColl.Description = cashCollect.Description;
+                        newCashColl.Description = cashPayment.Description;
                         newCashColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "CPY");
                         newCashColl.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
                         newCashColl.ToEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                         newCashColl.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                         newCashColl.IsActive = true;
-                        newCashColl.LocationID = cashCollect.LocationID;
+                        newCashColl.LocationID = cashPayment.LocationID;
                         newCashColl.OurCompanyID = location.OurCompanyID;
                         newCashColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
                         newCashColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
@@ -735,9 +844,7 @@ namespace ActionForce.Office.Controllers
                         newCashColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newCashColl.ExchangeRate;
                         newCashColl.SystemCurrency = ourcompany.Currency;
                         newCashColl.EnvironmentID = 2;
-
-
-
+                        
 
                         Db.DocumentCashPayments.Add(newCashColl);
                         Db.SaveChanges();
@@ -818,7 +925,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult AddTicketSaleReturn(NewTicketSaleReturn cashSale)
+        public ActionResult AddTicketSaleReturn(NewTicketSaleReturn cashSaleReturn)
         {
             Result<CashActions> result = new Result<CashActions>()
             {
@@ -828,21 +935,21 @@ namespace ActionForce.Office.Controllers
             };
             CashControlModel model = new CashControlModel();
 
-            if (cashSale != null)
+            if (cashSaleReturn != null)
             {
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSale.ActinTypeID);
-                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSale.LocationID);
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSaleReturn.ActinTypeID);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSaleReturn.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var fromPrefix = cashSale.FromID.Substring(0, 1);
-                var fromID = Convert.ToInt32(cashSale.FromID.Substring(1, cashSale.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashSale.Amount.Replace(".", ","));
-                var currency = cashSale.Currency;
+                var fromPrefix = cashSaleReturn.FromID.Substring(0, 1);
+                var fromID = Convert.ToInt32(cashSaleReturn.FromID.Substring(1, cashSaleReturn.FromID.Length - 1));
+                var amount = Convert.ToDouble(cashSaleReturn.Amount.Replace(".", ","));
+                var currency = cashSaleReturn.Currency;
                 var docDate = DateTime.Now.Date;
-                if (DateTime.TryParse(cashSale.DocumentDate, out docDate))
+                if (DateTime.TryParse(cashSaleReturn.DocumentDate, out docDate))
                 {
-                    docDate = Convert.ToDateTime(cashSale.DocumentDate).Date;
+                    docDate = Convert.ToDateTime(cashSaleReturn.DocumentDate).Date;
                 }
-                var cash = OfficeHelper.GetCash(cashSale.LocationID, cashSale.Currency);
+                var cash = OfficeHelper.GetCash(cashSaleReturn.LocationID, cashSaleReturn.Currency);
 
                 
                 
@@ -861,12 +968,12 @@ namespace ActionForce.Office.Controllers
                         newCashColl.CashID = cash.ID;
                         newCashColl.Currency = currency;
                         newCashColl.Date = docDate;
-                        newCashColl.Description = cashSale.Description;
+                        newCashColl.Description = cashSaleReturn.Description;
                         newCashColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "TSR");
                         newCashColl.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
                         newCashColl.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                         newCashColl.IsActive = true;
-                        newCashColl.LocationID = cashSale.LocationID;
+                        newCashColl.LocationID = cashSaleReturn.LocationID;
                         newCashColl.OurCompanyID = location.OurCompanyID;
                         newCashColl.RecordDate = DateTime.UtcNow.AddHours(3);
                         newCashColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
@@ -874,8 +981,8 @@ namespace ActionForce.Office.Controllers
                         newCashColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newCashColl.ExchangeRate;
                         newCashColl.SystemCurrency = ourcompany.Currency;
                         newCashColl.PayMethodID = 1;
-                        newCashColl.Quantity = cashSale.Quantity;
-                        newCashColl.PayMethodID = cashSale.PayMethodID;
+                        newCashColl.Quantity = cashSaleReturn.Quantity;
+                        newCashColl.PayMethodID = cashSaleReturn.PayMethodID;
                         newCashColl.EnvironmentID = 2;
 
                         Db.DocumentTicketSaleReturns.Add(newCashColl);
@@ -954,7 +1061,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult AddCashExpense(NewCashExpense cashCollect, HttpPostedFileBase documentFile)
+        public ActionResult AddCashExpense(NewCashExpense cashExpense, HttpPostedFileBase documentFile)
         {
             Result<CashActions> result = new Result<CashActions>()
             {
@@ -964,23 +1071,23 @@ namespace ActionForce.Office.Controllers
             };
             CashControlModel model = new CashControlModel();
 
-            if (cashCollect != null)
+            if (cashExpense != null)
             {
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashCollect.ActinTypeID);
-                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashCollect.LocationID);
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashExpense.ActinTypeID);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashExpense.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var fromPrefix = cashCollect.FromID.Substring(0, 1);
-                var fromID = Convert.ToInt32(cashCollect.FromID.Substring(1, cashCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashCollect.Amount.Replace(".", ","));
-                var currency = cashCollect.Currency;
+                var fromPrefix = cashExpense.FromID.Substring(0, 1);
+                var fromID = Convert.ToInt32(cashExpense.FromID.Substring(1, cashExpense.FromID.Length - 1));
+                var amount = Convert.ToDouble(cashExpense.Amount.Replace(".", ","));
+                var currency = cashExpense.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
 
-                if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
+                if (DateTime.TryParse(cashExpense.DocumentDate, out docDate))
                 {
-                    docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
+                    docDate = Convert.ToDateTime(cashExpense.DocumentDate).Date;
                 }
-                var cash = OfficeHelper.GetCash(cashCollect.LocationID, cashCollect.Currency);
+                var cash = OfficeHelper.GetCash(cashExpense.LocationID, cashExpense.Currency);
                 // tahsilat eklenir.
 
                 try
@@ -998,21 +1105,21 @@ namespace ActionForce.Office.Controllers
                         newCashColl.CashID = cash.ID;
                         newCashColl.Currency = currency;
                         newCashColl.Date = docDate;
-                        newCashColl.Description = cashCollect.Description;
+                        newCashColl.Description = cashExpense.Description;
                         newCashColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "EXP");
                         newCashColl.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
                         newCashColl.ToBankAccountID = fromPrefix == "B" ? fromID : (int?)null;
                         newCashColl.ToEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                         newCashColl.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                         newCashColl.IsActive = true;
-                        newCashColl.LocationID = cashCollect.LocationID;
+                        newCashColl.LocationID = cashExpense.LocationID;
                         newCashColl.OurCompanyID = location.OurCompanyID;
                         newCashColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
                         newCashColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                         newCashColl.RecordIP = OfficeHelper.GetIPAddress();
                         newCashColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newCashColl.ExchangeRate;
                         newCashColl.SystemCurrency = ourcompany.Currency;
-                        newCashColl.SlipNumber = cashCollect.SlipNumber;
+                        newCashColl.SlipNumber = cashExpense.SlipNumber;
                         newCashColl.EnvironmentID = 2;
 
                         string FileName = string.Empty;
@@ -1116,7 +1223,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult AddCashBankTransfer(NewCashBankTransfer cashCollect, HttpPostedFileBase documentFile)
+        public ActionResult AddCashBankTransfer(NewCashBankTransfer cashTransfer, HttpPostedFileBase documentFile)
         {
             Result<CashActions> result = new Result<CashActions>()
             {
@@ -1126,27 +1233,27 @@ namespace ActionForce.Office.Controllers
             };
             CashControlModel model = new CashControlModel();
 
-            if (cashCollect != null)
+            if (cashTransfer != null)
             {
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashCollect.ActinTypeID);
-                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashCollect.LocationID);
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashTransfer.ActinTypeID);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashTransfer.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var fromPrefix = cashCollect.FromID.Substring(0, 1);
-                var fromID = Convert.ToInt32(cashCollect.FromID.Substring(1, cashCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashCollect.Amount.Replace(".", ","));
-                var currency = cashCollect.Currency;
+                var fromPrefix = cashTransfer.FromID.Substring(0, 1);
+                var fromID = Convert.ToInt32(cashTransfer.FromID.Substring(1, cashTransfer.FromID.Length - 1));
+                var amount = Convert.ToDouble(cashTransfer.Amount.Replace(".", ","));
+                var currency = cashTransfer.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
 
-                if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
+                if (DateTime.TryParse(cashTransfer.DocumentDate, out docDate))
                 {
-                    docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
+                    docDate = Convert.ToDateTime(cashTransfer.DocumentDate).Date;
                 }
-                var cash = OfficeHelper.GetCash(cashCollect.LocationID, cashCollect.Currency);
+                var cash = OfficeHelper.GetCash(cashTransfer.LocationID, cashTransfer.Currency);
                 // tahsilat eklenir.
                 var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
 
-                var isOpen = Db.DocumentBankTransfer.FirstOrDefault(x => x.ReferenceCode == cashCollect.ReferenceCode && x.StatusID == 1);
+                var isOpen = Db.DocumentBankTransfer.FirstOrDefault(x => x.ReferenceCode == cashTransfer.ReferenceCode && x.StatusID == 1);
                 if (isOpen == null)
                 {
                     try
@@ -1162,19 +1269,19 @@ namespace ActionForce.Office.Controllers
                             newCashColl.FromCashID = cash.ID;
                             newCashColl.Currency = currency;
                             newCashColl.Date = docDate;
-                            newCashColl.Description = cashCollect.Description;
+                            newCashColl.Description = cashTransfer.Description;
                             newCashColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "BT");
                             newCashColl.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
                             newCashColl.ToBankAccountID = fromPrefix == "B" ? fromID : (int?)null;
                             newCashColl.IsActive = true;
-                            newCashColl.LocationID = cashCollect.LocationID;
+                            newCashColl.LocationID = cashTransfer.LocationID;
                             newCashColl.OurCompanyID = location.OurCompanyID;
                             newCashColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
                             newCashColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                             newCashColl.RecordIP = OfficeHelper.GetIPAddress();
                             newCashColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newCashColl.ExchangeRate;
                             newCashColl.SystemCurrency = ourcompany.Currency;
-                            newCashColl.SlipNumber = cashCollect.SlipNumber;
+                            newCashColl.SlipNumber = cashTransfer.SlipNumber;
                             newCashColl.StatusID = 1;
                             newCashColl.EnvironmentID = 2;
 
@@ -1253,7 +1360,7 @@ namespace ActionForce.Office.Controllers
                     var balance = Db.GetCashBalance(location.LocationID, cash.ID).FirstOrDefault().Value;
                     if (balance >= amount)
                     {
-                        if (cashCollect.StatusID == 2)
+                        if (cashTransfer.StatusID == 2)
                         {
                             DocumentBankTransfer self = new DocumentBankTransfer()
                             {
@@ -1287,14 +1394,14 @@ namespace ActionForce.Office.Controllers
 
                             isOpen.ToBankAccountID = fromPrefix == "B" ? fromID : (int?)null;
                             isOpen.Amount = amount;
-                            isOpen.Description = cashCollect.Description;
+                            isOpen.Description = cashTransfer.Description;
                             isOpen.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
                             isOpen.UpdateDate = DateTime.UtcNow.AddHours(3);
                             isOpen.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
                             isOpen.UpdateIP = OfficeHelper.GetIPAddress();
                             isOpen.SystemAmount = ourcompany.Currency == currency ? amount : amount * isOpen.ExchangeRate;
                             isOpen.SystemCurrency = ourcompany.Currency;
-                            isOpen.StatusID = cashCollect.StatusID;
+                            isOpen.StatusID = cashTransfer.StatusID;
 
                             Db.SaveChanges();
 
@@ -1385,7 +1492,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult AddCashSalaryPayment(NewCashSalaryPayment cashCollect)
+        public ActionResult AddCashSalaryPayment(NewCashSalaryPayment cashSalary)
         {
             Result<CashActions> result = new Result<CashActions>()
             {
@@ -1395,23 +1502,23 @@ namespace ActionForce.Office.Controllers
             };
             CashControlModel model = new CashControlModel();
 
-            if (cashCollect != null)
+            if (cashSalary != null)
             {
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashCollect.ActinTypeID);
-                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashCollect.LocationID);
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSalary.ActinTypeID);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSalary.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var fromPrefix = cashCollect.FromID.Substring(0, 1);
-                var fromID = Convert.ToInt32(cashCollect.FromID.Substring(1, cashCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashCollect.Amount.Replace(".", ","));
-                var currency = cashCollect.Currency;
+                var fromPrefix = cashSalary.FromID.Substring(0, 1);
+                var fromID = Convert.ToInt32(cashSalary.FromID.Substring(1, cashSalary.FromID.Length - 1));
+                var amount = Convert.ToDouble(cashSalary.Amount.Replace(".", ","));
+                var currency = cashSalary.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
 
-                if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
+                if (DateTime.TryParse(cashSalary.DocumentDate, out docDate))
                 {
-                    docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
+                    docDate = Convert.ToDateTime(cashSalary.DocumentDate).Date;
                 }
-                var cash = OfficeHelper.GetCash(cashCollect.LocationID, cashCollect.Currency);
+                var cash = OfficeHelper.GetCash(cashSalary.LocationID, cashSalary.Currency);
                 // tahsilat eklenir.
 
                 try
@@ -1427,28 +1534,31 @@ namespace ActionForce.Office.Controllers
                         newCashColl.ActionTypeName = actType.Name;
                         newCashColl.ToEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                         newCashColl.Amount = amount;
-                        newCashColl.FromCashID = (int?)cashCollect.BankAccountID == 0 ? cash.ID : (int?)null;
+                        newCashColl.FromCashID = (int?)cashSalary.BankAccountID == 0 ? cash.ID : (int?)null;
                         newCashColl.Currency = currency;
                         newCashColl.Date = docDate;
-                        newCashColl.Description = cashCollect.Description;
+                        newCashColl.Description = cashSalary.Description;
                         newCashColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "SAP");
                         newCashColl.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
-                        newCashColl.FromBankAccountID = (int?)cashCollect.BankAccountID > 0 ? cashCollect.BankAccountID : (int?)null;
+                        newCashColl.FromBankAccountID = (int?)cashSalary.BankAccountID > 0 ? cashSalary.BankAccountID : (int?)null;
                         newCashColl.IsActive = true;
-                        newCashColl.LocationID = cashCollect.LocationID;
+                        newCashColl.LocationID = cashSalary.LocationID;
                         newCashColl.OurCompanyID = location.OurCompanyID;
                         newCashColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
                         newCashColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                         newCashColl.RecordIP = OfficeHelper.GetIPAddress();
                         newCashColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newCashColl.ExchangeRate;
                         newCashColl.SystemCurrency = ourcompany.Currency;
-                        newCashColl.SalaryType = cashCollect.SalaryType;
+                        newCashColl.SalaryType = cashSalary.SalaryType;
 
                         Db.DocumentSalaryPayment.Add(newCashColl);
                         Db.SaveChanges();
 
                         // cari hesap işlemesi
                         OfficeHelper.AddCashAction(newCashColl.FromCashID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, -1, 0, newCashColl.Amount, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
+                        
+                        //maaş hesap işlemi
+                        OfficeHelper.AddEmployeeAction(newCashColl.ToEmployeeID, newCashColl.ActionTypeID, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.Description, 1, newCashColl.Amount, 0, newCashColl.Currency, null, null, cashSalary.SalaryType, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
 
                         result.IsSuccess = true;
                         result.Message = "Maaş Avans ödemesi başarı ile eklendi";

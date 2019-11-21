@@ -49,5 +49,6 @@ namespace ActionForce.Entity
         public string LocationFullName { get; set; }
         public string SlipNumber { get; set; }
         public string SlipDocument { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
     }
 }

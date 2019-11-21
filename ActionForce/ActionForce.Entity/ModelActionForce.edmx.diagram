@@ -203,6 +203,10 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationSchedule" Width="1.5" PointX="45.375" PointY="6.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Schedule" Width="1.5" PointX="11.375" PointY="45.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VResult" Width="1.5" PointX="45.375" PointY="20.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosCollection" Width="1.5" PointX="25.375" PointY="45.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosCancel" Width="1.5" PointX="45.375" PointY="27.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosRefund" Width="1.5" PointX="27.375" PointY="45.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationPosTerminal" Width="1.5" PointX="45.375" PointY="35.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

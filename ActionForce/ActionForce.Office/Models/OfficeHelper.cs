@@ -282,6 +282,20 @@ namespace ActionForce.Office
                 db.AddCashAction(CashID, LocationID, EmployeeID, CashActionTypeID, ActionDate, ProcessName, ProcessID, ProcessDate, DocumentNumber, Description, Direction, Collection, Payment, Currency, Latitude, Longitude, RecordEmployeeID, RecordDate);
             }
         }
+        public static void AddBankAction(int? LocationID, int? EmployeeID, int? BankAccountID, int? PosID, int? BankActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? RecordEmployeeID, DateTime? RecordDate)
+        {
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                db.AddBankAction(LocationID, EmployeeID, BankAccountID, PosID, BankActionTypeID, ActionDate, ProcessName, ProcessID, ProcessDate, DocumentNumber, Description, Direction, Collection, Payment, Currency, Latitude, Longitude, RecordEmployeeID, RecordDate);
+            }
+        }
+        public static void AddEmployeeAction(int? EmployeeID, int? ActionTypeID, string ProcessName, long? ProcessID, DateTime? ProcessDate, string ProcessDetail, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? SalaryTypeID, int? RecordEmployeeID, DateTime? RecordDate)
+        {
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                db.AddEmployeeAction(EmployeeID, ActionTypeID, ProcessName, ProcessID, ProcessDate, ProcessDetail, Direction, Collection, Payment, Currency, Latitude, Longitude, SalaryTypeID, RecordEmployeeID, RecordDate);
+            }
+        }
 
     }
 }

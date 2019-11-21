@@ -12,13 +12,11 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class VDocumentCashCollections
+    public partial class VDocumentPosCollection
     {
         public long ID { get; set; }
         public string DocumentNumber { get; set; }
-        public Nullable<int> FromEmployeeID { get; set; }
         public Nullable<int> FromCustomerID { get; set; }
-        public Nullable<int> FromBankAccountID { get; set; }
         public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
@@ -28,7 +26,7 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> UpdateEmployee { get; set; }
         public string UpdateIP { get; set; }
-        public Nullable<int> CashID { get; set; }
+        public Nullable<int> BankAccountID { get; set; }
         public Nullable<double> ExchangeRate { get; set; }
         public Nullable<double> SystemAmount { get; set; }
         public string SystemCurrency { get; set; }
@@ -39,14 +37,14 @@ namespace ActionForce.Entity
         public string ActionTypeName { get; set; }
         public Nullable<int> ActionTypeID { get; set; }
         public string Description { get; set; }
-        public string EmployeeFullName { get; set; }
         public string BankAccountName { get; set; }
         public string CustomerFullName { get; set; }
         public string ActionName { get; set; }
-        public string CashName { get; set; }
+        public string BankName { get; set; }
         public string RecorderFullName { get; set; }
         public string UpdaterFullName { get; set; }
         public string LocationFullName { get; set; }
+        public string TerminalID { get; set; }
         public Nullable<System.Guid> UID { get; set; }
     }
 }

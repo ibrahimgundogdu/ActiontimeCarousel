@@ -1,6 +1,6 @@
-﻿@model CashControlModel
+﻿@model BankControlModel
 @{
-    ViewBag.Title = "Kasa Tahsilat";
+    ViewBag.Title = "Pos Tahsilat";
 }
 
 @section style{
@@ -25,13 +25,13 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                     <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Kasa Nakit İşlemleri</li>
+                    <li class="breadcrumb-item active" aria-current="page">Pos İptal İşlemleri</li>
                 </ol>
             </nav>
-            <h4 class="mg-b-0 tx-spacing--1">Kasa Tahsilatı</h4>
+            <h4 class="mg-b-0 tx-spacing--1">Pos İptal (Aynı Gün)</h4>
         </div>
         <div class="d-none d-md-block">
-            @{Html.RenderPartial("_PartialAddCashMenu");}
+            @{Html.RenderPartial("_PartialAddBankMenu");}
         </div>
     </div>
     <!--<div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right">
@@ -42,7 +42,7 @@
 
 
 
-    @using (Html.BeginForm("Filter", "Cash", FormMethod.Post))
+    @using (Html.BeginForm("Filter", "Bank", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         <div class="form-row align-items-end">
@@ -78,37 +78,35 @@
                         <th>#</th>
                         <th>Tarih</th>
                         <th>Lokasyon</th>
-                        <th>Kasa</th>
+                        <th>Banka</th>
                         <th>İşlem</th>
-                        <th>Bu Hesaptan</th>
+                        <th>Bu Hesaba</th>
                         <th>Belge No</th>
                         <th>Tahsilat</th>
                         <th>Para Br.</th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
 
-                    @foreach (var item in Model.CashCollections)
+                    @foreach (var item in Model.PosCollections)
                     {
-                    <tr>
+                        <tr>
 
-                        <td class="tx-sm-13 bold">@item.ID</td>
-                        <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
-                        <td class="tx-sm-13">@item.LocationFullName</td>
-                        <td class="tx-sm-13">@item.CashName</td>
-                        <td class="tx-sm-13">@item.ActionTypeName</td>
-                        <td class="tx-sm-13">@item.CustomerFullName @item.EmployeeFullName @item.BankAccountName </td>
-                        <td class="tx-sm-13">@item.DocumentNumber</td>
-                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
-                        <td class="tx-sm-13">@(item.Currency)</td>
-                        <td class="tx-sm-13">@item.RecorderFullName</td>
-                        <td class="tx-sm-13 text-right">@item.RecordDate</td>
-                        <td class="tx-sm-13 text-right"><a href="@(string.Format("../Cash/_PartialCashDetail/{0}",@item.UID))" class="btn btn-xs btn-primary btn-icon"><i data-feather="arrow-left"></i></a></td>
+                            <td class="tx-sm-13 bold">@item.ID</td>
+                            <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                            <td class="tx-sm-13">@item.LocationFullName</td>
+                            <td class="tx-sm-13">@item.BankAccountName</td>
+                            <td class="tx-sm-13">@item.ActionTypeName</td>
+                            <td class="tx-sm-13">@item.CustomerFullName</td>
+                            <td class="tx-sm-13">@item.DocumentNumber</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
+                            <td class="tx-sm-13">@(item.Currency)</td>
+                            <td class="tx-sm-13">@item.RecorderFullName</td>
+                            <td class="tx-sm-13 text-right">@item.RecordDate</td>
 
-                    </tr>
+                        </tr>
                     }
 
                 </tbody>
@@ -135,7 +133,7 @@
     <script src="/lib/cleave.js/cleave.min.js"></script>
 
     <script>
-        
+
         $(function () {
             'use strict'
             $('.select2').select2({
@@ -203,11 +201,11 @@
 
 
 
-        
+
 
     </script>
     <script>
-        
+
 
         $(function () {
             'use strict'

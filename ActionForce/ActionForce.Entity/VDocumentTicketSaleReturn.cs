@@ -46,5 +46,6 @@ namespace ActionForce.Entity
         public Nullable<int> Quantity { get; set; }
         public Nullable<int> PayMethodID { get; set; }
         public string PayMethodName { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
     }
 }
