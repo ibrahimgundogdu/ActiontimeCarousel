@@ -10,7 +10,7 @@ namespace ActionForce.Integration.UfeService
 {
     public class UfeServiceClient
     {
-        public const string apiUrl = "https://ufeservice.ufegrup.com";
+        public const string apiUrl = "http://ufeservice.ufegrup.com";
 
         private RestClient Client = new RestClient(apiUrl);
 
