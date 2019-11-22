@@ -59,12 +59,83 @@ namespace ActionForce.Office.Controllers
 
 
         [AllowAnonymous]
-        public ActionResult Location()
+        public ActionResult Location(string week)
         {
             ScheduleControlModel model = new ScheduleControlModel();
 
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            if (!string.IsNullOrEmpty(week))
+            {
+                var weekparts = week.Split('-');
+                int _year = Convert.ToInt32(weekparts[0]);
+                int _week = Convert.ToInt32(weekparts[1]);
+                datekey = Db.DateList.Where(x => x.WeekYear == _year && x.WeekNumber == _week).OrderBy(x => x.DateKey).FirstOrDefault();
+            }
+
+            string weekcode = $"{datekey.WeekYear}-{datekey.WeekNumber}";
+            var weekdatekeys = Db.DateList.Where(x => x.WeekYear == datekey.WeekYear && x.WeekNumber == datekey.WeekNumber).ToList();
+
+            model.WeekCode = weekcode;
+            model.CurrentDate = datekey;
+            model.WeekList = weekdatekeys;
+            model.FirstWeekDay = weekdatekeys.OrderBy(x => x.DateKey).FirstOrDefault();
+            model.LastWeekDay = weekdatekeys.OrderByDescending(x => x.DateKey).FirstOrDefault();
+
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+
+
+            var schedulelist = Db.VLocationSchedule.Where(x => x.WeekCode.Trim() == weekcode && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.VLocationSchedule = schedulelist;
+
+            List<int> scheduledlocationids = model.VLocationSchedule.Select(x => x.LocationID.Value).ToList();
+
+            model.ScheduledLocationList = model.LocationList.Where(x => scheduledlocationids.Contains(x.LocationID)).ToList();
+            model.NonScheduledLocationList = model.LocationList.Where(x => !scheduledlocationids.Contains(x.LocationID)).ToList();
+
+
             return View(model);
         }
+
+        [AllowAnonymous]
+        public PartialViewResult AddLocationSchedule(int id, string week)
+        {
+            ScheduleControlModel model = new ScheduleControlModel();
+
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            if (!string.IsNullOrEmpty(week))
+            {
+                var weekparts = week.Split('-');
+                int _year = Convert.ToInt32(weekparts[0]);
+                int _week = Convert.ToInt32(weekparts[1]);
+                datekey = Db.DateList.Where(x => x.WeekYear == _year && x.WeekNumber == _week).OrderBy(x => x.DateKey).FirstOrDefault();
+            }
+
+            string weekcode = $"{datekey.WeekYear}-{datekey.WeekNumber}";
+            var weekdatekeys = Db.DateList.Where(x => x.WeekYear == datekey.WeekYear && x.WeekNumber == datekey.WeekNumber).ToList();
+
+            model.WeekCode = weekcode;
+            model.CurrentDate = datekey;
+            model.WeekList = weekdatekeys;
+            model.FirstWeekDay = weekdatekeys.OrderBy(x => x.DateKey).FirstOrDefault();
+            model.LastWeekDay = weekdatekeys.OrderByDescending(x => x.DateKey).FirstOrDefault();
+
+            //model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == id);
+
+
+            var schedulelist = Db.VLocationSchedule.Where(x => x.WeekCode.Trim() == weekcode && x.LocationID == id).ToList();
+            model.VLocationSchedule = schedulelist;
+
+            
+
+            return PartialView("_PartialAddLocationSchedule", model);
+        }
+
         [AllowAnonymous]
         public ActionResult Employee()
         {

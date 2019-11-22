@@ -10,6 +10,8 @@ namespace ActionForce.Office
     {
         public IEnumerable<Location> LocationList { get; set; }
         public IEnumerable<LocationSchedule> LocationSchedule { get; set; }
+        public IEnumerable<VLocationSchedule> VLocationSchedule { get; set; }
+
         public IEnumerable<Schedule> EmployeeSchedule { get; set; }
         public IEnumerable<DateList> CurrentWeek { get; set; }
         public IEnumerable<DateList> NextWeek { get; set; }
@@ -21,7 +23,16 @@ namespace ActionForce.Office
         public Result<LocationSchedule> LocationResult { get; set; }
         public Result<Schedule> ResultMessage { get; set; }
 
+        public IEnumerable<DateList> WeekList { get; set; }
+        public DateList FirstWeekDay { get; set; }
+        public DateList LastWeekDay { get; set; }
+
+        public IEnumerable<Location> ScheduledLocationList { get; set; }
+        public IEnumerable<Location> NonScheduledLocationList { get; set; }
+
+
         public string calendarEvents { get; set; }
+        public string WeekCode { get; set; }
 
     }
 }

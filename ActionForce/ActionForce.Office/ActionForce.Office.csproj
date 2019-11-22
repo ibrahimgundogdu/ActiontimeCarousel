@@ -1366,6 +1366,7 @@
     <Content Include="lib\jquery.flot\jquery.flot.time.js" />
     <Content Include="lib\jquery.flot\jquery.js" />
     <Content Include="lib\jquery.flot\LICENSE.txt" />
+    <Content Include="lib\jquery.mask\jquery.mask.js" />
     <Content Include="lib\jqueryui\jquery-ui.min.js" />
     <Content Include="lib\jquery\core.js" />
     <Content Include="lib\jquery\jquery.min.js" />
@@ -2439,6 +2440,7 @@
     <Content Include="Views\Shift\EmployeeShift.cshtml" />
     <Content Include="Views\Shift\Index.cshtml" />
     <Content Include="Views\Shift\LocationShift.cshtml" />
+    <Content Include="Views\Schedule\_PartialAddLocationSchedule.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

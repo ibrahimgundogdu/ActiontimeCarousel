@@ -1,0 +1,83 @@
+﻿@model ScheduleControlModel
+<a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</a>
+<div>
+    <h4>Lokasyon Mesai Takvimleri (@(Model.WeekCode). Hafta )</h4>
+    <p class="tx-color-03">@Model.CurrentLocation.LocationName  @Model.CurrentLocation.Description @Model.CurrentLocation.State</p>
+
+
+    <div class="table-responsive">
+        <table class="table table-dark table-hover table-striped mg-b-0">
+            <thead>
+               
+                <tr>
+                    <th scope="col" style="width:5%;" class="bd-gray-100">
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="chkAll">
+                            <label class="custom-control-label" for="chkAll"></label>
+                        </div>
+                    </th>
+                    <th scope="col" style="width:35%;">Mesai Tarihi</th>
+                    <th scope="col" style="width:20%;" class="bd-l">Başlangıç Tarihi</th>
+                    <th scope="col" style="width:10%;" class="bd-r">
+                        <input name="ShiftBeginTime" type="text" class="form-control form-control-sm shifttime" value="10:00">
+                    </th>
+                    <th scope="col" style="width:20%;" class="bd-l">Bitiş Tarihi</th>
+                    <th scope="col" style="width:10%;">
+                        <input name="ShiftBeginTime" type="text" class="form-control form-control-sm shifttime" value="10:00">
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var day in Model.WeekList.OrderBy(x => x.DateKey))
+                {
+                    var schedule = Model.VLocationSchedule.FirstOrDefault(x => x.LocationID == Model.CurrentLocation.LocationID && x.ShiftDate == day.DateKey);
+
+                    <tr>
+                        <th scope="row">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input shiftcheck" id="chkShift@(day.DateID)" @(schedule != null ? "checked":"") value="@day.DateID">
+                                <label class="custom-control-label" for="chkShift@(day.DateID)"></label>
+                            </div>
+                        </th>
+                        <th scope="row">
+                            @(day.DateKey.ToLongDateString())
+                            <input id="dateKey" type="hidden" value="@(day.DateKey.ToString("yyyy-MM-dd"))" />
+                            <input id="locationID" type="hidden" value="@(Model.CurrentLocation.LocationID)" />
+                            <input id="dateID" type="hidden" value="@(day.DateID)" />
+                        </th>
+
+                        <td class="bd-l">
+                            <input name="ShiftBeginDate" type="text" class="form-control shiftdate" value="@(day.DateKey.ToString("yyyy-MM-dd"))">
+                        </td>
+                        <td class="bd-r">
+                            <input name="ShiftBeginTime" type="text" class="form-control shifttime" value="@(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToString("HH\\:mm") :"")">
+                        </td>
+
+                        <td  class="bd-l">
+                            <input name="ShiftEndDate" type="text" class="form-control shiftdate" value="@(day.DateKey.ToString("yyyy-MM-dd"))">
+                        </td>
+                        <td>
+                            <input name="ShiftEndTime" type="text" class="form-control shifttime" value="@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToString("HH\\:mm") :"")">
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="form-group mg-t-10">
+        <button class="btn btn-primary btn-block">Kaydet</button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('.shifttime').mask('00:00');
+        $('.shiftdate').mask('0000-00-00');
+    });
+</script>
