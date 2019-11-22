@@ -2278,6 +2278,8 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LogoutController.cs" />
     <Compile Include="Controllers\ResultController.cs" />
+    <Compile Include="Controllers\ScheduleController.cs" />
+    <Compile Include="Controllers\ShiftController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -2296,6 +2298,9 @@
     <Compile Include="Models\OfficeHelper.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Models\ResultControlModel.cs" />
+    <Compile Include="Models\ScheduleControlModel.cs" />
+    <Compile Include="Models\ScheduleItem.cs" />
+    <Compile Include="Models\ShiftControlModel.cs" />
     <Compile Include="Models\TotalModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -2428,6 +2433,12 @@
     <Content Include="Views\Bank\_PartialDocumentForms.cshtml" />
     <Content Include="Views\Bank\PosRefund.cshtml" />
     <Content Include="Views\Cash\_PartialCashDetail.cshtml" />
+    <Content Include="Views\Schedule\Employee.cshtml" />
+    <Content Include="Views\Schedule\Index.cshtml" />
+    <Content Include="Views\Schedule\Location.cshtml" />
+    <Content Include="Views\Shift\EmployeeShift.cshtml" />
+    <Content Include="Views\Shift\Index.cshtml" />
+    <Content Include="Views\Shift\LocationShift.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
