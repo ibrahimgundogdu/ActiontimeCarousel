@@ -1,0 +1,241 @@
+﻿@model ScheduleControlModel
+@{
+    ViewBag.Title = "Mesai Takvimi";
+}
+
+@section style{
+    <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
+
+}
+
+<div class="content-header">
+    <div class="content-search">
+        <i data-feather="search"></i>
+        <input type="search" class="form-control" placeholder="Search">
+    </div>
+    <nav class="nav">
+        <a href="" class="nav-link"><i data-feather="help-circle"></i></a>
+        <a href="" class="nav-link"><i data-feather="grid"></i></a>
+        <a href="" class="nav-link"><i data-feather="align-left"></i></a>
+    </nav>
+</div><!-- content-header -->
+<div class="content-body">
+    <div class="pd-x-0 tx-13">
+        <div class="media d-block d-lg-flex">
+            <div class="profile-sidebar profile-sidebar-two pd-lg-r-15" style="width:285px !important;">
+                <div class="row">
+                    <div id="dateLocation" class="col-sm-3 col-md-2 col-lg mg-b-20 mg-sm-b-20 mg-lg-b-25"></div>
+                    <div class="col-sm-3 col-md-2 col-lg">
+                        liste
+                    </div>
+                </div>
+            </div><!-- profile-sidebar -->
+            <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
+                <div class="profile-update-option bg-white ht-50 bd d-flex justify-content-end mg-b-20 mg-lg-b-25 rounded">
+                    <div class="d-flex align-items-center pd-x-20 mg-r-auto">
+                        <i data-feather="edit-3"></i> <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">Share an</span> Update</a>
+                    </div>
+                    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+                        <a href="" class="link-03" data-toggle="tooltip" title="Publish Photo"><i data-feather="image"></i></a>
+                    </div>
+                    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+                        <a href="" class="link-03" data-toggle="tooltip" title="Publish Video"><i data-feather="video"></i></a>
+                    </div>
+                    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+                        <a href="" class="link-03" data-toggle="tooltip" title="Write an Article"><i data-feather="file-text"></i></a>
+                    </div>
+                </div>
+                <div class="card mg-b-20 mg-lg-b-25">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Latest Activity</h6>
+                        <nav class="nav nav-icon-only">
+                            <a href="" class="nav-link"><i data-feather="more-horizontal"></i></a>
+                        </nav>
+                    </div><!-- card-header -->
+                    <div class="card-body pd-20 pd-lg-25">
+                        <div class="media align-items-center mg-b-20">
+                            <div class="avatar avatar-online"><img src="../https://via.placeholder.com/500" class="rounded-circle" alt=""></div>
+                            <div class="media-body pd-l-15">
+                                <h6 class="mg-b-3">Dyanne Aceron</h6>
+                                <span class="d-block tx-13 tx-color-03">Cigarette Butt Collector</span>
+                            </div>
+                            <span class="d-none d-sm-block tx-12 tx-color-03 align-self-start">5 hours ago</span>
+                        </div><!-- media -->
+                        <p class="mg-b-20">Our team is expanding again. We are looking for a Product Manager and Software Engineer to drive our new aspects of our capital projects. If you're interested, please drop a comment here or simply message me. <a href="">#softwareengineer</a> <a href="">#engineering</a></p>
+                        <div class="bd bg-gray-50 pd-y-15 pd-x-15 pd-sm-x-20">
+                            <h6 class="tx-15 mg-b-3">We're hiring of Product Manager</h6>
+                            <p class="mg-b-0 tx-14">Full-time, $60,000 - $80,000 annual</p>
+                            <span class="tx-13 tx-color-03">Bay Area, San Francisco, CA</span>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
+                        <nav class="nav nav-with-icon tx-13">
+                            <a href="" class="nav-link"><i data-feather="thumbs-up"></i> Like</a>
+                            <a href="" class="nav-link"><i data-feather="message-square"></i> Comment</a>
+                            <a href="" class="nav-link"><i data-feather="share"></i> Share</a>
+                        </nav>
+                    </div><!-- card-footer -->
+                </div><!-- card -->
+                <div class="card mg-b-20 mg-lg-b-25">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Work Experience</h6>
+                        <nav class="nav nav-with-icon tx-13">
+                            <a href="" class="nav-link"><i data-feather="plus"></i> Add New</a>
+                        </nav>
+                    </div><!-- card-header -->
+                    <div class="card-body pd-25">
+                        <div class="media d-block d-sm-flex">
+                            <div class="wd-80 ht-80 bg-ui-04 rounded d-flex align-items-center justify-content-center">
+                                <i data-feather="briefcase" class="tx-white-7 wd-40 ht-40"></i>
+                            </div>
+                            <div class="media-body pd-t-25 pd-sm-t-0 pd-sm-l-25">
+                                <h5 class="mg-b-5">Area Sales Manager</h5>
+                                <p class="mg-b-3 tx-color-02"><span class="tx-medium tx-color-01">ThemePixels, Inc.</span>, Bay Area, San Francisco, CA</p>
+                                <span class="d-block tx-13 tx-color-03">December 2016 - Present</span>
+                                <ul class="pd-l-10 mg-0 mg-t-20 tx-13">
+                                    <li>Reaching the targets and goals set for my area.</li>
+                                    <li>Servicing the needs of my existing customers.</li>
+                                    <li>Maintaining the relationships with existing customers for repeat business.</li>
+                                    <li>Reporting to top managers.</li>
+                                    <li>Keeping up to date with the products.</li>
+                                </ul>
+                            </div>
+                        </div><!-- media -->
+                    </div>
+                    <div class="card-footer bg-transparent pd-y-15 pd-x-20">
+                        <nav class="nav nav-with-icon tx-13">
+                            <a href="" class="nav-link">
+                                Show More Experiences (4)
+                                <i data-feather="chevron-down" class="mg-l-2 mg-r-0 mg-t-2"></i>
+                            </a>
+                        </nav>
+                    </div><!-- card-footer -->
+                </div><!-- card -->
+                <div class="card mg-b-20 mg-lg-b-25">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Education</h6>
+                        <nav class="nav nav-with-icon tx-13">
+                            <a href="" class="nav-link"><i data-feather="plus"></i> Add New</a>
+                        </nav>
+                    </div><!-- card-header -->
+                    <div class="card-body pd-25">
+                        <div class="media">
+                            <div class="wd-80 ht-80 bg-ui-04 rounded d-flex align-items-center justify-content-center">
+                                <i data-feather="book-open" class="tx-white-7 wd-40 ht-40"></i>
+                            </div>
+                            <div class="media-body pd-l-25">
+                                <h5 class="mg-b-5">BS in Computer Science</h5>
+                                <p class="mg-b-3"><span class="tx-medium tx-color-02">Holy Name University</span>,  Tagbilaran City, Bohol</p>
+                                <span class="d-block tx-13 tx-color-03">2002-2006</span>
+                            </div>
+                        </div><!-- media -->
+                    </div>
+                    <div class="card-footer bg-transparent pd-y-15 pd-x-20">
+                        <nav class="nav nav-with-icon tx-13">
+                            <a href="" class="nav-link">
+                                Show More Education (2)
+                                <i data-feather="chevron-down" class="mg-l-2 mg-r-0 mg-t-2"></i>
+                            </a>
+                        </nav>
+                    </div><!-- card-footer -->
+                </div><!-- card -->
+                <div class="card card-profile-interest">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Interests</h6>
+                        <nav class="nav nav-with-icon tx-13">
+                            <a href="" class="nav-link">Browse Interests <i data-feather="arrow-right" class="mg-l-5 mg-r-0"></i></a>
+                        </nav>
+                    </div><!-- card-header -->
+                    <div class="card-body pd-25">
+                        <div class="row">
+                            <div class="col-sm col-lg-12 col-xl">
+                                <div class="media">
+                                    <div class="wd-45 ht-45 bg-gray-900 rounded d-flex align-items-center justify-content-center">
+                                        <i data-feather="github" class="tx-white-7 wd-20 ht-20"></i>
+                                    </div>
+                                    <div class="media-body pd-l-15">
+                                        <h6 class="tx-color-01 mg-b-5">Github, Inc.</h6>
+                                        <p class="tx-12 mg-b-10">Web-based hosting service for version control using Git... <a href="">Learn more</a></p>
+                                        <span class="tx-12 tx-color-03">6,182,220 Followers</span>
+                                    </div>
+                                </div><!-- media -->
+                                <div class="media">
+                                    <div class="wd-45 ht-45 bg-warning rounded d-flex align-items-center justify-content-center">
+                                        <i data-feather="truck" class="tx-white-7 wd-20 ht-20"></i>
+                                    </div>
+                                    <div class="media-body pd-l-15">
+                                        <h6 class="tx-color-01 mg-b-5">DHL Express</h6>
+                                        <p class="tx-12 mg-b-10">Logistics company providing international courier service... <a href="">Learn more</a></p>
+                                        <span class="tx-12 tx-color-03">3,005,192 Followers</span>
+                                    </div>
+                                </div><!-- media -->
+                            </div><!-- col -->
+                            <div class="col-sm col-lg-12 col-xl mg-t-25 mg-sm-t-0 mg-lg-t-25 mg-xl-t-0">
+                                <div class="media">
+                                    <div class="wd-45 ht-45 bg-primary rounded d-flex align-items-center justify-content-center">
+                                        <i data-feather="facebook" class="tx-white-7 wd-20 ht-20"></i>
+                                    </div>
+                                    <div class="media-body pd-l-15">
+                                        <h6 class="tx-color-01 mg-b-5">Facebook, Inc.</h6>
+                                        <p class="tx-12 mg-b-10">Online social media and social networking service company... <a href="">Learn more</a></p>
+                                        <span class="tx-12 tx-color-03">12,182,220 Followers</span>
+                                    </div>
+                                </div><!-- media -->
+                                <div class="media">
+                                    <div class="wd-45 ht-45 bg-pink rounded d-flex align-items-center justify-content-center">
+                                        <i data-feather="instagram" class="tx-white-7 wd-20 ht-20"></i>
+                                    </div>
+                                    <div class="media-body pd-l-15">
+                                        <h6 class="tx-color-01 mg-b-5">Instagram</h6>
+                                        <p class="tx-12 mg-b-10">Photo and video-sharing social networking service by Facebook... <a href="">Learn more</a></p>
+                                        <span class="tx-12 tx-color-03">3,005,192 Followers</span>
+                                    </div>
+                                </div><!-- media -->
+                            </div><!-- col -->
+                        </div><!-- row -->
+                    </div><!-- card-body -->
+                </div><!-- card -->
+            </div><!-- media-body -->
+
+        </div><!-- media -->
+    </div><!-- container -->
+</div><!-- content-body -->
+@section scripts {
+
+
+
+    <script>
+        $(function () {
+            'use strict'
+            $("body").addClass("page-profile");
+
+            $('#dateLocation').datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+
+        });
+
+
+    </script>
+
+
+
+    @if (Model.ResultMessage != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.ResultMessage.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}
