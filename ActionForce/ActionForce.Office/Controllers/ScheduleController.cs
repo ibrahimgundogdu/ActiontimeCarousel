@@ -131,9 +131,93 @@ namespace ActionForce.Office.Controllers
             var schedulelist = Db.VLocationSchedule.Where(x => x.WeekCode.Trim() == weekcode && x.LocationID == id).ToList();
             model.VLocationSchedule = schedulelist;
 
-            
+
 
             return PartialView("_PartialAddLocationSchedule", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddUpdateLocationSchedule(LocationScheduleEdit[] schedulelist)
+        {
+            ScheduleControlModel model = new ScheduleControlModel();
+
+            string weekcode = "";
+
+            foreach (var item in schedulelist)
+            {
+                weekcode = item.weekCode;
+
+                if (item.scheduleID > 0)
+                {
+                    DateTime? startdate = Convert.ToDateTime(item.ShiftBeginDate);
+                    TimeSpan? starttime = Convert.ToDateTime(item.ShiftBeginTime + ":00").TimeOfDay;
+                    DateTime? startdatetime = startdate.Value.Add(starttime.Value);
+
+                    DateTime? enddate = Convert.ToDateTime(item.ShiftEndDate);
+                    TimeSpan? endtime = Convert.ToDateTime(item.ShiftEndTime + ":00").TimeOfDay;
+                    DateTime? enddatetime = enddate.Value.Add(endtime.Value);
+
+                    var locschedule = Db.LocationSchedule.FirstOrDefault(x => x.ID == item.scheduleID);
+
+                    if (!string.IsNullOrEmpty(item.isActive))
+                    {
+                        locschedule.ShiftDateStart = startdatetime;
+                        locschedule.ShiftdateEnd = enddatetime;
+                        locschedule.UpdateDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
+                        locschedule.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
+                        locschedule.UpdateIP = OfficeHelper.GetIPAddress();
+
+                        Db.SaveChanges();
+                    }
+                    else
+                    {
+                        Db.LocationSchedule.Remove(locschedule);
+                        Db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    DateTime? _dateKey = Convert.ToDateTime(item.dateKey);
+
+                    DateTime? startdate = Convert.ToDateTime(item.ShiftBeginDate);
+                    TimeSpan? starttime = Convert.ToDateTime(item.ShiftBeginTime + ":00").TimeOfDay;
+                    DateTime? startdatetime = startdate.Value.Add(starttime.Value);
+
+                    DateTime? enddate = Convert.ToDateTime(item.ShiftEndDate);
+                    TimeSpan? endtime = Convert.ToDateTime(item.ShiftEndTime + ":00").TimeOfDay;
+                    DateTime? enddatetime = enddate.Value.Add(endtime.Value);
+
+                    var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _dateKey);
+
+                    if (!string.IsNullOrEmpty(item.isActive))
+                    {
+                        LocationSchedule locschedule = new LocationSchedule();
+
+                        locschedule.Day = datekey.Day;
+                        locschedule.DayName = datekey.DayNameTR;
+                        locschedule.LocationID = item.locationID;
+                        locschedule.Month = datekey.Month;
+                        locschedule.ShiftDate = _dateKey;
+                        locschedule.StatusID = 2;
+                        locschedule.Week = datekey.WeekNumber;
+                        locschedule.Year = datekey.WeekYear;
+
+                        locschedule.ShiftDateStart = startdatetime;
+                        locschedule.ShiftdateEnd = enddatetime;
+                        locschedule.RecordDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
+                        locschedule.RecordEmployee = model.Authentication.ActionEmployee.EmployeeID;
+                        locschedule.RecordIP = OfficeHelper.GetIPAddress();
+
+                        Db.LocationSchedule.Add(locschedule);
+                        Db.SaveChanges();
+                    }
+
+
+                }
+            }
+
+            return RedirectToAction("Location", "Schedule", new { week = weekcode });
         }
 
         [AllowAnonymous]

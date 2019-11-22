@@ -2295,6 +2295,7 @@
     <Compile Include="Models\FromAccountModel.cs" />
     <Compile Include="Models\HomeControlModel.cs" />
     <Compile Include="Models\LayoutControlModel.cs" />
+    <Compile Include="Models\LocationScheduleEdit.cs" />
     <Compile Include="Models\NewCashCollect.cs" />
     <Compile Include="Models\OfficeHelper.cs" />
     <Compile Include="Models\Result.cs" />
@@ -2441,6 +2442,7 @@
     <Content Include="Views\Shift\Index.cshtml" />
     <Content Include="Views\Shift\LocationShift.cshtml" />
     <Content Include="Views\Schedule\_PartialAddLocationSchedule.cshtml" />
+    <Content Include="Views\Cash\CashDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
