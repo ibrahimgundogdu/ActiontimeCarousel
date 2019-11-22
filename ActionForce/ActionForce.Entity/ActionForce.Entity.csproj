@@ -630,7 +630,7 @@
     <Compile Include="VResult.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
-    <Compile Include="VSchedule.cs">
+    <Compile Include="WeekList.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
   </ItemGroup>

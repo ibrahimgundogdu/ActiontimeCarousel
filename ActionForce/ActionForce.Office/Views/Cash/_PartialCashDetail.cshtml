@@ -28,7 +28,7 @@
                     <li class="breadcrumb-item active" aria-current="page">Kasa Nakit İşlemleri</li>
                 </ol>
             </nav>
-            <h4 class="mg-b-0 tx-spacing--1">Kasa Tahsilatı</h4>
+            <h4 class="mg-b-0 tx-spacing--1">Kasa Tahsilatı Detayı</h4>
         </div>
         <div class="d-none d-md-block">
             @{Html.RenderPartial("_PartialAddCashMenu");}
@@ -41,33 +41,58 @@
 
 
 
-
-    @using (Html.BeginForm("Filter", "Cash", FormMethod.Post))
+    @using (Html.BeginForm("EditCashCollection", "Cash", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
-        <div class="form-row align-items-end">
-            <div class="form-group col-md-3 d-flex align-items-end">
-                <select class="form-control select2" id="locationId" name="locationId">
-                    <option value="" label="Lokasyon Seçiminiz"></option>
-                    @foreach (var item in Model.LocationList)
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Kimden</label>
+                <select class="form-control" id="FromID" name="FromID" required>
+                    @foreach (var item in Model.FromList)
                     {
-                        <option value="@item.LocationID" @(Model.Filters.LocationID == item.LocationID ? "selected" : "")>@(Html.Raw($"<strong>{item.SortBy}</strong> {item.LocationName} {item.Description} {item.State}"))</option>
+                        <option value="@item.Code">@(Html.Raw($"{item.Name}"))</option>
                     }
                 </select>
             </div>
-            <div class="form-group col-md-2 d-flex align-items-end">
-                <input type="text" id="dateFrom" name="beginDate" class="form-control" placeholder="Başlangıç Tarihi" value="@(Model.Filters.DateBegin.Value.ToString("yyyy-MM-dd"))">
+            <div class="form-group col-md-6">
+                <label>Lokasyon</label>
+                <select class="form-control" id="LocationID" name="LocationID" required>
+                    @foreach (var item in Model.LocationList)
+                    {
+                        <option value="@item.LocationID">@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                    }
+                </select>
             </div>
-            <div class="form-group col-md-2 d-flex align-items-end">
-                <input type="text" id="dateTo" name="endDate" class="form-control" placeholder="Bitiş Tarihi" value="@(Model.Filters.DateEnd.Value.ToString("yyyy-MM-dd"))">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Tutar</label>
+                <input id="Amount" name="Amount" type="text" class="form-control" placeholder="Tutar" required>
             </div>
-            <div class="form-group col-md-1 d-flex align-items-end ">
-                <button class="btn btn-primary" type="submit" id="btnsearch">Ara</button>
+            <div class="form-group col-md-6">
+                <label>Para Birimi</label>
+                <select class="form-control" id="Currency" name="Currency" required>
+                    @foreach (var item in Model.CurrencyList)
+                    {
+                        <option value="@item.Code">@($"{item.Code} ({item.Sign})")</option>
+                    }
+                </select>
             </div>
         </div>
 
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label>Tarih</label>
+                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label>Açıklama</label>
+                <textarea id="Description" name="Description" rows="4" class="form-control" placeholder="Açıklama"></textarea>
+            </div>
+        </div>
+        <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
     }
-
 </div>
 
 

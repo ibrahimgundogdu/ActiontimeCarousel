@@ -3488,6 +3488,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationSchedule' does not
           <Property Name="Status" Type="nvarchar" MaxLength="50" />
           <Property Name="Color" Type="nvarchar" MaxLength="20" />
           <Property Name="OurCompanyID" Type="int" />
+          <Property Name="WeekCode" Type="nvarchar" MaxLength="9" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -3521,6 +3522,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="Environment" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="WeekList">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="WeekCode" Type="nvarchar" MaxLength="9" />
+          <Property Name="Year" Type="int" />
+          <Property Name="Week" Type="int" />
         </EntityType>
         <Association Name="FK_Action_ResultState">
           <End Role="ResultState" Type="Self.ResultState" Multiplicity="1" />
@@ -4775,7 +4787,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
     [VLocationSchedule].[LocationFullName] AS [LocationFullName], 
     [VLocationSchedule].[Status] AS [Status], 
     [VLocationSchedule].[Color] AS [Color], 
-    [VLocationSchedule].[OurCompanyID] AS [OurCompanyID]
+    [VLocationSchedule].[OurCompanyID] AS [OurCompanyID], 
+    [VLocationSchedule].[WeekCode] AS [WeekCode]
     FROM [dbo].[VLocationSchedule] AS [VLocationSchedule]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VResult" EntityType="Self.VResult" store:Type="Views" store:Schema="dbo">
@@ -4804,6 +4817,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
     [VResult].[RecorderFullName] AS [RecorderFullName], 
     [VResult].[Environment] AS [Environment]
     FROM [dbo].[VResult] AS [VResult]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="WeekList" EntityType="Self.WeekList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [WeekList].[Id] AS [Id], 
+    [WeekList].[WeekCode] AS [WeekCode], 
+    [WeekList].[Year] AS [Year], 
+    [WeekList].[Week] AS [Week]
+    FROM [dbo].[WeekList] AS [WeekList]</DefiningQuery>
           </EntitySet>
           <AssociationSet Name="FK_Action_ResultState" Association="Self.FK_Action_ResultState">
             <End Role="ResultState" EntitySet="ResultState" />
@@ -5241,6 +5262,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
             <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
           </FunctionImport>
           <EntitySet Name="VLocationSchedule" EntityType="db293_ActionTimeDbModel.VLocationSchedule" />
+          <EntitySet Name="WeekList" EntityType="db293_ActionTimeDbModel.WeekList" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -8994,6 +9016,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Color" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="WeekCode" Type="String" MaxLength="9" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="WeekList">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="WeekCode" Type="String" MaxLength="9" FixedLength="false" Unicode="true" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="Week" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -12655,6 +12687,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <EntitySetMapping Name="VLocationSchedule">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationSchedule">
               <MappingFragment StoreEntitySet="VLocationSchedule">
+                <ScalarProperty Name="WeekCode" ColumnName="WeekCode" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="Color" ColumnName="Color" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
@@ -12679,6 +12712,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="StatusID" ColumnName="StatusID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WeekList">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.WeekList">
+              <MappingFragment StoreEntitySet="WeekList">
+                <ScalarProperty Name="Week" ColumnName="Week" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="WeekCode" ColumnName="WeekCode" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

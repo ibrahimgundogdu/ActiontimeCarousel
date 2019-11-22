@@ -179,6 +179,8 @@ namespace ActionForce.Office.Controllers
                 Data = null
             };
             CashControlModel model = new CashControlModel();
+            var list = Db.VDocumentCashCollections.FirstOrDefault(x => x.UID == cashCollect.UID);
+
             if (cashCollect != null)
             {
                 var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashCollect.ActinTypeID);
@@ -186,7 +188,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashCollect.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashCollect.FromID.Substring(1, cashCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashCollect.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(cashCollect.Amount.ToString().Replace(".", ","));
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -195,7 +197,7 @@ namespace ActionForce.Office.Controllers
                 {
                     docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
                 }
-                var cash = OfficeHelper.GetCash(cashCollect.LocationID, cashCollect.Currency);
+                var cash = OfficeHelper.GetCash((int)cashCollect.LocationID, cashCollect.Currency);
 
                 try
                 {
@@ -223,6 +225,7 @@ namespace ActionForce.Office.Controllers
                     newCashColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newCashColl.ExchangeRate;
                     newCashColl.SystemCurrency = ourcompany.Currency;
                     newCashColl.EnvironmentID = 2;
+
                     Db.SaveChanges();
 
                     // cari hesap işlemesi
@@ -243,7 +246,7 @@ namespace ActionForce.Office.Controllers
             }
 
             TempData["result"] = result;
-
+            //return RedirectToAction("_PartialCashDetail", new { id = cashCollect.UID });
             return RedirectToAction("Index", "Cash");
 
         }
