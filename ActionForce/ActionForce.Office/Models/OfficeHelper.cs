@@ -296,6 +296,13 @@ namespace ActionForce.Office
                 db.AddEmployeeAction(EmployeeID, ActionTypeID, ProcessName, ProcessID, ProcessDate, ProcessDetail, Direction, Collection, Payment, Currency, Latitude, Longitude, SalaryTypeID, RecordEmployeeID, RecordDate);
             }
         }
+        public static void UpdateCashAction(int? CashID, int? LocationID, int? EmployeeID, int? CashActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? RecordEmployeeID, DateTime? RecordDate, int? UpdateEmployeeID, DateTime? UpdateDate)
+        {
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                db.UpdateCashAction(CashID, LocationID, EmployeeID, CashActionTypeID, ActionDate, ProcessName, ProcessID, ProcessDate, DocumentNumber, Description, Direction, Collection, Payment, Currency, Latitude, Longitude, RecordEmployeeID, RecordDate, UpdateEmployeeID, UpdateDate);
+            }
+        }
 
     }
 }

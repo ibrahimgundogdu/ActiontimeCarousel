@@ -561,5 +561,90 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddEmployeeAction", employeeIDParameter, actionTypeIDParameter, processNameParameter, processIDParameter, processDateParameter, processDetailParameter, directionParameter, collectionParameter, paymentParameter, currencyParameter, latitudeParameter, longitudeParameter, salaryTypeIDParameter, recordEmployeeIDParameter, recordDateParameter);
         }
+    
+        public virtual int UpdateCashAction(Nullable<int> cashID, Nullable<int> locationID, Nullable<int> employeeID, Nullable<int> cashActionTypeID, Nullable<System.DateTime> actionDate, string processName, Nullable<long> processID, Nullable<System.DateTime> processDate, string documentNumber, string description, Nullable<short> direction, Nullable<double> collection, Nullable<double> payment, string currency, Nullable<double> latitude, Nullable<double> longitude, Nullable<int> recordEmployeeID, Nullable<System.DateTime> recordDate, Nullable<int> updateEmployeeID, Nullable<System.DateTime> updateDate)
+        {
+            var cashIDParameter = cashID.HasValue ?
+                new ObjectParameter("CashID", cashID) :
+                new ObjectParameter("CashID", typeof(int));
+    
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            var cashActionTypeIDParameter = cashActionTypeID.HasValue ?
+                new ObjectParameter("CashActionTypeID", cashActionTypeID) :
+                new ObjectParameter("CashActionTypeID", typeof(int));
+    
+            var actionDateParameter = actionDate.HasValue ?
+                new ObjectParameter("ActionDate", actionDate) :
+                new ObjectParameter("ActionDate", typeof(System.DateTime));
+    
+            var processNameParameter = processName != null ?
+                new ObjectParameter("ProcessName", processName) :
+                new ObjectParameter("ProcessName", typeof(string));
+    
+            var processIDParameter = processID.HasValue ?
+                new ObjectParameter("ProcessID", processID) :
+                new ObjectParameter("ProcessID", typeof(long));
+    
+            var processDateParameter = processDate.HasValue ?
+                new ObjectParameter("ProcessDate", processDate) :
+                new ObjectParameter("ProcessDate", typeof(System.DateTime));
+    
+            var documentNumberParameter = documentNumber != null ?
+                new ObjectParameter("DocumentNumber", documentNumber) :
+                new ObjectParameter("DocumentNumber", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var directionParameter = direction.HasValue ?
+                new ObjectParameter("Direction", direction) :
+                new ObjectParameter("Direction", typeof(short));
+    
+            var collectionParameter = collection.HasValue ?
+                new ObjectParameter("Collection", collection) :
+                new ObjectParameter("Collection", typeof(double));
+    
+            var paymentParameter = payment.HasValue ?
+                new ObjectParameter("Payment", payment) :
+                new ObjectParameter("Payment", typeof(double));
+    
+            var currencyParameter = currency != null ?
+                new ObjectParameter("Currency", currency) :
+                new ObjectParameter("Currency", typeof(string));
+    
+            var latitudeParameter = latitude.HasValue ?
+                new ObjectParameter("Latitude", latitude) :
+                new ObjectParameter("Latitude", typeof(double));
+    
+            var longitudeParameter = longitude.HasValue ?
+                new ObjectParameter("Longitude", longitude) :
+                new ObjectParameter("Longitude", typeof(double));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordDateParameter = recordDate.HasValue ?
+                new ObjectParameter("RecordDate", recordDate) :
+                new ObjectParameter("RecordDate", typeof(System.DateTime));
+    
+            var updateEmployeeIDParameter = updateEmployeeID.HasValue ?
+                new ObjectParameter("UpdateEmployeeID", updateEmployeeID) :
+                new ObjectParameter("UpdateEmployeeID", typeof(int));
+    
+            var updateDateParameter = updateDate.HasValue ?
+                new ObjectParameter("UpdateDate", updateDate) :
+                new ObjectParameter("UpdateDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateCashAction", cashIDParameter, locationIDParameter, employeeIDParameter, cashActionTypeIDParameter, actionDateParameter, processNameParameter, processIDParameter, processDateParameter, documentNumberParameter, descriptionParameter, directionParameter, collectionParameter, paymentParameter, currencyParameter, latitudeParameter, longitudeParameter, recordEmployeeIDParameter, recordDateParameter, updateEmployeeIDParameter, updateDateParameter);
+        }
     }
 }
