@@ -207,6 +207,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosCancel" Width="1.5" PointX="45.375" PointY="27.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosRefund" Width="1.5" PointX="27.375" PointY="45.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationPosTerminal" Width="1.5" PointX="45.375" PointY="35.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationSchedule" Width="1.5" PointX="45.375" PointY="39.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

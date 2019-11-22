@@ -3458,6 +3458,38 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
           <Property Name="POSAccountID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationSchedule' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VLocationSchedule">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="StatusID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="StatusID" Type="int" Nullable="false" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="ShiftDate" Type="date" />
+          <Property Name="Year" Type="int" />
+          <Property Name="Month" Type="int" />
+          <Property Name="Week" Type="int" />
+          <Property Name="Day" Type="int" />
+          <Property Name="DayName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ShiftDateStart" Type="datetime" />
+          <Property Name="ShiftdateEnd" Type="datetime" />
+          <Property Name="ShiftDateStartString" Type="varchar" MaxLength="30" />
+          <Property Name="ShiftDateEndString" Type="varchar" MaxLength="30" />
+          <Property Name="DurationMinute" Type="int" />
+          <Property Name="RecordEmployee" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateEmployee" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+          <Property Name="Status" Type="nvarchar" MaxLength="50" />
+          <Property Name="Color" Type="nvarchar" MaxLength="20" />
+          <Property Name="OurCompanyID" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VResult">
           <Key>
@@ -4718,6 +4750,34 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
     [VLocation].[POSAccountID] AS [POSAccountID]
     FROM [dbo].[VLocation] AS [VLocation]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VLocationSchedule" EntityType="Self.VLocationSchedule" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VLocationSchedule].[ID] AS [ID], 
+    [VLocationSchedule].[StatusID] AS [StatusID], 
+    [VLocationSchedule].[LocationID] AS [LocationID], 
+    [VLocationSchedule].[ShiftDate] AS [ShiftDate], 
+    [VLocationSchedule].[Year] AS [Year], 
+    [VLocationSchedule].[Month] AS [Month], 
+    [VLocationSchedule].[Week] AS [Week], 
+    [VLocationSchedule].[Day] AS [Day], 
+    [VLocationSchedule].[DayName] AS [DayName], 
+    [VLocationSchedule].[ShiftDateStart] AS [ShiftDateStart], 
+    [VLocationSchedule].[ShiftdateEnd] AS [ShiftdateEnd], 
+    [VLocationSchedule].[ShiftDateStartString] AS [ShiftDateStartString], 
+    [VLocationSchedule].[ShiftDateEndString] AS [ShiftDateEndString], 
+    [VLocationSchedule].[DurationMinute] AS [DurationMinute], 
+    [VLocationSchedule].[RecordEmployee] AS [RecordEmployee], 
+    [VLocationSchedule].[RecordDate] AS [RecordDate], 
+    [VLocationSchedule].[RecordIP] AS [RecordIP], 
+    [VLocationSchedule].[UpdateEmployee] AS [UpdateEmployee], 
+    [VLocationSchedule].[UpdateDate] AS [UpdateDate], 
+    [VLocationSchedule].[UpdateIP] AS [UpdateIP], 
+    [VLocationSchedule].[LocationFullName] AS [LocationFullName], 
+    [VLocationSchedule].[Status] AS [Status], 
+    [VLocationSchedule].[Color] AS [Color], 
+    [VLocationSchedule].[OurCompanyID] AS [OurCompanyID]
+    FROM [dbo].[VLocationSchedule] AS [VLocationSchedule]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VResult" EntityType="Self.VResult" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VResult].[ID] AS [ID], 
@@ -5180,6 +5240,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
             <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="VLocationSchedule" EntityType="db293_ActionTimeDbModel.VLocationSchedule" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -8904,6 +8965,36 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="IsMaster" Type="Boolean" />
         </EntityType>
+        <EntityType Name="VLocationSchedule">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="StatusID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="ShiftDate" Type="DateTime" Precision="0" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="Month" Type="Int32" />
+          <Property Name="Week" Type="Int32" />
+          <Property Name="Day" Type="Int32" />
+          <Property Name="DayName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShiftDateStart" Type="DateTime" Precision="3" />
+          <Property Name="ShiftdateEnd" Type="DateTime" Precision="3" />
+          <Property Name="ShiftDateStartString" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="ShiftDateEndString" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DurationMinute" Type="Int32" />
+          <Property Name="RecordEmployee" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Color" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -12561,6 +12652,36 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a pr
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddEmployeeAction" FunctionName="db293_ActionTimeDbModel.Store.AddEmployeeAction" />
+          <EntitySetMapping Name="VLocationSchedule">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationSchedule">
+              <MappingFragment StoreEntitySet="VLocationSchedule">
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployee" ColumnName="RecordEmployee" />
+                <ScalarProperty Name="DurationMinute" ColumnName="DurationMinute" />
+                <ScalarProperty Name="ShiftDateEndString" ColumnName="ShiftDateEndString" />
+                <ScalarProperty Name="ShiftDateStartString" ColumnName="ShiftDateStartString" />
+                <ScalarProperty Name="ShiftdateEnd" ColumnName="ShiftdateEnd" />
+                <ScalarProperty Name="ShiftDateStart" ColumnName="ShiftDateStart" />
+                <ScalarProperty Name="DayName" ColumnName="DayName" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+                <ScalarProperty Name="Week" ColumnName="Week" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="ShiftDate" ColumnName="ShiftDate" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
