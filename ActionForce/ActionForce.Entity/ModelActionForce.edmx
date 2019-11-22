@@ -3856,6 +3856,28 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <Function Name="GetToList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
         </Function>
+        <Function Name="UpdateCashAction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CashID" Type="int" Mode="In" />
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+          <Parameter Name="CashActionTypeID" Type="int" Mode="In" />
+          <Parameter Name="ActionDate" Type="date" Mode="In" />
+          <Parameter Name="ProcessName" Type="nvarchar" Mode="In" />
+          <Parameter Name="ProcessID" Type="bigint" Mode="In" />
+          <Parameter Name="ProcessDate" Type="date" Mode="In" />
+          <Parameter Name="DocumentNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar" Mode="In" />
+          <Parameter Name="Direction" Type="smallint" Mode="In" />
+          <Parameter Name="Collection" Type="float" Mode="In" />
+          <Parameter Name="Payment" Type="float" Mode="In" />
+          <Parameter Name="Currency" Type="nvarchar" Mode="In" />
+          <Parameter Name="Latitude" Type="float" Mode="In" />
+          <Parameter Name="Longitude" Type="float" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="UpdateDate" Type="datetime" Mode="In" />
+        </Function>
         <EntityContainer Name="db293_ActionTimeDbModelStoreContainer">
           <EntitySet Name="Action" EntityType="Self.Action" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ActionAccounts" EntityType="Self.ActionAccounts" Schema="dbo" store:Type="Tables" />
@@ -5263,6 +5285,28 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="VLocationSchedule" EntityType="db293_ActionTimeDbModel.VLocationSchedule" />
           <EntitySet Name="WeekList" EntityType="db293_ActionTimeDbModel.WeekList" />
+          <FunctionImport Name="UpdateCashAction">
+            <Parameter Name="CashID" Mode="In" Type="Int32" />
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="CashActionTypeID" Mode="In" Type="Int32" />
+            <Parameter Name="ActionDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ProcessName" Mode="In" Type="String" />
+            <Parameter Name="ProcessID" Mode="In" Type="Int64" />
+            <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
+            <Parameter Name="DocumentNumber" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="Direction" Mode="In" Type="Int16" />
+            <Parameter Name="Collection" Mode="In" Type="Double" />
+            <Parameter Name="Payment" Mode="In" Type="Double" />
+            <Parameter Name="Currency" Mode="In" Type="String" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
+            <Parameter Name="UpdateEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="UpdateDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -12725,6 +12769,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="UpdateCashAction" FunctionName="db293_ActionTimeDbModel.Store.UpdateCashAction" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

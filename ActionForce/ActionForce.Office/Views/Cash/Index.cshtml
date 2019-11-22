@@ -106,7 +106,7 @@
                         <td class="tx-sm-13">@(item.Currency)</td>
                         <td class="tx-sm-13">@item.RecorderFullName</td>
                         <td class="tx-sm-13 text-right">@item.RecordDate</td>
-                        <td class="tx-sm-13 text-right"><a href="@(string.Format("/Cash/_PartialCashDetail/{0}",@item.UID))" class="btn btn-xs btn-primary btn-icon"><i data-feather="arrow-right"></i></a></td>
+                        <td class="tx-sm-13 text-right"><a href="@("/Cash/CashDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="arrow-right"></i></a></td>
 
                     </tr>
                     }

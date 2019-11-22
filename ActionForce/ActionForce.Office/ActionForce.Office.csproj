@@ -2432,13 +2432,13 @@
     <Content Include="Views\Bank\PosCancel.cshtml" />
     <Content Include="Views\Bank\_PartialDocumentForms.cshtml" />
     <Content Include="Views\Bank\PosRefund.cshtml" />
-    <Content Include="Views\Cash\_PartialCashDetail.cshtml" />
     <Content Include="Views\Shift\EmployeeShift.cshtml" />
     <Content Include="Views\Shift\Index.cshtml" />
     <Content Include="Views\Shift\LocationShift.cshtml" />
     <Content Include="Views\Schedule\Employee.cshtml" />
     <Content Include="Views\Schedule\Index.cshtml" />
     <Content Include="Views\Schedule\Location.cshtml" />
+    <Content Include="Views\Cash\CashDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
