@@ -22,9 +22,14 @@
     <div class="pd-x-0 tx-13">
         <div class="media d-block d-lg-flex">
             <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
-                <div class="profile-update-option bg-white ht-50 bd d-flex justify-content-end mg-b-20 mg-lg-b-25 rounded">
+
+
+
+
+                <div class="profile-update-option bg-white ht-50 bd d-flex justify-content-end mg-b-10 mg-lg-b-10 rounded">
                     <div class="d-flex align-items-center pd-x-20 mg-r-auto">
-                        <span class="tx-15 pd-r-10">@(Model.WeekCode). Hafta</span>
+
+                        <span class="tx-15 pd-r-10">@(Html.Raw($"<span clas='text-success'>{Model.SuccessCount}</span> | <span>{Model.WaitingCount}</span> | <span>{Model.TotalCount}</span>  | <span>{Model.SuccessRate}%</span>")) </span>
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
                         <a href="#" id="LocationScheduleDate" class="link-03" title="Tarih Seç">
@@ -34,19 +39,24 @@
                         </a>
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="" class="link-03" title="Önceki Hafta"><i data-feather="arrow-left"></i></a>
+                        <a href="/Schedule/Location?week=@(Model.PrevWeekCode)" class="link-03" title="Bir Önceki Hafta"><i data-feather="arrow-left"></i></a>
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="" class="link-03" title="Bu Hafta"><i data-feather="target"></i></a>
+                        <a href="/Schedule/Location" class="link-03" title="Bu Hafta"><i data-feather="target"></i></a>
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="" class="link-03" title="Sonraki Hafta"><i data-feather="arrow-right"></i></a>
+                        <a href="/Schedule/Location?week=@(Model.NextWeekCode)" class="link-03" title="Bir Sonraki Hafta"><i data-feather="arrow-right"></i></a>
                     </div>
 
                 </div>
+
+                <div class="progress mg-b-10 mg-lg-b-10" style="height: 1px;">
+                    <div class="progress-bar" role="progressbar" style="@(Model.SuccessRate > 0 ? $"width: {Model.SuccessRate}%;":"")" aria-valuenow="@(Model.SuccessCount)" aria-valuemin="0" aria-valuemax="@(Model.TotalCount)"></div>
+                </div>
+
                 <div class="card mg-b-20 mg-lg-b-25">
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Lokasyon Mesai Takvimleri</h6>
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Lokasyon Mesai Takvimleri (@(Model.WeekCode). Hafta)</h6>
                         <nav class="nav">
                             <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.FirstWeekDay.DateKey.ToLongDateString())</span> <i data-feather="more-horizontal"></i> @(Model.LastWeekDay.DateKey.ToLongDateString())</a>
                         </nav>
@@ -83,18 +93,10 @@
                                             <td class="text-center"><a href="Schedule/Employee/@(Model.WeekCode)?locationID=@(location.LocationID)" class="text-sm-center d-sm-inline"> <i data-feather="users"></i></a></td>
                                         </tr>
                                     }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="card-body pd-0">
-                        <div class="table-responsive">
-                            <table class="table table-dark table-hover table-striped mg-b-0">
 
-                                <tbody>
                                     @foreach (var location in Model.NonScheduledLocationList.OrderBy(x => x.SortBy).ToList())
                                     {
-                                        <tr>
+                                        <tr class="table-dark table-hover table-striped">
                                             <th scope="row" style="width:3%;">@location.SortBy</th>
                                             <td style="width:21%;">@($"{location.LocationName} {location.Description} {location.State}")</td>
                                             <td style="width:3%;" class="text-center bd-l"><a href="#modalLocationSchedule" data-toggle="modal" class="text-sm-center d-sm-inline outline-none" onclick="AddLocationSchedule(@location.LocationID, '@(Model.WeekCode)')"> <i data-feather="calendar"></i></a></td>
@@ -109,6 +111,7 @@
                             </table>
                         </div>
                     </div>
+
 
                     <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
                         <nav class="nav nav-with-icon tx-13">
@@ -152,7 +155,7 @@
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1,
                 onSelect: function (dateText, inst) {
-                    alert(dateText);
+                     window.location.href = "/Schedule/Location?date=" + dateText;
                 },
                 beforeShow: function (event, ui) {
                     var $link = $("#LocationScheduleDate");

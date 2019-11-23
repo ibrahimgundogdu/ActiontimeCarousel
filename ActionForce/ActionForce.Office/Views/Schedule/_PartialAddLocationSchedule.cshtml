@@ -3,8 +3,8 @@
     <span aria-hidden="true">&times;</span>
 </a>
 <div>
-    <h4>Lokasyon Mesai Takvimleri (@(Model.WeekCode). Hafta )</h4>
-    <p class="tx-color-03">@Model.CurrentLocation.LocationName  @Model.CurrentLocation.Description @Model.CurrentLocation.State</p>
+    <h4>@Model.CurrentLocation.SortBy @Model.CurrentLocation.LocationName  @Model.CurrentLocation.Description @Model.CurrentLocation.State</h4>
+    <p class="tx-color-03">Lokasyon Mesai Takvimleri (@(Model.WeekCode). Hafta )</p>
 
 
     @using (Html.BeginForm("AddUpdateLocationSchedule", "Schedule", FormMethod.Post))

@@ -33,6 +33,14 @@ namespace ActionForce.Office
 
         public string calendarEvents { get; set; }
         public string WeekCode { get; set; }
+        public string NextWeekCode { get; set; }
+        public string PrevWeekCode { get; set; }
+
+        public int SuccessCount { get; set; }
+        public int WaitingCount { get; set; }
+        public int TotalCount { get; set; }
+        public int SuccessRate { get; set; }
+
 
     }
 }

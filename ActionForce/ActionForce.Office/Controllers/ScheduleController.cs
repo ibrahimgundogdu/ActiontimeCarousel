@@ -59,7 +59,7 @@ namespace ActionForce.Office.Controllers
 
 
         [AllowAnonymous]
-        public ActionResult Location(string week)
+        public ActionResult Location(string week, string date)
         {
             ScheduleControlModel model = new ScheduleControlModel();
 
@@ -74,14 +74,32 @@ namespace ActionForce.Office.Controllers
                 datekey = Db.DateList.Where(x => x.WeekYear == _year && x.WeekNumber == _week).OrderBy(x => x.DateKey).FirstOrDefault();
             }
 
+            if (!string.IsNullOrEmpty(date))
+            {
+                DateTime? _dateurl = Convert.ToDateTime(date).Date;
+                datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _dateurl);
+            }
+
             string weekcode = $"{datekey.WeekYear}-{datekey.WeekNumber}";
             var weekdatekeys = Db.DateList.Where(x => x.WeekYear == datekey.WeekYear && x.WeekNumber == datekey.WeekNumber).ToList();
 
             model.WeekCode = weekcode;
+
             model.CurrentDate = datekey;
             model.WeekList = weekdatekeys;
             model.FirstWeekDay = weekdatekeys.OrderBy(x => x.DateKey).FirstOrDefault();
             model.LastWeekDay = weekdatekeys.OrderByDescending(x => x.DateKey).FirstOrDefault();
+
+            var prevdate = model.FirstWeekDay.DateKey.AddDays(-1).Date;
+            var nextdate = model.LastWeekDay.DateKey.AddDays(1).Date;
+
+            var prevday = Db.DateList.FirstOrDefault(x => x.DateKey == prevdate);
+            var nextday = Db.DateList.FirstOrDefault(x => x.DateKey == nextdate);
+
+
+            model.NextWeekCode = $"{nextday.WeekYear}-{nextday.WeekNumber}";
+            model.PrevWeekCode = $"{prevday.WeekYear}-{prevday.WeekNumber}";
+
 
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
@@ -95,6 +113,10 @@ namespace ActionForce.Office.Controllers
             model.ScheduledLocationList = model.LocationList.Where(x => scheduledlocationids.Contains(x.LocationID)).ToList();
             model.NonScheduledLocationList = model.LocationList.Where(x => !scheduledlocationids.Contains(x.LocationID)).ToList();
 
+            model.SuccessCount = model.ScheduledLocationList.Count();
+            model.WaitingCount = model.NonScheduledLocationList.Count();
+            model.TotalCount = (model.SuccessCount + model.WaitingCount);
+            model.SuccessRate = (int)(100 * (decimal)((decimal)model.SuccessCount / (decimal)model.TotalCount));
 
             return View(model);
         }
@@ -221,9 +243,69 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Employee()
+        public ActionResult Employee(int? locationid, string week, string date)
         {
             ScheduleControlModel model = new ScheduleControlModel();
+
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            if (!string.IsNullOrEmpty(week))
+            {
+                var weekparts = week.Split('-');
+                int _year = Convert.ToInt32(weekparts[0]);
+                int _week = Convert.ToInt32(weekparts[1]);
+                datekey = Db.DateList.Where(x => x.WeekYear == _year && x.WeekNumber == _week).OrderBy(x => x.DateKey).FirstOrDefault();
+            }
+
+            if (!string.IsNullOrEmpty(date))
+            {
+                DateTime? _dateurl = Convert.ToDateTime(date).Date;
+                datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _dateurl);
+            }
+
+            string weekcode = $"{datekey.WeekYear}-{datekey.WeekNumber}";
+            var weekdatekeys = Db.DateList.Where(x => x.WeekYear == datekey.WeekYear && x.WeekNumber == datekey.WeekNumber).ToList();
+
+            model.WeekCode = weekcode;
+
+            model.CurrentDate = datekey;
+            model.WeekList = weekdatekeys;
+            model.FirstWeekDay = weekdatekeys.OrderBy(x => x.DateKey).FirstOrDefault();
+            model.LastWeekDay = weekdatekeys.OrderByDescending(x => x.DateKey).FirstOrDefault();
+
+            var prevdate = model.FirstWeekDay.DateKey.AddDays(-1).Date;
+            var nextdate = model.LastWeekDay.DateKey.AddDays(1).Date;
+
+            var prevday = Db.DateList.FirstOrDefault(x => x.DateKey == prevdate);
+            var nextday = Db.DateList.FirstOrDefault(x => x.DateKey == nextdate);
+
+
+            model.NextWeekCode = $"{nextday.WeekYear}-{nextday.WeekNumber}";
+            model.PrevWeekCode = $"{prevday.WeekYear}-{prevday.WeekNumber}";
+
+
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            if (locationid != null)
+            {
+                model.CurrentLocation = Db.VLocation.FirstOrDefault(x=> x.LocationID == locationid);
+            }
+            
+
+
+            var schedulelist = Db.VLocationSchedule.Where(x => x.WeekCode.Trim() == weekcode && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.VLocationSchedule = schedulelist;
+
+            List<int> scheduledlocationids = model.VLocationSchedule.Select(x => x.LocationID.Value).ToList();
+
+            model.ScheduledLocationList = model.LocationList.Where(x => scheduledlocationids.Contains(x.LocationID)).ToList();
+            model.NonScheduledLocationList = model.LocationList.Where(x => !scheduledlocationids.Contains(x.LocationID)).ToList();
+
+            model.SuccessCount = model.ScheduledLocationList.Count();
+            model.WaitingCount = model.NonScheduledLocationList.Count();
+            model.TotalCount = (model.SuccessCount + model.WaitingCount);
+            model.SuccessRate = (int)(100 * (decimal)((decimal)model.SuccessCount / (decimal)model.TotalCount));
 
             return View(model);
         }

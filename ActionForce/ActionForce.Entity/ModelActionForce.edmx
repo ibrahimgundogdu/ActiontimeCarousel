@@ -1584,7 +1584,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="DayName" Type="nvarchar" MaxLength="50" />
           <Property Name="ShiftDateStart" Type="datetime" />
           <Property Name="ShiftdateEnd" Type="datetime" />
-          <Property Name="DurationMinute" Type="int" />
+          <Property Name="DurationMinute" Type="int" StoreGeneratedPattern="Computed" />
           <Property Name="RecordEmployee" Type="int" />
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
@@ -5238,7 +5238,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="BankTransferStatus" EntityType="db293_ActionTimeDbModel.BankTransferStatus" />
           <EntitySet Name="VDocumentBankTransfer" EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" />
           <EntitySet Name="ExpenseType" EntityType="db293_ActionTimeDbModel.ExpenseType" />
-          <EntitySet Name="LocationSchedule" EntityType="db293_ActionTimeDbModel.LocationSchedule" />
           <EntitySet Name="Schedule" EntityType="db293_ActionTimeDbModel.Schedule" />
           <EntitySet Name="VResult" EntityType="db293_ActionTimeDbModel.VResult" />
           <EntitySet Name="VDocumentPosCollection" EntityType="db293_ActionTimeDbModel.VDocumentPosCollection" />
@@ -5307,6 +5306,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="UpdateEmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="UpdateDate" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="LocationSchedule" EntityType="db293_ActionTimeDbModel.LocationSchedule" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -8827,29 +8827,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
-        <EntityType Name="LocationSchedule">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StatusID" Type="Int32" Nullable="false" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="ShiftDate" Type="DateTime" Precision="0" />
-          <Property Name="Year" Type="Int32" />
-          <Property Name="Month" Type="Int32" />
-          <Property Name="Week" Type="Int32" />
-          <Property Name="Day" Type="Int32" />
-          <Property Name="DayName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ShiftDateStart" Type="DateTime" Precision="3" />
-          <Property Name="ShiftdateEnd" Type="DateTime" Precision="3" />
-          <Property Name="DurationMinute" Type="Int32" />
-          <Property Name="RecordEmployee" Type="Int32" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateEmployee" Type="Int32" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="Schedule">
           <Key>
             <PropertyRef Name="Id" />
@@ -9070,6 +9047,29 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="WeekCode" Type="String" MaxLength="9" FixedLength="false" Unicode="true" />
           <Property Name="Year" Type="Int32" />
           <Property Name="Week" Type="Int32" />
+        </EntityType>
+        <EntityType Name="LocationSchedule">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="ShiftDate" Type="DateTime" Precision="0" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="Month" Type="Int32" />
+          <Property Name="Week" Type="Int32" />
+          <Property Name="Day" Type="Int32" />
+          <Property Name="DayName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShiftDateStart" Type="DateTime" Precision="3" />
+          <Property Name="ShiftdateEnd" Type="DateTime" Precision="3" />
+          <Property Name="DurationMinute" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="RecordEmployee" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -12518,30 +12518,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="LocationSchedule">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationSchedule">
-              <MappingFragment StoreEntitySet="LocationSchedule">
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="RecordEmployee" ColumnName="RecordEmployee" />
-                <ScalarProperty Name="DurationMinute" ColumnName="DurationMinute" />
-                <ScalarProperty Name="ShiftdateEnd" ColumnName="ShiftdateEnd" />
-                <ScalarProperty Name="ShiftDateStart" ColumnName="ShiftDateStart" />
-                <ScalarProperty Name="DayName" ColumnName="DayName" />
-                <ScalarProperty Name="Day" ColumnName="Day" />
-                <ScalarProperty Name="Week" ColumnName="Week" />
-                <ScalarProperty Name="Month" ColumnName="Month" />
-                <ScalarProperty Name="Year" ColumnName="Year" />
-                <ScalarProperty Name="ShiftDate" ColumnName="ShiftDate" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="Schedule">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Schedule">
               <MappingFragment StoreEntitySet="Schedule">
@@ -12770,6 +12746,30 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="UpdateCashAction" FunctionName="db293_ActionTimeDbModel.Store.UpdateCashAction" />
+          <EntitySetMapping Name="LocationSchedule">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationSchedule">
+              <MappingFragment StoreEntitySet="LocationSchedule">
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployee" ColumnName="RecordEmployee" />
+                <ScalarProperty Name="DurationMinute" ColumnName="DurationMinute" />
+                <ScalarProperty Name="ShiftdateEnd" ColumnName="ShiftdateEnd" />
+                <ScalarProperty Name="ShiftDateStart" ColumnName="ShiftDateStart" />
+                <ScalarProperty Name="DayName" ColumnName="DayName" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+                <ScalarProperty Name="Week" ColumnName="Week" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="ShiftDate" ColumnName="ShiftDate" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
