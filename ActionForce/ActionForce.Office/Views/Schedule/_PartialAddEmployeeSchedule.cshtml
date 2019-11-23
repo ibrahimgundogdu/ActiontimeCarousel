@@ -1,0 +1,119 @@
+﻿@model ScheduleControlModel
+<a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</a>
+<div>
+    <h4>@Model.CurrentLocation.SortBy @Model.CurrentLocation.LocationName  @Model.CurrentLocation.Description @Model.CurrentLocation.State  | <span class="font-weight-bold text-black-50">@Model.CurrentEmployee.FullName</span></h4>
+    <p class="tx-color-03">Çalışan Mesai Takvimleri (@(Model.WeekCode). Hafta )</p>
+
+
+    @using (Html.BeginForm("AddUpdateEmployeeSchedule", "Schedule", FormMethod.Post))
+    {
+
+        <div class="table-responsive">
+            <table class="table table-dark table-hover table-striped mg-b-0">
+                <thead>
+
+                    <tr>
+                        <th scope="col" style="width:5%;" class="bd-gray-100">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="chkAll" onchange="chkControl()">
+                                <label class="custom-control-label" for="chkAll"></label>
+                            </div>
+                        </th>
+                        <th scope="col" style="width:35%;">Mesai Tarihi</th>
+                        <th scope="col" style="width:20%;" class="bd-l">Başlangıç Tarihi</th>
+                        <th scope="col" style="width:10%;" class="bd-r">
+                            <input name="ShiftBeginTime" type="text" class="form-control form-control-sm shiftbegintime" value="" onchange="chkbTime()">
+                        </th>
+                        <th scope="col" style="width:20%;" class="bd-l">Bitiş Tarihi</th>
+                        <th scope="col" style="width:10%;">
+                            <input name="ShiftEndTime" type="text" class="form-control form-control-sm shiftendtime" value="" onchange="chkeTime()">
+
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{ int index = 0;}
+                    @foreach (var day in Model.WeekList.OrderBy(x => x.DateKey))
+                    {
+                        var schedule = Model.EmployeeSchedule.FirstOrDefault(x => x.EmployeeID == Model.CurrentEmployee.EmployeeID && x.ShiftDate == day.DateKey);
+
+                        <tr>
+                            <th scope="row">
+                                <div class="custom-control custom-checkbox">
+                                    <input name="schedulelist[@index].isActive" type="checkbox" class="custom-control-input shiftcheck" id="chkShift@(day.DateID)" @(schedule != null ? "checked" : "") value="@day.DateID">
+                                    <label class="custom-control-label" for="chkShift@(day.DateID)"></label>
+                                </div>
+                            </th>
+                            <th scope="row">
+                                @(day.DateKey.ToLongDateString())
+                                <input id="dateKey" name="schedulelist[@index].dateKey" type="hidden" value="@(day.DateKey.ToString("yyyy-MM-dd"))" />
+                                <input id="locationID" name="schedulelist[@index].locationID" type="hidden" value="@(Model.CurrentLocation.LocationID)" />
+                                <input id="employeeID" name="schedulelist[@index].employeeID" type="hidden" value="@(Model.CurrentEmployee.EmployeeID)" />
+                                <input id="dateID" name="schedulelist[@index].dateID" type="hidden" value="@(day.DateID)" />
+                                <input id="scheduleID" name="schedulelist[@index].scheduleID" type="hidden" value="@(schedule?.Id)" />
+                                <input id="weekCode" name="schedulelist[@index].weekCode" type="hidden" value="@($"{day.WeekYear}-{day.WeekNumber}")" />
+                            </th>
+
+                            <td class="bd-l">
+                                <input name="schedulelist[@index].ShiftBeginDate" type="text" class="form-control shiftdate" value="@(day.DateKey.ToString("yyyy-MM-dd"))">
+                            </td>
+                            <td class="bd-r">
+                                <input name="schedulelist[@index].ShiftBeginTime" type="text" class="form-control shiftbtime" value="@(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToString("HH\\:mm") : "")">
+                            </td>
+
+                            <td class="bd-l">
+                                <input name="schedulelist[@index].ShiftEndDate" type="text" class="form-control shiftdate" value="@(day.DateKey.ToString("yyyy-MM-dd"))">
+                            </td>
+                            <td>
+                                <input name="schedulelist[@index].ShiftEndTime" type="text" class="form-control shiftetime" value="@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToString("HH\\:mm") : "")">
+                            </td>
+                        </tr>
+
+                        index++;
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group mg-t-10">
+            <button type="submit" class="btn btn-primary btn-block">Kaydet</button>
+        </div>
+    }
+
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('.shiftbegintime').mask('00:00');
+        $('.shiftendtime').mask('00:00');
+        $('.shiftbtime').mask('00:00');
+        $('.shiftetime').mask('00:00');
+        $('.shiftdate').mask('0000-00-00');
+
+
+    });
+
+    function chkControl() {
+
+        if ($('input#chkAll').is(':checked')) {
+            $(".shiftcheck").prop('checked', true);
+        }
+        else {
+            $(".shiftcheck").prop('checked', false);
+        };
+    };
+
+    function chkbTime() {
+        var bt = $('.shiftbegintime').val();
+        $(".shiftbtime").val(bt);
+    };
+
+    function chkeTime() {
+        var et = $('.shiftendtime').val();
+        $(".shiftetime").val(et);
+    };
+
+
+</script>

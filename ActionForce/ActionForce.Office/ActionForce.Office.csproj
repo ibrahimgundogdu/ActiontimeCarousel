@@ -2443,6 +2443,7 @@
     <Content Include="Views\Shift\LocationShift.cshtml" />
     <Content Include="Views\Schedule\_PartialAddLocationSchedule.cshtml" />
     <Content Include="Views\Cash\CashDetail.cshtml" />
+    <Content Include="Views\Schedule\_PartialAddEmployeeSchedule.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

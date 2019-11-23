@@ -12,13 +12,15 @@ namespace ActionForce.Office
         public IEnumerable<LocationSchedule> LocationSchedule { get; set; }
         public IEnumerable<VLocationSchedule> VLocationSchedule { get; set; }
 
-        public IEnumerable<Schedule> EmployeeSchedule { get; set; }
+        public IEnumerable<VSchedule> EmployeeSchedule { get; set; }
+        public IEnumerable<EmployeeLocation> EmployeeLocations { get; set; }
         public IEnumerable<DateList> CurrentWeek { get; set; }
         public IEnumerable<DateList> NextWeek { get; set; }
         public DateList CurrentDate { get; set; }
 
         public FilterModel Filters { get; set; }
         public VLocation CurrentLocation { get; set; }
+        public Employee CurrentEmployee { get; set; }
         public Result<Schedule> EmployeeResult { get; set; }
         public Result<LocationSchedule> LocationResult { get; set; }
         public Result<Schedule> ResultMessage { get; set; }

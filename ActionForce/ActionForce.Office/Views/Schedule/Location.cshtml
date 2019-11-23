@@ -90,7 +90,7 @@
                                                 <td class="text-center @(weekday.DateKey == Model.FirstWeekDay.DateKey ? "bd-l":weekday.DateKey == Model.LastWeekDay.DateKey ? "bd-r":"")">@(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToShortDateString() : "") <b>@(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToString("HH\\:mm") : "")</b> <br />@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToShortDateString() : "") <b>@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToString("HH\\:mm") : "")</b></td>
 
                                             }
-                                            <td class="text-center"><a href="Schedule/Employee/@(Model.WeekCode)?locationID=@(location.LocationID)" class="text-sm-center d-sm-inline"> <i data-feather="users"></i></a></td>
+                                            <td class="text-center"><a href="/Schedule/Employee?week=@(Model.WeekCode)&locationid=@(location.LocationID)" class="text-sm-center d-sm-inline"> <i data-feather="users"></i></a></td>
                                         </tr>
                                     }
 
@@ -104,7 +104,7 @@
                                             {
                                                 <td style="width:10%;" class="text-center @(weekday.DateKey == Model.FirstWeekDay.DateKey ? "bd-l":weekday.DateKey == Model.LastWeekDay.DateKey ? "bd-r":"")">&nbsp; <b>&nbsp;</b> <br />&nbsp; <b>&nbsp;</b></td>
                                             }
-                                            <td style="width:3%;" class="text-center"><a href="Schedule/Employee/@(Model.WeekCode)?locationID=@(location.LocationID)" class="text-sm-center d-sm-inline"> <i data-feather="users"></i></a></td>
+                                            <td style="width:3%;" class="text-center"><a href="/Schedule/Employee?week=@(Model.WeekCode)&locationid=@(location.LocationID)" class="text-sm-center d-sm-inline"> <i data-feather="users"></i></a></td>
                                         </tr>
                                     }
                                 </tbody>
@@ -115,9 +115,7 @@
 
                     <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
                         <nav class="nav nav-with-icon tx-13">
-                            <a href="" class="nav-link"><i data-feather="thumbs-up"></i> Like</a>
-                            <a href="" class="nav-link"><i data-feather="message-square"></i> Comment</a>
-                            <a href="" class="nav-link"><i data-feather="share"></i> Share</a>
+                            <a href="/Schedule/ExportToExcel" class="nav-link"><i data-feather="download"></i> Excel Olarak İndir</a>
                         </nav>
                     </div><!-- card-footer -->
                 </div>
@@ -155,7 +153,7 @@
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1,
                 onSelect: function (dateText, inst) {
-                     window.location.href = "/Schedule/Location?date=" + dateText;
+                    window.location.href = "/Schedule/Location?date=" + dateText;
                 },
                 beforeShow: function (event, ui) {
                     var $link = $("#LocationScheduleDate");
@@ -173,7 +171,7 @@
             $('.shifttime').mask('00:00');
             $('.shiftdate').mask('0000-00-00');
 
-          
+
 
         });
 

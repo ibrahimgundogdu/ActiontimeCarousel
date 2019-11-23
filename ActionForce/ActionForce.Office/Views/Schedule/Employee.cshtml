@@ -27,9 +27,15 @@
 
 
                 <div class="profile-update-option bg-white ht-50 bd d-flex justify-content-end mg-b-20 mg-lg-b-20 rounded">
-                    <div class="d-flex align-items-center pd-x-20 mg-r-auto">
-
-                        <span class="tx-15 pd-r-10">@(Html.Raw($"<span clas='text-success'>{Model.SuccessCount}</span> | <span>{Model.WaitingCount}</span> | <span>{Model.TotalCount}</span>  | <span>{Model.SuccessRate}%</span>")) </span>
+                    <div class="d-flex align-items-center pd-x-5 mg-r-auto">
+                        <span class="tx-15">
+                            <select name="listLocations" id="listLocations" class="custom-select">
+                                @foreach (var location in Model.LocationList)
+                                {
+                                    <option value="@($"{location.LocationID}&week={Model.WeekCode}")" @(location.LocationID == Model.CurrentLocation.LocationID ? "selected" : "")>@($"{location.SortBy.Trim()} {location.LocationName} {location.Description} {location.State}")</option>
+                                }
+                            </select>
+                        </span>
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
                         <a href="#" id="LocationScheduleDate" class="link-03" title="Tarih Seç">
@@ -37,24 +43,26 @@
                             <input type="hidden" id="DatePicker" />
                             <div></div>
                         </a>
+                        <input id="LocationID" type="hidden" value="@Model.CurrentLocation.LocationID" />
+                        <input id="WeekCode" type="hidden" value="@Model.WeekCode" />
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="/Schedule/Location?week=@(Model.PrevWeekCode)" class="link-03" title="Bir Önceki Hafta"><i data-feather="arrow-left"></i></a>
+                        <a href="/Schedule/Employee?week=@(Model.PrevWeekCode)&locationid=@(Model.CurrentLocation.LocationID)" class="link-03" title="Bir Önceki Hafta"><i data-feather="arrow-left"></i></a>
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="/Schedule/Location" class="link-03" title="Bu Hafta"><i data-feather="target"></i></a>
+                        <a href="/Schedule/Employee?week=@(Model.WeekCode)&locationid=@(Model.CurrentLocation.LocationID)" class="link-03" title="Bu Hafta"><i data-feather="target"></i></a>
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="/Schedule/Location?week=@(Model.NextWeekCode)" class="link-03" title="Bir Sonraki Hafta"><i data-feather="arrow-right"></i></a>
+                        <a href="/Schedule/Employee?week=@(Model.NextWeekCode)&locationid=@(Model.CurrentLocation.LocationID)" class="link-03" title="Bir Sonraki Hafta"><i data-feather="arrow-right"></i></a>
                     </div>
 
                 </div>
 
-               
+
 
                 <div class="card mg-b-20 mg-lg-b-25">
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Lokasyon Mesai Takvimleri (@(Model.WeekCode). Hafta)</h6>
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Çalışan Mesai Takvimleri (@(Model.WeekCode). Hafta)</h6>
                         <nav class="nav">
                             <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.FirstWeekDay.DateKey.ToLongDateString())</span> <i data-feather="more-horizontal"></i> @(Model.LastWeekDay.DateKey.ToLongDateString())</a>
                         </nav>
@@ -63,48 +71,66 @@
                         <div class="table-responsive">
                             <table class="table table-primary table-hover table-striped mg-b-0">
                                 <thead>
-                                    <tr>
+                                    <tr class="table-active">
                                         <th scope="col" style="width:3%;">#</th>
-                                        <th scope="col" style="width:21%;">Name</th>
-                                        <th scope="col" style="width:3%;" class="text-center bd-l"></th>
+                                        <th scope="col">Lokasyon / Çalışan</th>
                                         @foreach (var day in Model.WeekList.OrderBy(x => x.DateKey))
                                         {
                                             <th scope="col" style="width:10%;" class="text-center @(day.DateKey == Model.FirstWeekDay.DateKey ? "bd-l":day.DateKey == Model.LastWeekDay.DateKey ? "bd-r":"")">@($"{day.Day} {day.MonthNameTR} {day.DayNameTR}")</th>
                                         }
                                         <th scope="col" style="width:3%;" class="text-center"></th>
                                     </tr>
+                                    <tr class="bd-b">
+                                        <td>@Model.CurrentLocation.SortBy</td>
+                                        <td><span class="font-weight-bold">@($"{Model.CurrentLocation.LocationName} {Model.CurrentLocation.Description} {Model.CurrentLocation.State}")</span></td>
+
+                                        @foreach (var weekday in Model.WeekList.OrderBy(x => x.DateKey))
+                                        {
+                                            var locationschedule = Model.VLocationSchedule.FirstOrDefault(x => x.ShiftDate == weekday.DateKey);
+
+                                            <td class="text-center @(weekday.DateKey == Model.FirstWeekDay.DateKey ? "bd-l":weekday.DateKey == Model.LastWeekDay.DateKey ? "bd-r":"")">
+                                                @if (locationschedule != null)
+                                                {
+                                                    @(locationschedule?.ShiftDateStart != null ? locationschedule.ShiftDateStart.Value.ToShortDateString() : "") <b>@(locationschedule?.ShiftDateStart != null ? locationschedule.ShiftDateStart.Value.ToString("HH\\:mm") : "")</b> <br />@(locationschedule?.ShiftdateEnd != null ? locationschedule.ShiftdateEnd.Value.ToShortDateString() : "") <b>@(locationschedule?.ShiftdateEnd != null ? locationschedule.ShiftdateEnd.Value.ToString("HH\\:mm") : "")</b>
+
+                                                }
+                                            </td>
+
+                                        }
+                                        <td class="text-center bd-l "><a href="#modalLocationSchedule" data-toggle="modal" class="text-sm-center d-sm-inline outline-none text-white" onclick="AddLocationSchedule(@Model.CurrentLocation.LocationID, '@(Model.WeekCode)')"> <i data-feather="calendar"></i></a></td>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var location in Model.ScheduledLocationList.OrderBy(x => x.SortBy).ToList())
+
+
+
+
+
+                                    @foreach (var employee in Model.EmployeeLocations)
                                     {
                                         <tr>
-                                            <th scope="row">@location.SortBy</th>
-                                            <td>@($"{location.LocationName} {location.Description} {location.State}")</td>
-                                            <td class="text-center bd-l"><a href="#modalLocationSchedule" data-toggle="modal" class="text-sm-center d-sm-inline outline-none" onclick="AddLocationSchedule(@location.LocationID, '@(Model.WeekCode)')"> <i data-feather="calendar"></i></a></td>
+                                            <th scope="row">@employee.EmployeeID</th>
+
+                                            <td><b>@(employee.Employee.FullName)</b></td>
                                             @foreach (var weekday in Model.WeekList.OrderBy(x => x.DateKey))
                                             {
-                                                var schedule = Model.VLocationSchedule.FirstOrDefault(x => x.LocationID == location.LocationID && x.ShiftDate == weekday.DateKey);
+                                                var schedule = Model.EmployeeSchedule.FirstOrDefault(x => x.EmployeeID == employee.EmployeeID && x.ShiftDate == weekday.DateKey);
 
-                                                <td class="text-center @(weekday.DateKey == Model.FirstWeekDay.DateKey ? "bd-l":weekday.DateKey == Model.LastWeekDay.DateKey ? "bd-r":"")">@(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToShortDateString() : "") <b>@(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToString("HH\\:mm") : "")</b> <br />@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToShortDateString() : "") <b>@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToString("HH\\:mm") : "")</b></td>
+                                                <td class="text-center @(weekday.DateKey == Model.FirstWeekDay.DateKey ? "bd-l":weekday.DateKey == Model.LastWeekDay.DateKey ? "bd-r":"")">
+                                                    @if (schedule != null)
+                                                    {
+                                                        @(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToShortDateString() : "") <b>@(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToString("HH\\:mm") : "")</b> <br />@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToShortDateString() : "") <b>@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToString("HH\\:mm") : "")</b>
+
+                                                    }
+                                                </td>
 
                                             }
-                                            <td class="text-center"><a href="Schedule/Employee/@(Model.WeekCode)?locationID=@(location.LocationID)" class="text-sm-center d-sm-inline"> <i data-feather="users"></i></a></td>
+                                            <td class="text-center bd-l"><a href="#modalEmployeeSchedule" data-toggle="modal" class="text-sm-center d-sm-inline outline-none" onclick="AddEmployeeSchedule(@Model.CurrentLocation.LocationID, @employee.EmployeeID, '@(Model.WeekCode)')"> <i data-feather="calendar"></i></a></td>
                                         </tr>
                                     }
 
-                                    @foreach (var location in Model.NonScheduledLocationList.OrderBy(x => x.SortBy).ToList())
-                                    {
-                                        <tr class="table-dark table-hover table-striped">
-                                            <th scope="row" style="width:3%;">@location.SortBy</th>
-                                            <td style="width:21%;">@($"{location.LocationName} {location.Description} {location.State}")</td>
-                                            <td style="width:3%;" class="text-center bd-l"><a href="#modalLocationSchedule" data-toggle="modal" class="text-sm-center d-sm-inline outline-none" onclick="AddLocationSchedule(@location.LocationID, '@(Model.WeekCode)')"> <i data-feather="calendar"></i></a></td>
-                                            @foreach (var weekday in Model.WeekList.OrderBy(x => x.DateKey))
-                                            {
-                                                <td style="width:10%;" class="text-center @(weekday.DateKey == Model.FirstWeekDay.DateKey ? "bd-l":weekday.DateKey == Model.LastWeekDay.DateKey ? "bd-r":"")">&nbsp; <b>&nbsp;</b> <br />&nbsp; <b>&nbsp;</b></td>
-                                            }
-                                            <td style="width:3%;" class="text-center"><a href="Schedule/Employee/@(Model.WeekCode)?locationID=@(location.LocationID)" class="text-sm-center d-sm-inline"> <i data-feather="users"></i></a></td>
-                                        </tr>
-                                    }
+
+
                                 </tbody>
                             </table>
                         </div>
@@ -113,9 +139,7 @@
 
                     <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
                         <nav class="nav nav-with-icon tx-13">
-                            <a href="" class="nav-link"><i data-feather="thumbs-up"></i> Like</a>
-                            <a href="" class="nav-link"><i data-feather="message-square"></i> Comment</a>
-                            <a href="" class="nav-link"><i data-feather="share"></i> Share</a>
+                            <a href="/Schedule/ExportToExcel" class="nav-link"><i data-feather="download"></i> Excel Olarak İndir</a>
                         </nav>
                     </div><!-- card-footer -->
                 </div>
@@ -137,6 +161,16 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalEmployeeSchedule" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body pd-20 pd-sm-40" id="AddEmployeeSchedule">
+
+            </div>
+        </div>
+    </div>
+</div>
 @section scripts {
 
 
@@ -153,7 +187,10 @@
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1,
                 onSelect: function (dateText, inst) {
-                     window.location.href = "/Schedule/Location?date=" + dateText;
+
+                    var locationid = $("#LocationID").val();
+                    var parameters = dateText + "&locationid=" + locationid;
+                    window.location.href = "/Schedule/Employee?date=" + parameters;
                 },
                 beforeShow: function (event, ui) {
                     var $link = $("#LocationScheduleDate");
@@ -171,11 +208,11 @@
             $('.shifttime').mask('00:00');
             $('.shiftdate').mask('0000-00-00');
 
-
-
         });
 
-
+        $('#listLocations').on('change', function () {
+            window.location.href = "/Schedule/Employee?locationid=" + this.value;
+        });
 
         function AddLocationSchedule(locationid, weekcode) {
             //console.log(locationid);
@@ -189,6 +226,17 @@
             });
         }
 
+        function AddEmployeeSchedule(locationid, employeeid, weekcode) {
+            //console.log(locationid);
+            //console.log(weekcode);
+            $.ajax({
+                method: "GET",
+                url: "/Schedule/AddEmployeeSchedule",
+                data: { id: locationid, empid: employeeid, week: weekcode }
+            }).done(function (d) {
+                $("#AddEmployeeSchedule").html(d);
+            });
+        }
 
     </script>
 

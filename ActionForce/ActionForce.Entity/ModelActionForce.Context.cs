@@ -212,6 +212,7 @@ namespace ActionForce.Entity
         public virtual DbSet<VLocationSchedule> VLocationSchedule { get; set; }
         public virtual DbSet<WeekList> WeekList { get; set; }
         public virtual DbSet<LocationSchedule> LocationSchedule { get; set; }
+        public virtual DbSet<VSchedule> VSchedule { get; set; }
     
         public virtual int AddApplicationLog(string environment, string modul, string processType, string processID, string controller, string action, string tableName, string fieldName, string oldValue, string newValue, Nullable<bool> isSuccess, string resultMessage, string errorMessage, Nullable<System.DateTime> recordDate, string recordEmployee, string recordIP, string recordDevice)
         {
