@@ -52,21 +52,37 @@
                     <div class="card mg-b-20 mg-lg-b-25">
                         <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                             <h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.CashDetail.ActionName}"))</h6>
+                            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
+                            <input id="UID" name="UID" type="hidden" value="@(Model.CashDetail.UID)" />
                             <nav class="nav">
-                                <h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.CashDetail.Date.Value.ToString("yyyy-MM-dd")}"))</h6>
+                                <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CashDetail.Date.Value.ToLongDateString())</span></a>
                             </nav>
                         </div><!-- card-header -->
                         <div class="card-body pd-20 pd-lg-25">
                             <div class="table-responsive">
                                 <table class="table table-primary table-hover table-striped mg-b-0">
                                     <thead>
-                                        <tr>
-                                            <th scope="col"></th>
-                                            <th scope="col"></th>
-                                            <th scope="col"></th>
+                                        <tr class="table-active">
+                                            <th scope="col" style="width:3%;" class="text-center"></th>
+                                            <th scope="col" style="width:10%;" class="text-center"></th>
+                                            <th scope="col" style="width:20%;" class="text-center"></th>
                                         </tr>
                                     </thead>
                                     <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label>Döküman Nr</label>
+                                                </div>
+                                            </td>
+                                            <td>
+
+                                                <div class="form-group">
+                                                    <label class="text-danger">@Model.CashDetail.DocumentNumber</label>
+                                                </div>
+                                            </td>
+                                            <td></td>
+                                        </tr>
                                         <tr>
                                             <td>
                                                 <div class="form-group">
@@ -78,7 +94,7 @@
                                                     <select class="form-control" id="FromID" name="FromID" required>
                                                         @foreach (var item in Model.FromList)
                                                         {
-                                                            <option value="@item.Code" @(Model.CashDetail.FromBankAccountID != null ? Model.CashDetail.FromBankAccountID ==  item.ID ? "selected" : "" : Model.CashDetail.FromCustomerID != null ? Model.CashDetail.FromCustomerID == item.ID ? "selected" : "" : Model.CashDetail.FromEmployeeID == item.ID ? "selected" : "")>@(Html.Raw($"{item.Name}"))</option>
+                                                            <option value="@item.Code" @(Model.CashDetail.FromBankAccountID != null ? Model.CashDetail.FromBankAccountID == item.ID ? "selected" : "" : Model.CashDetail.FromCustomerID != null ? Model.CashDetail.FromCustomerID == item.ID ? "selected" : "" : Model.CashDetail.FromEmployeeID == item.ID ? "selected" : "")>@(Html.Raw($"{item.Name}"))</option>
                                                         }
                                                     </select>
                                                 </div>
@@ -110,7 +126,7 @@
                                                 </div>
                                             </td>
                                             <td>
-                                                
+
                                                 <div class="form-group">
                                                     <input id="Amount" name="Amount" type="text" class="form-control" value="@Model.CashDetail.Amount" placeholder="Tutar" required>
                                                 </div>
@@ -138,6 +154,24 @@
                                         <tr>
                                             <td>
                                                 <div class="form-group">
+                                                    <label>Döviz Kuru</label>
+                                                </div>
+                                            </td>
+                                            <td>
+
+                                                <div class="form-group">
+                                                    <label class="text-danger">@Model.CashDetail.ExchangeRate</label>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="form-group">
+                                                    <label class="text-danger">@($"{Model.CashDetail.SystemAmount} {Model.CashDetail.SystemCurrency}")</label>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-group">
                                                     <label>Açıklama</label>
                                                 </div>
                                             </td>
@@ -148,61 +182,15 @@
                                             </td>
                                             <td></td>
                                         </tr>
-                                        <tr>
-                                            <td>
-                                                
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
-                            <nav class="nav nav-with-icon tx-13">
-                                <a href="" class="nav-link"><i data-feather="user"></i> @(Html.Raw($"{Model.CashDetail.RecorderFullName}"))</a>
-                                <a href="" class="nav-link"><i data-feather="date"></i> @(Html.Raw($"{Model.CashDetail.RecordDate.Value.ToString("yyyy-MM-dd")}"))</a>
-                                <a href="" class="nav-link"><i data-feather="user"></i> @(Html.Raw($"{Model.CashDetail.UpdaterFullName}"))</a>
-                            </nav>
-                        </div><!-- card-footer -->
-                    </div><!-- card -->
-                </div>
-                <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
-                    <div class="card mg-b-20 mg-lg-b-25">
-                        <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                            <h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.CashDetail.ActionName}"))</h6>
-                            <nav class="nav">
-                                <h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.CashDetail.Date.Value.ToString("yyyy-MM-dd")}"))</h6>
-                            </nav>
-                        </div><!-- card-header -->
-                        <div class="card-body pd-20 pd-lg-25">
-                            <div class="table-responsive">
-                                <table class="table table-primary table-hover table-striped mg-b-0">
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Tarih</th>
-                                            <th>Ekleyen</th>
-                                            <th>Mesaj</th>
-                                            <th>Hata Mesajı</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                        @foreach (var item in Model.History)
+                                        @if (Model.CashDetail.IsActive == true)
                                         {
-                                        <tr>
-
-                                            <td class="tx-sm-13 bold">@item.ID</td>
-                                            <td class="tx-sm-13">@item.RecordDate.Value.ToShortDateString()</td>
-                                            <td class="tx-sm-13">@item.RecordEmployee</td>
-                                            <td class="tx-sm-13">@item.ResultMessage</td>
-                                            <td class="tx-sm-13">@item.ErrorMessage</td>
-
-                                        </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td>
+                                                    <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                </td>
+                                                <td></td>
+                                            </tr>
                                         }
 
                                     </tbody>
@@ -211,12 +199,98 @@
                         </div>
                         <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
                             <nav class="nav nav-with-icon tx-13">
-                                <a href="" class="nav-link"><i data-feather="user"></i> @(Html.Raw($"{Model.CashDetail.RecorderFullName}"))</a>
-                                <a href="" class="nav-link"><i data-feather="date"></i> @(Html.Raw($"{Model.CashDetail.RecordDate.Value.ToString("yyyy-MM-dd")}"))</a>
-                                <a href="" class="nav-link"><i data-feather="user"></i> @(Html.Raw($"{Model.CashDetail.UpdaterFullName}"))</a>
+                                <a href="" class="nav-link"><i data-feather="user-plus"></i> @(Html.Raw($"{Model.CashDetail.RecorderFullName}"))</a>
+                                <a href="" class="nav-link"><i data-feather="calendar"></i> @(Html.Raw($"{Model.CashDetail.RecordDate.Value.ToLongDateString()}"))</a>
+                                <a href="" class="nav-link"><i data-feather="user-check"></i> @(Html.Raw($"{Model.CashDetail.UpdaterFullName}"))</a>
                             </nav>
                         </div><!-- card-footer -->
                     </div><!-- card -->
+                </div>
+                <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
+                    <div class="card">
+                        <div class="card-header pd-b-0 pd-x-20 bd-b-0">
+                            <div class="d-sm-flex align-items-center justify-content-between">
+                                <h6 class="mg-b-0">@(Model.CashDetail.ActionName)</h6>
+                                <p class="tx-12 tx-color-03 mg-b-0">@(Model.CashDetail.Date.Value.ToLongDateString())</p>
+                            </div>
+                        </div><!-- card-header -->
+                        <div class="card-body pd-20">
+                            <ul class="activity tx-13">
+                                
+                                @foreach (var item in Model.History)
+                                {
+                                    <li class="activity-item">
+                                        <div class="activity-icon @(item.ProcessType == "Insert" ? "bg-success-light tx-success": item.ProcessType == "Update" ? "bg-indigo-light tx-indigo" : "bg-pink-light tx-pink")">
+                                            <i data-feather="@(item.ProcessType == "Insert" ? "plus-circle" : item.ProcessType == "Update" ? "edit" : "trash-2")"></i>
+                                        </div>
+
+                                        <div class="activity-body">
+                                            <p class="mg-b-2"><strong>@item.ProcessType :</strong> @(item.ErrorMessage != "" ? Html.Raw($"<span clas='text-danger'>{item.ErrorMessage}</span>") : Html.Raw($"<span clas='text-black-50'>{item.ResultMessage}</span>")) <a href="" class="link-02"><strong>@item.FieldName</strong></a></p>
+                                            <small class="tx-color-03">@item.RecordDate.Value.ToLongDateString()</small>
+                                        </div>
+                                    </li>
+                                }
+
+
+                            </ul>
+                        </div>
+                    </div>
+                    @*<div class="card mg-b-20 mg-lg-b-25">
+                            <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                                <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.CashDetail.ActionName)</h6>
+                                <nav class="nav">
+                                    <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CashDetail.Date.Value.ToLongDateString())</span></a>
+                                </nav>
+                            </div><!-- card-header -->
+                            <div class="card-body pd-0">
+                                <div class="table-responsive">
+                                    <table class="table table-primary table-hover table-striped mg-b-0">
+                                        <thead>
+                                            <tr class="table-active">
+                                                <th scope="col" style="width:3%;">#</th>
+                                                <th scope="col" style="width:5%;" class="text-center">Tarih</th>
+                                                <th scope="col" style="width:5%;" class="text-center">Ekleyen</th>
+                                                <th scope="col" style="width:5%;" class="text-center">FieldName</th>
+                                                <th scope="col" style="width:5%;" class="text-center">Eski Değer</th>
+                                                <th scope="col" style="width:5%;" class="text-center">Yeni Değer</th>
+                                                <th scope="col" style="width:15%;" class="text-center">Mesaj</th>
+                                                <th scope="col" style="width:15%;" class="text-center">Hata Mesaj</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var item in Model.History)
+                                            {
+                                                <tr>
+
+                                                    <td class="text-center bold">@item.ID</td>
+                                                    <td class="text-center">@item.RecordDate.Value.ToShortDateString()</td>
+                                                    <td class="text-center">@item.RecordEmployee</td>
+                                                    <td class="text-center">@item.FieldName</td>
+                                                    <td class="text-center">@item.OldValue</td>
+                                                    <td class="text-center">@item.NewValue</td>
+                                                    <td class="text-center">@item.ResultMessage</td>
+                                                    <td class="text-center">@item.ErrorMessage</td>
+
+                                                </tr>
+                                            }
+
+
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                            <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
+                                <nav class="nav nav-with-icon tx-13">
+                                    <a href="" class="nav-link"><i data-feather="user"></i> @(Html.Raw($"{Model.CashDetail.RecorderFullName}"))</a>
+                                    <a href="" class="nav-link"><i data-feather="date"></i> @(Html.Raw($"{Model.CashDetail.RecordDate.Value.ToLongDateString()}"))</a>
+                                    <a href="" class="nav-link"><i data-feather="user"></i> @(Html.Raw($"{Model.CashDetail.UpdaterFullName}"))</a>
+                                </nav>
+                            </div><!-- card-footer -->
+                        </div>*@
                 </div>
             </div>
 
@@ -231,7 +305,6 @@
 
 @section scripts {
     <script src="/lib/cleave.js/cleave.min.js"></script>
-
     <script>
 
         $(function () {

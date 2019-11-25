@@ -111,7 +111,8 @@ namespace ActionForce.Office.Controllers
                     docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
                 }
                 var cash = OfficeHelper.GetCash(cashCollect.LocationID, cashCollect.Currency);
-                // tahsilat eklenir.
+                
+                //var isCash = Db.DocumentCashCollections.FirstOrDefault(x => x.UID == cashCollect.UID);
 
                 try
                 {
@@ -148,7 +149,7 @@ namespace ActionForce.Office.Controllers
                     OfficeHelper.AddCashAction(newCashColl.CashID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, 1, newCashColl.Amount, 0, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
 
                     result.IsSuccess = true;
-                    result.Message = $"{ newCashColl.Amount } {newCashColl.Currency} tutarındaki kasa tahsilatı başarı ile eklendi";
+                    result.Message = $"{newCashColl.Date} tarihli { newCashColl.Amount } {newCashColl.Currency} tutarındaki kasa tahsilatı başarı ile eklendi";
 
                     // log atılır
                     OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", newCashColl.ID.ToString(), "Cash", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
@@ -161,6 +162,7 @@ namespace ActionForce.Office.Controllers
                     OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
 
                 }
+
 
             }
 
@@ -200,13 +202,15 @@ namespace ActionForce.Office.Controllers
                 }
                 var cash = OfficeHelper.GetCash((int)cashCollect.LocationID, cashCollect.Currency);
 
-                var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+                
 
                 var isCash = Db.DocumentCashCollections.FirstOrDefault(x => x.UID == cashCollect.UID);
                 if (isCash != null)
                 {
                     try
                     {
+                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+
                         DocumentCashCollections self = new DocumentCashCollections()
                         {
                             ActionTypeID = isCash.ActionTypeID,
@@ -244,8 +248,8 @@ namespace ActionForce.Office.Controllers
                         isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
                         isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
                         isCash.UpdateIP = OfficeHelper.GetIPAddress();
-                        isCash.SystemAmount = ourcompany.Currency == currency ? amount : amount * isCash.ExchangeRate;
-                        isCash.SystemCurrency = ourcompany.Currency;
+                        //isCash.SystemAmount = ourcompany.Currency == currency ? amount : amount * isCash.ExchangeRate;
+                        //isCash.SystemCurrency = ourcompany.Currency;
 
                         Db.SaveChanges();
                         
@@ -262,11 +266,11 @@ namespace ActionForce.Office.Controllers
                         }
 
                         result.IsSuccess = true;
-                        result.Message = $"{isCash.ID} ID li {amount} {currency} tutarındaki kasa tahsilatı başarı ile güncellendi";
+                        result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {amount} {currency} tutarındaki kasa tahsilatı başarı ile güncellendi";
 
 
                         var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentCashCollections>(self, isCash, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isCash.ID.ToString(), "Cash", "Index", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isCash.ID.ToString(), "Cash", "CashDetail", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
                         
                     }
                     catch (Exception ex)
@@ -280,11 +284,95 @@ namespace ActionForce.Office.Controllers
             }
 
             TempData["result"] = result;
-            return RedirectToAction("CashDetail", new { id = cashCollect.UID });
-            //return RedirectToAction("Index", "Cash");
+            //return RedirectToAction("CashDetail", new { id = cashCollect.UID });
+            return RedirectToAction("Index", "Cash");
 
         }
-        
+        [AllowAnonymous]
+        public ActionResult DeleteCashCollection(int? id)
+        {
+            Result<CashActions> result = new Result<CashActions>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            CashControlModel model = new CashControlModel();
+
+
+            if (id != null)
+            {
+                
+                var isCash = Db.DocumentCashCollections.FirstOrDefault(x => x.ID == id);
+                if (isCash != null)
+                {
+                    try
+                    {
+                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+
+                        DocumentCashCollections self = new DocumentCashCollections()
+                        {
+                            ActionTypeID = isCash.ActionTypeID,
+                            ActionTypeName = isCash.ActionTypeName,
+                            Amount = isCash.Amount,
+                            CashID = isCash.CashID,
+                            Currency = isCash.Currency,
+                            Date = isCash.Date,
+                            Description = isCash.Description,
+                            DocumentNumber = isCash.DocumentNumber,
+                            ExchangeRate = isCash.ExchangeRate,
+                            ID = isCash.ID,
+                            IsActive = isCash.IsActive,
+                            LocationID = isCash.LocationID,
+                            OurCompanyID = isCash.OurCompanyID,
+                            RecordDate = isCash.RecordDate,
+                            RecordEmployeeID = isCash.RecordEmployeeID,
+                            RecordIP = isCash.RecordIP,
+                            ReferenceID = isCash.ReferenceID,
+                            SystemAmount = isCash.SystemAmount,
+                            SystemCurrency = isCash.SystemCurrency,
+                            UpdateDate = isCash.UpdateDate,
+                            UpdateEmployee = isCash.UpdateEmployee,
+                            UpdateIP = isCash.UpdateIP,
+                            FromBankAccountID = isCash.FromBankAccountID,
+                            FromEmployeeID = isCash.FromEmployeeID,
+                            FromCustomerID = isCash.FromCustomerID,
+                            EnvironmentID = isCash.EnvironmentID
+                        };
+
+
+                        isCash.IsActive = false;
+                        isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
+                        isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
+                        isCash.UpdateIP = OfficeHelper.GetIPAddress();
+
+                        Db.SaveChanges();
+
+                        OfficeHelper.AddCashAction(isCash.CashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, -1 * isCash.Amount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+                        
+
+                        result.IsSuccess = true;
+                        result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki kasa tahsilatı başarı ile iptal edildi";
+
+
+                        //var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentCashCollections>(self, isCash, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki kasa tahsilatı iptal edilemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", "-1", "Cash", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                    }
+                }
+
+            }
+
+            TempData["result"] = result;
+            return RedirectToAction("Index", "Cash");
+
+        }
         [AllowAnonymous]
         public ActionResult CashDetail(Guid? id)
         {
