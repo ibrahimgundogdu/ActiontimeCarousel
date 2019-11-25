@@ -195,16 +195,11 @@ namespace ActionForce.Entity
         public virtual DbSet<VDocumentTicketSaleReturn> VDocumentTicketSaleReturn { get; set; }
         public virtual DbSet<Environment> Environment { get; set; }
         public virtual DbSet<VDocumentCashExpense> VDocumentCashExpense { get; set; }
-        public virtual DbSet<Result> Result { get; set; }
-        public virtual DbSet<ResultDocuments> ResultDocuments { get; set; }
-        public virtual DbSet<ResultItemList> ResultItemList { get; set; }
-        public virtual DbSet<ResultItems> ResultItems { get; set; }
         public virtual DbSet<VDocumentSalaryPayment> VDocumentSalaryPayment { get; set; }
         public virtual DbSet<BankTransferStatus> BankTransferStatus { get; set; }
         public virtual DbSet<VDocumentBankTransfer> VDocumentBankTransfer { get; set; }
         public virtual DbSet<ExpenseType> ExpenseType { get; set; }
         public virtual DbSet<Schedule> Schedule { get; set; }
-        public virtual DbSet<VResult> VResult { get; set; }
         public virtual DbSet<VDocumentPosCollection> VDocumentPosCollection { get; set; }
         public virtual DbSet<VDocumentPosCancel> VDocumentPosCancel { get; set; }
         public virtual DbSet<VDocumentPosRefund> VDocumentPosRefund { get; set; }
@@ -213,6 +208,11 @@ namespace ActionForce.Entity
         public virtual DbSet<WeekList> WeekList { get; set; }
         public virtual DbSet<LocationSchedule> LocationSchedule { get; set; }
         public virtual DbSet<VSchedule> VSchedule { get; set; }
+        public virtual DbSet<DayResult> DayResult { get; set; }
+        public virtual DbSet<DayResultDocuments> DayResultDocuments { get; set; }
+        public virtual DbSet<DayResultItemList> DayResultItemList { get; set; }
+        public virtual DbSet<DayResultItems> DayResultItems { get; set; }
+        public virtual DbSet<VDayResult> VDayResult { get; set; }
     
         public virtual int AddApplicationLog(string environment, string modul, string processType, string processID, string controller, string action, string tableName, string fieldName, string oldValue, string newValue, Nullable<bool> isSuccess, string resultMessage, string errorMessage, Nullable<System.DateTime> recordDate, string recordEmployee, string recordIP, string recordDevice)
         {

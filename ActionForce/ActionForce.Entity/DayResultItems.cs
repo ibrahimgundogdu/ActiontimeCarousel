@@ -12,12 +12,12 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class ResultItems
+    public partial class DayResultItems
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public ResultItems()
+        public DayResultItems()
         {
-            this.ResultItemList = new HashSet<ResultItemList>();
+            this.DayResultItemList = new HashSet<DayResultItemList>();
         }
     
         public int ID { get; set; }
@@ -26,6 +26,6 @@ namespace ActionForce.Entity
         public string ItemName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ResultItemList> ResultItemList { get; set; }
+        public virtual ICollection<DayResultItemList> DayResultItemList { get; set; }
     }
 }

@@ -12,33 +12,25 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class Result
+    public partial class DayResultDocuments
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Result()
-        {
-            this.ResultItemList = new HashSet<ResultItemList>();
-        }
-    
         public long ID { get; set; }
+        public long ResultID { get; set; }
+        public int DocumentTypeID { get; set; }
         public int LocationID { get; set; }
         public System.DateTime Date { get; set; }
-        public int StateID { get; set; }
-        public Nullable<int> StatusID { get; set; }
         public Nullable<int> EnvironmentID { get; set; }
+        public string FilePath { get; set; }
+        public string FileName { get; set; }
         public string Description { get; set; }
-        public Nullable<double> Latitude { get; set; }
-        public Nullable<double> Longitude { get; set; }
-        public Nullable<bool> IsMobile { get; set; }
-        public Nullable<int> RecordEmployeeID { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
-        public string UpdateIP { get; set; }
+        public Nullable<int> RecordEmployeeID { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
-        public string RecordIP { get; set; }
         public Nullable<bool> IsActive { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ResultItemList> ResultItemList { get; set; }
+        public Nullable<double> Latitude { get; set; }
+        public Nullable<double> Longitude { get; set; }
+        public string RecordIP { get; set; }
+        public string UpdateIP { get; set; }
     }
 }

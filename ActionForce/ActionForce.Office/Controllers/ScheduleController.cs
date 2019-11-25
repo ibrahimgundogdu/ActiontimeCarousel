@@ -13,7 +13,6 @@ namespace ActionForce.Office.Controllers
 {
     public class ScheduleController : BaseController
     {
-        [AllowAnonymous]
         public ActionResult Index()
         {
             ScheduleControlModel model = new ScheduleControlModel();
@@ -60,8 +59,6 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Index", "Schedule");
         }
 
-
-        [AllowAnonymous]
         public ActionResult Location(string week, string date)
         {
             ScheduleControlModel model = new ScheduleControlModel();
@@ -131,7 +128,6 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
-        [AllowAnonymous]
         public PartialViewResult AddLocationSchedule(int id, string week)
         {
             ScheduleControlModel model = new ScheduleControlModel();
@@ -169,7 +165,6 @@ namespace ActionForce.Office.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public ActionResult AddUpdateLocationSchedule(LocationScheduleEdit[] schedulelist)
         {
             Result<Schedule> result = new Result<Schedule>()
@@ -311,7 +306,6 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Location", "Schedule", new { week = weekcode });
         }
 
-        [AllowAnonymous]
         public ActionResult Employee(int? locationid, string week, string date)
         {
             ScheduleControlModel model = new ScheduleControlModel();
@@ -385,7 +379,6 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
-        [AllowAnonymous]
         public PartialViewResult AddEmployeeSchedule(int id, int empid, string week)
         {
 
@@ -425,7 +418,6 @@ namespace ActionForce.Office.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
         public ActionResult AddUpdateEmployeeSchedule(EmployeeScheduleEdit[] schedulelist)
         {
             Result<Schedule> result = new Result<Schedule>()
@@ -569,7 +561,6 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Employee", "Schedule", new { week = weekcode, locationid = locationID });
         }
 
-        [AllowAnonymous]
         public ActionResult ExportToExcel()
         {
             ScheduleControlModel model = new ScheduleControlModel();

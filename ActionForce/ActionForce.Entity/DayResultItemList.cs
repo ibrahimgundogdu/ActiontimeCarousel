@@ -12,7 +12,7 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class ResultItemList
+    public partial class DayResultItemList
     {
         public long ID { get; set; }
         public Nullable<long> ResultID { get; set; }
@@ -30,7 +30,7 @@ namespace ActionForce.Entity
         public string FilePath { get; set; }
         public string FileName { get; set; }
     
-        public virtual Result Result { get; set; }
-        public virtual ResultItems ResultItems { get; set; }
+        public virtual DayResult DayResult { get; set; }
+        public virtual DayResultItems DayResultItems { get; set; }
     }
 }

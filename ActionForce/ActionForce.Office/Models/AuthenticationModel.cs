@@ -10,5 +10,6 @@ namespace ActionForce.Office
     public class AuthenticationModel
     {
         public ActionEmployee ActionEmployee { get; set; }
+        public string Culture { get; set; }
     }
 }

@@ -8218,6 +8218,13 @@ strong {
   padding-bottom: 5px;
   border-radius: 0.25rem; }
 
+.btn-xxs {
+    font-size: 11px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border-radius: 0.25rem;
+}
+
 .btn-lg, .btn-group-lg > .btn, .ui-datepicker-buttonpane .btn-group-lg > button, .sp-container .btn-group-lg > button {
   font-size: 0.875rem;
   border-radius: 0.25rem; }
@@ -13792,7 +13799,7 @@ textarea.parsley-success:focus {
       padding: 20px; } }
   @media (min-width: 992px) {
     .content-body {
-      padding: 25px;
+      padding: 20px;
       height: calc(100% - 60px); } }
   .content-body .container {
     margin-bottom: 25px; }

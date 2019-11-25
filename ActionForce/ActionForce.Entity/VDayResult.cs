@@ -12,25 +12,30 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class ResultDocuments
+    public partial class VDayResult
     {
         public long ID { get; set; }
-        public long ResultID { get; set; }
-        public int DocumentTypeID { get; set; }
         public int LocationID { get; set; }
         public System.DateTime Date { get; set; }
+        public int StateID { get; set; }
+        public Nullable<int> StatusID { get; set; }
         public Nullable<int> EnvironmentID { get; set; }
-        public string FilePath { get; set; }
-        public string FileName { get; set; }
         public string Description { get; set; }
-        public Nullable<System.DateTime> RecordDate { get; set; }
-        public Nullable<int> RecordEmployeeID { get; set; }
-        public Nullable<int> UpdateEmployeeID { get; set; }
-        public Nullable<System.DateTime> UpdateDate { get; set; }
-        public Nullable<bool> IsActive { get; set; }
         public Nullable<double> Latitude { get; set; }
         public Nullable<double> Longitude { get; set; }
-        public string RecordIP { get; set; }
+        public Nullable<bool> IsMobile { get; set; }
+        public Nullable<int> RecordEmployeeID { get; set; }
+        public Nullable<System.DateTime> RecordDate { get; set; }
         public string UpdateIP { get; set; }
+        public Nullable<int> UpdateEmployeeID { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
+        public string RecordIP { get; set; }
+        public Nullable<bool> IsActive { get; set; }
+        public string LocationFullName { get; set; }
+        public string StateName { get; set; }
+        public string StatusName { get; set; }
+        public string UpdaterFullName { get; set; }
+        public string RecorderFullName { get; set; }
+        public string Environment { get; set; }
     }
 }

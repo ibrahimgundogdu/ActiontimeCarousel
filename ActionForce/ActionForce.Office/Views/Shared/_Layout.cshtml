@@ -26,9 +26,6 @@
     <link href="/assets/css/jquery.toast.css" rel="stylesheet" />
     <link href="/lib/fullcalendar/fullcalendar.min.css" rel="stylesheet">
 
-
-
-
     <!-- DashForge CSS -->
     <link rel="stylesheet" href="/assets/css/dashforge.css">
 
@@ -53,21 +50,21 @@
                 <div class="d-flex align-items-center justify-content-start">
                     <a href="" class="avatar"><img src="http://office.ufegrup.com/img/Employee/@Model.Authentication.ActionEmployee.FotoFile" class="rounded-circle" alt=""></a>
                     <div class="aside-alert-link">
-                        <a href="/Logout" data-toggle="tooltip" title="Sign out"><i data-feather="log-out"></i></a>
+                        <a href="/Logout" data-toggle="tooltip" title="Çıkış"><i data-feather="log-out"></i></a>
                     </div>
                 </div>
                 <div class="aside-loggedin-user">
-                    <a href="#loggedinMenu" class="d-flex align-items-center justify-content-between mg-b-2" data-toggle="collapse">
+                    <a href="#" class="d-flex align-items-center justify-content-between mg-b-2">
                         <h6 class="tx-semibold mg-b-0">@Model.Authentication.ActionEmployee.FullName </h6>
-                        <i data-feather="chevron-down"></i>
                     </a>
                     <p class="tx-color-03 tx-12 mg-b-0">@Model.Authentication.ActionEmployee.RoleGroup.GroupName</p>
                 </div>
-                <div class="collapse" id="loggedinMenu">
-                    <ul class="nav nav-aside mg-b-0">
-                        <li class="nav-item"><a href="/Logout" class="nav-link"><i data-feather="log-out"></i> <span>Çıkış</span></a></li>
-                    </ul>
-                </div>
+                <nav class="mg-t-10">
+                    <select class="custom-select btn-xxs" id="CurrentCompany">
+                        <option value="1" @(Model.Authentication.ActionEmployee.OurCompanyID == 1 ? "selected" : "")>UFE Group USA</option>
+                        <option value="2" @(Model.Authentication.ActionEmployee.OurCompanyID == 2 ? "selected" : "")>UFE Grup  TUR</option>
+                    </select>
+                </nav>
             </div><!-- aside-loggedin -->
             <ul class="nav nav-aside">
 
@@ -133,10 +130,10 @@
                         <li><a href="page-profile-view.html">01 Yazarkasa Fişleri</a></li>
                     </ul>
                 </li>
-                <li class="nav-item with-sub">
+                <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Result" ? "show" : "")">
                     <a href="/Employee" class="nav-link"><i data-feather="moon"></i> <span>Gün Sonu İşlemleri</span></a>
                     <ul>
-                        <li><a href="/Result">01 Gün Sonu Zarfları</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Result" && this.ViewContext.RouteData.Values["action"].ToString() == "Envelope" ? "class=active" : "")><a href="/Result/Envelope">01 Gün Sonu Zarfları</a></li>
                     </ul>
                 </li>
                 <li class="nav-item with-sub">
@@ -183,10 +180,32 @@
 
     <script src="/assets/js/jquery.toast.js"></script>
     <script src="/lib/jquery.mask/jquery.mask.js"></script>
+
+    <script type="text/javascript">
+        $('#CurrentCompany').on('change', function () {
+            var url = '@(Request.Url.AbsoluteUri)';
+            console.log(this.value);
+            console.log(url);
+
+            $.ajax({
+                method: "GET",
+                url: "/Login/ChangeOurCompany",
+                data: { id: this.value, url: url}
+            }).done(function (d) {
+                window.location.href = url;
+                //$("#AddLocationSchedule").html(d);
+            });
+            //window.location.href = "/Schedule/Employee?locationid=" + this.value;
+        });
+
+        
+    </script>
+
+
     @RenderSection("scripts", false)
 
 
-    
+
 
 
 </body>

@@ -336,6 +336,7 @@
           <Property Name="FieldName" Type="nvarchar" MaxLength="40" />
           <Property Name="OldValue" Type="nvarchar" MaxLength="250" />
           <Property Name="NewValue" Type="nvarchar" MaxLength="250" />
+          <Property Name="Model" Type="nvarchar(max)" />
           <Property Name="IsSuccess" Type="bit" />
           <Property Name="ResultMessage" Type="nvarchar" MaxLength="250" />
           <Property Name="ErrorMessage" Type="nvarchar" MaxLength="250" />
@@ -621,6 +622,80 @@
           <Property Name="Description" Type="nvarchar" MaxLength="150" />
           <Property Name="WeekYear" Type="int" />
           <Property Name="WeekNumber" Type="int" />
+        </EntityType>
+        <EntityType Name="DayResult">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="StateID" Type="int" Nullable="false" />
+          <Property Name="StatusID" Type="int" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Latitude" Type="float" />
+          <Property Name="Longitude" Type="float" />
+          <Property Name="IsMobile" Type="bit" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="DayResultDocuments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResultID" Type="bigint" Nullable="false" />
+          <Property Name="DocumentTypeID" Type="int" Nullable="false" />
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="FilePath" Type="varchar" MaxLength="80" />
+          <Property Name="FileName" Type="varchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="Latitude" Type="float" />
+          <Property Name="Longitude" Type="float" />
+          <Property Name="RecordIP" Type="varchar" MaxLength="20" />
+          <Property Name="UpdateIP" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="DayResultItemList">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="Category" Type="nvarchar" MaxLength="50" />
+          <Property Name="ResultItemID" Type="int" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="SystemAmount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="UnitHourPrice" Type="float" />
+          <Property Name="HourQuantity" Type="float" />
+          <Property Name="SystemHourQuantity" Type="float" />
+          <Property Name="FilePath" Type="nvarchar" MaxLength="80" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="DayResultItems">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Module" Type="nvarchar" MaxLength="20" />
+          <Property Name="Category" Type="nvarchar" MaxLength="40" />
+          <Property Name="ItemName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="DocumentBankTransfer">
           <Key>
@@ -1992,80 +2067,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="SortBy" Type="char" MaxLength="2" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
-        <EntityType Name="Result">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="LocationID" Type="int" Nullable="false" />
-          <Property Name="Date" Type="date" Nullable="false" />
-          <Property Name="StateID" Type="int" Nullable="false" />
-          <Property Name="StatusID" Type="int" />
-          <Property Name="EnvironmentID" Type="int" />
-          <Property Name="Description" Type="nvarchar" MaxLength="1000" />
-          <Property Name="Latitude" Type="float" />
-          <Property Name="Longitude" Type="float" />
-          <Property Name="IsMobile" Type="bit" />
-          <Property Name="RecordEmployeeID" Type="int" />
-          <Property Name="RecordDate" Type="datetime" />
-          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
-          <Property Name="UpdateEmployeeID" Type="int" />
-          <Property Name="UpdateDate" Type="datetime" />
-          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
-          <Property Name="IsActive" Type="bit" />
-        </EntityType>
-        <EntityType Name="ResultDocuments">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ResultID" Type="bigint" Nullable="false" />
-          <Property Name="DocumentTypeID" Type="int" Nullable="false" />
-          <Property Name="LocationID" Type="int" Nullable="false" />
-          <Property Name="Date" Type="date" Nullable="false" />
-          <Property Name="EnvironmentID" Type="int" />
-          <Property Name="FilePath" Type="varchar" MaxLength="80" />
-          <Property Name="FileName" Type="varchar" MaxLength="50" />
-          <Property Name="Description" Type="nvarchar" MaxLength="500" />
-          <Property Name="RecordDate" Type="datetime" />
-          <Property Name="RecordEmployeeID" Type="int" />
-          <Property Name="UpdateEmployeeID" Type="int" />
-          <Property Name="UpdateDate" Type="datetime" />
-          <Property Name="IsActive" Type="bit" />
-          <Property Name="Latitude" Type="float" />
-          <Property Name="Longitude" Type="float" />
-          <Property Name="RecordIP" Type="varchar" MaxLength="20" />
-          <Property Name="UpdateIP" Type="varchar" MaxLength="20" />
-        </EntityType>
-        <EntityType Name="ResultItemList">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ResultID" Type="bigint" />
-          <Property Name="Category" Type="nvarchar" MaxLength="50" />
-          <Property Name="ResultItemID" Type="int" />
-          <Property Name="Quantity" Type="int" />
-          <Property Name="Amount" Type="float" />
-          <Property Name="SystemAmount" Type="float" />
-          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
-          <Property Name="Description" Type="nvarchar" MaxLength="250" />
-          <Property Name="EmployeeID" Type="int" />
-          <Property Name="UnitHourPrice" Type="float" />
-          <Property Name="HourQuantity" Type="float" />
-          <Property Name="SystemHourQuantity" Type="float" />
-          <Property Name="FilePath" Type="nvarchar" MaxLength="80" />
-          <Property Name="FileName" Type="nvarchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="ResultItems">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Module" Type="nvarchar" MaxLength="20" />
-          <Property Name="Category" Type="nvarchar" MaxLength="40" />
-          <Property Name="ItemName" Type="nvarchar" MaxLength="50" />
-        </EntityType>
         <EntityType Name="ResultState">
           <Key>
             <PropertyRef Name="StateID" />
@@ -2887,6 +2888,39 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashBankActions' does not 
           <Property Name="RecordDate" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDayResult' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VDayResult">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="StateID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="StateID" Type="int" Nullable="false" />
+          <Property Name="StatusID" Type="int" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="1000" />
+          <Property Name="Latitude" Type="float" />
+          <Property Name="Longitude" Type="float" />
+          <Property Name="IsMobile" Type="bit" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="StateName" Type="nvarchar" MaxLength="50" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Environment" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentBankTransfer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VDocumentBankTransfer">
           <Key>
@@ -3491,39 +3525,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationSchedule' does not
           <Property Name="WeekCode" Type="nvarchar" MaxLength="9" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'db293_ActionTimeDb.dbo.VResult' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="VResult">
-          <Key>
-            <PropertyRef Name="ID" />
-            <PropertyRef Name="LocationID" />
-            <PropertyRef Name="Date" />
-            <PropertyRef Name="StateID" />
-          </Key>
-          <Property Name="ID" Type="bigint" Nullable="false" />
-          <Property Name="LocationID" Type="int" Nullable="false" />
-          <Property Name="Date" Type="date" Nullable="false" />
-          <Property Name="StateID" Type="int" Nullable="false" />
-          <Property Name="StatusID" Type="int" />
-          <Property Name="EnvironmentID" Type="int" />
-          <Property Name="Description" Type="nvarchar" MaxLength="1000" />
-          <Property Name="Latitude" Type="float" />
-          <Property Name="Longitude" Type="float" />
-          <Property Name="IsMobile" Type="bit" />
-          <Property Name="RecordEmployeeID" Type="int" />
-          <Property Name="RecordDate" Type="datetime" />
-          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
-          <Property Name="UpdateEmployeeID" Type="int" />
-          <Property Name="UpdateDate" Type="datetime" />
-          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
-          <Property Name="IsActive" Type="bit" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
-          <Property Name="StateName" Type="nvarchar" MaxLength="50" />
-          <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
-          <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="Environment" Type="nvarchar" MaxLength="20" />
-        </EntityType>
-        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSchedule' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VSchedule">
           <Key>
@@ -3749,25 +3750,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ResultItemList_Result">
-          <End Role="Result" Type="Self.Result" Multiplicity="0..1" />
-          <End Role="ResultItemList" Type="Self.ResultItemList" Multiplicity="*" />
+          <End Role="DayResult" Type="Self.DayResult" Multiplicity="0..1" />
+          <End Role="DayResultItemList" Type="Self.DayResultItemList" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Result">
+            <Principal Role="DayResult">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="ResultItemList">
+            <Dependent Role="DayResultItemList">
               <PropertyRef Name="ResultID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_ResultItemList_ResultItems">
-          <End Role="ResultItems" Type="Self.ResultItems" Multiplicity="0..1" />
-          <End Role="ResultItemList" Type="Self.ResultItemList" Multiplicity="*" />
+          <End Role="DayResultItems" Type="Self.DayResultItems" Multiplicity="0..1" />
+          <End Role="DayResultItemList" Type="Self.DayResultItemList" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="ResultItems">
+            <Principal Role="DayResultItems">
               <PropertyRef Name="ID" />
             </Principal>
-            <Dependent Role="ResultItemList">
+            <Dependent Role="DayResultItemList">
               <PropertyRef Name="ResultItemID" />
             </Dependent>
           </ReferentialConstraint>
@@ -3963,6 +3964,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DateList" EntityType="Self.DateList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DayResult" EntityType="Self.DayResult" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DayResultDocuments" EntityType="Self.DayResultDocuments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DayResultItemList" EntityType="Self.DayResultItemList" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DayResultItems" EntityType="Self.DayResultItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentBankTransfer" EntityType="Self.DocumentBankTransfer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentCashCollections" EntityType="Self.DocumentCashCollections" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentCashExpense" EntityType="Self.DocumentCashExpense" Schema="dbo" store:Type="Tables" />
@@ -4036,10 +4041,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Promotions" EntityType="Self.Promotions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RecordNumber" EntityType="Self.RecordNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RefundTypes" EntityType="Self.RefundTypes" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Result" EntityType="Self.Result" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ResultDocuments" EntityType="Self.ResultDocuments" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ResultItemList" EntityType="Self.ResultItemList" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ResultItems" EntityType="Self.ResultItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResultState" EntityType="Self.ResultState" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Resultstatus" EntityType="Self.Resultstatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
@@ -4301,6 +4302,33 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VCashBankActions].[Currency] AS [Currency], 
     [VCashBankActions].[RecordDate] AS [RecordDate]
     FROM [dbo].[VCashBankActions] AS [VCashBankActions]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VDayResult" EntityType="Self.VDayResult" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VDayResult].[ID] AS [ID], 
+    [VDayResult].[LocationID] AS [LocationID], 
+    [VDayResult].[Date] AS [Date], 
+    [VDayResult].[StateID] AS [StateID], 
+    [VDayResult].[StatusID] AS [StatusID], 
+    [VDayResult].[EnvironmentID] AS [EnvironmentID], 
+    [VDayResult].[Description] AS [Description], 
+    [VDayResult].[Latitude] AS [Latitude], 
+    [VDayResult].[Longitude] AS [Longitude], 
+    [VDayResult].[IsMobile] AS [IsMobile], 
+    [VDayResult].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VDayResult].[RecordDate] AS [RecordDate], 
+    [VDayResult].[UpdateIP] AS [UpdateIP], 
+    [VDayResult].[UpdateEmployeeID] AS [UpdateEmployeeID], 
+    [VDayResult].[UpdateDate] AS [UpdateDate], 
+    [VDayResult].[RecordIP] AS [RecordIP], 
+    [VDayResult].[IsActive] AS [IsActive], 
+    [VDayResult].[LocationFullName] AS [LocationFullName], 
+    [VDayResult].[StateName] AS [StateName], 
+    [VDayResult].[StatusName] AS [StatusName], 
+    [VDayResult].[UpdaterFullName] AS [UpdaterFullName], 
+    [VDayResult].[RecorderFullName] AS [RecorderFullName], 
+    [VDayResult].[Environment] AS [Environment]
+    FROM [dbo].[VDayResult] AS [VDayResult]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentBankTransfer" EntityType="Self.VDocumentBankTransfer" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -4859,33 +4887,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocationSchedule].[WeekCode] AS [WeekCode]
     FROM [dbo].[VLocationSchedule] AS [VLocationSchedule]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="VResult" EntityType="Self.VResult" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [VResult].[ID] AS [ID], 
-    [VResult].[LocationID] AS [LocationID], 
-    [VResult].[Date] AS [Date], 
-    [VResult].[StateID] AS [StateID], 
-    [VResult].[StatusID] AS [StatusID], 
-    [VResult].[EnvironmentID] AS [EnvironmentID], 
-    [VResult].[Description] AS [Description], 
-    [VResult].[Latitude] AS [Latitude], 
-    [VResult].[Longitude] AS [Longitude], 
-    [VResult].[IsMobile] AS [IsMobile], 
-    [VResult].[RecordEmployeeID] AS [RecordEmployeeID], 
-    [VResult].[RecordDate] AS [RecordDate], 
-    [VResult].[UpdateIP] AS [UpdateIP], 
-    [VResult].[UpdateEmployeeID] AS [UpdateEmployeeID], 
-    [VResult].[UpdateDate] AS [UpdateDate], 
-    [VResult].[RecordIP] AS [RecordIP], 
-    [VResult].[IsActive] AS [IsActive], 
-    [VResult].[LocationFullName] AS [LocationFullName], 
-    [VResult].[StateName] AS [StateName], 
-    [VResult].[StatusName] AS [StatusName], 
-    [VResult].[UpdaterFullName] AS [UpdaterFullName], 
-    [VResult].[RecorderFullName] AS [RecorderFullName], 
-    [VResult].[Environment] AS [Environment]
-    FROM [dbo].[VResult] AS [VResult]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="VSchedule" EntityType="Self.VSchedule" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VSchedule].[Id] AS [Id], 
@@ -4993,12 +4994,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <End Role="PrePaidCampaignPrices" EntitySet="PrePaidCampaignPrices" />
           </AssociationSet>
           <AssociationSet Name="FK_ResultItemList_Result" Association="Self.FK_ResultItemList_Result">
-            <End Role="Result" EntitySet="Result" />
-            <End Role="ResultItemList" EntitySet="ResultItemList" />
+            <End Role="DayResult" EntitySet="DayResult" />
+            <End Role="DayResultItemList" EntitySet="DayResultItemList" />
           </AssociationSet>
           <AssociationSet Name="FK_ResultItemList_ResultItems" Association="Self.FK_ResultItemList_ResultItems">
-            <End Role="ResultItems" EntitySet="ResultItems" />
-            <End Role="ResultItemList" EntitySet="ResultItemList" />
+            <End Role="DayResultItems" EntitySet="DayResultItems" />
+            <End Role="DayResultItemList" EntitySet="DayResultItemList" />
           </AssociationSet>
           <AssociationSet Name="FK_RoleGroup_RoleLevel" Association="Self.FK_RoleGroup_RoleLevel">
             <End Role="RoleLevel" EntitySet="RoleLevel" />
@@ -5307,18 +5308,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VDocumentTicketSaleReturn" EntityType="db293_ActionTimeDbModel.VDocumentTicketSaleReturn" />
           <EntitySet Name="Environment" EntityType="db293_ActionTimeDbModel.Environment" />
           <EntitySet Name="VDocumentCashExpense" EntityType="db293_ActionTimeDbModel.VDocumentCashExpense" />
-          <EntitySet Name="Result" EntityType="db293_ActionTimeDbModel.Result" />
-          <EntitySet Name="ResultDocuments" EntityType="db293_ActionTimeDbModel.ResultDocuments" />
-          <EntitySet Name="ResultItemList" EntityType="db293_ActionTimeDbModel.ResultItemList" />
-          <EntitySet Name="ResultItems" EntityType="db293_ActionTimeDbModel.ResultItems" />
-          <AssociationSet Name="FK_ResultItemList_Result" Association="db293_ActionTimeDbModel.FK_ResultItemList_Result">
-            <End Role="Result" EntitySet="Result" />
-            <End Role="ResultItemList" EntitySet="ResultItemList" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ResultItemList_ResultItems" Association="db293_ActionTimeDbModel.FK_ResultItemList_ResultItems">
-            <End Role="ResultItems" EntitySet="ResultItems" />
-            <End Role="ResultItemList" EntitySet="ResultItemList" />
-          </AssociationSet>
           <EntitySet Name="VDocumentSalaryPayment" EntityType="db293_ActionTimeDbModel.VDocumentSalaryPayment" />
           <FunctionImport Name="GetPersonList" ReturnType="Collection(db293_ActionTimeDbModel.GetPersonList_Result)">
           <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
@@ -5327,7 +5316,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VDocumentBankTransfer" EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" />
           <EntitySet Name="ExpenseType" EntityType="db293_ActionTimeDbModel.ExpenseType" />
           <EntitySet Name="Schedule" EntityType="db293_ActionTimeDbModel.Schedule" />
-          <EntitySet Name="VResult" EntityType="db293_ActionTimeDbModel.VResult" />
           <EntitySet Name="VDocumentPosCollection" EntityType="db293_ActionTimeDbModel.VDocumentPosCollection" />
           <FunctionImport Name="AddBankAction">
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
@@ -5396,6 +5384,19 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="LocationSchedule" EntityType="db293_ActionTimeDbModel.LocationSchedule" />
           <EntitySet Name="VSchedule" EntityType="db293_ActionTimeDbModel.VSchedule" />
+          <EntitySet Name="DayResult" EntityType="db293_ActionTimeDbModel.DayResult" />
+          <EntitySet Name="DayResultDocuments" EntityType="db293_ActionTimeDbModel.DayResultDocuments" />
+          <EntitySet Name="DayResultItemList" EntityType="db293_ActionTimeDbModel.DayResultItemList" />
+          <EntitySet Name="DayResultItems" EntityType="db293_ActionTimeDbModel.DayResultItems" />
+          <AssociationSet Name="FK_ResultItemList_Result1" Association="db293_ActionTimeDbModel.FK_ResultItemList_Result1">
+            <End Role="DayResult" EntitySet="DayResult" />
+            <End Role="DayResultItemList" EntitySet="DayResultItemList" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ResultItemList_ResultItems1" Association="db293_ActionTimeDbModel.FK_ResultItemList_ResultItems1">
+            <End Role="DayResultItems" EntitySet="DayResultItems" />
+            <End Role="DayResultItemList" EntitySet="DayResultItemList" />
+          </AssociationSet>
+          <EntitySet Name="VDayResult" EntityType="db293_ActionTimeDbModel.VDayResult" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -5741,6 +5742,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecordEmployee" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
           <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="RecordDevice" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Model" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="AuthorizedIP">
           <Key>
@@ -8710,108 +8712,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SlipDocument" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
         </EntityType>
-        <EntityType Name="Result">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LocationID" Type="Int32" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="StateID" Type="Int32" Nullable="false" />
-          <Property Name="StatusID" Type="Int32" />
-          <Property Name="EnvironmentID" Type="Int32" />
-          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="Latitude" Type="Double" />
-          <Property Name="Longitude" Type="Double" />
-          <Property Name="IsMobile" Type="Boolean" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateEmployeeID" Type="Int32" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" />
-          <NavigationProperty Name="ResultItemList" Relationship="db293_ActionTimeDbModel.FK_ResultItemList_Result" FromRole="Result" ToRole="ResultItemList" />
-        </EntityType>
-        <EntityType Name="ResultDocuments">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ResultID" Type="Int64" Nullable="false" />
-          <Property Name="DocumentTypeID" Type="Int32" Nullable="false" />
-          <Property Name="LocationID" Type="Int32" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="EnvironmentID" Type="Int32" />
-          <Property Name="FilePath" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-          <Property Name="FileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="UpdateEmployeeID" Type="Int32" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="Latitude" Type="Double" />
-          <Property Name="Longitude" Type="Double" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="ResultItemList">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ResultID" Type="Int64" />
-          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ResultItemID" Type="Int32" />
-          <Property Name="Quantity" Type="Int32" />
-          <Property Name="Amount" Type="Double" />
-          <Property Name="SystemAmount" Type="Double" />
-          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeID" Type="Int32" />
-          <Property Name="UnitHourPrice" Type="Double" />
-          <Property Name="HourQuantity" Type="Double" />
-          <Property Name="SystemHourQuantity" Type="Double" />
-          <Property Name="FilePath" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
-          <Property Name="FileName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Result" Relationship="db293_ActionTimeDbModel.FK_ResultItemList_Result" FromRole="ResultItemList" ToRole="Result" />
-          <NavigationProperty Name="ResultItems" Relationship="db293_ActionTimeDbModel.FK_ResultItemList_ResultItems" FromRole="ResultItemList" ToRole="ResultItems" />
-        </EntityType>
-        <EntityType Name="ResultItems">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Module" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Category" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="ItemName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ResultItemList" Relationship="db293_ActionTimeDbModel.FK_ResultItemList_ResultItems" FromRole="ResultItems" ToRole="ResultItemList" />
-        </EntityType>
-        <Association Name="FK_ResultItemList_Result">
-          <End Type="db293_ActionTimeDbModel.Result" Role="Result" Multiplicity="0..1" />
-          <End Type="db293_ActionTimeDbModel.ResultItemList" Role="ResultItemList" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Result">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ResultItemList">
-              <PropertyRef Name="ResultID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_ResultItemList_ResultItems">
-          <End Type="db293_ActionTimeDbModel.ResultItems" Role="ResultItems" Multiplicity="0..1" />
-          <End Type="db293_ActionTimeDbModel.ResultItemList" Role="ResultItemList" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ResultItems">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ResultItemList">
-              <PropertyRef Name="ResultItemID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="VDocumentSalaryPayment">
           <Key>
             <PropertyRef Name="ID" />
@@ -8941,37 +8841,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateEmployee" Type="Int32" />
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="VResult">
-          <Key>
-            <PropertyRef Name="ID" />
-            <PropertyRef Name="LocationID" />
-            <PropertyRef Name="Date" />
-            <PropertyRef Name="StateID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" />
-          <Property Name="LocationID" Type="Int32" Nullable="false" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="StateID" Type="Int32" Nullable="false" />
-          <Property Name="StatusID" Type="Int32" />
-          <Property Name="EnvironmentID" Type="Int32" />
-          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="Latitude" Type="Double" />
-          <Property Name="Longitude" Type="Double" />
-          <Property Name="IsMobile" Type="Boolean" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateEmployeeID" Type="Int32" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
-          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Environment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VDocumentPosCollection">
           <Key>
@@ -9203,6 +9072,139 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ShiftDateEndString" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="ShiftdateEnd" Type="DateTime" Precision="3" />
           <Property Name="DurationMinute" Type="Int32" />
+        </EntityType>
+        <EntityType Name="DayResult">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StateID" Type="Int32" Nullable="false" />
+          <Property Name="StatusID" Type="Int32" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="IsMobile" Type="Boolean" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <NavigationProperty Name="DayResultItemList" Relationship="db293_ActionTimeDbModel.FK_ResultItemList_Result1" FromRole="DayResult" ToRole="DayResultItemList" />
+        </EntityType>
+        <EntityType Name="DayResultDocuments">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ResultID" Type="Int64" Nullable="false" />
+          <Property Name="DocumentTypeID" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="FilePath" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+          <Property Name="FileName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="DayResultItemList">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ResultItemID" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="SystemAmount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="UnitHourPrice" Type="Double" />
+          <Property Name="HourQuantity" Type="Double" />
+          <Property Name="SystemHourQuantity" Type="Double" />
+          <Property Name="FilePath" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="FileName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="DayResult" Relationship="db293_ActionTimeDbModel.FK_ResultItemList_Result1" FromRole="DayResultItemList" ToRole="DayResult" />
+          <NavigationProperty Name="DayResultItems" Relationship="db293_ActionTimeDbModel.FK_ResultItemList_ResultItems1" FromRole="DayResultItemList" ToRole="DayResultItems" />
+        </EntityType>
+        <EntityType Name="DayResultItems">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Module" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Category" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="ItemName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="DayResultItemList" Relationship="db293_ActionTimeDbModel.FK_ResultItemList_ResultItems1" FromRole="DayResultItems" ToRole="DayResultItemList" />
+        </EntityType>
+        <Association Name="FK_ResultItemList_Result1">
+          <End Type="db293_ActionTimeDbModel.DayResult" Role="DayResult" Multiplicity="0..1" />
+          <End Type="db293_ActionTimeDbModel.DayResultItemList" Role="DayResultItemList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DayResult">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DayResultItemList">
+              <PropertyRef Name="ResultID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ResultItemList_ResultItems1">
+          <End Type="db293_ActionTimeDbModel.DayResultItems" Role="DayResultItems" Multiplicity="0..1" />
+          <End Type="db293_ActionTimeDbModel.DayResultItemList" Role="DayResultItemList" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DayResultItems">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DayResultItemList">
+              <PropertyRef Name="ResultItemID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="VDayResult">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="StateID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="StateID" Type="Int32" Nullable="false" />
+          <Property Name="StatusID" Type="Int32" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="IsMobile" Type="Boolean" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Environment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -9545,6 +9547,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="ApplicationLog">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ApplicationLog">
               <MappingFragment StoreEntitySet="ApplicationLog">
+                <ScalarProperty Name="Model" ColumnName="Model" />
                 <ScalarProperty Name="RecordDevice" ColumnName="RecordDevice" />
                 <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
                 <ScalarProperty Name="RecordEmployee" ColumnName="RecordEmployee" />
@@ -12461,84 +12464,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Result">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Result">
-              <MappingFragment StoreEntitySet="Result">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="IsMobile" ColumnName="IsMobile" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
-                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
-                <ScalarProperty Name="StateID" ColumnName="StateID" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ResultDocuments">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ResultDocuments">
-              <MappingFragment StoreEntitySet="ResultDocuments">
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="FileName" ColumnName="FileName" />
-                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
-                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="DocumentTypeID" ColumnName="DocumentTypeID" />
-                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ResultItemList">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ResultItemList">
-              <MappingFragment StoreEntitySet="ResultItemList">
-                <ScalarProperty Name="FileName" ColumnName="FileName" />
-                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
-                <ScalarProperty Name="SystemHourQuantity" ColumnName="SystemHourQuantity" />
-                <ScalarProperty Name="HourQuantity" ColumnName="HourQuantity" />
-                <ScalarProperty Name="UnitHourPrice" ColumnName="UnitHourPrice" />
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="SystemAmount" ColumnName="SystemAmount" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="ResultItemID" ColumnName="ResultItemID" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ResultItems">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ResultItems">
-              <MappingFragment StoreEntitySet="ResultItems">
-                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
-                <ScalarProperty Name="Category" ColumnName="Category" />
-                <ScalarProperty Name="Module" ColumnName="Module" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="VDocumentSalaryPayment">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentSalaryPayment">
               <MappingFragment StoreEntitySet="VDocumentSalaryPayment">
@@ -12675,35 +12600,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="StatusID" ColumnName="StatusID" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="VResult">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VResult">
-              <MappingFragment StoreEntitySet="VResult">
-                <ScalarProperty Name="Environment" ColumnName="Environment" />
-                <ScalarProperty Name="RecorderFullName" ColumnName="RecorderFullName" />
-                <ScalarProperty Name="UpdaterFullName" ColumnName="UpdaterFullName" />
-                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
-                <ScalarProperty Name="StateName" ColumnName="StateName" />
-                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="IsMobile" ColumnName="IsMobile" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
-                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
-                <ScalarProperty Name="StateID" ColumnName="StateID" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -12944,6 +12840,113 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="StatusID" ColumnName="StatusID" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DayResult">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DayResult">
+              <MappingFragment StoreEntitySet="DayResult">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="IsMobile" ColumnName="IsMobile" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DayResultDocuments">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DayResultDocuments">
+              <MappingFragment StoreEntitySet="DayResultDocuments">
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="DocumentTypeID" ColumnName="DocumentTypeID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DayResultItemList">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DayResultItemList">
+              <MappingFragment StoreEntitySet="DayResultItemList">
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="SystemHourQuantity" ColumnName="SystemHourQuantity" />
+                <ScalarProperty Name="HourQuantity" ColumnName="HourQuantity" />
+                <ScalarProperty Name="UnitHourPrice" ColumnName="UnitHourPrice" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="SystemAmount" ColumnName="SystemAmount" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ResultItemID" ColumnName="ResultItemID" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DayResultItems">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DayResultItems">
+              <MappingFragment StoreEntitySet="DayResultItems">
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Module" ColumnName="Module" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VDayResult">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDayResult">
+              <MappingFragment StoreEntitySet="VDayResult">
+                <ScalarProperty Name="Environment" ColumnName="Environment" />
+                <ScalarProperty Name="RecorderFullName" ColumnName="RecorderFullName" />
+                <ScalarProperty Name="UpdaterFullName" ColumnName="UpdaterFullName" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="IsMobile" ColumnName="IsMobile" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

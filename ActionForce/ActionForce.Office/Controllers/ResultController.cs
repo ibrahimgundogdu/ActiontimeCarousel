@@ -11,67 +11,37 @@ namespace ActionForce.Office.Controllers
     {
         // GET: Result
         [AllowAnonymous]
-        public ActionResult Index()
+        public ActionResult Envelope(string date)
         {
             ResultControlModel model = new ResultControlModel();
 
             if (TempData["result"] != null)
             {
-                model.ResultMessage = TempData["result"] as Result<Result> ?? null;
+                model.Result = TempData["result"] as Result<DayResult> ?? null;
             }
 
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
 
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
+            if (!string.IsNullOrEmpty(date))
+            {
+                _date = Convert.ToDateTime(date).Date;
+                datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
             }
+
+            model.CurrentDate = datekey;
+            model.TodayDateCode = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date.ToString("yyyy-MM-dd");
+            model.CurrentDateCode = _date.ToString("yyyy-MM-dd");
+            model.PrevDateCode = _date.AddDays(-1).Date.ToString("yyyy-MM-dd");
+            model.NextDateCode = _date.AddDays(1).Date.ToString("yyyy-MM-dd");
 
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
-            model.ResultList = Db.VResult.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-
-            if (model.Filters.LocationID > 0)
-            {
-                model.ResultList = model.ResultList.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-            }
+            model.DayResultList = Db.VDayResult.Where(x => x.Date == datekey.DateKey).ToList();
 
             return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult Filter(int? locationId, DateTime? beginDate, DateTime? endDate)
-        {
-            FilterModel model = new FilterModel();
-
-            model.LocationID = locationId;
-            model.DateBegin = beginDate;
-            model.DateEnd = endDate;
-
-            if (beginDate == null)
-            {
-                DateTime begin = DateTime.Now.AddMonths(-1).Date;
-                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
-            }
-
-            if (endDate == null)
-            {
-                model.DateEnd = DateTime.Now.Date;
-            }
-
-            TempData["filter"] = model;
-
-            return RedirectToAction("Index", "Result");
         }
 
         [AllowAnonymous]
@@ -98,7 +68,7 @@ namespace ActionForce.Office.Controllers
                 model.ResultDate = DateTime.Now.Date;
             }
 
-            var isExists = Db.Result.FirstOrDefault(x => x.LocationID == model.LocationID && x.Date == model.ResultDate);
+            var isExists = Db.DayResult.FirstOrDefault(x => x.LocationID == model.LocationID && x.Date == model.ResultDate);
 
             if (isExists != null)
             {
@@ -124,10 +94,10 @@ namespace ActionForce.Office.Controllers
                 filtermodel = TempData["filter"] as ResultFilterModel;
             }
 
-            model.CurrentResult = Db.VResult.FirstOrDefault(x => x.LocationID == filtermodel.LocationID && x.Date == filtermodel.ResultDate);
-            if (model.CurrentResult != null)
+            model.CurrentDayResult = Db.VDayResult.FirstOrDefault(x => x.LocationID == filtermodel.LocationID && x.Date == filtermodel.ResultDate);
+            if (model.CurrentDayResult != null)
             {
-                model.Result = Db.Result.FirstOrDefault(x => x.ID == model.CurrentResult.ID);
+                model.DayResult = Db.DayResult.FirstOrDefault(x => x.ID == model.CurrentDayResult.ID);
             }
 
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -140,8 +110,8 @@ namespace ActionForce.Office.Controllers
         {
             ResultControlModel model = new ResultControlModel();
 
-            model.CurrentResult = Db.VResult.FirstOrDefault(x => x.ID == id);
-            model.Result = Db.Result.FirstOrDefault(x => x.ID == id);
+            model.CurrentDayResult = Db.VDayResult.FirstOrDefault(x => x.ID == id);
+            model.DayResult = Db.DayResult.FirstOrDefault(x => x.ID == id);
 
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
@@ -153,8 +123,8 @@ namespace ActionForce.Office.Controllers
         {
             ResultControlModel model = new ResultControlModel();
 
-            model.CurrentResult = Db.VResult.FirstOrDefault(x => x.ID == id);
-            model.Result = Db.Result.FirstOrDefault(x => x.ID == id);
+            model.CurrentDayResult = Db.VDayResult.FirstOrDefault(x => x.ID == id);
+            model.DayResult = Db.DayResult.FirstOrDefault(x => x.ID == id);
 
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 

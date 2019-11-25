@@ -9,26 +9,19 @@
 
 <div class="content-header">
     <div class="content-search">
-        <i data-feather="search"></i>
-        <input type="search" class="form-control" placeholder="Search">
+        <span class="tx-20">Çalışan Mesai Takvimleri</span>
     </div>
     <nav class="nav">
-        <a href="" class="nav-link"><i data-feather="help-circle"></i></a>
-        <a href="" class="nav-link"><i data-feather="grid"></i></a>
-        <a href="" class="nav-link"><i data-feather="align-left"></i></a>
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
     </nav>
-</div><!-- content-header -->
+</div>
 <div class="content-body">
     <div class="pd-x-0 tx-13">
         <div class="media d-block d-lg-flex">
-            <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
-
-
-
-
+            <div class="media-body mg-t-40 mg-lg-t-0">
                 <div class="profile-update-option bg-white ht-50 bd d-flex justify-content-end mg-b-20 mg-lg-b-20 rounded">
                     <div class="d-flex align-items-center pd-x-5 mg-r-auto">
-                        <span class="tx-15">
+                        <span class="tx-15 pd-r-10">
                             <select name="listLocations" id="listLocations" class="custom-select">
                                 @foreach (var location in Model.LocationList)
                                 {
@@ -50,7 +43,7 @@
                         <a href="/Schedule/Employee?week=@(Model.PrevWeekCode)&locationid=@(Model.CurrentLocation.LocationID)" class="link-03" title="Bir Önceki Hafta"><i data-feather="arrow-left"></i></a>
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="/Schedule/Employee?week=@(Model.WeekCode)&locationid=@(Model.CurrentLocation.LocationID)" class="link-03" title="Bu Hafta"><i data-feather="target"></i></a>
+                        <a href="/Schedule/Employee?date=@(DateTime.Now.ToString("yyyy-MM-dd"))&locationid=@(Model.CurrentLocation.LocationID)" class="link-03" title="Bu Hafta"><i data-feather="target"></i></a>
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
                         <a href="/Schedule/Employee?week=@(Model.NextWeekCode)&locationid=@(Model.CurrentLocation.LocationID)" class="link-03" title="Bir Sonraki Hafta"><i data-feather="arrow-right"></i></a>
@@ -62,7 +55,7 @@
 
                 <div class="card mg-b-20 mg-lg-b-25">
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Çalışan Mesai Takvimleri (@(Model.WeekCode). Hafta)</h6>
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.WeekCode). Hafta</h6>
                         <nav class="nav">
                             <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.FirstWeekDay.DateKey.ToLongDateString())</span> <i data-feather="more-horizontal"></i> @(Model.LastWeekDay.DateKey.ToLongDateString())</a>
                         </nav>

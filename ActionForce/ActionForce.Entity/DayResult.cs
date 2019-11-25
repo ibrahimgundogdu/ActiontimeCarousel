@@ -12,8 +12,14 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class VResult
+    public partial class DayResult
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public DayResult()
+        {
+            this.DayResultItemList = new HashSet<DayResultItemList>();
+        }
+    
         public long ID { get; set; }
         public int LocationID { get; set; }
         public System.DateTime Date { get; set; }
@@ -31,11 +37,8 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public string RecordIP { get; set; }
         public Nullable<bool> IsActive { get; set; }
-        public string LocationFullName { get; set; }
-        public string StateName { get; set; }
-        public string StatusName { get; set; }
-        public string UpdaterFullName { get; set; }
-        public string RecorderFullName { get; set; }
-        public string Environment { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DayResultItemList> DayResultItemList { get; set; }
     }
 }

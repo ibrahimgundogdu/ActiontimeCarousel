@@ -167,6 +167,18 @@
     <Compile Include="DateList.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="DayResult.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DayResultDocuments.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DayResultItemList.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DayResultItems.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="DocumentBankTransfer.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -426,18 +438,6 @@
     <Compile Include="RefundTypes.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
-    <Compile Include="Result.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ResultDocuments.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ResultItemList.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ResultItems.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
     <Compile Include="ResultState.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -582,6 +582,9 @@
     <Compile Include="VCashBankActions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VDayResult.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VDocumentBankTransfer.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -625,9 +628,6 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VLocationSchedule.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
-    <Compile Include="VResult.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VSchedule.cs">

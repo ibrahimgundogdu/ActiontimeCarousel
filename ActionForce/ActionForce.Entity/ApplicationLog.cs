@@ -32,5 +32,6 @@ namespace ActionForce.Entity
         public string RecordEmployee { get; set; }
         public string RecordIP { get; set; }
         public string RecordDevice { get; set; }
+        public string Model { get; set; }
     }
 }
