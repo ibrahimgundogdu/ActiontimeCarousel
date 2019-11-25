@@ -72,7 +72,7 @@ namespace ActionForce.Office.Controllers
                     result.Message = "Giriş Başarılı";
                     result.Data = User;
 
-                    OfficeHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, true, $"{User.Username} başarılı bir giriş yaptı.", string.Empty, DateTime.UtcNow, User.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                    OfficeHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, true, $"{User.Username} başarılı bir giriş yaptı.", string.Empty, DateTime.UtcNow, User.FullName, OfficeHelper.GetIPAddress(), string.Empty, authModel);
 
                     var userData = Newtonsoft.Json.JsonConvert.SerializeObject(authModel);
                     var ticket = new FormsAuthenticationTicket(1, User.Username, DateTime.Now, DateTime.Now.AddMinutes(1440), false, userData, FormsAuthentication.FormsCookiePath);
@@ -93,19 +93,19 @@ namespace ActionForce.Office.Controllers
                     if (User.IsActive == false)
                     {
                         result.Message += " Kullanıcı Pasif Durumdadır. ";
-                        OfficeHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, false, $"{User.Username} kullanıcısı pasif durumdadır.", string.Empty, DateTime.UtcNow, User.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                        OfficeHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, false, $"{User.Username} kullanıcısı pasif durumdadır.", string.Empty, DateTime.UtcNow, User.FullName, OfficeHelper.GetIPAddress(), string.Empty,null);
                     }
 
                     if (User.IsDismissal == true)
                     {
                         result.Message += " Kullanıcı kilitli durumdadır. Sistem yöneticinize başvurunuz. ";
-                        OfficeHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, false, $"{User.Username} kullanıcısı kilitli durumdadır. Sistem yöneticinize başvurunuz.", string.Empty, DateTime.UtcNow, User.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                        OfficeHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, false, $"{User.Username} kullanıcısı kilitli durumdadır. Sistem yöneticinize başvurunuz.", string.Empty, DateTime.UtcNow, User.FullName, OfficeHelper.GetIPAddress(), string.Empty,null);
                     }
 
                     if (roleGroup.RoleLevel1.LevelNumber < 3)
                     {
                         result.Message += " Kullanıcı yetkiniz bulunmamaktadır. Sistem yöneticinize başvurunuz. ";
-                        OfficeHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, false, $"{User.Username} kullanıcısı yetkiniz bulunmamaktadır. Sistem yöneticinize başvurunuz.", string.Empty, DateTime.UtcNow, User.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                        OfficeHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, false, $"{User.Username} kullanıcısı yetkiniz bulunmamaktadır. Sistem yöneticinize başvurunuz.", string.Empty, DateTime.UtcNow, User.FullName, OfficeHelper.GetIPAddress(), string.Empty,null);
                     }
 
 
@@ -114,7 +114,7 @@ namespace ActionForce.Office.Controllers
             else
             {
                 result.Message = " Kullanıcı geçersizdir. ";
-                OfficeHelper.AddApplicationLog("Office", "Login", "Select", string.Empty, "Login", "Login", null, false, $"{Username} kullanıcısı bulunmamaktadır. Sistem yöneticinize başvurunuz.", string.Empty, DateTime.UtcNow, Username, OfficeHelper.GetIPAddress(), string.Empty);
+                OfficeHelper.AddApplicationLog("Office", "Login", "Select", string.Empty, "Login", "Login", null, false, $"{Username} kullanıcısı bulunmamaktadır. Sistem yöneticinize başvurunuz.", string.Empty, DateTime.UtcNow, Username, OfficeHelper.GetIPAddress(), string.Empty,null);
             }
 
             TempData["result"] = result;
@@ -140,7 +140,7 @@ namespace ActionForce.Office.Controllers
                     ChangeCulture(ourcompany.Culture);
                 }
 
-                OfficeHelper.AddApplicationLog("Office", "Login", "Select", Authentication.ActionEmployee.EmployeeID.ToString(), "Login", "ChangeOurCompany", null, true, $"{Authentication.ActionEmployee.FullName} başarılı şekilde {id} ülkesine değişim işlemi yaptı.", string.Empty, DateTime.UtcNow, Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                OfficeHelper.AddApplicationLog("Office", "Login", "Select", Authentication.ActionEmployee.EmployeeID.ToString(), "Login", "ChangeOurCompany", null, true, $"{Authentication.ActionEmployee.FullName} başarılı şekilde {id} ülkesine değişim işlemi yaptı.", string.Empty, DateTime.UtcNow, Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty,null);
 
                 var userData = Newtonsoft.Json.JsonConvert.SerializeObject(Authentication);
                 var ticket = new FormsAuthenticationTicket(1, identity.Name, DateTime.Now, DateTime.Now.AddMinutes(1440), false, userData, FormsAuthentication.FormsCookiePath);

@@ -336,7 +336,7 @@
           <Property Name="FieldName" Type="nvarchar" MaxLength="40" />
           <Property Name="OldValue" Type="nvarchar" MaxLength="250" />
           <Property Name="NewValue" Type="nvarchar" MaxLength="250" />
-          <Property Name="Model" Type="nvarchar(max)" />
+          <Property Name="Data" Type="nvarchar(max)" />
           <Property Name="IsSuccess" Type="bit" />
           <Property Name="ResultMessage" Type="nvarchar" MaxLength="250" />
           <Property Name="ErrorMessage" Type="nvarchar" MaxLength="250" />
@@ -3827,6 +3827,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="RecordEmployee" Type="nvarchar" Mode="In" />
           <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
           <Parameter Name="RecordDevice" Type="nvarchar" Mode="In" />
+          <Parameter Name="Data" Type="nvarchar(max)" Mode="In" />
         </Function>
         <Function Name="AddBankAction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -5019,25 +5020,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     <edmx:ConceptualModels>
       <Schema Namespace="db293_ActionTimeDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="ActionTimeEntities" annotation:LazyLoadingEnabled="true">
-          <FunctionImport Name="AddApplicationLog">
-            <Parameter Name="Environment" Mode="In" Type="String" />
-            <Parameter Name="Modul" Mode="In" Type="String" />
-            <Parameter Name="ProcessType" Mode="In" Type="String" />
-            <Parameter Name="ProcessID" Mode="In" Type="String" />
-            <Parameter Name="Controller" Mode="In" Type="String" />
-            <Parameter Name="Action" Mode="In" Type="String" />
-            <Parameter Name="TableName" Mode="In" Type="String" />
-            <Parameter Name="FieldName" Mode="In" Type="String" />
-            <Parameter Name="OldValue" Mode="In" Type="String" />
-            <Parameter Name="NewValue" Mode="In" Type="String" />
-            <Parameter Name="IsSuccess" Mode="In" Type="Boolean" />
-            <Parameter Name="ResultMessage" Mode="In" Type="String" />
-            <Parameter Name="ErrorMessage" Mode="In" Type="String" />
-            <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
-            <Parameter Name="RecordEmployee" Mode="In" Type="String" />
-            <Parameter Name="RecordIP" Mode="In" Type="String" />
-            <Parameter Name="RecordDevice" Mode="In" Type="String" />
-          </FunctionImport>
           <EntitySet Name="Action" EntityType="db293_ActionTimeDbModel.Action" />
           <EntitySet Name="ActionAccounts" EntityType="db293_ActionTimeDbModel.ActionAccounts" />
           <EntitySet Name="ActionRow" EntityType="db293_ActionTimeDbModel.ActionRow" />
@@ -5054,7 +5036,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="ActionTypeExpense" EntityType="db293_ActionTimeDbModel.ActionTypeExpense" />
           <EntitySet Name="Animal" EntityType="db293_ActionTimeDbModel.Animal" />
           <EntitySet Name="AnimalType" EntityType="db293_ActionTimeDbModel.AnimalType" />
-          <EntitySet Name="ApplicationLog" EntityType="db293_ActionTimeDbModel.ApplicationLog" />
           <EntitySet Name="AuthorizedIP" EntityType="db293_ActionTimeDbModel.AuthorizedIP" />
           <EntitySet Name="Bank" EntityType="db293_ActionTimeDbModel.Bank" />
           <EntitySet Name="BankAccount" EntityType="db293_ActionTimeDbModel.BankAccount" />
@@ -5397,6 +5378,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <End Role="DayResultItemList" EntitySet="DayResultItemList" />
           </AssociationSet>
           <EntitySet Name="VDayResult" EntityType="db293_ActionTimeDbModel.VDayResult" />
+          <FunctionImport Name="AddApplicationLog">
+            <Parameter Name="Environment" Mode="In" Type="String" />
+            <Parameter Name="Modul" Mode="In" Type="String" />
+            <Parameter Name="ProcessType" Mode="In" Type="String" />
+            <Parameter Name="ProcessID" Mode="In" Type="String" />
+            <Parameter Name="Controller" Mode="In" Type="String" />
+            <Parameter Name="Action" Mode="In" Type="String" />
+            <Parameter Name="TableName" Mode="In" Type="String" />
+            <Parameter Name="FieldName" Mode="In" Type="String" />
+            <Parameter Name="OldValue" Mode="In" Type="String" />
+            <Parameter Name="NewValue" Mode="In" Type="String" />
+            <Parameter Name="IsSuccess" Mode="In" Type="Boolean" />
+            <Parameter Name="ResultMessage" Mode="In" Type="String" />
+            <Parameter Name="ErrorMessage" Mode="In" Type="String" />
+            <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
+            <Parameter Name="RecordEmployee" Mode="In" Type="String" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+            <Parameter Name="RecordDevice" Mode="In" Type="String" />
+            <Parameter Name="Data" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="ApplicationLog" EntityType="db293_ActionTimeDbModel.ApplicationLog" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -5719,30 +5721,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="ApplicationLog">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Environment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Modul" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="ProcessType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="ProcessID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Controller" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="Action" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="TableName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="FieldName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="OldValue" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="NewValue" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="IsSuccess" Type="Boolean" />
-          <Property Name="ResultMessage" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ErrorMessage" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordEmployee" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="RecordDevice" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Model" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="AuthorizedIP">
           <Key>
@@ -9206,13 +9184,36 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Environment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="ApplicationLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Environment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Modul" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Controller" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="Action" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="TableName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="FieldName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="OldValue" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="NewValue" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Data" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsSuccess" Type="Boolean" />
+          <Property Name="ResultMessage" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ErrorMessage" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployee" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDevice" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="db293_ActionTimeDbModelStoreContainer" CdmEntityContainer="ActionTimeEntities">
-          <FunctionImportMapping FunctionImportName="AddApplicationLog" FunctionName="db293_ActionTimeDbModel.Store.AddApplicationLog" />
           <EntitySetMapping Name="Action">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Action">
               <MappingFragment StoreEntitySet="Action">
@@ -9540,31 +9541,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="SortBy" ColumnName="SortBy" />
                 <ScalarProperty Name="TypeName" ColumnName="TypeName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ApplicationLog">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ApplicationLog">
-              <MappingFragment StoreEntitySet="ApplicationLog">
-                <ScalarProperty Name="Model" ColumnName="Model" />
-                <ScalarProperty Name="RecordDevice" ColumnName="RecordDevice" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RecordEmployee" ColumnName="RecordEmployee" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
-                <ScalarProperty Name="ResultMessage" ColumnName="ResultMessage" />
-                <ScalarProperty Name="IsSuccess" ColumnName="IsSuccess" />
-                <ScalarProperty Name="NewValue" ColumnName="NewValue" />
-                <ScalarProperty Name="OldValue" ColumnName="OldValue" />
-                <ScalarProperty Name="FieldName" ColumnName="FieldName" />
-                <ScalarProperty Name="TableName" ColumnName="TableName" />
-                <ScalarProperty Name="Action" ColumnName="Action" />
-                <ScalarProperty Name="Controller" ColumnName="Controller" />
-                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
-                <ScalarProperty Name="ProcessType" ColumnName="ProcessType" />
-                <ScalarProperty Name="Modul" ColumnName="Modul" />
-                <ScalarProperty Name="Environment" ColumnName="Environment" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -12946,6 +12922,32 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="StateID" ColumnName="StateID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddApplicationLog" FunctionName="db293_ActionTimeDbModel.Store.AddApplicationLog" />
+          <EntitySetMapping Name="ApplicationLog">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ApplicationLog">
+              <MappingFragment StoreEntitySet="ApplicationLog">
+                <ScalarProperty Name="RecordDevice" ColumnName="RecordDevice" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployee" ColumnName="RecordEmployee" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
+                <ScalarProperty Name="ResultMessage" ColumnName="ResultMessage" />
+                <ScalarProperty Name="IsSuccess" ColumnName="IsSuccess" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="NewValue" ColumnName="NewValue" />
+                <ScalarProperty Name="OldValue" ColumnName="OldValue" />
+                <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+                <ScalarProperty Name="TableName" ColumnName="TableName" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="Controller" ColumnName="Controller" />
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="ProcessType" ColumnName="ProcessType" />
+                <ScalarProperty Name="Modul" ColumnName="Modul" />
+                <ScalarProperty Name="Environment" ColumnName="Environment" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

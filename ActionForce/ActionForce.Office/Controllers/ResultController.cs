@@ -20,7 +20,7 @@ namespace ActionForce.Office.Controllers
                 model.Result = TempData["result"] as Result<DayResult> ?? null;
             }
 
-            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var _date = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
             var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
 
             if (!string.IsNullOrEmpty(date))
@@ -30,7 +30,7 @@ namespace ActionForce.Office.Controllers
             }
 
             model.CurrentDate = datekey;
-            model.TodayDateCode = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date.ToString("yyyy-MM-dd");
+            model.TodayDateCode = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date.ToString("yyyy-MM-dd");
             model.CurrentDateCode = _date.ToString("yyyy-MM-dd");
             model.PrevDateCode = _date.AddDays(-1).Date.ToString("yyyy-MM-dd");
             model.NextDateCode = _date.AddDays(1).Date.ToString("yyyy-MM-dd");

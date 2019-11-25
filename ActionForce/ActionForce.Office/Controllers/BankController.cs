@@ -148,14 +148,14 @@ namespace ActionForce.Office.Controllers
                     result.Message = "Pos Tahsilatı başarı ile eklendi";
 
                     // log atılır
-                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", newPosColl.ID.ToString(), "Bank", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", newPosColl.ID.ToString(), "Bank", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newPosColl);
 
                 }
                 catch (Exception ex)
                 {
 
                     result.Message = $"Pos Tahsilatı eklenemedi : {ex.Message}";
-                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", "-1", "Bank", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", "-1", "Bank", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty,null);
 
                 }
 
@@ -276,14 +276,14 @@ namespace ActionForce.Office.Controllers
                     result.Message = "Pos Tahsilatı başarı ile eklendi";
 
                     // log atılır
-                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", newPosCancel.ID.ToString(), "Bank", "PosCancel", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", newPosCancel.ID.ToString(), "Bank", "PosCancel", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newPosCancel);
 
                 }
                 catch (Exception ex)
                 {
 
                     result.Message = $"Pos Tahsilatı eklenemedi : {ex.Message}";
-                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", "-1", "Bank", "PosCancel", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", "-1", "Bank", "PosCancel", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty,null);
 
                 }
 
@@ -404,14 +404,14 @@ namespace ActionForce.Office.Controllers
                     result.Message = "Pos Tahsilatı başarı ile eklendi";
 
                     // log atılır
-                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", newPosRefund.ID.ToString(), "Bank", "PosRefund", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", newPosRefund.ID.ToString(), "Bank", "PosRefund", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newPosRefund);
 
                 }
                 catch (Exception ex)
                 {
 
                     result.Message = $"Pos Tahsilatı eklenemedi : {ex.Message}";
-                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", "-1", "Bank", "PosRefund", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", "-1", "Bank", "PosRefund", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty,null);
 
                 }
 

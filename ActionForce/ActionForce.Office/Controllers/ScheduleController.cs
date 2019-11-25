@@ -235,17 +235,22 @@ namespace ActionForce.Office.Controllers
                         result.Message += $"{locschedule.LocationID} ID li lokasyonun {locschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi güncellendi.";
 
                         var isequal = OfficeHelper.PublicInstancePropertiesEqual<LocationSchedule>(self, locschedule, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Schedule", "Update", locschedule.ID.ToString(), "Schedule", "AddUpdateLocationSchedule", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                        OfficeHelper.AddApplicationLog("Office", "Schedule", "Update", locschedule.ID.ToString(), "Schedule", "AddUpdateLocationSchedule", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty,null);
 
 
                     }
                     else
                     {
+                        result.IsSuccess = true;
+                        result.Message += $"{locschedule.LocationID} ID li lokasyonun {locschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi silindi.";
+
+                        OfficeHelper.AddApplicationLog("Office", "Schedule", "Delete", locschedule.ID.ToString(), "Schedule", "AddUpdateLocationSchedule", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, locschedule);
+
+
                         Db.LocationSchedule.Remove(locschedule);
                         Db.SaveChanges();
 
-                        result.IsSuccess = true;
-                        result.Message += $"{locschedule.LocationID} ID li lokasyonun {locschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi silindi.";
+                        
                     }
                 }
                 else
@@ -290,10 +295,15 @@ namespace ActionForce.Office.Controllers
 
                             result.IsSuccess = true;
                             result.Message += $"{locschedule.LocationID} ID li lokasyonun {locschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi eklendi.";
+
+                            OfficeHelper.AddApplicationLog("Office", "Schedule", "Insert", locschedule.ID.ToString(), "Schedule", "AddUpdateLocationSchedule", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, locschedule);
+
                         }
                         catch (Exception ex)
                         {
                             result.Message += $"{item.locationID} ID li lokasyonun {item.dateKey} tarihli takviminde hata oluştu : " + ex.Message;
+                            OfficeHelper.AddApplicationLog("Office", "Schedule", "Insert", "0", "Schedule", "AddUpdateLocationSchedule", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
                         }
                     }
 
@@ -488,16 +498,22 @@ namespace ActionForce.Office.Controllers
                         result.Message += $"{empschedule.EmployeeID} ID li çalışanın {empschedule.LocationID} ID li lokasyonda {empschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi güncellendi.";
 
                         var isequal = OfficeHelper.PublicInstancePropertiesEqual<Schedule>(self, empschedule, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Schedule", "Update", empschedule.Id.ToString(), "Schedule", "AddUpdateEmployeeSchedule", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty);
+                        OfficeHelper.AddApplicationLog("Office", "Schedule", "Update", empschedule.Id.ToString(), "Schedule", "AddUpdateEmployeeSchedule", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty,null);
 
                     }
                     else
                     {
+                        result.IsSuccess = true;
+                        result.Message += $"{empschedule.EmployeeID} ID li çalışanın {empschedule.LocationID} ID li lokasyonda {empschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi silindi.";
+
+                        OfficeHelper.AddApplicationLog("Office", "Schedule", "Delete", empschedule.Id.ToString(), "Schedule", "AddUpdateEmployeeSchedule", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, empschedule);
+
+
                         Db.Schedule.Remove(empschedule);
                         Db.SaveChanges();
 
-                        result.IsSuccess = true;
-                        result.Message += $"{empschedule.EmployeeID} ID li çalışanın {empschedule.LocationID} ID li lokasyonda {empschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi silindi.";
+                        
+
                     }
                 }
                 else
@@ -545,10 +561,15 @@ namespace ActionForce.Office.Controllers
 
                             result.IsSuccess = true;
                             result.Message += $"{locschedule.EmployeeID} ID li çalışanın {locschedule.LocationID} ID li lokasyonda {locschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi eklendi.";
+
+                            OfficeHelper.AddApplicationLog("Office", "Schedule", "Insert", locschedule.Id.ToString(), "Schedule", "AddUpdateEmployeeSchedule", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, locschedule);
+
                         }
                         catch (Exception ex)
                         {
                             result.Message += $"{item.employeeID} ID li çalışanın {item.locationID} ID li lokasyonda {item.dateKey} tarihli takvimi eklenemedi : " + ex.Message;
+                            OfficeHelper.AddApplicationLog("Office", "Schedule", "Insert", "0", "Schedule", "AddUpdateEmployeeSchedule", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
                         }
                     }
 

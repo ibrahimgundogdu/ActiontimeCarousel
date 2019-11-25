@@ -43,7 +43,6 @@ namespace ActionForce.Entity
         public virtual DbSet<ActionTypeExpense> ActionTypeExpense { get; set; }
         public virtual DbSet<Animal> Animal { get; set; }
         public virtual DbSet<AnimalType> AnimalType { get; set; }
-        public virtual DbSet<ApplicationLog> ApplicationLog { get; set; }
         public virtual DbSet<AuthorizedIP> AuthorizedIP { get; set; }
         public virtual DbSet<Bank> Bank { get; set; }
         public virtual DbSet<BankAccount> BankAccount { get; set; }
@@ -213,79 +212,7 @@ namespace ActionForce.Entity
         public virtual DbSet<DayResultItemList> DayResultItemList { get; set; }
         public virtual DbSet<DayResultItems> DayResultItems { get; set; }
         public virtual DbSet<VDayResult> VDayResult { get; set; }
-    
-        public virtual int AddApplicationLog(string environment, string modul, string processType, string processID, string controller, string action, string tableName, string fieldName, string oldValue, string newValue, Nullable<bool> isSuccess, string resultMessage, string errorMessage, Nullable<System.DateTime> recordDate, string recordEmployee, string recordIP, string recordDevice)
-        {
-            var environmentParameter = environment != null ?
-                new ObjectParameter("Environment", environment) :
-                new ObjectParameter("Environment", typeof(string));
-    
-            var modulParameter = modul != null ?
-                new ObjectParameter("Modul", modul) :
-                new ObjectParameter("Modul", typeof(string));
-    
-            var processTypeParameter = processType != null ?
-                new ObjectParameter("ProcessType", processType) :
-                new ObjectParameter("ProcessType", typeof(string));
-    
-            var processIDParameter = processID != null ?
-                new ObjectParameter("ProcessID", processID) :
-                new ObjectParameter("ProcessID", typeof(string));
-    
-            var controllerParameter = controller != null ?
-                new ObjectParameter("Controller", controller) :
-                new ObjectParameter("Controller", typeof(string));
-    
-            var actionParameter = action != null ?
-                new ObjectParameter("Action", action) :
-                new ObjectParameter("Action", typeof(string));
-    
-            var tableNameParameter = tableName != null ?
-                new ObjectParameter("TableName", tableName) :
-                new ObjectParameter("TableName", typeof(string));
-    
-            var fieldNameParameter = fieldName != null ?
-                new ObjectParameter("FieldName", fieldName) :
-                new ObjectParameter("FieldName", typeof(string));
-    
-            var oldValueParameter = oldValue != null ?
-                new ObjectParameter("OldValue", oldValue) :
-                new ObjectParameter("OldValue", typeof(string));
-    
-            var newValueParameter = newValue != null ?
-                new ObjectParameter("NewValue", newValue) :
-                new ObjectParameter("NewValue", typeof(string));
-    
-            var isSuccessParameter = isSuccess.HasValue ?
-                new ObjectParameter("IsSuccess", isSuccess) :
-                new ObjectParameter("IsSuccess", typeof(bool));
-    
-            var resultMessageParameter = resultMessage != null ?
-                new ObjectParameter("ResultMessage", resultMessage) :
-                new ObjectParameter("ResultMessage", typeof(string));
-    
-            var errorMessageParameter = errorMessage != null ?
-                new ObjectParameter("ErrorMessage", errorMessage) :
-                new ObjectParameter("ErrorMessage", typeof(string));
-    
-            var recordDateParameter = recordDate.HasValue ?
-                new ObjectParameter("RecordDate", recordDate) :
-                new ObjectParameter("RecordDate", typeof(System.DateTime));
-    
-            var recordEmployeeParameter = recordEmployee != null ?
-                new ObjectParameter("RecordEmployee", recordEmployee) :
-                new ObjectParameter("RecordEmployee", typeof(string));
-    
-            var recordIPParameter = recordIP != null ?
-                new ObjectParameter("RecordIP", recordIP) :
-                new ObjectParameter("RecordIP", typeof(string));
-    
-            var recordDeviceParameter = recordDevice != null ?
-                new ObjectParameter("RecordDevice", recordDevice) :
-                new ObjectParameter("RecordDevice", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddApplicationLog", environmentParameter, modulParameter, processTypeParameter, processIDParameter, controllerParameter, actionParameter, tableNameParameter, fieldNameParameter, oldValueParameter, newValueParameter, isSuccessParameter, resultMessageParameter, errorMessageParameter, recordDateParameter, recordEmployeeParameter, recordIPParameter, recordDeviceParameter);
-        }
+        public virtual DbSet<ApplicationLog> ApplicationLog { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -646,6 +573,83 @@ namespace ActionForce.Entity
                 new ObjectParameter("UpdateDate", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UpdateCashAction", cashIDParameter, locationIDParameter, employeeIDParameter, cashActionTypeIDParameter, actionDateParameter, processNameParameter, processIDParameter, processDateParameter, documentNumberParameter, descriptionParameter, directionParameter, collectionParameter, paymentParameter, currencyParameter, latitudeParameter, longitudeParameter, recordEmployeeIDParameter, recordDateParameter, updateEmployeeIDParameter, updateDateParameter);
+        }
+    
+        public virtual int AddApplicationLog(string environment, string modul, string processType, string processID, string controller, string action, string tableName, string fieldName, string oldValue, string newValue, Nullable<bool> isSuccess, string resultMessage, string errorMessage, Nullable<System.DateTime> recordDate, string recordEmployee, string recordIP, string recordDevice, string data)
+        {
+            var environmentParameter = environment != null ?
+                new ObjectParameter("Environment", environment) :
+                new ObjectParameter("Environment", typeof(string));
+    
+            var modulParameter = modul != null ?
+                new ObjectParameter("Modul", modul) :
+                new ObjectParameter("Modul", typeof(string));
+    
+            var processTypeParameter = processType != null ?
+                new ObjectParameter("ProcessType", processType) :
+                new ObjectParameter("ProcessType", typeof(string));
+    
+            var processIDParameter = processID != null ?
+                new ObjectParameter("ProcessID", processID) :
+                new ObjectParameter("ProcessID", typeof(string));
+    
+            var controllerParameter = controller != null ?
+                new ObjectParameter("Controller", controller) :
+                new ObjectParameter("Controller", typeof(string));
+    
+            var actionParameter = action != null ?
+                new ObjectParameter("Action", action) :
+                new ObjectParameter("Action", typeof(string));
+    
+            var tableNameParameter = tableName != null ?
+                new ObjectParameter("TableName", tableName) :
+                new ObjectParameter("TableName", typeof(string));
+    
+            var fieldNameParameter = fieldName != null ?
+                new ObjectParameter("FieldName", fieldName) :
+                new ObjectParameter("FieldName", typeof(string));
+    
+            var oldValueParameter = oldValue != null ?
+                new ObjectParameter("OldValue", oldValue) :
+                new ObjectParameter("OldValue", typeof(string));
+    
+            var newValueParameter = newValue != null ?
+                new ObjectParameter("NewValue", newValue) :
+                new ObjectParameter("NewValue", typeof(string));
+    
+            var isSuccessParameter = isSuccess.HasValue ?
+                new ObjectParameter("IsSuccess", isSuccess) :
+                new ObjectParameter("IsSuccess", typeof(bool));
+    
+            var resultMessageParameter = resultMessage != null ?
+                new ObjectParameter("ResultMessage", resultMessage) :
+                new ObjectParameter("ResultMessage", typeof(string));
+    
+            var errorMessageParameter = errorMessage != null ?
+                new ObjectParameter("ErrorMessage", errorMessage) :
+                new ObjectParameter("ErrorMessage", typeof(string));
+    
+            var recordDateParameter = recordDate.HasValue ?
+                new ObjectParameter("RecordDate", recordDate) :
+                new ObjectParameter("RecordDate", typeof(System.DateTime));
+    
+            var recordEmployeeParameter = recordEmployee != null ?
+                new ObjectParameter("RecordEmployee", recordEmployee) :
+                new ObjectParameter("RecordEmployee", typeof(string));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            var recordDeviceParameter = recordDevice != null ?
+                new ObjectParameter("RecordDevice", recordDevice) :
+                new ObjectParameter("RecordDevice", typeof(string));
+    
+            var dataParameter = data != null ?
+                new ObjectParameter("Data", data) :
+                new ObjectParameter("Data", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddApplicationLog", environmentParameter, modulParameter, processTypeParameter, processIDParameter, controllerParameter, actionParameter, tableNameParameter, fieldNameParameter, oldValueParameter, newValueParameter, isSuccessParameter, resultMessageParameter, errorMessageParameter, recordDateParameter, recordEmployeeParameter, recordIPParameter, recordDeviceParameter, dataParameter);
         }
     }
 }

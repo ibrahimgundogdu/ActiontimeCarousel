@@ -25,6 +25,7 @@ namespace ActionForce.Entity
         public string FieldName { get; set; }
         public string OldValue { get; set; }
         public string NewValue { get; set; }
+        public string Data { get; set; }
         public Nullable<bool> IsSuccess { get; set; }
         public string ResultMessage { get; set; }
         public string ErrorMessage { get; set; }
@@ -32,6 +33,5 @@ namespace ActionForce.Entity
         public string RecordEmployee { get; set; }
         public string RecordIP { get; set; }
         public string RecordDevice { get; set; }
-        public string Model { get; set; }
     }
 }
