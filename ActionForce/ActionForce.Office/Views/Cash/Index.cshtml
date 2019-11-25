@@ -87,28 +87,32 @@
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
                         <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
 
                     @foreach (var item in Model.CashCollections)
                     {
-                    <tr>
+                        <tr style='@(item.IsActive == false ? "color: red" : "")'>
 
-                        <td class="tx-sm-13 bold">@item.ID</td>
-                        <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
-                        <td class="tx-sm-13">@item.LocationFullName</td>
-                        <td class="tx-sm-13">@item.CashName</td>
-                        <td class="tx-sm-13">@item.ActionTypeName</td>
-                        <td class="tx-sm-13">@item.CustomerFullName @item.EmployeeFullName @item.BankAccountName </td>
-                        <td class="tx-sm-13">@item.DocumentNumber</td>
-                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
-                        <td class="tx-sm-13">@(item.Currency)</td>
-                        <td class="tx-sm-13">@item.RecorderFullName</td>
-                        <td class="tx-sm-13 text-right">@item.RecordDate</td>
-                        <td class="tx-sm-13 text-right"><a href="@("/Cash/CashDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="arrow-right"></i></a></td>
-
-                    </tr>
+                            <td class="tx-sm-13 bold">@item.ID</td>
+                            <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                            <td class="tx-sm-13">@item.LocationFullName</td>
+                            <td class="tx-sm-13">@item.CashName</td>
+                            <td class="tx-sm-13">@item.ActionTypeName</td>
+                            <td class="tx-sm-13">@item.CustomerFullName @item.EmployeeFullName @item.BankAccountName </td>
+                            <td class="tx-sm-13">@item.DocumentNumber</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
+                            <td class="tx-sm-13">@(item.Currency)</td>
+                            <td class="tx-sm-13">@item.RecorderFullName</td>
+                            <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                            <td class="tx-sm-13 text-right"><a href="@("/Cash/CashDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
+                            @if (item.IsActive == true)
+                            {
+                            <td class="tx-sm-13 text-right"><a href="#javascript:;" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@item.Amount tutarlı tahsilatı iptal etmek istediğine emin misin?')) DeleteCashCollection(@item.ID)"><i data-feather="trash-2"></i></a></td>
+                            }
+                        </tr>
                     }
 
                 </tbody>
@@ -133,9 +137,8 @@
 
 @section scripts {
     <script src="/lib/cleave.js/cleave.min.js"></script>
-
     <script>
-        
+
         $(function () {
             'use strict'
             $('.select2').select2({
@@ -201,13 +204,22 @@
 
         });
 
+        function DeleteCashCollection(id) {
+            $.ajax({
+                method: "GET",
+                url: "/Cash/DeleteCashCollection",
+                data: { id: id }
+            }).done(function (d) {
+                $("#DeleteCashCollection").html(d);
+            });
+        }
 
 
-        
 
     </script>
+
     <script>
-        
+
 
         $(function () {
             'use strict'
