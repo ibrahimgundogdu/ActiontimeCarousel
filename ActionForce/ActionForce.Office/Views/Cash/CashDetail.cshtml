@@ -4,414 +4,317 @@
 }
 
 @section style{
-
+    <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
 }
 
-<div class="content-header">
-    <div class="content-search">
-        <i data-feather="search"></i>
-        <input id="SearchKey" type="search" class="form-control" placeholder="Arama..." aria-controls="example2">
-    </div>
-    <nav class="nav">
-        <select class="custom-select bg-light btn-xs" id="CurrentCompany">
-            <option value="1" @(Model.Authentication.ActionEmployee.OurCompanyID == 1 ? "selected" : "")>UFE Group USA</option>
-            <option value="2" @(Model.Authentication.ActionEmployee.OurCompanyID == 2 ? "selected" : "")>UFE Grup  TUR</option>
-        </select>
-    </nav>
-</div>
-<div class="content-body">
-    <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
-        <div>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-                    <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Kasa Nakit İşlemleri</li>
-                </ol>
-            </nav>
-            <h4 class="mg-b-0 tx-spacing--1">Kasa Tahsilatı Detayı</h4>
+    <div class="content-header">
+        <div class="content-search">
+            <span class="tx-20">Kasa Tahsilatı Detay</span>
         </div>
-        <div class="d-none d-md-block">
-            @{Html.RenderPartial("_PartialAddCashMenu");}
-        </div>
+        <nav class="nav">
+            @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+        </nav>
     </div>
-
-    <div class="df-example">
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Detay</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" id="history-tab" data-toggle="tab" href="#history" role="tab" aria-controls="history" aria-selected="false">History</a>
-            </li>
-        </ul>
-        @using (Html.BeginForm("EditCashCollection", "Cash", FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
-            <div class="tab-content bd bd-gray-300 bd-t-0 pd-20" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                    <div class="card mg-b-20 mg-lg-b-25">
-                        <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                            <h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.CashDetail.ActionName}"))</h6>
-                            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
-                            <input id="UID" name="UID" type="hidden" value="@(Model.CashDetail.UID)" />
-                            <nav class="nav">
-                                <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CashDetail.Date.Value.ToLongDateString())</span></a>
-                            </nav>
-                        </div><!-- card-header -->
-                        <div class="card-body pd-20 pd-lg-25">
-                            <div class="table-responsive">
-                                <table class="table table-primary table-hover table-striped mg-b-0">
-                                    <thead>
-                                        <tr class="table-active">
-                                            <th scope="col" style="width:3%;" class="text-center"></th>
-                                            <th scope="col" style="width:10%;" class="text-center"></th>
-                                            <th scope="col" style="width:20%;" class="text-center"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="form-group">
-                                                    <label>Döküman Nr</label>
-                                                </div>
-                                            </td>
-                                            <td>
-
-                                                <div class="form-group">
-                                                    <label class="text-danger">@Model.CashDetail.DocumentNumber</label>
-                                                </div>
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-group">
-                                                    <label>Kimden</label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-group">
-                                                    <select class="form-control" id="FromID" name="FromID" required>
-                                                        @foreach (var item in Model.FromList)
-                                                        {
-                                                            <option value="@item.Code" @(Model.CashDetail.FromBankAccountID != null ? Model.CashDetail.FromBankAccountID == item.ID ? "selected" : "" : Model.CashDetail.FromCustomerID != null ? Model.CashDetail.FromCustomerID == item.ID ? "selected" : "" : Model.CashDetail.FromEmployeeID == item.ID ? "selected" : "")>@(Html.Raw($"{item.Name}"))</option>
-                                                        }
-                                                    </select>
-                                                </div>
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-group">
-                                                    <label>Lokasyon</label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-group">
-                                                    <select class="form-control" id="LocationID" name="LocationID" required>
-                                                        @foreach (var item in Model.LocationList)
-                                                        {
-                                                            <option value="@item.LocationID" @(Model.CashDetail.LocationID == item.LocationID ? "selected" : "")>@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
-                                                        }
-                                                    </select>
-                                                </div>
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-group">
-                                                    <label>Tutar</label>
-                                                </div>
-                                            </td>
-                                            <td>
-
-                                                <div class="form-group">
-                                                    <input id="Amount" name="Amount" type="text" class="form-control" value="@Model.CashDetail.Amount" placeholder="Tutar" required>
-                                                </div>
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-group">
-                                                    <label>Para Birimi</label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-group">
-                                                    <select class="form-control" id="Currency" name="Currency" required>
-                                                        @foreach (var item in Model.CurrencyList)
-                                                        {
-                                                            <option value="@item.Code" @(Model.CashDetail.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
-                                                        }
-                                                    </select>
-                                                </div>
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-group">
-                                                    <label>Döviz Kuru</label>
-                                                </div>
-                                            </td>
-                                            <td>
-
-                                                <div class="form-group">
-                                                    <label class="text-danger">@Model.CashDetail.ExchangeRate</label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-group">
-                                                    <label class="text-danger">@($"{Model.CashDetail.SystemAmount} {Model.CashDetail.SystemCurrency}")</label>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-group">
-                                                    <label>Açıklama</label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-group">
-                                                    <textarea id="Description" name="Description" rows="4" class="form-control" value="@Model.CashDetail.Description" placeholder="Açıklama"></textarea>
-                                                </div>
-                                            </td>
-                                            <td></td>
-                                        </tr>
-                                        @if (Model.CashDetail.IsActive == true)
-                                        {
-                                            <tr>
-                                                <td></td>
-                                                <td>
-                                                    <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
-                                                </td>
-                                                <td></td>
-                                            </tr>
-                                        }
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
-                            <nav class="nav nav-with-icon tx-13">
-                                <a href="" class="nav-link"><i data-feather="user-plus"></i> @(Html.Raw($"{Model.CashDetail.RecorderFullName}"))</a>
-                                <a href="" class="nav-link"><i data-feather="calendar"></i> @(Html.Raw($"{Model.CashDetail.RecordDate.Value.ToLongDateString()}"))</a>
-                                <a href="" class="nav-link"><i data-feather="user-check"></i> @(Html.Raw($"{Model.CashDetail.UpdaterFullName}"))</a>
-                            </nav>
-                        </div><!-- card-footer -->
-                    </div><!-- card -->
-                </div>
-                <div class="tab-pane fade" id="history" role="tabpanel" aria-labelledby="history-tab">
-                    <div class="card">
-                        <div class="card-header pd-b-0 pd-x-20 bd-b-0">
-                            <div class="d-sm-flex align-items-center justify-content-between">
-                                <h6 class="mg-b-0">@(Model.CashDetail.ActionName)</h6>
-                                <p class="tx-12 tx-color-03 mg-b-0">@(Model.CashDetail.Date.Value.ToLongDateString())</p>
-                            </div>
-                        </div><!-- card-header -->
-                        <div class="card-body pd-20">
-                            <ul class="activity tx-13">
-                                
-                                @foreach (var item in Model.History)
-                                {
-                                    <li class="activity-item">
-                                        <div class="activity-icon @(item.ProcessType == "Insert" ? "bg-success-light tx-success": item.ProcessType == "Update" ? "bg-indigo-light tx-indigo" : "bg-pink-light tx-pink")">
-                                            <i data-feather="@(item.ProcessType == "Insert" ? "plus-circle" : item.ProcessType == "Update" ? "edit" : "trash-2")"></i>
-                                        </div>
-
-                                        <div class="activity-body">
-                                            <p class="mg-b-2"><strong>@item.ProcessType :</strong> @(item.ErrorMessage != "" ? Html.Raw($"<span clas='text-danger'>{item.ErrorMessage}</span>") : Html.Raw($"<span clas='text-black-50'>{item.ResultMessage}</span>")) <a href="" class="link-02"><strong>@item.FieldName</strong></a></p>
-                                            <small class="tx-color-03">@item.RecordDate.Value.ToLongDateString()</small>
-                                        </div>
-                                    </li>
-                                }
-
-
-                            </ul>
-                        </div>
-                    </div>
-                    @*<div class="card mg-b-20 mg-lg-b-25">
-                            <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                                <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.CashDetail.ActionName)</h6>
-                                <nav class="nav">
-                                    <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CashDetail.Date.Value.ToLongDateString())</span></a>
+    <div class="content-body">
+        <div class="pd-x-0 tx-13">
+            <div class="media d-block d-lg-flex">
+                <div class="media-body  mg-t-40 mg-lg-t-0">
+                        <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                            <div>
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                                        <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                                        <li class="breadcrumb-item active" aria-current="page">Kasa Nakit İşlemleri</li>
+                                    </ol>
                                 </nav>
-                            </div><!-- card-header -->
-                            <div class="card-body pd-0">
-                                <div class="table-responsive">
-                                    <table class="table table-primary table-hover table-striped mg-b-0">
-                                        <thead>
-                                            <tr class="table-active">
-                                                <th scope="col" style="width:3%;">#</th>
-                                                <th scope="col" style="width:5%;" class="text-center">Tarih</th>
-                                                <th scope="col" style="width:5%;" class="text-center">Ekleyen</th>
-                                                <th scope="col" style="width:5%;" class="text-center">FieldName</th>
-                                                <th scope="col" style="width:5%;" class="text-center">Eski Değer</th>
-                                                <th scope="col" style="width:5%;" class="text-center">Yeni Değer</th>
-                                                <th scope="col" style="width:15%;" class="text-center">Mesaj</th>
-                                                <th scope="col" style="width:15%;" class="text-center">Hata Mesaj</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-
-                                            @foreach (var item in Model.History)
-                                            {
-                                                <tr>
-
-                                                    <td class="text-center bold">@item.ID</td>
-                                                    <td class="text-center">@item.RecordDate.Value.ToShortDateString()</td>
-                                                    <td class="text-center">@item.RecordEmployee</td>
-                                                    <td class="text-center">@item.FieldName</td>
-                                                    <td class="text-center">@item.OldValue</td>
-                                                    <td class="text-center">@item.NewValue</td>
-                                                    <td class="text-center">@item.ResultMessage</td>
-                                                    <td class="text-center">@item.ErrorMessage</td>
-
-                                                </tr>
-                                            }
+                                <h4 class="mg-b-0 tx-spacing--1">Kasa Tahsilatı Detayı</h4>
+                            </div>
+                            <div class="d-none d-md-block">
+                                @{Html.RenderPartial("_PartialAddCashMenu");}
+                            </div>
+                        </div>
 
 
+                        @using (Html.BeginForm("EditCashCollection", "Cash", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="row row-xs">
+                                <div class="col-lg-6">
+                                    <div class="card mg-b-20 mg-lg-b-25">
+                                        <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                                            <h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.CashDetail.ActionName}"))</h6>
+                                            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
+                                            <input id="UID" name="UID" type="hidden" value="@(Model.CashDetail.UID)" />
+                                            <nav class="nav">
+                                                <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CashDetail.Date.Value.ToLongDateString())</span></a>
+                                            </nav>
+                                        </div><!-- card-header -->
+                                        <div class="card-body pd-20">
+                                            <form>
+                                                <div class="form-group row">
+                                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Kasa Tipi</label>
+                                                    <div class="col-sm-9">
+                                                        <span class="text-danger">@Model.CashDetail.ActionTypeName</span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Kasa</label>
+                                                    <div class="col-sm-9">
+                                                        <span class="text-danger">@Model.CashDetail.CashName</span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Döküman Nr</label>
+                                                    <div class="col-sm-9">
+                                                        <span class="text-danger">@Model.CashDetail.DocumentNumber</span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
+                                                    <div class="col-sm-9">
+                                                        <span class="text-danger">@Model.CashDetail.ReferenceID</span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="inputPassword3" class="col-sm-3 col-form-label">Kimden</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" id="FromID" name="FromID" required>
+                                                            @foreach (var item in Model.FromList)
+                                                            {
+                                                                <option value="@item.Code" @(Model.CashDetail.FromBankAccountID != null ? Model.CashDetail.FromBankAccountID == item.ID ? "selected" : "" : Model.CashDetail.FromCustomerID != null ? Model.CashDetail.FromCustomerID == item.ID ? "selected" : "" : Model.CashDetail.FromEmployeeID == item.ID ? "selected" : "")>@(Html.Raw($"{item.Name}"))</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="inputPassword3" class="col-sm-3 col-form-label">Lokasyon</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" id="LocationID" name="LocationID" required>
+                                                            @foreach (var item in Model.LocationList)
+                                                            {
+                                                                <option value="@item.LocationID" @(Model.CashDetail.LocationID == item.LocationID ? "selected" : "")>@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="inputPassword3" class="col-sm-3 col-form-label">Tutar</label>
+                                                    <div class="col-sm-9">
+                                                        <input id="Amount" name="Amount" type="text" class="form-control" value="@Model.CashDetail.Amount" placeholder="Tutar" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="inputPassword3" class="col-sm-3 col-form-label">Para Birimi</label>
+                                                    <div class="col-sm-9">
+                                                        <select class="form-control" id="Currency" name="Currency" required>
+                                                            @foreach (var item in Model.CurrencyList)
+                                                            {
+                                                                <option value="@item.Code" @(Model.CashDetail.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Kuru</label>
+                                                    <div class="col-sm-9">
+                                                        <span class="text-danger">@Model.CashDetail.ExchangeRate</span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Tutarı</label>
+                                                    <div class="col-sm-3">
+                                                        <span class="text-danger">@($"{Model.CashDetail.SystemAmount} {Model.CashDetail.SystemCurrency}")</span>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="inputPassword3" class="col-sm-3 col-form-label">Açıklama</label>
+                                                    <div class="col-sm-9">
+                                                        <textarea id="Description" name="Description" rows="4" class="form-control" value="@Model.CashDetail.Description" placeholder="Açıklama"></textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <div class="col-sm-3">Active?</div>
+                                                    <div class="col-sm-9">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" value="@Model.CashDetail.IsActive" checked="@Model.CashDetail.IsActive" class="custom-control-input">
+                                                            <label class="custom-control-label">Aktif mi?</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="form-group row mg-b-0">
+                                                    <div class="col-sm-3"></div>
+                                                    <div class="col-sm-9">
+                                                        @if (Model.CashDetail.IsActive == true)
+                                                        {
+                                                            <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                        }
 
-                                        </tbody>
-                                    </table>
+                                                    </div>
+                                                </div>
+	                                             
+                                                
+                                            </form>
+                                        </div>
+                                        <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
+                                            <nav class="nav nav-with-icon tx-13">
+                                                <a href="" class="nav-link"><i data-feather="user-plus"></i> @(Html.Raw($"{Model.CashDetail.RecorderFullName}"))</a>
+                                                <a href="" class="nav-link"><i data-feather="calendar"></i> @(Html.Raw($"{Model.CashDetail.RecordDate.Value.ToLongDateString()}"))</a>
+                                                <a href="" class="nav-link"><i data-feather="user-check"></i> @(Html.Raw($"{Model.CashDetail.UpdaterFullName}"))</a>
+                                            </nav>
+                                        </div><!-- card-footer -->
+                                    </div><!-- card -->
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="card">
+                                        <div class="card-header pd-b-0 pd-x-20 bd-b-0">
+                                            <div class="d-sm-flex align-items-center justify-content-between">
+                                                <h6 class="mg-b-0">@(Model.CashDetail.ActionName)</h6>
+                                                <p class="tx-12 tx-color-03 mg-b-0">@(Model.CashDetail.Date.Value.ToLongDateString())</p>
+                                            </div>
+                                        </div><!-- card-header -->
+                                        <div class="card-body pd-20">
+                                            <ul class="activity tx-13">
+
+                                                @foreach (var item in Model.History)
+                                                {
+                                                    <li class="activity-item">
+                                                        <div class="activity-icon @(item.ProcessType == "Insert" ? "bg-success-light tx-success": item.ProcessType == "Update" ? "bg-indigo-light tx-indigo" : "bg-pink-light tx-pink")">
+                                                            <i data-feather="@(item.ProcessType == "Insert" ? "plus-circle" : item.ProcessType == "Update" ? "edit" : "trash-2")"></i>
+                                                        </div>
+
+                                                        <div class="activity-body">
+                                                            <p class="mg-b-2"><strong>@item.ProcessType :</strong> @(item.ErrorMessage != "" ? Html.Raw($"<span class='text-danger'>{item.ErrorMessage}</span>") : Html.Raw($"<span class='text-black-50'>{item.ResultMessage}</span>"))</p>
+                                                            <small class="tx-color-03">@(Html.Raw($"{item.RecordDate.Value.ToLongDateString()} {item.RecordDate.Value.ToLongTimeString()} {item.RecordEmployee}"))</small>
+                                                        </div>
+                                                    </li>
+                                                }
+
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-
-                            <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
-                                <nav class="nav nav-with-icon tx-13">
-                                    <a href="" class="nav-link"><i data-feather="user"></i> @(Html.Raw($"{Model.CashDetail.RecorderFullName}"))</a>
-                                    <a href="" class="nav-link"><i data-feather="date"></i> @(Html.Raw($"{Model.CashDetail.RecordDate.Value.ToLongDateString()}"))</a>
-                                    <a href="" class="nav-link"><i data-feather="user"></i> @(Html.Raw($"{Model.CashDetail.UpdaterFullName}"))</a>
-                                </nav>
-                            </div><!-- card-footer -->
-                        </div>*@
+                        }
                 </div>
             </div>
-
-        }
+        </div>
     </div>
-</div>
 
-
-@section canvasmenu {
-    @{Html.RenderPartial("_PartialDocumentForms", Model);}
-}
-
-@section scripts {
-    <script src="/lib/cleave.js/cleave.min.js"></script>
-    <script>
-
-        $(function () {
-            'use strict'
-            $('.select2').select2({
-                placeholder: 'Lokasyon Seçiminiz',
-                searchInputPlaceholder: 'Search options'
-            });
-
-            var dateFormat = 'yy-mm-dd',
-                from = $('#dateFrom')
-                    .datepicker({
-                        defaultDate: '+1w',
-                        numberOfMonths: 2,
-                        dateFormat: "yy-mm-dd",
-                        dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                        monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                        firstDay: 1
-                    })
-                    .on('change', function () {
-                        to.datepicker('option', 'minDate', getDate(this));
-                    }),
-                to = $('#dateTo').datepicker({
-                    defaultDate: '+1w',
-                    numberOfMonths: 2,
-                    dateFormat: "yy-mm-dd",
-                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                    firstDay: 1
-                })
-                    .on('change', function () {
-                        from.datepicker('option', 'maxDate', getDate(this));
-                    });
-
-            $('#DocumentDate').datepicker({
-                dateFormat: "yy-mm-dd",
-                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                firstDay: 1
-            });
-
-            var cleaveC = new Cleave('#DocumentDate', {
-                date: true,
-                delimiter: '-',
-                datePattern: ['Y', 'm', 'd'],
-
-            });
-            //var cleave = new Cleave('#Amount', {
-            //    numeral: true
-            //});
-            var cleave2 = new Cleave('#Exchange', {
-                numeral: true
-            });
-            function getDate(element) {
-                var date;
-                try {
-                    date = $.datepicker.parseDate(dateFormat, element.value);
-                } catch (error) {
-                    date = null;
-                }
-
-                return date;
-
+            @section canvasmenu {
+                @{Html.RenderPartial("_PartialDocumentForms", Model);}
             }
 
-        });
+            @section scripts {
+                <script src="/lib/cleave.js/cleave.min.js"></script>
+                <script>
+
+                    $(function () {
+                        'use strict'
+                        $('.select2').select2({
+                            placeholder: 'Lokasyon Seçiminiz',
+                            searchInputPlaceholder: 'Search options'
+                        });
+
+                        var dateFormat = 'yy-mm-dd',
+                            from = $('#dateFrom')
+                                .datepicker({
+                                    defaultDate: '+1w',
+                                    numberOfMonths: 2,
+                                    dateFormat: "yy-mm-dd",
+                                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                                    firstDay: 1
+                                })
+                                .on('change', function () {
+                                    to.datepicker('option', 'minDate', getDate(this));
+                                }),
+                            to = $('#dateTo').datepicker({
+                                defaultDate: '+1w',
+                                numberOfMonths: 2,
+                                dateFormat: "yy-mm-dd",
+                                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                                firstDay: 1
+                            })
+                                .on('change', function () {
+                                    from.datepicker('option', 'maxDate', getDate(this));
+                                });
+
+                        $('#DocumentDate').datepicker({
+                            dateFormat: "yy-mm-dd",
+                            dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                            monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                            firstDay: 1
+                        });
+
+                        var cleaveC = new Cleave('#DocumentDate', {
+                            date: true,
+                            delimiter: '-',
+                            datePattern: ['Y', 'm', 'd'],
+
+                        });
+                        //var cleave = new Cleave('#Amount', {
+                        //    numeral: true
+                        //});
+                        var cleave2 = new Cleave('#Exchange', {
+                            numeral: true
+                        });
+                        function getDate(element) {
+                            var date;
+                            try {
+                                date = $.datepicker.parseDate(dateFormat, element.value);
+                            } catch (error) {
+                                date = null;
+                            }
+
+                            return date;
+
+                        }
+
+                    });
 
 
 
 
 
-    </script>
-    <script>
+                </script>
+                <script>
 
 
-        $(function () {
-            'use strict'
+                    $(function () {
+                        'use strict'
 
-            $('.off-canvas-menu').on('click', function (e) {
-                e.preventDefault();
-                var target = $(this).attr('href');
-                $(target).addClass('show');
-            });
-
-
-            $('.off-canvas .close').on('click', function (e) {
-                e.preventDefault();
-                $(this).closest('.off-canvas').removeClass('show');
-            })
-
-            $(document).on('click touchstart', function (e) {
-                e.stopPropagation();
-
-                if (!$(e.target).closest('.off-canvas-menu').length) {
-                    var offCanvas = $(e.target).closest('.off-canvas').length;
-                    if (!offCanvas) {
-                        $('.off-canvas.show').addClass('show');
-                    }
-                }
-            });
+                        $('.off-canvas-menu').on('click', function (e) {
+                            e.preventDefault();
+                            var target = $(this).attr('href');
+                            $(target).addClass('show');
+                        });
 
 
-        });
-    </script>
-    @if (Model.Result != null) //
-    {
-        <script type="text/javascript">
+                        $('.off-canvas .close').on('click', function (e) {
+                            e.preventDefault();
+                            $(this).closest('.off-canvas').removeClass('show');
+                        })
+
+                        $(document).on('click touchstart', function (e) {
+                            e.stopPropagation();
+
+                            if (!$(e.target).closest('.off-canvas-menu').length) {
+                                var offCanvas = $(e.target).closest('.off-canvas').length;
+                                if (!offCanvas) {
+                                    $('.off-canvas.show').addClass('show');
+                                }
+                            }
+                        });
+
+
+                    });
+                </script>
+                @if (Model.Result != null) //
+                {
+                    <script type="text/javascript">
         $.toast({
             heading: 'Information',
             text: '@Model.Result.Message ',
@@ -420,6 +323,6 @@
             hideAfter: 5000,
             position: 'bottom-right',
         });
-        </script>
-    }
-}
+                    </script>
+                }
+            }

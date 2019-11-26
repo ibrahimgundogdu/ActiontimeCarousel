@@ -9,14 +9,10 @@
 
 <div class="content-header">
     <div class="content-search">
-        <i data-feather="search"></i>
-        <input id="SearchKey" type="search" class="form-control" placeholder="Arama..." aria-controls="example2">
+        <span class="tx-20">Kasa Açılış Fişi</span>
     </div>
     <nav class="nav">
-        <select class="custom-select bg-light btn-xs" id="CurrentCompany">
-            <option value="1" @(Model.Authentication.ActionEmployee.OurCompanyID == 1 ? "selected" : "")>UFE Group USA</option>
-            <option value="2" @(Model.Authentication.ActionEmployee.OurCompanyID == 2 ? "selected" : "")>UFE Grup  TUR</option>
-        </select>
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
     </nav>
 </div>
 <div class="content-body">

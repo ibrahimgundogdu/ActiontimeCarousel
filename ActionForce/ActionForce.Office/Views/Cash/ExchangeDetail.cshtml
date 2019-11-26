@@ -1,0 +1,325 @@
+﻿@model CashControlModel
+@{
+    ViewBag.Title = "Kasa Tahsilat";
+}
+
+@section style{
+    <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
+}
+
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">Döviz Satış Detay</span>
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div>
+<div class="content-body">
+    <div class="pd-x-0 tx-13">
+        <div class="media d-block d-lg-flex">
+            <div class="media-body  mg-t-40 mg-lg-t-0">
+                <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                    <div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                                <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Kasa Nakit İşlemleri</li>
+                            </ol>
+                        </nav>
+                        <h4 class="mg-b-0 tx-spacing--1">Döviz Satış Detayı</h4>
+                    </div>
+                    <div class="d-none d-md-block">
+                        @{Html.RenderPartial("_PartialAddCashMenu");}
+                    </div>
+                </div>
+
+
+                @using (Html.BeginForm("EditCashExchange", "Cash", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="row row-xs">
+                        <div class="col-lg-6">
+                            <div class="card mg-b-20 mg-lg-b-25">
+                                <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                                    @*<h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.ExchangeDetail.ActionName}"))</h6>*@
+                                    <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="25" />
+                                    <input id="UID" name="UID" type="hidden" value="@(Model.ExchangeDetail.UID)" />
+                                    <nav class="nav">
+                                        <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.ExchangeDetail.Date.Value.ToLongDateString())</span></a>
+                                    </nav>
+                                </div><!-- card-header -->
+                                <div class="card-body pd-20">
+                                    <form>
+                                        <div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Kasa Tipi</label>
+                                            <div class="col-sm-9">
+                                                <span class="text-danger">@Model.ExchangeDetail.ActionTypeName</span>
+                                            </div>
+                                        </div>
+                                        @*<div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Kasa</label>
+                                            <div class="col-sm-9">
+                                                <span class="text-danger">@Model.ExchangeDetail.CashName</span>
+                                            </div>
+                                        </div>*@
+                                        <div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Döküman Nr</label>
+                                            <div class="col-sm-9">
+                                                <span class="text-danger">@Model.ExchangeDetail.DocumentNumber</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
+                                            <div class="col-sm-9">
+                                                <span class="text-danger">@Model.ExchangeDetail.ReferenceID</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Lokasyon</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" id="LocationID" name="LocationID" required>
+                                                    @foreach (var item in Model.LocationList)
+                                                    {
+                                                        <option value="@item.LocationID" @(Model.ExchangeDetail.LocationID == item.LocationID ? "selected" : "")>@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Tutar</label>
+                                            <div class="col-sm-9">
+                                                <input id="Amount" name="Amount" type="text" class="form-control" value="@Model.ExchangeDetail.Amount" placeholder="Tutar" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Para Birimi</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" id="Currency" name="Currency" required>
+                                                    @foreach (var item in Model.CurrencyList)
+                                                    {
+                                                        <option value="@item.Code" @(Model.ExchangeDetail.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Kuru</label>
+                                            <div class="col-sm-9">
+                                                <span class="text-danger">@Model.ExchangeDetail.ExchangeRate</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Tutarı</label>
+                                            <div class="col-sm-3">
+                                                <span class="text-danger">@($"{Model.ExchangeDetail.ToAmount} {Model.ExchangeDetail.ToCurrency}")</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Açıklama</label>
+                                            <div class="col-sm-9">
+                                                <textarea id="Description" name="Description" rows="4" class="form-control" value="@Model.ExchangeDetail.Description" placeholder="Açıklama"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Dekont</label>
+                                            <div class="col-sm-9">
+                                                <input type="file" name="documentFile" id="documentFile" value="@Model.ExchangeDetail.SlipDocument" style="width: 100%;" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col-sm-3">Active?</div>
+                                            <div class="col-sm-9">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" value="@Model.ExchangeDetail.IsActive" checked="@Model.ExchangeDetail.IsActive" class="custom-control-input">
+                                                    <label class="custom-control-label">Aktif mi?</label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row mg-b-0">
+                                            <div class="col-sm-3"></div>
+                                            <div class="col-sm-9">
+                                                @if (Model.ExchangeDetail.IsActive == true)
+                                                {
+                                                    <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                }
+
+                                            </div>
+                                        </div>
+
+
+                                    </form>
+                                </div>
+                                <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
+                                    <nav class="nav nav-with-icon tx-13">
+                                        <a href="" class="nav-link"><i data-feather="user-plus"></i> @(Html.Raw($"{Model.ExchangeDetail.RecorderFullName}"))</a>
+                                        <a href="" class="nav-link"><i data-feather="calendar"></i> @(Html.Raw($"{Model.ExchangeDetail.RecordDate.Value.ToLongDateString()}"))</a>
+                                        <a href="" class="nav-link"><i data-feather="user-check"></i> @(Html.Raw($"{Model.ExchangeDetail.UpdaterFullName}"))</a>
+                                    </nav>
+                                </div><!-- card-footer -->
+                            </div><!-- card -->
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="card">
+                                <div class="card-header pd-b-0 pd-x-20 bd-b-0">
+                                    <div class="d-sm-flex align-items-center justify-content-between">
+                                        @*<h6 class="mg-b-0">@(Model.ExchangeDetail.ActionName)</h6>*@
+                                        <p class="tx-12 tx-color-03 mg-b-0">@(Model.ExchangeDetail.Date.Value.ToLongDateString())</p>
+                                    </div>
+                                </div><!-- card-header -->
+                                <div class="card-body pd-20">
+                                    <ul class="activity tx-13">
+
+                                        @foreach (var item in Model.History)
+                                        {
+                                            <li class="activity-item">
+                                                <div class="activity-icon @(item.ProcessType == "Insert" ? "bg-success-light tx-success": item.ProcessType == "Update" ? "bg-indigo-light tx-indigo" : "bg-pink-light tx-pink")">
+                                                    <i data-feather="@(item.ProcessType == "Insert" ? "plus-circle" : item.ProcessType == "Update" ? "edit" : "trash-2")"></i>
+                                                </div>
+
+                                                <div class="activity-body">
+                                                    <p class="mg-b-2"><strong>@item.ProcessType :</strong> @(item.ErrorMessage != "" ? Html.Raw($"<span class='text-danger'>{item.ErrorMessage}</span>") : Html.Raw($"<span class='text-black-50'>{item.ResultMessage}</span>"))</p>
+                                                    <small class="tx-color-03">@(Html.Raw($"{item.RecordDate.Value.ToLongDateString()} {item.RecordDate.Value.ToLongTimeString()} {item.RecordEmployee}"))</small>
+                                                </div>
+                                            </li>
+                                        }
+
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section canvasmenu {
+    @{Html.RenderPartial("_PartialDocumentForms", Model);}
+}
+
+@section scripts {
+    <script src="/lib/cleave.js/cleave.min.js"></script>
+    <script>
+
+                    $(function () {
+                        'use strict'
+                        $('.select2').select2({
+                            placeholder: 'Lokasyon Seçiminiz',
+                            searchInputPlaceholder: 'Search options'
+                        });
+
+                        var dateFormat = 'yy-mm-dd',
+                            from = $('#dateFrom')
+                                .datepicker({
+                                    defaultDate: '+1w',
+                                    numberOfMonths: 2,
+                                    dateFormat: "yy-mm-dd",
+                                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                                    firstDay: 1
+                                })
+                                .on('change', function () {
+                                    to.datepicker('option', 'minDate', getDate(this));
+                                }),
+                            to = $('#dateTo').datepicker({
+                                defaultDate: '+1w',
+                                numberOfMonths: 2,
+                                dateFormat: "yy-mm-dd",
+                                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                                firstDay: 1
+                            })
+                                .on('change', function () {
+                                    from.datepicker('option', 'maxDate', getDate(this));
+                                });
+
+                        $('#DocumentDate').datepicker({
+                            dateFormat: "yy-mm-dd",
+                            dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                            monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                            firstDay: 1
+                        });
+
+                        var cleaveC = new Cleave('#DocumentDate', {
+                            date: true,
+                            delimiter: '-',
+                            datePattern: ['Y', 'm', 'd'],
+
+                        });
+                        //var cleave = new Cleave('#Amount', {
+                        //    numeral: true
+                        //});
+                        var cleave2 = new Cleave('#Exchange', {
+                            numeral: true
+                        });
+                        function getDate(element) {
+                            var date;
+                            try {
+                                date = $.datepicker.parseDate(dateFormat, element.value);
+                            } catch (error) {
+                                date = null;
+                            }
+
+                            return date;
+
+                        }
+
+                    });
+
+
+
+
+
+    </script>
+    <script>
+
+
+                    $(function () {
+                        'use strict'
+
+                        $('.off-canvas-menu').on('click', function (e) {
+                            e.preventDefault();
+                            var target = $(this).attr('href');
+                            $(target).addClass('show');
+                        });
+
+
+                        $('.off-canvas .close').on('click', function (e) {
+                            e.preventDefault();
+                            $(this).closest('.off-canvas').removeClass('show');
+                        })
+
+                        $(document).on('click touchstart', function (e) {
+                            e.stopPropagation();
+
+                            if (!$(e.target).closest('.off-canvas-menu').length) {
+                                var offCanvas = $(e.target).closest('.off-canvas').length;
+                                if (!offCanvas) {
+                                    $('.off-canvas.show').addClass('show');
+                                }
+                            }
+                        });
+
+
+                    });
+    </script>
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}
+
