@@ -223,8 +223,8 @@ namespace ActionForce.Office
 
         public static Exchange GetExchange(DateTime date)
         {
-            DateTime processDate = date;
-            DateTime filterDate = date;
+            DateTime processDate = date.Date;
+            DateTime filterDate = date.Date;
 
             if (DateTime.UtcNow.Hour >= 12 && DateTime.UtcNow.Minute > 0)
             {

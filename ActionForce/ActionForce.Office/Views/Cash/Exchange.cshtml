@@ -106,7 +106,7 @@
                         <td class="tx-sm-13 text-right"><a href="@("/Cash/ExchangeDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
                         @if (item.IsActive == true)
                         {
-                            <td class="tx-sm-13 text-right"><a href="/Cash/Exchange" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} tutarlı döviz satışı iptal etmek istediğine emin misin?')"))) DeleteCashExchange(@item.ID)"><i data-feather="trash-2"></i></a></td>
+                            <td class="tx-sm-13 text-right"><a href="/Cash/Exchange" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} döviz satışı iptal etmek istediğine emin misin?')"))) DeleteCashExchange(@item.ID)"><i data-feather="trash-2"></i></a></td>
                         }
 
                     </tr>
@@ -199,9 +199,7 @@
             }
 
         });
-
-
-
+        
         function DeleteCashExchange(id) {
             $.ajax({
                 method: "GET",
@@ -210,9 +208,8 @@
             }).done(function (d) {
                 $("#DeleteCashExchange").html(d);
             });
-
-        
-
+        }
+            
     </script>
     <script>
             $(function () {

@@ -2432,7 +2432,6 @@
     <Content Include="Views\Bank\PosCancel.cshtml" />
     <Content Include="Views\Bank\_PartialDocumentForms.cshtml" />
     <Content Include="Views\Bank\PosRefund.cshtml" />
-    <Content Include="Views\Cash\_PartialCashDetail.cshtml" />
     <Content Include="Views\Schedule\Employee.cshtml" />
     <Content Include="Views\Schedule\Index.cshtml" />
     <Content Include="Views\Schedule\Location.cshtml" />
@@ -2444,6 +2443,10 @@
     <Content Include="Views\Schedule\_PartialAddEmployeeSchedule.cshtml" />
     <Content Include="Views\Cash\SaleDetail.cshtml" />
     <Content Include="Views\Cash\ExchangeDetail.cshtml" />
+    <Content Include="Views\Cash\OpenDetail.cshtml" />
+    <Content Include="Views\Cash\CashPaymentDetail.cshtml" />
+    <Content Include="Views\Cash\PaymentDetail.cshtml" />
+    <Content Include="Views\Cash\ExpenseDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
