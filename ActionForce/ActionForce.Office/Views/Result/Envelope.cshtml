@@ -60,13 +60,12 @@
                                         <th>#</th>
                                         <th>Lokasyon</th>
                                         <th>Tarih</th>
+                                        <th>Takvim</th>
+                                        <th>Mesai</th>
                                         <th>Aşama</th>
                                         <th>Durum</th>
-                                        <th>Kaynak</th>
                                         <th>Kaydeden</th>
                                         <th>K.Tarihi</th>
-                                        <th>Güncelleyen</th>
-                                        <th>G.Tarihi</th>
                                         <th>Açıklama</th>
                                         <th>Aktif</th>
                                         <th></th>
@@ -76,25 +75,36 @@
 
                                     @foreach (var location in Model.LocationList)
                                     {
-                                        var dayresult = Model.DayResultList.FirstOrDefault(x=> x.LocationID == location.LocationID);
+                                        var dayresult = Model.DayResultList.FirstOrDefault(x => x.LocationID == location.LocationID);
+                                        var schedule = Model.LocationScheduleList.FirstOrDefault(x => x.LocationID == location.LocationID);
+                                        var shift = Model.LocationShiftList.FirstOrDefault(x => x.LocationID == location.LocationID);
 
-                                    <tr>
+                                        <tr>
 
-                                        <td class="tx-sm-13 bold">@location.SortBy</td>
-                                        <td class="tx-sm-13 bg-primary-light font-weight-bold">@($"{location.LocationName} {location.Description} {location.State}")</td>
-                                        <td class="tx-sm-13 bg-primary-light font-weight-bold">@(dayresult?.Date.ToShortDateString())</td>
-                                        <td class="tx-sm-13">@(dayresult?.StateName)</td>
-                                        <td class="tx-sm-13">@(dayresult?.StatusName)</td>
-                                        <td class="tx-sm-13">@(dayresult?.Environment)</td>
-                                        <td class="tx-sm-13">@(dayresult?.RecorderFullName)</td>
-                                        <td class="tx-sm-13">@(dayresult?.RecordDate)</td>
-                                        <td class="tx-sm-13">@(dayresult?.UpdaterFullName)</td>
-                                        <td class="tx-sm-13">@(dayresult?.UpdateDate)</td>
-                                        <td class="tx-sm-13">@(dayresult?.Description)</td>
-                                        <td class="tx-sm-13">@(dayresult?.IsActive)</td>
-                                        <td class="tx-sm-13"><a href="/Result/ExportToExcel" class="@(dayresult != null ? "active":"")"><i data-feather="mail"></i></a></td>
+                                            <td class="tx-sm-13 bold">@location.SortBy</td>
+                                            <td class="tx-sm-13 bg-primary-light font-weight-bold">@($"{location.LocationName} {location.Description} {location.State}")</td>
+                                            <td class="tx-sm-13 bg-primary-light font-weight-bold">@(dayresult?.Date.ToShortDateString())</td>
+                                            <td class="tx-sm-13 bg-primary-light font-weight-bold">@(schedule?.ShiftDateStart != null ? schedule?.ShiftDateStart.Value.ToString("HH\\:mm") : "") @(schedule?.ShiftdateEnd != null ? " - " + schedule?.ShiftdateEnd.Value.ToString("HH\\:mm") : "")</td>
+                                            <td class="tx-sm-13 bg-primary-light font-weight-bold">@(shift?.ShiftDateStart != null ? shift?.ShiftDateStart.Value.ToString("HH\\:mm") : "") @(shift?.ShiftDateFinish != null ? " - " + shift?.ShiftDateFinish.Value.ToString("HH\\:mm") : "")</td>
+                                            <td class="tx-sm-13 bg-light font-weight-bold">@(dayresult?.StateName)</td>
+                                            <td class="tx-sm-13">@(dayresult?.StatusName)</td>
+                                            <td class="tx-sm-13">@(dayresult?.RecorderFullName)</td>
+                                            <td class="tx-sm-13">@(dayresult?.RecordDate)</td>
+                                            <td class="tx-sm-13">@(dayresult?.Description)</td>
+                                            <td class="tx-sm-13">@(dayresult?.IsActive)</td>
+                                            <td class="tx-sm-13">
+                                                @if (schedule?.DurationMinute != null && shift?.DurationMinute != null && dayresult == null)
+                                                {
+                                                    <a href="/Result/New?locationid=@(location.LocationID)&date=@(Model.CurrentDateCode)" class="active"><i data-feather="mail"></i></a>
 
-                                    </tr>
+                                                }
+                                                else if (dayresult != null)
+                                                {
+
+                                                    <a href="/Result/Detail" class="@(dayresult != null ? "active":"") text-dark color-green"><i data-feather="mail"></i></a>
+                                                }
+                                            </td>
+                                        </tr>
                                     }
 
                                 </tbody>
@@ -162,7 +172,7 @@
 
         });
 
-       
+
 
     </script>
 

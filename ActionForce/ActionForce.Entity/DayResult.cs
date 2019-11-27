@@ -37,6 +37,7 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public string RecordIP { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<DayResultItemList> DayResultItemList { get; set; }

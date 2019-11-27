@@ -38,6 +38,8 @@ namespace ActionForce.Office.Controllers
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.LocationScheduleList = Db.VLocationSchedule.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.ShiftDate == datekey.DateKey && x.StatusID == 2).ToList();
+            model.LocationShiftList = Db.VLocationShift.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.ShiftDate == datekey.DateKey).ToList();
 
             model.DayResultList = Db.VDayResult.Where(x => x.Date == datekey.DateKey).ToList();
 
@@ -45,86 +47,68 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult New()
+        public ActionResult New(string id, int? locationID, string date)
         {
             ResultControlModel model = new ResultControlModel();
 
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            if ((locationID > 0 && !string.IsNullOrEmpty(date)) || !string.IsNullOrEmpty(id))
+            {
+                var _date = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
 
+                DateTime.TryParse(date, out _date);
+
+                var currentResult = Db.VDayResult.FirstOrDefault(x => x.UID.ToString() == id || (x.LocationID  == locationID && x.Date == _date));
+
+                if (currentResult != null)
+                {
+                    // yönlendir
+                    return RedirectToAction("Detail", new { id = currentResult.UID.ToString() });
+                }
+                else
+                {
+                    // oluştur ve yönlendir.
+
+                    DayResult dayresult = new DayResult();
+
+                    dayresult.Date = _date;
+                    dayresult.EnvironmentID = 2;
+                    dayresult.IsActive = true;
+                    dayresult.IsMobile = false;
+                    dayresult.LocationID = locationID.Value;
+                    dayresult.RecordDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+                    dayresult.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    dayresult.RecordIP = OfficeHelper.GetIPAddress();
+                    dayresult.StateID = 1;
+                    dayresult.StatusID = null;
+                    dayresult.UID = Guid.NewGuid();
+
+                    Db.DayResult.Add(dayresult);
+                    Db.SaveChanges();
+
+                    // Itemleri ekle
+                    var result = OfficeHelper.AddItemsToResultEnvelope(dayresult.ID);
+                    
+
+
+
+
+
+
+                    return RedirectToAction("Detail", new { id = dayresult.UID.ToString() });
+                }
+
+            }
             return View(model);
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult CheckNew(int? locationId, DateTime? resultDate)
-        {
-            ResultFilterModel model = new ResultFilterModel();
-
-            model.LocationID = locationId;
-            model.ResultDate = resultDate;
-
-            if (resultDate == null)
-            {
-                model.ResultDate = DateTime.Now.Date;
-            }
-
-            var isExists = Db.DayResult.FirstOrDefault(x => x.LocationID == model.LocationID && x.Date == model.ResultDate);
-
-            if (isExists != null)
-            {
-                model.ResultID = isExists.ID;
-                TempData["filter"] = model;
-                return RedirectToAction("Edit", "Result",new {id = model.ResultID });
-            }
-            else
-            {
-                TempData["filter"] = model;
-                return RedirectToAction("Add", "Result");
-            }
-        }
 
         [AllowAnonymous]
-        public ActionResult Add()
-        {
-            ResultControlModel model = new ResultControlModel();
-            ResultFilterModel filtermodel = new ResultFilterModel();
-
-            if (TempData["filter"] != null)
-            {
-                filtermodel = TempData["filter"] as ResultFilterModel;
-            }
-
-            model.CurrentDayResult = Db.VDayResult.FirstOrDefault(x => x.LocationID == filtermodel.LocationID && x.Date == filtermodel.ResultDate);
-            if (model.CurrentDayResult != null)
-            {
-                model.DayResult = Db.DayResult.FirstOrDefault(x => x.ID == model.CurrentDayResult.ID);
-            }
-
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-
-            return View(model);
-        }
-
-        [AllowAnonymous]
-        public ActionResult Edit(int id)
+        public ActionResult Detail(string id)
         {
             ResultControlModel model = new ResultControlModel();
 
-            model.CurrentDayResult = Db.VDayResult.FirstOrDefault(x => x.ID == id);
-            model.DayResult = Db.DayResult.FirstOrDefault(x => x.ID == id);
-
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-
-            return View(model);
-        }
-
-        [AllowAnonymous]
-        public ActionResult Detail(int id)
-        {
-            ResultControlModel model = new ResultControlModel();
-
-            model.CurrentDayResult = Db.VDayResult.FirstOrDefault(x => x.ID == id);
-            model.DayResult = Db.DayResult.FirstOrDefault(x => x.ID == id);
+            model.CurrentDayResult = Db.VDayResult.FirstOrDefault(x => x.UID.ToString() == id);
+            model.DayResult = Db.DayResult.FirstOrDefault(x => x.UID.ToString() == id);
 
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 

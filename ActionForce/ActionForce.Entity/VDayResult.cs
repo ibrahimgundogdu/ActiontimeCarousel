@@ -37,5 +37,6 @@ namespace ActionForce.Entity
         public string UpdaterFullName { get; set; }
         public string RecorderFullName { get; set; }
         public string Environment { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
     }
 }

@@ -14,6 +14,8 @@ namespace ActionForce.Office
         public IEnumerable<VDayResult> DayResultList { get; set; }
         public IEnumerable<Cash> CashList { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
+        public IEnumerable<VLocationSchedule> LocationScheduleList { get; set; }
+        public IEnumerable<VLocationShift> LocationShiftList { get; set; }
         public IEnumerable<FromAccountModel> FromList { get; set; }
         public IEnumerable<Currency> CurrencyList { get; set; }
 

@@ -630,6 +630,9 @@
     <Compile Include="VLocationSchedule.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VLocationShift.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VSchedule.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

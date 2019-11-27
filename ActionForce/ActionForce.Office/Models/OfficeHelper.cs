@@ -86,19 +86,19 @@ namespace ActionForce.Office
                     {
                         foreach (var item in differents)
                         {
-                            db.AddApplicationLog(environment, module, processType, processId, controller, action, item.TableName, item.FieldName, item.OldValue, item.NewValue, isSuccess, resultMessage, errorMessage, recordDate, recordEmployee, recordIP, recordDevice,data);
+                            db.AddApplicationLog(environment, module, processType, processId, controller, action, item.TableName, item.FieldName, item.OldValue, item.NewValue, isSuccess, resultMessage, errorMessage, recordDate, recordEmployee, recordIP, recordDevice, data);
                         }
                     }
                     else
                     {
-                        db.AddApplicationLog(environment, module, processType, processId, controller, action, string.Empty, string.Empty, string.Empty, string.Empty, isSuccess, resultMessage, errorMessage, recordDate, recordEmployee, recordIP, recordDevice,data);
+                        db.AddApplicationLog(environment, module, processType, processId, controller, action, string.Empty, string.Empty, string.Empty, string.Empty, isSuccess, resultMessage, errorMessage, recordDate, recordEmployee, recordIP, recordDevice, data);
 
                     }
 
                 }
                 else
                 {
-                    db.AddApplicationLog(environment, module, processType, processId, controller, action, string.Empty, string.Empty, string.Empty, string.Empty, isSuccess, resultMessage, errorMessage, recordDate, recordEmployee, recordIP, recordDevice,data);
+                    db.AddApplicationLog(environment, module, processType, processId, controller, action, string.Empty, string.Empty, string.Empty, string.Empty, isSuccess, resultMessage, errorMessage, recordDate, recordEmployee, recordIP, recordDevice, data);
 
                 }
             }
@@ -124,6 +124,7 @@ namespace ActionForce.Office
 
             return fromList;
         }
+
         public static IEnumerable<FromAccountModel> GetToList(int ourCompanyID)
         {
 
@@ -144,6 +145,7 @@ namespace ActionForce.Office
 
             return fromList;
         }
+
         public static IEnumerable<FromAccountModel> GetPersonList(int ourCompanyID)
         {
 
@@ -164,6 +166,7 @@ namespace ActionForce.Office
 
             return fromList;
         }
+
         public static IEnumerable<Currency> GetCurrency()
         {
             List<Currency> currList = new List<Currency>();
@@ -227,7 +230,7 @@ namespace ActionForce.Office
             {
                 processDate = date.AddDays(1).Date;
             }
-            
+
 
             using (ActionTimeEntities db = new ActionTimeEntities())
             {
@@ -241,7 +244,7 @@ namespace ActionForce.Office
                 {
                     var datekey = db.DateList.FirstOrDefault(x => x.DateKey == processDate);
 
-                    if (datekey.DayName == "Saturday" || datekey.DayName =="Sunday")
+                    if (datekey.DayName == "Saturday" || datekey.DayName == "Sunday")
                     {
                         filterDate = db.DateList.FirstOrDefault(x => x.Year == datekey.Year && x.WeekNumber == datekey.WeekNumber && x.DayName == "Friday").DateKey;
                     }
@@ -283,6 +286,7 @@ namespace ActionForce.Office
                 db.AddCashAction(CashID, LocationID, EmployeeID, CashActionTypeID, ActionDate, ProcessName, ProcessID, ProcessDate, DocumentNumber, Description, Direction, Collection, Payment, Currency, Latitude, Longitude, RecordEmployeeID, RecordDate);
             }
         }
+
         public static void AddBankAction(int? LocationID, int? EmployeeID, int? BankAccountID, int? PosID, int? BankActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? RecordEmployeeID, DateTime? RecordDate)
         {
             using (ActionTimeEntities db = new ActionTimeEntities())
@@ -290,6 +294,7 @@ namespace ActionForce.Office
                 db.AddBankAction(LocationID, EmployeeID, BankAccountID, PosID, BankActionTypeID, ActionDate, ProcessName, ProcessID, ProcessDate, DocumentNumber, Description, Direction, Collection, Payment, Currency, Latitude, Longitude, RecordEmployeeID, RecordDate);
             }
         }
+
         public static void AddEmployeeAction(int? EmployeeID, int? ActionTypeID, string ProcessName, long? ProcessID, DateTime? ProcessDate, string ProcessDetail, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? SalaryTypeID, int? RecordEmployeeID, DateTime? RecordDate)
         {
             using (ActionTimeEntities db = new ActionTimeEntities())
@@ -297,6 +302,7 @@ namespace ActionForce.Office
                 db.AddEmployeeAction(EmployeeID, ActionTypeID, ProcessName, ProcessID, ProcessDate, ProcessDetail, Direction, Collection, Payment, Currency, Latitude, Longitude, SalaryTypeID, RecordEmployeeID, RecordDate);
             }
         }
+
         public static void UpdateCashAction(int? CashID, int? LocationID, int? EmployeeID, int? CashActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? RecordEmployeeID, DateTime? RecordDate, int? UpdateEmployeeID, DateTime? UpdateDate)
         {
             using (ActionTimeEntities db = new ActionTimeEntities())
@@ -305,5 +311,860 @@ namespace ActionForce.Office
             }
         }
 
+        public static Result<DayResult> AddItemsToResultEnvelope(long? id)
+        {
+
+            // ID Module  Category ItemName
+            //1   Cash NULL    Kasa Tahsilatı
+            //2   Cash NULL    Kasa Satışı
+            //3   Cash NULL    Döviz Satışı
+            //4   Cash NULL    Kasa Ödemesi
+            //5   Cash NULL    Kasa Satış İadesi
+            //6   Cash NULL    Kasadan Masraf Ödemesi
+            //7   Cash NULL    Havale / EFT
+            //8   Cash NULL    Maaş Hakedişi
+            //9   Cash NULL    Maaş / Avans Ödemesi
+            //10  Bank NULL    Pos(Kredi Kartı)  Satışı
+            //11  Bank NULL    Pos(Kredi Kartı)  Satış İptali
+            //12  Bank NULL    Pos(Kredi Kartı)  Satış İadesi
+            //13  CashRecorder NULL    Yazarkasa Fişi
+            //14  File NULL    Dosyalar
+
+            Result<DayResult> result = new Result<DayResult>()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                ResultControlModel model = new ResultControlModel();
+
+                var dayresult = db.DayResult.FirstOrDefault(x => x.ID == id);
+
+                if (dayresult != null)
+                {
+                    
+                    List<DayResultItemList> itemlist = new List<DayResultItemList>();
+
+                    var items = db.DayResultItems.ToList();
+                    var location = db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
+
+                    if (location.OurCompanyID == 2)  // ülke türkiye ise
+                    {
+                        result.IsSuccess = true;
+
+                        // 01 Kasa Tahsilatı ekle
+                        var exchange = GetExchange(dayresult.Date);
+
+                        //trl
+                        itemlist.Add(items.Where(x => x.ID == 1).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+                        //usd
+                        itemlist.Add(items.Where(x => x.ID == 1).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = "USD",
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = exchange.USDA,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+                        //eur
+                        itemlist.Add(items.Where(x => x.ID == 1).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = "EUR",
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = exchange.EURA,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+
+                        // 02 Kasa Satışı ekle
+
+                        //trl
+                        itemlist.Add(items.Where(x => x.ID == 2).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+                        //usd
+                        itemlist.Add(items.Where(x => x.ID == 2).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = exchange.USDA,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+                        //eur
+                        itemlist.Add(items.Where(x => x.ID == 2).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = exchange.EURA,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+
+                        // 03 Kasa Döviz Satışı ekle
+
+                        //usd
+                        itemlist.Add(items.Where(x => x.ID == 3).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = "USD",
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = exchange.USDA,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+                        //usd
+                        itemlist.Add(items.Where(x => x.ID == 3).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = "EUR",
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = exchange.EURA,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+
+                        // 04 Kasa Ödemesi Ekle
+
+                        //trl
+                        itemlist.Add(items.Where(x => x.ID == 4).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+                        //usd
+                        itemlist.Add(items.Where(x => x.ID == 4).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = "USD",
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = exchange.USDA,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+                        //eur
+                        itemlist.Add(items.Where(x => x.ID == 4).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = "EUR",
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = exchange.EURA,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+
+                        // 05 Kasa Satış İadesi Ekle
+
+                        //trl
+                        itemlist.Add(items.Where(x => x.ID == 5).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+                        //usd
+                        itemlist.Add(items.Where(x => x.ID == 5).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = "USD",
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = exchange.USDA,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+                        //eur
+                        itemlist.Add(items.Where(x => x.ID == 5).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = "EUR",
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = exchange.EURA,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+
+                        // 06 Kasadan Masraf Ödemesi Ekle
+
+                        //trl
+                        itemlist.Add(items.Where(x => x.ID == 6).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+
+                        // 07 Kasadan Havale EFT çıkma Ekle
+
+                        //trl
+                        itemlist.Add(items.Where(x => x.ID == 7).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date,
+                            BankAccountID = 1
+                        }).FirstOrDefault());
+
+
+
+
+                        // 08 Maaş Hakedişi işle Maaş Avans Ödemesi Ekle
+
+                        var locschedule = db.LocationSchedule.FirstOrDefault(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date);
+
+                        if (locschedule != null)
+                        {
+                            var employees = db.EmployeeLocation.Where(x => x.LocationID == location.LocationID && x.IsActive == true && x.Role.Stage == 1 && x.Employee.IsActive == true).ToList();
+                            List<int> empids = employees.Select(x => x.EmployeeID).ToList();
+
+                            var empschedules = db.Schedule.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date).ToList();
+                            var empshifts = db.EmployeeShift.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date && empids.Contains(x.EmployeeID.Value)).ToList();
+                            var empunits = db.EmployeeSalary.Where(x => empids.Contains(x.EmployeeID) && x.DateStart <= dayresult.Date).ToList();
+
+                            foreach (var emp in employees)
+                            {
+                                var employeeschedule = empschedules.FirstOrDefault(x => x.EmployeeID == emp.EmployeeID);
+                                var employeeshift = empshifts.FirstOrDefault(x => x.EmployeeID == emp.EmployeeID);
+                                var hourprice = empunits.Where(x => x.EmployeeID == emp.EmployeeID && x.Hourly > 0).OrderByDescending(x => x.DateStart).FirstOrDefault();
+
+                                double? durationhour = 0;
+                                double? unithour = hourprice?.Hourly ?? 0;
+
+                                if (employeeschedule != null && employeeshift != null)
+                                {
+                                    DateTime? starttime = employeeschedule.ShiftDateStart;
+                                    if (employeeshift.ShiftDateStart > starttime)
+                                    {
+                                        starttime = employeeshift.ShiftDateStart;
+                                    }
+
+                                    DateTime? finishtime = employeeschedule.ShiftdateEnd;
+                                    if (employeeshift.ShiftDateEnd < finishtime)
+                                    {
+                                        finishtime = employeeshift.ShiftDateEnd;
+                                    }
+
+                                    if (finishtime != null && starttime != null)
+                                    {
+                                        double? durationminute = (finishtime - starttime).Value.TotalMinutes;
+                                        durationhour = (durationminute / 60);
+                                    }
+                                    
+
+                                    itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
+                                    {
+                                        Amount = (durationhour * unithour),
+                                        Category = x.Category,
+                                        Currency = location.Currency,
+                                        ResultID = id,
+                                        ResultItemID = x.ID,
+                                        Quantity = 0,
+                                        SystemQuantity = 0,
+                                        Exchange = 1,
+                                        SystemAmount = (durationhour * unithour),
+                                        LocationID = location.LocationID,
+                                        Date = dayresult.Date,
+                                        EmployeeID = emp.EmployeeID,
+                                        SystemHourQuantity = durationhour,
+                                        UnitHourPrice = unithour
+
+                                    }).FirstOrDefault());
+
+                                    itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
+                                    {
+                                        Amount = 0,
+                                        Category = x.Category,
+                                        Currency = location.Currency,
+                                        ResultID = id,
+                                        ResultItemID = x.ID,
+                                        Quantity = 0,
+                                        SystemQuantity = 0,
+                                        Exchange = 1,
+                                        SystemAmount = 0,
+                                        LocationID = location.LocationID,
+                                        Date = dayresult.Date,
+                                        EmployeeID = emp.EmployeeID
+                                    }).FirstOrDefault());
+
+                                }
+                                else
+                                {
+                                    itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
+                                    {
+                                        Amount = 0,
+                                        Category = x.Category,
+                                        Currency = location.Currency,
+                                        ResultID = id,
+                                        ResultItemID = x.ID,
+                                        Quantity = 0,
+                                        SystemQuantity = 0,
+                                        Exchange = 1,
+                                        SystemAmount = 0,
+                                        LocationID = location.LocationID,
+                                        Date = dayresult.Date,
+                                        EmployeeID = emp.EmployeeID,
+                                        SystemHourQuantity = 0,
+                                        UnitHourPrice = unithour
+                                    }).FirstOrDefault());
+
+                                    itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
+                                    {
+                                        Amount = 0,
+                                        Category = x.Category,
+                                        Currency = location.Currency,
+                                        ResultID = id,
+                                        ResultItemID = x.ID,
+                                        Quantity = 0,
+                                        SystemQuantity = 0,
+                                        Exchange = 1,
+                                        SystemAmount = 0,
+                                        LocationID = location.LocationID,
+                                        Date = dayresult.Date,
+                                        EmployeeID = emp.EmployeeID
+                                    }).FirstOrDefault());
+                                }
+                            }
+
+
+                        }
+                        else
+                        {
+                            result.Message = "Lokasyon takvimi tanımlanmamış";
+                        }
+
+                        // 10 POS Kredi Kartı Satışı Ekle
+
+                        itemlist.Add(items.Where(x => x.ID == 10).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date,
+                            BankAccountID = 8
+                        }).FirstOrDefault());
+
+
+                        // 11 POS Kredi Kartı Satışı İptali Ekle
+
+                        itemlist.Add(items.Where(x => x.ID == 11).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date,
+                            BankAccountID = 8
+                        }).FirstOrDefault());
+
+
+                        // 12 POS Kredi Kartı Satışı İadesi Ekle
+
+                        itemlist.Add(items.Where(x => x.ID == 12).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date,
+                            BankAccountID = 8
+                        }).FirstOrDefault());
+
+                    }
+                    else if (location.OurCompanyID == 1)  // ülke amerika ise
+                    {
+                        result.IsSuccess = true;
+
+                        // 01 Kasa Tahsilatı ekle
+                        var exchange = GetExchange(dayresult.Date);
+
+                        //usd
+                        itemlist.Add(items.Where(x => x.ID == 1).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = "USD",
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+
+                        // 02 Kasa Satışı ekle
+
+                        //usd
+                        itemlist.Add(items.Where(x => x.ID == 2).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+
+                        // 03 Kasa Döviz Satışı ekle
+
+                        //trl
+                        itemlist.Add(items.Where(x => x.ID == 3).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = "TRL",
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = (1 /exchange.USDA),
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+                        //eur
+                        itemlist.Add(items.Where(x => x.ID == 3).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = "EUR",
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = (1 /exchange.EURA),
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+
+                        // 04 Kasa Ödemesi Ekle
+
+                        //usd
+                        itemlist.Add(items.Where(x => x.ID == 4).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = "USD",
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+
+                        // 05 Kasa Satış İadesi Ekle
+
+                        //usd
+                        itemlist.Add(items.Where(x => x.ID == 5).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = "USD",
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+
+                        // 06 Kasadan Masraf Ödemesi Ekle
+
+                        //trl
+                        itemlist.Add(items.Where(x => x.ID == 6).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date
+                        }).FirstOrDefault());
+
+
+                        // 07 Kasadan Havale EFT çıkma Ekle
+
+                        //usd
+                        itemlist.Add(items.Where(x => x.ID == 7).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date,
+                            BankAccountID = 4
+                        }).FirstOrDefault());
+
+
+
+
+                        // 08 Maaş Hakedişi işle Maaş Avans Ödemesi Ekle
+
+                        var locschedule = db.LocationSchedule.FirstOrDefault(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date);
+
+                        if (locschedule != null)
+                        {
+                            var employees = db.EmployeeLocation.Where(x => x.LocationID == location.LocationID && x.IsActive == true && x.Role.Stage == 1 && x.Employee.IsActive == true).ToList();
+                            List<int> empids = employees.Select(x => x.EmployeeID).ToList();
+
+                            var empschedules = db.Schedule.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date).ToList();
+                            var empshifts = db.EmployeeShift.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date && empids.Contains(x.EmployeeID.Value)).ToList();
+                            var empunits = db.EmployeeSalary.Where(x => empids.Contains(x.EmployeeID) && x.DateStart <= dayresult.Date).ToList();
+
+                            foreach (var emp in employees)
+                            {
+                                var employeeschedule = empschedules.FirstOrDefault(x => x.EmployeeID == emp.EmployeeID);
+                                var employeeshift = empshifts.FirstOrDefault(x => x.EmployeeID == emp.EmployeeID);
+                                var hourprice = empunits.Where(x => x.EmployeeID == emp.EmployeeID && x.Hourly > 0).OrderByDescending(x => x.DateStart).FirstOrDefault();
+
+                                double? durationhour = 0;
+                                double? unithour = hourprice?.Hourly ?? 0;
+
+                                if (employeeschedule != null && employeeshift != null)
+                                {
+                                    DateTime? starttime = employeeschedule.ShiftDateStart;
+                                    if (employeeshift.ShiftDateStart > starttime)
+                                    {
+                                        starttime = employeeshift.ShiftDateStart;
+                                    }
+
+                                    DateTime? finishtime = employeeschedule.ShiftdateEnd;
+                                    if (employeeshift.ShiftDateEnd < finishtime)
+                                    {
+                                        finishtime = employeeshift.ShiftDateEnd;
+                                    }
+
+                                    if (finishtime != null && starttime != null)
+                                    {
+                                        double? durationminute = (finishtime - starttime).Value.TotalMinutes;
+                                        durationhour = (durationminute / 60);
+                                    }
+
+                                    itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
+                                    {
+                                        Amount = (durationhour * hourprice.Hourly),
+                                        Category = x.Category,
+                                        Currency = location.Currency,
+                                        ResultID = id,
+                                        ResultItemID = x.ID,
+                                        Quantity = 0,
+                                        SystemQuantity = 0,
+                                        Exchange = 1,
+                                        SystemAmount = (durationhour * hourprice.Hourly),
+                                        LocationID = location.LocationID,
+                                        Date = dayresult.Date,
+                                        EmployeeID = emp.EmployeeID,
+                                        SystemHourQuantity = durationhour,
+                                        UnitHourPrice = hourprice.Hourly
+
+                                    }).FirstOrDefault());
+
+                                    itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
+                                    {
+                                        Amount = 0,
+                                        Category = x.Category,
+                                        Currency = location.Currency,
+                                        ResultID = id,
+                                        ResultItemID = x.ID,
+                                        Quantity = 0,
+                                        SystemQuantity = 0,
+                                        Exchange = 1,
+                                        SystemAmount = 0,
+                                        LocationID = location.LocationID,
+                                        Date = dayresult.Date,
+                                        EmployeeID = emp.EmployeeID
+                                    }).FirstOrDefault());
+
+                                }
+                                else
+                                {
+                                    itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
+                                    {
+                                        Amount = 0,
+                                        Category = x.Category,
+                                        Currency = location.Currency,
+                                        ResultID = id,
+                                        ResultItemID = x.ID,
+                                        Quantity = 0,
+                                        SystemQuantity = 0,
+                                        Exchange = 1,
+                                        SystemAmount = 0,
+                                        LocationID = location.LocationID,
+                                        Date = dayresult.Date,
+                                        EmployeeID = emp.EmployeeID,
+                                        SystemHourQuantity = 0,
+                                        UnitHourPrice = hourprice.Hourly
+                                    }).FirstOrDefault());
+
+                                    itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
+                                    {
+                                        Amount = 0,
+                                        Category = x.Category,
+                                        Currency = location.Currency,
+                                        ResultID = id,
+                                        ResultItemID = x.ID,
+                                        Quantity = 0,
+                                        SystemQuantity = 0,
+                                        Exchange = 1,
+                                        SystemAmount = 0,
+                                        LocationID = location.LocationID,
+                                        Date = dayresult.Date,
+                                        EmployeeID = emp.EmployeeID
+                                    }).FirstOrDefault());
+                                }
+                            }
+
+
+                        }
+                        else
+                        {
+                            result.Message = "Lokasyon takvimi tanımlanmamış";
+                        }
+
+                        // 10 POS Kredi Kartı Satışı Ekle
+
+                        itemlist.Add(items.Where(x => x.ID == 10).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date,
+                            BankAccountID = 7
+                        }).FirstOrDefault());
+
+
+                        // 11 POS Kredi Kartı Satışı İptali Ekle
+
+                        itemlist.Add(items.Where(x => x.ID == 11).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date,
+                            BankAccountID = 7
+                        }).FirstOrDefault());
+
+
+                        // 12 POS Kredi Kartı Satışı İadesi Ekle
+
+                        itemlist.Add(items.Where(x => x.ID == 12).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date,
+                            BankAccountID = 7
+                        }).FirstOrDefault());
+
+                    }
+
+                    db.DayResultItemList.AddRange(itemlist);
+                    db.SaveChanges();
+                }
+
+            }
+
+
+
+
+            return result;
+
+        }
     }
 }

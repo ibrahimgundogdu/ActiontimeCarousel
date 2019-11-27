@@ -29,6 +29,11 @@ namespace ActionForce.Entity
         public Nullable<double> SystemHourQuantity { get; set; }
         public string FilePath { get; set; }
         public string FileName { get; set; }
+        public Nullable<int> LocationID { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
+        public Nullable<double> Exchange { get; set; }
+        public Nullable<int> SystemQuantity { get; set; }
+        public Nullable<int> BankAccountID { get; set; }
     
         public virtual DayResult DayResult { get; set; }
         public virtual DayResultItems DayResultItems { get; set; }

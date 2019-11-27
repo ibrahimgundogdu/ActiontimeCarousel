@@ -213,6 +213,7 @@ namespace ActionForce.Entity
         public virtual DbSet<DayResultItems> DayResultItems { get; set; }
         public virtual DbSet<VDayResult> VDayResult { get; set; }
         public virtual DbSet<ApplicationLog> ApplicationLog { get; set; }
+        public virtual DbSet<VLocationShift> VLocationShift { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

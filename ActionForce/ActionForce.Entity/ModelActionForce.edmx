@@ -644,6 +644,7 @@
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
           <Property Name="IsActive" Type="bit" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="DayResultDocuments">
           <Key>
@@ -674,11 +675,15 @@
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ResultID" Type="bigint" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="Date" Type="date" />
           <Property Name="Category" Type="nvarchar" MaxLength="50" />
           <Property Name="ResultItemID" Type="int" />
           <Property Name="Quantity" Type="int" />
+          <Property Name="SystemQuantity" Type="int" />
           <Property Name="Amount" Type="float" />
           <Property Name="SystemAmount" Type="float" />
+          <Property Name="Exchange" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="EmployeeID" Type="int" />
@@ -687,6 +692,7 @@
           <Property Name="SystemHourQuantity" Type="float" />
           <Property Name="FilePath" Type="nvarchar" MaxLength="80" />
           <Property Name="FileName" Type="nvarchar" MaxLength="50" />
+          <Property Name="BankAccountID" Type="int" />
         </EntityType>
         <EntityType Name="DayResultItems">
           <Key>
@@ -2919,6 +2925,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDayResult' does not have a
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="Environment" Type="nvarchar" MaxLength="20" />
+          <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentBankTransfer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -3523,6 +3530,41 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationSchedule' does not
           <Property Name="Color" Type="nvarchar" MaxLength="20" />
           <Property Name="OurCompanyID" Type="int" />
           <Property Name="WeekCode" Type="nvarchar" MaxLength="9" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationShift' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VLocationShift">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="ShiftDate" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="EmployeeIDFinish" Type="int" />
+          <Property Name="ShiftDate" Type="date" Nullable="false" />
+          <Property Name="ShiftStart" Type="time" Precision="0" />
+          <Property Name="ShiftFinish" Type="time" Precision="0" />
+          <Property Name="ShiftDateStart" Type="datetime" />
+          <Property Name="ShiftDateFinish" Type="datetime" />
+          <Property Name="Duration" Type="varchar" MaxLength="17" />
+          <Property Name="DurationMinute" Type="int" />
+          <Property Name="LatitudeStart" Type="float" />
+          <Property Name="LongitudeStart" Type="float" />
+          <Property Name="FromMobileStart" Type="bit" />
+          <Property Name="LatitudeFinish" Type="float" />
+          <Property Name="LongitudeFinish" Type="float" />
+          <Property Name="FromMobileFinish" Type="bit" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="CloseEnvironmentID" Type="int" />
+          <Property Name="OurCompanyID" Type="int" Nullable="false" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSchedule' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4328,7 +4370,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDayResult].[StatusName] AS [StatusName], 
     [VDayResult].[UpdaterFullName] AS [UpdaterFullName], 
     [VDayResult].[RecorderFullName] AS [RecorderFullName], 
-    [VDayResult].[Environment] AS [Environment]
+    [VDayResult].[Environment] AS [Environment], 
+    [VDayResult].[UID] AS [UID]
     FROM [dbo].[VDayResult] AS [VDayResult]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentBankTransfer" EntityType="Self.VDocumentBankTransfer" store:Type="Views" store:Schema="dbo">
@@ -4888,6 +4931,35 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocationSchedule].[WeekCode] AS [WeekCode]
     FROM [dbo].[VLocationSchedule] AS [VLocationSchedule]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VLocationShift" EntityType="Self.VLocationShift" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VLocationShift].[ID] AS [ID], 
+    [VLocationShift].[LocationID] AS [LocationID], 
+    [VLocationShift].[EmployeeID] AS [EmployeeID], 
+    [VLocationShift].[EmployeeIDFinish] AS [EmployeeIDFinish], 
+    [VLocationShift].[ShiftDate] AS [ShiftDate], 
+    [VLocationShift].[ShiftStart] AS [ShiftStart], 
+    [VLocationShift].[ShiftFinish] AS [ShiftFinish], 
+    [VLocationShift].[ShiftDateStart] AS [ShiftDateStart], 
+    [VLocationShift].[ShiftDateFinish] AS [ShiftDateFinish], 
+    [VLocationShift].[Duration] AS [Duration], 
+    [VLocationShift].[DurationMinute] AS [DurationMinute], 
+    [VLocationShift].[LatitudeStart] AS [LatitudeStart], 
+    [VLocationShift].[LongitudeStart] AS [LongitudeStart], 
+    [VLocationShift].[FromMobileStart] AS [FromMobileStart], 
+    [VLocationShift].[LatitudeFinish] AS [LatitudeFinish], 
+    [VLocationShift].[LongitudeFinish] AS [LongitudeFinish], 
+    [VLocationShift].[FromMobileFinish] AS [FromMobileFinish], 
+    [VLocationShift].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VLocationShift].[RecordDate] AS [RecordDate], 
+    [VLocationShift].[UpdateEmployeeID] AS [UpdateEmployeeID], 
+    [VLocationShift].[UpdateDate] AS [UpdateDate], 
+    [VLocationShift].[EnvironmentID] AS [EnvironmentID], 
+    [VLocationShift].[CloseEnvironmentID] AS [CloseEnvironmentID], 
+    [VLocationShift].[OurCompanyID] AS [OurCompanyID], 
+    [VLocationShift].[LocationFullName] AS [LocationFullName]
+    FROM [dbo].[VLocationShift] AS [VLocationShift]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VSchedule" EntityType="Self.VSchedule" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VSchedule].[Id] AS [Id], 
@@ -5399,6 +5471,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="Data" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="ApplicationLog" EntityType="db293_ActionTimeDbModel.ApplicationLog" />
+          <EntitySet Name="VLocationShift" EntityType="db293_ActionTimeDbModel.VLocationShift" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -9073,6 +9146,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" />
           <NavigationProperty Name="DayResultItemList" Relationship="db293_ActionTimeDbModel.FK_ResultItemList_Result1" FromRole="DayResult" ToRole="DayResultItemList" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="DayResultDocuments">
           <Key>
@@ -9118,6 +9192,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="FileName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="DayResult" Relationship="db293_ActionTimeDbModel.FK_ResultItemList_Result1" FromRole="DayResultItemList" ToRole="DayResult" />
           <NavigationProperty Name="DayResultItems" Relationship="db293_ActionTimeDbModel.FK_ResultItemList_ResultItems1" FromRole="DayResultItemList" ToRole="DayResultItems" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="Exchange" Type="Double" />
+          <Property Name="SystemQuantity" Type="Int32" />
+          <Property Name="BankAccountID" Type="Int32" />
         </EntityType>
         <EntityType Name="DayResultItems">
           <Key>
@@ -9183,6 +9262,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Environment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="ApplicationLog">
           <Key>
@@ -9207,6 +9287,39 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecordEmployee" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
           <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="RecordDevice" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VLocationShift">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="ShiftDate" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="EmployeeIDFinish" Type="Int32" />
+          <Property Name="ShiftDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ShiftStart" Type="Time" Precision="0" />
+          <Property Name="ShiftFinish" Type="Time" Precision="0" />
+          <Property Name="ShiftDateStart" Type="DateTime" Precision="3" />
+          <Property Name="ShiftDateFinish" Type="DateTime" Precision="3" />
+          <Property Name="Duration" Type="String" MaxLength="17" FixedLength="false" Unicode="false" />
+          <Property Name="DurationMinute" Type="Int32" />
+          <Property Name="LatitudeStart" Type="Double" />
+          <Property Name="LongitudeStart" Type="Double" />
+          <Property Name="FromMobileStart" Type="Boolean" />
+          <Property Name="LatitudeFinish" Type="Double" />
+          <Property Name="LongitudeFinish" Type="Double" />
+          <Property Name="FromMobileFinish" Type="Boolean" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="CloseEnvironmentID" Type="Int32" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -12822,6 +12935,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DayResult">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DayResult">
               <MappingFragment StoreEntitySet="DayResult">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
@@ -12869,6 +12983,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DayResultItemList">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DayResultItemList">
               <MappingFragment StoreEntitySet="DayResultItemList">
+                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
+                <ScalarProperty Name="SystemQuantity" ColumnName="SystemQuantity" />
+                <ScalarProperty Name="Exchange" ColumnName="Exchange" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="FileName" ColumnName="FileName" />
                 <ScalarProperty Name="FilePath" ColumnName="FilePath" />
                 <ScalarProperty Name="SystemHourQuantity" ColumnName="SystemHourQuantity" />
@@ -12900,6 +13019,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDayResult">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDayResult">
               <MappingFragment StoreEntitySet="VDayResult">
+                <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="Environment" ColumnName="Environment" />
                 <ScalarProperty Name="RecorderFullName" ColumnName="RecorderFullName" />
                 <ScalarProperty Name="UpdaterFullName" ColumnName="UpdaterFullName" />
@@ -12948,6 +13068,37 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="ProcessType" ColumnName="ProcessType" />
                 <ScalarProperty Name="Modul" ColumnName="Modul" />
                 <ScalarProperty Name="Environment" ColumnName="Environment" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VLocationShift">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationShift">
+              <MappingFragment StoreEntitySet="VLocationShift">
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="CloseEnvironmentID" ColumnName="CloseEnvironmentID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="FromMobileFinish" ColumnName="FromMobileFinish" />
+                <ScalarProperty Name="LongitudeFinish" ColumnName="LongitudeFinish" />
+                <ScalarProperty Name="LatitudeFinish" ColumnName="LatitudeFinish" />
+                <ScalarProperty Name="FromMobileStart" ColumnName="FromMobileStart" />
+                <ScalarProperty Name="LongitudeStart" ColumnName="LongitudeStart" />
+                <ScalarProperty Name="LatitudeStart" ColumnName="LatitudeStart" />
+                <ScalarProperty Name="DurationMinute" ColumnName="DurationMinute" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="ShiftDateFinish" ColumnName="ShiftDateFinish" />
+                <ScalarProperty Name="ShiftDateStart" ColumnName="ShiftDateStart" />
+                <ScalarProperty Name="ShiftFinish" ColumnName="ShiftFinish" />
+                <ScalarProperty Name="ShiftStart" ColumnName="ShiftStart" />
+                <ScalarProperty Name="ShiftDate" ColumnName="ShiftDate" />
+                <ScalarProperty Name="EmployeeIDFinish" ColumnName="EmployeeIDFinish" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
