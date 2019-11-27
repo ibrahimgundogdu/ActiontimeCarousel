@@ -335,7 +335,6 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
-    <Content Include="dashboard-four.html" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="images\loginback.png" />
@@ -2443,6 +2442,8 @@
     <Content Include="Views\Schedule\_PartialAddLocationSchedule.cshtml" />
     <Content Include="Views\Cash\CashDetail.cshtml" />
     <Content Include="Views\Schedule\_PartialAddEmployeeSchedule.cshtml" />
+    <Content Include="Views\Cash\SaleDetail.cshtml" />
+    <Content Include="Views\Cash\ExchangeDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -288,6 +288,7 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Index", "Cash");
 
         }
+
         [AllowAnonymous]
         public ActionResult DeleteCashCollection(int? id)
         {
@@ -355,8 +356,8 @@ namespace ActionForce.Office.Controllers
                         result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki kasa tahsilatı başarı ile iptal edildi";
 
 
-                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentCashCollections>(self, isCash, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "Index", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        //var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentCashCollections>(self, isCash, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
                     }
                     catch (Exception ex)
@@ -373,6 +374,7 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Index", "Cash");
 
         }
+
         [AllowAnonymous]
         public ActionResult CashDetail(Guid? id)
         {
@@ -410,7 +412,7 @@ namespace ActionForce.Office.Controllers
 
             return View(model);
         }
-
+        
         [AllowAnonymous]
         public ActionResult Sale(int? locationId)
         {
@@ -532,6 +534,246 @@ namespace ActionForce.Office.Controllers
             TempData["result"] = result;
 
             return RedirectToAction("Sale", "Cash");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult EditCashSale(NewCashSale cashCollect)
+        {
+            Result<CashActions> result = new Result<CashActions>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            CashControlModel model = new CashControlModel();
+
+
+            if (cashCollect != null)
+            {
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashCollect.ActinTypeID);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashCollect.LocationID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                var fromPrefix = cashCollect.FromID.Substring(0, 1);
+                var fromID = Convert.ToInt32(cashCollect.FromID.Substring(1, cashCollect.FromID.Length - 1));
+                var amount = Convert.ToDouble(cashCollect.Amount.ToString().Replace(".", ","));
+                var currency = cashCollect.Currency;
+                var docDate = DateTime.Now.Date;
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
+
+                if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
+                {
+                    docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
+                }
+                var cash = OfficeHelper.GetCash((int)cashCollect.LocationID, cashCollect.Currency);
+
+
+
+                var isCash = Db.DocumentTicketSales.FirstOrDefault(x => x.UID == cashCollect.UID);
+                if (isCash != null)
+                {
+                    try
+                    {
+                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+
+                        DocumentTicketSales self = new DocumentTicketSales()
+                        {
+                            ActionTypeID = isCash.ActionTypeID,
+                            ActionTypeName = isCash.ActionTypeName,
+                            Amount = isCash.Amount,
+                            CashID = isCash.CashID,
+                            Currency = isCash.Currency,
+                            Date = isCash.Date,
+                            Description = isCash.Description,
+                            DocumentNumber = isCash.DocumentNumber,
+                            ExchangeRate = isCash.ExchangeRate,
+                            ID = isCash.ID,
+                            IsActive = isCash.IsActive,
+                            LocationID = isCash.LocationID,
+                            OurCompanyID = isCash.OurCompanyID,
+                            RecordDate = isCash.RecordDate,
+                            RecordEmployeeID = isCash.RecordEmployeeID,
+                            RecordIP = isCash.RecordIP,
+                            ReferenceID = isCash.ReferenceID,
+                            SystemAmount = isCash.SystemAmount,
+                            SystemCurrency = isCash.SystemCurrency,
+                            UpdateDate = isCash.UpdateDate,
+                            UpdateEmployee = isCash.UpdateEmployee,
+                            UpdateIP = isCash.UpdateIP,
+                            EnvironmentID = isCash.EnvironmentID
+                        };
+                        isCash.Quantity = isCash.Quantity;
+                        isCash.PayMethodID = isCash.PayMethodID;
+                        isCash.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                        isCash.Amount = amount;
+                        isCash.Description = isCash.Description;
+                        isCash.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                        isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
+                        isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
+                        isCash.UpdateIP = OfficeHelper.GetIPAddress();
+                        //isCash.SystemAmount = ourcompany.Currency == currency ? amount : amount * isCash.ExchangeRate;
+                        //isCash.SystemCurrency = ourcompany.Currency;
+
+                        Db.SaveChanges();
+
+                        var cashaction = Db.CashActions.FirstOrDefault(x => x.CashID == isCash.CashID && x.LocationID == isCash.LocationID && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isCash.Date && x.DocumentNumber == isCash.DocumentNumber);
+
+                        if (cashaction != null)
+                        {
+                            cashaction.Collection = isCash.Amount;
+                            cashaction.UpdateDate = isCash.UpdateDate;
+                            cashaction.UpdateEmployeeID = isCash.UpdateEmployee;
+
+                            Db.SaveChanges();
+
+                        }
+
+                        result.IsSuccess = true;
+                        result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {amount} {currency} tutarındaki {isCash.Quantity} adet bilet satışı başarı ile güncellendi";
+
+
+                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentTicketSales>(self, isCash, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isCash.ID.ToString(), "Cash", "Sale", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"{amount} {currency} tutarındaki {isCash.Quantity} adet bilet satışı güncellenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "Sale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+
+            }
+
+            TempData["result"] = result;
+            //return RedirectToAction("CashDetail", new { id = cashCollect.UID });
+            return RedirectToAction("Sale", "Cash");
+
+        }
+
+        [AllowAnonymous]
+        public ActionResult DeleteCashSale(int? id)
+        {
+            Result<CashActions> result = new Result<CashActions>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            CashControlModel model = new CashControlModel();
+
+
+            if (id != null)
+            {
+
+                var isCash = Db.DocumentTicketSales.FirstOrDefault(x => x.ID == id);
+                if (isCash != null)
+                {
+                    try
+                    {
+                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+
+                        DocumentTicketSales self = new DocumentTicketSales()
+                        {
+                            ActionTypeID = isCash.ActionTypeID,
+                            ActionTypeName = isCash.ActionTypeName,
+                            Amount = isCash.Amount,
+                            CashID = isCash.CashID,
+                            Currency = isCash.Currency,
+                            Date = isCash.Date,
+                            Description = isCash.Description,
+                            DocumentNumber = isCash.DocumentNumber,
+                            ExchangeRate = isCash.ExchangeRate,
+                            ID = isCash.ID,
+                            IsActive = isCash.IsActive,
+                            LocationID = isCash.LocationID,
+                            OurCompanyID = isCash.OurCompanyID,
+                            RecordDate = isCash.RecordDate,
+                            RecordEmployeeID = isCash.RecordEmployeeID,
+                            RecordIP = isCash.RecordIP,
+                            ReferenceID = isCash.ReferenceID,
+                            SystemAmount = isCash.SystemAmount,
+                            SystemCurrency = isCash.SystemCurrency,
+                            UpdateDate = isCash.UpdateDate,
+                            UpdateEmployee = isCash.UpdateEmployee,
+                            UpdateIP = isCash.UpdateIP,
+                            FromCustomerID = isCash.FromCustomerID,
+                            PayMethodID = isCash.PayMethodID,
+                            Quantity = isCash.Quantity,
+                            EnvironmentID = isCash.EnvironmentID
+                        };
+
+
+                        isCash.IsActive = false;
+                        isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
+                        isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
+                        isCash.UpdateIP = OfficeHelper.GetIPAddress();
+
+                        Db.SaveChanges();
+
+                        OfficeHelper.AddCashAction(isCash.CashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, -1 * isCash.Amount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+
+
+                        result.IsSuccess = true;
+                        result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki {isCash.Quantity} adet bilet satış başarı ile iptal edildi";
+
+
+                        //var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentTicketSales>(self, isCash, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "Sale", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki {isCash.Quantity} adet bilet satış iptal edilemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", "-1", "Cash", "Sale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+
+            }
+
+            TempData["result"] = result;
+            return RedirectToAction("Sale", "Cash");
+
+        }
+
+        [AllowAnonymous]
+        public ActionResult SaleDetail(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result<CashActions> ?? null;
+            }
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateTime.Now.Date;
+                model.Filters = filterModel;
+            }
+            model.BankAccountList = Db.BankAccount.ToList();
+            model.PayMethodList = Db.PayMethod.ToList();
+            model.StatusList = Db.BankTransferStatus.ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+
+            model.SaleDetail = Db.VDocumentTicketSales.FirstOrDefault(x => x.UID == id);
+            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Sale" && x.Environment == "Office" && x.ProcessID == model.SaleDetail.ID.ToString()).ToList();
+
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
+
+            return View(model);
         }
 
         [AllowAnonymous]
@@ -684,6 +926,271 @@ namespace ActionForce.Office.Controllers
             TempData["result"] = result;
 
             return RedirectToAction("Exchange", "Cash");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult EditCashExchange(NewCashExchange cashCollect, HttpPostedFileBase documentFile)
+        {
+            Result<CashActions> result = new Result<CashActions>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            CashControlModel model = new CashControlModel();
+
+
+            if (cashCollect != null)
+            {
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashCollect.ActinTypeID);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashCollect.LocationID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                var amount = Convert.ToDouble(cashCollect.Amount.ToString().Replace(".", ","));
+                var currencyo = cashCollect.Currency;
+                var currencyi = location.Currency != null ? location.Currency : ourcompany.Currency;
+                var exchangerate = Convert.ToDouble(cashCollect.Exchange.Replace(".", ","));
+                var docDate = DateTime.Now.Date;
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
+
+                if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
+                {
+                    docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
+                }
+
+                var casho = OfficeHelper.GetCash(cashCollect.LocationID, currencyo);
+                var cashi = OfficeHelper.GetCash(cashCollect.LocationID, currencyi);
+
+
+
+                var isCash = Db.DocumentSaleExchange.FirstOrDefault(x => x.UID == cashCollect.UID);
+                if (isCash != null)
+                {
+                    try
+                    {
+                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+
+                        DocumentSaleExchange self = new DocumentSaleExchange()
+                        {
+                            ActionTypeID = isCash.ActionTypeID,
+                            ActionTypeName = isCash.ActionTypeName,
+
+                            FromCashID = casho.ID,
+                            Amount = amount,
+                            Currency = currencyo,
+
+                            SaleExchangeRate = exchangerate,
+                            ToCashID = cashi.ID,
+                            ToAmount = (isCash.Amount * isCash.SaleExchangeRate),
+                            ToCurrency = currencyi,
+                            Date = isCash.Date,
+                            Description = isCash.Description,
+                            DocumentNumber = isCash.DocumentNumber,
+                            ExchangeRate = isCash.ExchangeRate,
+                            ID = isCash.ID,
+                            IsActive = isCash.IsActive,
+                            LocationID = isCash.LocationID,
+                            OurCompanyID = isCash.OurCompanyID,
+                            RecordDate = isCash.RecordDate,
+                            RecordEmployeeID = isCash.RecordEmployeeID,
+                            RecordIP = isCash.RecordIP,
+                            ReferenceID = isCash.ReferenceID,
+                            UpdateDate = isCash.UpdateDate,
+                            UpdateEmployee = isCash.UpdateEmployee,
+                            UpdateIP = isCash.UpdateIP,
+                            EnvironmentID = isCash.EnvironmentID
+                        };
+                        isCash.Amount = amount;
+                        isCash.ToAmount = (isCash.Amount * isCash.SaleExchangeRate);
+                        isCash.Description = isCash.Description;
+                        isCash.ExchangeRate = currencyo == "USD" ? exchange.USDA : currencyo == "EUR" ? exchange.EURA : 1;
+                        isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
+                        isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
+                        isCash.UpdateIP = OfficeHelper.GetIPAddress();
+
+                        if (documentFile != null && documentFile.ContentLength > 0)
+                        {
+                            string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
+
+                            try
+                            {
+                                documentFile.SaveAs(Path.Combine(Server.MapPath("/Document/Exchange"), filename));
+                                isCash.SlipDocument = filename;
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        }
+                        //isCash.SystemAmount = ourcompany.Currency == currency ? amount : amount * isCash.ExchangeRate;
+                        //isCash.SystemCurrency = ourcompany.Currency;
+
+                        Db.SaveChanges();
+                        
+                        var cashaction = Db.CashActions.FirstOrDefault(x => x.CashID == isCash.FromCashID && x.LocationID == isCash.LocationID && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isCash.Date && x.DocumentNumber == isCash.DocumentNumber);
+                        var cashactioni = Db.CashActions.FirstOrDefault(x => x.CashID == isCash.ToCashID && x.LocationID == isCash.LocationID && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isCash.Date && x.DocumentNumber == isCash.DocumentNumber);
+                        if (cashaction != null)
+                        {
+                            cashaction.Collection = isCash.Amount;
+                            cashaction.Currency = isCash.Currency;
+                            cashaction.UpdateDate = isCash.UpdateDate;
+                            cashaction.UpdateEmployeeID = isCash.UpdateEmployee;
+
+                            Db.SaveChanges();
+
+                        }
+                        if (cashactioni != null)
+                        {
+                            cashactioni.Collection = isCash.ToAmount;
+                            cashactioni.Currency = isCash.ToCurrency;
+                            cashactioni.UpdateDate = isCash.UpdateDate;
+                            cashactioni.UpdateEmployeeID = isCash.UpdateEmployee;
+
+                            Db.SaveChanges();
+
+                        }
+                        result.IsSuccess = true;
+                        result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} kasa döviz satışı başarı ile güncellendi";
+
+
+                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentSaleExchange>(self, isCash, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isCash.ID.ToString(), "Cash", "Exchange", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"{amount} {currencyo} kasa döviz satışı Güncellenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "Exchange", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+
+            }
+
+            TempData["result"] = result;
+            //return RedirectToAction("CashDetail", new { id = cashCollect.UID });
+            return RedirectToAction("Exchange", "Cash");
+
+        }
+
+        [AllowAnonymous]
+        public ActionResult DeleteCashExchange(int? id)
+        {
+            Result<CashActions> result = new Result<CashActions>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            CashControlModel model = new CashControlModel();
+
+
+            if (id != null)
+            {
+
+                var isCash = Db.DocumentSaleExchange.FirstOrDefault(x => x.ID == id);
+                if (isCash != null)
+                {
+                    try
+                    {
+                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+
+                        DocumentSaleExchange self = new DocumentSaleExchange()
+                        {
+                            ActionTypeID = isCash.ActionTypeID,
+                            ActionTypeName = isCash.ActionTypeName,
+                            Amount = isCash.Amount,
+                            ToCashID = isCash.ToCashID,
+                            Currency = isCash.Currency,
+                            Date = isCash.Date,
+                            Description = isCash.Description,
+                            DocumentNumber = isCash.DocumentNumber,
+                            ExchangeRate = isCash.ExchangeRate,
+                            ID = isCash.ID,
+                            IsActive = isCash.IsActive,
+                            LocationID = isCash.LocationID,
+                            OurCompanyID = isCash.OurCompanyID,
+                            RecordDate = isCash.RecordDate,
+                            RecordEmployeeID = isCash.RecordEmployeeID,
+                            RecordIP = isCash.RecordIP,
+                            ReferenceID = isCash.ReferenceID,
+                            ToAmount = isCash.ToAmount,
+                            ToCurrency = isCash.ToCurrency,
+                            UpdateDate = isCash.UpdateDate,
+                            UpdateEmployee = isCash.UpdateEmployee,
+                            UpdateIP = isCash.UpdateIP,
+                            FromCashID = isCash.FromCashID,
+                            EnvironmentID = isCash.EnvironmentID
+                        };
+
+
+                        isCash.IsActive = false;
+                        isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
+                        isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
+                        isCash.UpdateIP = OfficeHelper.GetIPAddress();
+
+                        Db.SaveChanges();
+                        
+                        OfficeHelper.AddCashAction(isCash.FromCashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+                        OfficeHelper.AddCashAction(isCash.ToCashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, -1 * isCash.ToAmount, 0, isCash.ToCurrency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+
+                        result.IsSuccess = true;
+                        result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} kasa döviz satışı başarı ile iptal edildi";
+
+
+                        //var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentTicketSales>(self, isCash, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "Exchange", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"{isCash.Amount} {isCash.Currency} kasa döviz satışı iptal edilemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", "-1", "Cash", "Exchange", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+
+            }
+
+            TempData["result"] = result;
+            return RedirectToAction("Exchange", "Cash");
+
+        }
+
+        [AllowAnonymous]
+        public ActionResult ExchangeDetail(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result<CashActions> ?? null;
+            }
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateTime.Now.Date;
+                model.Filters = filterModel;
+            }
+            model.BankAccountList = Db.BankAccount.ToList();
+            model.PayMethodList = Db.PayMethod.ToList();
+            model.StatusList = Db.BankTransferStatus.ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+
+            model.ExchangeDetail = Db.VDocumentSaleExchange.FirstOrDefault(x => x.UID == id);
+            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Exchange" && x.Environment == "Office" && x.ProcessID == model.ExchangeDetail.ID.ToString()).ToList();
+
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
+
+            return View(model);
         }
 
         [AllowAnonymous]
