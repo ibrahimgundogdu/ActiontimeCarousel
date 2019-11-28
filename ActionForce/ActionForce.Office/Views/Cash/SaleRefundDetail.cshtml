@@ -9,7 +9,7 @@
 
 <div class="content-header">
     <div class="content-search">
-        <span class="tx-20">Döviz Satış Detay</span>
+        <span class="tx-20">Bilet İade Detay</span>
     </div>
     <nav class="nav">
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
@@ -27,7 +27,7 @@
                                 <li class="breadcrumb-item active" aria-current="page">Kasa Nakit İşlemleri</li>
                             </ol>
                         </nav>
-                        <h4 class="mg-b-0 tx-spacing--1">Döviz Satış Detayı</h4>
+                        <h4 class="mg-b-0 tx-spacing--1">Bilet İade Detayı</h4>
                     </div>
                     <div class="d-none d-md-block">
                         @{Html.RenderPartial("_PartialAddCashMenu");}
@@ -35,18 +35,18 @@
                 </div>
 
 
-                @using (Html.BeginForm("EditCashExchange", "Cash", FormMethod.Post))
+                @using (Html.BeginForm("EditTicketSaleReturn", "Cash", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
                     <div class="row row-xs">
                         <div class="col-lg-6">
                             <div class="card mg-b-20 mg-lg-b-25">
                                 <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                                    @*<h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.ExchangeDetail.ActionName}"))</h6>*@
-                                    <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="25" />
-                                    <input id="UID" name="UID" type="hidden" value="@(Model.ExchangeDetail.UID)" />
+                                    <h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.SalesRefundDetail.ActionName}"))</h6>
+                                    <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="28" />
+                                    <input id="UID" name="UID" type="hidden" value="@(Model.SalesRefundDetail.UID)" />
                                     <nav class="nav">
-                                        <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.ExchangeDetail.Date.Value.ToLongDateString())</span></a>
+                                        <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.SalesRefundDetail.Date.Value.ToLongDateString())</span></a>
                                     </nav>
                                 </div><!-- card-header -->
                                 <div class="card-body pd-20">
@@ -54,25 +54,37 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Kasa Tipi</label>
                                             <div class="col-sm-9">
-                                                <span class="text-danger">@Model.ExchangeDetail.ActionTypeName</span>
+                                                <span class="text-danger">@Model.SalesRefundDetail.ActionTypeName</span>
                                             </div>
                                         </div>
-                                        @*<div class="form-group row">
-            <label for="inputEmail3" class="col-sm-3 col-form-label">Kasa</label>
-            <div class="col-sm-9">
-                <span class="text-danger">@Model.ExchangeDetail.CashName</span>
-            </div>
-        </div>*@
+                                        <div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Kasa</label>
+                                            <div class="col-sm-9">
+                                                <span class="text-danger">@Model.SalesRefundDetail.CashName</span>
+                                            </div>
+                                        </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Döküman Nr</label>
                                             <div class="col-sm-9">
-                                                <span class="text-danger">@Model.ExchangeDetail.DocumentNumber</span>
+                                                <span class="text-danger">@Model.SalesRefundDetail.DocumentNumber</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
                                             <div class="col-sm-9">
-                                                <span class="text-danger">@Model.ExchangeDetail.ReferenceID</span>
+                                                <span class="text-danger">@Model.SalesRefundDetail.ReferenceID</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Kimden</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" id="FromID" name="FromID" required>
+                                                    
+                                                    @foreach (var item in Model.FromList)
+                                                    {
+                                                        <option value="@item.Code" @(Model.SalesRefundDetail.ToCustomerID != null ? Model.SalesRefundDetail.ToCustomerID == item.ID ? "selected" : "" : "")>@(Html.Raw($"{item.Name}"))</option>
+                                                    }
+                                                </select>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -81,15 +93,21 @@
                                                 <select class="form-control" id="LocationID" name="LocationID" required>
                                                     @foreach (var item in Model.LocationList)
                                                     {
-                                                        <option value="@item.LocationID" @(Model.ExchangeDetail.LocationID == item.LocationID ? "selected" : "")>@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                                                        <option value="@item.LocationID" @(Model.SalesRefundDetail.LocationID == item.LocationID ? "selected" : "")>@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
                                                     }
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Adet</label>
+                                            <div class="col-sm-9">
+                                                <input id="Quantity" name="Quantity" type="text" class="form-control" value="@Model.SalesRefundDetail.Quantity" placeholder="Adet" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Tutar</label>
                                             <div class="col-sm-9">
-                                                <input id="Amount" name="Amount" type="text" class="form-control" value="@Model.ExchangeDetail.Amount" placeholder="Tutar" required>
+                                                <input id="Amount" name="Amount" type="text" class="form-control" value="@Model.SalesRefundDetail.Amount" placeholder="Tutar" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -98,7 +116,18 @@
                                                 <select class="form-control" id="Currency" name="Currency" required>
                                                     @foreach (var item in Model.CurrencyList)
                                                     {
-                                                        <option value="@item.Code" @(Model.ExchangeDetail.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
+                                                        <option value="@item.Code" @(Model.SalesRefundDetail.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Ödeme Metodu</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control" id="PayMethodID" name="PayMethodID" required>
+                                                    @foreach (var item in Model.PayMethodList)
+                                                    {
+                                                        <option value="@item.ID" @(Model.SalesRefundDetail.PayMethodID == item.ID ? "selected" : "")>@($"{item.MethodName}" )</option>
                                                     }
                                                 </select>
                                             </div>
@@ -106,35 +135,26 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Kuru</label>
                                             <div class="col-sm-9">
-                                                <span class="text-danger">@Model.ExchangeDetail.ExchangeRate</span>
+                                                <span class="text-danger">@Model.SalesRefundDetail.ExchangeRate</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Tutarı</label>
                                             <div class="col-sm-3">
-                                                <span class="text-danger">@($"{Model.ExchangeDetail.ToAmount} {Model.ExchangeDetail.ToCurrency}")</span>
+                                                <span class="text-danger">@($"{Model.SalesRefundDetail.SystemAmount} {Model.SalesRefundDetail.SystemCurrency}")</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Açıklama</label>
                                             <div class="col-sm-9">
-                                                <textarea id="Description" name="Description" rows="4" class="form-control" value="@Model.ExchangeDetail.Description" placeholder="Açıklama"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Dekont</label>
-                                            <div class="col-sm-7">
-                                                <input type="file" name="documentFile" id="documentFile" value="@Model.ExchangeDetail.SlipDocument" style="width: 100%;" class="form-control" />
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <img src="~/Document/Exchange/@Model.ExchangeDetail.SlipDocument" class="img-thumbnail" alt="Responsive image">
+                                                <textarea id="Description" name="Description" rows="4" class="form-control" value="@Model.SalesRefundDetail.Description" placeholder="Açıklama"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-3">Active?</div>
                                             <div class="col-sm-9">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" value="@Model.ExchangeDetail.IsActive" checked="@Model.ExchangeDetail.IsActive" class="custom-control-input">
+                                                    <input type="checkbox" value="@Model.SalesRefundDetail.IsActive" checked="@Model.SalesRefundDetail.IsActive" class="custom-control-input">
                                                     <label class="custom-control-label">Aktif mi?</label>
                                                 </div>
                                             </div>
@@ -143,7 +163,7 @@
                                         <div class="form-group row mg-b-0">
                                             <div class="col-sm-3"></div>
                                             <div class="col-sm-9">
-                                                @if (Model.ExchangeDetail.IsActive == true)
+                                                @if (Model.SalesRefundDetail.IsActive == true)
                                                 {
                                                     <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
                                                 }
@@ -156,9 +176,9 @@
                                 </div>
                                 <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
                                     <nav class="nav nav-with-icon tx-13">
-                                        <a href="" class="nav-link"><i data-feather="user-plus"></i> @(Html.Raw($"{Model.ExchangeDetail.RecorderFullName}"))</a>
-                                        <a href="" class="nav-link"><i data-feather="calendar"></i> @(Html.Raw($"{Model.ExchangeDetail.RecordDate.Value.ToLongDateString()}"))</a>
-                                        <a href="" class="nav-link"><i data-feather="user-check"></i> @(Html.Raw($"{Model.ExchangeDetail.UpdaterFullName}"))</a>
+                                        <a href="" class="nav-link"><i data-feather="user-plus"></i> @(Html.Raw($"{Model.SalesRefundDetail.RecorderFullName}"))</a>
+                                        <a href="" class="nav-link"><i data-feather="calendar"></i> @(Html.Raw($"{Model.SalesRefundDetail.RecordDate.Value.ToLongDateString()}"))</a>
+                                        <a href="" class="nav-link"><i data-feather="user-check"></i> @(Html.Raw($"{Model.SalesRefundDetail.UpdaterFullName}"))</a>
                                     </nav>
                                 </div><!-- card-footer -->
                             </div><!-- card -->
@@ -167,8 +187,8 @@
                             <div class="card">
                                 <div class="card-header pd-b-0 pd-x-20 bd-b-0">
                                     <div class="d-sm-flex align-items-center justify-content-between">
-                                        @*<h6 class="mg-b-0">@(Model.ExchangeDetail.ActionName)</h6>*@
-                                        <p class="tx-12 tx-color-03 mg-b-0">@(Model.ExchangeDetail.Date.Value.ToLongDateString())</p>
+                                        <h6 class="mg-b-0">@(Model.SalesRefundDetail.ActionName)</h6>
+                                        <p class="tx-12 tx-color-03 mg-b-0">@(Model.SalesRefundDetail.Date.Value.ToLongDateString())</p>
                                     </div>
                                 </div><!-- card-header -->
                                 <div class="card-body pd-20">

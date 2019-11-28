@@ -84,39 +84,46 @@
                         <th>Kayıt Tarihi</th>
                         <th>Fiş Nr.</th>
                         <th>Döküman</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
 
                     @foreach (var item in Model.CashExpense)
                     {
-                        <tr>
+                    <tr style='@(item.IsActive == false ? "color: red" : "")'>
 
-                            <td class="tx-sm-13 bold">@item.ID</td>
-                            <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
-                            <td class="tx-sm-13">@item.LocationFullName</td>
-                            <td class="tx-sm-13">@item.CashName</td>
-                            <td class="tx-sm-13">@item.ActionTypeName</td>
-                            <td class="tx-sm-13">@item.CustomerFullName @item.EmployeeFullName @item.BankAccountName </td>
-                            <td class="tx-sm-13">@item.DocumentNumber</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
-                            <td class="tx-sm-13">@(item.Currency)</td>
-                            <td class="tx-sm-13">@item.RecorderFullName</td>
-                            <td class="tx-sm-13 text-right">@item.RecordDate</td>
-                            <td class="tx-sm-13 text-right">@item.SlipNumber</td>
-                            <td>
-                                @if (item.SlipDocument != null)
-                                {
-                                    @*<a href="#modal6" onclick="@item.ID" data-toggle="modal" data-animation="effect-scale">
-                                        <img src="@(string.Format("../Document/Expense/{0}",item.SlipDocument))" class="img-fluid img-thumbnail" width="64">
-                                    </a>*@
+                        <td class="tx-sm-13 bold">@item.ID</td>
+                        <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                        <td class="tx-sm-13">@item.LocationFullName</td>
+                        <td class="tx-sm-13">@item.CashName</td>
+                        <td class="tx-sm-13">@item.ActionTypeName</td>
+                        <td class="tx-sm-13">@item.CustomerFullName @item.EmployeeFullName @item.BankAccountName </td>
+                        <td class="tx-sm-13">@item.DocumentNumber</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13">@(item.Currency)</td>
+                        <td class="tx-sm-13">@item.RecorderFullName</td>
+                        <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                        <td class="tx-sm-13 text-right">@item.SlipNumber</td>
+                        <td>
+                            @if (item.SlipDocument != null)
+                            {
+                                @*<a href="#modal6" onclick="@item.ID" data-toggle="modal" data-animation="effect-scale">
                                     <img src="@(string.Format("../Document/Expense/{0}",item.SlipDocument))" class="img-fluid img-thumbnail" width="64">
-                                }
+                                </a>*@
+                                <img src="@(string.Format("../Document/Expense/{0}",item.SlipDocument))" class="img-fluid img-thumbnail" width="64">
+                            }
 
 
-                            </td>
+                        </td>
+                        <td class="tx-sm-13 text-right"><a href="@("/Cash/ExpenseDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
+                        @if (item.IsActive == true)
+                        {
+                            <td class="tx-sm-13 text-right"><a href="/Cash/Expense" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} tutarlı masraf fişi iptal etmek istediğine emin misin?')"))) DeleteCashExpense(@item.ID)"><i data-feather="trash-2"></i></a></td>
+                        }
 
-                        </tr>
+                    </tr>
                         <div class="modal fade" id="modal6" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel6" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content tx-14">
@@ -224,6 +231,16 @@
             }
 
         });
+
+        function DeleteCashExpense(id) {
+            $.ajax({
+                method: "GET",
+                url: "/Cash/DeleteCashExpense",
+                data: { id: id }
+            }).done(function (d) {
+                $("#DeleteCashExpense").html(d);
+            });
+        }
 
 
 

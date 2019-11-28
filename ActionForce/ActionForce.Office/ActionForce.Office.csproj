@@ -2447,6 +2447,12 @@
     <Content Include="Views\Cash\CashPaymentDetail.cshtml" />
     <Content Include="Views\Cash\PaymentDetail.cshtml" />
     <Content Include="Views\Cash\ExpenseDetail.cshtml" />
+    <Content Include="Views\Cash\SaleRefundDetail.cshtml" />
+    <Content Include="Views\Cash\TransferDetail.cshtml" />
+    <Content Include="Views\Cash\SalaryDetail.cshtml" />
+    <Content Include="Views\Bank\Detail.cshtml" />
+    <Content Include="Views\Bank\PosCancelDetail.cshtml" />
+    <Content Include="Views\Bank\PosRefundDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

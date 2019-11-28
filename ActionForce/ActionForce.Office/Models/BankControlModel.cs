@@ -17,10 +17,15 @@ namespace ActionForce.Office
         public IEnumerable<Currency> CurrencyList { get; set; }
         public IEnumerable<BankAccount> BankAccountList { get; set; }
 
+        public VDocumentPosCollection Detail { get; set; }
+        public VDocumentPosCancel PosCancelDetail { get; set; }
+        public VDocumentPosRefund PosRefundDetail { get; set; }
+
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }
         public VLocation CurrentLocation { get; set; }
         public Result<BankActions> Result { get; set; }
+        public IEnumerable<ApplicationLog> History { get; set; }
 
     }
 }

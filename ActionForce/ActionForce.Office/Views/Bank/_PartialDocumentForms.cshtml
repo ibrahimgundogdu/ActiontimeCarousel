@@ -31,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label>Banka</label>
-                <select class="form-control" id="Currency" name="Currency" required>
+                <select class="form-control" id="BankAccountID" name="BankAccountID" required>
                     @foreach (var item in Model.BankAccountList)
                     {
                         <option value="@item.ID">@($"{item.BranchName} ({item.Currency})")</option>

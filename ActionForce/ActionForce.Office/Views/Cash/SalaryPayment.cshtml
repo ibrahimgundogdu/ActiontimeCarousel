@@ -83,13 +83,15 @@
                         <th>Para Br.</th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
 
                     @foreach (var item in Model.SalaryPayment)
                     {
-                    <tr>
+                    <tr style='@(item.IsActive == false ? "color: red" : "")'>
 
                         <td class="tx-sm-13 bold">@item.ID</td>
                         <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
@@ -104,6 +106,11 @@
                         <td class="tx-sm-13">@(item.Currency)</td>
                         <td class="tx-sm-13">@item.RecorderFullName</td>
                         <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                        <td class="tx-sm-13 text-right"><a href="@("/Cash/SalaryDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
+                        @if (item.IsActive == true)
+                        {
+                            <td class="tx-sm-13 text-right"><a href="/Cash/SalaryPayment" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} tutarlı maaş ödemesi iptal etmek istediğine emin misin?')"))) DeleteCashSalaryPayment(@item.ID)"><i data-feather="trash-2"></i></a></td>
+                        }
 
                     </tr>
                     }
@@ -196,6 +203,16 @@
             }
 
         });
+
+        function DeleteCashSalaryPayment(id) {
+            $.ajax({
+                method: "GET",
+                url: "/Cash/DeleteCashSalaryPayment",
+                data: { id: id }
+            }).done(function (d) {
+                $("#DeleteCashSalaryPayment").html(d);
+            });
+        }
 
 
 
