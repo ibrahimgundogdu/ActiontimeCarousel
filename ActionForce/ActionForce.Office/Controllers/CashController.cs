@@ -775,7 +775,7 @@ namespace ActionForce.Office.Controllers
             model.SaleDetail = Db.VDocumentTicketSales.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Sale" && x.Environment == "Office" && x.ProcessID == model.SaleDetail.ID.ToString()).ToList();
 
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
 
             return View(model);
         }
@@ -1195,7 +1195,7 @@ namespace ActionForce.Office.Controllers
             model.ExchangeDetail = Db.VDocumentSaleExchange.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "ExchangeSale" && x.Environment == "Office" && x.ProcessID == model.ExchangeDetail.ID.ToString()).ToList();
 
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
 
             return View(model);
         }
@@ -1618,7 +1618,7 @@ namespace ActionForce.Office.Controllers
             model.OpenDetail = Db.VDocumentCashOpen.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "CashOpen" && x.Environment == "Office" && x.ProcessID == model.CashDetail.ID.ToString()).ToList();
 
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
 
             return View(model);
         }
@@ -1662,8 +1662,7 @@ namespace ActionForce.Office.Controllers
 
             }
 
-
-            model.FromList = OfficeHelper.GetToList(model.Authentication.ActionEmployee.OurCompanyID.Value);
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A" && x.Prefix == "E").ToList();
 
             return View(model);
         }
@@ -2001,7 +2000,7 @@ namespace ActionForce.Office.Controllers
             model.PaymentDetail = Db.VDocumentCashPayments.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "CashPayment" && x.Environment == "Office" && x.ProcessID == model.PaymentDetail.ID.ToString()).ToList();
 
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A" && x.Prefix == "E").ToList();
 
             return View(model);
         }
@@ -2380,7 +2379,7 @@ namespace ActionForce.Office.Controllers
             model.SalesRefundDetail = Db.VDocumentTicketSaleReturn.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "SaleReturn" && x.Environment == "Office" && x.ProcessID == model.SalesRefundDetail.ID.ToString()).ToList();
 
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
+            model.FromList = OfficeHelper.GetToList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
 
             return View(model);
         }
@@ -2854,7 +2853,7 @@ namespace ActionForce.Office.Controllers
             }
 
 
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value);
+            model.FromList = OfficeHelper.GetToList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "B").ToList();
 
             return View(model);
         }
@@ -3363,7 +3362,7 @@ namespace ActionForce.Office.Controllers
             model.TransferDetail = Db.VDocumentBankTransfer.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Expense" && x.Environment == "Office" && x.ProcessID == model.TransferDetail.ID.ToString()).ToList();
 
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
+            model.FromList = OfficeHelper.GetToList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "B").ToList();
 
             return View(model);
         }
@@ -3408,7 +3407,7 @@ namespace ActionForce.Office.Controllers
             }
 
 
-            model.FromList = OfficeHelper.GetPersonList(model.Authentication.ActionEmployee.OurCompanyID.Value);
+            model.FromList = OfficeHelper.GetToList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
 
             return View(model);
         }
@@ -3767,7 +3766,7 @@ namespace ActionForce.Office.Controllers
             model.SalaryDetail = Db.VDocumentSalaryPayment.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Index" && x.Environment == "Office" && x.ProcessID == model.SalaryDetail.ID.ToString()).ToList();
 
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
+            model.FromList = OfficeHelper.GetToList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
 
             return View(model);
         }

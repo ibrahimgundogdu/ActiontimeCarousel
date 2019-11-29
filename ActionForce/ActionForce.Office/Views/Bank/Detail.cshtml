@@ -1,6 +1,6 @@
 ﻿@model BankControlModel
 @{
-    ViewBag.Title = "Kasa Tahsilat";
+    ViewBag.Title = "Pos Tahsilat";
 }
 
 @section style{
@@ -9,7 +9,7 @@
 
 <div class="content-header">
     <div class="content-search">
-        <span class="tx-20">Kasa Tahsilatı Detay</span>
+        <span class="tx-20">Pos Tahsilatı Detay</span>
     </div>
     <nav class="nav">
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
@@ -24,10 +24,10 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                                 <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Kasa Nakit İşlemleri</li>
+                                <li class="breadcrumb-item active" aria-current="page">Pos Tahsilat İşlemleri</li>
                             </ol>
                         </nav>
-                        <h4 class="mg-b-0 tx-spacing--1">Kasa Tahsilatı Detayı</h4>
+                        <h4 class="mg-b-0 tx-spacing--1">Pos Tahsilatı Detayı</h4>
                     </div>
                     <div class="d-none d-md-block">
                         @{Html.RenderPartial("_PartialAddBankMenu");}

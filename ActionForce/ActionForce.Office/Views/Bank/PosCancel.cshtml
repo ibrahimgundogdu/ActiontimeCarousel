@@ -24,18 +24,12 @@
                     <li class="breadcrumb-item active" aria-current="page">Pos İptal İşlemleri</li>
                 </ol>
             </nav>
-            <h4 class="mg-b-0 tx-spacing--1">Pos İptal (Aynı Gün)</h4>
+            <h4 class="mg-b-0 tx-spacing--1">Pos İptal</h4>
         </div>
         <div class="d-none d-md-block">
             @{Html.RenderPartial("_PartialAddBankMenu");}
         </div>
     </div>
-    <!--<div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right">
-             any content goes here
-        form
-    </div>-->
-
-
 
 
     @using (Html.BeginForm("Filter", "Bank", FormMethod.Post))
@@ -88,7 +82,7 @@
                 </thead>
                 <tbody>
 
-                    @foreach (var item in Model.PosCollections)
+                    @foreach (var item in Model.PosCancel)
                     {
                     <tr style='@(item.IsActive == false ? "color: red" : "")'>
 
@@ -106,7 +100,7 @@
                         <td class="tx-sm-13 text-right"><a href="@("/Bank/PosCancelDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
                         @if (item.IsActive == true)
                         {
-                            <td class="tx-sm-13 text-right"><a href="/Bank/PosCancel" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@item.Amount tutarlı tahsilatı iptal etmek istediğine emin misin?')) DeletePosCancelDetail(@item.ID)"><i data-feather="trash-2"></i></a></td>
+                            <td class="tx-sm-13 text-right"><a href="/Bank/PosCancel" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@item.Amount tutarlı tahsilatı iptal etmek istediğine emin misin?')) DeletePosCancel(@item.ID)"><i data-feather="trash-2"></i></a></td>
                         }
 
                     </tr>
@@ -203,13 +197,13 @@
         });
 
 
-        function DeletePosCancelDetail(id) {
+        function DeletePosCancel(id) {
             $.ajax({
                 method: "GET",
-                url: "/Bank/DeletePosCancelDetail",
+                url: "/Bank/DeletePosCancel",
                 data: { id: id }
             }).done(function (d) {
-                $("#DeletePosCancelDetail").html(d);
+                $("#DeletePosCancel").html(d);
             });
         }
 

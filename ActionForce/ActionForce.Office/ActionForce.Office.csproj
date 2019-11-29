@@ -2279,6 +2279,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LogoutController.cs" />
     <Compile Include="Controllers\ResultController.cs" />
+    <Compile Include="Controllers\SalaryController.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />
     <Compile Include="Global.asax.cs">
@@ -2289,6 +2290,7 @@
     <Compile Include="Models\AuditTrail.cs" />
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\BankControlModel.cs" />
+    <Compile Include="Models\SalaryControlModel.cs" />
     <Compile Include="Models\CashControlModel.cs" />
     <Compile Include="Models\FilterModel.cs" />
     <Compile Include="Models\FinanceControlModel.cs" />
@@ -2453,6 +2455,14 @@
     <Content Include="Views\Bank\Detail.cshtml" />
     <Content Include="Views\Bank\PosCancelDetail.cshtml" />
     <Content Include="Views\Bank\PosRefundDetail.cshtml" />
+    <Content Include="Views\Salary\Index.cshtml" />
+    <Content Include="Views\Salary\Detail.cshtml" />
+    <Content Include="Views\Salary\_PartialAddSalaryMenu.cshtml" />
+    <Content Include="Views\Salary\_PartialDocumentForms.cshtml" />
+    <Content Include="Views\Salary\Earn.cshtml" />
+    <Content Include="Views\Salary\EarnDetail.cshtml" />
+    <Content Include="Views\Salary\SalaryPayment.cshtml" />
+    <Content Include="Views\Salary\SalaryDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

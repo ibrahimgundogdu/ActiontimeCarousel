@@ -115,12 +115,12 @@
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Bank" && this.ViewContext.RouteData.Values["action"].ToString() == "PosRefund" ? "class=active" : "")><a href="/Bank/PosReturn">02 Pos İade</a></li>
                     </ul>
                 </li>
-                <li class="nav-item with-sub">
-                    <a href="/Employee" class="nav-link"><i data-feather="user"></i> <span>Çalışan Cari İşlemleri</span></a>
+                <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Salary" ? "show" : "")">
+                    <a href="" class="nav-link"><i data-feather="user"></i> <span>Çalışan Cari İşlemleri</span></a>
                     <ul>
-                        <li><a href="page-profile-view.html">01 Ücret Hakediş</a></li>
-                        <li><a href="page-profile-view.html">02 Maaş Avans Ödemesi</a></li>
-                        <li><a href="page-profile-view.html">03 Cari Hesap Ekstresi</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Salary" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Salary">01 Ücret Hakediş</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Salary" && this.ViewContext.RouteData.Values["action"].ToString() == "SalaryPayment" ? "class=active" : "")><a href="/Salary/SalaryPayment">02 Maaş Avans Ödemesi</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Salary" && this.ViewContext.RouteData.Values["action"].ToString() == "Current" ? "class=active" : "")><a href="/Salary/Current">03 Cari Hesap Ekstresi</a></li>
 
                     </ul>
                 </li>

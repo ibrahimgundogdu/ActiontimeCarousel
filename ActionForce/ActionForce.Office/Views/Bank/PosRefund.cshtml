@@ -30,12 +30,6 @@
             @{Html.RenderPartial("_PartialAddBankMenu");}
         </div>
     </div>
-    <!--<div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right">
-             any content goes here
-        form
-    </div>-->
-
-
 
 
     @using (Html.BeginForm("Filter", "Bank", FormMethod.Post))
@@ -88,7 +82,7 @@
                 </thead>
                 <tbody>
 
-                    @foreach (var item in Model.PosCollections)
+                    @foreach (var item in Model.PosRefund)
                     {
                     <tr style='@(item.IsActive == false ? "color: red" : "")'>
 
