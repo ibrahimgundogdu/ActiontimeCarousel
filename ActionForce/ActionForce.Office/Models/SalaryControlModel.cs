@@ -6,25 +6,24 @@ using System.Web;
 
 namespace ActionForce.Office
 {
-    public class BankControlModel : LayoutControlModel
+    public class SalaryControlModel : LayoutControlModel
     {
-        public IEnumerable<VDocumentPosCollection> PosCollections { get; set; }
-        public IEnumerable<VDocumentPosCancel> PosCancel { get; set; }
-        public IEnumerable<VDocumentPosRefund> PosRefund { get; set; }
+        public IEnumerable<VDocumentSalaryEarn> SalaryEarn { get; set; }
+        public IEnumerable<VDocumentSalaryPayment> SalaryPayment { get; set; }
 
+        public IEnumerable<Cash> CashList { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
         public IEnumerable<FromAccountModel> FromList { get; set; }
         public IEnumerable<Currency> CurrencyList { get; set; }
         public IEnumerable<BankAccount> BankAccountList { get; set; }
 
-        public VDocumentPosCollection Detail { get; set; }
-        public VDocumentPosCancel PosCancelDetail { get; set; }
-        public VDocumentPosRefund PosRefundDetail { get; set; }
-
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }
         public VLocation CurrentLocation { get; set; }
-        public Result<BankActions> Result { get; set; }
+        public Result<CashActions> Result { get; set; }
+
+        public VDocumentSalaryEarn Detail { get; set; }
+        public VDocumentSalaryPayment SalaryDetail { get; set; }
         public IEnumerable<ApplicationLog> History { get; set; }
 
     }

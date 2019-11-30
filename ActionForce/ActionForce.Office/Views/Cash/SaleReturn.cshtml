@@ -84,29 +84,36 @@
                         <th>Ödeme Yöntemi</th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
 
                     @foreach (var item in Model.TicketSalesReturn)
                     {
-                        <tr>
+                    <tr style='@(item.IsActive == false ? "color: red" : "")'>
 
-                            <td class="tx-sm-13 bold">@item.ID</td>
-                            <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
-                            <td class="tx-sm-13">@item.LocationFullName</td>
-                            <td class="tx-sm-13">@item.CashName</td>
-                            <td class="tx-sm-13">@item.ActionTypeName</td>
-                            <td class="tx-sm-13">@item.CustomerFullName</td>
-                            <td class="tx-sm-13">@item.DocumentNumber</td>
-                            <td class="tx-sm-13">@item.Quantity</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
-                            <td class="tx-sm-13">@(item.Currency)</td>
-                            <td class="tx-sm-13">@(item.PayMethodName)</td>
-                            <td class="tx-sm-13">@item.RecorderFullName</td>
-                            <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                        <td class="tx-sm-13 bold">@item.ID</td>
+                        <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                        <td class="tx-sm-13">@item.LocationFullName</td>
+                        <td class="tx-sm-13">@item.CashName</td>
+                        <td class="tx-sm-13">@item.ActionTypeName</td>
+                        <td class="tx-sm-13">@item.CustomerFullName</td>
+                        <td class="tx-sm-13">@item.DocumentNumber</td>
+                        <td class="tx-sm-13">@item.Quantity</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13">@(item.Currency)</td>
+                        <td class="tx-sm-13">@(item.PayMethodName)</td>
+                        <td class="tx-sm-13">@item.RecorderFullName</td>
+                        <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                        <td class="tx-sm-13 text-right"><a href="@("/Cash/SaleRefundDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
+                        @if (item.IsActive == true)
+                        {
+                            <td class="tx-sm-13 text-right"><a href="/Cash/SaleReturn" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} tutarlı {item.Quantity} adet bilet satışı iptal etmek istediğine emin misin?')"))) DeleteTicketSaleReturn(@item.ID)"><i data-feather="trash-2"></i></a></td>
+                        }
 
-                        </tr>
+                    </tr>
                     }
 
                 </tbody>
@@ -195,6 +202,16 @@
             }
 
         });
+
+        function DeleteTicketSaleReturn(id) {
+            $.ajax({
+                method: "GET",
+                url: "/Cash/DeleteTicketSaleReturn",
+                data: { id: id }
+            }).done(function (d) {
+                $("#DeleteTicketSaleReturn").html(d);
+            });
+        }
 
 
 

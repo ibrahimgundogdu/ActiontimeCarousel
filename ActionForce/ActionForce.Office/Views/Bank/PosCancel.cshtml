@@ -9,14 +9,10 @@
 
 <div class="content-header">
     <div class="content-search">
-        <i data-feather="search"></i>
-        <input id="SearchKey" type="search" class="form-control" placeholder="Arama..." aria-controls="example2">
+        <span class="tx-20">Pos İptal İşlemleri</span>
     </div>
     <nav class="nav">
-        <select class="custom-select bg-light btn-xs" id="CurrentCompany">
-            <option value="1" @(Model.Authentication.ActionEmployee.OurCompanyID == 1 ? "selected" : "")>UFE Group USA</option>
-            <option value="2" @(Model.Authentication.ActionEmployee.OurCompanyID == 2 ? "selected" : "")>UFE Grup  TUR</option>
-        </select>
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
     </nav>
 </div>
 <div class="content-body">
@@ -28,18 +24,12 @@
                     <li class="breadcrumb-item active" aria-current="page">Pos İptal İşlemleri</li>
                 </ol>
             </nav>
-            <h4 class="mg-b-0 tx-spacing--1">Pos İptal (Aynı Gün)</h4>
+            <h4 class="mg-b-0 tx-spacing--1">Pos İptal</h4>
         </div>
         <div class="d-none d-md-block">
             @{Html.RenderPartial("_PartialAddBankMenu");}
         </div>
     </div>
-    <!--<div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right">
-             any content goes here
-        form
-    </div>-->
-
-
 
 
     @using (Html.BeginForm("Filter", "Bank", FormMethod.Post))
@@ -86,27 +76,34 @@
                         <th>Para Br.</th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
 
-                    @foreach (var item in Model.PosCollections)
+                    @foreach (var item in Model.PosCancel)
                     {
-                        <tr>
+                    <tr style='@(item.IsActive == false ? "color: red" : "")'>
 
-                            <td class="tx-sm-13 bold">@item.ID</td>
-                            <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
-                            <td class="tx-sm-13">@item.LocationFullName</td>
-                            <td class="tx-sm-13">@item.BankAccountName</td>
-                            <td class="tx-sm-13">@item.ActionTypeName</td>
-                            <td class="tx-sm-13">@item.CustomerFullName</td>
-                            <td class="tx-sm-13">@item.DocumentNumber</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
-                            <td class="tx-sm-13">@(item.Currency)</td>
-                            <td class="tx-sm-13">@item.RecorderFullName</td>
-                            <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                        <td class="tx-sm-13 bold">@item.ID</td>
+                        <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                        <td class="tx-sm-13">@item.LocationFullName</td>
+                        <td class="tx-sm-13">@item.BankAccountName</td>
+                        <td class="tx-sm-13">@item.ActionTypeName</td>
+                        <td class="tx-sm-13">@item.CustomerFullName</td>
+                        <td class="tx-sm-13">@item.DocumentNumber</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13">@(item.Currency)</td>
+                        <td class="tx-sm-13">@item.RecorderFullName</td>
+                        <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                        <td class="tx-sm-13 text-right"><a href="@("/Bank/PosCancelDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
+                        @if (item.IsActive == true)
+                        {
+                            <td class="tx-sm-13 text-right"><a href="/Bank/PosCancel" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@item.Amount tutarlı tahsilatı iptal etmek istediğine emin misin?')) DeletePosCancel(@item.ID)"><i data-feather="trash-2"></i></a></td>
+                        }
 
-                        </tr>
+                    </tr>
                     }
 
                 </tbody>
@@ -200,7 +197,15 @@
         });
 
 
-
+        function DeletePosCancel(id) {
+            $.ajax({
+                method: "GET",
+                url: "/Bank/DeletePosCancel",
+                data: { id: id }
+            }).done(function (d) {
+                $("#DeletePosCancel").html(d);
+            });
+        }
 
 
     </script>

@@ -169,8 +169,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentSaleExchange" Width="1.5" PointX="39.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentTicketSaleReturns" Width="1.5" PointX="40.375" PointY="0.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentTicketSales" Width="1.5" PointX="5.375" PointY="40.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentPosCancel" Width="1.5" PointX="15.375" PointY="40.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentPosRefund" Width="1.5" PointX="21.375" PointY="40.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentSalaryEarn" Width="1.5" PointX="41.375" PointY="7.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentCashCollections" Width="1.5" PointX="41.375" PointY="13.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Currency" Width="1.5" PointX="41.375" PointY="21.75" />
@@ -195,8 +193,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ExpenseType" Width="1.5" PointX="44.375" PointY="3.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Schedule" Width="1.5" PointX="11.375" PointY="45.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosCollection" Width="1.5" PointX="25.375" PointY="45.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosCancel" Width="1.5" PointX="45.375" PointY="27.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosRefund" Width="1.5" PointX="27.375" PointY="45.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationPosTerminal" Width="1.5" PointX="45.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationSchedule" Width="1.5" PointX="45.375" PointY="39.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.WeekList" Width="1.5" PointX="46.375" PointY="0.75" />
@@ -211,7 +207,11 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDayResult" Width="1.5" PointX="43.375" PointY="15.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ApplicationLog" Width="1.5" PointX="20.375" PointY="8.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationShift" Width="1.5" PointX="45.375" PointY="12.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDayResultItemList" Width="1.5" PointX="41.375" PointY="45.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentPosCancel" Width="1.5" PointX="19.375" PointY="38.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentPosRefund" Width="1.5" PointX="13.375" PointY="45.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosCancel" Width="1.5" PointX="45.375" PointY="19.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosRefund" Width="1.5" PointX="19.375" PointY="45.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentSalaryEarn" Width="1.5" PointX="45.375" PointY="27.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

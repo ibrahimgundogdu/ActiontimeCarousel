@@ -90,13 +90,15 @@
                         <th>Fiş Nr.</th>
                         <th>Döküman</th>
                         <th>Durum</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
 
                     @foreach (var item in Model.BankTransfer)
                     {
-                    <tr>
+                    <tr style='@(item.IsActive == false ? "color: red" : "")'>
 
                         <td class="tx-sm-13 bold">@item.ID</td>
                         <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
@@ -118,7 +120,12 @@
                             }
                         </td>
                         <td class="tx-sm-13 text-right">@item.StatusName</td>
-                        
+                        <td class="tx-sm-13 text-right"><a href="@("/Cash/TransferDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
+                        @if (item.IsActive == true)
+                        {
+                            <td class="tx-sm-13 text-right"><a href="/Cash/BankTransfer" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} tutarlı bilet iade iptal etmek istediğine emin misin?')"))) DeleteCashBankTransfer(@item.ID)"><i data-feather="trash-2"></i></a></td>
+                        }
+
                     </tr>
                     }
 
@@ -210,6 +217,16 @@
             }
 
         });
+
+        function DeleteCashBankTransfer(id) {
+            $.ajax({
+                method: "GET",
+                url: "/Cash/DeleteCashBankTransfer",
+                data: { id: id }
+            }).done(function (d) {
+                $("#DeleteCashBankTransfer").html(d);
+            });
+        }
 
 
 

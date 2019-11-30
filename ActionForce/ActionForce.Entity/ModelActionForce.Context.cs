@@ -174,8 +174,6 @@ namespace ActionForce.Entity
         public virtual DbSet<DocumentSaleExchange> DocumentSaleExchange { get; set; }
         public virtual DbSet<DocumentTicketSaleReturns> DocumentTicketSaleReturns { get; set; }
         public virtual DbSet<DocumentTicketSales> DocumentTicketSales { get; set; }
-        public virtual DbSet<DocumentPosCancel> DocumentPosCancel { get; set; }
-        public virtual DbSet<DocumentPosRefund> DocumentPosRefund { get; set; }
         public virtual DbSet<DocumentSalaryEarn> DocumentSalaryEarn { get; set; }
         public virtual DbSet<VDocumentCashCollections> VDocumentCashCollections { get; set; }
         public virtual DbSet<Currency> Currency { get; set; }
@@ -200,8 +198,6 @@ namespace ActionForce.Entity
         public virtual DbSet<ExpenseType> ExpenseType { get; set; }
         public virtual DbSet<Schedule> Schedule { get; set; }
         public virtual DbSet<VDocumentPosCollection> VDocumentPosCollection { get; set; }
-        public virtual DbSet<VDocumentPosCancel> VDocumentPosCancel { get; set; }
-        public virtual DbSet<VDocumentPosRefund> VDocumentPosRefund { get; set; }
         public virtual DbSet<LocationPosTerminal> LocationPosTerminal { get; set; }
         public virtual DbSet<VLocationSchedule> VLocationSchedule { get; set; }
         public virtual DbSet<WeekList> WeekList { get; set; }
@@ -214,7 +210,11 @@ namespace ActionForce.Entity
         public virtual DbSet<VDayResult> VDayResult { get; set; }
         public virtual DbSet<ApplicationLog> ApplicationLog { get; set; }
         public virtual DbSet<VLocationShift> VLocationShift { get; set; }
-        public virtual DbSet<VDayResultItemList> VDayResultItemList { get; set; }
+        public virtual DbSet<DocumentPosCancel> DocumentPosCancel { get; set; }
+        public virtual DbSet<DocumentPosRefund> DocumentPosRefund { get; set; }
+        public virtual DbSet<VDocumentPosCancel> VDocumentPosCancel { get; set; }
+        public virtual DbSet<VDocumentPosRefund> VDocumentPosRefund { get; set; }
+        public virtual DbSet<VDocumentSalaryEarn> VDocumentSalaryEarn { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

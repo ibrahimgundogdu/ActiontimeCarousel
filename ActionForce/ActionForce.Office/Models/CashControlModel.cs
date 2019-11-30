@@ -37,6 +37,12 @@ namespace ActionForce.Office
         public VDocumentCashCollections CashDetail { get; set; }
         public VDocumentTicketSales SaleDetail { get; set; }
         public VDocumentSaleExchange ExchangeDetail { get; set; }
+        public VDocumentCashOpen OpenDetail { get; set; }
+        public VDocumentCashPayments PaymentDetail { get; set; }
+        public VDocumentTicketSaleReturn SalesRefundDetail { get; set; }
+        public VDocumentCashExpense ExpenseDetail { get; set; }
+        public VDocumentBankTransfer TransferDetail { get; set; }
+        public VDocumentSalaryPayment SalaryDetail { get; set; }
         public IEnumerable<ApplicationLog> History { get; set; }
 
     }

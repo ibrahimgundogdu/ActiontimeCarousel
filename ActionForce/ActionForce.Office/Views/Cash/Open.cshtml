@@ -80,6 +80,8 @@
                         <th>Kayıt Tarihi</th>
                         <th>Güncelleyen</th>
                         <th>Güncelleme Tarihi</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -100,6 +102,11 @@
                         <td class="tx-sm-13 text-right">@item.RecordDate</td>
                         <td class="tx-sm-13">@item.UpdaterFullName</td>
                         <td class="tx-sm-13 text-right">@item.UpdateDate</td>
+                        <td class="tx-sm-13 text-right"><a href="@("/Cash/OpenDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
+                        @if (item.IsActive == true)
+                        {
+                            <td class="tx-sm-13 text-right"><a href="/Cash/Open" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} kasa açılış fişini iptal etmek istediğine emin misin?')"))) DeleteCashOpen(@item.ID)"><i data-feather="trash-2"></i></a></td>
+                        }
 
                     </tr>
                     }
@@ -193,7 +200,15 @@
 
         });
 
-
+        function DeleteCashOpen(id) {
+            $.ajax({
+                method: "GET",
+                url: "/Cash/DeleteCashOpen",
+                data: { id: id }
+            }).done(function (d) {
+                $("#DeleteCashOpen").html(d);
+            });
+        }
 
         $(function () {
             'use strict'
