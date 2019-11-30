@@ -211,6 +211,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDayResult" Width="1.5" PointX="43.375" PointY="15.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ApplicationLog" Width="1.5" PointX="20.375" PointY="8.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationShift" Width="1.5" PointX="45.375" PointY="12.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDayResultItemList" Width="1.5" PointX="41.375" PointY="45.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

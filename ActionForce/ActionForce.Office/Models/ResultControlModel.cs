@@ -12,6 +12,8 @@ namespace ActionForce.Office
         public VDayResult CurrentDayResult { get; set; }
         public DayResult DayResult { get; set; }
         public IEnumerable<VDayResult> DayResultList { get; set; }
+        public IEnumerable<DayResultItems> DayResultItems { get; set; }
+        public IEnumerable<VDayResultItemList> DayResultItemList { get; set; }
         public IEnumerable<Cash> CashList { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
         public IEnumerable<VLocationSchedule> LocationScheduleList { get; set; }

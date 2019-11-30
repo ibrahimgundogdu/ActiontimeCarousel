@@ -693,6 +693,15 @@
           <Property Name="FilePath" Type="nvarchar" MaxLength="80" />
           <Property Name="FileName" Type="nvarchar" MaxLength="50" />
           <Property Name="BankAccountID" Type="int" />
+          <Property Name="SlipNumber" Type="nvarchar" MaxLength="40" />
+          <Property Name="SlipDate" Type="datetime" />
+          <Property Name="SlipTotalAmount" Type="float" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployee" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="DayResultItems">
           <Key>
@@ -906,8 +915,6 @@
           <Property Name="Counter" Type="bigint" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentPosCancel' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="DocumentPosCancel">
           <Key>
             <PropertyRef Name="ID" />
@@ -972,8 +979,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentPosCancel' does not
           <Property Name="EnvironmentID" Type="int" />
           <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentPosRefund' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="DocumentPosRefund">
           <Key>
             <PropertyRef Name="ID" />
@@ -2928,6 +2933,47 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDayResult' does not have a
           <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDayResultItemList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VDayResultItemList">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="Date" Type="date" />
+          <Property Name="Category" Type="nvarchar" MaxLength="50" />
+          <Property Name="ResultItemID" Type="int" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="SystemQuantity" Type="int" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="SystemAmount" Type="float" />
+          <Property Name="Exchange" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="UnitHourPrice" Type="float" />
+          <Property Name="HourQuantity" Type="float" />
+          <Property Name="SystemHourQuantity" Type="float" />
+          <Property Name="FilePath" Type="nvarchar" MaxLength="80" />
+          <Property Name="FileName" Type="nvarchar" MaxLength="50" />
+          <Property Name="BankAccountID" Type="int" />
+          <Property Name="SlipNumber" Type="nvarchar" MaxLength="40" />
+          <Property Name="SlipDate" Type="datetime" />
+          <Property Name="SlipTotalAmount" Type="float" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployee" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="ItemCategory" Type="nvarchar" MaxLength="40" />
+          <Property Name="ItemName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountName" Type="nvarchar" MaxLength="50" />
+          <Property Name="BranchName" Type="nvarchar" MaxLength="50" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentBankTransfer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VDocumentBankTransfer">
           <Key>
@@ -4018,7 +4064,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DocumentCashPayments" EntityType="Self.DocumentCashPayments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentCashRecorderSlip" EntityType="Self.DocumentCashRecorderSlip" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentNumber" EntityType="Self.DocumentNumber" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentPosCancel" EntityType="Self.DocumentPosCancel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentPosCollections" EntityType="Self.DocumentPosCollections" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentPosRefund" EntityType="Self.DocumentPosRefund" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentSalaryPayment" EntityType="Self.DocumentSalaryPayment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentSaleExchange" EntityType="Self.DocumentSaleExchange" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentTicketSaleReturns" EntityType="Self.DocumentTicketSaleReturns" Schema="dbo" store:Type="Tables" />
@@ -4129,68 +4177,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="TrampolinePartType" EntityType="Self.TrampolinePartType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TrampolineType" EntityType="Self.TrampolineType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="Office" store:Type="Tables" />
-          <EntitySet Name="DocumentPosCancel" EntityType="Self.DocumentPosCancel" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [DocumentPosCancel].[ID] AS [ID], 
-    [DocumentPosCancel].[DocumentNumber] AS [DocumentNumber], 
-    [DocumentPosCancel].[ToCustomerID] AS [ToCustomerID], 
-    [DocumentPosCancel].[Amount] AS [Amount], 
-    [DocumentPosCancel].[Currency] AS [Currency], 
-    [DocumentPosCancel].[Date] AS [Date], 
-    [DocumentPosCancel].[RecordDate] AS [RecordDate], 
-    [DocumentPosCancel].[RecordEmployeeID] AS [RecordEmployeeID], 
-    [DocumentPosCancel].[RecordIP] AS [RecordIP], 
-    [DocumentPosCancel].[UpdateDate] AS [UpdateDate], 
-    [DocumentPosCancel].[UpdateEmployee] AS [UpdateEmployee], 
-    [DocumentPosCancel].[UpdateIP] AS [UpdateIP], 
-    [DocumentPosCancel].[FromBankAccountID] AS [FromBankAccountID], 
-    [DocumentPosCancel].[ExchangeRate] AS [ExchangeRate], 
-    [DocumentPosCancel].[SystemAmount] AS [SystemAmount], 
-    [DocumentPosCancel].[SystemCurrency] AS [SystemCurrency], 
-    [DocumentPosCancel].[LocationID] AS [LocationID], 
-    [DocumentPosCancel].[OurCompanyID] AS [OurCompanyID], 
-    [DocumentPosCancel].[ReferenceID] AS [ReferenceID], 
-    [DocumentPosCancel].[IsActive] AS [IsActive], 
-    [DocumentPosCancel].[ActionTypeName] AS [ActionTypeName], 
-    [DocumentPosCancel].[ActionTypeID] AS [ActionTypeID], 
-    [DocumentPosCancel].[Description] AS [Description], 
-    [DocumentPosCancel].[TerminalID] AS [TerminalID], 
-    [DocumentPosCancel].[ResultID] AS [ResultID], 
-    [DocumentPosCancel].[EnvironmentID] AS [EnvironmentID], 
-    [DocumentPosCancel].[UID] AS [UID]
-    FROM [dbo].[DocumentPosCancel] AS [DocumentPosCancel]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="DocumentPosRefund" EntityType="Self.DocumentPosRefund" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [DocumentPosRefund].[ID] AS [ID], 
-    [DocumentPosRefund].[DocumentNumber] AS [DocumentNumber], 
-    [DocumentPosRefund].[ToCustomerID] AS [ToCustomerID], 
-    [DocumentPosRefund].[Amount] AS [Amount], 
-    [DocumentPosRefund].[Currency] AS [Currency], 
-    [DocumentPosRefund].[Date] AS [Date], 
-    [DocumentPosRefund].[RecordDate] AS [RecordDate], 
-    [DocumentPosRefund].[RecordEmployeeID] AS [RecordEmployeeID], 
-    [DocumentPosRefund].[RecordIP] AS [RecordIP], 
-    [DocumentPosRefund].[UpdateDate] AS [UpdateDate], 
-    [DocumentPosRefund].[UpdateEmployee] AS [UpdateEmployee], 
-    [DocumentPosRefund].[UpdateIP] AS [UpdateIP], 
-    [DocumentPosRefund].[FromBankAccountID] AS [FromBankAccountID], 
-    [DocumentPosRefund].[ExchangeRate] AS [ExchangeRate], 
-    [DocumentPosRefund].[SystemAmount] AS [SystemAmount], 
-    [DocumentPosRefund].[SystemCurrency] AS [SystemCurrency], 
-    [DocumentPosRefund].[LocationID] AS [LocationID], 
-    [DocumentPosRefund].[OurCompanyID] AS [OurCompanyID], 
-    [DocumentPosRefund].[ReferenceID] AS [ReferenceID], 
-    [DocumentPosRefund].[IsActive] AS [IsActive], 
-    [DocumentPosRefund].[ActionTypeName] AS [ActionTypeName], 
-    [DocumentPosRefund].[ActionTypeID] AS [ActionTypeID], 
-    [DocumentPosRefund].[Description] AS [Description], 
-    [DocumentPosRefund].[TerminalID] AS [TerminalID], 
-    [DocumentPosRefund].[ResultID] AS [ResultID], 
-    [DocumentPosRefund].[EnvironmentID] AS [EnvironmentID], 
-    [DocumentPosRefund].[UID] AS [UID]
-    FROM [dbo].[DocumentPosRefund] AS [DocumentPosRefund]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="DocumentSalaryEarn" EntityType="Self.DocumentSalaryEarn" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [DocumentSalaryEarn].[ID] AS [ID], 
@@ -4373,6 +4359,44 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDayResult].[Environment] AS [Environment], 
     [VDayResult].[UID] AS [UID]
     FROM [dbo].[VDayResult] AS [VDayResult]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VDayResultItemList" EntityType="Self.VDayResultItemList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VDayResultItemList].[ID] AS [ID], 
+    [VDayResultItemList].[ResultID] AS [ResultID], 
+    [VDayResultItemList].[LocationID] AS [LocationID], 
+    [VDayResultItemList].[Date] AS [Date], 
+    [VDayResultItemList].[Category] AS [Category], 
+    [VDayResultItemList].[ResultItemID] AS [ResultItemID], 
+    [VDayResultItemList].[Quantity] AS [Quantity], 
+    [VDayResultItemList].[SystemQuantity] AS [SystemQuantity], 
+    [VDayResultItemList].[Amount] AS [Amount], 
+    [VDayResultItemList].[SystemAmount] AS [SystemAmount], 
+    [VDayResultItemList].[Exchange] AS [Exchange], 
+    [VDayResultItemList].[Currency] AS [Currency], 
+    [VDayResultItemList].[Description] AS [Description], 
+    [VDayResultItemList].[EmployeeID] AS [EmployeeID], 
+    [VDayResultItemList].[UnitHourPrice] AS [UnitHourPrice], 
+    [VDayResultItemList].[HourQuantity] AS [HourQuantity], 
+    [VDayResultItemList].[SystemHourQuantity] AS [SystemHourQuantity], 
+    [VDayResultItemList].[FilePath] AS [FilePath], 
+    [VDayResultItemList].[FileName] AS [FileName], 
+    [VDayResultItemList].[BankAccountID] AS [BankAccountID], 
+    [VDayResultItemList].[SlipNumber] AS [SlipNumber], 
+    [VDayResultItemList].[SlipDate] AS [SlipDate], 
+    [VDayResultItemList].[SlipTotalAmount] AS [SlipTotalAmount], 
+    [VDayResultItemList].[RecordDate] AS [RecordDate], 
+    [VDayResultItemList].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VDayResultItemList].[RecordIP] AS [RecordIP], 
+    [VDayResultItemList].[UpdateDate] AS [UpdateDate], 
+    [VDayResultItemList].[UpdateEmployee] AS [UpdateEmployee], 
+    [VDayResultItemList].[UpdateIP] AS [UpdateIP], 
+    [VDayResultItemList].[ItemCategory] AS [ItemCategory], 
+    [VDayResultItemList].[ItemName] AS [ItemName], 
+    [VDayResultItemList].[AccountName] AS [AccountName], 
+    [VDayResultItemList].[BranchName] AS [BranchName], 
+    [VDayResultItemList].[FullName] AS [FullName]
+    FROM [dbo].[VDayResultItemList] AS [VDayResultItemList]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentBankTransfer" EntityType="Self.VDocumentBankTransfer" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -5472,6 +5496,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="ApplicationLog" EntityType="db293_ActionTimeDbModel.ApplicationLog" />
           <EntitySet Name="VLocationShift" EntityType="db293_ActionTimeDbModel.VLocationShift" />
+          <EntitySet Name="VDayResultItemList" EntityType="db293_ActionTimeDbModel.VDayResultItemList" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -9197,6 +9222,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Exchange" Type="Double" />
           <Property Name="SystemQuantity" Type="Int32" />
           <Property Name="BankAccountID" Type="Int32" />
+          <Property Name="SlipNumber" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="SlipDate" Type="DateTime" Precision="3" />
+          <Property Name="SlipTotalAmount" Type="Double" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DayResultItems">
           <Key>
@@ -9320,6 +9354,45 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CloseEnvironmentID" Type="Int32" />
           <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
           <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VDayResultItemList">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="Category" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ResultItemID" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="SystemQuantity" Type="Int32" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="SystemAmount" Type="Double" />
+          <Property Name="Exchange" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="UnitHourPrice" Type="Double" />
+          <Property Name="HourQuantity" Type="Double" />
+          <Property Name="SystemHourQuantity" Type="Double" />
+          <Property Name="FilePath" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="FileName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankAccountID" Type="Int32" />
+          <Property Name="SlipNumber" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="SlipDate" Type="DateTime" Precision="3" />
+          <Property Name="SlipTotalAmount" Type="Double" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ItemCategory" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="ItemName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -12983,6 +13056,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DayResultItemList">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DayResultItemList">
               <MappingFragment StoreEntitySet="DayResultItemList">
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="SlipTotalAmount" ColumnName="SlipTotalAmount" />
+                <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
+                <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />
                 <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
                 <ScalarProperty Name="SystemQuantity" ColumnName="SystemQuantity" />
                 <ScalarProperty Name="Exchange" ColumnName="Exchange" />
@@ -13099,6 +13181,46 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="EmployeeIDFinish" ColumnName="EmployeeIDFinish" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VDayResultItemList">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDayResultItemList">
+              <MappingFragment StoreEntitySet="VDayResultItemList">
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="ItemName" ColumnName="ItemName" />
+                <ScalarProperty Name="ItemCategory" ColumnName="ItemCategory" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="SlipTotalAmount" ColumnName="SlipTotalAmount" />
+                <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
+                <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />
+                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
+                <ScalarProperty Name="FileName" ColumnName="FileName" />
+                <ScalarProperty Name="FilePath" ColumnName="FilePath" />
+                <ScalarProperty Name="SystemHourQuantity" ColumnName="SystemHourQuantity" />
+                <ScalarProperty Name="HourQuantity" ColumnName="HourQuantity" />
+                <ScalarProperty Name="UnitHourPrice" ColumnName="UnitHourPrice" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Exchange" ColumnName="Exchange" />
+                <ScalarProperty Name="SystemAmount" ColumnName="SystemAmount" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="SystemQuantity" ColumnName="SystemQuantity" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ResultItemID" ColumnName="ResultItemID" />
+                <ScalarProperty Name="Category" ColumnName="Category" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

@@ -370,7 +370,11 @@ namespace ActionForce.Office
                             Exchange = 1,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
                         //usd
@@ -386,7 +390,11 @@ namespace ActionForce.Office
                             Exchange = exchange.USDA,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
                         //eur
@@ -402,7 +410,11 @@ namespace ActionForce.Office
                             Exchange = exchange.EURA,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -421,7 +433,11 @@ namespace ActionForce.Office
                             Exchange = 1,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
                         //usd
@@ -429,7 +445,7 @@ namespace ActionForce.Office
                         {
                             Amount = 0,
                             Category = x.Category,
-                            Currency = location.Currency,
+                            Currency = "USD",
                             ResultID = id,
                             ResultItemID = x.ID,
                             Quantity = 0,
@@ -437,7 +453,11 @@ namespace ActionForce.Office
                             Exchange = exchange.USDA,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
                         //eur
@@ -445,7 +465,7 @@ namespace ActionForce.Office
                         {
                             Amount = 0,
                             Category = x.Category,
-                            Currency = location.Currency,
+                            Currency = "EUR",
                             ResultID = id,
                             ResultItemID = x.ID,
                             Quantity = 0,
@@ -453,7 +473,11 @@ namespace ActionForce.Office
                             Exchange = exchange.EURA,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -472,7 +496,11 @@ namespace ActionForce.Office
                             Exchange = exchange.USDA,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
                         //usd
@@ -488,7 +516,11 @@ namespace ActionForce.Office
                             Exchange = exchange.EURA,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -507,7 +539,11 @@ namespace ActionForce.Office
                             Exchange = 1,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
                         //usd
@@ -523,7 +559,11 @@ namespace ActionForce.Office
                             Exchange = exchange.USDA,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
                         //eur
@@ -539,7 +579,11 @@ namespace ActionForce.Office
                             Exchange = exchange.EURA,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -558,7 +602,11 @@ namespace ActionForce.Office
                             Exchange = 1,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
                         //usd
@@ -574,7 +622,11 @@ namespace ActionForce.Office
                             Exchange = exchange.USDA,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
                         //eur
@@ -590,7 +642,11 @@ namespace ActionForce.Office
                             Exchange = exchange.EURA,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -609,7 +665,11 @@ namespace ActionForce.Office
                             Exchange = 1,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -629,7 +689,11 @@ namespace ActionForce.Office
                             SystemAmount = 0,
                             LocationID = location.LocationID,
                             Date = dayresult.Date,
-                            BankAccountID = 1
+                            BankAccountID = 1,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -693,7 +757,10 @@ namespace ActionForce.Office
                                         Date = dayresult.Date,
                                         EmployeeID = emp.EmployeeID,
                                         SystemHourQuantity = durationhour,
-                                        UnitHourPrice = unithour
+                                        UnitHourPrice = unithour,
+                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                        RecordIP = GetIPAddress()
 
                                     }).FirstOrDefault());
 
@@ -710,7 +777,11 @@ namespace ActionForce.Office
                                         SystemAmount = 0,
                                         LocationID = location.LocationID,
                                         Date = dayresult.Date,
-                                        EmployeeID = emp.EmployeeID
+                                        EmployeeID = emp.EmployeeID,
+                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                        RecordIP = GetIPAddress()
+
                                     }).FirstOrDefault());
 
                                 }
@@ -731,7 +802,11 @@ namespace ActionForce.Office
                                         Date = dayresult.Date,
                                         EmployeeID = emp.EmployeeID,
                                         SystemHourQuantity = 0,
-                                        UnitHourPrice = unithour
+                                        UnitHourPrice = unithour,
+                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                        RecordIP = GetIPAddress()
+
                                     }).FirstOrDefault());
 
                                     itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
@@ -747,7 +822,11 @@ namespace ActionForce.Office
                                         SystemAmount = 0,
                                         LocationID = location.LocationID,
                                         Date = dayresult.Date,
-                                        EmployeeID = emp.EmployeeID
+                                        EmployeeID = emp.EmployeeID,
+                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                        RecordIP = GetIPAddress()
+
                                     }).FirstOrDefault());
                                 }
                             }
@@ -774,7 +853,11 @@ namespace ActionForce.Office
                             SystemAmount = 0,
                             LocationID = location.LocationID,
                             Date = dayresult.Date,
-                            BankAccountID = 8
+                            BankAccountID = 8,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -793,7 +876,11 @@ namespace ActionForce.Office
                             SystemAmount = 0,
                             LocationID = location.LocationID,
                             Date = dayresult.Date,
-                            BankAccountID = 8
+                            BankAccountID = 8,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -812,7 +899,35 @@ namespace ActionForce.Office
                             SystemAmount = 0,
                             LocationID = location.LocationID,
                             Date = dayresult.Date,
-                            BankAccountID = 8
+                            BankAccountID = 8,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
+                        }).FirstOrDefault());
+
+                        // 13 Yazarkasa satışı fişi Ekle
+
+                        itemlist.Add(items.Where(x => x.ID == 13).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress(),
+                            SlipNumber = string.Empty,
+                            SlipDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            SlipTotalAmount = 0
+
                         }).FirstOrDefault());
 
                     }
@@ -828,7 +943,7 @@ namespace ActionForce.Office
                         {
                             Amount = 0,
                             Category = x.Category,
-                            Currency = "USD",
+                            Currency = location.Currency,
                             ResultID = id,
                             ResultItemID = x.ID,
                             Quantity = 0,
@@ -836,7 +951,11 @@ namespace ActionForce.Office
                             Exchange = 1,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -855,7 +974,11 @@ namespace ActionForce.Office
                             Exchange = 1,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -874,7 +997,11 @@ namespace ActionForce.Office
                             Exchange = (1 /exchange.USDA),
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
                         //eur
@@ -890,7 +1017,11 @@ namespace ActionForce.Office
                             Exchange = (1 /exchange.EURA),
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -901,7 +1032,7 @@ namespace ActionForce.Office
                         {
                             Amount = 0,
                             Category = x.Category,
-                            Currency = "USD",
+                            Currency = location.Currency,
                             ResultID = id,
                             ResultItemID = x.ID,
                             Quantity = 0,
@@ -909,7 +1040,11 @@ namespace ActionForce.Office
                             Exchange = 1,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -920,7 +1055,7 @@ namespace ActionForce.Office
                         {
                             Amount = 0,
                             Category = x.Category,
-                            Currency = "USD",
+                            Currency = location.Currency,
                             ResultID = id,
                             ResultItemID = x.ID,
                             Quantity = 0,
@@ -928,7 +1063,11 @@ namespace ActionForce.Office
                             Exchange = 1,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -947,7 +1086,11 @@ namespace ActionForce.Office
                             Exchange = 1,
                             SystemAmount = 0,
                             LocationID = location.LocationID,
-                            Date = dayresult.Date
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -967,7 +1110,11 @@ namespace ActionForce.Office
                             SystemAmount = 0,
                             LocationID = location.LocationID,
                             Date = dayresult.Date,
-                            BankAccountID = 4
+                            BankAccountID = 4,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -1030,7 +1177,10 @@ namespace ActionForce.Office
                                         Date = dayresult.Date,
                                         EmployeeID = emp.EmployeeID,
                                         SystemHourQuantity = durationhour,
-                                        UnitHourPrice = hourprice.Hourly
+                                        UnitHourPrice = hourprice.Hourly,
+                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                        RecordIP = GetIPAddress()
 
                                     }).FirstOrDefault());
 
@@ -1047,7 +1197,11 @@ namespace ActionForce.Office
                                         SystemAmount = 0,
                                         LocationID = location.LocationID,
                                         Date = dayresult.Date,
-                                        EmployeeID = emp.EmployeeID
+                                        EmployeeID = emp.EmployeeID,
+                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                        RecordIP = GetIPAddress()
+
                                     }).FirstOrDefault());
 
                                 }
@@ -1068,7 +1222,11 @@ namespace ActionForce.Office
                                         Date = dayresult.Date,
                                         EmployeeID = emp.EmployeeID,
                                         SystemHourQuantity = 0,
-                                        UnitHourPrice = hourprice.Hourly
+                                        UnitHourPrice = hourprice.Hourly,
+                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                        RecordIP = GetIPAddress()
+
                                     }).FirstOrDefault());
 
                                     itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
@@ -1084,7 +1242,11 @@ namespace ActionForce.Office
                                         SystemAmount = 0,
                                         LocationID = location.LocationID,
                                         Date = dayresult.Date,
-                                        EmployeeID = emp.EmployeeID
+                                        EmployeeID = emp.EmployeeID,
+                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                        RecordIP = GetIPAddress()
+
                                     }).FirstOrDefault());
                                 }
                             }
@@ -1111,7 +1273,11 @@ namespace ActionForce.Office
                             SystemAmount = 0,
                             LocationID = location.LocationID,
                             Date = dayresult.Date,
-                            BankAccountID = 7
+                            BankAccountID = 7,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -1130,7 +1296,11 @@ namespace ActionForce.Office
                             SystemAmount = 0,
                             LocationID = location.LocationID,
                             Date = dayresult.Date,
-                            BankAccountID = 7
+                            BankAccountID = 7,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
                         }).FirstOrDefault());
 
 
@@ -1149,7 +1319,35 @@ namespace ActionForce.Office
                             SystemAmount = 0,
                             LocationID = location.LocationID,
                             Date = dayresult.Date,
-                            BankAccountID = 7
+                            BankAccountID = 7,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress()
+
+                        }).FirstOrDefault());
+
+                        // 13 Yazarkasa satışı fişi Ekle
+
+                        itemlist.Add(items.Where(x => x.ID == 13).Select(x => new DayResultItemList()
+                        {
+                            Amount = 0,
+                            Category = x.Category,
+                            Currency = location.Currency,
+                            ResultID = id,
+                            ResultItemID = x.ID,
+                            Quantity = 0,
+                            SystemQuantity = 0,
+                            Exchange = 1,
+                            SystemAmount = 0,
+                            LocationID = location.LocationID,
+                            Date = dayresult.Date,
+                            RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = GetIPAddress(),
+                            SlipNumber = string.Empty,
+                            SlipDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            SlipTotalAmount = 0
+
                         }).FirstOrDefault());
 
                     }

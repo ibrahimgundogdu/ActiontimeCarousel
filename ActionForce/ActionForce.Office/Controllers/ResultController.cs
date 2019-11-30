@@ -103,15 +103,50 @@ namespace ActionForce.Office.Controllers
 
 
         [AllowAnonymous]
-        public ActionResult Detail(string id)
+        public ActionResult Detail(string id, int? locationID, string date)
         {
             ResultControlModel model = new ResultControlModel();
 
-            model.CurrentDayResult = Db.VDayResult.FirstOrDefault(x => x.UID.ToString() == id);
-            model.DayResult = Db.DayResult.FirstOrDefault(x => x.UID.ToString() == id);
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result<DayResult> ?? null;
+            }
 
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            if (locationID>0 && !string.IsNullOrEmpty(date))
+            {
+                DateTime? urldate = Convert.ToDateTime(date).Date;
+                model.CurrentDayResult = Db.VDayResult.FirstOrDefault(x => x.LocationID == locationID && x.Date == urldate);
+                model.DayResult = Db.DayResult.FirstOrDefault(x => x.LocationID == locationID && x.Date == urldate);
+            }
+            else if (!string.IsNullOrEmpty(id))
+            {
+                model.CurrentDayResult = Db.VDayResult.FirstOrDefault(x => x.UID.ToString() == id);
+                model.DayResult = Db.DayResult.FirstOrDefault(x => x.UID.ToString() == id);
+            }
 
+            if (model.DayResult != null)
+            {
+                model.DayResultItems = Db.DayResultItems.ToList();
+                model.DayResultItemList = Db.VDayResultItemList.Where(x => x.ResultID == model.DayResult.ID).ToList();
+
+                model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == model.DayResult.LocationID);
+                var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == model.DayResult.Date);
+                model.CurrentDate = datekey;
+                model.TodayDateCode = DateTime.UtcNow.AddHours(model.CurrentLocation.Timezone.Value).Date.ToString("yyyy-MM-dd");
+                model.CurrentDateCode = datekey.DateKey.ToString("yyyy-MM-dd");
+                model.PrevDateCode = datekey.DateKey.AddDays(-1).Date.ToString("yyyy-MM-dd");
+                model.NextDateCode = datekey.DateKey.AddDays(1).Date.ToString("yyyy-MM-dd");
+
+                model.CurrencyList = OfficeHelper.GetCurrency();
+
+                model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+
+            }
+            else
+            {
+                return RedirectToAction("Envelope");
+            }
+            
             return View(model);
         }
     }

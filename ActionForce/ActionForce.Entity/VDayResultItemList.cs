@@ -12,15 +12,19 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class DayResultItemList
+    public partial class VDayResultItemList
     {
         public long ID { get; set; }
         public Nullable<long> ResultID { get; set; }
+        public Nullable<int> LocationID { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
         public string Category { get; set; }
         public Nullable<int> ResultItemID { get; set; }
         public Nullable<int> Quantity { get; set; }
+        public Nullable<int> SystemQuantity { get; set; }
         public Nullable<double> Amount { get; set; }
         public Nullable<double> SystemAmount { get; set; }
+        public Nullable<double> Exchange { get; set; }
         public string Currency { get; set; }
         public string Description { get; set; }
         public Nullable<int> EmployeeID { get; set; }
@@ -29,10 +33,6 @@ namespace ActionForce.Entity
         public Nullable<double> SystemHourQuantity { get; set; }
         public string FilePath { get; set; }
         public string FileName { get; set; }
-        public Nullable<int> LocationID { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
-        public Nullable<double> Exchange { get; set; }
-        public Nullable<int> SystemQuantity { get; set; }
         public Nullable<int> BankAccountID { get; set; }
         public string SlipNumber { get; set; }
         public Nullable<System.DateTime> SlipDate { get; set; }
@@ -43,8 +43,10 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> UpdateEmployee { get; set; }
         public string UpdateIP { get; set; }
-    
-        public virtual DayResult DayResult { get; set; }
-        public virtual DayResultItems DayResultItems { get; set; }
+        public string ItemCategory { get; set; }
+        public string ItemName { get; set; }
+        public string AccountName { get; set; }
+        public string BranchName { get; set; }
+        public string FullName { get; set; }
     }
 }

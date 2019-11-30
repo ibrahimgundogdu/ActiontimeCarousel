@@ -1,7 +1,504 @@
-﻿
+﻿@model ResultControlModel
 @{
-    ViewBag.Title = "Detail";
+    ViewBag.Title = "Gün Sonu Zarf Detayı";
 }
 
-<h2>Detail</h2>
+@section style{
+    <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
+}
 
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">Gün Sonu Zarfları</span>
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.CurrentLocation.Timezone.Value).ToLongDateString())
+    </nav>
+</div>
+<div class="content-body">
+    <div class="pd-x-0 tx-13">
+        <div class="media d-block d-lg-flex">
+            <div class="media-body mg-t-40 mg-lg-t-0">
+                <div class="profile-update-option bg-light ht-50 bd d-flex justify-content-end mg-b-20 mg-lg-b-20 rounded">
+                    <div class="d-flex align-items-center pd-x-5 mg-r-auto">
+                        0
+                    </div>
+                    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+                        <a href="#" id="LocationResultDate" class="link-03" title="Tarih Seç">
+                            <i data-feather="calendar"></i>
+                            <input type="hidden" id="DatePicker" />
+                            <div></div>
+                        </a>
+                        <input id="CurrentDateCode" type="hidden" value="@Model.CurrentDateCode" />
+                    </div>
+                    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+                        <a href="/Result/Detail?date=@(Model.PrevDateCode)&locationID=@(Model.CurrentLocation.LocationID)" class="link-03" title="Bir Önceki Gün"><i data-feather="arrow-left"></i></a>
+                    </div>
+                    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+                        <a href="/Result/Detail?date=@(Model.TodayDateCode)&locationID=@(Model.CurrentLocation.LocationID)" class="link-03" title="Bu Gün"><i data-feather="target"></i></a>
+                    </div>
+                    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+                        <a href="/Result/Detail?date=@(Model.NextDateCode)&locationID=@(Model.CurrentLocation.LocationID)" class="link-03" title="Bir Sonraki Gün"><i data-feather="arrow-right"></i></a>
+                    </div>
+
+                </div>
+
+
+
+                <div class="card mg-b-20 mg-lg-b-25">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@Model.CurrentDayResult.LocationFullName</h6>
+                        <nav class="nav">
+                            <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CurrentDate.DateKey.ToLongDateString())</span></a>
+                        </nav>
+                    </div><!-- card-header -->
+                    <div class="card-body pd-r-10 pd-l-10 pd-t-0">
+                        <div class="row row-xs">
+                            <div class="col-md-9 pd-r-0 pd-l-0 pd-t-0">
+                                <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
+                                    <div class="card ht-100p">
+                                        <div class="card-header d-flex align-items-center justify-content-between">
+                                            <h6 class="mg-b-0">Nakit İşlemler</h6>
+                                            <div class="d-flex tx-18">
+                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Kasa Tahsilatı</th>
+                                                        <th><span>TRL</span></th>
+                                                        <th><span>USD</span></th>
+                                                        <th><span>EUR</span></th>
+                                                        <th class="bd-l"><span>Kasa Ödemesi</span></th>
+                                                        <th class="table-danger"><span>TRL</span></th>
+                                                        <th class="table-danger"><span>USD</span></th>
+                                                        <th class="table-danger"><span>EUR</span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td></td>
+                                                        <td>
+                                                            <input type="number" name="T1TRL" class="form-control" min="0" placeholder="TRL" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "TRL").Amount.Value.ToString("N2").Replace(",",".") )">
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" name="T1USD" class="form-control" min="0" placeholder="USD" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD").Amount.Value.ToString("N2"))">
+                                                        </td>
+                                                        <td>
+                                                            <input type="number" name="T1EUR" class="form-control" min="0" placeholder="EUR" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "EUR").Amount.Value.ToString("N2"))">
+                                                        </td>
+                                                        <td class="bd-l"></td>
+                                                        <td class="table-danger">
+                                                            <input type="number" name="T4TRL" class="form-control" min="0" placeholder="TRL" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "TRL").Amount?.ToString("N2"))">
+                                                        </td>
+                                                        <td class="table-danger">
+                                                            <input type="number" name="T4USD" class="form-control" min="0" placeholder="USD" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD").Amount?.ToString("N2"))">
+                                                        </td>
+                                                        <td class="table-danger">
+                                                            <input type="number" name="T4EUR" class="form-control" min="0" placeholder="EUR" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "EUR").Amount?.ToString("N2"))">
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+
+                                            </table>
+
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>İşlem Türü</th>
+                                                        <th>Adet</th>
+                                                        <th class="bg-gray-100"><span>Adet</span></th>
+                                                        <th>Tutar</th>
+                                                        <th class="bg-gray-100"><span>Tutar</span></th>
+                                                        <th class=" table-danger">Birim Ücret</th>
+                                                        <th>Saat</th>
+                                                        <th class="bg-gray-100"><span>Saat</span></th>
+                                                        <th>Birim</th>
+                                                        <th>Açıklama</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.DayResultItemList.Where(x => x.Category == "Maaş Hakediş" || x.Category == "Maaş Ödeme"))
+                                                    {
+
+                                                        <tr>
+                                                            <td>@item.ItemName</td>
+                                                            <td>0,00</td>
+                                                            <td>0,00</td>
+                                                            <td>0,00</td>
+                                                            <td>0,00</td>
+                                                            <td class=" table-info">0,00</td>
+                                                            <td class=" table-light">0,00</td>
+                                                            <td class=" table-primary">0,00</td>
+                                                            <td class=" table-secondary">@item.Currency</td>
+                                                            <td>@item.FullName</td>
+                                                        </tr>
+                                                    }
+
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+                                        <div class="card-footer text-center tx-13">
+                                            <a href="" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
+                                        </div><!-- card-footer -->
+                                    </div><!-- card -->
+                                </div>
+                                <div class="row row-xs">
+                                    <div class="col-md-6 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
+                                        <div class="card ht-100p">
+                                            <div class="card-header d-flex align-items-center justify-content-between">
+                                                <h6 class="mg-b-0">Kredi Kartı İşlemleri</h6>
+                                                <div class="d-flex tx-18">
+                                                    <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                    <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                                </div>
+                                            </div>
+                                            <ul class="list-group list-group-flush tx-13">
+                                                <li class="list-group-item d-flex pd-sm-x-20">
+                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
+                                                    <div class="pd-sm-l-10">
+                                                        <p class="tx-medium mg-b-0">Payment from #10322</p>
+                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 21, 2019, 3:30pm</small>
+                                                    </div>
+                                                    <div class="mg-l-auto text-right">
+                                                        <p class="tx-medium mg-b-0">+ $250.00</p>
+                                                        <small class="tx-12 tx-success mg-b-0">Completed</small>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item d-flex pd-sm-x-20">
+                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-indigo op-5"><i class="icon ion-md-return-left"></i></span></div>
+                                                    <div class="pd-sm-l-10">
+                                                        <p class="tx-medium mg-b-2">Process refund to #00910</p>
+                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 21, 2019, 1:00pm</small>
+                                                    </div>
+                                                    <div class="mg-l-auto text-right">
+                                                        <p class="tx-medium mg-b-2">-$16.50</p>
+                                                        <small class="tx-12 tx-success mg-b-0">Completed</small>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item d-flex pd-sm-x-20">
+                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-orange op-5"><i class="icon ion-md-bus"></i></span></div>
+                                                    <div class="pd-sm-l-10">
+                                                        <p class="tx-medium mg-b-2">Process delivery to #44333</p>
+                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 20, 2019, 11:40am</small>
+                                                    </div>
+                                                    <div class="mg-l-auto text-right">
+                                                        <p class="tx-medium mg-b-2">3 Items</p>
+                                                        <small class="tx-12 tx-info mg-b-0">For pickup</small>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item d-flex pd-sm-x-20">
+                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
+                                                    <div class="pd-sm-l-10">
+                                                        <p class="tx-medium mg-b-0">Payment from #023328</p>
+                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 20, 2019, 10:30pm</small>
+                                                    </div>
+                                                    <div class="mg-l-auto text-right">
+                                                        <p class="tx-medium mg-b-0">+ $129.50</p>
+                                                        <small class="tx-12 tx-success mg-b-0">Completed</small>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item d-flex pd-sm-x-20">
+                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-gray-400"><i class="icon ion-md-close"></i></span></div>
+                                                    <div class="pd-sm-l-10">
+                                                        <p class="tx-medium mg-b-0">Payment failed from #087651</p>
+                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 19, 2019, 12:54pm</small>
+                                                    </div>
+                                                    <div class="mg-l-auto text-right">
+                                                        <p class="tx-medium mg-b-0">$150.00</p>
+                                                        <small class="tx-12 tx-danger mg-b-0">Declined</small>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="card-footer text-center tx-13">
+                                                <a href="" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
+                                            </div><!-- card-footer -->
+                                        </div><!-- card -->
+                                    </div>
+                                    <div class="col-md-6 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
+                                        <div class="card ht-100p">
+                                            <div class="card-header d-flex align-items-center justify-content-between">
+                                                <h6 class="mg-b-0">Yazar Kasa İşlemleri</h6>
+                                                <div class="d-flex tx-18">
+                                                    <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                    <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                                </div>
+                                            </div>
+                                            <ul class="list-group list-group-flush tx-13">
+                                                <li class="list-group-item d-flex pd-sm-x-20">
+                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
+                                                    <div class="pd-sm-l-10">
+                                                        <p class="tx-medium mg-b-0">Payment from #10322</p>
+                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 21, 2019, 3:30pm</small>
+                                                    </div>
+                                                    <div class="mg-l-auto text-right">
+                                                        <p class="tx-medium mg-b-0">+ $250.00</p>
+                                                        <small class="tx-12 tx-success mg-b-0">Completed</small>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item d-flex pd-sm-x-20">
+                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-indigo op-5"><i class="icon ion-md-return-left"></i></span></div>
+                                                    <div class="pd-sm-l-10">
+                                                        <p class="tx-medium mg-b-2">Process refund to #00910</p>
+                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 21, 2019, 1:00pm</small>
+                                                    </div>
+                                                    <div class="mg-l-auto text-right">
+                                                        <p class="tx-medium mg-b-2">-$16.50</p>
+                                                        <small class="tx-12 tx-success mg-b-0">Completed</small>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item d-flex pd-sm-x-20">
+                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-orange op-5"><i class="icon ion-md-bus"></i></span></div>
+                                                    <div class="pd-sm-l-10">
+                                                        <p class="tx-medium mg-b-2">Process delivery to #44333</p>
+                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 20, 2019, 11:40am</small>
+                                                    </div>
+                                                    <div class="mg-l-auto text-right">
+                                                        <p class="tx-medium mg-b-2">3 Items</p>
+                                                        <small class="tx-12 tx-info mg-b-0">For pickup</small>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item d-flex pd-sm-x-20">
+                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
+                                                    <div class="pd-sm-l-10">
+                                                        <p class="tx-medium mg-b-0">Payment from #023328</p>
+                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 20, 2019, 10:30pm</small>
+                                                    </div>
+                                                    <div class="mg-l-auto text-right">
+                                                        <p class="tx-medium mg-b-0">+ $129.50</p>
+                                                        <small class="tx-12 tx-success mg-b-0">Completed</small>
+                                                    </div>
+                                                </li>
+                                                <li class="list-group-item d-flex pd-sm-x-20">
+                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-gray-400"><i class="icon ion-md-close"></i></span></div>
+                                                    <div class="pd-sm-l-10">
+                                                        <p class="tx-medium mg-b-0">Payment failed from #087651</p>
+                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 19, 2019, 12:54pm</small>
+                                                    </div>
+                                                    <div class="mg-l-auto text-right">
+                                                        <p class="tx-medium mg-b-0">$150.00</p>
+                                                        <small class="tx-12 tx-danger mg-b-0">Declined</small>
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                            <div class="card-footer text-center tx-13">
+                                                <a href="" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
+                                            </div><!-- card-footer -->
+                                        </div><!-- card -->
+                                    </div>
+                                </div>
+                                <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
+                                    <div class="card ht-100p">
+                                        <div class="card-header d-flex align-items-center justify-content-between">
+                                            <h6 class="mg-b-0">Dosyalar </h6>
+                                            <div class="d-flex tx-18">
+                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                            </div>
+                                        </div>
+                                        <ul class="list-group list-group-flush tx-13">
+                                            <li class="list-group-item d-flex pd-sm-x-20">
+                                                <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
+                                                <div class="pd-sm-l-10">
+                                                    <p class="tx-medium mg-b-0">Payment from #10322</p>
+                                                    <small class="tx-12 tx-color-03 mg-b-0">Mar 21, 2019, 3:30pm</small>
+                                                </div>
+                                                <div class="mg-l-auto text-right">
+                                                    <p class="tx-medium mg-b-0">+ $250.00</p>
+                                                    <small class="tx-12 tx-success mg-b-0">Completed</small>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item d-flex pd-sm-x-20">
+                                                <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-indigo op-5"><i class="icon ion-md-return-left"></i></span></div>
+                                                <div class="pd-sm-l-10">
+                                                    <p class="tx-medium mg-b-2">Process refund to #00910</p>
+                                                    <small class="tx-12 tx-color-03 mg-b-0">Mar 21, 2019, 1:00pm</small>
+                                                </div>
+                                                <div class="mg-l-auto text-right">
+                                                    <p class="tx-medium mg-b-2">-$16.50</p>
+                                                    <small class="tx-12 tx-success mg-b-0">Completed</small>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item d-flex pd-sm-x-20">
+                                                <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-orange op-5"><i class="icon ion-md-bus"></i></span></div>
+                                                <div class="pd-sm-l-10">
+                                                    <p class="tx-medium mg-b-2">Process delivery to #44333</p>
+                                                    <small class="tx-12 tx-color-03 mg-b-0">Mar 20, 2019, 11:40am</small>
+                                                </div>
+                                                <div class="mg-l-auto text-right">
+                                                    <p class="tx-medium mg-b-2">3 Items</p>
+                                                    <small class="tx-12 tx-info mg-b-0">For pickup</small>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item d-flex pd-sm-x-20">
+                                                <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
+                                                <div class="pd-sm-l-10">
+                                                    <p class="tx-medium mg-b-0">Payment from #023328</p>
+                                                    <small class="tx-12 tx-color-03 mg-b-0">Mar 20, 2019, 10:30pm</small>
+                                                </div>
+                                                <div class="mg-l-auto text-right">
+                                                    <p class="tx-medium mg-b-0">+ $129.50</p>
+                                                    <small class="tx-12 tx-success mg-b-0">Completed</small>
+                                                </div>
+                                            </li>
+                                            <li class="list-group-item d-flex pd-sm-x-20">
+                                                <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-gray-400"><i class="icon ion-md-close"></i></span></div>
+                                                <div class="pd-sm-l-10">
+                                                    <p class="tx-medium mg-b-0">Payment failed from #087651</p>
+                                                    <small class="tx-12 tx-color-03 mg-b-0">Mar 19, 2019, 12:54pm</small>
+                                                </div>
+                                                <div class="mg-l-auto text-right">
+                                                    <p class="tx-medium mg-b-0">$150.00</p>
+                                                    <small class="tx-12 tx-danger mg-b-0">Declined</small>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <div class="card-footer text-center tx-13">
+                                            <a href="" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
+                                        </div><!-- card-footer -->
+                                    </div><!-- card -->
+                                </div>
+                            </div>
+                            <div class="col-md-3 pd-r-0 pd-l-0 pd-t-0">
+                                <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
+                                    <div class="card ht-100p">
+                                        <div class="card-header d-flex align-items-center justify-content-between">
+                                            <h6 class="mg-b-0">Gün Sonu Toplamı</h6>
+                                            <div class="d-flex tx-18">
+                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Kasa</th>
+                                                        <th>Tahsilat</th>
+                                                        <th>Ödeme</th>
+                                                        <th>Bakiye</th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>Kasa TRL</td>
+                                                        <td>0,00</td>
+                                                        <td>0,00</td>
+                                                        <td>0,00</td>
+                                                        <td>₺</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Kasa USD</td>
+                                                        <td>0,00</td>
+                                                        <td>0,00</td>
+                                                        <td>0,00</td>
+                                                        <td>$</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Kasa EUR</td>
+                                                        <td>0,00</td>
+                                                        <td>0,00</td>
+                                                        <td>0,00</td>
+                                                        <td>€</td>
+                                                    </tr>
+                                                </tbody>
+
+                                            </table>
+                                        </div>
+
+                                        <div class="card-footer text-center tx-13">
+                                            <a href="" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
+                                        </div><!-- card-footer -->
+                                    </div><!-- card -->
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
+                        <nav class="nav nav-with-icon tx-13">
+                            <a href="/Result/ExportToExcel" class="nav-link"><i data-feather="download"></i> Excel Olarak İndir</a>
+                        </nav>
+                    </div><!-- card-footer -->
+                </div>
+
+                <footer class="content-footer">
+                    <div>
+                        <span>&copy; @DateTime.Now.Year UFE Group LLC </span>
+                    </div>
+
+                </footer>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section canvasmenu {
+
+}
+
+@section scripts {
+
+    <script>
+        $(function () {
+            'use strict'
+
+            $("body").addClass("page-profile");
+
+            $('#DatePicker').datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1,
+                onSelect: function (dateText, inst) {
+                    window.location.href = "/Result/Detail?date=" + dateText + "&locationID="+@Model.CurrentLocation.LocationID;
+                },
+                beforeShow: function (event, ui) {
+                    var $link = $("#LocationResultDate");
+                    ui.dpDiv.offset({
+                        top: $link.offset().top + 10,
+                        left: $link.offset().left + 10
+                    });
+                }
+            });
+
+            $("#LocationResultDate").click(function () {
+                $("#DatePicker").datepicker("show");
+            });
+
+
+        });
+
+
+
+    </script>
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}

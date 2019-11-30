@@ -585,6 +585,9 @@
     <Compile Include="VDayResult.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VDayResultItemList.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VDocumentBankTransfer.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
