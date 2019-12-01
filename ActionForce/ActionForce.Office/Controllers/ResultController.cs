@@ -43,6 +43,7 @@ namespace ActionForce.Office.Controllers
 
             model.DayResultList = Db.VDayResult.Where(x => x.Date == datekey.DateKey).ToList();
 
+           
             return View(model);
         }
 
