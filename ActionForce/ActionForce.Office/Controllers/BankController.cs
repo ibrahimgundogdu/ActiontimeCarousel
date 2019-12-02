@@ -514,7 +514,7 @@ namespace ActionForce.Office.Controllers
                     Db.SaveChanges();
 
                     
-                    OfficeHelper.AddBankAction(newPosColl.LocationID, null, newPosColl.FromBankAccountID, null, newPosColl.ActionTypeID, newPosColl.Date, newPosColl.ActionTypeName, newPosColl.ID, newPosColl.Date, newPosColl.DocumentNumber, newPosColl.Description, 1, 0, newPosColl.Amount, newPosColl.Currency, null, null, newPosColl.RecordEmployeeID, newPosColl.RecordDate);
+                    OfficeHelper.AddBankAction(newPosColl.LocationID, null, newPosColl.FromBankAccountID, null, newPosColl.ActionTypeID, newPosColl.Date, newPosColl.ActionTypeName, newPosColl.ID, newPosColl.Date, newPosColl.DocumentNumber, newPosColl.Description, -1, 0, newPosColl.Amount, newPosColl.Currency, null, null, newPosColl.RecordEmployeeID, newPosColl.RecordDate);
 
                     result.IsSuccess = true;
                     result.Message = "Pos İptali başarı ile eklendi";
@@ -752,7 +752,7 @@ namespace ActionForce.Office.Controllers
 
                         Db.SaveChanges();
 
-                        OfficeHelper.AddBankAction(isCash.LocationID, null, isCash.FromBankAccountID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+                        OfficeHelper.AddBankAction(isCash.LocationID, null, isCash.FromBankAccountID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
 
                         result.IsSuccess = true;
                         result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki pos iptali başarı ile iptal edildi";
@@ -885,7 +885,7 @@ namespace ActionForce.Office.Controllers
                     Db.SaveChanges();
 
                     // cari hesap işlemesi
-                    OfficeHelper.AddBankAction(newPosColl.LocationID, null, newPosColl.FromBankAccountID, null, newPosColl.ActionTypeID, newPosColl.Date, newPosColl.ActionTypeName, newPosColl.ID, newPosColl.Date, newPosColl.DocumentNumber, newPosColl.Description, 1, 0, newPosColl.Amount, newPosColl.Currency, null, null, newPosColl.RecordEmployeeID, newPosColl.RecordDate);
+                    OfficeHelper.AddBankAction(newPosColl.LocationID, null, newPosColl.FromBankAccountID, null, newPosColl.ActionTypeID, newPosColl.Date, newPosColl.ActionTypeName, newPosColl.ID, newPosColl.Date, newPosColl.DocumentNumber, newPosColl.Description, -1, 0, newPosColl.Amount, newPosColl.Currency, null, null, newPosColl.RecordEmployeeID, newPosColl.RecordDate);
 
                     result.IsSuccess = true;
                     result.Message = "Pos İade başarı ile eklendi";
@@ -1123,7 +1123,7 @@ namespace ActionForce.Office.Controllers
 
                         Db.SaveChanges();
 
-                        OfficeHelper.AddBankAction(isCash.LocationID, null, isCash.FromBankAccountID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+                        OfficeHelper.AddBankAction(isCash.LocationID, null, isCash.FromBankAccountID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
 
                         result.IsSuccess = true;
                         result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki pos iadesi başarı ile iptal edildi";

@@ -14,6 +14,7 @@ namespace ActionForce.Office
         public string Currency { get; set; }
         public string DocumentDate { get; set; }
         public string Description { get; set; }
+        public string ExchangeRate { get; set; }
         public Guid UID { get; set; }
     }
 
@@ -27,6 +28,7 @@ namespace ActionForce.Office
         public string Currency { get; set; }
         public string DocumentDate { get; set; }
         public string Description { get; set; }
+        public string ExchangeRate { get; set; }
         public Guid UID { get; set; }
     }
     public class NewCashExchange
@@ -38,6 +40,7 @@ namespace ActionForce.Office
         public string Exchange { get; set; }
         public string DocumentDate { get; set; }
         public string Description { get; set; }
+        public string ExchangeRate { get; set; }
         public Guid UID { get; set; }
     }
 
@@ -48,6 +51,7 @@ namespace ActionForce.Office
         public string Currency { get; set; }
         public string Amount { get; set; }
         public string Description { get; set; }
+        public string ExchangeRate { get; set; }
         public Guid UID { get; set; }
     }
 
@@ -61,6 +65,7 @@ namespace ActionForce.Office
         public string Currency { get; set; }
         public string DocumentDate { get; set; }
         public string Description { get; set; }
+        public string ExchangeRate { get; set; }
         public Guid UID { get; set; }
     }
     public class NewTicketSaleReturn
@@ -74,6 +79,7 @@ namespace ActionForce.Office
         public string DocumentDate { get; set; }
         public string Description { get; set; }
         public int PayMethodID { get; set; }
+        public string ExchangeRate { get; set; }
         public Guid UID { get; set; }
     }
 
@@ -88,6 +94,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public string SlipNumber { get; set; }
         public string SlipDocument { get; set; }
+        public string ExchangeRate { get; set; }
         public Guid UID { get; set; }
     }
     public class NewCashBankTransfer
@@ -103,6 +110,7 @@ namespace ActionForce.Office
         public string SlipDocument { get; set; }
         public int StatusID { get; set; }
         public string ReferenceCode { get; set; }
+        public string ExchangeRate { get; set; }
         public Guid UID { get; set; }
     }
     public class NewCashSalaryPayment
@@ -154,6 +162,19 @@ namespace ActionForce.Office
         public string DocumentDate { get; set; }
         public string Description { get; set; }
         public int BankAccountID { get; set; }
+        public Guid UID { get; set; }
+    }
+    public class NewSalaryEarn
+    {
+        public int ActinTypeID { get; set; }
+        public float UnitPrice { get; set; }
+        public float QuantityHour { get; set; }
+        public string TotalAmount { get; set; }
+        public int LocationID { get; set; }
+        public int EmployeeID { get; set; }
+        public string Currency { get; set; }
+        public string DocumentDate { get; set; }
+        public string Description { get; set; }
         public Guid UID { get; set; }
     }
 }

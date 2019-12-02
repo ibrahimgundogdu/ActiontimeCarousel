@@ -70,9 +70,9 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Tarih</label>
                                             <div class="col-sm-9">
-                                                <span class="text-danger">@Model.ExpenseDetail.ReferenceID</span>
+                                                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" placeholder="Tarih" value="@(Model.ExpenseDetail.Date.Value.ToString("yyyy-MM-dd"))" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -117,7 +117,13 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Kuru</label>
                                             <div class="col-sm-9">
-                                                <span class="text-danger">@Model.ExpenseDetail.ExchangeRate</span>
+                                                <input id="ExchangeRate" name="ExchangeRate" type="text" class="form-control" placeholder="Döviz Kuru">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Kur</label>
+                                            <div class="col-sm-9">
+                                                <input id="Exchange" name="Exchange" type="text" class="form-control" value="@Model.ExpenseDetail.ExchangeRate" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -148,6 +154,12 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
+                                            <div class="col-sm-9">
+                                                <span class="text-danger">@Model.ExpenseDetail.ReferenceID</span>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <div class="col-sm-3">Active?</div>
                                             <div class="col-sm-9">
                                                 <div class="custom-control custom-checkbox">
@@ -173,9 +185,13 @@
                                 </div>
                                 <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
                                     <nav class="nav nav-with-icon tx-13">
+                                        <a href="" class="nav-link"><i data-feather="save"></i> <strong>İlk Kayıt : </strong></a>
                                         <a href="" class="nav-link"><i data-feather="user-plus"></i> @(Html.Raw($"{Model.ExpenseDetail.RecorderFullName}"))</a>
                                         <a href="" class="nav-link"><i data-feather="calendar"></i> @(Html.Raw($"{Model.ExpenseDetail.RecordDate.Value.ToLongDateString()}"))</a>
+                                        <a href="" class="nav-link"><span>|</span></a>
+                                        <a href="" class="nav-link"><i data-feather="edit"></i> <strong>Güncelleyen : </strong></a>
                                         <a href="" class="nav-link"><i data-feather="user-check"></i> @(Html.Raw($"{Model.ExpenseDetail.UpdaterFullName}"))</a>
+                                        <a href="" class="nav-link"><i data-feather="calendar"></i> @(Model.ExpenseDetail.UpdateDate != null ? Html.Raw($"{Model.ExpenseDetail.UpdateDate.Value.ToLongDateString()}") : Html.Raw($""))</a>
                                     </nav>
                                 </div><!-- card-footer -->
                             </div><!-- card -->
@@ -200,6 +216,7 @@
 
                                                 <div class="activity-body">
                                                     <p class="mg-b-2"><strong>@item.ProcessType :</strong> @(item.ErrorMessage != "" ? Html.Raw($"<span class='text-danger'>{item.ErrorMessage}</span>") : Html.Raw($"<span class='text-black-50'>{item.ResultMessage}</span>"))</p>
+                                                    @(Html.Raw($"<p class='mg - b - 2'>{item.FieldName} <strong> | </strong> {item.OldValue} <strong> | </strong> {item.NewValue} </p>"))
                                                     <small class="tx-color-03">@(Html.Raw($"{item.RecordDate.Value.ToLongDateString()} {item.RecordDate.Value.ToLongTimeString()} {item.RecordEmployee}"))</small>
                                                 </div>
                                             </li>
@@ -273,9 +290,9 @@
                         //var cleave = new Cleave('#Amount', {
                         //    numeral: true
                         //});
-                        var cleave2 = new Cleave('#Exchange', {
-                            numeral: true
-                        });
+                        //var cleave2 = new Cleave('#Exchange', {
+                        //    numeral: true
+                        //});
                         function getDate(element) {
                             var date;
                             try {
