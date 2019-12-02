@@ -26,6 +26,33 @@ namespace ActionForce.WebSocket
             Console.Read();
         }
 
+        //private void OnAccept(IAsyncResult result)
+        //{
+        //    try
+        //    {
+        //        Socket client = null;
+        //        if (serverSocket != null && serverSocket.IsBound)
+        //        {
+        //            client = serverSocket.EndAccept(result);
+        //        }
+        //        if (client != null)
+        //        {
+        //            /* Handshaking and managing ClientSocket */
+        //        }
+        //    }
+        //    catch (SocketException exception)
+        //    {
+
+        //    }
+        //    finally
+        //    {
+        //        if (serverSocket != null && serverSocket.IsBound)
+        //        {
+        //            serverSocket.BeginAccept(null, 0, OnAccept, null);
+        //        }
+        //    }
+        //}
+
         private static void OnAccept(IAsyncResult result)
         {
             byte[] buffer = new byte[1024];

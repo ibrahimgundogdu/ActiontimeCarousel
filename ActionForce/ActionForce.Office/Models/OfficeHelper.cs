@@ -705,21 +705,21 @@ namespace ActionForce.Office
 
                         if (locschedule != null)
                         {
-                            var employees = db.EmployeeLocation.Where(x => x.LocationID == location.LocationID && x.IsActive == true && x.Role.Stage == 1 && x.Employee.IsActive == true).ToList();
-                            List<int> empids = employees.Select(x => x.EmployeeID).ToList();
-
                             var empschedules = db.Schedule.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date).ToList();
+                            List<int> empids = empschedules.Select(x => x.EmployeeID.Value).ToList();
+
                             var empshifts = db.EmployeeShift.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date && empids.Contains(x.EmployeeID.Value)).ToList();
                             var empunits = db.EmployeeSalary.Where(x => empids.Contains(x.EmployeeID) && x.DateStart <= dayresult.Date).ToList();
 
-                            foreach (var emp in employees)
+                            foreach (var emp in empids)
                             {
-                                var employeeschedule = empschedules.FirstOrDefault(x => x.EmployeeID == emp.EmployeeID);
-                                var employeeshift = empshifts.FirstOrDefault(x => x.EmployeeID == emp.EmployeeID);
-                                var hourprice = empunits.Where(x => x.EmployeeID == emp.EmployeeID && x.Hourly > 0).OrderByDescending(x => x.DateStart).FirstOrDefault();
+                                var employeeschedule = empschedules.FirstOrDefault(x => x.EmployeeID == emp);
+                                var employeeshift = empshifts.FirstOrDefault(x => x.EmployeeID == emp);
+                                var hourprice = empunits.Where(x => x.EmployeeID == emp && x.Hourly > 0 && x.DateStart <= dayresult.Date).OrderByDescending(x => x.DateStart).FirstOrDefault();
 
                                 double? durationhour = 0;
                                 double? unithour = hourprice?.Hourly ?? 0;
+                                TimeSpan? duration = null;
 
                                 if (employeeschedule != null && employeeshift != null)
                                 {
@@ -737,6 +737,7 @@ namespace ActionForce.Office
 
                                     if (finishtime != null && starttime != null)
                                     {
+                                        duration = (finishtime - starttime).Value;
                                         double? durationminute = (finishtime - starttime).Value.TotalMinutes;
                                         durationhour = (durationminute / 60);
                                     }
@@ -755,12 +756,15 @@ namespace ActionForce.Office
                                         SystemAmount = (durationhour * unithour),
                                         LocationID = location.LocationID,
                                         Date = dayresult.Date,
-                                        EmployeeID = emp.EmployeeID,
+                                        EmployeeID = emp,
                                         SystemHourQuantity = durationhour,
                                         UnitHourPrice = unithour,
                                         RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
                                         RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
-                                        RecordIP = GetIPAddress()
+                                        RecordIP = GetIPAddress(),
+                                        Duration = duration,
+                                        SystemDuration = duration,
+                                        HourQuantity = durationhour
 
                                     }).FirstOrDefault());
 
@@ -777,7 +781,7 @@ namespace ActionForce.Office
                                         SystemAmount = 0,
                                         LocationID = location.LocationID,
                                         Date = dayresult.Date,
-                                        EmployeeID = emp.EmployeeID,
+                                        EmployeeID = emp,
                                         RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
                                         RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
                                         RecordIP = GetIPAddress()
@@ -800,7 +804,7 @@ namespace ActionForce.Office
                                         SystemAmount = 0,
                                         LocationID = location.LocationID,
                                         Date = dayresult.Date,
-                                        EmployeeID = emp.EmployeeID,
+                                        EmployeeID = emp,
                                         SystemHourQuantity = 0,
                                         UnitHourPrice = unithour,
                                         RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
@@ -822,7 +826,7 @@ namespace ActionForce.Office
                                         SystemAmount = 0,
                                         LocationID = location.LocationID,
                                         Date = dayresult.Date,
-                                        EmployeeID = emp.EmployeeID,
+                                        EmployeeID = emp,
                                         RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
                                         RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
                                         RecordIP = GetIPAddress()
@@ -1126,21 +1130,22 @@ namespace ActionForce.Office
 
                         if (locschedule != null)
                         {
-                            var employees = db.EmployeeLocation.Where(x => x.LocationID == location.LocationID && x.IsActive == true && x.Role.Stage == 1 && x.Employee.IsActive == true).ToList();
-                            List<int> empids = employees.Select(x => x.EmployeeID).ToList();
-
                             var empschedules = db.Schedule.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date).ToList();
+                            List<int> empids = empschedules.Select(x => x.EmployeeID.Value).ToList();
+
+
                             var empshifts = db.EmployeeShift.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date && empids.Contains(x.EmployeeID.Value)).ToList();
                             var empunits = db.EmployeeSalary.Where(x => empids.Contains(x.EmployeeID) && x.DateStart <= dayresult.Date).ToList();
 
-                            foreach (var emp in employees)
+                            foreach (var emp in empids)
                             {
-                                var employeeschedule = empschedules.FirstOrDefault(x => x.EmployeeID == emp.EmployeeID);
-                                var employeeshift = empshifts.FirstOrDefault(x => x.EmployeeID == emp.EmployeeID);
-                                var hourprice = empunits.Where(x => x.EmployeeID == emp.EmployeeID && x.Hourly > 0).OrderByDescending(x => x.DateStart).FirstOrDefault();
+                                var employeeschedule = empschedules.FirstOrDefault(x => x.EmployeeID == emp);
+                                var employeeshift = empshifts.FirstOrDefault(x => x.EmployeeID == emp);
+                                var hourprice = empunits.Where(x => x.EmployeeID == emp && x.Hourly > 0 && x.DateStart <= dayresult.Date).OrderByDescending(x => x.DateStart).FirstOrDefault();
 
                                 double? durationhour = 0;
                                 double? unithour = hourprice?.Hourly ?? 0;
+                                TimeSpan? duration = null;
 
                                 if (employeeschedule != null && employeeshift != null)
                                 {
@@ -1158,6 +1163,7 @@ namespace ActionForce.Office
 
                                     if (finishtime != null && starttime != null)
                                     {
+                                        duration = (finishtime - starttime).Value;
                                         double? durationminute = (finishtime - starttime).Value.TotalMinutes;
                                         durationhour = (durationminute / 60);
                                     }
@@ -1175,12 +1181,15 @@ namespace ActionForce.Office
                                         SystemAmount = (durationhour * hourprice.Hourly),
                                         LocationID = location.LocationID,
                                         Date = dayresult.Date,
-                                        EmployeeID = emp.EmployeeID,
+                                        EmployeeID = emp,
                                         SystemHourQuantity = durationhour,
                                         UnitHourPrice = hourprice.Hourly,
                                         RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
                                         RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
-                                        RecordIP = GetIPAddress()
+                                        RecordIP = GetIPAddress(),
+                                        Duration = duration,
+                                        SystemDuration = duration,
+                                        HourQuantity = durationhour
 
                                     }).FirstOrDefault());
 
@@ -1197,7 +1206,7 @@ namespace ActionForce.Office
                                         SystemAmount = 0,
                                         LocationID = location.LocationID,
                                         Date = dayresult.Date,
-                                        EmployeeID = emp.EmployeeID,
+                                        EmployeeID = emp,
                                         RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
                                         RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
                                         RecordIP = GetIPAddress()
@@ -1220,7 +1229,7 @@ namespace ActionForce.Office
                                         SystemAmount = 0,
                                         LocationID = location.LocationID,
                                         Date = dayresult.Date,
-                                        EmployeeID = emp.EmployeeID,
+                                        EmployeeID = emp,
                                         SystemHourQuantity = 0,
                                         UnitHourPrice = hourprice.Hourly,
                                         RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
@@ -1242,7 +1251,7 @@ namespace ActionForce.Office
                                         SystemAmount = 0,
                                         LocationID = location.LocationID,
                                         Date = dayresult.Date,
-                                        EmployeeID = emp.EmployeeID,
+                                        EmployeeID = emp,
                                         RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
                                         RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
                                         RecordIP = GetIPAddress()

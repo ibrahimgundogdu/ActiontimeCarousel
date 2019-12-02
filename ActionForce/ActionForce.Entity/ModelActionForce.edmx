@@ -688,7 +688,9 @@
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="EmployeeID" Type="int" />
           <Property Name="UnitHourPrice" Type="float" />
+          <Property Name="Duration" Type="time" Precision="0" />
           <Property Name="HourQuantity" Type="float" />
+          <Property Name="SystemDuration" Type="time" Precision="0" />
           <Property Name="SystemHourQuantity" Type="float" />
           <Property Name="FilePath" Type="nvarchar" MaxLength="80" />
           <Property Name="FileName" Type="nvarchar" MaxLength="50" />
@@ -1328,6 +1330,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentSalaryEarn' does no
           <Property Name="Hourly" Type="float" />
           <Property Name="Monthly" Type="float" />
           <Property Name="Money" Type="nvarchar" MaxLength="4" />
+          <Property Name="HourlyExtend" Type="float" />
+          <Property Name="ExtendMultiplyRate" Type="float" />
         </EntityType>
         <EntityType Name="EmployeeShift">
           <Key>
@@ -2972,6 +2976,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDayResultItemList' does no
           <Property Name="AccountName" Type="nvarchar" MaxLength="50" />
           <Property Name="BranchName" Type="nvarchar" MaxLength="50" />
           <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Duration" Type="time" Precision="0" />
+          <Property Name="SystemDuration" Type="time" Precision="0" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentBankTransfer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4430,7 +4436,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDayResultItemList].[ItemName] AS [ItemName], 
     [VDayResultItemList].[AccountName] AS [AccountName], 
     [VDayResultItemList].[BranchName] AS [BranchName], 
-    [VDayResultItemList].[FullName] AS [FullName]
+    [VDayResultItemList].[FullName] AS [FullName], 
+    [VDayResultItemList].[Duration] AS [Duration], 
+    [VDayResultItemList].[SystemDuration] AS [SystemDuration]
     FROM [dbo].[VDayResultItemList] AS [VDayResultItemList]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentBankTransfer" EntityType="Self.VDocumentBankTransfer" store:Type="Views" store:Schema="dbo">
@@ -6256,6 +6264,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Hourly" Type="Double" />
           <Property Name="Monthly" Type="Double" />
           <Property Name="Money" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="HourlyExtend" Type="Double" />
+          <Property Name="ExtendMultiplyRate" Type="Double" />
         </EntityType>
         <EntityType Name="EmployeeShift">
           <Key>
@@ -9161,6 +9171,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateEmployee" Type="Int32" />
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Duration" Type="Time" Precision="0" />
+          <Property Name="SystemDuration" Type="Time" Precision="0" />
         </EntityType>
         <EntityType Name="DayResultItems">
           <Key>
@@ -9494,6 +9506,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="AccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Duration" Type="Time" Precision="0" />
+          <Property Name="SystemDuration" Type="Time" Precision="0" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -10210,6 +10224,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="EmployeeSalary">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeeSalary">
               <MappingFragment StoreEntitySet="EmployeeSalary">
+                <ScalarProperty Name="ExtendMultiplyRate" ColumnName="ExtendMultiplyRate" />
+                <ScalarProperty Name="HourlyExtend" ColumnName="HourlyExtend" />
                 <ScalarProperty Name="Money" ColumnName="Money" />
                 <ScalarProperty Name="Monthly" ColumnName="Monthly" />
                 <ScalarProperty Name="Hourly" ColumnName="Hourly" />
@@ -13015,6 +13031,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DayResultItemList">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DayResultItemList">
               <MappingFragment StoreEntitySet="DayResultItemList">
+                <ScalarProperty Name="SystemDuration" ColumnName="SystemDuration" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
                 <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
@@ -13323,6 +13341,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDayResultItemList">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDayResultItemList">
               <MappingFragment StoreEntitySet="VDayResultItemList">
+                <ScalarProperty Name="SystemDuration" ColumnName="SystemDuration" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="BranchName" ColumnName="BranchName" />
                 <ScalarProperty Name="AccountName" ColumnName="AccountName" />

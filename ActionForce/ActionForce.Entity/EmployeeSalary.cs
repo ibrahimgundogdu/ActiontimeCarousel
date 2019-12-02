@@ -20,5 +20,7 @@ namespace ActionForce.Entity
         public Nullable<double> Hourly { get; set; }
         public Nullable<double> Monthly { get; set; }
         public string Money { get; set; }
+        public Nullable<double> HourlyExtend { get; set; }
+        public Nullable<double> ExtendMultiplyRate { get; set; }
     }
 }

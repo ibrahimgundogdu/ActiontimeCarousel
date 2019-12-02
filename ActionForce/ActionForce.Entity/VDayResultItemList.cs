@@ -48,5 +48,7 @@ namespace ActionForce.Entity
         public string AccountName { get; set; }
         public string BranchName { get; set; }
         public string FullName { get; set; }
+        public Nullable<System.TimeSpan> Duration { get; set; }
+        public Nullable<System.TimeSpan> SystemDuration { get; set; }
     }
 }
