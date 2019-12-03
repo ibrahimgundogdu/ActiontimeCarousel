@@ -32,6 +32,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.BankAccountList = Db.BankAccount.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
 
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
@@ -44,7 +45,7 @@ namespace ActionForce.Office.Controllers
                 model.SalaryEarn = model.SalaryEarn.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
 
             }
-            
+            model.FromList = OfficeHelper.GetToList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
 
             return View(model);
         }
@@ -130,6 +131,7 @@ namespace ActionForce.Office.Controllers
                         newCashColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
                         newCashColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                         newCashColl.RecordIP = OfficeHelper.GetIPAddress();
+                        newCashColl.UID = Guid.NewGuid();
 
                         Db.DocumentSalaryEarn.Add(newCashColl);
                         Db.SaveChanges();
@@ -197,14 +199,16 @@ namespace ActionForce.Office.Controllers
                 }
                 var cash = OfficeHelper.GetCash((int)cashCollect.LocationID, cashCollect.Currency);
 
-
-
+                var isDate = DateTime.Now.Date;
+                var isEmp = cashCollect.EmployeeID;
                 var isCash = Db.DocumentSalaryEarn.FirstOrDefault(x => x.UID == cashCollect.UID);
                 if (isCash != null)
                 {
                     try
                     {
-                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+                        isDate = Convert.ToDateTime(isCash.Date);
+                        isEmp = (int)isCash.EmployeeID;
+                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(docDate));
 
                         DocumentSalaryEarn self = new DocumentSalaryEarn()
                         {
@@ -233,7 +237,7 @@ namespace ActionForce.Office.Controllers
                         };
 
 
-                        isCash.EmployeeID = fromPrefix;
+                        isCash.EmployeeID = cashCollect.EmployeeID;
                         isCash.TotalAmount = amount;
                         isCash.UnitPrice = cashCollect.UnitPrice;
                         isCash.Description = cashCollect.Description;
@@ -241,28 +245,28 @@ namespace ActionForce.Office.Controllers
                         isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
                         isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
                         isCash.UpdateIP = OfficeHelper.GetIPAddress();
-                        //isCash.SystemAmount = ourcompany.Currency == currency ? amount : amount * isCash.ExchangeRate;
-                        //isCash.SystemCurrency = ourcompany.Currency;
 
                         Db.SaveChanges();
 
-                        var cashaction = Db.CashActions.FirstOrDefault(x => x.CashID == isCash.EmployeeID && x.LocationID == isCash.LocationID && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isCash.Date && x.DocumentNumber == isCash.DocumentNumber);
+                        //var cashaction = Db.CashActions.FirstOrDefault(x => x.CashID == isCash.EmployeeID && x.LocationID == isCash.LocationID && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isCash.Date && x.DocumentNumber == isCash.DocumentNumber);
 
-                        if (cashaction != null)
-                        {
-                            cashaction.Payment = isCash.TotalAmount;
-                            cashaction.UpdateDate = isCash.UpdateDate;
-                            cashaction.UpdateEmployeeID = isCash.UpdateEmployee;
+                        //if (cashaction != null)
+                        //{
+                        //    cashaction.Payment = isCash.TotalAmount;
+                        //    cashaction.UpdateDate = isCash.UpdateDate;
+                        //    cashaction.UpdateEmployeeID = isCash.UpdateEmployee;
 
-                            Db.SaveChanges();
+                        //    Db.SaveChanges();
 
-                        }
+                        //}
 
-                        var empaction = Db.EmployeeCashActions.FirstOrDefault(x => x.EmployeeID == isCash.EmployeeID && x.ActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isCash.Date);
+                        var empaction = Db.EmployeeCashActions.FirstOrDefault(x => x.EmployeeID == isEmp && x.ActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate);
 
                         if (empaction != null)
                         {
                             empaction.Collection = isCash.TotalAmount;
+                            empaction.Currency = cashCollect.Currency;
+                            empaction.ProcessDate = docDate;
                             empaction.UpdateDate = isCash.UpdateDate;
                             empaction.UpdateEmployeeID = isCash.UpdateEmployee;
 
@@ -289,8 +293,8 @@ namespace ActionForce.Office.Controllers
             }
 
             TempData["result"] = result;
-            //return RedirectToAction("CashDetail", new { id = cashCollect.UID });
-            return RedirectToAction("Index", "Salary");
+            return RedirectToAction("Detail", new { id = cashCollect.UID });
+            //return RedirectToAction("Index", "Salary");
 
         }
 
@@ -516,6 +520,7 @@ namespace ActionForce.Office.Controllers
                         newCashColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newCashColl.ExchangeRate;
                         newCashColl.SystemCurrency = ourcompany.Currency;
                         newCashColl.SalaryType = cashSalary.SalaryType;
+                        newCashColl.UID = Guid.NewGuid();
 
                         Db.DocumentSalaryPayment.Add(newCashColl);
                         Db.SaveChanges();
@@ -596,14 +601,21 @@ namespace ActionForce.Office.Controllers
                 }
                 var cash = OfficeHelper.GetCash((int)cashCollect.LocationID, cashCollect.Currency);
 
-
+                var isDate = DateTime.Now.Date;
+                int? isKasa = cashCollect.BankAccountID;
+                int? isBank = cashCollect.BankAccountID;
+                var isEmp = fromPrefix == "E" ? fromID : (int?)null;
 
                 var isCash = Db.DocumentSalaryPayment.FirstOrDefault(x => x.UID == cashCollect.UID);
                 if (isCash != null)
                 {
                     try
                     {
-                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+                        isDate = Convert.ToDateTime(isCash.Date);
+                        isKasa = isCash.FromCashID != null ? Convert.ToInt32(isCash.FromCashID) : (int?)null;
+                        isBank = isCash.FromBankAccountID != null ? isCash.FromBankAccountID : (int?)null;
+                        isEmp = isCash.ToEmployeeID;
+                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(docDate));
 
                         DocumentSalaryPayment self = new DocumentSalaryPayment()
                         {
@@ -635,7 +647,7 @@ namespace ActionForce.Office.Controllers
                             EnvironmentID = isCash.EnvironmentID
                         };
 
-
+                        isCash.Date = docDate;
                         isCash.ToEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                         isCash.Amount = amount;
                         isCash.FromCashID = (int?)cashCollect.BankAccountID == 0 ? cash.ID : (int?)null;
@@ -646,28 +658,69 @@ namespace ActionForce.Office.Controllers
                         isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
                         isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
                         isCash.UpdateIP = OfficeHelper.GetIPAddress();
-                        //isCash.SystemAmount = ourcompany.Currency == currency ? amount : amount * isCash.ExchangeRate;
-                        //isCash.SystemCurrency = ourcompany.Currency;
+                        isCash.SystemAmount = ourcompany.Currency == currency ? amount : amount * isCash.ExchangeRate;
+                        isCash.SystemCurrency = ourcompany.Currency;
 
                         Db.SaveChanges();
 
-                        var cashaction = Db.CashActions.FirstOrDefault(x => x.CashID == isCash.FromCashID && x.LocationID == isCash.LocationID && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isCash.Date && x.DocumentNumber == isCash.DocumentNumber);
-
-                        if (cashaction != null)
+                        if (isKasa != null && cashCollect.BankAccountID == 0)
                         {
-                            cashaction.Payment = isCash.Amount;
-                            cashaction.UpdateDate = isCash.UpdateDate;
-                            cashaction.UpdateEmployeeID = isCash.UpdateEmployee;
+                            var cashaction = Db.CashActions.FirstOrDefault(x => x.CashID == isKasa && x.LocationID == isCash.LocationID && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
 
-                            Db.SaveChanges();
+                            if (cashaction != null)
+                            {
+                                cashaction.Payment = isCash.Amount;
+                                cashaction.Currency = cashCollect.Currency;
+                                cashaction.CashID = (int?)cashCollect.BankAccountID == 0 ? cash.ID : (int?)null;
+                                cashaction.ActionDate = docDate;
+                                cashaction.ProcessDate = docDate;
+                                cashaction.UpdateDate = isCash.UpdateDate;
+                                cashaction.UpdateEmployeeID = isCash.UpdateEmployee;
+
+                                Db.SaveChanges();
+
+                            }
+                        }
+                        else if (isBank != null && cashCollect.BankAccountID > 0)
+                        {
+                            var bankaction = Db.BankActions.FirstOrDefault(x => x.BankAccountID == isBank && x.LocationID == isCash.LocationID && x.BankActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
+
+                            if (bankaction != null)
+                            {
+                                bankaction.Payment = isCash.Amount;
+                                bankaction.Currency = cashCollect.Currency;
+                                bankaction.BankAccountID = (int?)cashCollect.BankAccountID > 0 ? cashCollect.BankAccountID : (int?)null;
+                                bankaction.ActionDate = docDate;
+                                bankaction.ProcessDate = docDate;
+                                bankaction.UpdateDate = isCash.UpdateDate;
+                                bankaction.UpdateEmployeeID = isCash.UpdateEmployee;
+
+                                Db.SaveChanges();
+
+                            }
+                        }
+                        else if (isKasa != null && cashCollect.BankAccountID != 0)
+                        {
+                            OfficeHelper.AddCashAction(isCash.FromCashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+                            OfficeHelper.AddBankAction(isCash.LocationID, null, isCash.FromBankAccountID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
 
                         }
+                        else if (isBank != null && cashCollect.BankAccountID == 0)
+                        {
+                            OfficeHelper.AddCashAction(isCash.FromCashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+                            OfficeHelper.AddBankAction(isCash.LocationID, null, isCash.FromBankAccountID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+                        }
 
-                        var empaction = Db.EmployeeCashActions.FirstOrDefault(x => x.EmployeeID == isCash.ToEmployeeID && x.ActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isCash.Date);
+
+                        var empaction = Db.EmployeeCashActions.FirstOrDefault(x => x.EmployeeID == isEmp && x.ActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate);
 
                         if (empaction != null)
                         {
+                            
+                            empaction.ProcessDate = docDate;
                             empaction.Collection = isCash.Amount;
+                            empaction.Currency = cashCollect.Currency;
+                            empaction.EmployeeID = isCash.ToEmployeeID;
                             empaction.UpdateDate = isCash.UpdateDate;
                             empaction.UpdateEmployeeID = isCash.UpdateEmployee;
 
@@ -694,8 +747,8 @@ namespace ActionForce.Office.Controllers
             }
 
             TempData["result"] = result;
-            //return RedirectToAction("CashDetail", new { id = cashCollect.UID });
-            return RedirectToAction("SalaryPayment", "Salary");
+            return RedirectToAction("SalaryDetail", new { id = cashCollect.UID });
+            //return RedirectToAction("SalaryPayment", "Salary");
 
         }
 

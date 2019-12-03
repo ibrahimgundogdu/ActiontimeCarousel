@@ -235,13 +235,18 @@ namespace ActionForce.Office.Controllers
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
                 //var cash = OfficeHelper.GetCash(posCollect.LocationID, posCollect.Currency);
+                var exchanges = posCollect.ExchangeRate;
+                var isDate = DateTime.Now.Date;
+                var isKasa = posCollect.BankAccountID;
 
                 var isCash = Db.DocumentPosCollections.FirstOrDefault(x => x.UID == posCollect.UID);
                 if (isCash != null)
                 {
                     try
                     {
-                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+                        isDate = Convert.ToDateTime(isCash.Date);
+                        isKasa = Convert.ToInt32(isCash.BankAccountID);
+                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(docDate));
 
                         DocumentPosCollections self = new DocumentPosCollections()
                         {
@@ -272,25 +277,30 @@ namespace ActionForce.Office.Controllers
                             EnvironmentID = isCash.EnvironmentID
                         };
 
-
-                        isCash.BankAccountID = isCash.BankAccountID;
+                        isCash.Date = docDate;
+                        isCash.BankAccountID = posCollect.BankAccountID;
                         isCash.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                         isCash.Amount = amount;
+                        isCash.Currency = posCollect.Currency;
                         isCash.Description = isCash.Description;
-                        isCash.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                        isCash.ExchangeRate = exchanges != null ? Convert.ToDouble(posCollect.ExchangeRate.ToString().Replace(".", ",")) : currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
                         isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
                         isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
                         isCash.UpdateIP = OfficeHelper.GetIPAddress();
-                        //isCash.SystemAmount = ourcompany.Currency == currency ? amount : amount * isCash.ExchangeRate;
-                        //isCash.SystemCurrency = ourcompany.Currency;
+                        isCash.SystemAmount = ourcompany.Currency == currency ? amount : amount * isCash.ExchangeRate;
+                        isCash.SystemCurrency = ourcompany.Currency;
 
                         Db.SaveChanges();
 
-                        var cashaction = Db.BankActions.FirstOrDefault(x => x.BankAccountID == isCash.BankAccountID && x.LocationID == isCash.LocationID && x.BankActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isCash.Date && x.DocumentNumber == isCash.DocumentNumber);
+                        var cashaction = Db.BankActions.FirstOrDefault(x => x.BankAccountID == isKasa && x.LocationID == isCash.LocationID && x.BankActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
 
                         if (cashaction != null)
                         {
                             cashaction.Collection = isCash.Amount;
+                            cashaction.Currency = posCollect.Currency;
+                            cashaction.BankAccountID = posCollect.BankAccountID;
+                            cashaction.ActionDate = docDate;
+                            cashaction.ProcessDate = docDate;
                             cashaction.UpdateDate = isCash.UpdateDate;
                             cashaction.UpdateEmployeeID = isCash.UpdateEmployee;
 
@@ -317,8 +327,8 @@ namespace ActionForce.Office.Controllers
             }
 
             TempData["result"] = result;
-
-            return RedirectToAction("Index", "Bank");
+            return RedirectToAction("Detail", new { id = posCollect.UID });
+            //return RedirectToAction("Index", "Bank");
         }
         
         [AllowAnonymous]
@@ -606,13 +616,17 @@ namespace ActionForce.Office.Controllers
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
                 //var cash = OfficeHelper.GetCash(posCollect.LocationID, posCollect.Currency);
-
+                var exchanges = posCollect.ExchangeRate;
+                var isDate = DateTime.Now.Date;
+                var isKasa = posCollect.BankAccountID;
                 var isCash = Db.DocumentPosCancel.FirstOrDefault(x => x.UID == posCollect.UID);
                 if (isCash != null)
                 {
                     try
                     {
-                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+                        isDate = Convert.ToDateTime(isCash.Date);
+                        isKasa = Convert.ToInt32(isCash.FromBankAccountID);
+                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(docDate));
 
                         DocumentPosCancel self = new DocumentPosCancel()
                         {
@@ -643,25 +657,30 @@ namespace ActionForce.Office.Controllers
                             EnvironmentID = isCash.EnvironmentID
                         };
 
-
-                        isCash.FromBankAccountID = isCash.FromBankAccountID;
+                        isCash.Date = docDate;
+                        isCash.FromBankAccountID = posCollect.BankAccountID;
                         isCash.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                         isCash.Amount = amount;
+                        isCash.Currency = posCollect.Currency;
                         isCash.Description = isCash.Description;
-                        isCash.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                        isCash.ExchangeRate = exchanges != null ? Convert.ToDouble(posCollect.ExchangeRate.ToString().Replace(".", ",")) : currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
                         isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
                         isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
                         isCash.UpdateIP = OfficeHelper.GetIPAddress();
-                        //isCash.SystemAmount = ourcompany.Currency == currency ? amount : amount * isCash.ExchangeRate;
-                        //isCash.SystemCurrency = ourcompany.Currency;
+                        isCash.SystemAmount = ourcompany.Currency == currency ? amount : amount * isCash.ExchangeRate;
+                        isCash.SystemCurrency = ourcompany.Currency;
 
                         Db.SaveChanges();
 
-                        var cashaction = Db.BankActions.FirstOrDefault(x => x.BankAccountID == isCash.FromBankAccountID && x.LocationID == isCash.LocationID && x.BankActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isCash.Date && x.DocumentNumber == isCash.DocumentNumber);
+                        var cashaction = Db.BankActions.FirstOrDefault(x => x.BankAccountID == isKasa && x.LocationID == isCash.LocationID && x.BankActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
 
                         if (cashaction != null)
                         {
                             cashaction.Payment = isCash.Amount;
+                            cashaction.Currency = posCollect.Currency;
+                            cashaction.BankAccountID = posCollect.BankAccountID;
+                            cashaction.ActionDate = docDate;
+                            cashaction.ProcessDate = docDate;
                             cashaction.UpdateDate = isCash.UpdateDate;
                             cashaction.UpdateEmployeeID = isCash.UpdateEmployee;
 
@@ -688,8 +707,7 @@ namespace ActionForce.Office.Controllers
             }
 
             TempData["result"] = result;
-
-            return RedirectToAction("PosCancel", "Bank");
+            return RedirectToAction("PosCancelDetail", new { id = posCollect.UID });
         }
 
         [AllowAnonymous]
@@ -977,13 +995,18 @@ namespace ActionForce.Office.Controllers
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
                 //var cash = OfficeHelper.GetCash(posCollect.LocationID, posCollect.Currency);
+                var exchanges = posCollect.ExchangeRate;
+                var isDate = DateTime.Now.Date;
+                var isKasa = posCollect.BankAccountID;
 
                 var isCash = Db.DocumentPosRefund.FirstOrDefault(x => x.UID == posCollect.UID);
                 if (isCash != null)
                 {
                     try
                     {
-                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+                        isDate = Convert.ToDateTime(isCash.Date);
+                        isKasa = Convert.ToInt32(isCash.FromBankAccountID);
+                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(docDate));
 
                         DocumentPosRefund self = new DocumentPosRefund()
                         {
@@ -1014,25 +1037,30 @@ namespace ActionForce.Office.Controllers
                             EnvironmentID = isCash.EnvironmentID
                         };
 
-
-                        isCash.FromBankAccountID = isCash.FromBankAccountID;
+                        isCash.Date = docDate;
+                        isCash.FromBankAccountID = posCollect.BankAccountID;
                         isCash.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                         isCash.Amount = amount;
+                        isCash.Currency = posCollect.Currency;
                         isCash.Description = isCash.Description;
-                        isCash.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                        isCash.ExchangeRate = exchanges != null ? Convert.ToDouble(posCollect.ExchangeRate.ToString().Replace(".", ",")) : currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
                         isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
                         isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
                         isCash.UpdateIP = OfficeHelper.GetIPAddress();
-                        //isCash.SystemAmount = ourcompany.Currency == currency ? amount : amount * isCash.ExchangeRate;
-                        //isCash.SystemCurrency = ourcompany.Currency;
+                        isCash.SystemAmount = ourcompany.Currency == currency ? amount : amount * isCash.ExchangeRate;
+                        isCash.SystemCurrency = ourcompany.Currency;
 
                         Db.SaveChanges();
 
-                        var cashaction = Db.BankActions.FirstOrDefault(x => x.BankAccountID == isCash.FromBankAccountID && x.LocationID == isCash.LocationID && x.BankActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isCash.Date && x.DocumentNumber == isCash.DocumentNumber);
+                        var cashaction = Db.BankActions.FirstOrDefault(x => x.BankAccountID == isKasa && x.LocationID == isCash.LocationID && x.BankActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
 
                         if (cashaction != null)
                         {
                             cashaction.Payment = isCash.Amount;
+                            cashaction.Currency = posCollect.Currency;
+                            cashaction.BankAccountID = posCollect.BankAccountID;
+                            cashaction.ActionDate = docDate;
+                            cashaction.ProcessDate = docDate;
                             cashaction.UpdateDate = isCash.UpdateDate;
                             cashaction.UpdateEmployeeID = isCash.UpdateEmployee;
 
@@ -1059,8 +1087,7 @@ namespace ActionForce.Office.Controllers
             }
 
             TempData["result"] = result;
-
-            return RedirectToAction("PosRefund", "Bank");
+            return RedirectToAction("PosRefundDetail", new { id = posCollect.UID });
         }
 
         [AllowAnonymous]

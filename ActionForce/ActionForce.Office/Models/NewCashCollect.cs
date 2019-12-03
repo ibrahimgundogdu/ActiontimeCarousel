@@ -138,6 +138,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public int BankAccountID { get; set; }
         public string TerminalID { get; set; }
+        public string ExchangeRate { get; set; }
         public Guid UID { get; set; }
     }
     public class NewPosCancel
@@ -150,6 +151,7 @@ namespace ActionForce.Office
         public string DocumentDate { get; set; }
         public string Description { get; set; }
         public int BankAccountID { get; set; }
+        public string ExchangeRate { get; set; }
         public Guid UID { get; set; }
     }
     public class NewPosReturn
@@ -162,6 +164,7 @@ namespace ActionForce.Office
         public string DocumentDate { get; set; }
         public string Description { get; set; }
         public int BankAccountID { get; set; }
+        public string ExchangeRate { get; set; }
         public Guid UID { get; set; }
     }
     public class NewSalaryEarn
@@ -175,6 +178,7 @@ namespace ActionForce.Office
         public string Currency { get; set; }
         public string DocumentDate { get; set; }
         public string Description { get; set; }
+        public string ExchangeRate { get; set; }
         public Guid UID { get; set; }
     }
 }

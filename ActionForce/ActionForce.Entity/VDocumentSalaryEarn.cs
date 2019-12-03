@@ -41,6 +41,5 @@ namespace ActionForce.Entity
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<double> UnitPrice { get; set; }
         public Nullable<double> QuantityHour { get; set; }
-        public Nullable<double> Expr1 { get; set; }
     }
 }
