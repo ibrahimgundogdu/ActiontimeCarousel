@@ -138,7 +138,7 @@ namespace ActionForce.Office.Controllers
 
                         // cari hesap işlemesi
                         OfficeHelper.AddCashAction(newCashColl.EmployeeID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, -1, 0, newCashColl.TotalAmount, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
-                        
+
 
                         result.IsSuccess = true;
                         result.Message = "Ücret Hakediş ödemesi başarı ile eklendi";
@@ -716,7 +716,7 @@ namespace ActionForce.Office.Controllers
 
                         if (empaction != null)
                         {
-                            
+
                             empaction.ProcessDate = docDate;
                             empaction.Collection = isCash.Amount;
                             empaction.Currency = cashCollect.Currency;
@@ -872,6 +872,35 @@ namespace ActionForce.Office.Controllers
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Salary" && x.Action == "SalaryPayment" && x.Environment == "Office" && x.ProcessID == model.SalaryDetail.ID.ToString()).ToList();
 
             model.FromList = OfficeHelper.GetToList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult Unit()
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result<CashActions> ?? null;
+            }
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateTime.Now.Date;
+                model.Filters = filterModel;
+            }
+
+            
+            model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
             return View(model);
         }

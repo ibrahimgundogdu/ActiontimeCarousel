@@ -2463,6 +2463,7 @@
     <Content Include="Views\Salary\EarnDetail.cshtml" />
     <Content Include="Views\Salary\SalaryPayment.cshtml" />
     <Content Include="Views\Salary\SalaryDetail.cshtml" />
+    <Content Include="Views\Salary\Unit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

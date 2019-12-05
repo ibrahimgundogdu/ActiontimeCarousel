@@ -216,6 +216,7 @@ namespace ActionForce.Entity
         public virtual DbSet<VDocumentPosRefund> VDocumentPosRefund { get; set; }
         public virtual DbSet<VDayResultItemList> VDayResultItemList { get; set; }
         public virtual DbSet<VDocumentSalaryEarn> VDocumentSalaryEarn { get; set; }
+        public virtual DbSet<VEmployeeSalary> VEmployeeSalary { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

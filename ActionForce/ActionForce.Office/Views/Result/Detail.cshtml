@@ -50,12 +50,176 @@
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                         <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@Model.CurrentDayResult.LocationFullName</h6>
                         <nav class="nav">
-                            <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CurrentDate.DateKey.ToLongDateString())</span></a>
+                            <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CurrentDate.DateKey.Date.ToString())</span></a>
                         </nav>
                     </div><!-- card-header -->
                     <div class="card-body pd-r-10 pd-l-10 pd-t-0">
                         <div class="row row-xs">
                             <div class="col-md-9 pd-r-0 pd-l-0 pd-t-0">
+
+                                <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
+                                    <div class="card ht-100p">
+                                        <div class="card-header d-flex align-items-center justify-content-between">
+                                            <h6 class="mg-b-0">Nakit Satış / İade İşlemleri</h6>
+                                            <div class="d-flex tx-18">
+                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover mg-b-0">
+                                                <thead class="bg-gray-100">
+                                                    <tr>
+                                                        <th>&nbsp;</th>
+                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>Nakit Satış</span></th>
+                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>Nakit İade</span></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><span></span></th>
+                                                        <th class="bd-l text-right"><span>Adet</span></th>
+                                                        <th class="text-right"><span>Tutar</span></th>
+                                                        <th class="text-center"><span>Açıklama</span></th>
+                                                        <th class="bd-l text-right"><span>Adet</span></th>
+                                                        <th class="text-right"><span>Tutar</span></th>
+                                                        <th class="text-center"><span>Açıklama</span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="width:100px;"><strong>TRL (₺)</strong></td>
+
+                                                        <td class="bd-l text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="N2TRL" class="form-control money font-weight-bold text-right text-info" placeholder="0" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID ==2 && x.Currency == " TRL")?.Quantity?.ToString("N2"))">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="N2TRL" class="form-control money font-weight-bold text-right text-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "TRL").Amount?.ToString("N2"))">
+                                                        </td>
+                                                        <td style="padding:1px !important;">
+                                                            <input type="text" name="N2TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "TRL").Description)" />
+                                                        </td>
+
+                                                        <td class="bd-l  text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="I5TRL" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "TRL")?.Quantity?.ToString("N2"))">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="I5TRL" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "TRL")?.Amount?.ToString("N2"))">
+                                                        </td>
+                                                        <td style="padding:1px !important;">
+                                                            <input type="text" name="I5TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "TRL").Description)" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>USD ($)</td>
+
+                                                        <td class="bd-l text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="N2USD" class="form-control money font-weight-bold text-right text-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "USD")?.Quantity?.ToString("N2"))">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="N2USD" class="form-control money font-weight-bold text-right text-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "USD")?.Amount?.ToString("N2"))">
+                                                        </td>
+                                                        <td style="padding:1px !important;">
+                                                            <input type="text" name="N2USDD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "USD").Description)" />
+                                                        </td>
+
+                                                        <td class="bd-l text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="I5USD" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "USD")?.Quantity?.ToString("N2"))">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="I5USD" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "USD")?.Amount?.ToString("N2"))">
+                                                        </td>
+                                                        <td style="padding:1px !important;">
+                                                            <input type="text" name="I5USDD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "USD").Description)" />
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+
+                                                        <td>EUR (€)</td>
+
+                                                        <td class="bd-l text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="N2EUR" class="form-control money font-weight-bold text-right text-info" min="0" placeholder="0" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "EUR")?.Quantity?.ToString("N2"))">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="N2EUR" class="form-control money font-weight-bold text-right text-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "EUR")?.Amount?.ToString("N2"))">
+                                                        </td>
+                                                        <td style="padding:1px !important;">
+                                                            <input type="text" name="N2EURD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "EUR").Description)" />
+                                                        </td>
+
+                                                        <td class="bd-l" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="I5EUR" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "EUR")?.Quantity?.ToString("N2"))">
+                                                        </td>
+                                                        <td class="" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="I5EUR" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "EUR")?.Amount?.ToString("N2"))">
+                                                        </td>
+                                                        <td style="padding:1px !important;">
+                                                            <input type="text" name="I5EURD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "EUR").Description)" />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                               
+                                            </table>
+                                        </div>
+                                    </div><!-- card -->
+                                </div>
+
+                                <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
+                                    <div class="card ht-100p">
+                                        <div class="card-header d-flex align-items-center justify-content-between">
+                                            <h6 class="mg-b-0">Kart Satış / İade İşlemleri</h6>
+                                            <div class="d-flex tx-18">
+                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover mg-b-0">
+                                                <thead class="bg-gray-100">
+                                                    <tr>
+                                                        <th>&nbsp;</th>
+                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>Kredi Kartı Satış</span></th>
+                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>Kredi Kartı İptal / İade</span></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><span></span></th>
+                                                        <th class="bd-l text-right"><span>Adet</span></th>
+                                                        <th class="text-right"><span>Tutar</span></th>
+                                                        <th class="text-center"><span>Açıklama</span></th>
+                                                        <th class="bd-l text-right"><span>Adet</span></th>
+                                                        <th class="text-right"><span>Tutar</span></th>
+                                                        <th class="text-center"><span>Açıklama</span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="width:100px;"><strong>TRL (₺)</strong></td>
+
+                                                        <td class="bd-l text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="S1TRL" class="form-control money font-weight-bold text-right tx-orange" placeholder="0" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 10 && x.Currency == " TRL")?.Quantity?.ToString("N2"))">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="S1TRL" class="form-control money font-weight-bold text-right tx-orange" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 10 && x.Currency == "TRL")?.Amount?.ToString("N2"))">
+                                                        </td>
+                                                        <td style="padding:1px !important;">
+                                                            <input type="text" name="T1TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 10 && x.Currency == "TRL").Description)" />
+                                                        </td>
+
+                                                        <td class="bd-l  text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="T4TRL" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 11 && x.Currency == "TRL")?.Quantity?.ToString("N2"))">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="T4TRL" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 11 && x.Currency == "TRL")?.Amount?.ToString("N2"))">
+                                                        </td>
+                                                        <td style="padding:1px !important;">
+                                                            <input type="text" name="T4TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 11 && x.Currency == "TRL").Description)" />
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+
+
+                                            </table>
+                                        </div>
+                                    </div><!-- card -->
+                                </div>
                                 <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
                                     <div class="card ht-100p">
                                         <div class="card-header d-flex align-items-center justify-content-between">
@@ -74,7 +238,7 @@
                                                         <th colspan="2" class="bd-l text-center font-weight-bold"><span>Kasa Ödemesi</span></th>
                                                     </tr>
                                                     <tr>
-                                                        <th><span>Döviz</span></th>
+                                                        <th><span></span></th>
                                                         <th class="bd-l text-right"><span>Tutar</span></th>
                                                         <th class="text-center"><span>Açıklama</span></th>
                                                         <th class="bd-l text-right"><span>Tutar</span></th>
@@ -83,7 +247,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td><strong>TRL (₺)</strong></td>
+                                                        <td style="width:100px;"><strong>TRL (₺)</strong></td>
                                                         <td class="bd-l text-right" style="width:100px; padding:1px !important;">
                                                             <input type="text" name="T1TRL" class="form-control money font-weight-bold text-right text-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "TRL").Amount.Value.ToString("N2"))">
                                                         </td>
@@ -105,7 +269,7 @@
                                                         <td style="padding:1px !important;">
                                                             <input type="text" name="T1USDD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD").Description)" />
                                                         </td>
-                                                        <td class="bd-l text-right"  style="width:100px; padding:1px !important;">
+                                                        <td class="bd-l text-right" style="width:100px; padding:1px !important;">
                                                             <input type="text" name="T4USD" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD").Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
@@ -150,7 +314,7 @@
                                                         <th></th>
                                                         <th colspan="3" class=" bd-l text-center font-weight-bold">Sistem Maaş Hakediş Hesabı</th>
                                                         <th colspan="4" class=" bd-l text-center font-weight-bold">Lokasyon Maaş Hakediş Hesabı</th>
-                                                        <th colspan="2" class=" bd-l text-center font-weight-bold">Maaş / Avans Ödeme</th>
+                                                        <th colspan="2" class=" bd-l text-center font-weight-bold">Maaş Avansı Ödeme</th>
                                                     </tr>
                                                     <tr>
                                                         <th class="wd-150-f">Adı Soyadı</th>

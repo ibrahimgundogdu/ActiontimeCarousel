@@ -1,0 +1,108 @@
+﻿@model SalaryControlModel
+@{
+    ViewBag.Title = "Çalışan Mesai Ücretleri";
+}
+
+@section style{
+
+}
+
+
+
+<div class="row no-gutters">
+
+
+
+    <div class="col-md-4 mg-t-0 pd-r-0 pd-l-0 pd-t-0">
+        <div id="scrollEmployee" class="card-body pd-0  pos-relative bd ht-100v">
+
+            <div class="contact-list">
+                <div class="table-responsive">
+                    <table class="table table-primary table-hover table-striped mg-b-0">
+                        <thead>
+                            <tr class="table-active">
+                                <th scope="col">Çalışan</th>
+                                <th>Tarih</th>
+                                <th class="tx-right">Saat Ücreti</th>
+                                <th>Birim</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var employee in Model.UnitSalaryList.Where(x => x.IsActive == true).OrderBy(x => x.FullName))
+                            {
+                            <tr>
+                                <td scope="row" class="@(employee.IsActive == true ? "":"tx-danger")"><b>@(employee.FullName)</b></td>
+                                <td>@(employee.DateStart?.Date.ToShortDateString() )</td>
+                                <td class="tx-right font-weight-bold">@(employee.Hourly?.ToString("N2"))</td>
+                                <td>@(employee.Money)</td>
+
+
+                            </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <div class="col-md-8 mg-t-0 pd-r-0 pd-l-0 pd-t-0">
+        <div class="card ht-100p">
+            <div class="card-header d-flex align-items-center justify-content-between">
+                <h6 class="mg-b-0">Çalışan Saat Ücreti</h6>
+                <div class="d-flex tx-18">
+                    <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                    <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                </div>
+            </div>
+
+
+
+            <div class="card-footer text-center tx-13">
+                <a href="" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
+            </div><!-- card-footer -->
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts {
+
+
+    <script>
+        $(function () {
+            'use strict'
+            //$(".content").addClass("app-contact");
+
+
+            $('.shifttime').mask('00:00');
+            $('.shiftdate').mask('0000-00-00');
+
+
+            const scrollEmployee = new PerfectScrollbar('#scrollEmployee', {
+                suppressScrollX: true
+            });
+
+        });
+
+    </script>
+
+
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}

@@ -3527,6 +3527,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployee' does not have a 
           <Property Name="EmployeeUID" Type="uniqueidentifier" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeSalary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VEmployeeSalary">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="Hourly" Type="float" />
+          <Property Name="Money" Type="nvarchar" MaxLength="4" />
+          <Property Name="DateStart" Type="date" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VLocation">
           <Key>
@@ -4918,6 +4932,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployee].[EmployeeUID] AS [EmployeeUID]
     FROM [dbo].[VEmployee] AS [VEmployee]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VEmployeeSalary" EntityType="Self.VEmployeeSalary" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VEmployeeSalary].[EmployeeID] AS [EmployeeID], 
+    [VEmployeeSalary].[OurCompanyID] AS [OurCompanyID], 
+    [VEmployeeSalary].[FullName] AS [FullName], 
+    [VEmployeeSalary].[IsActive] AS [IsActive], 
+    [VEmployeeSalary].[Hourly] AS [Hourly], 
+    [VEmployeeSalary].[Money] AS [Money], 
+    [VEmployeeSalary].[DateStart] AS [DateStart]
+    FROM [dbo].[VEmployeeSalary] AS [VEmployeeSalary]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VLocation" EntityType="Self.VLocation" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VLocation].[LocationID] AS [LocationID], 
@@ -5542,6 +5567,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VDocumentPosRefund" EntityType="db293_ActionTimeDbModel.VDocumentPosRefund" />
           <EntitySet Name="VDayResultItemList" EntityType="db293_ActionTimeDbModel.VDayResultItemList" />
           <EntitySet Name="VDocumentSalaryEarn" EntityType="db293_ActionTimeDbModel.VDocumentSalaryEarn" />
+          <EntitySet Name="VEmployeeSalary" EntityType="db293_ActionTimeDbModel.VEmployeeSalary" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -9477,6 +9503,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UnitPrice" Type="Double" />
           <Property Name="QuantityHour" Type="Double" />
         </EntityType>
+        <EntityType Name="VEmployeeSalary">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Hourly" Type="Double" />
+          <Property Name="Money" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="DateStart" Type="DateTime" Precision="0" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -13344,6 +13382,19 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VEmployeeSalary">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeSalary">
+              <MappingFragment StoreEntitySet="VEmployeeSalary">
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
+                <ScalarProperty Name="Hourly" ColumnName="Hourly" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
