@@ -38,7 +38,7 @@ namespace ActionForce.Office.Controllers
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
-
+            model.UnitPrice = Db.EmployeeSalary.ToList();
             model.SalaryEarn = Db.VDocumentSalaryEarn.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
@@ -137,7 +137,7 @@ namespace ActionForce.Office.Controllers
                         Db.SaveChanges();
 
                         // cari hesap işlemesi
-                        OfficeHelper.AddCashAction(newCashColl.EmployeeID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, -1, 0, newCashColl.TotalAmount, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
+                        //OfficeHelper.AddCashAction(newCashColl.EmployeeID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, -1, 0, newCashColl.TotalAmount, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
                         
 
                         result.IsSuccess = true;
@@ -277,14 +277,12 @@ namespace ActionForce.Office.Controllers
                         result.IsSuccess = true;
                         result.Message = "Ücret Hakediş başarı ile güncellendi";
 
-
                         var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentSalaryEarn>(self, isCash, OfficeHelper.getIgnorelist());
                         OfficeHelper.AddApplicationLog("Office", "Salary", "Update", isCash.ID.ToString(), "Salary", "Index", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
                     }
                     catch (Exception ex)
                     {
-
                         result.Message = $"Ücret Hakediş güncellenemedi : {ex.Message}";
                         OfficeHelper.AddApplicationLog("Office", "Salary", "Update", "-1", "Salary", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
@@ -409,7 +407,7 @@ namespace ActionForce.Office.Controllers
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
-
+            model.UnitPrice = Db.EmployeeSalary.ToList();
             model.Detail = Db.VDocumentSalaryEarn.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Salary" && x.Action == "Index" && x.Environment == "Office" && x.ProcessID == model.Detail.ID.ToString()).ToList();
 
@@ -447,7 +445,7 @@ namespace ActionForce.Office.Controllers
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
-
+            model.UnitPrice = Db.EmployeeSalary.ToList();
             model.SalaryPayment = Db.VDocumentSalaryPayment.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
@@ -867,13 +865,50 @@ namespace ActionForce.Office.Controllers
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
-
+            model.UnitPrice = Db.EmployeeSalary.ToList();
             model.SalaryDetail = Db.VDocumentSalaryPayment.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Salary" && x.Action == "SalaryPayment" && x.Environment == "Office" && x.ProcessID == model.SalaryDetail.ID.ToString()).ToList();
 
             model.FromList = OfficeHelper.GetToList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
 
             return View(model);
+        }
+        
+        public PartialViewResult _PartialSalaryEmployee(int empid)
+        {
+
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result<CashActions> ?? null;
+            }
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateTime.Now.Date;
+                model.Filters = filterModel;
+            }
+            model.BankAccountList = Db.BankAccount.ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+            
+            model.History = Db.ApplicationLog.Where(x => x.Controller == "Salary" && x.Action == "Index" && x.Environment == "Office" && x.ProcessID == model.SalaryDetail.ID.ToString()).ToList();
+
+            model.FromList = OfficeHelper.GetToList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
+
+            model.EmployeeHour = Db.EmployeeSalary.FirstOrDefault(x => x.EmployeeID == empid);
+
+            return PartialView("_PartialSalaryEmployee", model);
         }
     }
 }

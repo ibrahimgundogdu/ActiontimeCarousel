@@ -9,7 +9,7 @@
             @Html.AntiForgeryToken()
         <div>
             <h4>Yeni Ücret Hakediş</h4>
-            <p class="tx-color-03">Kasaya nakit giriş işlemi yapar.</p>
+            <p class="tx-color-03">Ücret hakediş işlemi yapar.</p>
             <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="32" />
             <div class="form-group">
                 <label>Kime</label>
@@ -31,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label>Saatlik Ücret</label>
-                <input id="UnitPrice" name="UnitPrice" type="text" class="form-control" placeholder="Saatlik Ücret" required>
+                <input id="UnitPrice" name="UnitPrice" type="text" class="form-control" placeholder="Saatlik Ücret" readonly required>
             </div>
             <div class="form-group">
                 <label>Toplam Saat</label>
