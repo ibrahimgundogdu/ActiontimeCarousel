@@ -910,5 +910,33 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialSalaryEmployee", model);
         }
+
+        [AllowAnonymous]
+        public ActionResult Unit(int? locationId)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result<CashActions> ?? null;
+            }
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateTime.Now.Date;
+                model.Filters = filterModel;
+            }
+           
+            model.UnitSalaryList = Db.VEmployeeSalary.Where(x=> x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            return View(model);
+        }
     }
 }
