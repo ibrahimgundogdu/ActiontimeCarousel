@@ -80,7 +80,7 @@
                                                 <select class="form-control" id="FromID" name="FromID" required>
                                                     @foreach (var item in Model.FromList)
                                                     {
-                                                        <option value="@item.Code" @(Model.Detail.EmployeeID != null ? Model.Detail.EmployeeID == item.ID ? "selected" : "" : "")>@(Html.Raw($"{item.Name}"))</option>
+                                                        <option onchange="getUnit(@item.ID)" value="@item.Code" @(Model.Detail.EmployeeID != null ? Model.Detail.EmployeeID == item.ID ? "selected" : "" : "")>@(Html.Raw($"{item.Name}"))</option>
                                                     }
                                                 </select>
                                             </div>
@@ -102,10 +102,12 @@
                                                 <input id="TotalAmount" name="TotalAmount" type="text" class="form-control" value="@Model.Detail.TotalAmount" placeholder="Tutar" required>
                                             </div>
                                         </div>
+                                        
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Saatlik Ücret</label>
                                             <div class="col-sm-9">
-                                                <input id="UnitPrice" name="UnitPrice" type="text" class="form-control" value="@Model.Detail.UnitPrice" placeholder="Birim Fiyat" required>
+                                                <input id="UnitPrice" name="UnitPrice" type="text" class="form-control" value="@(Model.Detail.UnitPrice)" placeholder="Birim Fiyat" readonly required>
+
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -271,6 +273,7 @@
             //var cleave2 = new Cleave('#Exchange', {
             //    numeral: true
             //});
+
             function getDate(element) {
                 var date;
                 try {
@@ -284,12 +287,45 @@
             }
 
         });
+        function getUnit(employeeid) {
+            $('#FormID').on('change', function () {
+                var ID = $("#FormID").val();
+                $.ajax({
+                    method: "GET",
+                    url: "/Salary/_PartialSalaryEmployee/" + ID,
+                    data: { id: employeeid },
+                    
+                }).done(function (d) {
+                    $("#_PartialSalaryEmployee").html(d);
+                });
+            });
+        }
 
-
-
+        
+        
 
 
     </script>
+    @*<script type="text/javascript">
+        $('#FormID').on('change', function () {
+
+            var ID = $("#FormID").val();
+            $.ajax({
+                data: { id: this.value },
+                url: '/Salary/Detail/' + ID,
+                type: 'GET',
+                dataType: 'json',
+                //success: function (data) {
+                //    $("#Detail").val(data.Hourly);
+                //}
+            }).done(function (d) {
+
+                $("#Detail").html(d);
+            });
+        });
+
+
+    </script>*@
     <script>
 
 
