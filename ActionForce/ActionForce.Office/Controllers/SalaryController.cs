@@ -416,6 +416,20 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        public ActionResult SalaryEarn(string id)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            
+            var fromPrefix = id.Substring(0, 1);
+            var fromID = Convert.ToInt32(id.Substring(1, id.Length - 1));
+
+            model.EmployeeHour = Db.EmployeeSalary.FirstOrDefault(x => x.EmployeeID == fromID);
+
+            return View(model);
+
+        }
 
 
         [AllowAnonymous]
@@ -872,43 +886,6 @@ namespace ActionForce.Office.Controllers
             model.FromList = OfficeHelper.GetToList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
 
             return View(model);
-        }
-        
-        public PartialViewResult _PartialSalaryEmployee(int empid)
-        {
-
-            SalaryControlModel model = new SalaryControlModel();
-
-            if (TempData["result"] != null)
-            {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
-            }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
-            model.BankAccountList = Db.BankAccount.ToList();
-            model.CurrencyList = OfficeHelper.GetCurrency();
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
-            
-            model.History = Db.ApplicationLog.Where(x => x.Controller == "Salary" && x.Action == "Index" && x.Environment == "Office" && x.ProcessID == model.SalaryDetail.ID.ToString()).ToList();
-
-            model.FromList = OfficeHelper.GetToList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
-
-            model.EmployeeHour = Db.EmployeeSalary.FirstOrDefault(x => x.EmployeeID == empid);
-
-            return PartialView("_PartialSalaryEmployee", model);
         }
 
         [AllowAnonymous]
