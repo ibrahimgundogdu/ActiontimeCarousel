@@ -918,7 +918,7 @@ namespace ActionForce.Office.Controllers
             var employee = model.UnitSalaryList.FirstOrDefault();
 
             if (locationId != null && locationId > 0)
-                employee = model.UnitSalaryList.LastOrDefault(x => x.EmployeeID == locationId && x.DateStart <= docDate);
+                employee = model.UnitSalaryList.LastOrDefault(x => x.EmployeeID == locationId);
 
             model.UnitSalary = employee;
             return View(model);
@@ -943,8 +943,8 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == our.OurCompanyID);
                 
                 var hourly = Convert.ToDouble(empSalary.Hourly.Replace(".", ","));
-                var hourlyExtent = Convert.ToDouble(empSalary.HourlyExtent.Replace(".", ","));
-                var extendMultiplyRate = Convert.ToDouble("1,5");
+                var hourlyExtent = Convert.ToDouble(empSalary.HourlyExtend.Replace(".", ","));
+                var extendMultiplyRate = Convert.ToDouble(empSalary.ExtendMultiplyRate.Replace(".", ","));
 
                 var docDate = DateTime.Now.Date;
 
@@ -1003,9 +1003,12 @@ namespace ActionForce.Office.Controllers
                             HourlyExtend = isSalary.HourlyExtend,
                             ExtendMultiplyRate = isSalary.ExtendMultiplyRate
                         };
-                        //isSalary.HourlyExtend = hourlyExtent;
+                        isSalary.DateStart = docDate;
                         isSalary.Hourly = hourly;
-                        
+                        isSalary.Money = ourcompany.Currency;
+                        isSalary.HourlyExtend = hourlyExtent;
+                        isSalary.ExtendMultiplyRate = extendMultiplyRate;
+
                         Db.SaveChanges();
 
 
@@ -1031,17 +1034,6 @@ namespace ActionForce.Office.Controllers
             TempData["result"] = result;
 
             return RedirectToAction("Unit", "Salary");
-        }
-
-        [AllowAnonymous]
-        public string SalaryUnit(int? id)
-        {
-            SalaryControlModel model = new SalaryControlModel();
-            
-            string dd = Db.VEmployeeSalary.FirstOrDefault(x => x.EmployeeID == id).EmployeeID.ToString();
-            
-            return dd;
-
         }
     }
 }

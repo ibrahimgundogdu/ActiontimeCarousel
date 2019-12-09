@@ -187,7 +187,7 @@ namespace ActionForce.Office
         public int OurCompanyID { get; set; }
         public string DateStart { get; set; }
         public string Hourly { get; set; }
-        public string HourlyExtent { get; set; }
+        public string HourlyExtend { get; set; }
         public string ExtendMultiplyRate { get; set; }
     }
 }
