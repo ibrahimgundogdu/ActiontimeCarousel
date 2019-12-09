@@ -50,5 +50,6 @@ namespace ActionForce.Entity
         public string FullName { get; set; }
         public Nullable<System.TimeSpan> Duration { get; set; }
         public Nullable<System.TimeSpan> SystemDuration { get; set; }
+        public string ReferenceCode { get; set; }
     }
 }

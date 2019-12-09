@@ -45,6 +45,7 @@ namespace ActionForce.Entity
         public string UpdateIP { get; set; }
         public Nullable<System.TimeSpan> Duration { get; set; }
         public Nullable<System.TimeSpan> SystemDuration { get; set; }
+        public string ReferenceCode { get; set; }
     
         public virtual DayResult DayResult { get; set; }
         public virtual DayResultItems DayResultItems { get; set; }

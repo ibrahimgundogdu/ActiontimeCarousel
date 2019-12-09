@@ -129,6 +129,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.DayResultItems = Db.DayResultItems.ToList();
                 model.DayResultItemList = Db.VDayResultItemList.Where(x => x.ResultID == model.DayResult.ID).ToList();
+               // model.BankAccountList = Db.BankAccount.Where(x => x.ou == model.DayResult.ID).ToList();
 
                 model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == model.DayResult.LocationID);
                 var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == model.DayResult.Date);

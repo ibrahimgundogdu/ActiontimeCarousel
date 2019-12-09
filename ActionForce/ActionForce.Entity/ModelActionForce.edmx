@@ -698,6 +698,7 @@
           <Property Name="SlipNumber" Type="nvarchar" MaxLength="40" />
           <Property Name="SlipDate" Type="datetime" />
           <Property Name="SlipTotalAmount" Type="float" />
+          <Property Name="ReferenceCode" Type="nvarchar" MaxLength="40" />
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="RecordEmployeeID" Type="int" />
           <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
@@ -2817,6 +2818,29 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VBankAccount' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VBankAccount">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="BankID" Type="int" />
+          <Property Name="AccountTypeID" Type="int" />
+          <Property Name="BranchName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountName" Type="nvarchar" MaxLength="50" />
+          <Property Name="BranchCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="RoutingNumber" Type="nvarchar" MaxLength="30" />
+          <Property Name="AccountNumber" Type="nvarchar" MaxLength="30" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="IBAN" Type="nvarchar" MaxLength="30" />
+          <Property Name="IsMaster" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="Code" Type="nvarchar" MaxLength="10" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VBankActions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VBankActions">
           <Key>
@@ -2976,6 +3000,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDayResultItemList' does no
           <Property Name="FullName" Type="nvarchar" MaxLength="150" />
           <Property Name="Duration" Type="time" Precision="0" />
           <Property Name="SystemDuration" Type="time" Precision="0" />
+          <Property Name="ReferenceCode" Type="nvarchar" MaxLength="40" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentBankTransfer' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4283,6 +4308,26 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [EmployeeX].[IsDismissal] AS [IsDismissal]
     FROM [dbo].[EmployeeX] AS [EmployeeX]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VBankAccount" EntityType="Self.VBankAccount" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VBankAccount].[ID] AS [ID], 
+    [VBankAccount].[BankID] AS [BankID], 
+    [VBankAccount].[AccountTypeID] AS [AccountTypeID], 
+    [VBankAccount].[BranchName] AS [BranchName], 
+    [VBankAccount].[AccountName] AS [AccountName], 
+    [VBankAccount].[BranchCode] AS [BranchCode], 
+    [VBankAccount].[RoutingNumber] AS [RoutingNumber], 
+    [VBankAccount].[AccountNumber] AS [AccountNumber], 
+    [VBankAccount].[Currency] AS [Currency], 
+    [VBankAccount].[IBAN] AS [IBAN], 
+    [VBankAccount].[IsMaster] AS [IsMaster], 
+    [VBankAccount].[IsActive] AS [IsActive], 
+    [VBankAccount].[OurCompanyID] AS [OurCompanyID], 
+    [VBankAccount].[Code] AS [Code], 
+    [VBankAccount].[Name] AS [Name], 
+    [VBankAccount].[TypeName] AS [TypeName]
+    FROM [dbo].[VBankAccount] AS [VBankAccount]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VBankActions" EntityType="Self.VBankActions" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VBankActions].[ID] AS [ID], 
@@ -4422,7 +4467,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDayResultItemList].[BranchName] AS [BranchName], 
     [VDayResultItemList].[FullName] AS [FullName], 
     [VDayResultItemList].[Duration] AS [Duration], 
-    [VDayResultItemList].[SystemDuration] AS [SystemDuration]
+    [VDayResultItemList].[SystemDuration] AS [SystemDuration], 
+    [VDayResultItemList].[ReferenceCode] AS [ReferenceCode]
     FROM [dbo].[VDayResultItemList] AS [VDayResultItemList]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentBankTransfer" EntityType="Self.VDocumentBankTransfer" store:Type="Views" store:Schema="dbo">
@@ -5568,6 +5614,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VDayResultItemList" EntityType="db293_ActionTimeDbModel.VDayResultItemList" />
           <EntitySet Name="VDocumentSalaryEarn" EntityType="db293_ActionTimeDbModel.VDocumentSalaryEarn" />
           <EntitySet Name="VEmployeeSalary" EntityType="db293_ActionTimeDbModel.VEmployeeSalary" />
+          <EntitySet Name="VBankAccount" EntityType="db293_ActionTimeDbModel.VBankAccount" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -9168,6 +9215,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Duration" Type="Time" Precision="0" />
           <Property Name="SystemDuration" Type="Time" Precision="0" />
+          <Property Name="ReferenceCode" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DayResultItems">
           <Key>
@@ -9470,6 +9518,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Duration" Type="Time" Precision="0" />
           <Property Name="SystemDuration" Type="Time" Precision="0" />
+          <Property Name="ReferenceCode" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VDocumentSalaryEarn">
           <Key>
@@ -9514,6 +9563,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Hourly" Type="Double" />
           <Property Name="Money" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="DateStart" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="VBankAccount">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="BankID" Type="Int32" />
+          <Property Name="AccountTypeID" Type="Int32" />
+          <Property Name="BranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BranchCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RoutingNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="AccountNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="IBAN" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="IsMaster" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -13037,6 +13107,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DayResultItemList">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DayResultItemList">
               <MappingFragment StoreEntitySet="DayResultItemList">
+                <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
                 <ScalarProperty Name="SystemDuration" ColumnName="SystemDuration" />
                 <ScalarProperty Name="Duration" ColumnName="Duration" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
@@ -13313,6 +13384,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDayResultItemList">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDayResultItemList">
               <MappingFragment StoreEntitySet="VDayResultItemList">
+                <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
                 <ScalarProperty Name="SystemDuration" ColumnName="SystemDuration" />
                 <ScalarProperty Name="Duration" ColumnName="Duration" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
@@ -13395,6 +13467,28 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VBankAccount">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VBankAccount">
+              <MappingFragment StoreEntitySet="VBankAccount">
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+                <ScalarProperty Name="IBAN" ColumnName="IBAN" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="RoutingNumber" ColumnName="RoutingNumber" />
+                <ScalarProperty Name="BranchCode" ColumnName="BranchCode" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="AccountTypeID" ColumnName="AccountTypeID" />
+                <ScalarProperty Name="BankID" ColumnName="BankID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

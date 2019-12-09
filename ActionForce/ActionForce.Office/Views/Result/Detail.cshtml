@@ -71,8 +71,8 @@
                                                 <thead class="bg-gray-100">
                                                     <tr>
                                                         <th>&nbsp;</th>
-                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>Nakit Satış</span></th>
-                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>Nakit İade</span></th>
+                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>(2) Nakit Satış</span></th>
+                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>(5) Nakit İade</span></th>
                                                     </tr>
                                                     <tr>
                                                         <th><span></span></th>
@@ -156,7 +156,7 @@
                                                         </td>
                                                     </tr>
                                                 </tbody>
-                                               
+
                                             </table>
                                         </div>
                                     </div><!-- card -->
@@ -176,8 +176,8 @@
                                                 <thead class="bg-gray-100">
                                                     <tr>
                                                         <th>&nbsp;</th>
-                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>Kredi Kartı Satış</span></th>
-                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>Kredi Kartı İptal / İade</span></th>
+                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>(10) Kredi Kartı Satış</span></th>
+                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>(11,12) Kredi Kartı İptal / İade</span></th>
                                                     </tr>
                                                     <tr>
                                                         <th><span></span></th>
@@ -220,6 +220,7 @@
                                         </div>
                                     </div><!-- card -->
                                 </div>
+
                                 <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
                                     <div class="card ht-100p">
                                         <div class="card-header d-flex align-items-center justify-content-between">
@@ -234,8 +235,8 @@
                                                 <thead class="bg-gray-100">
                                                     <tr>
                                                         <th>&nbsp;</th>
-                                                        <th colspan="2" class="bd-l text-center font-weight-bold"><span>Kasa Tahsilatı</span></th>
-                                                        <th colspan="2" class="bd-l text-center font-weight-bold"><span>Kasa Ödemesi</span></th>
+                                                        <th colspan="2" class="bd-l text-center font-weight-bold"><span>(1) Kasa Tahsilatı</span></th>
+                                                        <th colspan="2" class="bd-l text-center font-weight-bold"><span>(4) Kasa Ödemesi</span></th>
                                                     </tr>
                                                     <tr>
                                                         <th><span></span></th>
@@ -298,6 +299,220 @@
                                         </div>
                                     </div><!-- card -->
                                 </div>
+
+                                <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
+                                    <div class="card ht-100p">
+                                        <div class="card-header d-flex align-items-center justify-content-between">
+                                            <h6 class="mg-b-0">Döviz Satış İşlemleri</h6>
+                                            <div class="d-flex tx-18">
+                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover mg-b-0">
+                                                <thead class="bg-gray-100">
+                                                    <tr>
+                                                        <th>&nbsp;</th>
+                                                        <th colspan="5" class="text-center font-weight-bold"><span>(3) Döviz Satışı</span></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><span></span></th>
+                                                        <th class="text-right"><span>Döviz Tutar</span></th>
+                                                        <th class="text-right"><span>Kur</span></th>
+                                                        <th class=""><span>Döviz</span></th>
+                                                        <th class="text-right"><span>TRL Tutar</span></th>
+                                                        <th class="text-center"><span>Açıklama</span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td style="width:100px;"><strong>USD ($)</strong></td>
+
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="E3USDA" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Amount?.ToString("N2"))">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="E3USDE" class="form-control money4 font-weight-bold text-right" min="0" placeholder="0,0000" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Exchange?.ToString("N4"))">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="E3USDC" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD").Currency)" readonly />
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="E3USDS" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.SystemAmount?.ToString("N2"))" readonly>
+                                                        </td>
+                                                        <td class="bd-l  text-right" style="padding:1px !important;">
+                                                            <input type="text" name="E3USDD" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Description)">
+                                                        </td>
+
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td style="width:100px;"><strong>EUR (€)</strong></td>
+
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="E3EURA" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Amount?.ToString("N2"))">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="E3EURE" class="form-control money4 font-weight-bold text-right" min="0" placeholder="0,0000" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Exchange?.ToString("N4"))">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="E3EURC" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR").Currency)" readonly />
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" name="E3EURS" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.SystemAmount?.ToString("N2"))" readonly>
+                                                        </td>
+                                                        <td class="bd-l  text-right" style="padding:1px !important;">
+                                                            <input type="text" name="E3EURD" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Description)">
+                                                        </td>
+
+                                                    </tr>
+
+                                                </tbody>
+
+
+                                            </table>
+                                        </div>
+                                    </div><!-- card -->
+                                </div>
+
+                                <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
+                                    <div class="card ht-100p">
+                                        <div class="card-header d-flex align-items-center justify-content-between">
+                                            <h6 class="mg-b-0">Masraflar</h6>
+                                            <div class="d-flex tx-18">
+                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover mg-b-0">
+                                                <thead class="bg-gray-100">
+                                                    <tr>
+                                                        <th>&nbsp;</th>
+                                                        <th colspan="6" class="text-center font-weight-bold"><span>(6) Masraf Detayı</span></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><span></span></th>
+                                                        <th class="text-right"><span>Adet</span></th>
+                                                        <th class="text-right"><span>Tutar</span></th>
+                                                        <th class=""><span>Para</span></th>
+                                                        <th class="text-right"><span>Fiş No</span></th>
+                                                        <th class="text-right"><span>Fiş Tarihi</span></th>
+                                                        <th class="text-center"><span>Açıklama</span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.DayResultItemList.Where(x => x.ResultItemID == 6).ToList())
+                                                    {
+                                                        <tr>
+                                                            <td style="width:100px;"><strong>@item.ID</strong></td>
+
+                                                            <td class="text-right" style="width:60px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLQ" class="form-control font-weight-bold text-right tx-info" min="0" placeholder="0" value="@(item.Quantity)">
+                                                            </td>
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
+                                                            </td>
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLC" class="form-control" value="@(item.Currency)" readonly />
+                                                            </td>
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLN" class="form-control font-weight-bold" value="@(item.SlipNumber)">
+                                                            </td>
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLD" class="form-control font-weight-bold" value="@(item.SlipDate)">
+                                                            </td>
+                                                            <td class="bd-l  text-right" style="padding:1px !important;">
+                                                                <input type="text" name="E6TRLDE" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Description)">
+                                                            </td>
+
+                                                        </tr>
+                                                    }
+
+
+
+
+                                                </tbody>
+
+
+                                            </table>
+                                        </div>
+                                    </div><!-- card -->
+                                </div>
+
+                                <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
+                                    <div class="card ht-100p">
+                                        <div class="card-header d-flex align-items-center justify-content-between">
+                                            <h6 class="mg-b-0">Havale / EFT</h6>
+                                            <div class="d-flex tx-18">
+                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover mg-b-0">
+                                                <thead class="bg-gray-100">
+                                                    <tr>
+                                                        <th colspan="8" class="text-center font-weight-bold"><span>(7) Havale EFT Bildirimi</span></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><span>Banka Hesabı</span></th>
+                                                        <th class="text-right"><span>Tutar</span></th>
+                                                        <th><span>Para</span></th>
+                                                        <th><span>Refernas No</span></th>
+                                                        <th><span>Fiş No</span></th>
+                                                        <th><span>Fiş Tarihi</span></th>
+                                                        <th><span>Fiş Tutarı</span></th>
+                                                        <th><span>Açıklama</span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.DayResultItemList.Where(x => x.ResultItemID == 7).ToList())
+                                                    {
+                                                        <tr>
+                                                            <td>
+                                                                <select class="form-control" id="BankAccountID" name="BankAccountID" required>
+                                                                    @foreach (var item in Model.BankAccountList)
+                                                                    {
+                                                                        <option value="@item.ID">@($"{item.BranchName} ({item.Currency})")</option>
+                                                                    }
+                                                                </select>
+                                                            </td>
+
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLQ" class="form-control font-weight-bold text-right tx-info" min="0" placeholder="0" value="@(item.Quantity)">
+                                                            </td>
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
+                                                            </td>
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLC" class="form-control" value="@(item.Currency)" readonly />
+                                                            </td>
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLN" class="form-control font-weight-bold" value="@(item.SlipNumber)">
+                                                            </td>
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLD" class="form-control font-weight-bold" value="@(item.SlipDate)">
+                                                            </td>
+                                                            <td class="bd-l  text-right" style="padding:1px !important;">
+                                                                <input type="text" name="E6TRLDE" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Description)">
+                                                            </td>
+
+                                                        </tr>
+                                                    }
+
+
+
+
+                                                </tbody>
+
+
+                                            </table>
+                                        </div>
+                                    </div><!-- card -->
+                                </div>
+
                                 <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
                                     <div class="card ht-100p">
                                         <div class="card-header d-flex align-items-center justify-content-between">
@@ -313,8 +528,8 @@
                                                     <tr>
                                                         <th></th>
                                                         <th colspan="3" class=" bd-l text-center font-weight-bold">Sistem Maaş Hakediş Hesabı</th>
-                                                        <th colspan="4" class=" bd-l text-center font-weight-bold">Lokasyon Maaş Hakediş Hesabı</th>
-                                                        <th colspan="2" class=" bd-l text-center font-weight-bold">Maaş Avansı Ödeme</th>
+                                                        <th colspan="4" class=" bd-l text-center font-weight-bold">(8) Lokasyon Maaş Hakediş Hesabı</th>
+                                                        <th colspan="2" class=" bd-l text-center font-weight-bold">(9) Maaş Avansı Ödeme</th>
                                                     </tr>
                                                     <tr>
                                                         <th class="wd-150-f">Adı Soyadı</th>
@@ -379,150 +594,72 @@
                                         </div>
                                     </div><!-- card -->
                                 </div>
-                                <div class="row row-xs">
-                                    <div class="col-md-6 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
-                                        <div class="card ht-100p">
-                                            <div class="card-header d-flex align-items-center justify-content-between">
-                                                <h6 class="mg-b-0">Kredi Kartı İşlemleri</h6>
-                                                <div class="d-flex tx-18">
-                                                    <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                    <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
-                                                </div>
+
+                                <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
+                                    <div class="card ht-100p">
+                                        <div class="card-header d-flex align-items-center justify-content-between">
+                                            <h6 class="mg-b-0">Yazarkasa</h6>
+                                            <div class="d-flex tx-18">
+                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
                                             </div>
-                                            <ul class="list-group list-group-flush tx-13">
-                                                <li class="list-group-item d-flex pd-sm-x-20">
-                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
-                                                    <div class="pd-sm-l-10">
-                                                        <p class="tx-medium mg-b-0">Payment from #10322</p>
-                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 21, 2019, 3:30pm</small>
-                                                    </div>
-                                                    <div class="mg-l-auto text-right">
-                                                        <p class="tx-medium mg-b-0">+ $250.00</p>
-                                                        <small class="tx-12 tx-success mg-b-0">Completed</small>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item d-flex pd-sm-x-20">
-                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-indigo op-5"><i class="icon ion-md-return-left"></i></span></div>
-                                                    <div class="pd-sm-l-10">
-                                                        <p class="tx-medium mg-b-2">Process refund to #00910</p>
-                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 21, 2019, 1:00pm</small>
-                                                    </div>
-                                                    <div class="mg-l-auto text-right">
-                                                        <p class="tx-medium mg-b-2">-$16.50</p>
-                                                        <small class="tx-12 tx-success mg-b-0">Completed</small>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item d-flex pd-sm-x-20">
-                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-orange op-5"><i class="icon ion-md-bus"></i></span></div>
-                                                    <div class="pd-sm-l-10">
-                                                        <p class="tx-medium mg-b-2">Process delivery to #44333</p>
-                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 20, 2019, 11:40am</small>
-                                                    </div>
-                                                    <div class="mg-l-auto text-right">
-                                                        <p class="tx-medium mg-b-2">3 Items</p>
-                                                        <small class="tx-12 tx-info mg-b-0">For pickup</small>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item d-flex pd-sm-x-20">
-                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
-                                                    <div class="pd-sm-l-10">
-                                                        <p class="tx-medium mg-b-0">Payment from #023328</p>
-                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 20, 2019, 10:30pm</small>
-                                                    </div>
-                                                    <div class="mg-l-auto text-right">
-                                                        <p class="tx-medium mg-b-0">+ $129.50</p>
-                                                        <small class="tx-12 tx-success mg-b-0">Completed</small>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item d-flex pd-sm-x-20">
-                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-gray-400"><i class="icon ion-md-close"></i></span></div>
-                                                    <div class="pd-sm-l-10">
-                                                        <p class="tx-medium mg-b-0">Payment failed from #087651</p>
-                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 19, 2019, 12:54pm</small>
-                                                    </div>
-                                                    <div class="mg-l-auto text-right">
-                                                        <p class="tx-medium mg-b-0">$150.00</p>
-                                                        <small class="tx-12 tx-danger mg-b-0">Declined</small>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                            <div class="card-footer text-center tx-13">
-                                                <a href="" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
-                                            </div><!-- card-footer -->
-                                        </div><!-- card -->
-                                    </div>
-                                    <div class="col-md-6 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
-                                        <div class="card ht-100p">
-                                            <div class="card-header d-flex align-items-center justify-content-between">
-                                                <h6 class="mg-b-0">Yazar Kasa İşlemleri</h6>
-                                                <div class="d-flex tx-18">
-                                                    <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                    <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
-                                                </div>
-                                            </div>
-                                            <ul class="list-group list-group-flush tx-13">
-                                                <li class="list-group-item d-flex pd-sm-x-20">
-                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
-                                                    <div class="pd-sm-l-10">
-                                                        <p class="tx-medium mg-b-0">Payment from #10322</p>
-                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 21, 2019, 3:30pm</small>
-                                                    </div>
-                                                    <div class="mg-l-auto text-right">
-                                                        <p class="tx-medium mg-b-0">+ $250.00</p>
-                                                        <small class="tx-12 tx-success mg-b-0">Completed</small>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item d-flex pd-sm-x-20">
-                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-indigo op-5"><i class="icon ion-md-return-left"></i></span></div>
-                                                    <div class="pd-sm-l-10">
-                                                        <p class="tx-medium mg-b-2">Process refund to #00910</p>
-                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 21, 2019, 1:00pm</small>
-                                                    </div>
-                                                    <div class="mg-l-auto text-right">
-                                                        <p class="tx-medium mg-b-2">-$16.50</p>
-                                                        <small class="tx-12 tx-success mg-b-0">Completed</small>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item d-flex pd-sm-x-20">
-                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-orange op-5"><i class="icon ion-md-bus"></i></span></div>
-                                                    <div class="pd-sm-l-10">
-                                                        <p class="tx-medium mg-b-2">Process delivery to #44333</p>
-                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 20, 2019, 11:40am</small>
-                                                    </div>
-                                                    <div class="mg-l-auto text-right">
-                                                        <p class="tx-medium mg-b-2">3 Items</p>
-                                                        <small class="tx-12 tx-info mg-b-0">For pickup</small>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item d-flex pd-sm-x-20">
-                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
-                                                    <div class="pd-sm-l-10">
-                                                        <p class="tx-medium mg-b-0">Payment from #023328</p>
-                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 20, 2019, 10:30pm</small>
-                                                    </div>
-                                                    <div class="mg-l-auto text-right">
-                                                        <p class="tx-medium mg-b-0">+ $129.50</p>
-                                                        <small class="tx-12 tx-success mg-b-0">Completed</small>
-                                                    </div>
-                                                </li>
-                                                <li class="list-group-item d-flex pd-sm-x-20">
-                                                    <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-gray-400"><i class="icon ion-md-close"></i></span></div>
-                                                    <div class="pd-sm-l-10">
-                                                        <p class="tx-medium mg-b-0">Payment failed from #087651</p>
-                                                        <small class="tx-12 tx-color-03 mg-b-0">Mar 19, 2019, 12:54pm</small>
-                                                    </div>
-                                                    <div class="mg-l-auto text-right">
-                                                        <p class="tx-medium mg-b-0">$150.00</p>
-                                                        <small class="tx-12 tx-danger mg-b-0">Declined</small>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                            <div class="card-footer text-center tx-13">
-                                                <a href="" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
-                                            </div><!-- card-footer -->
-                                        </div><!-- card -->
-                                    </div>
+                                        </div>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover mg-b-0">
+                                                <thead class="bg-gray-100">
+                                                    <tr>
+                                                        <th>&nbsp;</th>
+                                                        <th colspan="6" class="text-center font-weight-bold"><span>(13) Yazarkasa Fişi Bildirimi</span></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><span></span></th>
+                                                        <th class="text-right"><span>Adet</span></th>
+                                                        <th class="text-right"><span>Tutar</span></th>
+                                                        <th class=""><span>Para</span></th>
+                                                        <th class="text-right"><span>Fiş No</span></th>
+                                                        <th class="text-right"><span>Fiş Tarihi</span></th>
+                                                        <th class="text-center"><span>Açıklama</span></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var item in Model.DayResultItemList.Where(x => x.ResultItemID == 6).ToList())
+                                                    {
+                                                        <tr>
+                                                            <td style="width:100px;"><strong>@item.ID</strong></td>
+
+                                                            <td class="text-right" style="width:60px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLQ" class="form-control font-weight-bold text-right tx-info" min="0" placeholder="0" value="@(item.Quantity)">
+                                                            </td>
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
+                                                            </td>
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLC" class="form-control" value="@(item.Currency)" readonly />
+                                                            </td>
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLN" class="form-control font-weight-bold" value="@(item.SlipNumber)">
+                                                            </td>
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E6TRLD" class="form-control font-weight-bold" value="@(item.SlipDate)">
+                                                            </td>
+                                                            <td class="bd-l  text-right" style="padding:1px !important;">
+                                                                <input type="text" name="E6TRLDE" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Description)">
+                                                            </td>
+
+                                                        </tr>
+                                                    }
+
+
+
+
+                                                </tbody>
+
+
+                                            </table>
+                                        </div>
+                                    </div><!-- card -->
                                 </div>
+
                                 <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
                                     <div class="card ht-100p">
                                         <div class="card-header d-flex align-items-center justify-content-between">
@@ -594,6 +731,7 @@
                                         </div><!-- card-footer -->
                                     </div><!-- card -->
                                 </div>
+
                             </div>
                             <div class="col-md-3 pd-r-0 pd-l-0 pd-t-0">
                                 <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
@@ -720,6 +858,7 @@
             $('.hour').mask('00:00');
             $('.shiftdate').mask('0000-00-00');
             $('.money').mask("#.##0,00", { reverse: true });
+            $('.money4').mask("#.##0,0000", { reverse: true });
         });
 
     </script>
