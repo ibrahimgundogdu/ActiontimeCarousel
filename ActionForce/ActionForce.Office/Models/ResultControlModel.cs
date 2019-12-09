@@ -20,7 +20,7 @@ namespace ActionForce.Office
         public IEnumerable<VLocationShift> LocationShiftList { get; set; }
         public IEnumerable<FromAccountModel> FromList { get; set; }
         public IEnumerable<Currency> CurrencyList { get; set; }
-        public IEnumerable<BankAccount> BankAccountList { get; set; }
+        public IEnumerable<VBankAccount> BankAccountList { get; set; }
         
 
         public FilterModel Filters { get; set; }

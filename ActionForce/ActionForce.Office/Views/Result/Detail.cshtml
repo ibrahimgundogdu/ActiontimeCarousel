@@ -72,7 +72,7 @@
                                                     <tr>
                                                         <th>&nbsp;</th>
                                                         <th colspan="3" class="bd-l text-center font-weight-bold"><span>(2) Nakit Satış</span></th>
-                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>(5) Nakit İade</span></th>
+                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>(5) Nakit Satış İade</span></th>
                                                     </tr>
                                                     <tr>
                                                         <th><span></span></th>
@@ -421,10 +421,10 @@
                                                                 <input type="text" name="E6TRLN" class="form-control font-weight-bold" value="@(item.SlipNumber)">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLD" class="form-control font-weight-bold" value="@(item.SlipDate)">
+                                                                <input type="text" id="ExpSlipDate" name="E6TRLD" class="form-control font-weight-bold" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
                                                             </td>
                                                             <td class="bd-l  text-right" style="padding:1px !important;">
-                                                                <input type="text" name="E6TRLDE" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Description)">
+                                                                <input type="text" name="E6TRLDE" class="form-control" value="@(item.Description)">
                                                             </td>
 
                                                         </tr>
@@ -460,7 +460,7 @@
                                                         <th><span>Banka Hesabı</span></th>
                                                         <th class="text-right"><span>Tutar</span></th>
                                                         <th><span>Para</span></th>
-                                                        <th><span>Refernas No</span></th>
+                                                        <th><span>Referans</span></th>
                                                         <th><span>Fiş No</span></th>
                                                         <th><span>Fiş Tarihi</span></th>
                                                         <th><span>Fiş Tutarı</span></th>
@@ -471,34 +471,36 @@
                                                     @foreach (var item in Model.DayResultItemList.Where(x => x.ResultItemID == 7).ToList())
                                                     {
                                                         <tr>
-                                                            <td>
+                                                            <td style="width:240px; padding:1px !important;">
                                                                 <select class="form-control" id="BankAccountID" name="BankAccountID" required>
-                                                                    @foreach (var item in Model.BankAccountList)
+                                                                    @foreach (var bank in Model.BankAccountList.Where(x => x.AccountTypeID == 1))
                                                                     {
-                                                                        <option value="@item.ID">@($"{item.BranchName} ({item.Currency})")</option>
+                                                                        <option value="@bank.ID" @(item.BankAccountID == bank.ID ? "selected" : "")>@($"{bank.BranchName} ({bank.Currency})")</option>
                                                                     }
                                                                 </select>
                                                             </td>
 
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLQ" class="form-control font-weight-bold text-right tx-info" min="0" placeholder="0" value="@(item.Quantity)">
+                                                                <input type="text" name="E7TRLA" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
+                                                                <input type="text" name="E7TRLC" class="form-control" value="@(item.Currency)" readonly />
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLC" class="form-control" value="@(item.Currency)" readonly />
+                                                                <input type="text" name="E7TRLR" class="form-control font-weight-bold" value="@(item.ReferenceCode)">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLN" class="form-control font-weight-bold" value="@(item.SlipNumber)">
+                                                                <input type="text" name="E7TRLN" class="form-control font-weight-bold" value="@(item.SlipNumber)">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLD" class="form-control font-weight-bold" value="@(item.SlipDate)">
+                                                                <input type="text" id="slipDate" name="E7TRLD" class="form-control font-weight-bold" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
                                                             </td>
-                                                            <td class="bd-l  text-right" style="padding:1px !important;">
-                                                                <input type="text" name="E6TRLDE" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Description)">
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E7TRLSA" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(item.SlipTotalAmount?.ToString("N2"))">
                                                             </td>
-
+                                                            <td class="text-right" style="padding:1px !important;">
+                                                                <input type="text" name="E7TRLDE" class="form-control" value="@(item.Description)">
+                                                            </td>
                                                         </tr>
                                                     }
 
@@ -608,42 +610,42 @@
                                             <table class="table table-hover mg-b-0">
                                                 <thead class="bg-gray-100">
                                                     <tr>
-                                                        <th>&nbsp;</th>
-                                                        <th colspan="6" class="text-center font-weight-bold"><span>(13) Yazarkasa Fişi Bildirimi</span></th>
+                                                        <th colspan="7" class="text-center font-weight-bold"><span>(13) Yazarkasa Fişi Bildirimi</span></th>
                                                     </tr>
                                                     <tr>
-                                                        <th><span></span></th>
-                                                        <th class="text-right"><span>Adet</span></th>
-                                                        <th class="text-right"><span>Tutar</span></th>
-                                                        <th class=""><span>Para</span></th>
-                                                        <th class="text-right"><span>Fiş No</span></th>
-                                                        <th class="text-right"><span>Fiş Tarihi</span></th>
-                                                        <th class="text-center"><span>Açıklama</span></th>
+                                                        <th><span>Fiş No</span></th>
+                                                        <th><span>Fiş Tarihi</span></th>
+                                                        <th><span>Fiş Saati</span></th>
+                                                        <th class="text-right"><span>Fiş Tutarı</span></th>
+                                                        <th class="text-right"><span>Genel Tutar</span></th>
+                                                        <th><span>Para</span></th>
+                                                        <th><span>Açıklama</span></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @foreach (var item in Model.DayResultItemList.Where(x => x.ResultItemID == 6).ToList())
+                                                    @foreach (var cr in Model.DayResultItemList.Where(x => x.ResultItemID == 13))
                                                     {
                                                         <tr>
-                                                            <td style="width:100px;"><strong>@item.ID</strong></td>
-
-                                                            <td class="text-right" style="width:60px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLQ" class="form-control font-weight-bold text-right tx-info" min="0" placeholder="0" value="@(item.Quantity)">
+                                                            <td style="width:160px; padding:1px !important;">
+                                                                <input type="text" name="E13TRLN" class="form-control font-weight-bold" value="@(cr.SlipNumber)">
+                                                            </td>
+                                                            <td style="width:120px; padding:1px !important;">
+                                                                <input type="text" id="crSlipDate" name="E13TRLD" class="form-control shiftdate font-weight-bold" value="@(cr.SlipDate != null ? cr.SlipDate.Value.ToString("yyyy-MM-dd") : Model.CurrentDayResult.Date.ToString("yyyy-MM-dd"))">
+                                                            </td>
+                                                            <td style="width:120px; padding:1px !important;">
+                                                                <input type="text" id="crSlipTime" name="E13TRLT" class="form-control hourfull font-weight-bold" value="@(cr.SlipDate != null ? cr.SlipDate.Value.TimeOfDay.ToString() : Model.CurrentDayResult.Date.TimeOfDay.ToString())">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
+                                                                <input type="text" name="E13TRLA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(cr.Amount?.ToString("N2"))">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLC" class="form-control" value="@(item.Currency)" readonly />
+                                                                <input type="text" name="E13TRLTA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(cr.SlipTotalAmount?.ToString("N2"))">
                                                             </td>
-                                                            <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLN" class="form-control font-weight-bold" value="@(item.SlipNumber)">
+                                                            <td style="width:100px; padding:1px !important;">
+                                                                <input type="text" name="E13TRLC" class="form-control" value="@(cr.Currency)" readonly />
                                                             </td>
-                                                            <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLD" class="form-control font-weight-bold" value="@(item.SlipDate)">
-                                                            </td>
-                                                            <td class="bd-l  text-right" style="padding:1px !important;">
-                                                                <input type="text" name="E6TRLDE" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Description)">
+                                                            <td style="padding:1px !important;">
+                                                                <input type="text" name="E13TRLDE" class="form-control" value="@(cr.Description)">
                                                             </td>
 
                                                         </tr>
@@ -657,7 +659,7 @@
 
                                             </table>
                                         </div>
-                                    </div><!-- card -->
+                                    </div>
                                 </div>
 
                                 <div class="col-md-12 mg-t-10 pd-r-0 pd-l-0 pd-t-0">
@@ -846,6 +848,33 @@
                 }
             });
 
+            $('#slipDate').datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+            $('#ExpSlipDate').datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+            $('#crSlipDate').datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
             $("#LocationResultDate").click(function () {
                 $("#DatePicker").datepicker("show");
             });
@@ -856,6 +885,7 @@
         $(function () {
             $('.shiftbegintime').mask('00:00');
             $('.hour').mask('00:00');
+            $('.hourfull').mask('00:00:00');
             $('.shiftdate').mask('0000-00-00');
             $('.money').mask("#.##0,00", { reverse: true });
             $('.money4').mask("#.##0,0000", { reverse: true });
