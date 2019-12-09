@@ -1,0 +1,52 @@
+﻿@model SalaryControlModel
+<div class="col-md-8 mg-t-0 pd-r-0 pd-l-0 pd-t-0">
+    <div class="card ht-100p">
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <h6 class="mg-b-0">Çalışan Saat Ücreti</h6>
+            <div class="d-flex tx-18">
+                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+
+            </div>
+        </div>
+        @using (Html.BeginForm("SaveSalaryUnit", "Salary", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="card-body pd-20">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-3">
+                            <label for="inputEmail4">Tarih <input id="EmployeeID" name="EmployeeID" value="@(Model.UnitSalary.EmployeeID)" type="hidden" /></label>
+                            <input id="DateStart" name="DateStart" type="text" class="form-control" placeholder="Tarih" value="@(Model.UnitSalary.DateStart.Value.ToString("yyyy-MM-dd"))" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="inputPassword4">Saatlik Ücret</label>
+                            <input id="Hourly" name="Hourly" type="text" class="form-control" value="@(Model.UnitSalary.Hourly?.ToString("N2"))" placeholder="Saatlik Ücret" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label for="inputPassword4">Mesai Ücret</label>
+                            <input id="HourlyExtent" name="HourlyExtent" type="text" class="form-control" value="@(Model.UnitSalary.HourlyExtent?.ToString("N2"))" placeholder="Mesai Ücret" required>
+                        </div>
+                        <div class="form-group col-md-1">
+                            <label for="inputPassword4">Oran</label>
+                            <input id="ExtendMultiplyRate" name="ExtendMultiplyRate" type="text" class="form-control" value="@(Model.UnitSalary.ExtendMultiplyRate?.ToString("N2"))" placeholder="Oran" required>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label for="inputPassword4"></label>
+                            <button class="btn btn-primary btn-block">Ücret Kaydet</button>
+                        </div>
+                    </div>
+                    
+                    
+
+
+                </form>
+            </div>
+        }
+
+
+        <div class="card-footer text-center tx-13">
+            <a href="" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
+        </div><!-- card-footer -->
+    </div>
+</div>

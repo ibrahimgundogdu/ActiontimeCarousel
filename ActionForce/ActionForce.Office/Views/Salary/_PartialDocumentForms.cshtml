@@ -13,7 +13,7 @@
             <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="32" />
             <div class="form-group">
                 <label>Kime</label>
-                <select class="form-control" id="FromID" name="FromID" required>
+                <select class="form-control" id="FromID" name="FromID" onchange="SalaryEarn(this.value)" required>
                     @foreach (var item in Model.FromList)
                     {
                         <option value="@item.Code">@(Html.Raw($"{item.Name}"))</option>

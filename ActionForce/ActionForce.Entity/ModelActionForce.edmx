@@ -3564,6 +3564,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeSalary' does not h
           <Property Name="Hourly" Type="float" />
           <Property Name="Money" Type="nvarchar" MaxLength="4" />
           <Property Name="DateStart" Type="date" />
+          <Property Name="HourlyExtend" Type="float" />
+          <Property Name="ExtendMultiplyRate" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4986,7 +4988,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeSalary].[IsActive] AS [IsActive], 
     [VEmployeeSalary].[Hourly] AS [Hourly], 
     [VEmployeeSalary].[Money] AS [Money], 
-    [VEmployeeSalary].[DateStart] AS [DateStart]
+    [VEmployeeSalary].[DateStart] AS [DateStart], 
+    [VEmployeeSalary].[HourlyExtend] AS [HourlyExtend], 
+    [VEmployeeSalary].[ExtendMultiplyRate] AS [ExtendMultiplyRate]
     FROM [dbo].[VEmployeeSalary] AS [VEmployeeSalary]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VLocation" EntityType="Self.VLocation" store:Type="Views" store:Schema="dbo">
@@ -5613,8 +5617,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VDocumentPosRefund" EntityType="db293_ActionTimeDbModel.VDocumentPosRefund" />
           <EntitySet Name="VDayResultItemList" EntityType="db293_ActionTimeDbModel.VDayResultItemList" />
           <EntitySet Name="VDocumentSalaryEarn" EntityType="db293_ActionTimeDbModel.VDocumentSalaryEarn" />
-          <EntitySet Name="VEmployeeSalary" EntityType="db293_ActionTimeDbModel.VEmployeeSalary" />
           <EntitySet Name="VBankAccount" EntityType="db293_ActionTimeDbModel.VBankAccount" />
+          <EntitySet Name="VEmployeeSalary" EntityType="db293_ActionTimeDbModel.VEmployeeSalary" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -9552,18 +9556,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UnitPrice" Type="Double" />
           <Property Name="QuantityHour" Type="Double" />
         </EntityType>
-        <EntityType Name="VEmployeeSalary">
-          <Key>
-            <PropertyRef Name="EmployeeID" />
-          </Key>
-          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="Hourly" Type="Double" />
-          <Property Name="Money" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="DateStart" Type="DateTime" Precision="0" />
-        </EntityType>
         <EntityType Name="VBankAccount">
           <Key>
             <PropertyRef Name="ID" />
@@ -9584,6 +9576,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VEmployeeSalary">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Hourly" Type="Double" />
+          <Property Name="Money" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="DateStart" Type="DateTime" Precision="0" />
+          <Property Name="HourlyExtend" Type="Double" />
+          <Property Name="ExtendMultiplyRate" Type="Double" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -13457,19 +13463,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="VEmployeeSalary">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeSalary">
-              <MappingFragment StoreEntitySet="VEmployeeSalary">
-                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
-                <ScalarProperty Name="Money" ColumnName="Money" />
-                <ScalarProperty Name="Hourly" ColumnName="Hourly" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="VBankAccount">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VBankAccount">
               <MappingFragment StoreEntitySet="VBankAccount">
@@ -13489,6 +13482,21 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="AccountTypeID" ColumnName="AccountTypeID" />
                 <ScalarProperty Name="BankID" ColumnName="BankID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VEmployeeSalary">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeSalary">
+              <MappingFragment StoreEntitySet="VEmployeeSalary">
+                <ScalarProperty Name="ExtendMultiplyRate" ColumnName="ExtendMultiplyRate" />
+                <ScalarProperty Name="HourlyExtend" ColumnName="HourlyExtend" />
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
+                <ScalarProperty Name="Hourly" ColumnName="Hourly" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

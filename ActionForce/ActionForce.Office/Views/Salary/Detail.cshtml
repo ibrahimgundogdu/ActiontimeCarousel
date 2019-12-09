@@ -53,7 +53,7 @@
                                     <nav class="nav">
                                         <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.Detail.Date.Value.ToLongDateString())</span></a>
                                     </nav>
-                                </div><!-- card-header -->
+                                </div>
                                 <div class="card-body pd-20">
                                     <form>
                                         <div class="form-group row">
@@ -173,8 +173,8 @@
                                         <a href="" class="nav-link"><i data-feather="user-check"></i> @(Html.Raw($"{Model.Detail.UpdaterFullName}"))</a>
                                         <a href="" class="nav-link"><i data-feather="calendar"></i> @(Model.Detail.UpdateDate != null ? Html.Raw($"{Model.Detail.UpdateDate.Value.ToLongDateString()}") : Html.Raw($""))</a>
                                     </nav>
-                                </div><!-- card-footer -->
-                            </div><!-- card -->
+                                </div>
+                            </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="card">
@@ -289,19 +289,16 @@
         });
         
         function SalaryEarn(FormID) {
-            $("#FormID").on("change", function () {
-                $.ajax({
+            $.ajax({
                     method: "GET",
                     url: "/Salary/SalaryEarn",
                     data: { id: FormID }
 
                 }).done(function (d) {
-                    $("#SalaryEarn").html(d);
-                    $("#UnitPrice").val(@(Model.EmployeeHour.Hourly?.ToString()));
+                    $("#UnitPrice").val(d);
 
 
                 });
-            });
         }
         
     </script>
