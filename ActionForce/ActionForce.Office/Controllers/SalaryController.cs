@@ -417,17 +417,17 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult SalaryEarn(string id)
+        public string SalaryEarn(string id)
         {
             SalaryControlModel model = new SalaryControlModel();
-
             
             var fromPrefix = id.Substring(0, 1);
             var fromID = Convert.ToInt32(id.Substring(1, id.Length - 1));
 
-            model.EmployeeHour = Db.EmployeeSalary.FirstOrDefault(x => x.EmployeeID == fromID);
+            string dd = Db.EmployeeSalary.FirstOrDefault(x => x.EmployeeID == fromID).Hourly?.ToString();
 
-            return View(model);
+
+            return dd;
 
         }
 
@@ -910,10 +910,130 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-           
-            model.UnitSalaryList = Db.VEmployeeSalary.Where(x=> x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
+            var docDate = DateTime.Now.Date;
+
+            model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            var employee = model.UnitSalaryList.FirstOrDefault();
+
+            if (locationId != null && locationId > 0)
+                employee = model.UnitSalaryList.LastOrDefault(x => x.EmployeeID == locationId);
+
+            model.UnitSalary = employee;
             return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult SaveSalaryUnit(NewEmployeeSalary empSalary)
+        {
+            Result<CashActions> result = new Result<CashActions>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (empSalary != null)
+            {
+                var employeeID = Convert.ToInt32(empSalary.EmployeeID);
+                var our = Db.VEmployeeSalary.FirstOrDefault(x => x.EmployeeID == employeeID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == our.OurCompanyID);
+                
+                var hourly = Convert.ToDouble(empSalary.Hourly.Replace(".", ","));
+                var hourlyExtent = Convert.ToDouble(empSalary.HourlyExtend.Replace(".", ","));
+                var extendMultiplyRate = Convert.ToDouble(empSalary.ExtendMultiplyRate.Replace(".", ","));
+
+                var docDate = DateTime.Now.Date;
+
+                if (DateTime.TryParse(empSalary.DateStart, out docDate))
+                {
+                    docDate = Convert.ToDateTime(empSalary.DateStart).Date;
+                }
+
+                var isSalary = Db.EmployeeSalary.FirstOrDefault(x => x.EmployeeID == employeeID && x.DateStart == docDate);
+                if (isSalary == null)
+                {
+                    try
+                    {
+                        
+                        EmployeeSalary newEmpSalary = new EmployeeSalary();
+
+                        newEmpSalary.EmployeeID = employeeID;
+                        newEmpSalary.DateStart = docDate;
+                        newEmpSalary.Hourly = hourly;
+                        newEmpSalary.Money = ourcompany.Currency;
+                        newEmpSalary.HourlyExtend = hourlyExtent;
+                        newEmpSalary.ExtendMultiplyRate = extendMultiplyRate;
+
+                        Db.EmployeeSalary.Add(newEmpSalary);
+                        Db.SaveChanges();
+
+
+                        result.IsSuccess = true;
+                        result.Message = "Employee saatlik ücret başarı ile eklendi";
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", newEmpSalary.ID.ToString(), "Salary", "Unit", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newEmpSalary);
+
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"Emplopyee saatlik ücret eklenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", "-1", "Salary", "Unit", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        EmployeeSalary self = new EmployeeSalary()
+                        {
+                            ID = isSalary.ID,
+                            EmployeeID = isSalary.EmployeeID,
+                            Hourly = isSalary.Hourly,
+                            DateStart = isSalary.DateStart,
+                            Monthly = isSalary.Monthly,
+                            Money = isSalary.Money,
+                            HourlyExtend = isSalary.HourlyExtend,
+                            ExtendMultiplyRate = isSalary.ExtendMultiplyRate
+                        };
+                        isSalary.DateStart = docDate;
+                        isSalary.Hourly = hourly;
+                        isSalary.Money = ourcompany.Currency;
+                        isSalary.HourlyExtend = hourlyExtent;
+                        isSalary.ExtendMultiplyRate = extendMultiplyRate;
+
+                        Db.SaveChanges();
+
+
+                        result.IsSuccess = true;
+                        result.Message = "Employee saatlik ücret başarı ile güncellendi";
+
+                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<EmployeeSalary>(self, isSalary, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Salary", "Update", isSalary.ID.ToString(), "Salary", "Unit", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"Emplopyee saatlik ücret güncellenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Salary", "Update", "-1", "Salary", "Unit", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                    }
+                }
+                
+
+            }
+
+            TempData["result"] = result;
+
+            return RedirectToAction("Unit", "Salary");
         }
     }
 }

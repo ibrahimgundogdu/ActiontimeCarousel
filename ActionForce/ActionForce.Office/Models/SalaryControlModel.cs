@@ -19,12 +19,14 @@ namespace ActionForce.Office
         public IEnumerable<Currency> CurrencyList { get; set; }
         public IEnumerable<BankAccount> BankAccountList { get; set; }
         public IEnumerable<VEmployeeSalary> UnitSalaryList { get; set; }
+        public VEmployeeSalary UnitSalary { get; set; }
 
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }
         public VLocation CurrentLocation { get; set; }
         public Result<CashActions> Result { get; set; }
 
+        
         public VDocumentSalaryEarn Detail { get; set; }
         public VDocumentSalaryPayment SalaryDetail { get; set; }
         public IEnumerable<ApplicationLog> History { get; set; }

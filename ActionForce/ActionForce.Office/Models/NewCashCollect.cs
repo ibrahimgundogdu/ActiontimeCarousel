@@ -181,4 +181,13 @@ namespace ActionForce.Office
         public string ExchangeRate { get; set; }
         public Guid UID { get; set; }
     }
+    public class NewEmployeeSalary
+    {
+        public int EmployeeID { get; set; }
+        public int OurCompanyID { get; set; }
+        public string DateStart { get; set; }
+        public string Hourly { get; set; }
+        public string HourlyExtend { get; set; }
+        public string ExtendMultiplyRate { get; set; }
+    }
 }

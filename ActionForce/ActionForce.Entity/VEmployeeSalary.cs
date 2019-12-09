@@ -21,5 +21,7 @@ namespace ActionForce.Entity
         public Nullable<double> Hourly { get; set; }
         public string Money { get; set; }
         public Nullable<System.DateTime> DateStart { get; set; }
+        public Nullable<double> HourlyExtend { get; set; }
+        public Nullable<double> ExtendMultiplyRate { get; set; }
     }
 }

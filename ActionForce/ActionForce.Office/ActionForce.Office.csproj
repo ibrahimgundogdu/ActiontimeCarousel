@@ -2463,6 +2463,7 @@
     <Content Include="Views\Salary\_PartialAddSalaryMenu.cshtml" />
     <Content Include="Views\Salary\getUnit.cshtml" />
     <Content Include="Views\Salary\Unit.cshtml" />
+    <Content Include="Views\Salary\_PartialAddEmployeeSalary.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
