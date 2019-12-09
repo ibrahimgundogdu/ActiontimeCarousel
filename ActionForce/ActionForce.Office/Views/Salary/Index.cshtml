@@ -213,7 +213,21 @@
             });
         }
 
+        function SalaryEarn(id) {
+            $("#FormID").on("change", function () {
+                $.ajax({
+                    method: "POST",
+                    url: "/Salary/SalaryEarn",
+                    data: { id: id }
+                }).done(function (d) {
+                    $("#SalaryEarn").html(d);
+                    $("#UnitPrice").val(d.Hourly);
 
+                });
+            });
+
+
+        }
 
         
 
