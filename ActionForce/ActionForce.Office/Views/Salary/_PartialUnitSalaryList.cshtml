@@ -1,4 +1,5 @@
-﻿<table class="table table-primary table-hover table-striped mg-b-0">
+﻿<link href="/lib/fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<table class="table table-primary table-hover table-striped mg-b-0">
     <thead>
         <tr class="table-active">
             <th></th>
@@ -15,7 +16,7 @@
         @foreach (var employee in Model.UnitSalaryDistList)
         {
             <tr>
-                <td><span class="tx-10 @(employee.IsActive == true ? "tx-success":"tx-danger")"><i data-feather="user"></i></span></td>
+                <td><span class="@(employee.IsActive == true ? "tx-success":"tx-danger")">&#8226;</span></td>
                 <td scope="row" class="@(employee.IsActive == true ? "":"tx-danger")"><a href="#" onclick="SalaryUnit(@employee.EmployeeID);"><b>@(employee.FullName)</b></a></td>
                 <td>@(employee.DateStart?.Date.ToShortDateString() )</td>
                 <td class="tx-right font-weight-bold">@(employee.Hourly?.ToString("N2"))</td>
