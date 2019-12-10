@@ -337,6 +337,7 @@
     <Content Include="Content\Site.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="images\login.png" />
     <Content Include="images\loginback.png" />
     <Content Include="lib\animate.css\animate.min.css" />
     <Content Include="lib\bootstrap-tagsinput\bootstrap-tagsinput-typeahead.css" />
@@ -2292,6 +2293,8 @@
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\DefinitionControlModel.cs" />
     <Compile Include="Models\BankControlModel.cs" />
+    <Compile Include="Models\CashCollection.cs" />
+    <Compile Include="Models\Document\DocumentManager.cs" />
     <Compile Include="Models\SalaryControlModel.cs" />
     <Compile Include="Models\CashControlModel.cs" />
     <Compile Include="Models\FilterModel.cs" />
@@ -2485,6 +2488,7 @@
     <Folder Include="Document\Bank\" />
     <Folder Include="Document\Exchange\" />
     <Folder Include="Document\Expense\" />
+    <Folder Include="icons\" />
     <Folder Include="Views\Actions\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Finance\" />

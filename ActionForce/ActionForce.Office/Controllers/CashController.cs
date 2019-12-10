@@ -86,12 +86,13 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddCashCollection(NewCashCollect cashCollect)
         {
-            Result<CashActions> result = new Result<CashActions>()
+            Result<DocumentCashCollections> result = new Result<DocumentCashCollections>()
             {
                 IsSuccess = false,
                 Message = string.Empty,
                 Data = null
             };
+
             CashControlModel model = new CashControlModel();
 
             if (cashCollect != null)
@@ -105,6 +106,7 @@ namespace ActionForce.Office.Controllers
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
+                var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
 
                 if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
                 {
@@ -112,59 +114,21 @@ namespace ActionForce.Office.Controllers
                 }
                 var cash = OfficeHelper.GetCash(cashCollect.LocationID, cashCollect.Currency);
 
-                //var isCash = Db.DocumentCashCollections.FirstOrDefault(x => x.UID == cashCollect.UID);
-
-                try
-                {
-                    var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
-
-                    DocumentCashCollections newCashColl = new DocumentCashCollections();
-
-                    newCashColl.ActionTypeID = actType.ID;
-                    newCashColl.ActionTypeName = actType.Name;
-                    newCashColl.Amount = amount;
-                    newCashColl.CashID = cash.ID;
-                    newCashColl.Currency = currency;
-                    newCashColl.Date = docDate;
-                    newCashColl.Description = cashCollect.Description;
-                    newCashColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "CC");
-                    newCashColl.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
-                    newCashColl.FromBankAccountID = fromPrefix == "B" ? fromID : (int?)null;
-                    newCashColl.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
-                    newCashColl.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                    newCashColl.IsActive = true;
-                    newCashColl.LocationID = cashCollect.LocationID;
-                    newCashColl.OurCompanyID = location.OurCompanyID;
-                    newCashColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
-                    newCashColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                    newCashColl.RecordIP = OfficeHelper.GetIPAddress();
-                    newCashColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newCashColl.ExchangeRate;
-                    newCashColl.SystemCurrency = ourcompany.Currency;
-                    newCashColl.EnvironmentID = 2;
-                    newCashColl.UID = Guid.NewGuid();
-
-                    Db.DocumentCashCollections.Add(newCashColl);
-                    Db.SaveChanges();
-
-                    // cari hesap işlemesi
-                    OfficeHelper.AddCashAction(newCashColl.CashID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, 1, newCashColl.Amount, 0, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
-
-                    result.IsSuccess = true;
-                    result.Message = $"{newCashColl.Date} tarihli { newCashColl.Amount } {newCashColl.Currency} tutarındaki kasa tahsilatı başarı ile eklendi";
-
-                    // log atılır
-                    OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", newCashColl.ID.ToString(), "Cash", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newCashColl);
-
-                }
-                catch (Exception ex)
-                {
-
-                    result.Message = $"{amount} {currency} tutarındaki kasa tahsilatı eklenemedi : {ex.Message}";
-                    OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-                }
-
-
+                CashCollection collection = new CashCollection();
+                collection.ActinTypeID = actType.ID;
+                collection.Amount = amount;
+                collection.Currency = currency;
+                collection.Description = cashCollect.Description;
+                collection.DocumentDate = docDate;
+                collection.EnvironmentID = 2;
+                collection.ExchangeRate = currency == "USD" ? exchange.USDA.Value : currency == "EUR" ? exchange.EURA.Value : 1;
+                collection.FromBankAccountID = fromPrefix == "B" ? fromID : (int?)null;
+                collection.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                collection.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
+                collection.LocationID = cashCollect.LocationID;
+                
+                DocumentManager documentManager = new DocumentManager();
+                result = documentManager.AddCashCollection(collection, model.Authentication);
             }
 
             TempData["result"] = result;
@@ -296,7 +260,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeleteCashCollection(int? id)
+        public ActionResult DeleteCashCollection(long? id)
         {
             Result<CashActions> result = new Result<CashActions>()
             {
