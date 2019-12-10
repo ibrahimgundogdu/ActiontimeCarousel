@@ -1,0 +1,37 @@
+﻿@model SalaryControlModel
+
+<div class="card-body pd-0">
+
+    <div class="contact-list">
+        <div class="table-responsive">
+            <table class="table table-primary table-hover table-striped mg-b-0">
+                <thead>
+                    <tr class="table-active">
+                        <th>Tarih</th>
+                        <th class="tx-right">Saat Ücreti</th>
+                        <th>Birim</th>
+                        <th class="tx-right">Mesai Ücreti</th>
+                        <th class="tx-right">Oran</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var employee in Model.UnitPrice)
+                    {
+                        <tr>
+                            @*<td scope="row" class="@(employee.IsActive == true ? "":"tx-danger")"><a href="@("/Salary/Unit/?locationId=" + employee.EmployeeID)"><b>@(employee.FullName)</b></a></td>*@
+                            <td>@(employee.DateStart?.Date.ToShortDateString() )</td>
+                            <td class="tx-right font-weight-bold">@(employee.Hourly?.ToString("N2"))</td>
+                            <td>@(employee.Money)</td>
+                            <td class="tx-right font-weight-bold">@(employee.HourlyExtend?.ToString("N2"))</td>
+                            <td class="tx-right font-weight-bold">@(employee.ExtendMultiplyRate?.ToString("N2"))</td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
