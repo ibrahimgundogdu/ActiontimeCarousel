@@ -2869,6 +2869,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VBankActions' does not have
           <Property Name="ProcessID" Type="bigint" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCash' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VCash">
+          <Key>
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" Nullable="false" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CashName" Type="nvarchar" MaxLength="50" />
+          <Property Name="BlockedAmount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="10" />
+          <Property Name="IsMaster" Type="bit" />
+          <Property Name="cIsActive" Type="bit" />
+          <Property Name="SortBy" Type="nchar" MaxLength="4" />
+          <Property Name="ID" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashActions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VCashActions">
           <Key>
@@ -4355,6 +4374,21 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VBankActions].[ProcessID] AS [ProcessID]
     FROM [dbo].[VBankActions] AS [VBankActions]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VCash" EntityType="Self.VCash" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VCash].[LocationID] AS [LocationID], 
+    [VCash].[OurCompanyID] AS [OurCompanyID], 
+    [VCash].[LocationFullName] AS [LocationFullName], 
+    [VCash].[IsActive] AS [IsActive], 
+    [VCash].[CashName] AS [CashName], 
+    [VCash].[BlockedAmount] AS [BlockedAmount], 
+    [VCash].[Currency] AS [Currency], 
+    [VCash].[IsMaster] AS [IsMaster], 
+    [VCash].[cIsActive] AS [cIsActive], 
+    [VCash].[SortBy] AS [SortBy], 
+    [VCash].[ID] AS [ID]
+    FROM [dbo].[VCash] AS [VCash]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VCashActions" EntityType="Self.VCashActions" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VCashActions].[ID] AS [ID], 
@@ -5619,6 +5653,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VDocumentSalaryEarn" EntityType="db293_ActionTimeDbModel.VDocumentSalaryEarn" />
           <EntitySet Name="VBankAccount" EntityType="db293_ActionTimeDbModel.VBankAccount" />
           <EntitySet Name="VEmployeeSalary" EntityType="db293_ActionTimeDbModel.VEmployeeSalary" />
+          <EntitySet Name="VCash" EntityType="db293_ActionTimeDbModel.VCash" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -9591,6 +9626,23 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="HourlyExtend" Type="Double" />
           <Property Name="ExtendMultiplyRate" Type="Double" />
         </EntityType>
+        <EntityType Name="VCash">
+          <Key>
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CashName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BlockedAmount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IsMaster" Type="Boolean" />
+          <Property Name="cIsActive" Type="Boolean" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
+          <Property Name="ID" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -13497,6 +13549,23 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VCash">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCash">
+              <MappingFragment StoreEntitySet="VCash">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="cIsActive" ColumnName="cIsActive" />
+                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="BlockedAmount" ColumnName="BlockedAmount" />
+                <ScalarProperty Name="CashName" ColumnName="CashName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
