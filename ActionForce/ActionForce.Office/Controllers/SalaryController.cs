@@ -1052,9 +1052,7 @@ namespace ActionForce.Office.Controllers
             //return RedirectToAction("Unit", "Salary");
             return RedirectToAction("Unit", new { locationId = empSalary.EmployeeID });
         }
-
         
-
         [HttpPost]
         [AllowAnonymous]
         public PartialViewResult AddSalaryEmployee(NewEmployeeSalary empSalary)

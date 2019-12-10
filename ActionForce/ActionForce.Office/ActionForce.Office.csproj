@@ -2273,6 +2273,7 @@
     <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CashController.cs" />
+    <Compile Include="Controllers\DefinitionController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FinanceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -2289,6 +2290,7 @@
     <Compile Include="Models\ActionEmployee.cs" />
     <Compile Include="Models\AuditTrail.cs" />
     <Compile Include="Models\AuthenticationModel.cs" />
+    <Compile Include="Models\DefinitionControlModel.cs" />
     <Compile Include="Models\BankControlModel.cs" />
     <Compile Include="Models\SalaryControlModel.cs" />
     <Compile Include="Models\CashControlModel.cs" />
@@ -2464,6 +2466,13 @@
     <Content Include="Views\Salary\Unit.cshtml" />
     <Content Include="Views\Salary\_PartialAddEmployeeSalary.cshtml" />
     <Content Include="Views\Salary\_PartialEmployeeSalaryList.cshtml" />
+    <Content Include="Views\Definition\Index.cshtml" />
+    <Content Include="Views\Definition\Detail.cshtml" />
+    <Content Include="Views\Definition\Bank.cshtml" />
+    <Content Include="Views\Definition\BankAccount.cshtml" />
+    <Content Include="Views\Definition\Pos.cshtml" />
+    <Content Include="Views\Definition\_PartialAddDefinitionMenu.cshtml" />
+    <Content Include="Views\Definition\_PartialDocumentForms.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
