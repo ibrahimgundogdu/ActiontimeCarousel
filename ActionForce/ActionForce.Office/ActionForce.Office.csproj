@@ -2263,6 +2263,8 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -2467,6 +2469,7 @@
     <Content Include="Views\Salary\Unit.cshtml" />
     <Content Include="Views\Salary\_PartialAddEmployeeSalary.cshtml" />
     <Content Include="Views\Salary\_PartialEmployeeSalaryList.cshtml" />
+    <Content Include="Views\Salary\_PartialUnitSalaryList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

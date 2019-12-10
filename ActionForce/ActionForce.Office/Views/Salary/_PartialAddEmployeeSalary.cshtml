@@ -2,11 +2,12 @@
 @using (Ajax.BeginForm("SaveSalaryUnit", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "SalaryUnitList", InsertionMode = InsertionMode.Replace }))
 {
     @Html.AntiForgeryToken()
+
     <div class="card-header d-flex align-items-center justify-content-between">
         <h6 class="mg-b-0">@(Model.UnitSalary.FullName) <input id="EmployeeID" name="EmployeeID" value="@(Model.UnitSalary.EmployeeID)" type="hidden" /></h6>
     </div>
     <div class="card-body pd-0">
-        <form>
+        
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="inputEmail4">Tarih</label>
@@ -27,19 +28,11 @@
                 <div class="form-group col-md-2">
                     <label for="inputPassword4">&nbsp;</label>
                     <input id="SaveSalaryUnit" type="submit" class="btn btn-primary btn-block" value="Ücret Kaydet" />
-                    @*<button class="btn btn-primary btn-block">Ücret Kaydet</button>*@
                 </div>
             </div>
-
-
-
-
-        </form>
-
     </div>
     <div class="card-footer text-center tx-13">
-        @*<a href="" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>*@
-    </div><!-- card-footer -->
+    </div>
 }
 
 <div id="SalaryUnitList">

@@ -16,16 +16,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var employee in Model.UnitPrice)
+                    @foreach (var employee in Model.UnitSalaryList)
                     {
                         <tr>
-                            @*<td scope="row" class="@(employee.IsActive == true ? "":"tx-danger")"><a href="@("/Salary/Unit/?locationId=" + employee.EmployeeID)"><b>@(employee.FullName)</b></a></td>*@
                             <td>@(employee.DateStart?.Date.ToShortDateString() )</td>
                             <td class="tx-right font-weight-bold">@(employee.Hourly?.ToString("N2"))</td>
                             <td>@(employee.Money)</td>
                             <td class="tx-right font-weight-bold">@(employee.HourlyExtend?.ToString("N2"))</td>
                             <td class="tx-right font-weight-bold">@(employee.ExtendMultiplyRate?.ToString("N2"))</td>
-
                         </tr>
                     }
                 </tbody>
@@ -35,3 +33,17 @@
 
 
 </div>
+
+@if (Model.Result != null)
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
+}

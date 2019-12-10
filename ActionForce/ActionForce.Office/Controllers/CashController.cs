@@ -106,7 +106,7 @@ namespace ActionForce.Office.Controllers
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-                var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+                
 
                 if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
                 {
@@ -121,7 +121,6 @@ namespace ActionForce.Office.Controllers
                 collection.Description = cashCollect.Description;
                 collection.DocumentDate = docDate;
                 collection.EnvironmentID = 2;
-                collection.ExchangeRate = currency == "USD" ? exchange.USDA.Value : currency == "EUR" ? exchange.EURA.Value : 1;
                 collection.FromBankAccountID = fromPrefix == "B" ? fromID : (int?)null;
                 collection.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                 collection.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
@@ -140,7 +139,7 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditCashCollection(NewCashCollect cashCollect)
         {
-            Result<CashActions> result = new Result<CashActions>()
+            Result<DocumentCashCollections> result = new Result<DocumentCashCollections>()
             {
                 IsSuccess = false,
                 Message = string.Empty,
@@ -151,118 +150,44 @@ namespace ActionForce.Office.Controllers
 
             if (cashCollect != null)
             {
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashCollect.ActinTypeID);
-                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashCollect.LocationID);
-                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashCollect.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashCollect.FromID.Substring(1, cashCollect.FromID.Length - 1));
                 var amount = Convert.ToDouble(cashCollect.Amount.ToString().Replace(".", ","));
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
-                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-                var exchanges = cashCollect.ExchangeRate;
+                var exchanges = !string.IsNullOrEmpty(cashCollect.ExchangeRate) ? Convert.ToDouble(cashCollect.ExchangeRate.ToString().Replace(".", ",")) : (double?)null ;
                 if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
                 }
-                var cash = OfficeHelper.GetCash((int)cashCollect.LocationID, cashCollect.Currency);
-                var isDate = DateTime.Now.Date;
-                var isKasa = cash.ID;
-                var isCash = Db.DocumentCashCollections.FirstOrDefault(x => x.UID == cashCollect.UID);
-                if (isCash != null)
-                {
-                    try
-                    {
-                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(docDate));
-                        isDate = Convert.ToDateTime(isCash.Date);
-                        isKasa = Convert.ToInt32(isCash.CashID);
-                        DocumentCashCollections self = new DocumentCashCollections()
-                        {
-                            ActionTypeID = isCash.ActionTypeID,
-                            ActionTypeName = isCash.ActionTypeName,
-                            Amount = isCash.Amount,
-                            CashID = isCash.CashID,
-                            Currency = isCash.Currency,
-                            Date = isCash.Date,
-                            Description = isCash.Description,
-                            DocumentNumber = isCash.DocumentNumber,
-                            ExchangeRate = isCash.ExchangeRate,
-                            ID = isCash.ID,
-                            IsActive = isCash.IsActive,
-                            LocationID = isCash.LocationID,
-                            OurCompanyID = isCash.OurCompanyID,
-                            RecordDate = isCash.RecordDate,
-                            RecordEmployeeID = isCash.RecordEmployeeID,
-                            RecordIP = isCash.RecordIP,
-                            ReferenceID = isCash.ReferenceID,
-                            SystemAmount = isCash.SystemAmount,
-                            SystemCurrency = isCash.SystemCurrency,
-                            UpdateDate = isCash.UpdateDate,
-                            UpdateEmployee = isCash.UpdateEmployee,
-                            UpdateIP = isCash.UpdateIP,
-                            EnvironmentID = isCash.EnvironmentID
-                        };
-                        isCash.CashID = cash.ID;
-                        isCash.Date = docDate;
-                        isCash.FromBankAccountID = fromPrefix == "B" ? fromID : (int?)null;
-                        isCash.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
-                        isCash.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                        isCash.Amount = amount;
-                        isCash.Currency = cashCollect.Currency;
-                        isCash.Description = isCash.Description;
-                        isCash.ExchangeRate = exchanges != null ? Convert.ToDouble(cashCollect.ExchangeRate.ToString().Replace(".", ",")) : currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
-                        isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
-                        isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
-                        isCash.UpdateIP = OfficeHelper.GetIPAddress();
-                        isCash.SystemAmount = ourcompany.Currency == currency ? amount : amount * isCash.ExchangeRate;
-                        isCash.SystemCurrency = ourcompany.Currency;
 
-                        Db.SaveChanges();
+                CashCollection collection = new CashCollection();
+                collection.ActinTypeID = cashCollect.ActinTypeID;
+                collection.Amount = amount;
+                collection.Currency = currency;
+                collection.Description = cashCollect.Description;
+                collection.DocumentDate = docDate;
+                collection.EnvironmentID = 2;
+                collection.FromBankAccountID = fromPrefix == "B" ? fromID : (int?)null;
+                collection.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                collection.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
+                collection.LocationID = cashCollect.LocationID;
+                collection.UID = cashCollect.UID;
+                collection.ExchangeRate = exchanges;
 
-                        var cashaction = Db.CashActions.FirstOrDefault(x => x.CashID == isKasa && x.LocationID == isCash.LocationID && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
-
-                        if (cashaction != null)
-                        {
-                            cashaction.Collection = isCash.Amount;
-                            cashaction.CashID = cash.ID;
-                            cashaction.Currency = cashCollect.Currency;
-                            cashaction.ActionDate = docDate;
-                            cashaction.ProcessDate = docDate;
-                            cashaction.UpdateDate = isCash.UpdateDate;
-                            cashaction.UpdateEmployeeID = isCash.UpdateEmployee;
-
-                            Db.SaveChanges();
-
-                        }
-
-                        result.IsSuccess = true;
-                        result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {amount} {currency} tutarındaki kasa tahsilatı başarı ile güncellendi";
-
-
-                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentCashCollections>(self, isCash, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isCash.ID.ToString(), "Cash", "Index", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-                    }
-                    catch (Exception ex)
-                    {
-
-                        result.Message = $"{amount} {currency} tutarındaki kasa tahsilatı güncellenemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                    }
-                }
-
+                DocumentManager documentManager = new DocumentManager();
+                result = documentManager.EditCashCollection(collection, model.Authentication);
             }
 
             TempData["result"] = result;
             return RedirectToAction("CashDetail", new { id = cashCollect.UID });
-            //return RedirectToAction("Index", "Cash");
 
         }
 
         [AllowAnonymous]
         public ActionResult DeleteCashCollection(long? id)
         {
-            Result<CashActions> result = new Result<CashActions>()
+            Result<DocumentCashCollections> result = new Result<DocumentCashCollections>()
             {
                 IsSuccess = false,
                 Message = string.Empty,
@@ -273,71 +198,8 @@ namespace ActionForce.Office.Controllers
 
             if (id != null)
             {
-
-                var isCash = Db.DocumentCashCollections.FirstOrDefault(x => x.ID == id);
-                if (isCash != null)
-                {
-                    try
-                    {
-                        var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
-
-                        DocumentCashCollections self = new DocumentCashCollections()
-                        {
-                            ActionTypeID = isCash.ActionTypeID,
-                            ActionTypeName = isCash.ActionTypeName,
-                            Amount = isCash.Amount,
-                            CashID = isCash.CashID,
-                            Currency = isCash.Currency,
-                            Date = isCash.Date,
-                            Description = isCash.Description,
-                            DocumentNumber = isCash.DocumentNumber,
-                            ExchangeRate = isCash.ExchangeRate,
-                            ID = isCash.ID,
-                            IsActive = isCash.IsActive,
-                            LocationID = isCash.LocationID,
-                            OurCompanyID = isCash.OurCompanyID,
-                            RecordDate = isCash.RecordDate,
-                            RecordEmployeeID = isCash.RecordEmployeeID,
-                            RecordIP = isCash.RecordIP,
-                            ReferenceID = isCash.ReferenceID,
-                            SystemAmount = isCash.SystemAmount,
-                            SystemCurrency = isCash.SystemCurrency,
-                            UpdateDate = isCash.UpdateDate,
-                            UpdateEmployee = isCash.UpdateEmployee,
-                            UpdateIP = isCash.UpdateIP,
-                            FromBankAccountID = isCash.FromBankAccountID,
-                            FromEmployeeID = isCash.FromEmployeeID,
-                            FromCustomerID = isCash.FromCustomerID,
-                            EnvironmentID = isCash.EnvironmentID
-                        };
-
-
-                        isCash.IsActive = false;
-                        isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
-                        isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
-                        isCash.UpdateIP = OfficeHelper.GetIPAddress();
-
-                        Db.SaveChanges();
-
-                        OfficeHelper.AddCashAction(isCash.CashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, -1 * isCash.Amount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
-
-
-                        result.IsSuccess = true;
-                        result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki kasa tahsilatı başarı ile iptal edildi";
-
-
-                        //var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentCashCollections>(self, isCash, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-                    }
-                    catch (Exception ex)
-                    {
-
-                        result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki kasa tahsilatı iptal edilemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", "-1", "Cash", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                    }
-                }
-
+                DocumentManager documentManager = new DocumentManager();
+                result = documentManager.DeleteCashCollection(id, model.Authentication);
             }
 
             TempData["result"] = result;

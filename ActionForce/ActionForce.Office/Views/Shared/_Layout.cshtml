@@ -181,6 +181,7 @@
 
     <script src="/assets/js/jquery.toast.js"></script>
     <script src="/lib/jquery.mask/jquery.mask.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
 
     <script type="text/javascript">
         $('#CurrentCompany').on('change', function () {
@@ -194,9 +195,7 @@
                 data: { id: this.value, url: url}
             }).done(function (d) {
                 window.location.href = url;
-                //$("#AddLocationSchedule").html(d);
             });
-            //window.location.href = "/Schedule/Employee?locationid=" + this.value;
         });
 
         

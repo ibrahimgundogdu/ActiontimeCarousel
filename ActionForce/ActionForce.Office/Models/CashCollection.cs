@@ -16,7 +16,8 @@ namespace ActionForce.Office
         public string Currency { get; set; }
         public DateTime? DocumentDate { get; set; }
         public string Description { get; set; }
-        public double ExchangeRate { get; set; }
+        public double? ExchangeRate { get; set; }
         public int? EnvironmentID { get; set; }
+        public Guid? UID { get; set; }
     }
 }

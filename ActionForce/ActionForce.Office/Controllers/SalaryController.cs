@@ -889,7 +889,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Unit(int? locationId, string key, string isactive, string all)
+        public ActionResult Unit(int? id, string key, string isactive, string all)
         {
             SalaryControlModel model = new SalaryControlModel();
 
@@ -911,38 +911,62 @@ namespace ActionForce.Office.Controllers
                 model.Filters = filterModel;
             }
             
-            var docDate = DateTime.Now.Date;
+            //var docDate = DateTime.Now.Date;
 
             model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.FullName).ToList();
+
             if (!string.IsNullOrEmpty(key))
             {
                 model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.FullName.Contains(key)).ToList();
             }
-            //if (isactiveid == 1)
-            //{
-            //    model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.FullName).ToList();
-            //}
-            //if (isactiveid == -1)
-            //{
-            //    model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == false).OrderBy(x => x.FullName).ToList();
-            //}
-            //if (all != null && all == "Tümü")
-            //{
-            //    model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.IsActive).OrderBy(x => x.FullName).ToList();
-            //}
-            var employee = model.UnitSalaryList.FirstOrDefault();
+            
+            var unitSalary = model.UnitSalaryList.FirstOrDefault();
 
-            if (locationId != null && locationId > 0)
-                employee = model.UnitSalaryList.LastOrDefault(x => x.EmployeeID == locationId);
+            if (id != null && id > 0)
+                unitSalary = model.UnitSalaryList.FirstOrDefault(x => x.EmployeeID == id);
 
-            model.UnitSalary = employee;
-            model.UnitPrice = Db.EmployeeSalary.Where(x => x.EmployeeID == employee.EmployeeID).OrderByDescending(x => x.DateStart).ToList();
+            if (unitSalary != null)
+            {
+                model.UnitSalary = unitSalary;
+                model.UnitPrice = Db.EmployeeSalary.Where(x => x.EmployeeID == unitSalary.EmployeeID).OrderByDescending(x => x.DateStart).ToList();
+            }
+            
             return View(model);
         }
 
+        [AllowAnonymous]
+        public PartialViewResult UnitSearch(string key, string active)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
+
+            if (!string.IsNullOrEmpty(key))
+            {
+                model.UnitSalaryList = model.UnitSalaryList.Where(x => x.FullName.Contains(key)).ToList();
+            }
+
+            if (!string.IsNullOrEmpty(active))
+            {
+                if (active == "act")
+                {
+                    model.UnitSalaryList = model.UnitSalaryList.Where(x => x.IsActive == true).ToList();
+                }
+                else if (active == "psv")
+                {
+                    model.UnitSalaryList = model.UnitSalaryList.Where(x => x.IsActive == false).ToList();
+                }
+
+            }
+
+
+            return PartialView("_PartialUnitSalaryList", model);
+        }
+
+
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult SaveSalaryUnit(NewEmployeeSalary empSalary)
+        public PartialViewResult SaveSalaryUnit(NewEmployeeSalary empSalary)
         {
             Result<CashActions> result = new Result<CashActions>()
             {
@@ -950,14 +974,13 @@ namespace ActionForce.Office.Controllers
                 Message = string.Empty,
                 Data = null
             };
+
             SalaryControlModel model = new SalaryControlModel();
 
             if (empSalary != null)
             {
-                var employeeID = Convert.ToInt32(empSalary.EmployeeID);
-                var our = Db.VEmployeeSalary.FirstOrDefault(x => x.EmployeeID == employeeID);
+                var our = Db.VEmployeeSalary.FirstOrDefault(x => x.EmployeeID == empSalary.EmployeeID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == our.OurCompanyID);
-                
                 var hourly = Convert.ToDouble(empSalary.Hourly.Replace(".", ","));
                 var hourlyExtent = Convert.ToDouble(empSalary.HourlyExtend.Replace(".", ","));
                 var extendMultiplyRate = Convert.ToDouble(empSalary.ExtendMultiplyRate.Replace(".", ","));
@@ -969,15 +992,15 @@ namespace ActionForce.Office.Controllers
                     docDate = Convert.ToDateTime(empSalary.DateStart).Date;
                 }
 
-                var isSalary = Db.EmployeeSalary.FirstOrDefault(x => x.EmployeeID == employeeID && x.DateStart == docDate);
+                var isSalary = Db.EmployeeSalary.FirstOrDefault(x => x.EmployeeID == empSalary.EmployeeID && x.DateStart == docDate);
+
                 if (isSalary == null)
                 {
                     try
                     {
-                        
                         EmployeeSalary newEmpSalary = new EmployeeSalary();
 
-                        newEmpSalary.EmployeeID = employeeID;
+                        newEmpSalary.EmployeeID = empSalary.EmployeeID;
                         newEmpSalary.DateStart = docDate;
                         newEmpSalary.Hourly = hourly;
                         newEmpSalary.Money = ourcompany.Currency;
@@ -987,21 +1010,16 @@ namespace ActionForce.Office.Controllers
                         Db.EmployeeSalary.Add(newEmpSalary);
                         Db.SaveChanges();
 
-
                         result.IsSuccess = true;
                         result.Message = "Employee saatlik ücret başarı ile eklendi";
 
                         // log atılır
                         OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", newEmpSalary.ID.ToString(), "Salary", "Unit", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newEmpSalary);
-
-
                     }
                     catch (Exception ex)
                     {
-
                         result.Message = $"Emplopyee saatlik ücret eklenemedi : {ex.Message}";
                         OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", "-1", "Salary", "Unit", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
                     }
                 }
                 else
@@ -1019,6 +1037,7 @@ namespace ActionForce.Office.Controllers
                             HourlyExtend = isSalary.HourlyExtend,
                             ExtendMultiplyRate = isSalary.ExtendMultiplyRate
                         };
+
                         isSalary.DateStart = docDate;
                         isSalary.Hourly = hourly;
                         isSalary.Money = ourcompany.Currency;
@@ -1043,17 +1062,21 @@ namespace ActionForce.Office.Controllers
 
                     }
                 }
-                
+
+                model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.EmployeeID == empSalary.EmployeeID).ToList();
+                //model.UnitPrice = Db.EmployeeSalary.Where(x => x.EmployeeID == empSalary.EmployeeID).ToList();
+
 
             }
 
-            TempData["result"] = result;
-            model.UnitPrice = Db.EmployeeSalary.Where(x => x.EmployeeID == empSalary.EmployeeID).ToList();
-            //return RedirectToAction("Unit", "Salary");
-            return RedirectToAction("Unit", new { locationId = empSalary.EmployeeID });
-        }
 
-        
+            TempData["result"] = result;
+
+            model.Result = result;
+            //model.UnitPrice = Db.EmployeeSalary.Where(x => x.EmployeeID == empSalary.EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeeSalaryList", model);
+        }
 
         [HttpPost]
         [AllowAnonymous]
@@ -1170,40 +1193,13 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult EmployeeUnit(int? locationId)
+        public PartialViewResult SalaryUnit(int? id)
         {
             SalaryControlModel model = new SalaryControlModel();
-
-            if (TempData["result"] != null)
-            {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
-            }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
-
-            var docDate = DateTime.Now.Date;
-
-            model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
-
-            var employee = model.UnitSalaryList.FirstOrDefault();
-
-            if (locationId != null && locationId > 0)
-                employee = model.UnitSalaryList.LastOrDefault(x => x.EmployeeID == locationId);
-
-            model.UnitSalary = employee;
-            model.UnitPrice = Db.EmployeeSalary.Where(x => x.EmployeeID == employee.EmployeeID).OrderByDescending(x => x.DateStart).ToList();
-            return View(model);
+            
+            model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.EmployeeID == id).ToList();
+            model.UnitSalary = model.UnitSalaryList.OrderByDescending(x=> x.DateStart).FirstOrDefault();
+            return PartialView("_PartialAddEmployeeSalary", model);
         }
 
         [HttpPost]
