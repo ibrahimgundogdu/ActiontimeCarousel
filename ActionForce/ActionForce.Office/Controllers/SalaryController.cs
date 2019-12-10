@@ -889,7 +889,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Unit(int? id, string key, string isactive, string all)
+        public ActionResult Unit()  //
         {
             SalaryControlModel model = new SalaryControlModel();
 
@@ -898,67 +898,36 @@ namespace ActionForce.Office.Controllers
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
 
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
+            model.UnitSalaryDistList = Db.VEmployeeSalaryDist.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.FullName).ToList();
 
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
-            
-            //var docDate = DateTime.Now.Date;
-
-            model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.FullName).ToList();
-
-            if (!string.IsNullOrEmpty(key))
-            {
-                model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.FullName.Contains(key)).ToList();
-            }
-            
-            var unitSalary = model.UnitSalaryList.FirstOrDefault();
-
-            if (id != null && id > 0)
-                unitSalary = model.UnitSalaryList.FirstOrDefault(x => x.EmployeeID == id);
-
-            if (unitSalary != null)
-            {
-                model.UnitSalary = unitSalary;
-                model.UnitPrice = Db.EmployeeSalary.Where(x => x.EmployeeID == unitSalary.EmployeeID).OrderByDescending(x => x.DateStart).ToList();
-            }
-            
             return View(model);
         }
 
         [AllowAnonymous]
-        public PartialViewResult UnitSearch(string key, string active)
+        public PartialViewResult UnitSearch(string key, string active) //
         {
             SalaryControlModel model = new SalaryControlModel();
 
-            model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
+            model.UnitSalaryDistList = Db.VEmployeeSalaryDist.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
 
             if (!string.IsNullOrEmpty(key))
             {
-                model.UnitSalaryList = model.UnitSalaryList.Where(x => x.FullName.Contains(key)).ToList();
+                key = key.ToUpper().Replace("İ", "I").Replace("Ü","U").Replace("Ğ", "G").Replace("Ş", "S").Replace("Ç", "C").Replace("Ö", "O");
+                model.UnitSalaryDistList = model.UnitSalaryDistList.Where(x => x.FullNameSearch.Contains(key)).ToList();
             }
 
             if (!string.IsNullOrEmpty(active))
             {
                 if (active == "act")
                 {
-                    model.UnitSalaryList = model.UnitSalaryList.Where(x => x.IsActive == true).ToList();
+                    model.UnitSalaryDistList = model.UnitSalaryDistList.Where(x => x.IsActive == true).ToList();
                 }
                 else if (active == "psv")
                 {
-                    model.UnitSalaryList = model.UnitSalaryList.Where(x => x.IsActive == false).ToList();
+                    model.UnitSalaryDistList = model.UnitSalaryDistList.Where(x => x.IsActive == false).ToList();
                 }
 
             }
-
 
             return PartialView("_PartialUnitSalaryList", model);
         }

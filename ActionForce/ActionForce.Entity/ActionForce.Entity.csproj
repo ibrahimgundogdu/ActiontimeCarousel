@@ -639,6 +639,9 @@
     <Compile Include="VEmployeeSalary.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VEmployeeSalaryDist.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VLocation.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

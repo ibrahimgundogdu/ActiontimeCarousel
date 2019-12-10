@@ -12,18 +12,17 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class VEmployeeSalary
+    public partial class VEmployeeSalaryDist
     {
-        public int ID { get; set; }
         public int EmployeeID { get; set; }
-        public Nullable<System.DateTime> DateStart { get; set; }
+        public Nullable<int> OurCompanyID { get; set; }
+        public string FullName { get; set; }
+        public Nullable<bool> IsActive { get; set; }
         public Nullable<double> Hourly { get; set; }
-        public Nullable<double> Monthly { get; set; }
         public string Money { get; set; }
+        public Nullable<System.DateTime> DateStart { get; set; }
         public Nullable<double> HourlyExtend { get; set; }
         public Nullable<double> ExtendMultiplyRate { get; set; }
-        public string FullName { get; set; }
         public string FullNameSearch { get; set; }
-        public Nullable<int> OurCompanyID { get; set; }
     }
 }
