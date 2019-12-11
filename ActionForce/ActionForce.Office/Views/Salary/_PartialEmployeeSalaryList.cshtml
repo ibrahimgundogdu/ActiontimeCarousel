@@ -16,7 +16,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var employee in Model.UnitSalaryList)
+                    @foreach (var employee in Model.UnitSalaryList.OrderByDescending(x=> x.DateStart).ToList())
                     {
                         <tr>
                             <td>@(employee.DateStart?.Date.ToShortDateString() )</td>

@@ -50,7 +50,7 @@
     <div class="col-md-8 mg-t-0 pd-r-0 pd-l-0 pd-t-0">
         <div class="df-example demo-forms pd-5">
             <div class="card ht-100p" id="AddEmployeeSalary">
-                @*@{Html.RenderPartial("_PartialAddEmployeeSalary", Model);}*@
+               
             </div>
         </div>
 
@@ -95,6 +95,7 @@
         function UnitSearch(active) {
 
             var skey = $("#srcEmployeeName").val();
+            
             $.ajax({
                 method: "GET",
                 url: "/Salary/UnitSearch",

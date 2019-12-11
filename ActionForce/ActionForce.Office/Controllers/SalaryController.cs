@@ -1033,8 +1033,6 @@ namespace ActionForce.Office.Controllers
                 }
 
                 model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.EmployeeID == empSalary.EmployeeID).ToList();
-                //model.UnitPrice = Db.EmployeeSalary.Where(x => x.EmployeeID == empSalary.EmployeeID).ToList();
-
 
             }
 
@@ -1042,7 +1040,6 @@ namespace ActionForce.Office.Controllers
             TempData["result"] = result;
 
             model.Result = result;
-            //model.UnitPrice = Db.EmployeeSalary.Where(x => x.EmployeeID == empSalary.EmployeeID).ToList();
 
             return PartialView("_PartialEmployeeSalaryList", model);
         }

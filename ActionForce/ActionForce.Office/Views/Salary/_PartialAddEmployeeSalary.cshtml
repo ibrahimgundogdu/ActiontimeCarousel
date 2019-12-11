@@ -38,3 +38,17 @@
 <div id="SalaryUnitList">
     @{Html.RenderPartial("_PartialEmployeeSalaryList", Model); }
 </div>
+
+<script>
+        $(function () {
+            'use strict'
+
+            $('#DateStart').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+        });
+</script>
