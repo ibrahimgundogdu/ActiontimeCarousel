@@ -1,0 +1,75 @@
+﻿@model DefinitionControlModel
+@using (Ajax.BeginForm("SaveBankAccount", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "BankAccountList", InsertionMode = InsertionMode.Replace }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <h6 class="mg-b-0">@(Model.BankAccount.AccountName) <input id="BankID" name="BankID" value="@(Model.BankAccount.BankID)" type="hidden" /></h6>
+    </div>
+    <div class="card-body pd-0">
+
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="inputPassword4">Şube</label>
+                <input id="BranchName" name="BranchName" type="text" class="form-control" value="@(Model.BankAccount.BranchName)" placeholder="Şube" required>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputPassword4">Hesap Adı</label>
+                <input id="AccountName" name="AccountName" type="text" class="form-control" value="@(Model.BankAccount.AccountName)" placeholder="Hesap Adı" required>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputPassword4">Hesap Numarası</label>
+                <input id="AccountNumber" name="AccountNumber" type="text" class="form-control" value="@(Model.BankAccount.AccountNumber)" placeholder="Hesap Numarası" required>
+            </div>
+            <div class="form-group col-md-1">
+                <label for="inputPassword4">Şube Kodu</label>
+                <input id="BranchCode" name="BranchCode" type="text" class="form-control" value="@(Model.BankAccount.BranchCode)" placeholder="Şube Kodu" required>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputPassword4">IBAN</label>
+                <input id="IBAN" name="IBAN" type="text" class="form-control" value="@(Model.BankAccount.IBAN)" placeholder="IBAN" required>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputPassword4">Hesap Tipi</label>
+                <select class="form-control" id="AccountTypeID" name="AccountTypeID" required>
+                    @foreach (var item in Model.AccountType)
+                    {
+                        <option value="@item.ID" @(Model.BankAccount.AccountTypeID == item.ID ? "selected" : "")>@($"{item.Code} ({item.Name})")</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-1">
+                <label for="inputPassword4">Para Birimi</label>
+                <select class="form-control" id="Currency" name="Currency" required>
+                    @foreach (var item in Model.CurrencyList)
+                    {
+                        <option value="@item.Code" @(Model.BankAccount.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-1">
+                <label for="inputPassword4">&nbsp;</label>
+                <input id="SaveBankAccount" type="submit" class="btn btn-primary btn-block" value="Hesap Kaydet" />
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-center tx-13">
+    </div>
+}
+
+<div id="BankAccountList">
+    @{Html.RenderPartial("_PartialBankAccountList", Model); }
+</div>
+@if (Model.Results != null) //
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Results.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
+}

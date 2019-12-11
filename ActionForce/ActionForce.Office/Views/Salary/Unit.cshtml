@@ -115,6 +115,15 @@
             });
         }
 
+        function DeleteSalaryUnit(id) {
+            $.ajax({
+                method: "GET",
+                url: "/Salary/DeleteSalaryUnit",
+                data: { id: id }
+            }).done(function (d) {
+                $("#SalaryUnitList").html(d);
+            });
+        }
     </script>
 
 
