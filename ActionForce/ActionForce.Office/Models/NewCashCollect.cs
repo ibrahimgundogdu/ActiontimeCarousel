@@ -190,4 +190,17 @@ namespace ActionForce.Office
         public string HourlyExtend { get; set; }
         public string ExtendMultiplyRate { get; set; }
     }
+    public class NewLocationCash
+    {
+        public int LocationID { get; set; }
+        public string CashName { get; set; }
+        public string BlockedAmount { get; set; }
+        public string Currency { get; set; }
+    }
+    public class NewBank
+    {
+        public int OurCompanyID { get; set; }
+        public string Name { get; set; }
+        public string Code { get; set; }
+    }
 }

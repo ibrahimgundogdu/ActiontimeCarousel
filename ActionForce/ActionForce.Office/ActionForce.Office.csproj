@@ -2276,6 +2276,7 @@
     <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CashController.cs" />
+    <Compile Include="Controllers\DefinitionController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FinanceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -2294,6 +2295,7 @@
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\BankControlModel.cs" />
     <Compile Include="Models\CashCollection.cs" />
+    <Compile Include="Models\DefinitionControlModel.cs" />
     <Compile Include="Models\Document\DocumentManager.cs" />
     <Compile Include="Models\SalaryControlModel.cs" />
     <Compile Include="Models\CashControlModel.cs" />
@@ -2470,6 +2472,19 @@
     <Content Include="Views\Salary\_PartialAddEmployeeSalary.cshtml" />
     <Content Include="Views\Salary\_PartialEmployeeSalaryList.cshtml" />
     <Content Include="Views\Salary\_PartialUnitSalaryList.cshtml" />
+    <Content Include="Views\Definition\Bank.cshtml" />
+    <Content Include="Views\Definition\BankAccount.cshtml" />
+    <Content Include="Views\Definition\Detail.cshtml" />
+    <Content Include="Views\Definition\Index.cshtml" />
+    <Content Include="Views\Definition\Pos.cshtml" />
+    <Content Include="Views\Definition\_PartialLocationList.cshtml" />
+    <Content Include="Views\Definition\_PartialAddLocationCash.cshtml" />
+    <Content Include="Views\Definition\_PartialLocationCashList.cshtml" />
+    <Content Include="Views\Definition\_PartialBankList.cshtml" />
+    <Content Include="Views\Definition\_PartialAddBank.cshtml" />
+    <Content Include="Views\Definition\_PartialBanksList.cshtml" />
+    <Content Include="Views\Definition\_PartialBankAccountList.cshtml" />
+    <Content Include="Views\Definition\_PartialAddBankAccount.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

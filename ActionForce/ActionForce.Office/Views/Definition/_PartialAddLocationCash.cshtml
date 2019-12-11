@@ -1,0 +1,54 @@
+﻿@model DefinitionControlModel
+@using (Ajax.BeginForm("SaveLocationCash", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "LocationCashList", InsertionMode = InsertionMode.Replace }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <h6 class="mg-b-0">@(Model.Cash.LocationFullName) <input id="LocationID" name="LocationID" value="@(Model.Cash.LocationID)" type="hidden" /></h6>
+    </div>
+    <div class="card-body pd-0">
+
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="inputPassword4">Kasa</label>
+                <input id="CashName" name="CashName" type="text" class="form-control" value="@(Model.Cash.CashName)" placeholder="Kasa" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="inputPassword4">Bloke Edilen Tutar</label>
+                <input id="BlockedAmount" name="BlockedAmount" type="text" class="form-control" value="@(Model.Cash.BlockedAmount)" placeholder="Bloke Edilen Tutar" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="inputPassword4">Para Birimi</label>
+                <select class="form-control" id="Currency" name="Currency" required>
+                    @foreach (var item in Model.CurrencyList)
+                    {
+                        <option value="@item.Code" @(Model.Cash.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputPassword4">&nbsp;</label>
+                <input id="SaveLocationCash" type="submit" class="btn btn-primary btn-block" value="Kasa Kaydet" />
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-center tx-13">
+    </div>
+}
+
+<div id="LocationCashList">
+    @{Html.RenderPartial("_PartialLocationCashList", Model); }
+</div>
+@if (Model.Result != null) //
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
+}

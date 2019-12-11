@@ -888,6 +888,7 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+
         [AllowAnonymous]
         public ActionResult Unit()  //
         {
@@ -931,8 +932,7 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialUnitSalaryList", model);
         }
-
-
+        
         [HttpPost]
         [AllowAnonymous]
         public PartialViewResult SaveSalaryUnit(NewEmployeeSalary empSalary)
@@ -993,43 +993,9 @@ namespace ActionForce.Office.Controllers
                 }
                 else
                 {
-                    try
-                    {
-                        EmployeeSalary self = new EmployeeSalary()
-                        {
-                            ID = isSalary.ID,
-                            EmployeeID = isSalary.EmployeeID,
-                            Hourly = isSalary.Hourly,
-                            DateStart = isSalary.DateStart,
-                            Monthly = isSalary.Monthly,
-                            Money = isSalary.Money,
-                            HourlyExtend = isSalary.HourlyExtend,
-                            ExtendMultiplyRate = isSalary.ExtendMultiplyRate
-                        };
-
-                        isSalary.DateStart = docDate;
-                        isSalary.Hourly = hourly;
-                        isSalary.Money = ourcompany.Currency;
-                        isSalary.HourlyExtend = hourlyExtent;
-                        isSalary.ExtendMultiplyRate = extendMultiplyRate;
-
-                        Db.SaveChanges();
-
-
-                        result.IsSuccess = true;
-                        result.Message = "Employee saatlik ücret başarı ile güncellendi";
-
-                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<EmployeeSalary>(self, isSalary, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Salary", "Update", isSalary.ID.ToString(), "Salary", "Unit", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-                    }
-                    catch (Exception ex)
-                    {
-
-                        result.Message = $"Emplopyee saatlik ücret güncellenemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Salary", "Update", "-1", "Salary", "Unit", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-                    }
+                    result.IsSuccess = true;
+                    result.Message = $"{our.FullName} Employee { isSalary.DateStart } tarihinde ücret girişi mevcuttur. Kontrol edip güncel tarihli ücret girişi yapabilirsiniz.";
+                    
                 }
 
                 model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.EmployeeID == empSalary.EmployeeID).ToList();
@@ -1044,11 +1010,9 @@ namespace ActionForce.Office.Controllers
             return PartialView("_PartialEmployeeSalaryList", model);
         }
 
-        [HttpPost]
         [AllowAnonymous]
-        public PartialViewResult AddSalaryEmployee(NewEmployeeSalary empSalary)
+        public PartialViewResult DeleteSalaryUnit(int? id)
         {
-
             Result<CashActions> result = new Result<CashActions>()
             {
                 IsSuccess = false,
@@ -1056,106 +1020,47 @@ namespace ActionForce.Office.Controllers
                 Data = null
             };
             SalaryControlModel model = new SalaryControlModel();
+            int? empID = 0;
 
-            if (empSalary != null)
+            if (id != null)
             {
-                var employeeID = Convert.ToInt32(empSalary.EmployeeID);
-                var our = Db.VEmployeeSalary.FirstOrDefault(x => x.EmployeeID == employeeID);
-                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == our.OurCompanyID);
-
-                var hourly = Convert.ToDouble(empSalary.Hourly.Replace(".", ","));
-                var hourlyExtent = Convert.ToDouble(empSalary.HourlyExtend.Replace(".", ","));
-                var extendMultiplyRate = Convert.ToDouble(empSalary.ExtendMultiplyRate.Replace(".", ","));
-
-                var docDate = DateTime.Now.Date;
-
-                if (DateTime.TryParse(empSalary.DateStart, out docDate))
-                {
-                    docDate = Convert.ToDateTime(empSalary.DateStart).Date;
-                }
-
-                var isSalary = Db.EmployeeSalary.FirstOrDefault(x => x.EmployeeID == employeeID && x.DateStart == docDate);
-                if (isSalary == null)
+                
+                var isCash = Db.EmployeeSalary.FirstOrDefault(x => x.ID == id);
+                if (isCash != null)
                 {
                     try
                     {
+                        empID = isCash.EmployeeID;
+                        EmployeeSalary self = Db.EmployeeSalary.FirstOrDefault(x => x.ID == id);
+                        self.ID = (int)id;
 
-                        EmployeeSalary newEmpSalary = new EmployeeSalary();
-
-                        newEmpSalary.EmployeeID = employeeID;
-                        newEmpSalary.DateStart = docDate;
-                        newEmpSalary.Hourly = hourly;
-                        newEmpSalary.Money = ourcompany.Currency;
-                        newEmpSalary.HourlyExtend = hourlyExtent;
-                        newEmpSalary.ExtendMultiplyRate = extendMultiplyRate;
-
-                        Db.EmployeeSalary.Add(newEmpSalary);
+                        Db.EmployeeSalary.Remove(self);
                         Db.SaveChanges();
 
-
                         result.IsSuccess = true;
-                        result.Message = "Employee saatlik ücret başarı ile eklendi";
+                        result.Message = $"{isCash.DateStart} tarihli {isCash.ID} ID'li Employee saatlik ücreti silindi";
 
                         // log atılır
-                        OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", newEmpSalary.ID.ToString(), "Salary", "Unit", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newEmpSalary);
-
-
-                    }
-                    catch (Exception ex)
-                    {
-
-                        result.Message = $"Emplopyee saatlik ücret eklenemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", "-1", "Salary", "Unit", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-                    }
-                }
-                else
-                {
-                    try
-                    {
-                        EmployeeSalary self = new EmployeeSalary()
-                        {
-                            ID = isSalary.ID,
-                            EmployeeID = isSalary.EmployeeID,
-                            Hourly = isSalary.Hourly,
-                            DateStart = isSalary.DateStart,
-                            Monthly = isSalary.Monthly,
-                            Money = isSalary.Money,
-                            HourlyExtend = isSalary.HourlyExtend,
-                            ExtendMultiplyRate = isSalary.ExtendMultiplyRate
-                        };
-                        isSalary.DateStart = docDate;
-                        isSalary.Hourly = hourly;
-                        isSalary.Money = ourcompany.Currency;
-                        isSalary.HourlyExtend = hourlyExtent;
-                        isSalary.ExtendMultiplyRate = extendMultiplyRate;
-
-                        Db.SaveChanges();
-
-
-                        result.IsSuccess = true;
-                        result.Message = "Employee saatlik ücret başarı ile güncellendi";
-
-                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<EmployeeSalary>(self, isSalary, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Salary", "Update", isSalary.ID.ToString(), "Salary", "Unit", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        OfficeHelper.AddApplicationLog("Office", "Salary", "Remove", isCash.ID.ToString(), "Salary", "Unit", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isCash);
 
                     }
                     catch (Exception ex)
                     {
-
-                        result.Message = $"Emplopyee saatlik ücret güncellenemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Salary", "Update", "-1", "Salary", "Unit", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        result.Message = $"{isCash.DateStart} tarihli {isCash.ID} ID'li Employee saatlik ücreti silinemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Salary", "Remove", "-1", "Salary", "Unit", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
                     }
                 }
-
+                model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.EmployeeID == empID).ToList();
 
             }
 
             TempData["result"] = result;
-            model.UnitPrice = Db.EmployeeSalary.Where(x => x.EmployeeID == empSalary.EmployeeID).ToList();
-            return PartialView("_PartialEmployeeSalaryList", model.UnitPrice);
-            
+
+            model.Result = result;
+
+            return PartialView("_PartialEmployeeSalaryList", model);
+
         }
 
         [AllowAnonymous]
@@ -1167,15 +1072,6 @@ namespace ActionForce.Office.Controllers
             model.UnitSalary = model.UnitSalaryList.OrderByDescending(x=> x.DateStart).FirstOrDefault();
             return PartialView("_PartialAddEmployeeSalary", model);
         }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public PartialViewResult AddNew()
-        {
-            SalaryControlModel model = new SalaryControlModel();
-            
-
-            return PartialView("_PartialAddEmployeeSalary", model);
-        }
+        
     }
 }

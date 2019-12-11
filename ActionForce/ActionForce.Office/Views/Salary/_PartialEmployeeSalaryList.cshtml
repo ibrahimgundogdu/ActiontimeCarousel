@@ -12,19 +12,21 @@
                         <th>Birim</th>
                         <th class="tx-right">Mesai Ücreti</th>
                         <th class="tx-right">Oran</th>
+                        <th></th>
 
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var employee in Model.UnitSalaryList.OrderByDescending(x=> x.DateStart).ToList())
                     {
-                        <tr>
-                            <td>@(employee.DateStart?.Date.ToShortDateString() )</td>
-                            <td class="tx-right font-weight-bold">@(employee.Hourly?.ToString("N2"))</td>
-                            <td>@(employee.Money)</td>
-                            <td class="tx-right font-weight-bold">@(employee.HourlyExtend?.ToString("N2"))</td>
-                            <td class="tx-right font-weight-bold">@(employee.ExtendMultiplyRate?.ToString("N2"))</td>
-                        </tr>
+                    <tr>
+                        <td>@(employee.DateStart?.Date.ToShortDateString() )</td>
+                        <td class="tx-right font-weight-bold">@(employee.Hourly?.ToString("N2"))</td>
+                        <td>@(employee.Money)</td>
+                        <td class="tx-right font-weight-bold">@(employee.HourlyExtend?.ToString("N2"))</td>
+                        <td class="tx-right font-weight-bold">@(employee.ExtendMultiplyRate?.ToString("N2"))</td>
+                        <td class="tx-right font-weight-bold"><a href="#" class="text-danger" onclick="if(confirm('@employee.DateStart tarihli ücret girişini silmek istediğine emin misin? Bu işlem geri alınamaz')) DeleteSalaryUnit(@employee.ID)"><i class="fas fa-trash"></i></a></td>
+                    </tr>
                     }
                 </tbody>
             </table>
