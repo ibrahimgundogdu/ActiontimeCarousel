@@ -2479,6 +2479,14 @@
     <Content Include="Views\Definition\Pos.cshtml" />
     <Content Include="Views\Definition\_PartialAddDefinitionMenu.cshtml" />
     <Content Include="Views\Definition\_PartialDocumentForms.cshtml" />
+    <Content Include="Views\Definition\_PartialAddBank.cshtml" />
+    <Content Include="Views\Definition\_PartialAddBankAccount.cshtml" />
+    <Content Include="Views\Definition\_PartialAddLocationCash.cshtml" />
+    <Content Include="Views\Definition\_PartialBankAccountList.cshtml" />
+    <Content Include="Views\Definition\_PartialBankList.cshtml" />
+    <Content Include="Views\Definition\_PartialBanksList.cshtml" />
+    <Content Include="Views\Definition\_PartialLocationCashList.cshtml" />
+    <Content Include="Views\Definition\_PartialLocationList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -68,7 +68,7 @@
             </div><!-- aside-loggedin -->
             <ul class="nav nav-aside">
 
-                <li class="nav-label mg-t-10 active">Schedule</li>
+                <li class="nav-label mg-t-10 active">Schedule & Shift</li>
 
                 <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Schedule" ? "show" : "")">
                     <a href="/Employee" class="nav-link"><i data-feather="calendar"></i> <span>Mesai Plan Takvimi</span></a>
@@ -76,6 +76,15 @@
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Schedule" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Schedule">01 Lokasyon Takvimi</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Schedule" && this.ViewContext.RouteData.Values["action"].ToString() == "Location" ? "class=active" : "")><a href="/Schedule/Location">02 Lokasyon Planları</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Schedule" && this.ViewContext.RouteData.Values["action"].ToString() == "Employee" ? "class=active" : "")><a href="/Schedule/Employee">03 Çalışan Planları</a></li>
+
+                    </ul>
+                </li>
+                <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" ? "show" : "")">
+                    <a href="/Employee" class="nav-link"><i data-feather="clock"></i> <span>Mesai & Mola</span></a>
+                    <ul>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Shift">01 Lokasyon Çalışan Mesai</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" && this.ViewContext.RouteData.Values["action"].ToString() == "Location" ? "class=active" : "")><a href="/Shift/Location">02 Lokasyon Mesaileri</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" && this.ViewContext.RouteData.Values["action"].ToString() == "Employee" ? "class=active" : "")><a href="/Shift/Employee">03 Çalışan Mesaileri</a></li>
 
                     </ul>
                 </li>
@@ -144,8 +153,8 @@
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "Bank" ? "class=active" : "")><a href="/Definition/Bank">02 Bankalar</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "BankAccount" ? "class=active" : "")><a href="/Definition/BankAccount">03 Banka Hesapları</a></li>
                         @*<li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "Bank" ? "class=active" : "")><a href="/Definition/Bank">02 Bankalar</a></li>
-        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "BankAccount" ? "class=active" : "")><a href="/Definition/BankAccount">03 Banka Hesapları</a></li>
-        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "Pos" ? "class=active" : "")><a href="/Definition/Pos">04 POS Cihazları</a></li>*@
+                <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "BankAccount" ? "class=active" : "")><a href="/Definition/BankAccount">03 Banka Hesapları</a></li>
+                <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "Pos" ? "class=active" : "")><a href="/Definition/Pos">04 POS Cihazları</a></li>*@
                         @*<li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "Cash" ? "class=active" : "")><a href="/Definition/Cash">05 Yazarkasalar</a></li>*@
                     </ul>
                 </li>
