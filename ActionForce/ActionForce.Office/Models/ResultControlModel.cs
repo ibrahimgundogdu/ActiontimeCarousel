@@ -21,7 +21,11 @@ namespace ActionForce.Office
         public IEnumerable<FromAccountModel> FromList { get; set; }
         public IEnumerable<Currency> CurrencyList { get; set; }
         public IEnumerable<VBankAccount> BankAccountList { get; set; }
-        
+        public IEnumerable<DocumentType> DocumentTypes { get; set; }
+
+        public IEnumerable<DocumentTicketSales> TicketSales { get; set; }
+        public IEnumerable<DocumentTicketSaleReturns> TicketSaleReturns { get; set; }
+
 
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }

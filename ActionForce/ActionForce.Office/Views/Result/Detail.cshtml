@@ -104,8 +104,6 @@
                                                             <a href="#" class="text-primary">
                                                                 <i data-feather="plus-square"></i>
                                                             </a>
-
-                                                            
                                                         </td>
                                                         <td class="bd-l  text-right" style="width:100px; padding:1px !important;">
                                                             <input type="text" name="I5TRL" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "TRL")?.Quantity?.ToString("N2"))">
@@ -117,7 +115,9 @@
                                                             <input type="text" name="I5TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "TRL").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
-                                                            <i data-feather="plus-square"></i>
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -133,7 +133,9 @@
                                                             <input type="text" name="N2USDD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "USD").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
-                                                            <i data-feather="plus-square"></i>
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
                                                         </td>
                                                         <td class="bd-l text-right" style="width:100px; padding:1px !important;">
                                                             <input type="text" name="I5USD" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "USD")?.Quantity?.ToString("N2"))">
@@ -145,7 +147,9 @@
                                                             <input type="text" name="I5USDD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "USD").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
-                                                            <i data-feather="plus-square"></i>
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -162,7 +166,9 @@
                                                             <input type="text" name="N2EURD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "EUR").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
-                                                            <i data-feather="plus-square"></i>
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
                                                         </td>
                                                         <td class="bd-l" style="width:100px; padding:1px !important;">
                                                             <input type="text" name="I5EUR" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "EUR")?.Quantity?.ToString("N2"))">
@@ -174,7 +180,9 @@
                                                             <input type="text" name="I5EURD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "EUR").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
-                                                            <i data-feather="plus-square"></i>
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -192,7 +200,6 @@
                                                             <th></th>
                                                             <th colspan="4" class="text-center">Nakit</th>
                                                             <th></th>
-                                                            <th></th>
                                                         </tr>
                                                         <tr>
                                                             <th>#</th>
@@ -202,7 +209,6 @@
 
                                                             <th>Satış</th>
                                                             <th>İade</th>
-                                                            <th>Toplam</th>
                                                             <th>Bakiye</th>
                                                             <th>Para Br.</th>
                                                             <th>Kayıt</th>
@@ -215,7 +221,6 @@
                                                             <td class="tx-sm-13"></td>
                                                             <td class="tx-sm-13"></td>
                                                             <td class="tx-sm-13"></td>
-                                                            <td class="tx-sm-13 text-right bg-primary-light"></td>
                                                             <td class="tx-sm-13 text-right bg-primary-light"></td>
                                                             <td class="tx-sm-13 text-right bg-primary-light"></td>
                                                             <td class="tx-sm-13 text-right bg-primary font-weight-bold text-white"></td>
@@ -231,7 +236,6 @@
                                                             <th colspan="3"></th>
                                                             <th>Toplam</th>
                                                             <th colspan="2"></th>
-                                                            <th></th>
                                                             <th class="text-right bg-light"></th>
                                                             <th>TRL</th>
                                                             <th></th>
@@ -240,7 +244,6 @@
                                                             <th colspan="3"></th>
                                                             <th>Toplam</th>
                                                             <th colspan="2"></th>
-                                                            <th></th>
                                                             <th class="text-right bg-light"></th>
                                                             <th>USD</th>
                                                             <th></th>
@@ -249,7 +252,6 @@
                                                             <th colspan="3"></th>
                                                             <th>Toplam</th>
                                                             <th colspan="2"></th>
-                                                            <th></th>
                                                             <th class="text-right bg-light"></th>
                                                             <th>EUR</th>
                                                             <th></th>
@@ -275,17 +277,19 @@
                                                 <thead class="bg-gray-100">
                                                     <tr>
                                                         <th>&nbsp;</th>
-                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>(10) Kredi Kartı Satış</span></th>
-                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>(11,12) Kredi Kartı İptal / İade</span></th>
+                                                        <th colspan="4" class="bd-l text-center font-weight-bold"><span>(10) Kredi Kartı Satış</span></th>
+                                                        <th colspan="4" class="bd-l text-center font-weight-bold"><span>(11,12) Kredi Kartı İptal / İade</span></th>
                                                     </tr>
                                                     <tr>
                                                         <th><span></span></th>
                                                         <th class="bd-l text-right"><span>Adet</span></th>
                                                         <th class="text-right"><span>Tutar</span></th>
                                                         <th class="text-center"><span>Açıklama</span></th>
+                                                        <th></th>
                                                         <th class="bd-l text-right"><span>Adet</span></th>
                                                         <th class="text-right"><span>Tutar</span></th>
                                                         <th class="text-center"><span>Açıklama</span></th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -301,7 +305,11 @@
                                                         <td style="padding:1px !important;">
                                                             <input type="text" name="T1TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 10 && x.Currency == "TRL").Description)" />
                                                         </td>
-
+                                                        <td class="text-center" style="width:50px; padding:1px !important;">
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
+                                                        </td>
                                                         <td class="bd-l  text-right" style="width:100px; padding:1px !important;">
                                                             <input type="text" name="T4TRL" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 11 && x.Currency == "TRL")?.Quantity?.ToString("N2"))">
                                                         </td>
@@ -310,6 +318,11 @@
                                                         </td>
                                                         <td style="padding:1px !important;">
                                                             <input type="text" name="T4TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 11 && x.Currency == "TRL").Description)" />
+                                                        </td>
+                                                        <td class="text-center" style="width:50px; padding:1px !important;">
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -420,15 +433,17 @@
                                                 <thead class="bg-gray-100">
                                                     <tr>
                                                         <th>&nbsp;</th>
-                                                        <th colspan="2" class="bd-l text-center font-weight-bold"><span>(1) Kasa Tahsilatı</span></th>
-                                                        <th colspan="2" class="bd-l text-center font-weight-bold"><span>(4) Kasa Ödemesi</span></th>
+                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>(1) Kasa Tahsilatı</span></th>
+                                                        <th colspan="3" class="bd-l text-center font-weight-bold"><span>(4) Kasa Ödemesi</span></th>
                                                     </tr>
                                                     <tr>
                                                         <th><span></span></th>
                                                         <th class="bd-l text-right"><span>Tutar</span></th>
                                                         <th class="text-center"><span>Açıklama</span></th>
+                                                        <th></th>
                                                         <th class="bd-l text-right"><span>Tutar</span></th>
                                                         <th class="text-center"><span>Açıklama</span></th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -440,11 +455,21 @@
                                                         <td style="padding:1px !important;">
                                                             <input type="text" name="T1TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "TRL").Description)" />
                                                         </td>
+                                                        <td class="text-center" style="width:50px; padding:1px !important;">
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
+                                                        </td>
                                                         <td class="bd-l  text-right" style="width:100px; padding:1px !important;">
                                                             <input type="text" name="T4TRL" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "TRL").Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
                                                             <input type="text" name="T4TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "TRL").Description)" />
+                                                        </td>
+                                                        <td class="text-center" style="width:50px; padding:1px !important;">
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -455,11 +480,21 @@
                                                         <td style="padding:1px !important;">
                                                             <input type="text" name="T1USDD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD").Description)" />
                                                         </td>
+                                                        <td class="text-center" style="width:50px; padding:1px !important;">
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
+                                                        </td>
                                                         <td class="bd-l text-right" style="width:100px; padding:1px !important;">
                                                             <input type="text" name="T4USD" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD").Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
                                                             <input type="text" name="T4USDD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD").Description)" />
+                                                        </td>
+                                                        <td class="text-center" style="width:50px; padding:1px !important;">
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -471,11 +506,21 @@
                                                         <td style="padding:1px !important;">
                                                             <input type="text" name="T1EURD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "EUR").Description)" />
                                                         </td>
+                                                        <td class="text-center" style="width:50px; padding:1px !important;">
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
+                                                        </td>
                                                         <td class="bd-l" style="width:100px; padding:1px !important;">
                                                             <input type="text" name="T4EUR" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "EUR").Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
                                                             <input type="text" name="T4EURD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "EUR").Description)" />
+                                                        </td>
+                                                        <td class="text-center" style="width:50px; padding:1px !important;">
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
                                                         </td>
                                                     </tr>
                                                 </tbody>
@@ -499,7 +544,7 @@
                                                 <thead class="bg-gray-100">
                                                     <tr>
                                                         <th>&nbsp;</th>
-                                                        <th colspan="5" class="text-center font-weight-bold"><span>(3) Döviz Satışı</span></th>
+                                                        <th colspan="6" class="text-center font-weight-bold"><span>(3) Döviz Satışı</span></th>
                                                     </tr>
                                                     <tr>
                                                         <th><span></span></th>
@@ -508,6 +553,7 @@
                                                         <th class=""><span>Döviz</span></th>
                                                         <th class="text-right"><span>TRL Tutar</span></th>
                                                         <th class="text-center"><span>Açıklama</span></th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -528,6 +574,11 @@
                                                         </td>
                                                         <td class="bd-l  text-right" style="padding:1px !important;">
                                                             <input type="text" name="E3USDD" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Description)">
+                                                        </td>
+                                                        <td class="text-center" style="width:50px; padding:1px !important;">
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
                                                         </td>
 
                                                     </tr>
@@ -550,7 +601,11 @@
                                                         <td class="bd-l  text-right" style="padding:1px !important;">
                                                             <input type="text" name="E3EURD" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Description)">
                                                         </td>
-
+                                                        <td class="text-center" style="width:50px; padding:1px !important;">
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
+                                                        </td>
                                                     </tr>
 
                                                 </tbody>
@@ -575,7 +630,7 @@
                                                 <thead class="bg-gray-100">
                                                     <tr>
                                                         <th>&nbsp;</th>
-                                                        <th colspan="6" class="text-center font-weight-bold"><span>(6) Masraf Detayı</span></th>
+                                                        <th colspan="7" class="text-center font-weight-bold"><span>(6) Masraf Detayı</span></th>
                                                     </tr>
                                                     <tr>
                                                         <th><span></span></th>
@@ -585,6 +640,7 @@
                                                         <th class="text-right"><span>Fiş No</span></th>
                                                         <th class="text-right"><span>Fiş Tarihi</span></th>
                                                         <th class="text-center"><span>Açıklama</span></th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -611,7 +667,11 @@
                                                             <td class="bd-l  text-right" style="padding:1px !important;">
                                                                 <input type="text" name="E6TRLDE" class="form-control" value="@(item.Description)">
                                                             </td>
-
+                                                            <td class="text-center" style="width:50px; padding:1px !important;">
+                                                                <a href="#" class="text-primary">
+                                                                    <i data-feather="plus-square"></i>
+                                                                </a>
+                                                            </td>
                                                         </tr>
                                                     }
 
@@ -639,17 +699,18 @@
                                             <table class="table table-hover mg-b-0">
                                                 <thead class="bg-gray-100">
                                                     <tr>
-                                                        <th colspan="8" class="text-center font-weight-bold"><span>(7) Havale EFT Bildirimi</span></th>
+                                                        <th colspan="9" class="text-center font-weight-bold"><span>(7) Havale EFT Bildirimi</span></th>
                                                     </tr>
                                                     <tr>
                                                         <th><span>Banka Hesabı</span></th>
                                                         <th class="text-right"><span>Tutar</span></th>
-                                                        <th><span>Para</span></th>
                                                         <th><span>Referans</span></th>
                                                         <th><span>Fiş No</span></th>
                                                         <th><span>Fiş Tarihi</span></th>
                                                         <th><span>Fiş Tutarı</span></th>
                                                         <th><span>Açıklama</span></th>
+                                                        <th><span>Dekont</span></th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -668,9 +729,7 @@
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
                                                                 <input type="text" name="E7TRLA" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
                                                             </td>
-                                                            <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E7TRLC" class="form-control" value="@(item.Currency)" readonly />
-                                                            </td>
+
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
                                                                 <input type="text" name="E7TRLR" class="form-control font-weight-bold" value="@(item.ReferenceCode)">
                                                             </td>
@@ -686,12 +745,16 @@
                                                             <td class="text-right" style="padding:1px !important;">
                                                                 <input type="text" name="E7TRLDE" class="form-control" value="@(item.Description)">
                                                             </td>
+                                                            <td style="width:200px; padding:1px !important;">
+                                                                <input id="E7TRLF" name="E7TRLF" class="form-control" type="file" />
+                                                            </td>
+                                                            <td class="text-center" style="width:50px; padding:1px !important;">
+                                                                <a href="#" class="text-primary">
+                                                                    <i data-feather="plus-square"></i>
+                                                                </a>
+                                                            </td>
                                                         </tr>
                                                     }
-
-
-
-
                                                 </tbody>
 
 
@@ -715,8 +778,8 @@
                                                     <tr>
                                                         <th></th>
                                                         <th colspan="3" class=" bd-l text-center font-weight-bold">Sistem Maaş Hakediş Hesabı</th>
-                                                        <th colspan="4" class=" bd-l text-center font-weight-bold">(8) Lokasyon Maaş Hakediş Hesabı</th>
-                                                        <th colspan="2" class=" bd-l text-center font-weight-bold">(9) Maaş Avansı Ödeme</th>
+                                                        <th colspan="5" class=" bd-l text-center font-weight-bold">(8) Lokasyon Maaş Hakediş Hesabı</th>
+                                                        <th colspan="3" class=" bd-l text-center font-weight-bold">(9) Maaş Avansı Ödeme</th>
                                                     </tr>
                                                     <tr>
                                                         <th class="wd-150-f">Adı Soyadı</th>
@@ -730,9 +793,11 @@
                                                         <th class="text-right"><span>@(Model.CurrentLocation.Currency)/Saat</span></th>
                                                         <th class="text-right"><span>Hakediş (@(Model.CurrentLocation.Currency))</span></th>
                                                         <th class="text-center">Açıklama</th>
+                                                        <th></th>
 
                                                         <th class="text-right bd-l"><span>Ödeme (@(Model.CurrentLocation.Currency))</span></th>
                                                         <th class="text-center">Açıklama</th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -765,12 +830,21 @@
                                                             <td class="table-light" style="padding:1px !important;">
                                                                 <input type="text" name="S8SD" class="form-control money" placeholder="" value="@(salary.Description)" />
                                                             </td>
-
+                                                            <td class="text-center" style="width:50px; padding:1px !important;">
+                                                                <a href="#" class="text-primary">
+                                                                    <i data-feather="plus-square"></i>
+                                                                </a>
+                                                            </td>
                                                             <td class="bd-l" style="width:120px; padding:1px !important;">
                                                                 <input type="text" name="S9PA" class="form-control money text-right font-weight-bold text-danger" placeholder="0,00" value="@(payment.Amount?.ToString("N2"))" />
                                                             </td>
                                                             <td class="" style="padding:1px !important;">
                                                                 <input type="text" name="S9PD" class="form-control money" placeholder="" value="@(payment.Description)" />
+                                                            </td>
+                                                            <td class="text-center" style="width:50px; padding:1px !important;">
+                                                                <a href="#" class="text-primary">
+                                                                    <i data-feather="plus-square"></i>
+                                                                </a>
                                                             </td>
                                                         </tr>
                                                     }
@@ -795,7 +869,7 @@
                                             <table class="table table-hover mg-b-0">
                                                 <thead class="bg-gray-100">
                                                     <tr>
-                                                        <th colspan="7" class="text-center font-weight-bold"><span>(13) Yazarkasa Fişi Bildirimi</span></th>
+                                                        <th colspan="8" class="text-center font-weight-bold"><span>(13) Yazarkasa Fişi Bildirimi</span></th>
                                                     </tr>
                                                     <tr>
                                                         <th><span>Fiş No</span></th>
@@ -803,8 +877,9 @@
                                                         <th><span>Fiş Saati</span></th>
                                                         <th class="text-right"><span>Fiş Tutarı</span></th>
                                                         <th class="text-right"><span>Genel Tutar</span></th>
-                                                        <th><span>Para</span></th>
                                                         <th><span>Açıklama</span></th>
+                                                        <th><span>Fiş Dosyası</span></th>
+                                                        <th></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -826,22 +901,21 @@
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
                                                                 <input type="text" name="E13TRLTA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(cr.SlipTotalAmount?.ToString("N2"))">
                                                             </td>
-                                                            <td style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E13TRLC" class="form-control" value="@(cr.Currency)" readonly />
-                                                            </td>
+
                                                             <td style="padding:1px !important;">
                                                                 <input type="text" name="E13TRLDE" class="form-control" value="@(cr.Description)">
                                                             </td>
-
+                                                            <td style="width:200px; padding:1px !important;">
+                                                                <input id="E13TRLF" name="E13TRLF" class="form-control" type="file" />
+                                                            </td>
+                                                            <td class="text-center" style="width:50px; padding:1px !important;">
+                                                                <a href="#" class="text-primary">
+                                                                    <i data-feather="plus-square"></i>
+                                                                </a>
+                                                            </td>
                                                         </tr>
                                                     }
-
-
-
-
                                                 </tbody>
-
-
                                             </table>
                                         </div>
                                     </div>
@@ -856,67 +930,48 @@
                                                 <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
                                             </div>
                                         </div>
-                                        <ul class="list-group list-group-flush tx-13">
-                                            <li class="list-group-item d-flex pd-sm-x-20">
-                                                <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
-                                                <div class="pd-sm-l-10">
-                                                    <p class="tx-medium mg-b-0">Payment from #10322</p>
-                                                    <small class="tx-12 tx-color-03 mg-b-0">Mar 21, 2019, 3:30pm</small>
-                                                </div>
-                                                <div class="mg-l-auto text-right">
-                                                    <p class="tx-medium mg-b-0">+ $250.00</p>
-                                                    <small class="tx-12 tx-success mg-b-0">Completed</small>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item d-flex pd-sm-x-20">
-                                                <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-indigo op-5"><i class="icon ion-md-return-left"></i></span></div>
-                                                <div class="pd-sm-l-10">
-                                                    <p class="tx-medium mg-b-2">Process refund to #00910</p>
-                                                    <small class="tx-12 tx-color-03 mg-b-0">Mar 21, 2019, 1:00pm</small>
-                                                </div>
-                                                <div class="mg-l-auto text-right">
-                                                    <p class="tx-medium mg-b-2">-$16.50</p>
-                                                    <small class="tx-12 tx-success mg-b-0">Completed</small>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item d-flex pd-sm-x-20">
-                                                <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-orange op-5"><i class="icon ion-md-bus"></i></span></div>
-                                                <div class="pd-sm-l-10">
-                                                    <p class="tx-medium mg-b-2">Process delivery to #44333</p>
-                                                    <small class="tx-12 tx-color-03 mg-b-0">Mar 20, 2019, 11:40am</small>
-                                                </div>
-                                                <div class="mg-l-auto text-right">
-                                                    <p class="tx-medium mg-b-2">3 Items</p>
-                                                    <small class="tx-12 tx-info mg-b-0">For pickup</small>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item d-flex pd-sm-x-20">
-                                                <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-teal"><i class="icon ion-md-checkmark"></i></span></div>
-                                                <div class="pd-sm-l-10">
-                                                    <p class="tx-medium mg-b-0">Payment from #023328</p>
-                                                    <small class="tx-12 tx-color-03 mg-b-0">Mar 20, 2019, 10:30pm</small>
-                                                </div>
-                                                <div class="mg-l-auto text-right">
-                                                    <p class="tx-medium mg-b-0">+ $129.50</p>
-                                                    <small class="tx-12 tx-success mg-b-0">Completed</small>
-                                                </div>
-                                            </li>
-                                            <li class="list-group-item d-flex pd-sm-x-20">
-                                                <div class="avatar d-none d-sm-block"><span class="avatar-initial rounded-circle bg-gray-400"><i class="icon ion-md-close"></i></span></div>
-                                                <div class="pd-sm-l-10">
-                                                    <p class="tx-medium mg-b-0">Payment failed from #087651</p>
-                                                    <small class="tx-12 tx-color-03 mg-b-0">Mar 19, 2019, 12:54pm</small>
-                                                </div>
-                                                <div class="mg-l-auto text-right">
-                                                    <p class="tx-medium mg-b-0">$150.00</p>
-                                                    <small class="tx-12 tx-danger mg-b-0">Declined</small>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        <div class="card-footer text-center tx-13">
-                                            <a href="" class="link-03">View All Transactions <i class="icon ion-md-arrow-down mg-l-5"></i></a>
-                                        </div><!-- card-footer -->
-                                    </div><!-- card -->
+                                        <div class="table-responsive">
+                                            <table class="table table-hover mg-b-0">
+                                                <thead class="bg-gray-100">
+                                                    <tr>
+                                                        <th colspan="4" class="text-center font-weight-bold"><span>(14) Gün Sonu Dosyaları</span></th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><span>Dosya Türü</span></th>
+                                                        <th><span>Açıklama</span></th>
+                                                        <th><span>Dosya</span></th>
+                                                        <th></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+
+                                                    <tr>
+                                                       
+                                                        <td style="width:240px; padding:1px !important;">
+                                                            <select class="form-control" id="FileTypeID" name="FileTypeID" required>
+                                                                @foreach (var doc in Model.DocumentTypes)
+                                                                {
+                                                                    <option value="@doc.TypeID">@($"{doc.TypeName}")</option>
+                                                                }
+                                                            </select>
+                                                        </td>
+
+                                                        <td style="padding:1px !important;">
+                                                            <input type="text" name="E14TRLDE" class="form-control">
+                                                        </td>
+                                                        <td style="width:200px; padding:1px !important;">
+                                                            <input id="E13TRLF" name="E14TRLF" class="form-control" type="file" />
+                                                        </td>
+                                                        <td class="text-center" style="width:50px; padding:1px !important;">
+                                                            <a href="#" class="text-primary">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
 
                             </div>
