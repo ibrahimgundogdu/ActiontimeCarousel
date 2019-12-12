@@ -22,9 +22,12 @@ namespace ActionForce.Office
         public IEnumerable<Currency> CurrencyList { get; set; }
         public IEnumerable<VBankAccount> BankAccountList { get; set; }
         public IEnumerable<DocumentType> DocumentTypes { get; set; }
+        public IEnumerable<CashActionType> CashActionTypes { get; set; }
+        public IEnumerable<BankActionType> BankActionTypes { get; set; }
 
-        public IEnumerable<DocumentTicketSales> TicketSales { get; set; }
-        public IEnumerable<DocumentTicketSaleReturns> TicketSaleReturns { get; set; }
+        public IEnumerable<VCashActions> CashActions { get; set; }
+        public IEnumerable<VBankActions> BankActions { get; set; }
+        public IEnumerable<VDocumentSaleExchange> Exchanges { get; set; }
 
 
         public FilterModel Filters { get; set; }

@@ -1,0 +1,62 @@
+﻿@model ResultControlModel
+@{
+    var typeids = Model.CashActionTypes.Where(x => new[] { "EXPENSESLİP", "EXPN" }.Contains(x.Code)).Select(x => x.ID).ToList();
+
+    double? totaltrl = 0;
+    string currency = "";
+}
+
+@if (Model.CashActions != null)
+{
+
+    <div class="table">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th colspan="7" class="text-center">Masraf</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th class="wd-5p">#</th>
+                    <th class="wd-20p">İşlem</th>
+                    <th class="wd-10p">Belge Tarihi</th>
+                    <th class="wd-20p">Belge No</th>
+                    <th class="text-right">Tutar</th>
+                    <th class="wd-5p">Para</th>
+                    <th>Detay</th>
+                    <th>Kayıt</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var sale in Model.CashActions.Where(x => typeids.Contains(x.CashActionTypeID.Value)).OrderByDescending(x => x.RecordDate))
+                {
+                <tr>
+                    <td class="tx-sm-13 bold">@sale.ID</td>
+                    <td class="tx-sm-13">@sale.ProcessName</td>
+                    <td class="tx-sm-13">@(sale.ActionDate?.ToShortDateString())</td>
+                    <td class="tx-sm-13">@sale.DocumentNumber</td>
+                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(sale.Amount?.ToString("N2"))</td>
+                    <td class="tx-sm-13">@sale.Currency</td>
+                    <td class="tx-sm-13">@sale.Description</td>
+                    <td class="tx-sm-13">@sale.RecordDate</td>
+
+                </tr>
+
+                    totaltrl = totaltrl + sale.Amount;
+                    currency = sale.Currency;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="3"></th>
+                    <th>Toplam</th>
+                    <th class="text-right bg-light  text-danger">@(totaltrl?.ToString("N2"))</th>
+                    <th>@currency</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+}

@@ -1,0 +1,66 @@
+﻿@model ResultControlModel
+@{ 
+    double? totaltrl = 0;
+    string tocurrency = "";
+}
+
+@if (Model.Exchanges != null)
+{
+    <div class="table">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th colspan="5" class="text-center">Döviz</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th class="wd-5p">#</th>
+                    <th class="wd-20p">İşlem</th>
+                    <th class="wd-10p">Belge Tarihi</th>
+                    <th class="wd-20p">Belge No</th>
+                    <th class="text-right">Döviz Tutar</th>
+                    <th class="wd-5p">Döviz</th>
+                    <th class="text-right">Kur</th>
+                    <th class="text-right">Satış Tutar</th>
+                    <th class="wd-5p">Para</th>
+                    <th>Kayıt</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var sale in Model.Exchanges.OrderByDescending(x => x.RecordDate))
+                {
+                    <tr>
+                        <td class="tx-sm-13 bold">@sale.ID</td>
+                        <td class="tx-sm-13">@sale.ActionTypeName</td>
+                        <td class="tx-sm-13">@(sale.Date?.ToShortDateString())</td>
+                        <td class="tx-sm-13">@sale.DocumentNumber</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(sale.Amount >= 0 ? sale.Amount?.ToString("N2") : "")</td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold">@(sale.Currency)</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold  text-danger">@(sale.SaleExchangeRate?.ToString("N2"))</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(sale.ToAmount?.ToString("N2"))</td>
+                        <td class="tx-sm-13">@sale.ToCurrency</td>
+                        <td class="tx-sm-13">@sale.RecordDate</td>
+
+                    </tr>
+
+                    totaltrl = totaltrl + sale.ToAmount;
+                    tocurrency = sale.ToCurrency;
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="3"></th>
+                    <th>Toplam</th>
+                    <th class="text-right bg-light" colspan="4">@(totaltrl?.ToString("N2"))</th>
+                    <th>@tocurrency</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+}

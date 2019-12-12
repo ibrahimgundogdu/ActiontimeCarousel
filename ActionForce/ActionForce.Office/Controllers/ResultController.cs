@@ -131,13 +131,20 @@ namespace ActionForce.Office.Controllers
                 model.DayResultItemList = Db.VDayResultItemList.Where(x => x.ResultID == model.DayResult.ID).ToList();
                 model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
                 model.DocumentTypes = Db.DocumentType.Where(x => x.IsActive == true).ToList();
+                model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
+                model.BankActionTypes = Db.BankActionType.Where(x => x.IsActive == true).ToList();
                 model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == model.DayResult.LocationID);
+                model.Exchanges = Db.VDocumentSaleExchange.Where(x => x.LocationID == model.DayResult.LocationID && x.Date == model.DayResult.Date).ToList();
+
                 var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == model.DayResult.Date);
                 model.CurrentDate = datekey;
                 model.TodayDateCode = DateTime.UtcNow.AddHours(model.CurrentLocation.Timezone.Value).Date.ToString("yyyy-MM-dd");
                 model.CurrentDateCode = datekey.DateKey.ToString("yyyy-MM-dd");
                 model.PrevDateCode = datekey.DateKey.AddDays(-1).Date.ToString("yyyy-MM-dd");
                 model.NextDateCode = datekey.DateKey.AddDays(1).Date.ToString("yyyy-MM-dd");
+
+                model.CashActions = Db.VCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date).ToList();
+                model.BankActions = Db.VBankActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date).ToList();
 
                 model.CurrencyList = OfficeHelper.GetCurrency();
 

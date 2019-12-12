@@ -2293,7 +2293,9 @@
     <Compile Include="Models\ActionEmployee.cs" />
     <Compile Include="Models\AuditTrail.cs" />
     <Compile Include="Models\AuthenticationModel.cs" />
+    <Compile Include="Models\BankActionModel.cs" />
     <Compile Include="Models\BankControlModel.cs" />
+    <Compile Include="Models\CashActionModel.cs" />
     <Compile Include="Models\CashCollection.cs" />
     <Compile Include="Models\DefinitionControlModel.cs" />
     <Compile Include="Models\Document\DocumentManager.cs" />
@@ -2487,6 +2489,16 @@
     <Content Include="Views\Definition\_PartialBanksList.cshtml" />
     <Content Include="Views\Definition\_PartialLocationCashList.cshtml" />
     <Content Include="Views\Definition\_PartialLocationList.cshtml" />
+    <Content Include="Views\Result\_PartialCashSale.cshtml" />
+    <Content Include="Views\Result\_PartialCardSale.cshtml" />
+    <Content Include="Views\Result\_PartialCashCollectPayment.cshtml" />
+    <Content Include="Views\Result\_PartialExchange.cshtml" />
+    <Content Include="Views\Result\_PartialExpence.cshtml" />
+    <Content Include="Views\Result\_PartialBankTransfer.cshtml" />
+    <Content Include="Views\Result\_PartialEmployeeSalary.cshtml" />
+    <Content Include="Views\Result\_PartialCashRecorder.cshtml" />
+    <Content Include="Views\Result\_PartialResultFiles.cshtml" />
+    <Content Include="Views\Result\_PartialResultSummary.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

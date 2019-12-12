@@ -1,0 +1,92 @@
+﻿@model ResultControlModel
+@{
+    var typeids = Model.CashActionTypes.Where(x => new[] { "SALE", "SALERETURN" }.Contains(x.Code)).Select(x => x.ID).ToList();
+
+    double? totaltrl = 0;
+    double? totalusd = 0;
+    double? totaleur = 0;
+}
+
+@if (Model.CashActions != null)
+{
+    <div class="table">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th colspan="3" class="text-center">Nakit</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th class="wd-5p">#</th>
+                    <th class="wd-20p">İşlem</th>
+                    <th class="wd-10p">Belge Tarihi</th>
+                    <th class="wd-20p">Belge No</th>
+                    <th class="text-right">Satış</th>
+                    <th class="text-right">İade</th>
+                    <th>Para Br.</th>
+                    <th>Kayıt</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var sale in Model.CashActions.Where(x => typeids.Contains(x.CashActionTypeID.Value)).OrderByDescending(x => x.RecordDate))
+                {
+                    <tr>
+
+                        <td class="tx-sm-13 bold">@sale.ID</td>
+                        <td class="tx-sm-13">@sale.ProcessName</td>
+                        <td class="tx-sm-13">@(sale.ActionDate?.ToShortDateString())</td>
+                        <td class="tx-sm-13">@sale.DocumentNumber</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(sale.Amount >= 0 ? sale.Amount?.ToString("N2") : "")</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(sale.Amount < 0 ? sale.Amount?.ToString("N2") : "")</td>
+                        <td class="tx-sm-13">@sale.Currency</td>
+                        <td class="tx-sm-13">@sale.RecordDate</td>
+
+                    </tr>
+
+                    if (sale.Currency == "TRL")
+                    {
+                        totaltrl = totaltrl + sale.Amount;
+                    }
+                    if (sale.Currency == "USD")
+                    {
+                        totalusd = totalusd + sale.Amount;
+                    }
+                    if (sale.Currency == "EUR")
+                    {
+                        totaleur = totaleur + sale.Amount;
+                    }
+                }
+
+
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="3"></th>
+                    <th>Toplam</th>
+                    <th class="text-right bg-light" colspan="2">@(totaltrl?.ToString("N2"))</th>
+                    <th>TRL</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th colspan="3"></th>
+                    <th>Toplam</th>
+                    <th class="text-right bg-light" colspan="2">@(totalusd?.ToString("N2"))</th>
+                    <th>USD</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th colspan="3"></th>
+                    <th>Toplam</th>
+                    <th class="text-right bg-light" colspan="2">@(totaleur?.ToString("N2"))</th>
+                    <th>EUR</th>
+                    <th></th>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+}
