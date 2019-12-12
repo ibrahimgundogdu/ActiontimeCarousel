@@ -12,12 +12,14 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class LocationPosTerminal
+    public partial class VCashRecorders
     {
-        public int ID { get; set; }
-        public Nullable<int> LocationID { get; set; }
-        public Nullable<int> TerminalID { get; set; }
+        public int LocationID { get; set; }
+        public int OurCompanyID { get; set; }
+        public string LocationFullName { get; set; }
         public Nullable<bool> IsActive { get; set; }
-        public Nullable<bool> IsMaster { get; set; }
+        public string Name { get; set; }
+        public string SerialNumber { get; set; }
+        public int ID { get; set; }
     }
 }

@@ -1,0 +1,44 @@
+﻿@model DefinitionControlModel
+@using (Ajax.BeginForm("SaveCashRecord", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "LocationList", InsertionMode = InsertionMode.Replace }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <h6 class="mg-b-0">@(Model.CashRedord.LocationFullName) <input id="LocationID" name="LocationID" value="@(Model.CashRedord.LocationID)" type="hidden" /></h6>
+    </div>
+    <div class="card-body pd-0">
+
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="inputPassword4">Name</label>
+                <input id="Name" name="Name" type="text" class="form-control" value="@(Model.CashRedord.Name)" placeholder="Name" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="inputPassword4">Serial Numara</label>
+                <input id="SerialNumber" name="SerialNumber" type="text" class="form-control" value="@(Model.CashRedord.SerialNumber)" placeholder="Serial Numara" required>
+            </div>
+            <div class="form-group col-md-2">
+                <label for="inputPassword4">&nbsp;</label>
+                <input id="SaveCashRecord" type="submit" class="btn btn-primary btn-block" value="Yazarkasa Kaydet" />
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-center tx-13">
+    </div>
+}
+    <div id="LocationList">
+        @{Html.RenderPartial("_PartialCashRecordList", Model); }
+    </div>
+@if (Model.Results != null) //
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Results.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
+}

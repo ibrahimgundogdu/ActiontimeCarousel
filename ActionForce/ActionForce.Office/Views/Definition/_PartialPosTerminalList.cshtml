@@ -1,0 +1,53 @@
+﻿@model DefinitionControlModel
+
+<div class="card-body pd-0">
+
+    <div class="contact-list">
+        <div class="table-responsive">
+            <table class="table table-primary table-hover table-striped mg-b-0">
+                <thead>
+                    <tr class="table-active">
+                        <th>Banka Hesap</th>
+                        <th>Marka</th>
+                        <th>Model</th>
+                        <th>Seri No</th>
+                        <th class="tx-right">Terminal</th>
+                        <th class="tx-right">Client</th>
+                        @*<th></th>*@
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var pos in Model.LocPosTerminalList)
+                    {
+                    <tr>
+                        <td>@(pos.AccountName)</td>
+                        <td>@(pos.BrandName)</td>
+                        <td>@(pos.ModelName)</td>
+                        <td>@(pos.SerialNumber)</td>
+                        <td class="font-weight-bold">@(pos.TerminalID)</td>
+                        <td class="font-weight-bold">@(pos.ClientID)</td>
+                        @*<td class="tx-right font-weight-bold"><a href="#" class="text-danger" onclick="if(confirm('@cash.Name isimli yazarkasayı silmek istediğine emin misin? Bu işlem geri alınamaz')) DeleteCashRecorded(@cash.ID)"><i class="fas fa-trash"></i></a></td>*@
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+
+@if (Model.Results != null)
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Results.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
+}

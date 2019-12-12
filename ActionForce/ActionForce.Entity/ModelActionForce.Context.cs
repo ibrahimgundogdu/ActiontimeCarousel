@@ -198,7 +198,6 @@ namespace ActionForce.Entity
         public virtual DbSet<ExpenseType> ExpenseType { get; set; }
         public virtual DbSet<Schedule> Schedule { get; set; }
         public virtual DbSet<VDocumentPosCollection> VDocumentPosCollection { get; set; }
-        public virtual DbSet<LocationPosTerminal> LocationPosTerminal { get; set; }
         public virtual DbSet<VLocationSchedule> VLocationSchedule { get; set; }
         public virtual DbSet<WeekList> WeekList { get; set; }
         public virtual DbSet<LocationSchedule> LocationSchedule { get; set; }
@@ -220,6 +219,12 @@ namespace ActionForce.Entity
         public virtual DbSet<VCash> VCash { get; set; }
         public virtual DbSet<VEmployeeSalary> VEmployeeSalary { get; set; }
         public virtual DbSet<VEmployeeSalaryDist> VEmployeeSalaryDist { get; set; }
+        public virtual DbSet<CashRecorders> CashRecorders { get; set; }
+        public virtual DbSet<LocationPosTerminal> LocationPosTerminal { get; set; }
+        public virtual DbSet<PosTerminal> PosTerminal { get; set; }
+        public virtual DbSet<VCashRecorders> VCashRecorders { get; set; }
+        public virtual DbSet<VPosTerminal> VPosTerminal { get; set; }
+        public virtual DbSet<VLocationPosTerminal> VLocationPosTerminal { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

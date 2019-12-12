@@ -535,6 +535,15 @@
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="CashRecorders">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="SerialNumber" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="Chassis">
           <Key>
             <PropertyRef Name="ID" />
@@ -1650,11 +1659,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TerminalNumber" Type="nvarchar" MaxLength="50" />
-          <Property Name="IdentityNumber" Type="nvarchar" MaxLength="50" />
-          <Property Name="BrandName" Type="nvarchar" MaxLength="50" />
-          <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
           <Property Name="LocationID" Type="int" />
+          <Property Name="TerminalID" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="IsMaster" Type="bit" />
         </EntityType>
@@ -1941,6 +1947,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="PosTerminal">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TerminalID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ClientID" Type="nvarchar" MaxLength="50" />
+          <Property Name="BankAccountID" Type="int" />
+          <Property Name="BrandName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SerialNumber" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PrePaidCampaign">
           <Key>
@@ -2944,6 +2962,22 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashBankActions' does not 
           <Property Name="RecordDate" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashRecorders' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VCashRecorders">
+          <Key>
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="OurCompanyID" />
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" Nullable="false" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="SerialNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="ID" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDayResult' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VDayResult">
           <Key>
@@ -3663,6 +3697,24 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
           <Property Name="POSAccountID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPosTerminal' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VLocationPosTerminal">
+          <Key>
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" Nullable="false" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="BrandName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ClientID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SerialNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="TerminalID" Type="int" />
+          <Property Name="AccountName" Type="nvarchar" MaxLength="50" />
+          <Property Name="BankAccountID" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationSchedule' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VLocationSchedule">
           <Key>
@@ -3729,6 +3781,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationShift' does not ha
           <Property Name="CloseEnvironmentID" Type="int" />
           <Property Name="OurCompanyID" Type="int" Nullable="false" />
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPosTerminal' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VPosTerminal">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="TerminalID" Type="nvarchar" MaxLength="50" />
+          <Property Name="ClientID" Type="nvarchar" MaxLength="50" />
+          <Property Name="BankAccountID" Type="int" />
+          <Property Name="BrandName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SerialNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="BankID" Type="int" />
+          <Property Name="BranchName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="OurCompanyID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSchedule' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4163,6 +4234,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Cash" EntityType="Self.Cash" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CashActions" EntityType="Self.CashActions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CashActionType" EntityType="Self.CashActionType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CashRecorders" EntityType="Self.CashRecorders" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Chassis" EntityType="Self.Chassis" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ChassisType" EntityType="Self.ChassisType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CheckParameters" EntityType="Self.CheckParameters" Schema="dbo" store:Type="Tables" />
@@ -4240,6 +4312,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Permission" EntityType="Self.Permission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PermitStatus" EntityType="Self.PermitStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PermitType" EntityType="Self.PermitType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PosTerminal" EntityType="Self.PosTerminal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrePaidCampaign" EntityType="Self.PrePaidCampaign" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrePaidCampaignPrices" EntityType="Self.PrePaidCampaignPrices" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
@@ -4457,6 +4530,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VCashBankActions].[Currency] AS [Currency], 
     [VCashBankActions].[RecordDate] AS [RecordDate]
     FROM [dbo].[VCashBankActions] AS [VCashBankActions]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VCashRecorders" EntityType="Self.VCashRecorders" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VCashRecorders].[LocationID] AS [LocationID], 
+    [VCashRecorders].[OurCompanyID] AS [OurCompanyID], 
+    [VCashRecorders].[LocationFullName] AS [LocationFullName], 
+    [VCashRecorders].[IsActive] AS [IsActive], 
+    [VCashRecorders].[Name] AS [Name], 
+    [VCashRecorders].[SerialNumber] AS [SerialNumber], 
+    [VCashRecorders].[ID] AS [ID]
+    FROM [dbo].[VCashRecorders] AS [VCashRecorders]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDayResult" EntityType="Self.VDayResult" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -5115,6 +5199,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocation].[POSAccountID] AS [POSAccountID]
     FROM [dbo].[VLocation] AS [VLocation]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VLocationPosTerminal" EntityType="Self.VLocationPosTerminal" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VLocationPosTerminal].[LocationID] AS [LocationID], 
+    [VLocationPosTerminal].[OurCompanyID] AS [OurCompanyID], 
+    [VLocationPosTerminal].[LocationFullName] AS [LocationFullName], 
+    [VLocationPosTerminal].[BrandName] AS [BrandName], 
+    [VLocationPosTerminal].[ClientID] AS [ClientID], 
+    [VLocationPosTerminal].[ModelName] AS [ModelName], 
+    [VLocationPosTerminal].[SerialNumber] AS [SerialNumber], 
+    [VLocationPosTerminal].[TerminalID] AS [TerminalID], 
+    [VLocationPosTerminal].[AccountName] AS [AccountName], 
+    [VLocationPosTerminal].[BankAccountID] AS [BankAccountID]
+    FROM [dbo].[VLocationPosTerminal] AS [VLocationPosTerminal]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VLocationSchedule" EntityType="Self.VLocationSchedule" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VLocationSchedule].[ID] AS [ID], 
@@ -5172,6 +5270,22 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocationShift].[OurCompanyID] AS [OurCompanyID], 
     [VLocationShift].[LocationFullName] AS [LocationFullName]
     FROM [dbo].[VLocationShift] AS [VLocationShift]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VPosTerminal" EntityType="Self.VPosTerminal" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VPosTerminal].[ID] AS [ID], 
+    [VPosTerminal].[TerminalID] AS [TerminalID], 
+    [VPosTerminal].[ClientID] AS [ClientID], 
+    [VPosTerminal].[BankAccountID] AS [BankAccountID], 
+    [VPosTerminal].[BrandName] AS [BrandName], 
+    [VPosTerminal].[ModelName] AS [ModelName], 
+    [VPosTerminal].[SerialNumber] AS [SerialNumber], 
+    [VPosTerminal].[BankID] AS [BankID], 
+    [VPosTerminal].[BranchName] AS [BranchName], 
+    [VPosTerminal].[AccountName] AS [AccountName], 
+    [VPosTerminal].[Name] AS [Name], 
+    [VPosTerminal].[OurCompanyID] AS [OurCompanyID]
+    FROM [dbo].[VPosTerminal] AS [VPosTerminal]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VSchedule" EntityType="Self.VSchedule" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -5602,7 +5716,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
           </FunctionImport>
-          <EntitySet Name="LocationPosTerminal" EntityType="db293_ActionTimeDbModel.LocationPosTerminal" />
           <FunctionImport Name="AddEmployeeAction">
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="ActionTypeID" Mode="In" Type="Int32" />
@@ -5691,6 +5804,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VCash" EntityType="db293_ActionTimeDbModel.VCash" />
           <EntitySet Name="VEmployeeSalary" EntityType="db293_ActionTimeDbModel.VEmployeeSalary" />
           <EntitySet Name="VEmployeeSalaryDist" EntityType="db293_ActionTimeDbModel.VEmployeeSalaryDist" />
+          <EntitySet Name="CashRecorders" EntityType="db293_ActionTimeDbModel.CashRecorders" />
+          <EntitySet Name="LocationPosTerminal" EntityType="db293_ActionTimeDbModel.LocationPosTerminal" />
+          <EntitySet Name="PosTerminal" EntityType="db293_ActionTimeDbModel.PosTerminal" />
+          <EntitySet Name="VCashRecorders" EntityType="db293_ActionTimeDbModel.VCashRecorders" />
+          <EntitySet Name="VPosTerminal" EntityType="db293_ActionTimeDbModel.VPosTerminal" />
+          <EntitySet Name="VLocationPosTerminal" EntityType="db293_ActionTimeDbModel.VLocationPosTerminal" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -9087,19 +9206,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TerminalID" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
         </EntityType>
-        <EntityType Name="LocationPosTerminal">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TerminalNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IdentityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BrandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="IsMaster" Type="Boolean" />
-        </EntityType>
         <EntityType Name="VLocationSchedule">
           <Key>
             <PropertyRef Name="ID" />
@@ -9697,6 +9803,84 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="HourlyExtend" Type="Double" />
           <Property Name="ExtendMultiplyRate" Type="Double" />
           <Property Name="FullNameSearch" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CashRecorders">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="LocationPosTerminal">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="TerminalID" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsMaster" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="PosTerminal">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TerminalID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ClientID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankAccountID" Type="Int32" />
+          <Property Name="BrandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VCashRecorders">
+          <Key>
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="OurCompanyID" />
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VPosTerminal">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="TerminalID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ClientID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankAccountID" Type="Int32" />
+          <Property Name="BrandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankID" Type="Int32" />
+          <Property Name="BranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="VLocationPosTerminal">
+          <Key>
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="BrandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ClientID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TerminalID" Type="Int32" />
+          <Property Name="AccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankAccountID" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -13044,20 +13228,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddBankAction" FunctionName="db293_ActionTimeDbModel.Store.AddBankAction" />
-          <EntitySetMapping Name="LocationPosTerminal">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationPosTerminal">
-              <MappingFragment StoreEntitySet="LocationPosTerminal">
-                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
-                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-                <ScalarProperty Name="IdentityNumber" ColumnName="IdentityNumber" />
-                <ScalarProperty Name="TerminalNumber" ColumnName="TerminalNumber" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddEmployeeAction" FunctionName="db293_ActionTimeDbModel.Store.AddEmployeeAction" />
           <EntitySetMapping Name="VLocationSchedule">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationSchedule">
@@ -13639,6 +13809,87 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CashRecorders">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CashRecorders">
+              <MappingFragment StoreEntitySet="CashRecorders">
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LocationPosTerminal">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationPosTerminal">
+              <MappingFragment StoreEntitySet="LocationPosTerminal">
+                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="TerminalID" ColumnName="TerminalID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PosTerminal">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PosTerminal">
+              <MappingFragment StoreEntitySet="PosTerminal">
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="TerminalID" ColumnName="TerminalID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VCashRecorders">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCashRecorders">
+              <MappingFragment StoreEntitySet="VCashRecorders">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VPosTerminal">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPosTerminal">
+              <MappingFragment StoreEntitySet="VPosTerminal">
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="BankID" ColumnName="BankID" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="TerminalID" ColumnName="TerminalID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VLocationPosTerminal">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationPosTerminal">
+              <MappingFragment StoreEntitySet="VLocationPosTerminal">
+                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="TerminalID" ColumnName="TerminalID" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

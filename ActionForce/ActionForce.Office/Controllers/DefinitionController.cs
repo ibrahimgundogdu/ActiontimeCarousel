@@ -361,6 +361,183 @@ namespace ActionForce.Office.Controllers
             return PartialView("_PartialBanksList", model);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult SaveBankAccount(NewBankAccount newAccount)
+        {
+            Result<BankActions> result = new Result<BankActions>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            DefinitionControlModel model = new DefinitionControlModel();
+
+            if (newAccount != null)
+            {
+                var bAcc = newAccount.BankID;
+                var aType = newAccount.AccountTypeID;
+                var currency = newAccount.Currency;
+                var accNr = newAccount.AccountNumber;
+                var ibn = newAccount.IBAN;
+
+                var isBank = Db.BankAccount.FirstOrDefault(x => x.BankID == bAcc && x.AccountTypeID == aType && x.Currency == currency && x.AccountNumber == accNr);
+
+                if (isBank == null)
+                {
+                    try
+                    {
+                        BankAccount newBank = new BankAccount();
+
+                        newBank.BankID = bAcc;
+                        newBank.AccountTypeID = aType;
+                        newBank.BranchName = newAccount.BranchName;
+                        newBank.AccountName = newAccount.AccountName;
+                        newBank.BranchCode = newAccount.BranchCode;
+                        newBank.RoutingNumber = newAccount.RoutingNumber;
+                        newBank.AccountNumber = accNr;
+                        newBank.Currency = currency;
+                        newBank.IBAN = ibn;
+                        newBank.IsMaster = true;
+                        newBank.IsActive = true;
+
+                        Db.BankAccount.Add(newBank);
+                        Db.SaveChanges();
+
+                        result.IsSuccess = true;
+                        result.Message = $"{accNr} hesap numaralı { newAccount.BranchName } şubeli { newAccount.AccountName } banka hesabı başarı ile eklendi";
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Definition", "Insert", newBank.ID.ToString(), "Definition", "BankAccount", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newAccount);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"{accNr} hesap numaralı { newAccount.BranchName } şubeli { newAccount.AccountName } banka hesabı başarı ile eklenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Definition", "Insert", "-1", "Definition", "BankAccount", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        BankAccount newBank = new BankAccount()
+                        {
+                            BankID = isBank.BankID,
+                            AccountTypeID = isBank.AccountTypeID,
+                            BranchName = isBank.BranchName,
+                            AccountName = isBank.AccountName,
+                            BranchCode = isBank.BranchCode,
+                            RoutingNumber = isBank.RoutingNumber,
+                            AccountNumber = isBank.AccountNumber,
+                            Currency = isBank.Currency,
+                            IBAN = isBank.IBAN,
+                            IsMaster = isBank.IsMaster,
+                            IsActive = isBank.IsActive
+                        };
+
+                        isBank.AccountTypeID = aType;
+                        isBank.BranchName = newAccount.BranchName;
+                        isBank.AccountName = newAccount.AccountName;
+                        isBank.BranchCode = newAccount.BranchCode;
+                        isBank.RoutingNumber = newAccount.RoutingNumber;
+                        isBank.AccountNumber = accNr;
+                        isBank.Currency = currency;
+                        isBank.IBAN = ibn;
+
+                        Db.SaveChanges();
+
+                        result.IsSuccess = true;
+                        result.Message = $"{accNr} hesap numaralı { newAccount.BranchName } şubeli { newAccount.AccountName } banka hesabı başarı ile güncellendi";
+
+
+                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<BankAccount>(newBank, isBank, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Definition", "Update", isBank.ID.ToString(), "Definition", "BankAccount", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"{accNr} hesap numaralı { newAccount.BranchName } şubeli { newAccount.AccountName } banka hesabı güncellenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Definition", "Update", "-1", "Definition", "BankAccount", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                    
+                }
+                model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true && x.BankID == bAcc).ToList();
+
+            }
+
+            TempData["result"] = result;
+
+            model.Results = result;
+
+            return PartialView("_PartialBankAccountList", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult DeleteBankAccount(int? id)
+        {
+            Result<BankActions> result = new Result<BankActions>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            DefinitionControlModel model = new DefinitionControlModel();
+
+            if (id != null)
+            {
+
+                var isBank = Db.BankAccount.FirstOrDefault(x => x.ID == id);
+
+                if (isBank != null)
+                {
+                    try
+                    {
+                        BankAccount newBank = new BankAccount()
+                        {
+                            BankID = isBank.BankID,
+                            AccountTypeID = isBank.AccountTypeID,
+                            BranchName = isBank.BranchName,
+                            AccountName = isBank.AccountName,
+                            BranchCode = isBank.BranchCode,
+                            RoutingNumber = isBank.RoutingNumber,
+                            AccountNumber = isBank.AccountNumber,
+                            Currency = isBank.Currency,
+                            IBAN = isBank.IBAN,
+                            IsMaster = isBank.IsMaster,
+                            IsActive = isBank.IsActive
+                        };
+                        isBank.IsMaster = false;
+                        isBank.IsActive = false;
+
+                        Db.SaveChanges();
+
+                        result.IsSuccess = true;
+                        result.Message = $"{isBank.AccountNumber} hesap numaralı { isBank.BranchName } şubeli { isBank.AccountName } banka hesabı başarı ile silindi";
+                        
+                        OfficeHelper.AddApplicationLog("Office", "Definition", "Remove", isBank.ID.ToString(), "Definition", "BankAccount", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"{isBank.AccountNumber} hesap numaralı { isBank.BranchName } şubeli { isBank.AccountName } banka hesabı silinemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Definition", "Remove", "-1", "Definition", "BankAccount", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+                model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true && x.BankID == isBank.BankID).ToList();
+
+            }
+
+
+            TempData["result"] = result;
+
+            model.Results = result;
+
+            return PartialView("_PartialBankAccountList", model);
+        }
+
         [AllowAnonymous]
         public PartialViewResult BankAccountList(int? id)
         {
@@ -370,6 +547,258 @@ namespace ActionForce.Office.Controllers
             model.AccountType = Db.BankAccountType.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             return PartialView("_PartialAddBankAccount", model);
+        }
+
+
+        [AllowAnonymous]
+        public ActionResult CashRecord()
+        {
+            DefinitionControlModel model = new DefinitionControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Results = TempData["result"] as Result<BankActions> ?? null;
+            }
+
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.LocationName).ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult SaveCashRecord(NewCashRecord newCash)
+        {
+            Result<BankActions> result = new Result<BankActions>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            DefinitionControlModel model = new DefinitionControlModel();
+
+            if (newCash != null)
+            {
+                var loc = newCash.LocationID;
+                var serial = newCash.SerialNumber;
+
+                var isCash = Db.CashRecorders.FirstOrDefault(x => x.LocationID == loc && x.SerialNumber == serial);
+
+                if (isCash == null)
+                {
+                    try
+                    {
+                        CashRecorders newRecord = new CashRecorders();
+
+                        newRecord.LocationID = loc;
+                        newRecord.Name = newCash.Name;
+                        newRecord.SerialNumber = serial;
+
+                        Db.CashRecorders.Add(newRecord);
+                        Db.SaveChanges();
+
+                        result.IsSuccess = true;
+                        result.Message = $"{newCash.Name} { newCash.SerialNumber } serial numaralı yazarkasa başarı ile eklendi";
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Definition", "Insert", newRecord.ID.ToString(), "Definition", "CashRecord", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newCash);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"{newCash.Name} { newCash.SerialNumber } serial numaralı yazarkasa eklenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Definition", "Insert", "-1", "Definition", "CashRecord", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        CashRecorders self = new CashRecorders()
+                        {
+                            LocationID = isCash.LocationID,
+                            Name = isCash.Name,
+                            SerialNumber = isCash.SerialNumber
+                        };
+
+                        isCash.Name = newCash.Name;
+                        isCash.SerialNumber = serial;
+
+                        Db.SaveChanges();
+
+                        result.IsSuccess = true;
+                        result.Message = $"{newCash.Name} { newCash.SerialNumber } serial numaralı yazarkasa başarı ile Güncellendi";
+
+
+                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<CashRecorders>(isCash, self, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Definition", "Update", isCash.ID.ToString(), "Definition", "CashRecord", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"{newCash.Name} { newCash.SerialNumber } serial numaralı yazarkasa güncellenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Definition", "Update", "-1", "Definition", "CashRecord", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+
+                }
+                model.CashRecordsList = Db.CashRecorders.Where(x => x.LocationID == loc).ToList();
+
+            }
+
+            TempData["result"] = result;
+
+            model.Results = result;
+
+            return PartialView("_PartialCashRecordList", model);
+        }
+
+        [AllowAnonymous]
+        public PartialViewResult CashRecordList(int? id)
+        {
+            DefinitionControlModel model = new DefinitionControlModel();
+            model.CashRecordList = Db.VCashRecorders.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == id).ToList();
+            model.CashRecordsList = Db.CashRecorders.Where(x => x.LocationID == id).ToList();
+            model.CashRedord = model.CashRecordList.FirstOrDefault();
+            return PartialView("_PartialAddCashRecord", model);
+        }
+        
+
+
+        [AllowAnonymous]
+        public ActionResult PosTerminal()
+        {
+            DefinitionControlModel model = new DefinitionControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Results = TempData["result"] as Result<BankActions> ?? null;
+            }
+            model.AccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.LocationName).ToList();
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public PartialViewResult PosTerminalList(int? id)
+        {
+            DefinitionControlModel model = new DefinitionControlModel();
+
+            model.AccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
+            model.LocPosTerminalList = Db.VLocationPosTerminal.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == id).ToList();
+            
+            model.LocPosTerminal = model.LocPosTerminalList.FirstOrDefault();
+            return PartialView("_PartialAddPosTerminal", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult SavePosTerminal(NewPosTerminal newPos)
+        {
+            Result<BankActions> result = new Result<BankActions>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            DefinitionControlModel model = new DefinitionControlModel();
+
+            if (newPos != null)
+            {
+                var loc = newPos.LocationID;
+                var terminal = Convert.ToInt32(newPos.TerminalID);
+                var ter = newPos.TerminalID;
+
+                var isLocPos = Db.LocationPosTerminal.FirstOrDefault(x => x.LocationID == loc && x.TerminalID == terminal);
+
+                if (isLocPos == null)
+                {
+                    try
+                    {
+                        var isPos = Db.PosTerminal.FirstOrDefault(x => x.TerminalID == ter);
+                        PosTerminal ps = new PosTerminal();
+                        if (isPos == null)
+                        {
+                            
+                            ps.TerminalID = newPos.TerminalID;
+                            ps.ClientID = newPos.ClientID;
+                            ps.BankAccountID = newPos.BankAccountID;
+                            ps.BrandName = newPos.BrandName;
+                            ps.ModelName = newPos.ModelName;
+                            ps.SerialNumber = newPos.SerialNumber;
+
+                            Db.PosTerminal.Add(ps);
+                            Db.SaveChanges();
+
+                            //result.IsSuccess = true;
+                            //result.Message = $"{newPos.TerminalID} { newPos.SerialNumber } serial numaralı pos cihazı başarı ile eklendi";
+
+                            // log atılır
+                            OfficeHelper.AddApplicationLog("Office", "Definition", "Insert", isPos.ID.ToString(), "Definition", "PosTerminal", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isPos);
+                        }
+                        LocationPosTerminal locPos = new LocationPosTerminal();
+
+                        locPos.LocationID = loc;
+                        locPos.TerminalID = terminal;
+                        locPos.IsMaster = true;
+                        locPos.IsActive = true;
+
+                        Db.LocationPosTerminal.Add(locPos);
+                        Db.SaveChanges();
+
+                        result.IsSuccess = true;
+                        result.Message = $"{newPos.TerminalID} { newPos.SerialNumber } serial numaralı pos Cihazı başarı ile eklendi";
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Definition", "Insert", isLocPos.ID.ToString(), "Definition", "LocationPosTerminal", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isLocPos);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"{newPos.TerminalID} { newPos.SerialNumber } serial numaralı pos cihazı eklenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Definition", "Insert", "-1", "Definition", "LocationPosTerminal", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+                //else
+                //{
+                //    try
+                //    {
+                //        CashRecorders self = new CashRecorders()
+                //        {
+                //            LocationID = isCash.LocationID,
+                //            Name = isCash.Name,
+                //            SerialNumber = isCash.SerialNumber
+                //        };
+
+                //        isCash.Name = newCash.Name;
+                //        isCash.SerialNumber = serial;
+
+                //        Db.SaveChanges();
+
+                //        result.IsSuccess = true;
+                //        result.Message = $"{newCash.Name} { newCash.SerialNumber } serial numaralı yazarkasa başarı ile Güncellendi";
+
+
+                //        var isequal = OfficeHelper.PublicInstancePropertiesEqual<CashRecorders>(isCash, self, OfficeHelper.getIgnorelist());
+                //        OfficeHelper.AddApplicationLog("Office", "Definition", "Update", isCash.ID.ToString(), "Definition", "CashRecord", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                //    }
+                //    catch (Exception ex)
+                //    {
+
+                //        result.Message = $"{newCash.Name} { newCash.SerialNumber } serial numaralı yazarkasa güncellenemedi : {ex.Message}";
+                //        OfficeHelper.AddApplicationLog("Office", "Definition", "Update", "-1", "Definition", "CashRecord", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                //    }
+
+                //}
+                model.LocPosTerminalList = Db.VLocationPosTerminal.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == loc).ToList();
+
+            }
+
+            TempData["result"] = result;
+
+            model.Results = result;
+
+            return PartialView("_PartialPosTerminalList", model);
         }
     }
 }
