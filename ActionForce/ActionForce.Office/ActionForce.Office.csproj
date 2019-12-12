@@ -2478,7 +2478,6 @@
     <Content Include="Views\Definition\BankAccount.cshtml" />
     <Content Include="Views\Definition\Detail.cshtml" />
     <Content Include="Views\Definition\Index.cshtml" />
-    <Content Include="Views\Definition\Pos.cshtml" />
     <Content Include="Views\Definition\_PartialAddDefinitionMenu.cshtml" />
     <Content Include="Views\Definition\_PartialDocumentForms.cshtml" />
     <Content Include="Views\Definition\_PartialAddBank.cshtml" />
@@ -2499,6 +2498,12 @@
     <Content Include="Views\Result\_PartialCashRecorder.cshtml" />
     <Content Include="Views\Result\_PartialResultFiles.cshtml" />
     <Content Include="Views\Result\_PartialResultSummary.cshtml" />
+    <Content Include="Views\Definition\PosTerminal.cshtml" />
+    <Content Include="Views\Definition\CashRecord.cshtml" />
+    <Content Include="Views\Definition\_PartialAddCashRecord.cshtml" />
+    <Content Include="Views\Definition\_PartialCashRecordList.cshtml" />
+    <Content Include="Views\Definition\_PartialAddPosTerminal.cshtml" />
+    <Content Include="Views\Definition\_PartialPosTerminalList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

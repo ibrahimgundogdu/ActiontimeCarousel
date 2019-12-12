@@ -152,10 +152,8 @@
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Definition">01 Kasalar</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "Bank" ? "class=active" : "")><a href="/Definition/Bank">02 Bankalar</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "BankAccount" ? "class=active" : "")><a href="/Definition/BankAccount">03 Banka Hesapları</a></li>
-                        @*<li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "Bank" ? "class=active" : "")><a href="/Definition/Bank">02 Bankalar</a></li>
-                <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "BankAccount" ? "class=active" : "")><a href="/Definition/BankAccount">03 Banka Hesapları</a></li>
-                <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "Pos" ? "class=active" : "")><a href="/Definition/Pos">04 POS Cihazları</a></li>*@
-                        @*<li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "Cash" ? "class=active" : "")><a href="/Definition/Cash">05 Yazarkasalar</a></li>*@
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "PosTerminal" ? "class=active" : "")><a href="/Definition/PosTerminal">04 POS Cihazları</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Definition" && this.ViewContext.RouteData.Values["action"].ToString() == "CashRecord" ? "class=active" : "")><a href="/Definition/CashRecord">05 Yazarkasalar</a></li>
                     </ul>
                 </li>
 

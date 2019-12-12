@@ -203,4 +203,35 @@ namespace ActionForce.Office
         public string Name { get; set; }
         public string Code { get; set; }
     }
+    public class NewBankAccount
+    {
+        public int BankID { get; set; }
+        public int AccountTypeID { get; set; }
+        public string BranchName { get; set; }
+        public string AccountName { get; set; }
+        public string BranchCode { get; set; }
+        public string RoutingNumber { get; set; }
+        public string AccountNumber { get; set; }
+        public string Currency { get; set; }
+        public string IBAN { get; set; }
+        
+    }
+    public class NewPosTerminal
+    {
+        public int LocationID { get; set; }
+        public int BankAccountID { get; set; }
+        public string ClientID { get; set; }
+        public string TerminalID { get; set; }
+        public string BrandName { get; set; }
+        public string ModelName { get; set; }
+        public string SerialNumber { get; set; }
+
+    }
+    public class NewCashRecord
+    {
+        public int LocationID { get; set; }
+        public string Name { get; set; }
+        public string SerialNumber { get; set; }
+
+    }
 }

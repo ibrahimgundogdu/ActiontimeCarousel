@@ -143,6 +143,9 @@
     <Compile Include="CashActionType.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="CashRecorders.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="Chassis.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -404,6 +407,9 @@
     <Compile Include="PermitType.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="PosTerminal.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="PrePaidCampaign.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -588,6 +594,9 @@
     <Compile Include="VCashBankActions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VCashRecorders.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VDayResult.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -645,10 +654,16 @@
     <Compile Include="VLocation.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VLocationPosTerminal.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VLocationSchedule.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VLocationShift.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VPosTerminal.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VSchedule.cs">
