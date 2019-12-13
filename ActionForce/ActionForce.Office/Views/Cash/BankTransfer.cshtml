@@ -83,6 +83,7 @@
                         <th>Bu Hesaba</th>
                         <th>Belge No</th>
                         <th>Tahsilat</th>
+                        <th>Komisyon</th>
                         <th>Para Br.</th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
@@ -91,7 +92,6 @@
                         <th>Fiş Nr.</th>
                         <th>Döküman</th>
                         <th>Durum</th>
-                        <th></th>
                         <th></th>
                     </tr>
                 </thead>
@@ -109,6 +109,7 @@
                         <td class="tx-sm-13">@item.BankAccountName </td>
                         <td class="tx-sm-13">@item.DocumentNumber</td>
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Commission != null ? item.Commission.Value.ToString("N2") : "")</td>
                         <td class="tx-sm-13">@(item.Currency)</td>
                         <td class="tx-sm-13">@item.RecorderFullName</td>
                         <td class="tx-sm-13 text-right">@item.RecordDate</td>
@@ -123,10 +124,7 @@
                         </td>
                         <td class="tx-sm-13 text-right">@item.StatusName</td>
                         <td class="tx-sm-13 text-right"><a href="@("/Cash/TransferDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
-                        @if (item.IsActive == true)
-                        {
-                            <td class="tx-sm-13 text-right"><a href="/Cash/BankTransfer" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} tutarlı bilet iade iptal etmek istediğine emin misin?')"))) DeleteCashBankTransfer(@item.ID)"><i data-feather="trash-2"></i></a></td>
-                        }
+
 
                     </tr>
                     }
