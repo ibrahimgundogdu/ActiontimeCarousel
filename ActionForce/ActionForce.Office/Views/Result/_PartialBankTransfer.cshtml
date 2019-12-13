@@ -1,8 +1,10 @@
 ﻿@model ResultControlModel
 @{
-    var typeids = Model.CashActionTypes.Where(x => new[] { "BANKTRANSFER", "BNKT" }.Contains(x.Code)).Select(x => x.ID).ToList();
 
-    double? totaltrl = 0;
+
+    double? total = 0;
+    double? totalcom = 0;
+    double? totalnet = 0;
     string currency = "";
 }
 <div class="table">
@@ -13,7 +15,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th colspan="4" class="text-center">Havale / EFT Bildirimi</th>
+                <th colspan="9" class="text-center">Havale / EFT Bildirimi</th>
                 <th></th>
             </tr>
             <tr>
@@ -24,53 +26,52 @@
                 <th>Banka Hesabı</th>
                 <th>Dekont Tarihi</th>
                 <th>Dekont No</th>
+                <th>Referans No</th>
                 <th>Tutar</th>
-                <th>İade</th>
-                <th>Bakiye</th>
-                <th>Para Br.</th>
+                <th>Komisyon</th>
+                <th>Net Tutar</th>
+                <th>Para</th>
+                <th>Durum</th>
                 <th>Kayıt</th>
             </tr>
         </thead>
         <tbody>
+            @foreach (var item in Model.BankTransfers.OrderByDescending(x => x.RecordDate))
+            {
             <tr>
-
-                <td class="tx-sm-13 bold"></td>
-                <td class="tx-sm-13"></td>
-                <td class="tx-sm-13"></td>
-                <td class="tx-sm-13"></td>
-                <td class="tx-sm-13 text-right bg-primary-light"></td>
-                <td class="tx-sm-13 text-right bg-primary-light"></td>
-                <td class="tx-sm-13 text-right bg-primary font-weight-bold text-white"></td>
-
-                <td class="tx-sm-13">&nbsp;</td>
-                <td class="tx-sm-13 text-right"></td>
+                <td class="tx-sm-13 bold">@item.ID</td>
+                <td class="tx-sm-13">@item.ActionTypeName</td>
+                <td class="tx-sm-13">@(item.Date?.ToShortDateString())</td>
+                <td class="tx-sm-13">@(item.DocumentNumber)</td>
+                <td class="tx-sm-13">@(item.BankAccountName)</td>
+                <td class="tx-sm-13">@(item.SlipDate?.ToString())</td>
+                <td class="tx-sm-13">@(item.SlipNumber)</td>
+                <td class="tx-sm-13">@(item.ReferenceCode)</td>
+                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.Amount?.ToString("N2"))</td>
+                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.Commission?.ToString("N2"))</td>
+                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.NetAmount?.ToString("N2"))</td>
+                <td class="tx-sm-13">@item.Currency</td>
+                <td class="tx-sm-13">@item.StatusName</td>
+                <td class="tx-sm-13">@item.RecordDate</td>
 
             </tr>
+
+                total = total + item.Amount;
+                totalcom = totalcom + item.Commission;
+                totalnet = totalnet + item.NetAmount;
+                currency = item.Currency;
+            }
 
         </tbody>
         <tfoot>
             <tr>
-                <th colspan="3"></th>
+                <th colspan="7"></th>
                 <th>Toplam</th>
-                <th colspan="2"></th>
-                <th class="text-right bg-light"></th>
-                <th>TRL</th>
+                <th class="text-right bg-light  text-danger">@(total?.ToString("N2"))</th>
+                <th class="text-right bg-light  text-danger">@(totalcom?.ToString("N2"))</th>
+                <th class="text-right bg-light  text-danger">@(totalnet?.ToString("N2"))</th>
+                <th>@currency</th>
                 <th></th>
-            </tr>
-            <tr>
-                <th colspan="3"></th>
-                <th>Toplam</th>
-                <th colspan="2"></th>
-                <th class="text-right bg-light"></th>
-                <th>USD</th>
-                <th></th>
-            </tr>
-            <tr>
-                <th colspan="3"></th>
-                <th>Toplam</th>
-                <th colspan="2"></th>
-                <th class="text-right bg-light"></th>
-                <th>EUR</th>
                 <th></th>
             </tr>
         </tfoot>
