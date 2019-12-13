@@ -108,6 +108,8 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public string SlipNumber { get; set; }
         public string SlipDocument { get; set; }
+        public string SlipDate { get; set; }
+        public string SlipTime { get; set; }
         public int StatusID { get; set; }
         public string ReferenceCode { get; set; }
         public string ExchangeRate { get; set; }

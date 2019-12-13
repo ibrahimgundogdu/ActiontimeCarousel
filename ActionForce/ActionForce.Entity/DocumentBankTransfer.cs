@@ -18,6 +18,8 @@ namespace ActionForce.Entity
         public string DocumentNumber { get; set; }
         public Nullable<int> ToBankAccountID { get; set; }
         public Nullable<double> Amount { get; set; }
+        public Nullable<double> Commission { get; set; }
+        public Nullable<double> NetAmount { get; set; }
         public string Currency { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
@@ -37,6 +39,7 @@ namespace ActionForce.Entity
         public string ActionTypeName { get; set; }
         public Nullable<int> ActionTypeID { get; set; }
         public string Description { get; set; }
+        public Nullable<System.DateTime> SlipDate { get; set; }
         public string SlipNumber { get; set; }
         public string SlipDocument { get; set; }
         public Nullable<int> StatusID { get; set; }

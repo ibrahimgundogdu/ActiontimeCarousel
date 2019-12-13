@@ -717,10 +717,10 @@ namespace ActionForce.Office.Controllers
                     try
                     {
                         var isPos = Db.PosTerminal.FirstOrDefault(x => x.TerminalID == ter);
-                        PosTerminal ps = new PosTerminal();
+                        
                         if (isPos == null)
                         {
-                            
+                            PosTerminal ps = new PosTerminal();
                             ps.TerminalID = newPos.TerminalID;
                             ps.ClientID = newPos.ClientID;
                             ps.BankAccountID = newPos.BankAccountID;
@@ -730,9 +730,6 @@ namespace ActionForce.Office.Controllers
 
                             Db.PosTerminal.Add(ps);
                             Db.SaveChanges();
-
-                            //result.IsSuccess = true;
-                            //result.Message = $"{newPos.TerminalID} { newPos.SerialNumber } serial numaralı pos cihazı başarı ile eklendi";
 
                             // log atılır
                             OfficeHelper.AddApplicationLog("Office", "Definition", "Insert", isPos.ID.ToString(), "Definition", "PosTerminal", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isPos);
@@ -759,37 +756,6 @@ namespace ActionForce.Office.Controllers
                         OfficeHelper.AddApplicationLog("Office", "Definition", "Insert", "-1", "Definition", "LocationPosTerminal", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
                 }
-                //else
-                //{
-                //    try
-                //    {
-                //        CashRecorders self = new CashRecorders()
-                //        {
-                //            LocationID = isCash.LocationID,
-                //            Name = isCash.Name,
-                //            SerialNumber = isCash.SerialNumber
-                //        };
-
-                //        isCash.Name = newCash.Name;
-                //        isCash.SerialNumber = serial;
-
-                //        Db.SaveChanges();
-
-                //        result.IsSuccess = true;
-                //        result.Message = $"{newCash.Name} { newCash.SerialNumber } serial numaralı yazarkasa başarı ile Güncellendi";
-
-
-                //        var isequal = OfficeHelper.PublicInstancePropertiesEqual<CashRecorders>(isCash, self, OfficeHelper.getIgnorelist());
-                //        OfficeHelper.AddApplicationLog("Office", "Definition", "Update", isCash.ID.ToString(), "Definition", "CashRecord", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                //    }
-                //    catch (Exception ex)
-                //    {
-
-                //        result.Message = $"{newCash.Name} { newCash.SerialNumber } serial numaralı yazarkasa güncellenemedi : {ex.Message}";
-                //        OfficeHelper.AddApplicationLog("Office", "Definition", "Update", "-1", "Definition", "CashRecord", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                //    }
-
-                //}
                 model.LocPosTerminalList = Db.VLocationPosTerminal.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == loc).ToList();
 
             }
