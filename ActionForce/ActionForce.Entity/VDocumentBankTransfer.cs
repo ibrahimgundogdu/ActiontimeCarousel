@@ -50,5 +50,10 @@ namespace ActionForce.Entity
         public Nullable<bool> IsActiv { get; set; }
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<int> StatusID { get; set; }
+        public Nullable<long> ResultID { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
+        public Nullable<System.DateTime> SlipDate { get; set; }
+        public Nullable<double> Commission { get; set; }
+        public Nullable<double> NetAmount { get; set; }
     }
 }

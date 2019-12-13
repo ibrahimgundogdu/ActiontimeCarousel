@@ -164,7 +164,6 @@ namespace ActionForce.Entity
         public virtual DbSet<EmployeeX> EmployeeX { get; set; }
         public virtual DbSet<VEmployee> VEmployee { get; set; }
         public virtual DbSet<VLocation> VLocation { get; set; }
-        public virtual DbSet<DocumentBankTransfer> DocumentBankTransfer { get; set; }
         public virtual DbSet<DocumentCashCollections> DocumentCashCollections { get; set; }
         public virtual DbSet<DocumentCashExpense> DocumentCashExpense { get; set; }
         public virtual DbSet<DocumentCashPayments> DocumentCashPayments { get; set; }
@@ -194,7 +193,6 @@ namespace ActionForce.Entity
         public virtual DbSet<VDocumentCashExpense> VDocumentCashExpense { get; set; }
         public virtual DbSet<VDocumentSalaryPayment> VDocumentSalaryPayment { get; set; }
         public virtual DbSet<BankTransferStatus> BankTransferStatus { get; set; }
-        public virtual DbSet<VDocumentBankTransfer> VDocumentBankTransfer { get; set; }
         public virtual DbSet<ExpenseType> ExpenseType { get; set; }
         public virtual DbSet<Schedule> Schedule { get; set; }
         public virtual DbSet<VDocumentPosCollection> VDocumentPosCollection { get; set; }
@@ -225,6 +223,8 @@ namespace ActionForce.Entity
         public virtual DbSet<VCashRecorders> VCashRecorders { get; set; }
         public virtual DbSet<VPosTerminal> VPosTerminal { get; set; }
         public virtual DbSet<VLocationPosTerminal> VLocationPosTerminal { get; set; }
+        public virtual DbSet<DocumentBankTransfer> DocumentBankTransfer { get; set; }
+        public virtual DbSet<VDocumentBankTransfer> VDocumentBankTransfer { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

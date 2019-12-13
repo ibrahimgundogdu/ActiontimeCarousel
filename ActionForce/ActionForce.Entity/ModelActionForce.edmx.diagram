@@ -159,7 +159,6 @@
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_PrePaidCampaignPrices_PrePaidCampaign" />
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_RoleGroup_RoleLevel" />
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_RoleGroupPermissions_RoleGroup" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentBankTransfer" Width="1.5" PointX="39.375" PointY="7.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentCashCollections" Width="1.5" PointX="39.375" PointY="14.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentCashExpense" Width="1.5" PointX="39.375" PointY="21.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentCashPayments" Width="1.5" PointX="39.375" PointY="28.75" />
@@ -189,7 +188,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentCashExpense" Width="1.5" PointX="43.375" PointY="26.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentSalaryPayment" Width="1.5" PointX="35.375" PointY="43.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankTransferStatus" Width="1.5" PointX="44.375" PointY="0.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" Width="1.5" PointX="43.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ExpenseType" Width="1.5" PointX="44.375" PointY="3.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Schedule" Width="1.5" PointX="11.375" PointY="45.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosCollection" Width="1.5" PointX="25.375" PointY="45.75" />
@@ -222,6 +220,8 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCashRecorders" Width="1.5" PointX="47.375" PointY="25.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPosTerminal" Width="1.5" PointX="47.375" PointY="29.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationPosTerminal" Width="1.5" PointX="31.375" PointY="47.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentBankTransfer" Width="1.5" PointX="47.375" PointY="34.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" Width="1.5" PointX="3.375" PointY="48.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -474,6 +474,17 @@
                 <label>Fiş Nr.</label>
                 <input id="SlipNumber" name="SlipNumber" type="text" class="form-control" placeholder="Fiş Numarası" required>
             </div>
+            <div class="form-row">
+                <div class="form-group col-md-8">
+                    <label>Fiş Tarihi</label>
+                    <input id="SlipDate" name="SlipDate" type="text" class="form-control" placeholder="Fiş Tarihi" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Fiş Saati</label>
+                    <input id="SlipTime" name="SlipTime" type="text" class="form-control mg-t-10" placeholder="hh:mm" value="@(DateTime.Now.ToString("hh:mm"))" required>
+                </div>
+            </div>
+            
             <div class="form-group">
                 <label>Döküman</label>
                 <input type="file" name="documentFile" id="documentFile" style="width: 100%;" class="form-control" />

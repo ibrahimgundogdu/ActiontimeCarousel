@@ -2478,8 +2478,6 @@
     <Content Include="Views\Definition\BankAccount.cshtml" />
     <Content Include="Views\Definition\Detail.cshtml" />
     <Content Include="Views\Definition\Index.cshtml" />
-    <Content Include="Views\Definition\_PartialAddDefinitionMenu.cshtml" />
-    <Content Include="Views\Definition\_PartialDocumentForms.cshtml" />
     <Content Include="Views\Definition\_PartialAddBank.cshtml" />
     <Content Include="Views\Definition\_PartialAddBankAccount.cshtml" />
     <Content Include="Views\Definition\_PartialAddLocationCash.cshtml" />
