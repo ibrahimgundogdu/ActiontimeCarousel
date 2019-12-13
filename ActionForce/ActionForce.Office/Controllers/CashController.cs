@@ -3646,7 +3646,7 @@ namespace ActionForce.Office.Controllers
                         }
                         
                         //maaş hesap işlemi
-                        OfficeHelper.AddEmployeeAction(newCashColl.ToEmployeeID, newCashColl.ActionTypeID, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.Description, 1, newCashColl.Amount, 0, newCashColl.Currency, null, null, cashSalary.SalaryType, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
+                        OfficeHelper.AddEmployeeAction(newCashColl.ToEmployeeID, newCashColl.LocationID, newCashColl.ActionTypeID, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.Description, 1, newCashColl.Amount, 0, newCashColl.Currency, null, null, cashSalary.SalaryType, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
 
                         result.IsSuccess = true;
                         result.Message = "Maaş Avans ödemesi başarı ile eklendi";
@@ -3924,7 +3924,7 @@ namespace ActionForce.Office.Controllers
                         OfficeHelper.AddCashAction(isCash.FromCashID, isCash.LocationID, isCash.ToEmployeeID, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
 
                         //maaş hesap işlemi
-                        OfficeHelper.AddEmployeeAction(isCash.ToEmployeeID, isCash.ActionTypeID, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.Description, 1, -1 * isCash.Amount, 0, isCash.Currency, null, null, isCash.SalaryType, isCash.RecordEmployeeID, isCash.RecordDate);
+                        OfficeHelper.AddEmployeeAction(isCash.ToEmployeeID, isCash.LocationID, isCash.ActionTypeID, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.Description, 1, -1 * isCash.Amount, 0, isCash.Currency, null, null, isCash.SalaryType, isCash.RecordEmployeeID, isCash.RecordDate);
 
                         result.IsSuccess = true;
                         result.Message = "Maaş Avans ödemesi iptal edildi";

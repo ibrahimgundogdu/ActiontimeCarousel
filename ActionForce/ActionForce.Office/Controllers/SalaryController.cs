@@ -139,7 +139,7 @@ namespace ActionForce.Office.Controllers
 
                         // cari hesap işlemesi
                         //OfficeHelper.AddCashAction(newCashColl.EmployeeID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, -1, 0, newCashColl.TotalAmount, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
-                        OfficeHelper.AddEmployeeAction(newCashColl.EmployeeID, newCashColl.ActionTypeID, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.Description, 1, newCashColl.TotalAmount, 0, newCashColl.Currency, null, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
+                        OfficeHelper.AddEmployeeAction(newCashColl.EmployeeID, newCashColl.LocationID, newCashColl.ActionTypeID, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.Description, 1, newCashColl.TotalAmount, 0, newCashColl.Currency, null, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
 
                         result.IsSuccess = true;
                         result.Message = "Ücret Hakediş ödemesi başarı ile eklendi";
@@ -360,7 +360,7 @@ namespace ActionForce.Office.Controllers
                         OfficeHelper.AddCashAction(isCash.EmployeeID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.TotalAmount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
 
                         //maaş hesap işlemi
-                        OfficeHelper.AddEmployeeAction(isCash.EmployeeID, isCash.ActionTypeID, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.Description, 1, -1 * isCash.TotalAmount, 0, isCash.Currency, null, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+                        OfficeHelper.AddEmployeeAction(isCash.EmployeeID, isCash.LocationID, isCash.ActionTypeID, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.Description, 1, -1 * isCash.TotalAmount, 0, isCash.Currency, null, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
 
                         result.IsSuccess = true;
                         result.Message = "Ücret Hakediş iptal edildi";
@@ -555,7 +555,7 @@ namespace ActionForce.Office.Controllers
                         //OfficeHelper.AddCashAction(newCashColl.FromCashID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, -1, 0, newCashColl.Amount, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
 
                         //maaş hesap işlemi
-                        OfficeHelper.AddEmployeeAction(newCashColl.ToEmployeeID, newCashColl.ActionTypeID, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.Description, 1, newCashColl.Amount, 0, newCashColl.Currency, null, null, cashSalary.SalaryType, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
+                        OfficeHelper.AddEmployeeAction(newCashColl.ToEmployeeID, newCashColl.LocationID, newCashColl.ActionTypeID, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.Description, 1, newCashColl.Amount, 0, newCashColl.Currency, null, null, cashSalary.SalaryType, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
 
                         result.IsSuccess = true;
                         result.Message = "Maaş Avans ödemesi başarı ile eklendi";
@@ -834,7 +834,7 @@ namespace ActionForce.Office.Controllers
                         OfficeHelper.AddCashAction(isCash.FromCashID, isCash.LocationID, isCash.ToEmployeeID, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
 
                         //maaş hesap işlemi
-                        OfficeHelper.AddEmployeeAction(isCash.ToEmployeeID, isCash.ActionTypeID, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.Description, 1, -1 * isCash.Amount, 0, isCash.Currency, null, null, isCash.SalaryType, isCash.RecordEmployeeID, isCash.RecordDate);
+                        OfficeHelper.AddEmployeeAction(isCash.ToEmployeeID, isCash.LocationID, isCash.ActionTypeID, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.Description, 1, -1 * isCash.Amount, 0, isCash.Currency, null, null, isCash.SalaryType, isCash.RecordEmployeeID, isCash.RecordDate);
 
                         result.IsSuccess = true;
                         result.Message = "Maaş Avans ödemesi iptal edildi";

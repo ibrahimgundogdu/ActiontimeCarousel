@@ -295,11 +295,11 @@ namespace ActionForce.Office
             }
         }
 
-        public static void AddEmployeeAction(int? EmployeeID, int? ActionTypeID, string ProcessName, long? ProcessID, DateTime? ProcessDate, string ProcessDetail, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? SalaryTypeID, int? RecordEmployeeID, DateTime? RecordDate)
+        public static void AddEmployeeAction(int? EmployeeID, int? LocationID, int? ActionTypeID, string ProcessName, long? ProcessID, DateTime? ProcessDate, string ProcessDetail, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? SalaryTypeID, int? RecordEmployeeID, DateTime? RecordDate)
         {
             using (ActionTimeEntities db = new ActionTimeEntities())
             {
-                db.AddEmployeeAction(EmployeeID, ActionTypeID, ProcessName, ProcessID, ProcessDate, ProcessDetail, Direction, Collection, Payment, Currency, Latitude, Longitude, SalaryTypeID, RecordEmployeeID, RecordDate);
+                db.AddEmployeeAction(EmployeeID, LocationID, ActionTypeID, ProcessName, ProcessID, ProcessDate, ProcessDetail, Direction, Collection, Payment, Currency, Latitude, Longitude, SalaryTypeID, RecordEmployeeID, RecordDate);
             }
         }
 

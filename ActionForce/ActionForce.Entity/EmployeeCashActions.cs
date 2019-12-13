@@ -33,5 +33,6 @@ namespace ActionForce.Entity
         public Nullable<int> UpdateEmployeeID { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> SalaryTypeID { get; set; }
+        public Nullable<int> LocationID { get; set; }
     }
 }
