@@ -263,7 +263,7 @@
                                             </table>
                                         </div>
                                         <div class="card-body pd-0" id="CardSale">
-                                            @{Html.RenderPartial("_PartialCardSale", Model);}    
+                                            @{Html.RenderPartial("_PartialCardSale", Model);}
                                         </div>
                                     </div>
                                 </div>
@@ -396,7 +396,7 @@
                                                 <thead class="bg-gray-100">
                                                     <tr>
                                                         <th>&nbsp;</th>
-                                                        <th colspan="6" class="text-center font-weight-bold"><span>(3) Döviz Satışı</span></th>
+                                                        <th colspan="7" class="text-center font-weight-bold"><span>(3) Döviz Satışı</span></th>
                                                     </tr>
                                                     <tr>
                                                         <th><span></span></th>
@@ -404,6 +404,7 @@
                                                         <th class="text-right"><span>Kur</span></th>
                                                         <th class=""><span>Döviz</span></th>
                                                         <th class="text-right"><span>TRL Tutar</span></th>
+                                                        <th class=""><span>Döviz Fişi</span></th>
                                                         <th class="text-center"><span>Açıklama</span></th>
                                                         <th></th>
                                                     </tr>
@@ -423,6 +424,9 @@
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
                                                             <input type="text" name="E3USDS" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.SystemAmount?.ToString("N2"))" readonly>
+                                                        </td>
+                                                        <td style="width:200px; padding:1px !important;">
+                                                            <input id="E7TRLF" name="E7TRLF" class="form-control" type="file" />
                                                         </td>
                                                         <td class="bd-l  text-right" style="padding:1px !important;">
                                                             <input type="text" name="E3USDD" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Description)">
@@ -449,6 +453,9 @@
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
                                                             <input type="text" name="E3EURS" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.SystemAmount?.ToString("N2"))" readonly>
+                                                        </td>
+                                                        <td style="width:200px; padding:1px !important;">
+                                                            <input id="E7TRLF" name="E7TRLF" class="form-control" type="file" />
                                                         </td>
                                                         <td class="bd-l  text-right" style="padding:1px !important;">
                                                             <input type="text" name="E3EURD" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Description)">
@@ -485,16 +492,17 @@
                                                 <thead class="bg-gray-100">
                                                     <tr>
                                                         <th>&nbsp;</th>
-                                                        <th colspan="7" class="text-center font-weight-bold"><span>(6) Masraf Detayı</span></th>
+                                                        <th colspan="8" class="text-center font-weight-bold"><span>(6) Masraf Detayı</span></th>
                                                     </tr>
                                                     <tr>
                                                         <th><span></span></th>
                                                         <th class="text-right"><span>Adet</span></th>
                                                         <th class="text-right"><span>Tutar</span></th>
                                                         <th class=""><span>Para</span></th>
-                                                        <th class="text-right"><span>Fiş No</span></th>
-                                                        <th class="text-right"><span>Fiş Tarihi</span></th>
-                                                        <th class="text-center"><span>Açıklama</span></th>
+                                                        <th><span>Fiş No</span></th>
+                                                        <th><span>Fiş Tarihi</span></th>
+                                                        <th><span>Masraf Fişi</span></th>
+                                                        <th><span>Açıklama</span></th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
@@ -518,6 +526,9 @@
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
                                                                 <input type="text" id="ExpSlipDate" name="E6TRLD" class="form-control font-weight-bold" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
+                                                            </td>
+                                                            <td style="width:200px; padding:1px !important;">
+                                                                <input id="E7TRLF" name="E7TRLF" class="form-control" type="file" />
                                                             </td>
                                                             <td class="bd-l  text-right" style="padding:1px !important;">
                                                                 <input type="text" name="E6TRLDE" class="form-control" value="@(item.Description)">
@@ -561,13 +572,15 @@
                                                     </tr>
                                                     <tr>
                                                         <th><span>Banka Hesabı</span></th>
+
                                                         <th class="text-right"><span>Tutar</span></th>
-                                                        <th><span>Referans</span></th>
-                                                        <th><span>Fiş No</span></th>
-                                                        <th><span>Fiş Tarihi</span></th>
-                                                        <th><span>Fiş Tutarı</span></th>
-                                                        <th><span>Açıklama</span></th>
+                                                        <th class="text-right"><span>Komisyon</span></th>
+
+                                                        <th><span>Dekont No</span></th>
+                                                        <th><span>Dekont Tarihi</span></th>
+                                                        <th><span>Dekont Saati</span></th>
                                                         <th><span>Dekont</span></th>
+                                                        <th><span>Açıklama</span></th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
@@ -587,24 +600,24 @@
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
                                                                 <input type="text" name="E7TRLA" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
                                                             </td>
-
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E7TRLR" class="form-control font-weight-bold" value="@(item.ReferenceCode)">
+                                                                <input type="text" name="E7TRLCO" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="0,00">
                                                             </td>
+
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
                                                                 <input type="text" name="E7TRLN" class="form-control font-weight-bold" value="@(item.SlipNumber)">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="slipDate" name="E7TRLD" class="form-control font-weight-bold" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
+                                                                <input type="text" id="slipDate" name="E7TRLD" class="form-control font-weight-bold shiftdate" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E7TRLSA" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(item.SlipTotalAmount?.ToString("N2"))">
-                                                            </td>
-                                                            <td class="text-right" style="padding:1px !important;">
-                                                                <input type="text" name="E7TRLDE" class="form-control" value="@(item.Description)">
+                                                                <input type="text" name="E7TRLR" class="form-control font-weight-bold hourfull" value="@(item.SlipDate != null ? item.SlipDate?.TimeOfDay.ToString("HH\\:mm\\:00") :Model.CurrentDayResult.Date.ToString("00:00:00") )">
                                                             </td>
                                                             <td style="width:200px; padding:1px !important;">
                                                                 <input id="E7TRLF" name="E7TRLF" class="form-control" type="file" />
+                                                            </td>
+                                                            <td class="text-right" style="padding:1px !important;">
+                                                                <input type="text" name="E7TRLDE" class="form-control" value="@(item.Description)">
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary">
@@ -741,8 +754,8 @@
                                                         <th><span>Fiş Saati</span></th>
                                                         <th class="text-right"><span>Fiş Tutarı</span></th>
                                                         <th class="text-right"><span>Genel Tutar</span></th>
+                                                        <th><span>Yazarkasa Fişi</span></th>
                                                         <th><span>Açıklama</span></th>
-                                                        <th><span>Fiş Dosyası</span></th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
@@ -765,13 +778,13 @@
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
                                                                 <input type="text" name="E13TRLTA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(cr.SlipTotalAmount?.ToString("N2"))">
                                                             </td>
-
-                                                            <td style="padding:1px !important;">
-                                                                <input type="text" name="E13TRLDE" class="form-control" value="@(cr.Description)">
-                                                            </td>
                                                             <td style="width:200px; padding:1px !important;">
                                                                 <input id="E13TRLF" name="E13TRLF" class="form-control" type="file" />
                                                             </td>
+                                                            <td style="padding:1px !important;">
+                                                                <input type="text" name="E13TRLDE" class="form-control" value="@(cr.Description)">
+                                                            </td>
+
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary">
                                                                     <i data-feather="plus-square"></i>
@@ -805,8 +818,8 @@
                                                     </tr>
                                                     <tr>
                                                         <th><span>Dosya Türü</span></th>
-                                                        <th><span>Açıklama</span></th>
                                                         <th><span>Dosya</span></th>
+                                                        <th><span>Açıklama</span></th>
                                                         <th></th>
                                                     </tr>
                                                 </thead>
@@ -822,12 +835,11 @@
                                                                 }
                                                             </select>
                                                         </td>
-
-                                                        <td style="padding:1px !important;">
-                                                            <input type="text" name="E14TRLDE" class="form-control">
-                                                        </td>
                                                         <td style="width:200px; padding:1px !important;">
                                                             <input id="E13TRLF" name="E14TRLF" class="form-control" type="file" />
+                                                        </td>
+                                                        <td style="padding:1px !important;">
+                                                            <input type="text" name="E14TRLDE" class="form-control">
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
