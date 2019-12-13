@@ -135,6 +135,7 @@ namespace ActionForce.Office.Controllers
                 model.BankActionTypes = Db.BankActionType.Where(x => x.IsActive == true).ToList();
                 model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == model.DayResult.LocationID);
                 model.Exchanges = Db.VDocumentSaleExchange.Where(x => x.LocationID == model.DayResult.LocationID && x.Date == model.DayResult.Date).ToList();
+                model.BankTransfers = Db.VDocumentBankTransfer.Where(x => x.LocationID == model.DayResult.LocationID && x.Date == model.DayResult.Date && x.IsActive==true).ToList();
 
                 var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == model.DayResult.Date);
                 model.CurrentDate = datekey;
