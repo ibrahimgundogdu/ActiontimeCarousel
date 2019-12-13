@@ -39,7 +39,7 @@
                         <td class="tx-sm-13">@sale.ActionTypeName</td>
                         <td class="tx-sm-13">@(sale.Date?.ToShortDateString())</td>
                         <td class="tx-sm-13">@sale.DocumentNumber</td>
-                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(sale.Amount >= 0 ? sale.Amount?.ToString("N2") : "")</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(sale.Amount >= 0 ? sale.Amount?.ToString("N2") : "")</td>
                         <td class="tx-sm-13 bg-primary-light font-weight-bold">@(sale.Currency)</td>
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold  text-danger">@(sale.SaleExchangeRate?.ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(sale.ToAmount?.ToString("N2"))</td>

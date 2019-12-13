@@ -1,4 +1,11 @@
-﻿<div class="table">
+﻿@model ResultControlModel
+@{
+    var typeids = Model.CashActionTypes.Where(x => new[] { "BANKTRANSFER", "BNKT" }.Contains(x.Code)).Select(x => x.ID).ToList();
+
+    double? totaltrl = 0;
+    string currency = "";
+}
+<div class="table">
     <table class="table table-sm table-hover">
         <thead>
             <tr>
@@ -6,7 +13,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th colspan="4" class="text-center">Nakit</th>
+                <th colspan="4" class="text-center">Havale / EFT Bildirimi</th>
                 <th></th>
             </tr>
             <tr>
@@ -14,8 +21,10 @@
                 <th>İşlem</th>
                 <th>Belge Tarihi</th>
                 <th>Belge No</th>
-
-                <th>Satış</th>
+                <th>Banka Hesabı</th>
+                <th>Dekont Tarihi</th>
+                <th>Dekont No</th>
+                <th>Tutar</th>
                 <th>İade</th>
                 <th>Bakiye</th>
                 <th>Para Br.</th>
