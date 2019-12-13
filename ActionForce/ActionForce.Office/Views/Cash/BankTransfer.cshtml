@@ -87,6 +87,7 @@
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
                         <th>Referans</th>
+                        <th>Fiş Tarihi</th>
                         <th>Fiş Nr.</th>
                         <th>Döküman</th>
                         <th>Durum</th>
@@ -112,6 +113,7 @@
                         <td class="tx-sm-13">@item.RecorderFullName</td>
                         <td class="tx-sm-13 text-right">@item.RecordDate</td>
                         <td class="tx-sm-13 text-right">@item.ReferenceCode</td>
+                        <td class="tx-sm-13">@($"{item.Date.Value.ToShortDateString()} {item.Date.Value.ToShortTimeString()}")</td>
                         <td class="tx-sm-13 text-right">@item.SlipNumber</td>
                         <td>
                             @if (item.SlipDocument != null)
@@ -198,6 +200,21 @@
                 datePattern: ['Y', 'm', 'd'],
 
             });
+
+            $('#SlipDate').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+            var cleaveC = new Cleave('#SlipDate', {
+                date: true,
+                delimiter: '-',
+                datePattern: ['Y', 'm', 'd'],
+
+            });
+
             var cleaveF = new Cleave('#SlipTime', {
                 time: true,
                 timePattern: ['h', 'm']

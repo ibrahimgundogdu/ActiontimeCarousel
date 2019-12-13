@@ -17,6 +17,7 @@ namespace ActionForce.Entity
         public int ID { get; set; }
         public Nullable<int> LevelNumber { get; set; }
         public string StatusName { get; set; }
+        public string Description { get; set; }
         public Nullable<bool> IsActive { get; set; }
     }
 }

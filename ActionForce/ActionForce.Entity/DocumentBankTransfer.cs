@@ -42,6 +42,7 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> SlipDate { get; set; }
         public string SlipNumber { get; set; }
         public string SlipDocument { get; set; }
+        public string TrackingNumber { get; set; }
         public Nullable<int> StatusID { get; set; }
         public string ReferenceCode { get; set; }
         public Nullable<long> ResultID { get; set; }

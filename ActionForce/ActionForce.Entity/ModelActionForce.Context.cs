@@ -192,7 +192,6 @@ namespace ActionForce.Entity
         public virtual DbSet<Environment> Environment { get; set; }
         public virtual DbSet<VDocumentCashExpense> VDocumentCashExpense { get; set; }
         public virtual DbSet<VDocumentSalaryPayment> VDocumentSalaryPayment { get; set; }
-        public virtual DbSet<BankTransferStatus> BankTransferStatus { get; set; }
         public virtual DbSet<ExpenseType> ExpenseType { get; set; }
         public virtual DbSet<Schedule> Schedule { get; set; }
         public virtual DbSet<VDocumentPosCollection> VDocumentPosCollection { get; set; }
@@ -223,6 +222,7 @@ namespace ActionForce.Entity
         public virtual DbSet<VCashRecorders> VCashRecorders { get; set; }
         public virtual DbSet<VPosTerminal> VPosTerminal { get; set; }
         public virtual DbSet<VLocationPosTerminal> VLocationPosTerminal { get; set; }
+        public virtual DbSet<BankTransferStatus> BankTransferStatus { get; set; }
         public virtual DbSet<DocumentBankTransfer> DocumentBankTransfer { get; set; }
         public virtual DbSet<VDocumentBankTransfer> VDocumentBankTransfer { get; set; }
     

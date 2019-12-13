@@ -55,5 +55,6 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> SlipDate { get; set; }
         public Nullable<double> Commission { get; set; }
         public Nullable<double> NetAmount { get; set; }
+        public string TrackingNumber { get; set; }
     }
 }
