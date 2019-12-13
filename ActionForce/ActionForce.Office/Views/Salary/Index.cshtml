@@ -213,11 +213,11 @@
             });
         }
 
-        function SalaryEarn(FormID) {
+        function SalaryEarn(EmployeeID) {
             $.ajax({
                 method: "GET",
                 url: "/Salary/SalaryEarn",
-                data: { id: FormID }
+                data: { id: EmployeeID }
 
             }).done(function (d) {
                 $("#UnitPrice").val(d);

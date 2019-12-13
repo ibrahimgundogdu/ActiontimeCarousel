@@ -77,7 +77,7 @@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Kime</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" id="FromID" name="FromID" onchange="SalaryEarn(this.value)" required>
+                                                <select class="form-control" id="EmployeeID" name="EmployeeID" onchange="SalaryEarn(this.value)" required>
                                                     @foreach (var item in Model.FromList)
                                                     {
                                                         <option value="@item.Code" @(Model.Detail.EmployeeID != null ? Model.Detail.EmployeeID == item.ID ? "selected" : "" : "")>@(Html.Raw($"{item.Name}"))</option>
@@ -288,11 +288,11 @@
 
         });
         
-        function SalaryEarn(FormID) {
+        function SalaryEarn(EmployeeID) {
             $.ajax({
                     method: "GET",
                     url: "/Salary/SalaryEarn",
-                    data: { id: FormID }
+                data: { id: EmployeeID }
 
                 }).done(function (d) {
                     $("#UnitPrice").val(d);

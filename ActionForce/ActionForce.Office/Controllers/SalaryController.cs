@@ -45,7 +45,7 @@ namespace ActionForce.Office.Controllers
                 model.SalaryEarn = model.SalaryEarn.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
 
             }
-            model.FromList = OfficeHelper.GetToList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
 
             return View(model);
         }
@@ -93,7 +93,8 @@ namespace ActionForce.Office.Controllers
                 var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSalary.ActinTypeID);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSalary.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var fromPrefix = cashSalary.EmployeeID;
+                var fromPrefix = cashSalary.EmployeeID.Substring(0, 1);
+                var fromID = Convert.ToInt32(cashSalary.EmployeeID.Substring(1, cashSalary.EmployeeID.Length - 1));
                 var amount = Convert.ToDouble(cashSalary.TotalAmount.Replace(".", ","));
                 var currency = cashSalary.Currency;
                 var docDate = DateTime.Now.Date;
@@ -117,7 +118,7 @@ namespace ActionForce.Office.Controllers
 
                         newCashColl.ActionTypeID = actType.ID;
                         newCashColl.ActionTypeName = actType.Name;
-                        newCashColl.EmployeeID = fromPrefix;
+                        newCashColl.EmployeeID = fromID;
                         newCashColl.TotalAmount = amount;
                         newCashColl.UnitPrice = (double?)cashSalary.UnitPrice;
                         newCashColl.QuantityHour = (double?)cashSalary.QuantityHour;
@@ -187,7 +188,10 @@ namespace ActionForce.Office.Controllers
                 var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashCollect.ActinTypeID);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashCollect.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var fromPrefix = cashCollect.EmployeeID;
+
+                var fromPrefix = cashCollect.EmployeeID.Substring(0, 1);
+                var fromID = Convert.ToInt32(cashCollect.EmployeeID.Substring(1, cashCollect.EmployeeID.Length - 1));
+
                 var amount = Convert.ToDouble(cashCollect.TotalAmount.Replace(".", ","));
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
@@ -200,7 +204,7 @@ namespace ActionForce.Office.Controllers
                 var cash = OfficeHelper.GetCash((int)cashCollect.LocationID, cashCollect.Currency);
 
                 var isDate = DateTime.Now.Date;
-                var isEmp = cashCollect.EmployeeID;
+                var isEmp = fromID;
                 var isCash = Db.DocumentSalaryEarn.FirstOrDefault(x => x.UID == cashCollect.UID);
                 if (isCash != null)
                 {
@@ -237,7 +241,7 @@ namespace ActionForce.Office.Controllers
                         };
 
 
-                        isCash.EmployeeID = cashCollect.EmployeeID;
+                        isCash.EmployeeID = fromID;
                         isCash.TotalAmount = amount;
                         isCash.UnitPrice = cashCollect.UnitPrice;
                         isCash.Description = cashCollect.Description;
@@ -411,7 +415,7 @@ namespace ActionForce.Office.Controllers
             model.Detail = Db.VDocumentSalaryEarn.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Salary" && x.Action == "Index" && x.Environment == "Office" && x.ProcessID == model.Detail.ID.ToString()).ToList();
 
-            model.FromList = OfficeHelper.GetToList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
 
             return View(model);
         }

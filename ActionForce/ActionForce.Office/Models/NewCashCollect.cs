@@ -189,7 +189,7 @@ namespace ActionForce.Office
         public float QuantityHour { get; set; }
         public string TotalAmount { get; set; }
         public int LocationID { get; set; }
-        public int EmployeeID { get; set; }
+        public string EmployeeID { get; set; }
         public string Currency { get; set; }
         public string DocumentDate { get; set; }
         public string Description { get; set; }
