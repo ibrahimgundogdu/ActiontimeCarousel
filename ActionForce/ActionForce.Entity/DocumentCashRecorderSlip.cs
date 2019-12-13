@@ -35,5 +35,6 @@ namespace ActionForce.Entity
         public Nullable<long> ResultID { get; set; }
         public Nullable<int> EnvironmentID { get; set; }
         public Nullable<System.Guid> UID { get; set; }
+        public string SlipNumber { get; set; }
     }
 }

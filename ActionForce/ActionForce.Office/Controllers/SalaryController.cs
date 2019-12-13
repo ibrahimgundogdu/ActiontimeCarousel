@@ -555,7 +555,7 @@ namespace ActionForce.Office.Controllers
                         //OfficeHelper.AddCashAction(newCashColl.FromCashID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, -1, 0, newCashColl.Amount, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
 
                         //maaş hesap işlemi
-                        OfficeHelper.AddEmployeeAction(newCashColl.ToEmployeeID, newCashColl.LocationID, newCashColl.ActionTypeID, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.Description, 1, newCashColl.Amount, 0, newCashColl.Currency, null, null, cashSalary.SalaryType, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
+                        OfficeHelper.AddEmployeeAction(newCashColl.ToEmployeeID, newCashColl.LocationID, newCashColl.ActionTypeID, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.Description, 1, 0, newCashColl.Amount, newCashColl.Currency, null, null, cashSalary.SalaryType, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
 
                         result.IsSuccess = true;
                         result.Message = "Maaş Avans ödemesi başarı ile eklendi";
@@ -736,7 +736,8 @@ namespace ActionForce.Office.Controllers
                         {
                             
                             empaction.ProcessDate = docDate;
-                            empaction.Collection = isCash.Amount;
+                            empaction.Payment = isCash.Amount;
+                            empaction.Collection = 0;
                             empaction.Currency = cashCollect.Currency;
                             empaction.EmployeeID = isCash.ToEmployeeID;
                             empaction.UpdateDate = isCash.UpdateDate;

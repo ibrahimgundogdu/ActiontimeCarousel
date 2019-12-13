@@ -167,7 +167,6 @@ namespace ActionForce.Entity
         public virtual DbSet<DocumentCashCollections> DocumentCashCollections { get; set; }
         public virtual DbSet<DocumentCashExpense> DocumentCashExpense { get; set; }
         public virtual DbSet<DocumentCashPayments> DocumentCashPayments { get; set; }
-        public virtual DbSet<DocumentCashRecorderSlip> DocumentCashRecorderSlip { get; set; }
         public virtual DbSet<DocumentPosCollections> DocumentPosCollections { get; set; }
         public virtual DbSet<DocumentSalaryPayment> DocumentSalaryPayment { get; set; }
         public virtual DbSet<DocumentSaleExchange> DocumentSaleExchange { get; set; }
@@ -225,6 +224,9 @@ namespace ActionForce.Entity
         public virtual DbSet<BankTransferStatus> BankTransferStatus { get; set; }
         public virtual DbSet<DocumentBankTransfer> DocumentBankTransfer { get; set; }
         public virtual DbSet<VDocumentBankTransfer> VDocumentBankTransfer { get; set; }
+        public virtual DbSet<VEmployeeCashActions> VEmployeeCashActions { get; set; }
+        public virtual DbSet<DocumentCashRecorderSlip> DocumentCashRecorderSlip { get; set; }
+        public virtual DbSet<VDayResultDocuments> VDayResultDocuments { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

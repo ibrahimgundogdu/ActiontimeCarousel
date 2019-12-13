@@ -26,9 +26,14 @@ namespace ActionForce.Office
         public IEnumerable<BankActionType> BankActionTypes { get; set; }
 
         public IEnumerable<VCashActions> CashActions { get; set; }
+        public IEnumerable<VEmployeeCashActions> EmployeeActions { get; set; }
         public IEnumerable<VBankActions> BankActions { get; set; }
         public IEnumerable<VDocumentSaleExchange> Exchanges { get; set; }
         public IEnumerable<VDocumentBankTransfer> BankTransfers { get; set; }
+        public IEnumerable<DocumentCashRecorderSlip> CashRecorderSlips { get; set; }
+        public IEnumerable<VDayResultDocuments> DayResultDocuments { get; set; }
+        
+
 
 
         public FilterModel Filters { get; set; }

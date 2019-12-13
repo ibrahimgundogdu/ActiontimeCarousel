@@ -43,7 +43,7 @@ namespace ActionForce.Office.Controllers
 
             model.DayResultList = Db.VDayResult.Where(x => x.Date == datekey.DateKey).ToList();
 
-           
+
             return View(model);
         }
 
@@ -58,7 +58,7 @@ namespace ActionForce.Office.Controllers
 
                 DateTime.TryParse(date, out _date);
 
-                var currentResult = Db.VDayResult.FirstOrDefault(x => x.UID.ToString() == id || (x.LocationID  == locationID && x.Date == _date));
+                var currentResult = Db.VDayResult.FirstOrDefault(x => x.UID.ToString() == id || (x.LocationID == locationID && x.Date == _date));
 
                 if (currentResult != null)
                 {
@@ -88,7 +88,7 @@ namespace ActionForce.Office.Controllers
 
                     // Itemleri ekle
                     var result = OfficeHelper.AddItemsToResultEnvelope(dayresult.ID);
-                    
+
 
 
 
@@ -113,7 +113,7 @@ namespace ActionForce.Office.Controllers
                 model.Result = TempData["result"] as Result<DayResult> ?? null;
             }
 
-            if (locationID>0 && !string.IsNullOrEmpty(date))
+            if (locationID > 0 && !string.IsNullOrEmpty(date))
             {
                 DateTime? urldate = Convert.ToDateTime(date).Date;
                 model.CurrentDayResult = Db.VDayResult.FirstOrDefault(x => x.LocationID == locationID && x.Date == urldate);
@@ -135,7 +135,7 @@ namespace ActionForce.Office.Controllers
                 model.BankActionTypes = Db.BankActionType.Where(x => x.IsActive == true).ToList();
                 model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == model.DayResult.LocationID);
                 model.Exchanges = Db.VDocumentSaleExchange.Where(x => x.LocationID == model.DayResult.LocationID && x.Date == model.DayResult.Date).ToList();
-                model.BankTransfers = Db.VDocumentBankTransfer.Where(x => x.LocationID == model.DayResult.LocationID && x.Date == model.DayResult.Date && x.IsActive==true).ToList();
+                model.BankTransfers = Db.VDocumentBankTransfer.Where(x => x.LocationID == model.DayResult.LocationID && x.Date == model.DayResult.Date && x.IsActive == true).ToList();
 
                 var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == model.DayResult.Date);
                 model.CurrentDate = datekey;
@@ -146,6 +146,10 @@ namespace ActionForce.Office.Controllers
 
                 model.CashActions = Db.VCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date).ToList();
                 model.BankActions = Db.VBankActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date).ToList();
+                model.EmployeeActions = Db.VEmployeeCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ProcessDate == model.DayResult.Date).ToList();
+
+                model.CashRecorderSlips = Db.DocumentCashRecorderSlip.Where(x => x.LocationID == model.DayResult.LocationID && x.SlipDate == model.DayResult.Date).ToList();
+                model.DayResultDocuments = Db.VDayResultDocuments.Where(x => x.LocationID == model.DayResult.LocationID && x.Date == model.DayResult.Date).ToList();
 
                 model.CurrencyList = OfficeHelper.GetCurrency();
 
@@ -156,8 +160,31 @@ namespace ActionForce.Office.Controllers
             {
                 return RedirectToAction("Envelope");
             }
-            
+
             return View(model);
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult AddResultDocument(long? id, HttpPostedFileBase file)
+        {
+            Result<CashActions> result = new Result<CashActions>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            ResultControlModel model = new ResultControlModel();
+
+           
+
+            TempData["result"] = result;
+
+           
+
+            return PartialView("_PartialResultFiles", model);
         }
     }
 }

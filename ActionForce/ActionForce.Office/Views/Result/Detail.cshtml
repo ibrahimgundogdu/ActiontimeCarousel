@@ -836,13 +836,13 @@
                                                             </select>
                                                         </td>
                                                         <td style="width:200px; padding:1px !important;">
-                                                            <input id="E13TRLF" name="E14TRLF" class="form-control" type="file" />
+                                                            <input id="ResultFile" name="ResultFile" class="form-control" type="file" />
                                                         </td>
                                                         <td style="padding:1px !important;">
                                                             <input type="text" name="E14TRLDE" class="form-control">
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
-                                                            <a href="#" class="text-primary">
+                                                            <a href="#" class="text-primary" onclick="AddResultDocument(@Model.CurrentDayResult.ID);">
                                                                 <i data-feather="plus-square"></i>
                                                             </a>
                                                         </td>
@@ -960,6 +960,35 @@
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
 
+    </script>
+
+    <script>
+
+        function AddResultDocument(id) {
+
+            var fotodata = new FormData();
+
+            jQuery.each(jQuery('#ResultFile')[0].files, function (i, file) {
+                fotodata.append('file', file);
+            });
+            fotodata.append('id', id);
+
+            $.ajax({
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST', 
+                url: "/Result/AddResultDocument",
+                data: fotodata,
+
+            }).done(function (d) {
+
+                $("#ResultFiles").html(d);
+
+
+            });
+        }
     </script>
 
     @if (Model.Result != null) //
