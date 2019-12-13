@@ -187,7 +187,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Environment" Width="1.5" PointX="41.375" PointY="42.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentCashExpense" Width="1.5" PointX="43.375" PointY="26.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentSalaryPayment" Width="1.5" PointX="35.375" PointY="43.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankTransferStatus" Width="1.5" PointX="44.375" PointY="0.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ExpenseType" Width="1.5" PointX="44.375" PointY="3.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Schedule" Width="1.5" PointX="11.375" PointY="45.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosCollection" Width="1.5" PointX="25.375" PointY="45.75" />
@@ -220,6 +219,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCashRecorders" Width="1.5" PointX="47.375" PointY="25.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPosTerminal" Width="1.5" PointX="47.375" PointY="29.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationPosTerminal" Width="1.5" PointX="31.375" PointY="47.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankTransferStatus" Width="1.5" PointX="38.375" PointY="8.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentBankTransfer" Width="1.5" PointX="47.375" PointY="34.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" Width="1.5" PointX="3.375" PointY="48.75" />
       </Diagram>

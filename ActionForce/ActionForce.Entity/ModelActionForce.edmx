@@ -473,6 +473,7 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LevelNumber" Type="int" />
           <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="BreakTypes">
@@ -756,6 +757,7 @@
           <Property Name="SlipDate" Type="datetime" />
           <Property Name="SlipNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="SlipDocument" Type="nvarchar" MaxLength="50" />
+          <Property Name="TrackingNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="StatusID" Type="int" />
           <Property Name="ReferenceCode" Type="nvarchar" MaxLength="20" />
           <Property Name="ResultID" Type="bigint" />
@@ -3105,6 +3107,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentBankTransfer' does
           <Property Name="SlipDate" Type="datetime" />
           <Property Name="Commission" Type="float" />
           <Property Name="NetAmount" Type="float" />
+          <Property Name="TrackingNumber" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashCollections' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4661,7 +4664,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentBankTransfer].[EnvironmentID] AS [EnvironmentID], 
     [VDocumentBankTransfer].[SlipDate] AS [SlipDate], 
     [VDocumentBankTransfer].[Commission] AS [Commission], 
-    [VDocumentBankTransfer].[NetAmount] AS [NetAmount]
+    [VDocumentBankTransfer].[NetAmount] AS [NetAmount], 
+    [VDocumentBankTransfer].[TrackingNumber] AS [TrackingNumber]
     FROM [dbo].[VDocumentBankTransfer] AS [VDocumentBankTransfer]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentCashCollections" EntityType="Self.VDocumentCashCollections" store:Type="Views" store:Schema="dbo">
@@ -5702,7 +5706,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImport Name="GetPersonList" ReturnType="Collection(db293_ActionTimeDbModel.GetPersonList_Result)">
           <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="BankTransferStatus" EntityType="db293_ActionTimeDbModel.BankTransferStatus" />
           <EntitySet Name="ExpenseType" EntityType="db293_ActionTimeDbModel.ExpenseType" />
           <EntitySet Name="Schedule" EntityType="db293_ActionTimeDbModel.Schedule" />
           <EntitySet Name="VDocumentPosCollection" EntityType="db293_ActionTimeDbModel.VDocumentPosCollection" />
@@ -5821,6 +5824,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VCashRecorders" EntityType="db293_ActionTimeDbModel.VCashRecorders" />
           <EntitySet Name="VPosTerminal" EntityType="db293_ActionTimeDbModel.VPosTerminal" />
           <EntitySet Name="VLocationPosTerminal" EntityType="db293_ActionTimeDbModel.VLocationPosTerminal" />
+          <EntitySet Name="BankTransferStatus" EntityType="db293_ActionTimeDbModel.BankTransferStatus" />
           <EntitySet Name="DocumentBankTransfer" EntityType="db293_ActionTimeDbModel.DocumentBankTransfer" />
           <EntitySet Name="VDocumentBankTransfer" EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" />
           </EntityContainer>
@@ -9061,15 +9065,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Type="String" Name="Code" Nullable="true" MaxLength="21" />
           <Property Type="String" Name="Name" Nullable="true" MaxLength="150" />
         </ComplexType>
-        <EntityType Name="BankTransferStatus">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LevelNumber" Type="Int32" />
-          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
         <EntityType Name="ExpenseType">
           <Key>
             <PropertyRef Name="ID" />
@@ -9819,6 +9814,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="AccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BankAccountID" Type="Int32" />
         </EntityType>
+        <EntityType Name="BankTransferStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LevelNumber" Type="Int32" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
         <EntityType Name="DocumentBankTransfer">
           <Key>
             <PropertyRef Name="ID" />
@@ -9851,6 +9856,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SlipDate" Type="DateTime" Precision="3" />
           <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="SlipDocument" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TrackingNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="StatusID" Type="Int32" />
           <Property Name="ReferenceCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ResultID" Type="Int64" />
@@ -9902,6 +9908,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SlipDate" Type="DateTime" Precision="3" />
           <Property Name="Commission" Type="Double" />
           <Property Name="NetAmount" Type="Double" />
+          <Property Name="TrackingNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -13084,16 +13091,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="BankTransferStatus">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.BankTransferStatus">
-              <MappingFragment StoreEntitySet="BankTransferStatus">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
-                <ScalarProperty Name="LevelNumber" ColumnName="LevelNumber" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ExpenseType">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ExpenseType">
               <MappingFragment StoreEntitySet="ExpenseType">
@@ -13836,6 +13833,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="BankTransferStatus">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.BankTransferStatus">
+              <MappingFragment StoreEntitySet="BankTransferStatus">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="LevelNumber" ColumnName="LevelNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="DocumentBankTransfer">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentBankTransfer">
               <MappingFragment StoreEntitySet="DocumentBankTransfer">
@@ -13844,6 +13852,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="ReferenceCode" ColumnName="ReferenceCode" />
                 <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="TrackingNumber" ColumnName="TrackingNumber" />
                 <ScalarProperty Name="SlipDocument" ColumnName="SlipDocument" />
                 <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />
                 <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
@@ -13878,6 +13887,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentBankTransfer">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentBankTransfer">
               <MappingFragment StoreEntitySet="VDocumentBankTransfer">
+                <ScalarProperty Name="TrackingNumber" ColumnName="TrackingNumber" />
                 <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
                 <ScalarProperty Name="Commission" ColumnName="Commission" />
                 <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
