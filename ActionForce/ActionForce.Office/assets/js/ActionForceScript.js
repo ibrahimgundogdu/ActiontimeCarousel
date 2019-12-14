@@ -82,7 +82,8 @@ function AddSalaryEarn(id, itemid, employeeid) {
     var unithprice = $('#S8SU' + employeeid).val();
     var totalamount = $('#S8ST' + employeeid).val();
 
-
+    console.log(unithprice);
+    console.log(totalamount);
     var data = new FormData();
 
     //jQuery.each(jQuery('#E13TRLF')[0].files, function (i, file) {

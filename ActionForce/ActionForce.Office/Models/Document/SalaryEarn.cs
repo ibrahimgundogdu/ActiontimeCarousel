@@ -23,5 +23,8 @@ namespace ActionForce.Office
         public int? EnvironmentID { get; set; }
         public int? TimeZone { get; set; }
         public Guid UID { get; set; }
+        public double? SystemUnitPrice { get; set; }
+        public double? SystemQuantityHour { get; set; }
+        public double? SystemTotalAmount { get; set; }
     }
 }

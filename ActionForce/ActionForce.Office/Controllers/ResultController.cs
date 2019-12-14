@@ -237,6 +237,7 @@ namespace ActionForce.Office.Controllers
             var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
             TimeSpan? sure = Convert.ToDateTime(duration + ":00").TimeOfDay;
             var unitPrice = Convert.ToDouble(unithprice.Replace(".", ""));
+            var totalAmount = Convert.ToDouble(totalamount.Replace(".", ""));
 
 
             SalaryEarn earn = new SalaryEarn();
@@ -250,13 +251,15 @@ namespace ActionForce.Office.Controllers
             earn.EnvironmentID = 2;
             earn.LocationID = dayresult.LocationID;
             earn.OurCompanyID = location.OurCompanyID;
-            earn.QuantityHour = sure.Value.TotalMinutes / 60;
+            earn.QuantityHour = (double)(sure.Value.TotalMinutes / (double)60);
             earn.UnitPrice = unitPrice;
             earn.ResultID = id;
             earn.TimeZone = location.Timezone;
-            earn.TotalAmount = earn.QuantityHour * earn.UnitPrice.Value;
+            earn.TotalAmount = totalAmount;
             earn.UID = Guid.NewGuid();
-
+            earn.SystemQuantityHour = item.SystemHourQuantity;
+            earn.SystemTotalAmount = item.SystemAmount;
+            earn.SystemUnitPrice = item.UnitHourPrice;
 
             result = documentManager.AddSalaryEarn(earn, model.Authentication);
 

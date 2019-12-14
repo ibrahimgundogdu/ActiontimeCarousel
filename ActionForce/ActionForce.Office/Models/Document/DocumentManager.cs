@@ -298,6 +298,9 @@ namespace ActionForce.Office
                         salaryEarn.EnvironmentID = salary.EnvironmentID;
                         salaryEarn.ReferenceID = salary.ReferanceID;
                         salaryEarn.ResultID = salary.ResultID;
+                        salaryEarn.SystemQuantityHour = salary.SystemQuantityHour;
+                        salaryEarn.SystemTotalAmount = salary.SystemTotalAmount;
+                        salaryEarn.SystemUnitPrice = salary.SystemUnitPrice;
 
 
                         Db.DocumentSalaryEarn.Add(salaryEarn);
@@ -342,7 +345,7 @@ namespace ActionForce.Office
                 {
                     try
                     {
-                        var balance = Db.GetCashBalance(payment.LocationID, payment.FromCashID).FirstOrDefault().Value;
+                        var balance = Db.GetCashBalance(payment.LocationID, payment.FromCashID).FirstOrDefault() ?? 0;
 
                         if (balance >= payment.Amount)
                         {

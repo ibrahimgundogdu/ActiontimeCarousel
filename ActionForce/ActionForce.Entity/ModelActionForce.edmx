@@ -1060,6 +1060,9 @@
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
           <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="SystemUnitPrice" Type="float" />
+          <Property Name="SystemQuantityHour" Type="float" />
+          <Property Name="SystemTotalAmount" Type="float" />
         </EntityType>
         <EntityType Name="DocumentSalaryPayment">
           <Key>
@@ -3452,6 +3455,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSalaryEarn' does n
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="UnitPrice" Type="float" />
           <Property Name="QuantityHour" Type="float" />
+          <Property Name="SystemUnitPrice" Type="float" />
+          <Property Name="SystemQuantityHour" Type="float" />
+          <Property Name="SystemTotalAmount" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSalaryPayment' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5042,7 +5048,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentSalaryEarn].[LocationFullName] AS [LocationFullName], 
     [VDocumentSalaryEarn].[UID] AS [UID], 
     [VDocumentSalaryEarn].[UnitPrice] AS [UnitPrice], 
-    [VDocumentSalaryEarn].[QuantityHour] AS [QuantityHour]
+    [VDocumentSalaryEarn].[QuantityHour] AS [QuantityHour], 
+    [VDocumentSalaryEarn].[SystemUnitPrice] AS [SystemUnitPrice], 
+    [VDocumentSalaryEarn].[SystemQuantityHour] AS [SystemQuantityHour], 
+    [VDocumentSalaryEarn].[SystemTotalAmount] AS [SystemTotalAmount]
     FROM [dbo].[VDocumentSalaryEarn] AS [VDocumentSalaryEarn]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentSalaryPayment" EntityType="Self.VDocumentSalaryPayment" store:Type="Views" store:Schema="dbo">
@@ -8644,6 +8653,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="SystemUnitPrice" Type="Double" />
+          <Property Name="SystemQuantityHour" Type="Double" />
+          <Property Name="SystemTotalAmount" Type="Double" />
         </EntityType>
         <EntityType Name="VDocumentCashCollections">
           <Key>
@@ -9765,6 +9777,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UID" Type="Guid" />
           <Property Name="UnitPrice" Type="Double" />
           <Property Name="QuantityHour" Type="Double" />
+          <Property Name="SystemUnitPrice" Type="Double" />
+          <Property Name="SystemQuantityHour" Type="Double" />
+          <Property Name="SystemTotalAmount" Type="Double" />
         </EntityType>
         <EntityType Name="VBankAccount">
           <Key>
@@ -12675,6 +12690,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentSalaryEarn">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentSalaryEarn">
               <MappingFragment StoreEntitySet="DocumentSalaryEarn">
+                <ScalarProperty Name="SystemTotalAmount" ColumnName="SystemTotalAmount" />
+                <ScalarProperty Name="SystemQuantityHour" ColumnName="SystemQuantityHour" />
+                <ScalarProperty Name="SystemUnitPrice" ColumnName="SystemUnitPrice" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
@@ -13812,6 +13830,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentSalaryEarn">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentSalaryEarn">
               <MappingFragment StoreEntitySet="VDocumentSalaryEarn">
+                <ScalarProperty Name="SystemTotalAmount" ColumnName="SystemTotalAmount" />
+                <ScalarProperty Name="SystemQuantityHour" ColumnName="SystemQuantityHour" />
+                <ScalarProperty Name="SystemUnitPrice" ColumnName="SystemUnitPrice" />
                 <ScalarProperty Name="QuantityHour" ColumnName="QuantityHour" />
                 <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
