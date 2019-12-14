@@ -208,6 +208,18 @@ namespace ActionForce.Office
 
         }
 
+        public static int GetTimeZone(int locationID)
+        {
+            int timezone = 3;
+
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                timezone = db.Location.FirstOrDefault(x => x.LocationID == locationID)?.Timezone ?? 3;
+                return timezone;
+            }
+
+        }
+
         public static string GetDocumentNumber(int ourCompanyID, string Prefix)
         {
             string documentNumber = string.Empty;
@@ -929,7 +941,7 @@ namespace ActionForce.Office
                             RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
                             RecordIP = GetIPAddress(),
                             SlipNumber = string.Empty,
-                            SlipDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            SlipDate = dayresult.Date.AddHours(22),
                             SlipTotalAmount = 0
 
                         }).FirstOrDefault());
@@ -1354,7 +1366,7 @@ namespace ActionForce.Office
                             RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
                             RecordIP = GetIPAddress(),
                             SlipNumber = string.Empty,
-                            SlipDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                            SlipDate = dayresult.Date.AddHours(22),
                             SlipTotalAmount = 0
 
                         }).FirstOrDefault());
@@ -1372,6 +1384,34 @@ namespace ActionForce.Office
 
             return result;
 
+        }
+
+        public static string BankReferenceCode(int OurCompanyID)
+        {
+            string rndNumber = string.Empty;
+
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                List<string> numberlist = db.DocumentBankTransfer.Select(x => x.ReferenceCode).ToList();
+
+                rndNumber = OurCompanyID.ToString() + DateTime.Now.ToString("yy");
+
+                Random rnd = new Random();
+
+                for (int i = 1; i < 6; i++)
+                {
+                    rndNumber += rnd.Next(0, 9).ToString();
+                }
+
+                if (!numberlist.Contains(rndNumber))
+                {
+                    return rndNumber;
+                }
+                else
+                {
+                    return BankReferenceCode(OurCompanyID);
+                }
+            }
         }
     }
 }

@@ -5,13 +5,14 @@
     <table class="table table-sm table-hover">
         <thead>
             <tr>
-                <th colspan="8" class="text-center">Nakit</th>
+                <th colspan="9" class="text-center">Nakit</th>
             </tr>
             <tr>
                 <th>#</th>
                 <th>İşlem</th>
                 <th>Z Rapor No</th>
                 <th>Z Rapor Tarihi</th>
+                <th>Z Raporu</th>
                 <th>Tutar</th>
                 <th>Genel Tutar</th>
                 <th>Para</th>
@@ -21,16 +22,20 @@
         <tbody>
             @foreach (var sale in Model.CashRecorderSlips.OrderBy(x => x.RecordDate))
             {
-                <tr>
-                    <td class="tx-sm-13 bold">@sale.ID</td>
-                    <td class="tx-sm-13">@sale.ActionTypeName</td>
-                    <td class="tx-sm-13">@sale.SlipNumber</td>
-                    <td class="tx-sm-13">@(sale.SlipDate?.ToString())</td>
-                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(sale.NetAmount != null ? sale.NetAmount?.ToString("N2") : "")</td>
-                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(sale.TotalAmount != null ? sale.TotalAmount?.ToString("N2") : "")</td>
-                    <td class="tx-sm-13">@sale.Currency</td>
-                    <td class="tx-sm-13">@sale.RecordDate</td>
-                </tr>
+            <tr>
+                <td class="tx-sm-13 bold">@sale.ID</td>
+                <td class="tx-sm-13">@sale.ActionTypeName</td>
+                <td class="tx-sm-13">@sale.SlipNumber</td>
+                <td class="tx-sm-13">@(sale.SlipDate?.ToString())</td>
+                <td class="tx-sm-13">
+                    <a target="_blank" href="@($"/{sale.SlipPath}/{sale.SlipFile}")">
+                        <img class="thumb" src="@($"/{sale.SlipPath}/{sale.SlipFile}")" alt="@(sale.SlipFile)">
+                    </a>
+                </td>                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(sale.NetAmount != null ? sale.NetAmount?.ToString("N2") : "")</td>
+                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(sale.TotalAmount != null ? sale.TotalAmount?.ToString("N2") : "")</td>
+                <td class="tx-sm-13">@sale.Currency</td>
+                <td class="tx-sm-13">@sale.RecordDate</td>
+            </tr>
             }
 
         </tbody>

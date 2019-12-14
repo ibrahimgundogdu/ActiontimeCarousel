@@ -56,5 +56,6 @@ namespace ActionForce.Entity
         public Nullable<double> Commission { get; set; }
         public Nullable<double> NetAmount { get; set; }
         public string TrackingNumber { get; set; }
+        public string SlipPath { get; set; }
     }
 }

@@ -106,7 +106,7 @@ namespace ActionForce.Office.Controllers
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-                
+
 
                 if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
                 {
@@ -125,7 +125,7 @@ namespace ActionForce.Office.Controllers
                 collection.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                 collection.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                 collection.LocationID = cashCollect.LocationID;
-                
+
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.AddCashCollection(collection, model.Authentication);
             }
@@ -155,7 +155,7 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(cashCollect.Amount.ToString().Replace(".", ","));
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashCollect.ExchangeRate) ? Convert.ToDouble(cashCollect.ExchangeRate.ToString().Replace(".", ",")) : (double?)null ;
+                var exchanges = !string.IsNullOrEmpty(cashCollect.ExchangeRate) ? Convert.ToDouble(cashCollect.ExchangeRate.ToString().Replace(".", ",")) : (double?)null;
                 if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
@@ -246,7 +246,7 @@ namespace ActionForce.Office.Controllers
         }
 
 
-        
+
         [AllowAnonymous]
         public ActionResult Sale(int? locationId)
         {
@@ -838,7 +838,7 @@ namespace ActionForce.Office.Controllers
 
                             SaleExchangeRate = exchangerate,
                             ToCashID = cashi.ID,
-                            
+
                             ToAmount = (isCash.Amount * isCash.SaleExchangeRate),
                             ToCurrency = currencyi,
                             Date = isCash.Date,
@@ -885,10 +885,10 @@ namespace ActionForce.Office.Controllers
                             {
                             }
                         }
-                        
+
 
                         Db.SaveChanges();
-                        
+
                         var cashaction = Db.CashActions.FirstOrDefault(x => x.CashID == isKasao && x.LocationID == isCash.LocationID && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
                         var cashactioni = Db.CashActions.FirstOrDefault(x => x.CashID == isKasa && x.LocationID == isCash.LocationID && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
                         if (cashaction != null)
@@ -997,7 +997,7 @@ namespace ActionForce.Office.Controllers
                         isCash.UpdateIP = OfficeHelper.GetIPAddress();
 
                         Db.SaveChanges();
-                        
+
                         OfficeHelper.AddCashAction(isCash.FromCashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
                         OfficeHelper.AddCashAction(isCash.ToCashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, -1 * isCash.ToAmount, 0, isCash.ToCurrency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
 
@@ -1256,7 +1256,7 @@ namespace ActionForce.Office.Controllers
                         result.Message = $"{amount} {currency} tutarındaki kasa açılış fişi güncellenemedi : {ex.Message}";
                         OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "CashOpen", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
-                    
+
                 }
             }
 
@@ -1289,7 +1289,7 @@ namespace ActionForce.Office.Controllers
                 var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 var exchanges = cashOpen.ExchangeRate;
-                
+
                 var isKasa = cash.ID;
 
                 var isOpen = Db.DocumentCashOpen.FirstOrDefault(x => x.LocationID == cashOpen.LocationID && x.CashID == cash.ID && x.ActionTypeID == cashOpen.ActinTypeID);
@@ -1325,7 +1325,7 @@ namespace ActionForce.Office.Controllers
                             UpdateIP = isOpen.UpdateIP,
                             EnvironmentID = isOpen.EnvironmentID
                         };
-                        
+
                         isOpen.Amount = amount;
                         isOpen.Description = cashOpen.Description;
                         isOpen.ExchangeRate = exchanges != null ? Convert.ToDouble(cashOpen.ExchangeRate.ToString().Replace(".", ",")) : currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
@@ -2213,7 +2213,7 @@ namespace ActionForce.Office.Controllers
 
                         OfficeHelper.AddCashAction(isCash.CashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
 
-                        
+
 
                         result.IsSuccess = true;
                         result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki {isCash.Quantity} adet bilet satış iadesi başarı ile iptal edildi";
@@ -2763,7 +2763,7 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddCashBankTransfer(NewCashBankTransfer cashTransfer, HttpPostedFileBase documentFile)
         {
-            Result<CashActions> result = new Result<CashActions>()
+            Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()
             {
                 IsSuccess = false,
                 Message = string.Empty,
@@ -2794,116 +2794,146 @@ namespace ActionForce.Office.Controllers
                     docDate = Convert.ToDateTime(cashTransfer.DocumentDate).Date;
                 }
 
-                
+
                 var cash = OfficeHelper.GetCash(cashTransfer.LocationID, cashTransfer.Currency);
-                // tahsilat eklenir.
                 var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
 
-                var isOpen = Db.DocumentBankTransfer.FirstOrDefault(x => x.ReferenceCode == cashTransfer.ReferenceCode && x.StatusID == 1);
-                if (isOpen == null)
-                {
-                    try
-                    {
-                        var balance = Db.GetCashBalance(location.LocationID, cash.ID).FirstOrDefault().Value;
-                        if (balance >= amount)
-                        {
-                            DocumentBankTransfer newCashColl = new DocumentBankTransfer();
 
-                            newCashColl.ActionTypeID = actType.ID;
-                            newCashColl.ActionTypeName = actType.Name;
-                            newCashColl.Amount = amount;
-                            newCashColl.Commission = commision;
-                            newCashColl.FromCashID = cash.ID;
-                            newCashColl.Currency = currency;
-                            newCashColl.Date = docDate;
-                            newCashColl.Description = cashTransfer.Description;
-                            newCashColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "BT");
-                            newCashColl.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
-                            newCashColl.ToBankAccountID = fromPrefix == "B" ? fromID : (int?)null;
-                            newCashColl.IsActive = true;
-                            newCashColl.LocationID = cashTransfer.LocationID;
-                            newCashColl.OurCompanyID = location.OurCompanyID;
-                            newCashColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
-                            newCashColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                            newCashColl.RecordIP = OfficeHelper.GetIPAddress();
-                            newCashColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newCashColl.ExchangeRate;
-                            newCashColl.SystemCurrency = ourcompany.Currency;
-                            newCashColl.SlipNumber = cashTransfer.SlipNumber;
-                            newCashColl.SlipDate = sDatetime;
-                            newCashColl.StatusID = 1;
-                            newCashColl.EnvironmentID = 2;
-                            newCashColl.TrackingNumber = cashTransfer.TrackingNumber;
-                            newCashColl.ReferenceID = refID == true ? Convert.ToInt64(refID) : (long?)null;
-                            newCashColl.UID = Guid.NewGuid();
+                DocumentManager documentManager = new DocumentManager();
+                string path = Server.MapPath("/");
 
-                            string FileName = string.Empty;
+                BankTransfer bankTransfer = new BankTransfer();
 
-                            if (documentFile != null)
-                            {
-                                FileName = Guid.NewGuid().ToString();
-                                string ext = System.IO.Path.GetExtension(documentFile.FileName);
-                                FileName = FileName + ext;
+                bankTransfer.ActionTypeID = actType.ID;
+                bankTransfer.ActionTypeName = actType.Name;
+                bankTransfer.Amount = amount;
+                bankTransfer.Commission = commision;
+                bankTransfer.Currency = currency;
+                bankTransfer.Description = cashTransfer.Description;
+                bankTransfer.DocumentDate = docDate;
+                bankTransfer.EmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                bankTransfer.EnvironmentID = 2;
+                bankTransfer.ExchangeRate = currency == "USD" ? exchange.USDA.Value : currency == "EUR" ? exchange.EURA.Value : 1;
+                bankTransfer.FromCashID = cash.ID;
+                bankTransfer.LocationID = location.LocationID;
+                bankTransfer.OurCompanyID = location.OurCompanyID;
+                bankTransfer.SlipDate = sDatetime;
+                bankTransfer.SlipNumber = cashTransfer.SlipNumber;
+                bankTransfer.SlipPath = Server.MapPath("/");
+                bankTransfer.TimeZone = location.Timezone.Value;
+                bankTransfer.ToBankID = fromPrefix == "B" ? fromID : (int?)null;
+                bankTransfer.UID = Guid.NewGuid();
 
-                                if (documentFile != null && documentFile.ContentLength > 0)
-                                {
-                                    try
-                                    {
-                                        documentFile.SaveAs(Path.Combine(Server.MapPath("../Document/Bank"), FileName));
-                                        newCashColl.SlipDocument = FileName;
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                    }
-                                }
-                            }
-                            List<string> varmi = Db.DocumentBankTransfer.Select(x => (string)x.ReferenceCode).ToList();
 
-                            string rndNumber = location.OurCompanyID.ToString() + DateTime.Now.ToString("yy");
-                            Random rnd = new Random();
-                            for (int i = 1; i < 6; i++)
-                            {
-                                rndNumber += rnd.Next(0, 9).ToString();
-                            }
-                            if (!varmi.Contains((string)rndNumber))
-                            {
-                                newCashColl.ReferenceCode = rndNumber;
-                            }
-                            else
-                            {
-                                for (int i = 1; i < 6; i++)
-                                {
-                                    rndNumber += rnd.Next(0, 9).ToString();
-                                }
-                                newCashColl.ReferenceCode = rndNumber;
-                            }
+                result = documentManager.AddBankTransfer(bankTransfer, documentFile, model.Authentication);
 
 
 
-                            Db.DocumentBankTransfer.Add(newCashColl);
-                            Db.SaveChanges();
+                //var isOpen = Db.DocumentBankTransfer.FirstOrDefault(x => x.ReferenceCode == cashTransfer.ReferenceCode && x.StatusID == 1);
+                //if (isOpen == null)
+                //{
+                //    try
+                //    {
+                //        var balance = Db.GetCashBalance(location.LocationID, cash.ID).FirstOrDefault().Value;
+                //        if (balance >= amount)
+                //        {
+                //            DocumentBankTransfer newCashColl = new DocumentBankTransfer();
 
-                            
-                            result.IsSuccess = true;
-                            result.Message = "Havale / EFT başarı ile eklendi";
+                //            newCashColl.ActionTypeID = actType.ID;
+                //            newCashColl.ActionTypeName = actType.Name;
+                //            newCashColl.Amount = amount;
+                //            newCashColl.Commission = commision;
+                //            newCashColl.FromCashID = cash.ID;
+                //            newCashColl.Currency = currency;
+                //            newCashColl.Date = docDate;
+                //            newCashColl.Description = cashTransfer.Description;
+                //            newCashColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "BT");
+                //            newCashColl.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                //            newCashColl.ToBankAccountID = fromPrefix == "B" ? fromID : (int?)null;
+                //            newCashColl.IsActive = true;
+                //            newCashColl.LocationID = cashTransfer.LocationID;
+                //            newCashColl.OurCompanyID = location.OurCompanyID;
+                //            newCashColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
+                //            newCashColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                //            newCashColl.RecordIP = OfficeHelper.GetIPAddress();
+                //            newCashColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newCashColl.ExchangeRate;
+                //            newCashColl.SystemCurrency = ourcompany.Currency;
+                //            newCashColl.SlipNumber = cashTransfer.SlipNumber;
+                //            newCashColl.SlipDate = sDatetime;
+                //            newCashColl.StatusID = 1;
+                //            newCashColl.EnvironmentID = 2;
+                //            newCashColl.TrackingNumber = cashTransfer.TrackingNumber;
+                //            newCashColl.ReferenceID = refID == true ? Convert.ToInt64(refID) : (long?)null;
+                //            newCashColl.UID = Guid.NewGuid();
 
-                            // log atılır
-                            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", newCashColl.ID.ToString(), "Cash", "BankTransfer", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newCashColl);
-                        }
-                        else
-                        {
-                            result.Message = $"Kasa bakiyesi { amount } { currency } tutar için yeterli değildir. Kullanılabilir bakiye { balance } { currency } tutardır.";
-                            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "BankTransfer", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                        }
+                //            string FileName = string.Empty;
+
+                //            if (documentFile != null)
+                //            {
+                //                FileName = Guid.NewGuid().ToString();
+                //                string ext = System.IO.Path.GetExtension(documentFile.FileName);
+                //                FileName = FileName + ext;
+
+                //                if (documentFile != null && documentFile.ContentLength > 0)
+                //                {
+                //                    try
+                //                    {
+                //                        documentFile.SaveAs(Path.Combine(Server.MapPath("../Document/Bank"), FileName));
+                //                        newCashColl.SlipDocument = FileName;
+                //                    }
+                //                    catch (Exception ex)
+                //                    {
+                //                    }
+                //                }
+                //            }
+                //            List<string> varmi = Db.DocumentBankTransfer.Select(x => (string)x.ReferenceCode).ToList();
+
+                //            string rndNumber = location.OurCompanyID.ToString() + DateTime.Now.ToString("yy");
+                //            Random rnd = new Random();
+                //            for (int i = 1; i < 6; i++)
+                //            {
+                //                rndNumber += rnd.Next(0, 9).ToString();
+                //            }
+                //            if (!varmi.Contains((string)rndNumber))
+                //            {
+                //                newCashColl.ReferenceCode = rndNumber;
+                //            }
+                //            else
+                //            {
+                //                for (int i = 1; i < 6; i++)
+                //                {
+                //                    rndNumber += rnd.Next(0, 9).ToString();
+                //                }
+                //                newCashColl.ReferenceCode = rndNumber;
+                //            }
 
 
-                    }
-                    catch (Exception ex)
-                    {
 
-                        result.Message = $"Havale / EFT eklenemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "BankTransfer", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                    }
-                }
+                //            Db.DocumentBankTransfer.Add(newCashColl);
+                //            Db.SaveChanges();
+
+
+                //            result.IsSuccess = true;
+                //            result.Message = "Havale / EFT başarı ile eklendi";
+
+                //            // log atılır
+                //            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", newCashColl.ID.ToString(), "Cash", "BankTransfer", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newCashColl);
+                //        }
+                //        else
+                //        {
+                //            result.Message = $"Kasa bakiyesi { amount } { currency } tutar için yeterli değildir. Kullanılabilir bakiye { balance } { currency } tutardır.";
+                //            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "BankTransfer", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                //        }
+
+
+                //    }
+                //    catch (Exception ex)
+                //    {
+
+                //        result.Message = $"Havale / EFT eklenemedi : {ex.Message}";
+                //        OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "BankTransfer", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                //    }
+                //}
 
 
             }
@@ -3006,7 +3036,7 @@ namespace ActionForce.Office.Controllers
                             string FileName = string.Empty;
                             if (cashTransfer.StatusID == 2)
                             {
-                                
+
 
                                 if (documentFile != null)
                                 {
@@ -3045,8 +3075,8 @@ namespace ActionForce.Office.Controllers
 
                                 Db.SaveChanges();
 
-                                
-                                
+
+
 
 
                                 var cashaction = Db.CashActions.FirstOrDefault(x => x.CashID == isOpen.FromCashID && x.LocationID == isOpen.LocationID && x.CashActionTypeID == isOpen.ActionTypeID && x.ProcessID == isOpen.ID && x.ProcessDate == isDate && x.DocumentNumber == isOpen.DocumentNumber);
@@ -3118,7 +3148,7 @@ namespace ActionForce.Office.Controllers
                                     }
                                     OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", newCashExp.ID.ToString(), "Cash", "Expense", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                                 }
-                                
+
 
                                 var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentBankTransfer>(self, isOpen, OfficeHelper.getIgnorelist());
                                 OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isOpen.ID.ToString(), "Cash", "BankTransfer", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
@@ -3234,7 +3264,7 @@ namespace ActionForce.Office.Controllers
                                     OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", newCashExp.ID.ToString(), "Cash", "Expense", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                                 }
 
-                                
+
 
 
                                 var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentBankTransfer>(self, isOpen, OfficeHelper.getIgnorelist());
@@ -3260,7 +3290,7 @@ namespace ActionForce.Office.Controllers
 
                                 Db.SaveChanges();
 
-                                
+
                                 result.IsSuccess = true;
                                 result.Message = $"{isOpen.ID} ID li {amount} {currency} tutarındaki havale eft işlemi başarı ile muhasebe takip etti";
 
@@ -3307,7 +3337,7 @@ namespace ActionForce.Office.Controllers
                                 Db.SaveChanges();
 
                                 OfficeHelper.AddBankAction(isOpen.LocationID, null, isOpen.ToBankAccountID, null, isOpen.ActionTypeID, isOpen.Date, isOpen.ActionTypeName, isOpen.ID, isOpen.Date, isOpen.DocumentNumber, isOpen.Description, 1, isOpen.NetAmount, 0, isOpen.Currency, null, null, isOpen.RecordEmployeeID, isOpen.RecordDate);
-                                
+
 
                                 result.IsSuccess = true;
                                 result.Message = $"{isOpen.ID} ID li {amount} {currency} tutarındaki havale eft işlemi başarı ile muhasebe onayladı";
@@ -3644,7 +3674,7 @@ namespace ActionForce.Office.Controllers
                         {
                             OfficeHelper.AddCashAction(newCashColl.FromCashID, newCashColl.LocationID, newCashColl.ToEmployeeID, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, -1, 0, newCashColl.Amount, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
                         }
-                        
+
                         //maaş hesap işlemi
                         OfficeHelper.AddEmployeeAction(newCashColl.ToEmployeeID, newCashColl.LocationID, newCashColl.ActionTypeID, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.Description, 1, newCashColl.Amount, 0, newCashColl.Currency, null, null, cashSalary.SalaryType, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
 
@@ -3816,10 +3846,10 @@ namespace ActionForce.Office.Controllers
                         }
                         else if (isBank != null && cashCollect.BankAccountID == 0)
                         {
-                            OfficeHelper.AddCashAction(isCash.FromCashID, isCash.LocationID, isCash.ToEmployeeID, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0,  -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+                            OfficeHelper.AddCashAction(isCash.FromCashID, isCash.LocationID, isCash.ToEmployeeID, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
                             OfficeHelper.AddBankAction(isCash.LocationID, null, isCash.FromBankAccountID, isCash.ToEmployeeID, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
                         }
-                        
+
 
                         var empaction = Db.EmployeeCashActions.FirstOrDefault(x => x.EmployeeID == isEmp && x.ActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate);
 
@@ -3839,7 +3869,7 @@ namespace ActionForce.Office.Controllers
                         result.IsSuccess = true;
                         result.Message = "Maaş Avans ödemesi başarı ile güncellendi";
 
-                        
+
                         var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentSalaryPayment>(self, isCash, OfficeHelper.getIgnorelist());
                         OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isCash.ID.ToString(), "Cash", "SalaryPayment", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 

@@ -6,6 +6,18 @@
 
 @section style{
     <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
+    <style>
+        img.thumb {
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            padding: 1px;
+            height: 30px;
+        }
+
+        img.thumb:hover {
+            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+        }
+    </style>
 }
 
 <div class="content-header">
@@ -589,7 +601,7 @@
                                                     {
                                                         <tr>
                                                             <td style="width:240px; padding:1px !important;">
-                                                                <select class="form-control" id="BankAccountID" name="BankAccountID" required>
+                                                                <select class="form-control" id="BankAccountID@(item.ID)" name="BankAccountID" required>
                                                                     @foreach (var bank in Model.BankAccountList.Where(x => x.AccountTypeID == 1))
                                                                     {
                                                                         <option value="@bank.ID" @(item.BankAccountID == bank.ID ? "selected" : "")>@($"{bank.BranchName} ({bank.Currency})")</option>
@@ -598,29 +610,29 @@
                                                             </td>
 
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E7TRLA" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
+                                                                <input type="text" id="E7TRLA@(item.ID)" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E7TRLCO" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="0,00">
+                                                                <input type="text" id="E7TRLCO@(item.ID)" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="0,00">
                                                             </td>
 
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E7TRLN" class="form-control font-weight-bold" value="@(item.SlipNumber)">
+                                                                <input type="text" id="E7TRLN@(item.ID)" class="form-control font-weight-bold" value="@(item.SlipNumber)">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="slipDate" name="E7TRLD" class="form-control font-weight-bold shiftdate" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
+                                                                <input type="text" id="E7TRLD@(item.ID)" name="E7TRLD" class="form-control font-weight-bold shiftdate" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E7TRLR" class="form-control font-weight-bold hourfull" value="@(item.SlipDate != null ? item.SlipDate?.TimeOfDay.ToString("HH\\:mm\\:00") :Model.CurrentDayResult.Date.ToString("00:00:00") )">
+                                                                <input type="text" id="E7TRLR@(item.ID)" class="form-control font-weight-bold hourfull" value="@(item.SlipDate != null ? item.SlipDate?.TimeOfDay.ToString("HH\\:mm\\:00") :Model.CurrentDayResult.Date.ToString("00:00:00") )">
                                                             </td>
                                                             <td style="width:200px; padding:1px !important;">
-                                                                <input id="E7TRLF" name="E7TRLF" class="form-control" type="file" />
+                                                                <input id="E7TRLF@(item.ID)" class="form-control" type="file" />
                                                             </td>
                                                             <td class="text-right" style="padding:1px !important;">
-                                                                <input type="text" name="E7TRLDE" class="form-control" value="@(item.Description)">
+                                                                <input type="text" id="E7TRLDE@(item.ID)" class="form-control" value="@(item.Description)">
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
-                                                                <a href="#" class="text-primary">
+                                                                <a href="#" class="text-primary" onclick="AddBankTransfer(@Model.CurrentDayResult.ID,@item.ID);">
                                                                     <i data-feather="plus-square"></i>
                                                                 </a>
                                                             </td>
@@ -684,6 +696,8 @@
                                                             <td>
                                                                 <input id="salaryID" type="hidden" value="@salary.ID" />
                                                                 <input id="paymentID" type="hidden" value="@payment.ID" />
+                                                                <input id="S8TYPEID@(emp)" type="hidden" value="32" />
+                                                                <input id="S9TYPEID@(emp)" type="hidden" value="31" />
                                                                 <strong> @salary.FullName</strong>
                                                             </td>
 
@@ -693,30 +707,30 @@
 
 
                                                             <td class="bd-l" style="width:60px; padding:1px !important;">
-                                                                <input type="text" name="S8SD" class="form-control hour font-weight-bold" placeholder="00:00" value="@(salary.Duration != null ? salary.Duration.Value.ToString("hh\\:mm"):"00:00")" />
+                                                                <input type="text" id="S8SD@(emp)" class="form-control hour font-weight-bold" placeholder="00:00" value="@(salary.Duration != null ? salary.Duration.Value.ToString("hh\\:mm"):"00:00")" />
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="S8SU" class="form-control money text-right" placeholder="0,00" value="@(salary.UnitHourPrice?.ToString("N2"))" />
+                                                                <input type="text" id="S8SU@(emp)" class="form-control money text-right" placeholder="0,00" value="@(salary.UnitHourPrice?.ToString("N2"))" />
                                                             </td>
                                                             <td class="text-right" style="width:120px; padding:1px !important;">
-                                                                <input type="text" name="S8ST" class="form-control money text-right  font-weight-bold text-info" placeholder="0,00" value="@((salary.UnitHourPrice * salary.HourQuantity)?.ToString("N2"))" />
+                                                                <input type="text" id="S8ST@(emp)" class="form-control money text-right  font-weight-bold text-info" placeholder="0,00" value="@((salary.UnitHourPrice * salary.HourQuantity)?.ToString("N2"))" />
                                                             </td>
                                                             <td class="table-light" style="padding:1px !important;">
-                                                                <input type="text" name="S8SD" class="form-control money" placeholder="" value="@(salary.Description)" />
+                                                                <input type="text" id="S8SDE@(emp)" class="form-control" placeholder="" value="@(salary.Description)" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
-                                                                <a href="#" class="text-primary">
+                                                                <a href="#" class="text-primary" onclick="AddSalaryEarn(@Model.CurrentDayResult.ID,@salary.ID, @emp);">
                                                                     <i data-feather="plus-square"></i>
                                                                 </a>
                                                             </td>
                                                             <td class="bd-l" style="width:120px; padding:1px !important;">
-                                                                <input type="text" name="S9PA" class="form-control money text-right font-weight-bold text-danger" placeholder="0,00" value="@(payment.Amount?.ToString("N2"))" />
+                                                                <input type="text" id="S9PAMOUNT@(emp)" class="form-control money text-right font-weight-bold text-danger" placeholder="0,00" value="@(payment.Amount?.ToString("N2"))" />
                                                             </td>
                                                             <td class="" style="padding:1px !important;">
-                                                                <input type="text" name="S9PD" class="form-control money" placeholder="" value="@(payment.Description)" />
+                                                                <input type="text" id="S9PDESC@(emp)" class="form-control" placeholder="" value="@(payment.Description)" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
-                                                                <a href="#" class="text-primary">
+                                                                <a href="#" class="text-primary" onclick="AddSalaryPayment(@Model.CurrentDayResult.ID, @payment.ID, @emp);">
                                                                     <i data-feather="plus-square"></i>
                                                                 </a>
                                                             </td>
@@ -764,29 +778,30 @@
                                                     {
                                                         <tr>
                                                             <td style="width:160px; padding:1px !important;">
-                                                                <input type="text" name="E13TRLN" class="form-control font-weight-bold" value="@(cr.SlipNumber)">
+                                                                <input type="text" id="E13TRLN" name="E13TRLN" class="form-control font-weight-bold" value="@(cr.SlipNumber)">
+                                                                <input id="E13TYPEID" type="hidden" value="33" />
                                                             </td>
                                                             <td style="width:120px; padding:1px !important;">
-                                                                <input type="text" id="crSlipDate" name="E13TRLD" class="form-control shiftdate font-weight-bold" value="@(cr.SlipDate != null ? cr.SlipDate.Value.ToString("yyyy-MM-dd") : Model.CurrentDayResult.Date.ToString("yyyy-MM-dd"))">
+                                                                <input type="text" id="E13TRLD" name="E13TRLD" class="form-control shiftdate font-weight-bold" value="@(cr.Date != null ? cr.Date.Value.ToString("yyyy-MM-dd") : Model.CurrentDate.DateKey.ToString("yyyy-MM-dd"))">
                                                             </td>
                                                             <td style="width:120px; padding:1px !important;">
-                                                                <input type="text" id="crSlipTime" name="E13TRLT" class="form-control hourfull font-weight-bold" value="@(cr.SlipDate != null ? cr.SlipDate.Value.TimeOfDay.ToString() : Model.CurrentDayResult.Date.TimeOfDay.ToString())">
+                                                                <input type="text" id="E13TRLT" name="E13TRLT" class="form-control hourfull font-weight-bold" value="@(cr.SlipDate != null ? cr.SlipDate.Value.TimeOfDay.ToString() : Model.CurrentDayResult.Date.TimeOfDay.ToString())">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E13TRLA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(cr.Amount?.ToString("N2"))">
+                                                                <input type="text" id="E13TRLA" name="E13TRLA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(cr.Amount?.ToString("N2"))">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E13TRLTA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(cr.SlipTotalAmount?.ToString("N2"))">
+                                                                <input type="text" id="E13TRLTA" name="E13TRLTA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(cr.SlipTotalAmount?.ToString("N2"))">
                                                             </td>
                                                             <td style="width:200px; padding:1px !important;">
                                                                 <input id="E13TRLF" name="E13TRLF" class="form-control" type="file" />
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" name="E13TRLDE" class="form-control" value="@(cr.Description)">
+                                                                <input type="text" id="E13TRLDE" name="E13TRLDE" class="form-control" value="@(cr.Description)">
                                                             </td>
 
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
-                                                                <a href="#" class="text-primary">
+                                                                <a href="#" class="text-primary" onclick="AddCashRecorder(@Model.CurrentDayResult.ID);">
                                                                     <i data-feather="plus-square"></i>
                                                                 </a>
                                                             </td>
@@ -839,7 +854,7 @@
                                                             <input id="ResultFile" name="ResultFile" class="form-control" type="file" />
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" name="E14TRLDE" class="form-control">
+                                                            <input type="text" id="FileDescription" name="FileDescription" class="form-control">
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary" onclick="AddResultDocument(@Model.CurrentDayResult.ID);">
@@ -962,34 +977,8 @@
 
     </script>
 
-    <script>
+    <script src="~/assets/js/ActionForceScript.js"></script>
 
-        function AddResultDocument(id) {
-
-            var fotodata = new FormData();
-
-            jQuery.each(jQuery('#ResultFile')[0].files, function (i, file) {
-                fotodata.append('file', file);
-            });
-            fotodata.append('id', id);
-
-            $.ajax({
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST', 
-                url: "/Result/AddResultDocument",
-                data: fotodata,
-
-            }).done(function (d) {
-
-                $("#ResultFiles").html(d);
-
-
-            });
-        }
-    </script>
 
     @if (Model.Result != null) //
     {

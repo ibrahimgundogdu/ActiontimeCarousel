@@ -756,6 +756,7 @@
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="SlipDate" Type="datetime" />
           <Property Name="SlipNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="SlipPath" Type="nvarchar" MaxLength="50" />
           <Property Name="SlipDocument" Type="nvarchar" MaxLength="50" />
           <Property Name="TrackingNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="StatusID" Type="int" />
@@ -900,6 +901,7 @@
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DocumentNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="Date" Type="date" StoreGeneratedPattern="Computed" />
           <Property Name="SlipDate" Type="datetime" />
           <Property Name="NetAmount" Type="float" />
           <Property Name="TotalAmount" Type="float" />
@@ -915,6 +917,7 @@
           <Property Name="IsActive" Type="bit" />
           <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
           <Property Name="ActionTypeID" Type="int" />
+          <Property Name="SlipPath" Type="nvarchar" MaxLength="50" />
           <Property Name="SlipFile" Type="nvarchar" MaxLength="50" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
@@ -3140,6 +3143,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentBankTransfer' does
           <Property Name="Commission" Type="float" />
           <Property Name="NetAmount" Type="float" />
           <Property Name="TrackingNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="SlipPath" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashCollections' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4753,7 +4757,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentBankTransfer].[SlipDate] AS [SlipDate], 
     [VDocumentBankTransfer].[Commission] AS [Commission], 
     [VDocumentBankTransfer].[NetAmount] AS [NetAmount], 
-    [VDocumentBankTransfer].[TrackingNumber] AS [TrackingNumber]
+    [VDocumentBankTransfer].[TrackingNumber] AS [TrackingNumber], 
+    [VDocumentBankTransfer].[SlipPath] AS [SlipPath]
     FROM [dbo].[VDocumentBankTransfer] AS [VDocumentBankTransfer]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentCashCollections" EntityType="Self.VDocumentCashCollections" store:Type="Views" store:Schema="dbo">
@@ -9957,6 +9962,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="SlipPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VDocumentBankTransfer">
           <Key>
@@ -10004,6 +10010,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Commission" Type="Double" />
           <Property Name="NetAmount" Type="Double" />
           <Property Name="TrackingNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SlipPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VEmployeeCashActions">
           <Key>
@@ -10061,6 +10068,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="UID" Type="Guid" />
           <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SlipPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" annotation:StoreGeneratedPattern="Computed" Precision="0" />
         </EntityType>
         <EntityType Name="VDayResultDocuments">
           <Key>
@@ -14000,6 +14009,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentBankTransfer">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentBankTransfer">
               <MappingFragment StoreEntitySet="DocumentBankTransfer">
+                <ScalarProperty Name="SlipPath" ColumnName="SlipPath" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
@@ -14040,6 +14050,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentBankTransfer">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentBankTransfer">
               <MappingFragment StoreEntitySet="VDocumentBankTransfer">
+                <ScalarProperty Name="SlipPath" ColumnName="SlipPath" />
                 <ScalarProperty Name="TrackingNumber" ColumnName="TrackingNumber" />
                 <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
                 <ScalarProperty Name="Commission" ColumnName="Commission" />
@@ -14120,6 +14131,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentCashRecorderSlip">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentCashRecorderSlip">
               <MappingFragment StoreEntitySet="DocumentCashRecorderSlip">
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="SlipPath" ColumnName="SlipPath" />
                 <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />

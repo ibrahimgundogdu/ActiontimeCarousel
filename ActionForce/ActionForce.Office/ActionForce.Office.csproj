@@ -312,6 +312,7 @@
     <Content Include="assets\img\placehold.jpg" />
     <Content Include="assets\img\prof1.png" />
     <Content Include="assets\img\prof2.png" />
+    <Content Include="assets\js\ActionForceScript.js" />
     <Content Include="assets\js\calendar-events.js" />
     <Content Include="assets\js\chart.chartjs.js" />
     <Content Include="assets\js\chart.flot.js" />
@@ -2298,7 +2299,10 @@
     <Compile Include="Models\CashActionModel.cs" />
     <Compile Include="Models\CashCollection.cs" />
     <Compile Include="Models\DefinitionControlModel.cs" />
+    <Compile Include="Models\Document\BankTransfer.cs" />
     <Compile Include="Models\Document\DocumentManager.cs" />
+    <Compile Include="Models\Document\SalaryEarn.cs" />
+    <Compile Include="Models\Document\SalaryPayment.cs" />
     <Compile Include="Models\SalaryControlModel.cs" />
     <Compile Include="Models\CashControlModel.cs" />
     <Compile Include="Models\FilterModel.cs" />
@@ -2512,6 +2516,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Document\Bank\" />
+    <Folder Include="Document\CashRecorder\" />
     <Folder Include="Document\Exchange\" />
     <Folder Include="Document\Expense\" />
     <Folder Include="icons\" />

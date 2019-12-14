@@ -148,7 +148,7 @@ namespace ActionForce.Office.Controllers
                 model.BankActions = Db.VBankActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date).ToList();
                 model.EmployeeActions = Db.VEmployeeCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ProcessDate == model.DayResult.Date).ToList();
 
-                model.CashRecorderSlips = Db.DocumentCashRecorderSlip.Where(x => x.LocationID == model.DayResult.LocationID && x.SlipDate == model.DayResult.Date).ToList();
+                model.CashRecorderSlips = Db.DocumentCashRecorderSlip.Where(x => x.LocationID == model.DayResult.LocationID && x.Date == model.DayResult.Date).ToList();
                 model.DayResultDocuments = Db.VDayResultDocuments.Where(x => x.LocationID == model.DayResult.LocationID && x.Date == model.DayResult.Date).ToList();
 
                 model.CurrencyList = OfficeHelper.GetCurrency();
@@ -167,9 +167,9 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public PartialViewResult AddResultDocument(long? id, HttpPostedFileBase file)
+        public PartialViewResult AddResultDocument(long? id, HttpPostedFileBase file, int? typeid, string description)
         {
-            Result<CashActions> result = new Result<CashActions>()
+            Result<DayResultDocuments> result = new Result<DayResultDocuments>()
             {
                 IsSuccess = false,
                 Message = string.Empty,
@@ -178,13 +178,219 @@ namespace ActionForce.Office.Controllers
 
             ResultControlModel model = new ResultControlModel();
 
-           
+            DocumentManager documentManager = new DocumentManager();
+            string path = Server.MapPath("/");
+            result = documentManager.AddResultDocument(id, file, path, typeid, description, model.Authentication);
+
+            var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
+
+            model.DayResultDocuments = Db.VDayResultDocuments.Where(x => x.LocationID == dayresult.LocationID && x.Date == dayresult.Date).ToList();
 
             TempData["result"] = result;
 
-           
-
             return PartialView("_PartialResultFiles", model);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult AddCashRecorder(long? id, HttpPostedFileBase file, int? typeid, string description, string slipnumber, string slipdate, string sliptime, string slipamount, string sliptotalmount)
+        {
+            Result<DocumentCashRecorderSlip> result = new Result<DocumentCashRecorderSlip>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            ResultControlModel model = new ResultControlModel();
+
+            DocumentManager documentManager = new DocumentManager();
+            string path = Server.MapPath("/");
+            result = documentManager.AddCashRecorder(id, file, path, typeid, description, slipnumber, slipdate, sliptime, slipamount, sliptotalmount, model.Authentication);
+
+            var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
+
+            model.CashRecorderSlips = Db.DocumentCashRecorderSlip.Where(x => x.LocationID == dayresult.LocationID && x.Date == dayresult.Date).ToList();
+
+            TempData["result"] = result;
+
+            return PartialView("_PartialCashRecorder", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult AddSalaryEarn(long? id, int? itemid, int? typeid, int? employeeid, string description, string duration, string unithprice, string totalamount)
+        {
+            Result<DocumentSalaryEarn> result = new Result<DocumentSalaryEarn>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            ResultControlModel model = new ResultControlModel();
+            DocumentManager documentManager = new DocumentManager();
+
+            var actType = Db.CashActionType.FirstOrDefault(x => x.ID == typeid);
+            var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
+            var item = Db.DayResultItemList.FirstOrDefault(x => x.ID == itemid);
+            var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
+            TimeSpan? sure = Convert.ToDateTime(duration + ":00").TimeOfDay;
+            var unitPrice = Convert.ToDouble(unithprice.Replace(".", ""));
+
+
+            SalaryEarn earn = new SalaryEarn();
+
+            earn.ActionTypeID = typeid.Value;
+            earn.ActionTypeName = actType.Name;
+            earn.Currency = item.Currency;
+            earn.Description = description;
+            earn.DocumentDate = dayresult.Date;
+            earn.EmployeeID = employeeid.Value;
+            earn.EnvironmentID = 2;
+            earn.LocationID = dayresult.LocationID;
+            earn.OurCompanyID = location.OurCompanyID;
+            earn.QuantityHour = sure.Value.TotalMinutes / 60;
+            earn.UnitPrice = unitPrice;
+            earn.ResultID = id;
+            earn.TimeZone = location.Timezone;
+            earn.TotalAmount = earn.QuantityHour * earn.UnitPrice.Value;
+            earn.UID = Guid.NewGuid();
+
+
+            result = documentManager.AddSalaryEarn(earn, model.Authentication);
+
+            model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
+            model.EmployeeActions = Db.VEmployeeCashActions.Where(x => x.LocationID == dayresult.LocationID && x.ProcessDate == dayresult.Date).ToList();
+
+            TempData["result"] = result;
+
+            return PartialView("_PartialEmployeeSalary", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult AddSalaryPayment(long? id, int? itemid, int? typeid, int? employeeid, string description, string amount)
+        {
+            Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            ResultControlModel model = new ResultControlModel();
+            DocumentManager documentManager = new DocumentManager();
+
+            var actType = Db.CashActionType.FirstOrDefault(x => x.ID == typeid);
+            var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
+            var item = Db.DayResultItemList.FirstOrDefault(x => x.ID == itemid);
+            var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
+            var payamount = Convert.ToDouble(amount.Replace(".", ""));
+            var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+            var cash = OfficeHelper.GetCash(dayresult.LocationID, location.Currency);
+
+
+            SalaryPayment payment = new SalaryPayment();
+
+            payment.ActionTypeID = typeid.Value;
+            payment.ActionTypeName = actType.Name;
+            payment.Currency = item.Currency;
+            payment.Description = description;
+            payment.DocumentDate = dayresult.Date;
+            payment.EmployeeID = employeeid.Value;
+            payment.EnvironmentID = 2;
+            payment.LocationID = dayresult.LocationID;
+            payment.OurCompanyID = location.OurCompanyID;
+            payment.ResultID = id;
+            payment.TimeZone = location.Timezone;
+            payment.Amount = payamount;
+            payment.UID = Guid.NewGuid();
+            payment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA.Value : payment.Currency == "EUR" ? exchange.EURA.Value : 1;
+            payment.FromCashID = cash.ID;
+            payment.SalaryTypeID = 2;
+            payment.TimeZone = location.Timezone;
+
+
+            result = documentManager.AddSalaryPayment(payment, model.Authentication);
+
+            model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
+            model.EmployeeActions = Db.VEmployeeCashActions.Where(x => x.LocationID == dayresult.LocationID && x.ProcessDate == dayresult.Date).ToList();
+
+            TempData["result"] = result;
+
+            return PartialView("_PartialEmployeeSalary", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult AddBankTransfer(long? id, HttpPostedFileBase file, long? itemid,int bankid, string description, string slipnumber, string slipdate, string sliptime, string comission, string amount)
+        {
+            Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            ResultControlModel model = new ResultControlModel();
+
+            DocumentManager documentManager = new DocumentManager();
+
+            var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 30);
+            var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
+            var item = Db.DayResultItemList.FirstOrDefault(x => x.ID == itemid);
+            var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
+            var transamount = Convert.ToDouble(amount.Replace(".", ""));
+            var transcommission = Convert.ToDouble(comission.Replace(".", ""));
+            var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+            var cash = OfficeHelper.GetCash(dayresult.LocationID, location.Currency);
+            DateTime? slipDatetime = null;
+
+            if (!string.IsNullOrEmpty(slipdate) && !string.IsNullOrEmpty(sliptime))
+            {
+                DateTime slipDate = Convert.ToDateTime(slipdate).Date;
+                slipDatetime = slipDate.Add(Convert.ToDateTime(sliptime).TimeOfDay);
+            }
+            
+
+            BankTransfer bankTransfer = new BankTransfer();
+
+            bankTransfer.ActionTypeID = actType.ID;
+            bankTransfer.ActionTypeName = actType.Name;
+            bankTransfer.Amount = transamount;
+            bankTransfer.Commission = transcommission;
+            bankTransfer.Currency = location.Currency;
+            bankTransfer.Description = description;
+            bankTransfer.DocumentDate = dayresult.Date;
+            bankTransfer.EmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+            bankTransfer.EnvironmentID = 2;
+            bankTransfer.ExchangeRate = bankTransfer.Currency == "USD" ? exchange.USDA.Value : bankTransfer.Currency == "EUR" ? exchange.EURA.Value : 1;
+            bankTransfer.FromCashID = cash.ID;
+            bankTransfer.LocationID = location.LocationID;
+            bankTransfer.OurCompanyID = location.OurCompanyID;
+            bankTransfer.SlipDate = slipDatetime;
+            bankTransfer.SlipNumber = slipnumber;
+            bankTransfer.SlipPath = Server.MapPath("/");
+            bankTransfer.TimeZone = location.Timezone.Value;
+            bankTransfer.ToBankID = bankid;
+            bankTransfer.UID = Guid.NewGuid();
+            bankTransfer.ResultID = dayresult.ID;
+
+            result = documentManager.AddBankTransfer(bankTransfer, file, model.Authentication);
+
+            model.BankTransfers = Db.VDocumentBankTransfer.Where(x => x.LocationID == dayresult.LocationID && x.Date == dayresult.Date).ToList();
+
+            TempData["result"] = result;
+
+            return PartialView("_PartialBankTransfer", model);
+        }
+
+
+
+
+
+
+
     }
 }
