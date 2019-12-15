@@ -1,0 +1,63 @@
+﻿@model CashRecorderControlModel
+
+<div id="OffCanvasAddCashRecorder" class="off-canvas off-canvas-overlay off-canvas-right wd-400" data-backdrop="static">
+    <a href="#" class="close"><i data-feather="x"></i></a>
+
+    <div class="pd-25 ht-100p tx-13">
+        @using (Html.BeginForm("AddCashRecorder", "Cash", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+        <div>
+            <h4>Yazarkasa Fişleri</h4>
+            <p class="tx-color-03">yazarkasa fiş giriş işlemi yapar.</p>
+            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
+            <div class="form-group">
+                <label>Lokasyon</label>
+                <select class="form-control" id="LocationID" name="LocationID" required>
+                    @foreach (var item in Model.LocationList)
+                    {
+                        <option value="@item.LocationID">@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tarih</label>
+                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+            </div>
+            <div class="form-group">
+                <label>Net Tutar</label>
+                <input id="NetAmount" name="NetAmount" type="text" class="form-control" placeholder="Net Tutar" required>
+            </div>
+            <div class="form-group">
+                <label>Toplam Tutar</label>
+                <input id="TotalAmount" name="TotalAmount" type="text" class="form-control" placeholder="Toplam Tutar" required>
+            </div>
+            <div class="form-group">
+                <label>Para Birimi</label>
+                <select class="form-control" id="Currency" name="Currency" required>
+                    @foreach (var item in Model.CurrencyList)
+                    {
+                        <option value="@item.Code">@($"{item.Code} ({item.Sign})")</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Fiş Numarası</label>
+                <input id="SlipNumber" name="SlipNumber" type="text" class="form-control" placeholder="Fiş Numarası">
+            </div>
+            <div class="form-group">
+                <label>Döküman</label>
+                <input type="file" name="documentFile" id="documentFile" style="width: 100%;" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Fiş Tarih</label>
+                <input id="SlipDate" name="SlipDate" type="text" class="form-control" placeholder="Fiş Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+            </div>
+            <button class="btn btn-primary btn-block">Fiş Ekle</button>
+        </div>
+
+        }
+
+    </div>
+</div>
+

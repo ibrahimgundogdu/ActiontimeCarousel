@@ -227,6 +227,7 @@ namespace ActionForce.Entity
         public virtual DbSet<VEmployeeCashActions> VEmployeeCashActions { get; set; }
         public virtual DbSet<DocumentCashRecorderSlip> DocumentCashRecorderSlip { get; set; }
         public virtual DbSet<VDayResultDocuments> VDayResultDocuments { get; set; }
+        public virtual DbSet<VDocumentCashRecorderSlip> VDocumentCashRecorderSlip { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
