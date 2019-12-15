@@ -1075,6 +1075,188 @@ namespace ActionForce.Office.Controllers
         }
 
 
-        
+
+        public ActionResult Current(int? employeeid)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.EmployeeID = employeeid != null ? employeeid : Db.Employee.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).EmployeeID;
+                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateTime.Now.Date;
+                model.Filters = filterModel;
+            }
+
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.CurrentEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.Filters.EmployeeID);
+
+            model.EmployeeActionList = Db.VEmployeeCashActions.Where(x => x.EmployeeID == model.Filters.EmployeeID && x.ProcessDate >= model.Filters.DateBegin && x.ProcessDate <= model.Filters.DateEnd).OrderBy(x => x.ProcessDate).ToList();
+
+            var balanceData = Db.VEmployeeCashActions.Where(x => x.EmployeeID == model.Filters.EmployeeID && x.ProcessDate < model.Filters.DateBegin).ToList();
+            if (balanceData != null && balanceData.Count > 0)
+            {
+                List<TotalModel> headerTotals = new List<TotalModel>();
+
+
+                if (model.CurrentCompany.Currency == "USD")
+                {
+                    headerTotals.Add(new TotalModel()
+                    {
+                        Currency = "USD",
+                        Type = "Salary",
+                        Total = balanceData.Where(x => x.Currency == "USD").Sum(x => x.Amount) ?? 0
+                    });
+                }
+                else
+                {
+                    headerTotals.Add(new TotalModel()
+                    {
+                        Currency = "TRL",
+                        Type = "Salary",
+                        Total = balanceData.Where(x => x.Currency == "TRL").Sum(x => x.Amount) ?? 0
+                    });
+
+                    headerTotals.Add(new TotalModel()
+                    {
+                        Currency = "USD",
+                        Type = "Salary",
+                        Total = balanceData.Where(x => x.Currency == "USD").Sum(x => x.Amount) ?? 0
+                    });
+
+                    headerTotals.Add(new TotalModel()
+                    {
+                        Currency = "EUR",
+                        Type = "Salary",
+                        Total = balanceData.Where(x => x.Currency == "EUR").Sum(x => x.Amount) ?? 0
+                    });
+                }
+
+                model.HeaderTotals = headerTotals;
+            }
+            else
+            {
+                List<TotalModel> headerTotals = new List<TotalModel>();
+
+                if (model.CurrentCompany.Currency == "USD")
+                {
+                    headerTotals.Add(new TotalModel()
+                    {
+                        Currency = "USD",
+                        Type = "Salary",
+                        Total = 0
+                    });
+                }
+                else
+                {
+                    headerTotals.Add(new TotalModel()
+                    {
+                        Currency = "TRL",
+                        Type = "Salary",
+                        Total = 0
+                    });
+
+                    headerTotals.Add(new TotalModel()
+                    {
+                        Currency = "USD",
+                        Type = "Salary",
+                        Total = 0
+                    });
+
+                    headerTotals.Add(new TotalModel()
+                    {
+                        Currency = "EUR",
+                        Type = "Salary",
+                        Total = 0
+                    });
+                }
+
+                model.HeaderTotals = headerTotals;
+            }
+
+
+            List<TotalModel> footerTotals = new List<TotalModel>(); // ilk başta header ile footer aynı olur ekranda foreach içinde footer değişir. 
+
+            if (model.CurrentCompany.Currency == "USD")
+            {
+                footerTotals.Add(new TotalModel()
+                {
+                    Currency = "USD",
+                    Type = "Salary",
+                    Total = model.HeaderTotals.FirstOrDefault(x => x.Currency == "USD").Total
+                });
+            }
+            else
+            {
+                footerTotals.Add(new TotalModel()
+                {
+                    Currency = "TRL",
+                    Type = "Salary",
+                    Total = model.HeaderTotals.FirstOrDefault(x => x.Currency == "TRL").Total
+                });
+
+
+
+                footerTotals.Add(new TotalModel()
+                {
+                    Currency = "USD",
+                    Type = "Salary",
+                    Total = model.HeaderTotals.FirstOrDefault(x => x.Currency == "USD").Total
+                });
+
+
+
+                footerTotals.Add(new TotalModel()
+                {
+                    Currency = "EUR",
+                    Type = "Salary",
+                    Total = model.HeaderTotals.FirstOrDefault(x => x.Currency == "EUR").Total
+                });
+            }
+
+            
+
+           
+
+            model.FooterTotals = footerTotals;
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult FilterCurrent(int? employeeid, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.EmployeeID = employeeid;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("Current", "Action");
+        }
+
     }
 }

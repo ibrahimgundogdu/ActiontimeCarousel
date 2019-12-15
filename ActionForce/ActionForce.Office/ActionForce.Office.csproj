@@ -2530,6 +2530,7 @@
     <Content Include="Views\CashRecorder\Detail.cshtml" />
     <Content Include="Views\CashRecorder\_PartialAddCashRecorderMenu.cshtml" />
     <Content Include="Views\CashRecorder\_PartialDocumentForms.cshtml" />
+    <Content Include="Views\Salary\Current.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

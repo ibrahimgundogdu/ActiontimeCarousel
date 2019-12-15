@@ -14,9 +14,9 @@
             height: 30px;
         }
 
-        img.thumb:hover {
-            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
-        }
+            img.thumb:hover {
+                box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+            }
     </style>
 }
 
@@ -654,12 +654,10 @@
                                         <div class="card-header d-flex align-items-center justify-content-between">
                                             <h6 class="mg-b-0">Ücret Hakediş / Ödeme İşlemleri</h6>
                                             <div class="d-flex tx-18">
-                                                <div class="wd-30 ht30 text-center" style="width:30px;height:30px;">
-                                                    <div id="Loading" style="display:none;">
-                                                        <img src="~/images/Pulse.gif" />
-                                                    </div>
-                                                </div>
-
+                                               
+                                                <a class="link-03 tx-12" id="Loading" style="display:none;">
+                                                    Yükleniyor... &nbsp;&nbsp;
+                                                </a>
                                                 <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
                                                 <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
                                             </div>
@@ -701,15 +699,15 @@
                                                                 <strong> @salary.FullName</strong>
                                                             </td>
 
-                                                           
+
                                                             <td class="bd-l" style="width:60px; padding:1px !important;">
-                                                                <input type="text" id="S8SD@(emp)" class="form-control hour font-weight-bold" placeholder="00:00" value="@(salary.Duration != null ? salary.Duration.Value.ToString("hh\\:mm"):"00:00")" readonly/>
+                                                                <input type="text" id="S8SD@(emp)" class="form-control hour font-weight-bold" placeholder="00:00" value="@(salary.Duration != null ? salary.Duration.Value.ToString("hh\\:mm"):"00:00")" readonly />
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="S8SU@(emp)" class="form-control money text-right" placeholder="0,00" value="@(salary.UnitHourPrice?.ToString("N2"))" readonly/>
+                                                                <input type="text" id="S8SU@(emp)" class="form-control money text-right" placeholder="0,00" value="@(salary.UnitHourPrice?.ToString("N2"))" readonly />
                                                             </td>
                                                             <td class="text-right" style="width:120px; padding:1px !important;">
-                                                                <input type="text" id="S8ST@(emp)" class="form-control money text-right  font-weight-bold text-info" placeholder="0,00" value="@((salary.UnitHourPrice * salary.HourQuantity)?.ToString("N2"))" readonly/>
+                                                                <input type="text" id="S8ST@(emp)" class="form-control money text-right  font-weight-bold text-info" placeholder="0,00" value="@((salary.UnitHourPrice * salary.HourQuantity)?.ToString("N2"))" readonly />
                                                             </td>
                                                             <td class="table-light" style="padding:1px !important;">
                                                                 <input type="text" id="S8SDE@(emp)" class="form-control" placeholder="" value="@(salary.Description)" />

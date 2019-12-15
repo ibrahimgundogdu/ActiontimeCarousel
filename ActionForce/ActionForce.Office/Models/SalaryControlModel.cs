@@ -11,10 +11,13 @@ namespace ActionForce.Office
         public IEnumerable<VDocumentSalaryEarn> SalaryEarn { get; set; }
         public IEnumerable<VDocumentSalaryPayment> SalaryPayment { get; set; }
         public IEnumerable<EmployeeSalary> UnitPrice { get; set; }
+        public Employee CurrentEmployee { get; set; }
+        public IEnumerable<VEmployeeCashActions> EmployeeActionList { get; set; }
+        public IEnumerable<Employee> EmployeeList { get; set; }
+
 
         public IEnumerable<Cash> CashList { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
-        public IEnumerable<Employee> EmployeeList { get; set; }
         public IEnumerable<FromAccountModel> FromList { get; set; }
         public IEnumerable<Currency> CurrencyList { get; set; }
         public IEnumerable<BankAccount> BankAccountList { get; set; }
@@ -32,6 +35,10 @@ namespace ActionForce.Office
         public VDocumentSalaryPayment SalaryDetail { get; set; }
         public IEnumerable<ApplicationLog> History { get; set; }
         public EmployeeSalary EmployeeHour { get; set; }
+
+
+        public IEnumerable<TotalModel> HeaderTotals { get; set; }
+        public IEnumerable<TotalModel> FooterTotals { get; set; }
 
     }
 }
