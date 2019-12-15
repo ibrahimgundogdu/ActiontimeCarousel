@@ -42,7 +42,7 @@ namespace ActionForce.Office
         public DateList CurrentDate { get; set; }
         public Result<DayResult> Result { get; set; }
 
-        
+
         public string TodayDateCode { get; set; }
         public string CurrentDateCode { get; set; }
         public string NextDateCode { get; set; }

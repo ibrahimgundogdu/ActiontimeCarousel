@@ -31,17 +31,17 @@
 
                 @foreach (var sale in Model.CashActions.Where(x => typeids.Contains(x.CashActionTypeID.Value)).OrderByDescending(x => x.RecordDate))
                 {
-                <tr>
-                    <td class="tx-sm-13 bold">@sale.ID</td>
-                    <td class="tx-sm-13">@sale.ProcessName</td>
-                    <td class="tx-sm-13">@(sale.ActionDate?.ToShortDateString())</td>
-                    <td class="tx-sm-13">@sale.DocumentNumber</td>
-                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(sale.Amount?.ToString("N2"))</td>
-                    <td class="tx-sm-13">@sale.Currency</td>
-                    <td class="tx-sm-13">@sale.Description</td>
-                    <td class="tx-sm-13">@sale.RecordDate</td>
+                    <tr>
+                        <td class="tx-sm-13 bold">@sale.ID</td>
+                        <td class="tx-sm-13">@sale.ProcessName</td>
+                        <td class="tx-sm-13">@(sale.ActionDate?.ToShortDateString())</td>
+                        <td class="tx-sm-13">@sale.DocumentNumber</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(sale.Amount?.ToString("N2"))</td>
+                        <td class="tx-sm-13">@sale.Currency</td>
+                        <td class="tx-sm-13">@sale.Description</td>
+                        <td class="tx-sm-13">@sale.RecordDate</td>
 
-                </tr>
+                    </tr>
 
                     totaltrl = totaltrl + sale.Amount;
                     currency = sale.Currency;
@@ -59,4 +59,18 @@
             </tfoot>
         </table>
     </div>
+}
+
+@if (Model.Result != null) //
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
 }

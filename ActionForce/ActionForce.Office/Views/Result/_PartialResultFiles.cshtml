@@ -18,19 +18,19 @@
         <tbody>
             @foreach (var sale in Model.DayResultDocuments.OrderBy(x => x.RecordDate))
             {
-            <tr>
-                <td class="tx-sm-13 bold">@sale.ID</td>
-                <td class="tx-sm-13">@sale.TypeName</td>
-                <td class="tx-sm-13">@sale.Date</td>
-                <td class="tx-sm-13">@(sale.Description)</td>
-                <td class="tx-sm-13">
-                    <a target="_blank" href="@($"/{sale.FilePath}/{sale.FileName}")">
-                        <img class="thumb" src="@($"/{sale.FilePath}/{sale.FileName}")" alt="@(sale.FileName)">
-                    </a>
-                </td>
-                <td class="tx-sm-13">@sale.IsActive</td>
-                <td class="tx-sm-13">@sale.RecordDate</td>
-            </tr>
+                <tr>
+                    <td class="tx-sm-13 bold">@sale.ID</td>
+                    <td class="tx-sm-13">@sale.TypeName</td>
+                    <td class="tx-sm-13">@sale.Date</td>
+                    <td class="tx-sm-13">@(sale.Description)</td>
+                    <td class="tx-sm-13">
+                        <a target="_blank" href="@($"/{sale.FilePath}/{sale.FileName}")">
+                            <img class="thumb" src="@($"/{sale.FilePath}/{sale.FileName}")" alt="@(sale.FileName)">
+                        </a>
+                    </td>
+                    <td class="tx-sm-13">@sale.IsActive</td>
+                    <td class="tx-sm-13">@sale.RecordDate</td>
+                </tr>
             }
 
         </tbody>
@@ -38,3 +38,16 @@
     </table>
 </div>
 
+@if (Model.Result != null) //
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
+}

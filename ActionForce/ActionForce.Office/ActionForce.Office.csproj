@@ -340,6 +340,7 @@
     <Content Include="Global.asax" />
     <Content Include="images\login.png" />
     <Content Include="images\loginback.png" />
+    <Content Include="images\Pulse.gif" />
     <Content Include="lib\animate.css\animate.min.css" />
     <Content Include="lib\bootstrap-tagsinput\bootstrap-tagsinput-typeahead.css" />
     <Content Include="lib\bootstrap-tagsinput\bootstrap-tagsinput.css" />

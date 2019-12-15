@@ -38,23 +38,23 @@
         <tbody>
             @foreach (var item in Model.BankTransfers.OrderByDescending(x => x.RecordDate))
             {
-            <tr>
-                <td class="tx-sm-13 bold">@item.ID</td>
-                <td class="tx-sm-13">@item.ActionTypeName</td>
-                <td class="tx-sm-13">@(item.Date?.ToShortDateString())</td>
-                <td class="tx-sm-13">@(item.DocumentNumber)</td>
-                <td class="tx-sm-13">@(item.BankAccountName)</td>
-                <td class="tx-sm-13">@(item.SlipDate?.ToString())</td>
-                <td class="tx-sm-13">@(item.SlipNumber)</td>
-                <td class="tx-sm-13">@(item.ReferenceCode)</td>
-                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.Amount?.ToString("N2"))</td>
-                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.Commission?.ToString("N2"))</td>
-                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.NetAmount?.ToString("N2"))</td>
-                <td class="tx-sm-13">@item.Currency</td>
-                <td class="tx-sm-13">@item.StatusName</td>
-                <td class="tx-sm-13">@item.RecordDate</td>
+                <tr>
+                    <td class="tx-sm-13 bold">@item.ID</td>
+                    <td class="tx-sm-13">@item.ActionTypeName</td>
+                    <td class="tx-sm-13">@(item.Date?.ToShortDateString())</td>
+                    <td class="tx-sm-13">@(item.DocumentNumber)</td>
+                    <td class="tx-sm-13">@(item.BankAccountName)</td>
+                    <td class="tx-sm-13">@(item.SlipDate?.ToString())</td>
+                    <td class="tx-sm-13">@(item.SlipNumber)</td>
+                    <td class="tx-sm-13">@(item.ReferenceCode)</td>
+                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.Amount?.ToString("N2"))</td>
+                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.Commission?.ToString("N2"))</td>
+                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.NetAmount?.ToString("N2"))</td>
+                    <td class="tx-sm-13">@item.Currency</td>
+                    <td class="tx-sm-13">@item.StatusName</td>
+                    <td class="tx-sm-13">@item.RecordDate</td>
 
-            </tr>
+                </tr>
 
                 total = total + item.Amount;
                 totalcom = totalcom + item.Commission;
@@ -78,3 +78,16 @@
     </table>
 </div>
 
+@if (Model.Result != null) //
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
+}

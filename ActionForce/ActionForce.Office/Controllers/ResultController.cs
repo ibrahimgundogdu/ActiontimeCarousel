@@ -185,6 +185,7 @@ namespace ActionForce.Office.Controllers
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
 
             model.DayResultDocuments = Db.VDayResultDocuments.Where(x => x.LocationID == dayresult.LocationID && x.Date == dayresult.Date).ToList();
+            model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
 
             TempData["result"] = result;
 
@@ -211,6 +212,7 @@ namespace ActionForce.Office.Controllers
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
 
             model.CashRecorderSlips = Db.DocumentCashRecorderSlip.Where(x => x.LocationID == dayresult.LocationID && x.Date == dayresult.Date).ToList();
+            model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
 
             TempData["result"] = result;
 
@@ -239,32 +241,11 @@ namespace ActionForce.Office.Controllers
             var unitPrice = Convert.ToDouble(unithprice.Replace(".", ""));
             var totalAmount = Convert.ToDouble(totalamount.Replace(".", ""));
 
-
-            SalaryEarn earn = new SalaryEarn();
-
-            earn.ActionTypeID = typeid.Value;
-            earn.ActionTypeName = actType.Name;
-            earn.Currency = item.Currency;
-            earn.Description = description;
-            earn.DocumentDate = dayresult.Date;
-            earn.EmployeeID = employeeid.Value;
-            earn.EnvironmentID = 2;
-            earn.LocationID = dayresult.LocationID;
-            earn.OurCompanyID = location.OurCompanyID;
-            earn.QuantityHour = (double)(sure.Value.TotalMinutes / (double)60);
-            earn.UnitPrice = unitPrice;
-            earn.ResultID = id;
-            earn.TimeZone = location.Timezone;
-            earn.TotalAmount = totalAmount;
-            earn.UID = Guid.NewGuid();
-            earn.SystemQuantityHour = item.SystemHourQuantity;
-            earn.SystemTotalAmount = item.SystemAmount;
-            earn.SystemUnitPrice = item.UnitHourPrice;
-
-            result = documentManager.AddSalaryEarn(earn, model.Authentication);
+            var issuccess = OfficeHelper.CalculateSalaryEarn(id, employeeid.Value, dayresult.Date, dayresult.LocationID, model.Authentication);
 
             model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
             model.EmployeeActions = Db.VEmployeeCashActions.Where(x => x.LocationID == dayresult.LocationID && x.ProcessDate == dayresult.Date).ToList();
+            model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
 
             TempData["result"] = result;
 
@@ -287,7 +268,6 @@ namespace ActionForce.Office.Controllers
 
             var actType = Db.CashActionType.FirstOrDefault(x => x.ID == typeid);
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
-            var item = Db.DayResultItemList.FirstOrDefault(x => x.ID == itemid);
             var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
             var payamount = Convert.ToDouble(amount.Replace(".", ""));
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
@@ -298,7 +278,7 @@ namespace ActionForce.Office.Controllers
 
             payment.ActionTypeID = typeid.Value;
             payment.ActionTypeName = actType.Name;
-            payment.Currency = item.Currency;
+            payment.Currency = location.Currency;
             payment.Description = description;
             payment.DocumentDate = dayresult.Date;
             payment.EmployeeID = employeeid.Value;
@@ -319,6 +299,7 @@ namespace ActionForce.Office.Controllers
 
             model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
             model.EmployeeActions = Db.VEmployeeCashActions.Where(x => x.LocationID == dayresult.LocationID && x.ProcessDate == dayresult.Date).ToList();
+            model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message};
 
             TempData["result"] = result;
 
@@ -383,6 +364,7 @@ namespace ActionForce.Office.Controllers
             result = documentManager.AddBankTransfer(bankTransfer, file, model.Authentication);
 
             model.BankTransfers = Db.VDocumentBankTransfer.Where(x => x.LocationID == dayresult.LocationID && x.Date == dayresult.Date).ToList();
+            model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
 
             TempData["result"] = result;
 

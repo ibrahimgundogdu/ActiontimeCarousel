@@ -272,23 +272,34 @@ namespace ActionForce.Office
                         Exchange newexchange = new Exchange();
 
                         var item = newExchange.items.FirstOrDefault();
-                        newexchange.Date = processDate;
-                        newexchange.EURA = Convert.ToDouble(item.TP_DK_EUR_A.Replace(".", ","));
-                        newexchange.EURS = Convert.ToDouble(item.TP_DK_EUR_S.Replace(".", ","));
-                        newexchange.USDA = Convert.ToDouble(item.TP_DK_USD_A.Replace(".", ","));
-                        newexchange.USDS = Convert.ToDouble(item.TP_DK_USD_S.Replace(".", ","));
 
-                        db.Exchange.Add(newexchange);
-                        db.SaveChanges();
+                        if (item != null && item.TP_DK_EUR_A != null && item.TP_DK_USD_A != null)
+                        {
+                            newexchange.Date = processDate;
+                            newexchange.EURA = Convert.ToDouble(item.TP_DK_EUR_A.Replace(".", ","));
+                            newexchange.EURS = Convert.ToDouble(item.TP_DK_EUR_S.Replace(".", ","));
+                            newexchange.USDA = Convert.ToDouble(item.TP_DK_USD_A.Replace(".", ","));
+                            newexchange.USDS = Convert.ToDouble(item.TP_DK_USD_S.Replace(".", ","));
 
-                        return newexchange;
+                            db.Exchange.Add(newexchange);
+                            db.SaveChanges();
+
+                            return newexchange;
+                        }
+                        else
+                        {
+                            return db.Exchange.OrderByDescending(x => x.Date).FirstOrDefault();
+                        }
+                        
+                    }
+                    else
+                    {
+                        return db.Exchange.OrderByDescending(x => x.Date).FirstOrDefault();
                     }
 
                 }
             }
-
-            return null;
-
+            
         }
 
         public static void AddCashAction(int? CashID, int? LocationID, int? EmployeeID, int? CashActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? RecordEmployeeID, DateTime? RecordDate)
@@ -356,7 +367,7 @@ namespace ActionForce.Office
 
                 if (dayresult != null)
                 {
-                    
+
                     List<DayResultItemList> itemlist = new List<DayResultItemList>();
 
                     var items = db.DayResultItems.ToList();
@@ -725,126 +736,128 @@ namespace ActionForce.Office
 
                             foreach (var emp in empids)
                             {
-                                var employeeschedule = empschedules.FirstOrDefault(x => x.EmployeeID == emp);
-                                var employeeshift = empshifts.FirstOrDefault(x => x.EmployeeID == emp);
-                                var hourprice = empunits.Where(x => x.EmployeeID == emp && x.Hourly > 0 && x.DateStart <= dayresult.Date).OrderByDescending(x => x.DateStart).FirstOrDefault();
+                                var calculate = CalculateSalaryEarn(dayresult.ID, emp, dayresult.Date, dayresult.LocationID, model.Authentication);
 
-                                double? durationhour = 0;
-                                double? unithour = hourprice?.Hourly ?? 0;
-                                TimeSpan? duration = null;
+                                //var employeeschedule = empschedules.FirstOrDefault(x => x.EmployeeID == emp);
+                                //var employeeshift = empshifts.FirstOrDefault(x => x.EmployeeID == emp);
+                                //var hourprice = empunits.Where(x => x.EmployeeID == emp && x.Hourly > 0 && x.DateStart <= dayresult.Date).OrderByDescending(x => x.DateStart).FirstOrDefault();
 
-                                if (employeeschedule != null && employeeshift != null)
-                                {
-                                    DateTime? starttime = employeeschedule.ShiftDateStart;
-                                    if (employeeshift.ShiftDateStart > starttime)
-                                    {
-                                        starttime = employeeshift.ShiftDateStart;
-                                    }
+                                //double? durationhour = 0;
+                                //double? unithour = hourprice?.Hourly ?? 0;
+                                //TimeSpan? duration = null;
 
-                                    DateTime? finishtime = employeeschedule.ShiftdateEnd;
-                                    if (employeeshift.ShiftDateEnd < finishtime)
-                                    {
-                                        finishtime = employeeshift.ShiftDateEnd;
-                                    }
+                                //if (employeeschedule != null && employeeshift != null)
+                                //{
+                                //    DateTime? starttime = employeeschedule.ShiftDateStart;
+                                //    if (employeeshift.ShiftDateStart > starttime)
+                                //    {
+                                //        starttime = employeeshift.ShiftDateStart;
+                                //    }
 
-                                    if (finishtime != null && starttime != null)
-                                    {
-                                        duration = (finishtime - starttime).Value;
-                                        double? durationminute = (finishtime - starttime).Value.TotalMinutes;
-                                        durationhour = (durationminute / 60);
-                                    }
-                                    
+                                //    DateTime? finishtime = employeeschedule.ShiftdateEnd;
+                                //    if (employeeshift.ShiftDateEnd < finishtime)
+                                //    {
+                                //        finishtime = employeeshift.ShiftDateEnd;
+                                //    }
 
-                                    itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
-                                    {
-                                        Amount = (durationhour * unithour),
-                                        Category = x.Category,
-                                        Currency = location.Currency,
-                                        ResultID = id,
-                                        ResultItemID = x.ID,
-                                        Quantity = 0,
-                                        SystemQuantity = 0,
-                                        Exchange = 1,
-                                        SystemAmount = (durationhour * unithour),
-                                        LocationID = location.LocationID,
-                                        Date = dayresult.Date,
-                                        EmployeeID = emp,
-                                        SystemHourQuantity = durationhour,
-                                        UnitHourPrice = unithour,
-                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
-                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
-                                        RecordIP = GetIPAddress(),
-                                        Duration = duration,
-                                        SystemDuration = duration,
-                                        HourQuantity = durationhour
+                                //    if (finishtime != null && starttime != null)
+                                //    {
+                                //        duration = (finishtime - starttime).Value;
+                                //        double? durationminute = (finishtime - starttime).Value.TotalMinutes;
+                                //        durationhour = (durationminute / 60);
+                                //    }
 
-                                    }).FirstOrDefault());
 
-                                    itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
-                                    {
-                                        Amount = 0,
-                                        Category = x.Category,
-                                        Currency = location.Currency,
-                                        ResultID = id,
-                                        ResultItemID = x.ID,
-                                        Quantity = 0,
-                                        SystemQuantity = 0,
-                                        Exchange = 1,
-                                        SystemAmount = 0,
-                                        LocationID = location.LocationID,
-                                        Date = dayresult.Date,
-                                        EmployeeID = emp,
-                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
-                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
-                                        RecordIP = GetIPAddress()
+                                //    itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
+                                //    {
+                                //        Amount = (durationhour * unithour),
+                                //        Category = x.Category,
+                                //        Currency = location.Currency,
+                                //        ResultID = id,
+                                //        ResultItemID = x.ID,
+                                //        Quantity = 0,
+                                //        SystemQuantity = 0,
+                                //        Exchange = 1,
+                                //        SystemAmount = (durationhour * unithour),
+                                //        LocationID = location.LocationID,
+                                //        Date = dayresult.Date,
+                                //        EmployeeID = emp,
+                                //        SystemHourQuantity = durationhour,
+                                //        UnitHourPrice = unithour,
+                                //        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                //        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                //        RecordIP = GetIPAddress(),
+                                //        Duration = duration,
+                                //        SystemDuration = duration,
+                                //        HourQuantity = durationhour
 
-                                    }).FirstOrDefault());
+                                //    }).FirstOrDefault());
 
-                                }
-                                else
-                                {
-                                    itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
-                                    {
-                                        Amount = 0,
-                                        Category = x.Category,
-                                        Currency = location.Currency,
-                                        ResultID = id,
-                                        ResultItemID = x.ID,
-                                        Quantity = 0,
-                                        SystemQuantity = 0,
-                                        Exchange = 1,
-                                        SystemAmount = 0,
-                                        LocationID = location.LocationID,
-                                        Date = dayresult.Date,
-                                        EmployeeID = emp,
-                                        SystemHourQuantity = 0,
-                                        UnitHourPrice = unithour,
-                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
-                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
-                                        RecordIP = GetIPAddress()
+                                //    itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
+                                //    {
+                                //        Amount = 0,
+                                //        Category = x.Category,
+                                //        Currency = location.Currency,
+                                //        ResultID = id,
+                                //        ResultItemID = x.ID,
+                                //        Quantity = 0,
+                                //        SystemQuantity = 0,
+                                //        Exchange = 1,
+                                //        SystemAmount = 0,
+                                //        LocationID = location.LocationID,
+                                //        Date = dayresult.Date,
+                                //        EmployeeID = emp,
+                                //        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                //        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                //        RecordIP = GetIPAddress()
 
-                                    }).FirstOrDefault());
+                                //    }).FirstOrDefault());
 
-                                    itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
-                                    {
-                                        Amount = 0,
-                                        Category = x.Category,
-                                        Currency = location.Currency,
-                                        ResultID = id,
-                                        ResultItemID = x.ID,
-                                        Quantity = 0,
-                                        SystemQuantity = 0,
-                                        Exchange = 1,
-                                        SystemAmount = 0,
-                                        LocationID = location.LocationID,
-                                        Date = dayresult.Date,
-                                        EmployeeID = emp,
-                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
-                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
-                                        RecordIP = GetIPAddress()
+                                //}
+                                //else
+                                //{
+                                //    itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
+                                //    {
+                                //        Amount = 0,
+                                //        Category = x.Category,
+                                //        Currency = location.Currency,
+                                //        ResultID = id,
+                                //        ResultItemID = x.ID,
+                                //        Quantity = 0,
+                                //        SystemQuantity = 0,
+                                //        Exchange = 1,
+                                //        SystemAmount = 0,
+                                //        LocationID = location.LocationID,
+                                //        Date = dayresult.Date,
+                                //        EmployeeID = emp,
+                                //        SystemHourQuantity = 0,
+                                //        UnitHourPrice = unithour,
+                                //        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                //        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                //        RecordIP = GetIPAddress()
 
-                                    }).FirstOrDefault());
-                                }
+                                //    }).FirstOrDefault());
+
+                                //    itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
+                                //    {
+                                //        Amount = 0,
+                                //        Category = x.Category,
+                                //        Currency = location.Currency,
+                                //        ResultID = id,
+                                //        ResultItemID = x.ID,
+                                //        Quantity = 0,
+                                //        SystemQuantity = 0,
+                                //        Exchange = 1,
+                                //        SystemAmount = 0,
+                                //        LocationID = location.LocationID,
+                                //        Date = dayresult.Date,
+                                //        EmployeeID = emp,
+                                //        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                //        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                //        RecordIP = GetIPAddress()
+
+                                //    }).FirstOrDefault());
+                                //}
                             }
 
 
@@ -1010,7 +1023,7 @@ namespace ActionForce.Office
                             ResultItemID = x.ID,
                             Quantity = 0,
                             SystemQuantity = 0,
-                            Exchange = (1 /exchange.USDA),
+                            Exchange = (1 / exchange.USDA),
                             SystemAmount = 0,
                             LocationID = location.LocationID,
                             Date = dayresult.Date,
@@ -1030,7 +1043,7 @@ namespace ActionForce.Office
                             ResultItemID = x.ID,
                             Quantity = 0,
                             SystemQuantity = 0,
-                            Exchange = (1 /exchange.EURA),
+                            Exchange = (1 / exchange.EURA),
                             SystemAmount = 0,
                             LocationID = location.LocationID,
                             Date = dayresult.Date,
@@ -1151,125 +1164,128 @@ namespace ActionForce.Office
 
                             foreach (var emp in empids)
                             {
-                                var employeeschedule = empschedules.FirstOrDefault(x => x.EmployeeID == emp);
-                                var employeeshift = empshifts.FirstOrDefault(x => x.EmployeeID == emp);
-                                var hourprice = empunits.Where(x => x.EmployeeID == emp && x.Hourly > 0 && x.DateStart <= dayresult.Date).OrderByDescending(x => x.DateStart).FirstOrDefault();
 
-                                double? durationhour = 0;
-                                double? unithour = hourprice?.Hourly ?? 0;
-                                TimeSpan? duration = null;
+                                var calculate = CalculateSalaryEarn(dayresult.ID, emp, dayresult.Date, dayresult.LocationID, model.Authentication);
 
-                                if (employeeschedule != null && employeeshift != null)
-                                {
-                                    DateTime? starttime = employeeschedule.ShiftDateStart;
-                                    if (employeeshift.ShiftDateStart > starttime)
-                                    {
-                                        starttime = employeeshift.ShiftDateStart;
-                                    }
+                                //var employeeschedule = empschedules.FirstOrDefault(x => x.EmployeeID == emp);
+                                //var employeeshift = empshifts.FirstOrDefault(x => x.EmployeeID == emp);
+                                //var hourprice = empunits.Where(x => x.EmployeeID == emp && x.Hourly > 0 && x.DateStart <= dayresult.Date).OrderByDescending(x => x.DateStart).FirstOrDefault();
 
-                                    DateTime? finishtime = employeeschedule.ShiftdateEnd;
-                                    if (employeeshift.ShiftDateEnd < finishtime)
-                                    {
-                                        finishtime = employeeshift.ShiftDateEnd;
-                                    }
+                                //double? durationhour = 0;
+                                //double? unithour = hourprice?.Hourly ?? 0;
+                                //TimeSpan? duration = null;
 
-                                    if (finishtime != null && starttime != null)
-                                    {
-                                        duration = (finishtime - starttime).Value;
-                                        double? durationminute = (finishtime - starttime).Value.TotalMinutes;
-                                        durationhour = (durationminute / 60);
-                                    }
+                                //if (employeeschedule != null && employeeshift != null)
+                                //{
+                                //    DateTime? starttime = employeeschedule.ShiftDateStart;
+                                //    if (employeeshift.ShiftDateStart > starttime)
+                                //    {
+                                //        starttime = employeeshift.ShiftDateStart;
+                                //    }
 
-                                    itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
-                                    {
-                                        Amount = (durationhour * hourprice.Hourly),
-                                        Category = x.Category,
-                                        Currency = location.Currency,
-                                        ResultID = id,
-                                        ResultItemID = x.ID,
-                                        Quantity = 0,
-                                        SystemQuantity = 0,
-                                        Exchange = 1,
-                                        SystemAmount = (durationhour * hourprice.Hourly),
-                                        LocationID = location.LocationID,
-                                        Date = dayresult.Date,
-                                        EmployeeID = emp,
-                                        SystemHourQuantity = durationhour,
-                                        UnitHourPrice = hourprice.Hourly,
-                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
-                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
-                                        RecordIP = GetIPAddress(),
-                                        Duration = duration,
-                                        SystemDuration = duration,
-                                        HourQuantity = durationhour
+                                //    DateTime? finishtime = employeeschedule.ShiftdateEnd;
+                                //    if (employeeshift.ShiftDateEnd < finishtime)
+                                //    {
+                                //        finishtime = employeeshift.ShiftDateEnd;
+                                //    }
 
-                                    }).FirstOrDefault());
+                                //    if (finishtime != null && starttime != null)
+                                //    {
+                                //        duration = (finishtime - starttime).Value;
+                                //        double? durationminute = (finishtime - starttime).Value.TotalMinutes;
+                                //        durationhour = (durationminute / 60);
+                                //    }
 
-                                    itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
-                                    {
-                                        Amount = 0,
-                                        Category = x.Category,
-                                        Currency = location.Currency,
-                                        ResultID = id,
-                                        ResultItemID = x.ID,
-                                        Quantity = 0,
-                                        SystemQuantity = 0,
-                                        Exchange = 1,
-                                        SystemAmount = 0,
-                                        LocationID = location.LocationID,
-                                        Date = dayresult.Date,
-                                        EmployeeID = emp,
-                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
-                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
-                                        RecordIP = GetIPAddress()
+                                //    itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
+                                //    {
+                                //        Amount = (durationhour * hourprice.Hourly),
+                                //        Category = x.Category,
+                                //        Currency = location.Currency,
+                                //        ResultID = id,
+                                //        ResultItemID = x.ID,
+                                //        Quantity = 0,
+                                //        SystemQuantity = 0,
+                                //        Exchange = 1,
+                                //        SystemAmount = (durationhour * hourprice.Hourly),
+                                //        LocationID = location.LocationID,
+                                //        Date = dayresult.Date,
+                                //        EmployeeID = emp,
+                                //        SystemHourQuantity = durationhour,
+                                //        UnitHourPrice = hourprice.Hourly,
+                                //        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                //        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                //        RecordIP = GetIPAddress(),
+                                //        Duration = duration,
+                                //        SystemDuration = duration,
+                                //        HourQuantity = durationhour
 
-                                    }).FirstOrDefault());
+                                //    }).FirstOrDefault());
 
-                                }
-                                else
-                                {
-                                    itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
-                                    {
-                                        Amount = 0,
-                                        Category = x.Category,
-                                        Currency = location.Currency,
-                                        ResultID = id,
-                                        ResultItemID = x.ID,
-                                        Quantity = 0,
-                                        SystemQuantity = 0,
-                                        Exchange = 1,
-                                        SystemAmount = 0,
-                                        LocationID = location.LocationID,
-                                        Date = dayresult.Date,
-                                        EmployeeID = emp,
-                                        SystemHourQuantity = 0,
-                                        UnitHourPrice = hourprice.Hourly,
-                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
-                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
-                                        RecordIP = GetIPAddress()
+                                //    itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
+                                //    {
+                                //        Amount = 0,
+                                //        Category = x.Category,
+                                //        Currency = location.Currency,
+                                //        ResultID = id,
+                                //        ResultItemID = x.ID,
+                                //        Quantity = 0,
+                                //        SystemQuantity = 0,
+                                //        Exchange = 1,
+                                //        SystemAmount = 0,
+                                //        LocationID = location.LocationID,
+                                //        Date = dayresult.Date,
+                                //        EmployeeID = emp,
+                                //        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                //        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                //        RecordIP = GetIPAddress()
 
-                                    }).FirstOrDefault());
+                                //    }).FirstOrDefault());
 
-                                    itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
-                                    {
-                                        Amount = 0,
-                                        Category = x.Category,
-                                        Currency = location.Currency,
-                                        ResultID = id,
-                                        ResultItemID = x.ID,
-                                        Quantity = 0,
-                                        SystemQuantity = 0,
-                                        Exchange = 1,
-                                        SystemAmount = 0,
-                                        LocationID = location.LocationID,
-                                        Date = dayresult.Date,
-                                        EmployeeID = emp,
-                                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
-                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
-                                        RecordIP = GetIPAddress()
+                                //}
+                                //else
+                                //{
+                                //    itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
+                                //    {
+                                //        Amount = 0,
+                                //        Category = x.Category,
+                                //        Currency = location.Currency,
+                                //        ResultID = id,
+                                //        ResultItemID = x.ID,
+                                //        Quantity = 0,
+                                //        SystemQuantity = 0,
+                                //        Exchange = 1,
+                                //        SystemAmount = 0,
+                                //        LocationID = location.LocationID,
+                                //        Date = dayresult.Date,
+                                //        EmployeeID = emp,
+                                //        SystemHourQuantity = 0,
+                                //        UnitHourPrice = hourprice.Hourly,
+                                //        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                //        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                //        RecordIP = GetIPAddress()
 
-                                    }).FirstOrDefault());
-                                }
+                                //    }).FirstOrDefault());
+
+                                //    itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
+                                //    {
+                                //        Amount = 0,
+                                //        Category = x.Category,
+                                //        Currency = location.Currency,
+                                //        ResultID = id,
+                                //        ResultItemID = x.ID,
+                                //        Quantity = 0,
+                                //        SystemQuantity = 0,
+                                //        Exchange = 1,
+                                //        SystemAmount = 0,
+                                //        LocationID = location.LocationID,
+                                //        Date = dayresult.Date,
+                                //        EmployeeID = emp,
+                                //        RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                //        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                //        RecordIP = GetIPAddress()
+
+                                //    }).FirstOrDefault());
+                                //}
                             }
 
 
@@ -1412,6 +1428,300 @@ namespace ActionForce.Office
                     return BankReferenceCode(OurCompanyID);
                 }
             }
+        }
+
+        public static bool CalculateSalaryEarn(long? resultid, int employeeid, DateTime? date, int? locationid, AuthenticationModel authentication)
+        {
+            bool issuccess = false;
+
+            if (employeeid > 0 && (resultid > 0 || date != null || locationid > 0))
+            {
+
+                using (ActionTimeEntities db = new ActionTimeEntities())
+                {
+                    var dayresult = db.VDayResult.FirstOrDefault(x => x.ID == resultid.Value);
+
+                    if (dayresult == null)
+                    {
+                        date = date.Value.Date;
+                        dayresult = db.VDayResult.FirstOrDefault(x => x.LocationID == locationid && x.Date == date);
+                    }
+
+
+                    if (dayresult != null)
+                    {
+                        List<DayResultItemList> itemlist = new List<DayResultItemList>();
+
+                        var items = db.DayResultItems.ToList();
+
+                        var locschedule = db.LocationSchedule.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date);
+                        var location = db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
+
+                        if (locschedule != null)
+                        {
+                            var employeeschedule = db.Schedule.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date && x.EmployeeID == employeeid);
+
+                            var employeeshift = db.EmployeeShift.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date && x.EmployeeID == employeeid);
+                            var empunits = db.EmployeeSalary.Where(x => x.EmployeeID == employeeid && x.DateStart <= dayresult.Date).ToList();
+                            var hourprice = empunits.Where(x => x.Hourly > 0 && x.DateStart <= dayresult.Date).OrderByDescending(x => x.DateStart).FirstOrDefault();
+
+                            double? durationhour = 0;
+                            double? unithour = hourprice?.Hourly ?? 0;
+                            TimeSpan? duration = null;
+
+                            if (employeeschedule != null && employeeshift != null)
+                            {
+                                DateTime? starttime = employeeschedule.ShiftDateStart;
+                                if (employeeshift.ShiftDateStart > starttime)
+                                {
+                                    starttime = employeeshift.ShiftDateStart;
+                                }
+
+                                DateTime? finishtime = employeeschedule.ShiftdateEnd;
+                                if (employeeshift.ShiftDateEnd < finishtime)
+                                {
+                                    finishtime = employeeshift.ShiftDateEnd;
+                                }
+
+                                if (finishtime != null && starttime != null)
+                                {
+                                    duration = (finishtime - starttime).Value;
+                                    double? durationminute = (finishtime - starttime).Value.TotalMinutes;
+                                    durationhour = (durationminute / 60);
+                                }
+
+                                // varmı yokmu
+                                var existsitem = db.DayResultItemList.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == employeeid && x.Date == dayresult.Date && x.ResultItemID == 8);
+                                if (existsitem != null)
+                                {
+                                    db.DayResultItemList.Remove(existsitem);
+                                    db.SaveChanges();
+                                }
+
+                                itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
+                                {
+                                    Amount = (durationhour * unithour),
+                                    Category = x.Category,
+                                    Currency = location.Currency,
+                                    ResultID = dayresult.ID,
+                                    ResultItemID = x.ID,
+                                    Quantity = 0,
+                                    SystemQuantity = 0,
+                                    Exchange = 1,
+                                    SystemAmount = (durationhour * unithour),
+                                    LocationID = location.LocationID,
+                                    Date = dayresult.Date,
+                                    EmployeeID = employeeid,
+                                    SystemHourQuantity = durationhour,
+                                    UnitHourPrice = unithour,
+                                    RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                    RecordEmployeeID = authentication.ActionEmployee.EmployeeID,
+                                    RecordIP = GetIPAddress(),
+                                    Duration = duration,
+                                    SystemDuration = duration,
+                                    HourQuantity = durationhour
+
+                                }).FirstOrDefault());
+
+                                var existsitem9 = db.DayResultItemList.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == employeeid && x.Date == dayresult.Date && x.ResultItemID == 9);
+                                if (existsitem9 != null)
+                                {
+                                    db.DayResultItemList.Remove(existsitem9);
+                                    db.SaveChanges();
+                                }
+
+                                itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
+                                {
+                                    Amount = 0,
+                                    Category = x.Category,
+                                    Currency = location.Currency,
+                                    ResultID = dayresult.ID,
+                                    ResultItemID = x.ID,
+                                    Quantity = 0,
+                                    SystemQuantity = 0,
+                                    Exchange = 1,
+                                    SystemAmount = 0,
+                                    LocationID = location.LocationID,
+                                    Date = dayresult.Date,
+                                    EmployeeID = employeeid,
+                                    RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                    RecordEmployeeID = authentication.ActionEmployee.EmployeeID,
+                                    RecordIP = GetIPAddress()
+
+                                }).FirstOrDefault());
+
+                                // maaş hakedişi dosya ve hareket olarak ekle
+
+                                var existssalaryearn = db.DocumentSalaryEarn.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == employeeid && x.Date == dayresult.Date);
+
+                                if (existssalaryearn != null)
+                                {
+
+                                    DocumentSalaryEarn self = new DocumentSalaryEarn()
+                                    {
+                                        ActionTypeID = existssalaryearn.ActionTypeID,
+                                        ActionTypeName = existssalaryearn.ActionTypeName,
+                                        Currency = existssalaryearn.Currency,
+                                        Date = existssalaryearn.Date,
+                                        Description = existssalaryearn.Description,
+                                        DocumentNumber = existssalaryearn.DocumentNumber,
+                                        EmployeeID = existssalaryearn.EmployeeID,
+                                        EnvironmentID = existssalaryearn.EnvironmentID,
+                                        ID = existssalaryearn.ID,
+                                        IsActive = existssalaryearn.IsActive,
+                                        LocationID = existssalaryearn.LocationID,
+                                        OurCompanyID = existssalaryearn.OurCompanyID,
+                                        QuantityHour = existssalaryearn.QuantityHour,
+                                        RecordDate = existssalaryearn.RecordDate,
+                                        RecordEmployeeID = existssalaryearn.RecordEmployeeID,
+                                        RecordIP = existssalaryearn.RecordIP,
+                                        ReferenceID = existssalaryearn.ReferenceID,
+                                        ResultID = existssalaryearn.ResultID,
+                                        SystemQuantityHour = existssalaryearn.SystemQuantityHour,
+                                        SystemTotalAmount = existssalaryearn.SystemTotalAmount,
+                                        SystemUnitPrice = existssalaryearn.SystemUnitPrice,
+                                        TotalAmount = existssalaryearn.TotalAmount,
+                                        UID = existssalaryearn.UID,
+                                        UnitPrice = existssalaryearn.UnitPrice,
+                                        UpdateDate = existssalaryearn.UpdateDate,
+                                        UpdateEmployee = existssalaryearn.UpdateEmployee,
+                                        UpdateIP = existssalaryearn.UpdateIP
+                                    };
+
+
+                                    existssalaryearn.QuantityHour = durationhour.Value;
+                                    existssalaryearn.SystemQuantityHour = durationhour.Value;
+                                    existssalaryearn.TotalAmount = (durationhour.Value * unithour.Value);
+                                    existssalaryearn.SystemTotalAmount = (durationhour.Value * unithour.Value);
+                                    existssalaryearn.UnitPrice = unithour;
+                                    existssalaryearn.SystemUnitPrice = unithour;
+                                    existssalaryearn.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                                    existssalaryearn.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                                    existssalaryearn.UpdateIP = OfficeHelper.GetIPAddress();
+
+                                    //log at
+                                    db.SaveChanges();
+
+                                    var empaction = db.EmployeeCashActions.FirstOrDefault(x => x.EmployeeID == employeeid && x.ActionTypeID == 32 && x.ProcessID == existssalaryearn.ID && x.ProcessDate == dayresult.Date);
+
+                                    if (empaction != null)
+                                    {
+
+                                        empaction.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                                        empaction.UpdateEmployeeID = authentication.ActionEmployee.EmployeeID;
+                                        empaction.Collection = (durationhour.Value * unithour.Value);
+                                        empaction.Payment = 0;
+
+                                        db.SaveChanges();
+
+                                    }
+
+
+                                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentSalaryEarn>(self, existssalaryearn, OfficeHelper.getIgnorelist());
+                                    OfficeHelper.AddApplicationLog("Office", "DocumentSalaryEarn", "Update", existssalaryearn.ID.ToString(), "Result", "SalaryEarn", isequal, true, $"Hakediş güncellendi", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+
+
+                                }
+                                else
+                                {
+                                    DocumentManager documentManager = new DocumentManager();
+
+                                    SalaryEarn earn = new SalaryEarn();
+
+                                    earn.ActionTypeID = 32;
+                                    earn.ActionTypeName = "Ücret Hakediş";
+                                    earn.Currency = location.Currency;
+                                    earn.DocumentDate = dayresult.Date;
+                                    earn.EmployeeID = employeeid;
+                                    earn.EnvironmentID = 2;
+                                    earn.LocationID = location.LocationID;
+                                    earn.OurCompanyID = location.OurCompanyID;
+                                    earn.QuantityHour = durationhour.Value;
+                                    earn.ResultID = dayresult.ID;
+                                    earn.SystemTotalAmount = (durationhour * unithour);
+                                    earn.SystemQuantityHour = durationhour;
+                                    earn.SystemUnitPrice = unithour;
+                                    earn.TimeZone = location.Timezone;
+                                    earn.TotalAmount = (durationhour.Value * unithour.Value);
+                                    earn.UID = Guid.NewGuid();
+                                    earn.UnitPrice = unithour;
+
+
+                                    var res = documentManager.AddSalaryEarn(earn, authentication);  // log zaten var.
+                                }
+
+                            }
+                            else
+                            {
+
+                                var existsitem8 = db.DayResultItemList.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == employeeid && x.Date == dayresult.Date && x.ResultItemID == 8);
+                                if (existsitem8 != null)
+                                {
+                                    db.DayResultItemList.Remove(existsitem8);
+                                    db.SaveChanges();
+                                }
+
+                                var existsitem9 = db.DayResultItemList.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == employeeid && x.Date == dayresult.Date && x.ResultItemID == 9);
+                                if (existsitem9 != null)
+                                {
+                                    db.DayResultItemList.Remove(existsitem9);
+                                    db.SaveChanges();
+                                }
+
+                                itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
+                                {
+                                    Amount = 0,
+                                    Category = x.Category,
+                                    Currency = location.Currency,
+                                    ResultID = dayresult.ID,
+                                    ResultItemID = x.ID,
+                                    Quantity = 0,
+                                    SystemQuantity = 0,
+                                    Exchange = 1,
+                                    SystemAmount = 0,
+                                    LocationID = location.LocationID,
+                                    Date = dayresult.Date,
+                                    EmployeeID = employeeid,
+                                    SystemHourQuantity = 0,
+                                    UnitHourPrice = unithour,
+                                    RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                    RecordEmployeeID = authentication.ActionEmployee.EmployeeID,
+                                    RecordIP = GetIPAddress()
+
+                                }).FirstOrDefault());
+
+                                itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
+                                {
+                                    Amount = 0,
+                                    Category = x.Category,
+                                    Currency = location.Currency,
+                                    ResultID = dayresult.ID,
+                                    ResultItemID = x.ID,
+                                    Quantity = 0,
+                                    SystemQuantity = 0,
+                                    Exchange = 1,
+                                    SystemAmount = 0,
+                                    LocationID = location.LocationID,
+                                    Date = dayresult.Date,
+                                    EmployeeID = employeeid,
+                                    RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                    RecordEmployeeID = authentication.ActionEmployee.EmployeeID,
+                                    RecordIP = GetIPAddress()
+
+                                }).FirstOrDefault());
+
+                                
+                            }
+                        }
+
+                        db.DayResultItemList.AddRange(itemlist);
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            return issuccess;
         }
     }
 }

@@ -663,17 +663,11 @@
                                                 <thead class="bg-gray-100">
                                                     <tr>
                                                         <th></th>
-                                                        <th colspan="3" class=" bd-l text-center font-weight-bold">Sistem Maaş Hakediş Hesabı</th>
                                                         <th colspan="5" class=" bd-l text-center font-weight-bold">(8) Lokasyon Maaş Hakediş Hesabı</th>
                                                         <th colspan="3" class=" bd-l text-center font-weight-bold">(9) Maaş Avansı Ödeme</th>
                                                     </tr>
                                                     <tr>
                                                         <th class="wd-150-f">Adı Soyadı</th>
-
-                                                        <th class="bg-gray-200 bd-l"><span>Süre</span></th>
-                                                        <th class="bg-gray-200 text-right"><span>@(Model.CurrentLocation.Currency)/Saat</span></th>
-                                                        <th class="bg-gray-200 text-right"><span>Hakediş (@(Model.CurrentLocation.Currency))</span></th>
-
 
                                                         <th class=" bd-l">Süre</th>
                                                         <th class="text-right"><span>@(Model.CurrentLocation.Currency)/Saat</span></th>
@@ -701,26 +695,22 @@
                                                                 <strong> @salary.FullName</strong>
                                                             </td>
 
-                                                            <td class="bd-l"> @(salary.SystemDuration != null ? salary.SystemDuration.Value.ToString("hh\\:mm") : "00:00")</td>
-                                                            <td class="text-right"> @(salary.UnitHourPrice?.ToString("N2"))</td>
-                                                            <td class="text-right">@((salary.UnitHourPrice * salary.SystemHourQuantity)?.ToString("N2"))</td>
-
-
+                                                           
                                                             <td class="bd-l" style="width:60px; padding:1px !important;">
-                                                                <input type="text" id="S8SD@(emp)" class="form-control hour font-weight-bold" placeholder="00:00" value="@(salary.Duration != null ? salary.Duration.Value.ToString("hh\\:mm"):"00:00")" />
+                                                                <input type="text" id="S8SD@(emp)" class="form-control hour font-weight-bold" placeholder="00:00" value="@(salary.Duration != null ? salary.Duration.Value.ToString("hh\\:mm"):"00:00")" readonly/>
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="S8SU@(emp)" class="form-control money text-right" placeholder="0,00" value="@(salary.UnitHourPrice?.ToString("N2"))" />
+                                                                <input type="text" id="S8SU@(emp)" class="form-control money text-right" placeholder="0,00" value="@(salary.UnitHourPrice?.ToString("N2"))" readonly/>
                                                             </td>
                                                             <td class="text-right" style="width:120px; padding:1px !important;">
-                                                                <input type="text" id="S8ST@(emp)" class="form-control money text-right  font-weight-bold text-info" placeholder="0,00" value="@((salary.UnitHourPrice * salary.HourQuantity)?.ToString("N2"))" />
+                                                                <input type="text" id="S8ST@(emp)" class="form-control money text-right  font-weight-bold text-info" placeholder="0,00" value="@((salary.UnitHourPrice * salary.HourQuantity)?.ToString("N2"))" readonly/>
                                                             </td>
                                                             <td class="table-light" style="padding:1px !important;">
                                                                 <input type="text" id="S8SDE@(emp)" class="form-control" placeholder="" value="@(salary.Description)" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="AddSalaryEarn(@Model.CurrentDayResult.ID,@salary.ID, @emp);">
-                                                                    <i data-feather="plus-square"></i>
+                                                                    <i data-feather="refresh-ccw"></i>
                                                                 </a>
                                                             </td>
                                                             <td class="bd-l" style="width:120px; padding:1px !important;">

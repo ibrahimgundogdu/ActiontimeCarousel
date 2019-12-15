@@ -4,7 +4,7 @@
     @Html.AntiForgeryToken()
 
     <div class="card-header d-flex align-items-center justify-content-between">
-        <h6 class="mg-b-0">@(Model.UnitSalary.FullName) <input id="EmployeeID" name="EmployeeID" value="@(Model.UnitSalary.EmployeeID)" type="hidden" /></h6>
+        <h6 class="mg-b-0">@(Model.UnitSalary?.FullName) <input id="EmployeeID" name="EmployeeID" value="@(Model.UnitSalary?.EmployeeID)" type="hidden" /></h6>
     </div>
     <div class="card-body pd-0">
         
