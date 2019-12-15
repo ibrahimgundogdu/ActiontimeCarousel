@@ -3721,6 +3721,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeCashActions' does 
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="FromCashID" Type="int" />
           <Property Name="SalaryType" Type="int" />
+          <Property Name="UnitPrice" Type="float" />
+          <Property Name="QuantityHour" Type="float" />
+          <Property Name="TotalAmount" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeSalary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5326,7 +5329,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeCashActions].[Name] AS [Name], 
     [VEmployeeCashActions].[RecorderFullName] AS [RecorderFullName], 
     [VEmployeeCashActions].[FromCashID] AS [FromCashID], 
-    [VEmployeeCashActions].[SalaryType] AS [SalaryType]
+    [VEmployeeCashActions].[SalaryType] AS [SalaryType], 
+    [VEmployeeCashActions].[UnitPrice] AS [UnitPrice], 
+    [VEmployeeCashActions].[QuantityHour] AS [QuantityHour], 
+    [VEmployeeCashActions].[TotalAmount] AS [TotalAmount]
     FROM [dbo].[VEmployeeCashActions] AS [VEmployeeCashActions]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VEmployeeSalary" EntityType="Self.VEmployeeSalary" store:Type="Views" store:Schema="dbo">
@@ -10120,6 +10126,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="FromCashID" Type="Int32" />
           <Property Name="SalaryType" Type="Int32" />
+          <Property Name="UnitPrice" Type="Double" />
+          <Property Name="QuantityHour" Type="Double" />
+          <Property Name="TotalAmount" Type="Double" />
         </EntityType>
         <EntityType Name="DocumentCashRecorderSlip">
           <Key>
@@ -14216,6 +14225,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VEmployeeCashActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeCashActions">
               <MappingFragment StoreEntitySet="VEmployeeCashActions">
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="QuantityHour" ColumnName="QuantityHour" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
                 <ScalarProperty Name="SalaryType" ColumnName="SalaryType" />
                 <ScalarProperty Name="FromCashID" ColumnName="FromCashID" />
                 <ScalarProperty Name="RecorderFullName" ColumnName="RecorderFullName" />

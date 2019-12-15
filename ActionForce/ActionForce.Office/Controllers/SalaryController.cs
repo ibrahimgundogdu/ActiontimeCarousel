@@ -1073,6 +1073,8 @@ namespace ActionForce.Office.Controllers
             model.UnitSalary = model.UnitSalaryList.OrderByDescending(x=> x.DateStart).FirstOrDefault();
             return PartialView("_PartialAddEmployeeSalary", model);
         }
+
+
         
     }
 }

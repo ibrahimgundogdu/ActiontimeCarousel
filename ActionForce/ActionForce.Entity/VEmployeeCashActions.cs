@@ -39,5 +39,8 @@ namespace ActionForce.Entity
         public string RecorderFullName { get; set; }
         public Nullable<int> FromCashID { get; set; }
         public Nullable<int> SalaryType { get; set; }
+        public Nullable<double> UnitPrice { get; set; }
+        public Nullable<double> QuantityHour { get; set; }
+        public Nullable<double> TotalAmount { get; set; }
     }
 }

@@ -108,12 +108,15 @@ function AddSalaryEarn(id, itemid, employeeid) {
         type: 'POST',
         url: "/Result/AddSalaryEarn",
         data: data,
-
+        beforeSend: function () {
+            $("#Loading").show();
+        },
     }).done(function (d) {
 
         $("#EmployeeSalary").html(d);
 
-
+    }).always(function () {
+        $("#Loading").hide();
     });
 }
 
