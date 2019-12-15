@@ -621,6 +621,9 @@
     <Compile Include="VDocumentCashPayments.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VDocumentCashRecorderSlip.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VDocumentPosCancel.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

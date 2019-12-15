@@ -134,10 +134,10 @@
 
                     </ul>
                 </li>
-                <li class="nav-item with-sub">
+                <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "CashRecorder" ? "show" : "")">
                     <a href="/Employee" class="nav-link"><i data-feather="file-text"></i> <span>Yazarkasa İşlemleri</span></a>
                     <ul>
-                        <li><a href="page-profile-view.html">01 Yazarkasa Fişleri</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "CashRecorder" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/CashRecorder">01 Yazarkasa Fişleri</a></li>
                     </ul>
                 </li>
                 <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Result" ? "show" : "")">

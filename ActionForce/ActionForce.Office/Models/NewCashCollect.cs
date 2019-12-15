@@ -250,4 +250,17 @@ namespace ActionForce.Office
         public string SerialNumber { get; set; }
 
     }
+    public class NewCashRecorder
+    {
+        public int ActinTypeID { get; set; }
+        public int LocationID { get; set; }
+        public string NetAmount { get; set; }
+        public string TotalAmount { get; set; }
+        public string Currency { get; set; }
+        public string DocumentDate { get; set; }
+        public string SlipDate { get; set; }
+        public string SlipNumber { get; set; }
+        public string SlipFile { get; set; }
+        public Guid UID { get; set; }
+    }
 }

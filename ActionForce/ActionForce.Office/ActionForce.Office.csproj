@@ -336,6 +336,22 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Document\Bank\0ecd878a-c741-457f-bd94-7f355f8171d0.jpg" />
+    <Content Include="Document\Bank\0f4dca42-8052-4b27-9561-3000df710c0b.jpg" />
+    <Content Include="Document\Bank\1ec47086-186e-4a9e-9e20-b8717df360ce.jpg" />
+    <Content Include="Document\CashRecorder\088c905f-fb05-4d2f-9720-4cc3fb92eb2e.jpeg" />
+    <Content Include="Document\CashRecorder\7417a563-f763-437a-8853-bf1048d84ce0.png" />
+    <Content Include="Document\CashRecorder\9fe48052-aa1f-4f03-a185-ea22de1e8e67.png" />
+    <Content Include="Document\CashRecorder\b78eb891-e121-4c21-b0cc-88013e20e9c0.jpeg" />
+    <Content Include="Document\CashRecorder\d11179a7-ea9e-49cf-9819-508a22e3ec45.jpg" />
+    <Content Include="Document\CashRecorder\eb22940d-1641-430f-bc33-d755e5ed2d8b.png" />
+    <Content Include="Document\CashRecorder\f88410b3-74cf-4d29-b875-da7aec98818f.jpeg" />
+    <Content Include="Document\CashRecorder\fc02d5c0-931e-4eaa-ad77-c3c1c0d2c2ea.jpg" />
+    <Content Include="Document\Exchange\03276718-8b27-4f6e-91db-14a34e5e946b.jpg" />
+    <Content Include="Document\Exchange\87a03806-5491-4cf7-bc2a-fe17df463b77.jpg" />
+    <Content Include="Document\Exchange\917526f0-0959-4679-bfd1-b9cce47b0d76.jpg" />
+    <Content Include="Document\Expense\4418fe55-7e76-477e-ba09-48f04ae1cee6.jpg" />
+    <Content Include="Document\Expense\a78d9ebd-9590-4ca6-8ddd-d32ea8065573.jpg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="images\login.png" />
@@ -2261,6 +2277,7 @@
     <Content Include="lib\typicons.font\typicons.eot" />
     <Content Include="lib\typicons.font\typicons.ttf" />
     <Content Include="lib\typicons.font\typicons.woff" />
+    <Content Include="Document\CashRecorder\60a3ef22-b203-4953-aba7-22fc8ae0070d.pdf" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -2277,6 +2294,7 @@
     <Compile Include="Controllers\BankController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CashController.cs" />
+    <Compile Include="Controllers\CashRecorderController.cs" />
     <Compile Include="Controllers\DefinitionController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FinanceController.cs" />
@@ -2295,6 +2313,7 @@
     <Compile Include="Models\AuditTrail.cs" />
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\BankActionModel.cs" />
+    <Compile Include="Models\CashRecorderControlModel.cs" />
     <Compile Include="Models\BankControlModel.cs" />
     <Compile Include="Models\CashActionModel.cs" />
     <Compile Include="Models\CashCollection.cs" />
@@ -2506,6 +2525,10 @@
     <Content Include="Views\Definition\_PartialCashRecordList.cshtml" />
     <Content Include="Views\Definition\_PartialAddPosTerminal.cshtml" />
     <Content Include="Views\Definition\_PartialPosTerminalList.cshtml" />
+    <Content Include="Views\CashRecorder\Index.cshtml" />
+    <Content Include="Views\CashRecorder\Detail.cshtml" />
+    <Content Include="Views\CashRecorder\_PartialAddCashRecorderMenu.cshtml" />
+    <Content Include="Views\CashRecorder\_PartialDocumentForms.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2515,10 +2538,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Document\Bank\" />
-    <Folder Include="Document\CashRecorder\" />
-    <Folder Include="Document\Exchange\" />
-    <Folder Include="Document\Expense\" />
     <Folder Include="icons\" />
     <Folder Include="Views\Actions\" />
     <Folder Include="Views\Base\" />
