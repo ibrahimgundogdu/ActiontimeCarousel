@@ -1,4 +1,5 @@
 ﻿using ActionForce.Entity;
+using ActionForce.Integration.UfeService;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,6 +29,8 @@ namespace ActionForce.Office.Controllers
                 _date = Convert.ToDateTime(date).Date;
                 datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
             }
+
+            var refresh = Db.SetShiftDates();
 
             model.CurrentDate = datekey;
             model.TodayDateCode = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date.ToString("yyyy-MM-dd");
@@ -69,5 +72,33 @@ namespace ActionForce.Office.Controllers
 
             return View(model);
         }
+
+
+        //OpenLocation
+
+        [HttpPost]
+        [AllowAnonymous]
+        public string OpenLocation(int? locationid, int? environmentid)
+        {
+            Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            
+            ResultControlModel model = new ResultControlModel();
+            UfeServiceClient service = new UfeServiceClient(model.Authentication.ActionEmployee.Token);
+
+            var serviceresult = service.LocationShiftStart(locationid.Value, environmentid,0,0);
+
+            string content = $"<a href='#' onclick='CloseLocation({locationid},{environmentid})'> <i class='text-info' data-feather='sun'></i></a>";
+
+            return content;
+
+
+        }
+
     }
 }

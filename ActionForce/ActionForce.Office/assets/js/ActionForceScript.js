@@ -183,7 +183,7 @@ function AddBankTransfer(id, itemid) {
     data.append('slipdate', slipdate);
     data.append('sliptime', sliptime);
     data.append('description', description);
-    
+
 
 
     $.ajax({
@@ -200,5 +200,70 @@ function AddBankTransfer(id, itemid) {
         $("#BankTransfer").html(d);
 
 
+    });
+}
+
+
+
+// shift break scripts
+
+function OpenLocation(id, envid) {
+
+    var data = new FormData();
+
+    data.append('locationid', id);
+    data.append('environmentid', envid);
+
+    console.log(id);
+    console.log(envid);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Shift/OpenLocation",
+        data: data,
+        beforeSend: function () {
+            $("#Loading").show();
+        },
+    }).done(function (d) {
+
+        $("#LocationStatus_" + id + "_2").html(d);
+
+    }).always(function () {
+        $("#Loading").hide();
+    });
+}
+
+function CloseLocation(id, envid) {
+
+
+    var data = new FormData();
+
+
+    data.append('locationid', id);
+    data.append('environmentid', envid);
+
+
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Shift/OpenLocation",
+        data: data,
+        beforeSend: function () {
+            $("#Loading").show();
+        },
+    }).done(function (d) {
+
+        $("#EmployeeSalary").html(d);
+
+    }).always(function () {
+        $("#Loading").hide();
     });
 }

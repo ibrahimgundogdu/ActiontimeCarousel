@@ -14,6 +14,7 @@ namespace ActionForce.Office
         public string EMail { get; set; }
         public string Mobile { get; set; }
         public string FotoFile { get; set; }
+        public string Token { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
         public Nullable<int> RoleGroupID { get; set; }
         public virtual OurCompany OurCompany { get; set; }

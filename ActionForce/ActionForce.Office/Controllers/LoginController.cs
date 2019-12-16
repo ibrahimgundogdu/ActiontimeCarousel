@@ -63,7 +63,8 @@ namespace ActionForce.Office.Controllers
                             RoleGroup = new ActionRoleGroup() { ID = roleGroup.ID, GroupName = roleGroup.GroupName, RoleLevel = roleGroup.RoleLevel.Value },
                             OurCompanyID = User.OurCompanyID,
                             Title = User.Title,
-                            OurCompany = ourCompany
+                            OurCompany = ourCompany,
+                            Token = User.EmployeeUID.ToString()
                         },
                         Culture = ourCompany.Culture
                     };
@@ -75,7 +76,7 @@ namespace ActionForce.Office.Controllers
                     OfficeHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, true, $"{User.Username} başarılı bir giriş yaptı.", string.Empty, DateTime.UtcNow, User.FullName, OfficeHelper.GetIPAddress(), string.Empty, authModel);
 
                     var userData = Newtonsoft.Json.JsonConvert.SerializeObject(authModel);
-                    var ticket = new FormsAuthenticationTicket(1, User.Username, DateTime.Now, DateTime.Now.AddMinutes(1440), false, userData, FormsAuthentication.FormsCookiePath);
+                    var ticket = new FormsAuthenticationTicket(2, User.Username, DateTime.Now, DateTime.Now.AddMinutes(1440), false, userData, FormsAuthentication.FormsCookiePath);
                     string hash = FormsAuthentication.Encrypt(ticket);
                     var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, hash);
 

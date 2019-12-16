@@ -670,5 +670,10 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddEmployeeAction", employeeIDParameter, locationIDParameter, actionTypeIDParameter, processNameParameter, processIDParameter, processDateParameter, processDetailParameter, directionParameter, collectionParameter, paymentParameter, currencyParameter, latitudeParameter, longitudeParameter, salaryTypeIDParameter, recordEmployeeIDParameter, recordDateParameter);
         }
+    
+        public virtual int SetShiftDates()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetShiftDates");
+        }
     }
 }
