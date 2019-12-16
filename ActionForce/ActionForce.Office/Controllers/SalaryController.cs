@@ -96,7 +96,9 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashSalary.EmployeeID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashSalary.EmployeeID.Substring(1, cashSalary.EmployeeID.Length - 1));
-                var amount = Convert.ToDouble(cashSalary.TotalAmount.Replace(".", ","));
+
+
+                //var amount = Convert.ToDouble(cashSalary.TotalAmount.Replace(".", ","));
                 var currency = cashSalary.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -119,7 +121,7 @@ namespace ActionForce.Office.Controllers
                 earn.EnvironmentID = 2;
                 earn.LocationID = location.LocationID;
                 earn.QuantityHour = (double)cashSalary.QuantityHour;
-                earn.TotalAmount = amount;
+                earn.TotalAmount = (double)((double)cashSalary.QuantityHour * (double?)cashSalary.UnitPrice);
                 earn.UID = Guid.NewGuid();
                 earn.UnitPrice = (double?)cashSalary.UnitPrice;
                 earn.TimeZone = location.Timezone;
@@ -159,7 +161,7 @@ namespace ActionForce.Office.Controllers
                 var fromPrefix = cashCollect.EmployeeID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashCollect.EmployeeID.Substring(1, cashCollect.EmployeeID.Length - 1));
 
-                var amount = Convert.ToDouble(cashCollect.TotalAmount.Replace(".", ","));
+                //var amount = Convert.ToDouble(cashCollect.TotalAmount.Replace(".", ","));
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -209,10 +211,10 @@ namespace ActionForce.Office.Controllers
 
 
                         isCash.EmployeeID = fromID;
-                        isCash.TotalAmount = amount;
-                        isCash.UnitPrice = cashCollect.UnitPrice;
+                        isCash.TotalAmount = (double)((double?)cashCollect.UnitPrice * (double)cashCollect.QuantityHour);
+                        isCash.UnitPrice = (double?)cashCollect.UnitPrice;
                         isCash.Description = cashCollect.Description;
-                        isCash.QuantityHour = cashCollect.QuantityHour;
+                        isCash.QuantityHour = (double)cashCollect.QuantityHour;
                         isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
                         isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
                         isCash.UpdateIP = OfficeHelper.GetIPAddress();
@@ -395,9 +397,17 @@ namespace ActionForce.Office.Controllers
             var fromPrefix = id.Substring(0, 1);
             var fromID = Convert.ToInt32(id.Substring(1, id.Length - 1));
 
-            string dd = Db.EmployeeSalary.FirstOrDefault(x => x.EmployeeID == fromID).Hourly?.ToString();
-
-
+            var isEmp = Db.EmployeeSalary.FirstOrDefault(x => x.EmployeeID == fromID);
+            string dd = "";
+            if (isEmp != null)
+            {
+                dd = Db.EmployeeSalary.FirstOrDefault(x => x.EmployeeID == fromID).Hourly?.ToString();
+            }
+            else
+            {
+                dd = "0";
+            }
+            
             return dd;
 
         }
@@ -445,6 +455,32 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        public ActionResult FilterSalary(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("SalaryPayment", "Salary");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult AddSalaryPayment(NewCashSalaryPayment cashSalary)
         {
             Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
@@ -474,7 +510,7 @@ namespace ActionForce.Office.Controllers
                 }
                 var cash = OfficeHelper.GetCash(cashSalary.LocationID, cashSalary.Currency);
                 // tahsilat eklenir.
-
+                var refID = string.IsNullOrEmpty(cashSalary.ReferanceID);
                 SalaryPayment payment = new SalaryPayment();
 
                 payment.ActionTypeID = actType.ID;
@@ -494,7 +530,7 @@ namespace ActionForce.Office.Controllers
                 payment.FromCashID = (int?)cashSalary.BankAccountID == 0 ? cash.ID : (int?)null;
                 payment.SalaryTypeID = cashSalary.SalaryType;
                 payment.TimeZone = location.Timezone;
-                
+                payment.ReferanceID = refID == false ? Convert.ToInt64(cashSalary.ReferanceID) : (long?)null;
 
 
                 DocumentManager documentManager = new DocumentManager();

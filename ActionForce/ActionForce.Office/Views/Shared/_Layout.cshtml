@@ -111,9 +111,11 @@
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" && this.ViewContext.RouteData.Values["action"].ToString() == "SalaryPayment" ? "class=active" : "")><a href="/Cash/SalaryPayment">05 Maaş Avans Ödemesi</a></li>
                     </ul>
                 </li>
+                @*<li class="nav-item"><a href="/Action/Bank" class="nav-link"><i data-feather="layers"></i> <span>Banka Hesap Ekstresi</span></a></li>*@
                 <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Bank" ? "show" : "")">
                     <a href="" class="nav-link"><i data-feather="credit-card"></i> <span>Banka Pos İşlemleri</span></a>
                     <ul>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Bank" && this.ViewContext.RouteData.Values["action"].ToString() == "Current" ? "class=active" : "")><a href="/Bank/Current">01 Banka Hesap Ekstresi</a></li>
                         <li class="nav-label">Tahsilatlar</li>
 
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Bank" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Bank">01 Pos Tahsilatı</a></li>

@@ -109,7 +109,7 @@ namespace ActionForce.Office.Controllers
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
                 //var cash = OfficeHelper.GetCash(posCollect.LocationID, posCollect.Currency);
-
+                var refID = string.IsNullOrEmpty(posCollect.ReferanceID);
 
                 try
                 {
@@ -136,6 +136,7 @@ namespace ActionForce.Office.Controllers
                     newPosColl.SystemCurrency = ourcompany.Currency;
                     newPosColl.EnvironmentID = 2;
                     newPosColl.BankAccountID = posCollect.BankAccountID;
+                    newPosColl.ReferenceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
                     //newPosColl.TerminalID = posTerminal.TerminalNumber != "" ? posTerminal != null ? posTerminal.TerminalNumber : "" : "";
                     newPosColl.UID = Guid.NewGuid();
 
@@ -462,6 +463,32 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        public ActionResult FilterCancel(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("PosCancel", "Bank");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult AddPosCancel(NewPosCancel posCollect)
         {
             Result<BankActions> result = new Result<BankActions>()
@@ -490,7 +517,7 @@ namespace ActionForce.Office.Controllers
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
                 //var cash = OfficeHelper.GetCash(posCollect.LocationID, posCollect.Currency);
-
+                var refID = string.IsNullOrEmpty(posCollect.ReferanceID);
 
                 try
                 {
@@ -517,6 +544,7 @@ namespace ActionForce.Office.Controllers
                     newPosColl.SystemCurrency = ourcompany.Currency;
                     newPosColl.EnvironmentID = 2;
                     newPosColl.FromBankAccountID = posCollect.BankAccountID;
+                    newPosColl.ReferenceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
                     //newPosColl.TerminalID = posTerminal.TerminalNumber != "" ? posTerminal != null ? posTerminal.TerminalNumber : "" : "";
                     newPosColl.UID = Guid.NewGuid();
 
@@ -841,6 +869,32 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        public ActionResult FilterRefund(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("PosRefund", "Bank");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult AddPosRefund(NewPosReturn posCollect)
         {
             Result<BankActions> result = new Result<BankActions>()
@@ -870,7 +924,7 @@ namespace ActionForce.Office.Controllers
                 }
                 //var cash = OfficeHelper.GetCash(posCollect.LocationID, posCollect.Currency);
 
-
+                var refID = string.IsNullOrEmpty(posCollect.ReferanceID);
                 try
                 {
                     var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
@@ -896,6 +950,7 @@ namespace ActionForce.Office.Controllers
                     newPosColl.SystemCurrency = ourcompany.Currency;
                     newPosColl.EnvironmentID = 2;
                     newPosColl.FromBankAccountID = posCollect.BankAccountID;
+                    newPosColl.ReferenceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
                     //newPosColl.TerminalID = posTerminal.TerminalNumber != "" ? posTerminal != null ? posTerminal.TerminalNumber : "" : "";
                     newPosColl.UID = Guid.NewGuid();
 
@@ -1173,6 +1228,143 @@ namespace ActionForce.Office.Controllers
             TempData["result"] = result;
 
             return RedirectToAction("PosRefund", "Bank");
+        }
+
+        [AllowAnonymous]
+        public ActionResult Current(int? locationId)
+        {
+            ActionControlModel model = new ActionControlModel();
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.LocationID = locationId != null ? locationId : Db.Location.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).LocationID;
+                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateTime.Now.Date;
+                model.Filters = filterModel;
+            }
+
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+
+            model.ActionList = Db.VCashBankActions.Where(x => x.LocationID == model.Filters.LocationID && x.ActionDate >= model.Filters.DateBegin && x.ActionDate <= model.Filters.DateEnd).OrderBy(x => x.ActionDate).ToList();
+
+            var balanceData = Db.VCashBankActions.Where(x => x.LocationID == model.Filters.LocationID && x.ActionDate < model.Filters.DateBegin).ToList();
+            if (balanceData != null && balanceData.Count > 0)
+            {
+                List<TotalModel> headerTotals = new List<TotalModel>();
+
+                headerTotals.Add(new TotalModel()
+                {
+                    Currency = "TRL",
+                    Type = "Bank",
+                    Total = balanceData.Where(x => x.Currency == "TRL" && x.Module == "Bank").Sum(x => x.CardAmount) ?? 0
+                });
+
+                headerTotals.Add(new TotalModel()
+                {
+                    Currency = "USD",
+                    Type = "Bank",
+                    Total = balanceData.Where(x => x.Currency == "USD" && x.Module == "Bank").Sum(x => x.CardAmount) ?? 0
+                });
+
+                headerTotals.Add(new TotalModel()
+                {
+                    Currency = "EUR",
+                    Type = "Bank",
+                    Total = balanceData.Where(x => x.Currency == "EUR" && x.Module == "Bank").Sum(x => x.CardAmount) ?? 0
+                });
+
+                model.HeaderTotals = headerTotals;
+            }
+            else
+            {
+                List<TotalModel> headerTotals = new List<TotalModel>();
+
+                headerTotals.Add(new TotalModel()
+                {
+                    Currency = "TRL",
+                    Type = "Bank",
+                    Total = 0
+                });
+
+                headerTotals.Add(new TotalModel()
+                {
+                    Currency = "USD",
+                    Type = "Bank",
+                    Total = 0
+                });
+
+                headerTotals.Add(new TotalModel()
+                {
+                    Currency = "EUR",
+                    Type = "Bank",
+                    Total = 0
+                });
+
+                model.HeaderTotals = headerTotals;
+            }
+
+
+            List<TotalModel> footerTotals = new List<TotalModel>(); // ilk başta header ile footer aynı olur ekranda foreach içinde footer değişir. 
+
+            footerTotals.Add(new TotalModel()
+            {
+                Currency = "TRL",
+                Type = "Bank",
+                Total = model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total
+            });
+
+            footerTotals.Add(new TotalModel()
+            {
+                Currency = "USD",
+                Type = "Bank",
+                Total = model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total
+            });
+
+            footerTotals.Add(new TotalModel()
+            {
+                Currency = "EUR",
+                Type = "Bank",
+                Total = model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total
+            });
+
+            model.FooterTotals = footerTotals;
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult Filters(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("Current", "Bank");
         }
     }
 }

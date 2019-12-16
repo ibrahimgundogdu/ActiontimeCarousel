@@ -20,7 +20,7 @@
     </nav>
 </div>
 <div class="content-body">
-    @using (Html.BeginForm("Filter", "Action", FormMethod.Post))
+    @using (Html.BeginForm("Filters", "Action", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
         <div class="form-row align-items-end">
@@ -47,7 +47,7 @@
 
 
     <div>
-        <h4 id="section2" class="mg-b-10">Cari Hesap Ekstresi</h4>
+        <h4 id="section2" class="mg-b-10">Banka Hesap Ekstresi</h4>
         <div class="table">
             <table class="table table-sm table-hover">
                 <thead>
@@ -59,16 +59,13 @@
 
                         <th></th>
                         <th></th>
-                        <th>TRL</th>
-                        <th class="text-right bg-light">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total.ToString("N2"))</th>
-
                         <th></th>
                         <th></th>
-                        <th>TRL</th>
-                        <th class="text-right bg-light">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total.ToString("N2"))</th>
 
-                        <th class="text-right bg-light">@((Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total + Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total).ToString("N2"))</th>
+                        <th class="text-right bg-warning">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total.ToString("N2"))</th>
                         <th>TRL</th>
+
+                        <th></th>
                         <th></th>
                     </tr>
                     <tr>
@@ -79,16 +76,13 @@
 
                         <th></th>
                         <th></th>
-                        <th>USD</th>
-                        <th class="text-right bg-light">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total.ToString("N2"))</th>
-
                         <th></th>
                         <th></th>
-                        <th>USD</th>
-                        <th class="text-right bg-light">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total.ToString("N2"))</th>
 
-                        <th class="text-right bg-light">@((Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total + Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total).ToString("N2"))</th>
+                        <th class="text-right bg-warning">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total.ToString("N2"))</th>
                         <th>USD</th>
+
+                        <th></th>
                         <th></th>
                     </tr>
                     <tr>
@@ -99,16 +93,13 @@
 
                         <th></th>
                         <th></th>
-                        <th>EUR</th>
-                        <th class="text-right bg-light">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total.ToString("N2"))</th>
-
                         <th></th>
                         <th></th>
-                        <th>EUR</th>
-                        <th class="text-right bg-light">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total.ToString("N2"))</th>
 
-                        <th class="text-right bg-light">@((Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total + Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total).ToString("N2"))</th>
+                        <th class="text-right bg-warning">@(Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total.ToString("N2"))</th>
                         <th>EUR</th>
+
+                        <th></th>
                         <th></th>
                     </tr>
 
@@ -119,9 +110,9 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th colspan="4" class="text-center">Nakit</th>
-                        <th colspan="4" class="text-center">Kart</th>
-                        <th class="text-center">Toplam</th>
+                        <th></th>
+                        <th colspan="2" class="text-center"></th>
+                        <th colspan="2" class="text-center">Bakiyeli</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -136,12 +127,8 @@
                         <th>Toplam</th>
                         <th>Bakiye</th>
 
-                        <th>Tahsilat</th>
-                        <th>Ödeme</th>
-                        <th>Toplam</th>
                         <th>Bakiye</th>
 
-                        <th>Bakiye</th>
                         <th>Para Br.</th>
                         <th>Kayıt Tarihi</th>
                     </tr>
@@ -154,9 +141,9 @@
                     }
 
 
-                    @foreach (var item in Model.ActionList)
+                    @foreach (var item in Model.ActionList.Where(x => x.Module == "Bank"))
                     {
-                        Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == item.Module).Total += item.Module == "Cash" ? item.CashAmount ?? 0 : item.CardAmount ?? 0;
+                        Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == item.Module).Total += item.Module == "Bank" ? item.CardAmount ?? 0 : item.CardAmount ?? 0;
 
                         <tr>
 
@@ -164,18 +151,14 @@
                             <td class="tx-sm-13">@item.ProcessDate.Value.ToShortDateString()</td>
                             <td class="tx-sm-13">@item.ProcessName</td>
                             <td class="tx-sm-13">@item.DocumentNumber</td>
-                            <td class="tx-sm-13 text-right bg-primary-light">@(item.CashCollection != null ? item.CashCollection.Value.ToString("N2") : "")</td>
-                            <td class="tx-sm-13 text-right bg-primary-light">@(item.CashPaymnet != null ? item.CashPaymnet.Value.ToString("N2") : "")</td>
-                            <td class="tx-sm-13 text-right bg-primary-light">@(item.CashAmount != null ? item.CashAmount.Value.ToString("N2") : "")</td>
-                            <td class="tx-sm-13 text-right bg-primary font-weight-bold text-white">@(Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Cash").Total.ToString("N2"))</td>
+                            <td class="tx-sm-13 text-right bg-primary-light">@(item.CardCollection != null ? item.CardCollection.Value.ToString("N2") : "")</td>
+                            <td class="tx-sm-13 text-right bg-primary-light">@(item.CardPayment != null ? item.CardPayment.Value.ToString("N2") : "")</td>
+                            <td class="tx-sm-13 text-right bg-primary-light">@(item.CardAmount != null ? item.CardAmount.Value.ToString("N2") : "")</td>
+                            <td class="tx-sm-13 text-right bg-primary font-weight-bold text-white">@((Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Bank").Total - Model.HeaderTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Bank").Total).ToString("N2"))</td>
 
-                            <td class="tx-sm-13 text-right bg-warning-light">@(item.CardCollection != null ? item.CardCollection.Value.ToString("N2") : "")</td>
-                            <td class="tx-sm-13 text-right bg-warning-light">@(item.CardPayment != null ? item.CardPayment.Value.ToString("N2") : "")</td>
-                            <td class="tx-sm-13 text-right bg-warning-light">@(item.CardAmount != null ? item.CardAmount.Value.ToString("N2") : "")</td>
-                            <td class="tx-sm-13 text-right bg-warning font-weight-bold text-white">@(Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Bank").Total.ToString("N2"))</td>
+                            <td class="tx-sm-13 text-right bg-warning font-weight-bold">@(Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Bank").Total.ToString("N2"))</td>
 
 
-                            <td class="tx-sm-13 text-right bg-orange font-weight-bold text-white">@((Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Cash").Total + Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == "Bank").Total).ToString("N2"))</td>
                             <td class="tx-sm-13">@item.Currency</td>
                             <td class="tx-sm-13 text-right">@item.RecordDate</td>
 
@@ -195,14 +178,10 @@
                         <th></th>
                         <th></th>
                         <th>TRL</th>
-                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total).ToString("N2"))</th>
-
-                        <th></th>
-                        <th></th>
-                        <th>TRL</th>
                         <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total).ToString("N2"))</th>
 
-                        <th class="text-right bg-light">@((((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total)) + (Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total)).ToString("N2"))</th>
+                        <th class="text-right bg-warning"></th>
+
                         <th>TRL</th>
                         <th></th>
                     </tr>
@@ -211,18 +190,14 @@
                         <th></th>
                         <th></th>
                         <th>Dip Toplam</th>
-
-                        <th></th>
-                        <th></th>
-                        <th>USD</th>
-                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total).ToString("N2"))</th>
 
                         <th></th>
                         <th></th>
                         <th>USD</th>
                         <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total).ToString("N2"))</th>
 
-                        <th class="text-right bg-light">@((((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total)) + (Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total)).ToString("N2"))</th>
+                        <th class="text-right bg-warning"></th>
+
                         <th>USD</th>
                         <th></th>
                     </tr>
@@ -235,14 +210,10 @@
                         <th></th>
                         <th></th>
                         <th>EUR</th>
-                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total).ToString("N2"))</th>
-
-                        <th></th>
-                        <th></th>
-                        <th>EUR</th>
                         <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total).ToString("N2"))</th>
 
-                        <th class="text-right bg-light">@((((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total)) + (Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total - Model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total)).ToString("N2"))</th>
+                        <th class="text-right bg-warning"></th>
+
                         <th>EUR</th>
                         <th></th>
                     </tr>
@@ -260,10 +231,6 @@
                         <th></th>
                         <th></th>
 
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
 
                         <th></th>
                         <th></th>
@@ -281,14 +248,10 @@
                         <th></th>
                         <th></th>
                         <th>TRL</th>
-                        <th class="text-right bg-light">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total.ToString("N2"))</th>
+                        <th class="text-right bg-light"></th>
 
-                        <th></th>
-                        <th></th>
-                        <th>TRL</th>
-                        <th class="text-right bg-light">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total.ToString("N2"))</th>
+                        <th class="text-right bg-warning">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total.ToString("N2"))</th>
 
-                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total + Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total).ToString("N2"))</th>
                         <th>TRL</th>
                         <th></th>
                     </tr>
@@ -301,14 +264,10 @@
                         <th></th>
                         <th></th>
                         <th>USD</th>
-                        <th class="text-right bg-light">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total.ToString("N2"))</th>
+                        <th class="text-right bg-light"></th>
 
-                        <th></th>
-                        <th></th>
-                        <th>USD</th>
-                        <th class="text-right bg-light">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total.ToString("N2"))</th>
+                        <th class="text-right bg-warning">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total.ToString("N2"))</th>
 
-                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "USD").Total + Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "USD").Total).ToString("N2"))</th>
                         <th>USD</th>
                         <th></th>
                     </tr>
@@ -321,14 +280,10 @@
                         <th></th>
                         <th></th>
                         <th>EUR</th>
-                        <th class="text-right bg-light">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total.ToString("N2"))</th>
+                        <th class="text-right bg-light"></th>
 
-                        <th></th>
-                        <th></th>
-                        <th>EUR</th>
-                        <th class="text-right bg-light">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total.ToString("N2"))</th>
+                        <th class="text-right bg-warning">@(Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total.ToString("N2"))</th>
 
-                        <th class="text-right bg-light">@((Model.FooterTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "EUR").Total + Model.FooterTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "EUR").Total).ToString("N2"))</th>
                         <th>EUR</th>
                         <th></th>
                     </tr>

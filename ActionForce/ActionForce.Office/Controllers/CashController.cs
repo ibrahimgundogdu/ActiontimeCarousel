@@ -125,6 +125,7 @@ namespace ActionForce.Office.Controllers
                 collection.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                 collection.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                 collection.LocationID = cashCollect.LocationID;
+                collection.UID = Guid.NewGuid();
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.AddCashCollection(collection, model.Authentication);
@@ -291,6 +292,32 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        public ActionResult FilterSale(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("Sale", "Cash");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult AddCashSale(NewCashSale cashSale)
         {
             Result<CashActions> result = new Result<CashActions>()
@@ -347,7 +374,7 @@ namespace ActionForce.Office.Controllers
                     newCashColl.Quantity = cashSale.Quantity;
                     newCashColl.EnvironmentID = 2;
                     newCashColl.UID = Guid.NewGuid();
-                    newCashColl.ReferenceID = refID == true ? Convert.ToInt64(refID) : (long?)null;
+                    newCashColl.ReferenceID = refID == false ? Convert.ToInt64(cashSale.ReferanceID) : (long?)null;
 
                     Db.DocumentTicketSales.Add(newCashColl);
                     Db.SaveChanges();
@@ -669,6 +696,32 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        public ActionResult FilterExchange(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("Exchange", "Cash");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult AddCashExchange(NewCashExchange cashSale, HttpPostedFileBase documentFile)
         {
             Result<CashActions> result = new Result<CashActions>()
@@ -735,7 +788,7 @@ namespace ActionForce.Office.Controllers
                         newCashColl.RecordIP = OfficeHelper.GetIPAddress();
                         newCashColl.EnvironmentID = 2;
                         newCashColl.UID = Guid.NewGuid();
-                        newCashColl.ReferenceID = refID == true ? Convert.ToInt64(refID) : (long?)null;
+                        newCashColl.ReferenceID = refID == false ? Convert.ToInt64(cashSale.ReferanceID) : (long?)null;
 
                         if (documentFile != null && documentFile.ContentLength > 0)
                         {
@@ -1106,6 +1159,32 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        public ActionResult FilterOpen(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("Open", "Cash");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult AddCashOpen(NewCashOpen cashOpen)
         {
             Result<CashActions> result = new Result<CashActions>()
@@ -1165,7 +1244,7 @@ namespace ActionForce.Office.Controllers
                         newCashColl.SystemCurrency = ourcompany.Currency;
                         newCashColl.EnvironmentID = 2;
                         newCashColl.UID = Guid.NewGuid();
-                        newCashColl.ReferenceID = refID == true ? Convert.ToInt64(refID) : (long?)null;
+                        newCashColl.ReferenceID = refID == false ? Convert.ToInt64(cashOpen.ReferanceID) : (long?)null;
 
                         Db.DocumentCashOpen.Add(newCashColl);
                         Db.SaveChanges();
@@ -1540,6 +1619,32 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        public ActionResult FilterPayment(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("CashPayment", "Cash");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult AddCashPayment(NewCashPayments cashPayment)
         {
             Result<CashActions> result = new Result<CashActions>()
@@ -1602,7 +1707,7 @@ namespace ActionForce.Office.Controllers
                         newCashColl.SystemCurrency = ourcompany.Currency;
                         newCashColl.EnvironmentID = 2;
                         newCashColl.UID = Guid.NewGuid();
-                        newCashColl.ReferenceID = refID == true ? Convert.ToInt64(refID) : (long?)null;
+                        newCashColl.ReferenceID = refID == false ? Convert.ToInt64(cashPayment.ReferanceID) : (long?)null;
 
                         Db.DocumentCashPayments.Add(newCashColl);
                         Db.SaveChanges();
@@ -1933,6 +2038,32 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        public ActionResult FilterReturn(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("SaleReturn", "Cash");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult AddTicketSaleReturn(NewTicketSaleReturn cashSaleReturn)
         {
             Result<CashActions> result = new Result<CashActions>()
@@ -1993,7 +2124,7 @@ namespace ActionForce.Office.Controllers
                         newCashColl.PayMethodID = cashSaleReturn.PayMethodID;
                         newCashColl.EnvironmentID = 2;
                         newCashColl.UID = Guid.NewGuid();
-                        newCashColl.ReferenceID = refID == true ? Convert.ToInt64(refID) : (long?)null;
+                        newCashColl.ReferenceID = refID == false ? Convert.ToInt64(cashSaleReturn.ReferanceID) : (long?)null;
 
                         Db.DocumentTicketSaleReturns.Add(newCashColl);
                         Db.SaveChanges();
@@ -2323,6 +2454,32 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        public ActionResult FilterExpense(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("Expense", "Cash");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult AddCashExpense(NewCashExpense cashExpense, HttpPostedFileBase documentFile)
         {
             Result<CashActions> result = new Result<CashActions>()
@@ -2384,7 +2541,7 @@ namespace ActionForce.Office.Controllers
                         newCashColl.SlipNumber = cashExpense.SlipNumber;
                         newCashColl.EnvironmentID = 2;
                         newCashColl.UID = Guid.NewGuid();
-                        newCashColl.ReferenceID = refID == true ? Convert.ToInt64(refID) : (long?)null;
+                        newCashColl.ReferenceID = refID == false ? Convert.ToInt64(cashExpense.ReferanceID) : (long?)null;
 
                         string FileName = string.Empty;
 
@@ -2761,6 +2918,32 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        public ActionResult FilterBank(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("BankTransfer", "Cash");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult AddCashBankTransfer(NewCashBankTransfer cashTransfer, HttpPostedFileBase documentFile)
         {
             Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()
@@ -2822,118 +3005,11 @@ namespace ActionForce.Office.Controllers
                 bankTransfer.SlipPath = Server.MapPath("/");
                 bankTransfer.TimeZone = location.Timezone.Value;
                 bankTransfer.ToBankID = fromPrefix == "B" ? fromID : (int?)null;
+                bankTransfer.ReferanceID = refID == false ? Convert.ToInt64(cashTransfer.ReferanceID) : (long?)null;
                 bankTransfer.UID = Guid.NewGuid();
 
 
                 result = documentManager.AddBankTransfer(bankTransfer, documentFile, model.Authentication);
-
-
-
-                //var isOpen = Db.DocumentBankTransfer.FirstOrDefault(x => x.ReferenceCode == cashTransfer.ReferenceCode && x.StatusID == 1);
-                //if (isOpen == null)
-                //{
-                //    try
-                //    {
-                //        var balance = Db.GetCashBalance(location.LocationID, cash.ID).FirstOrDefault().Value;
-                //        if (balance >= amount)
-                //        {
-                //            DocumentBankTransfer newCashColl = new DocumentBankTransfer();
-
-                //            newCashColl.ActionTypeID = actType.ID;
-                //            newCashColl.ActionTypeName = actType.Name;
-                //            newCashColl.Amount = amount;
-                //            newCashColl.Commission = commision;
-                //            newCashColl.FromCashID = cash.ID;
-                //            newCashColl.Currency = currency;
-                //            newCashColl.Date = docDate;
-                //            newCashColl.Description = cashTransfer.Description;
-                //            newCashColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "BT");
-                //            newCashColl.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
-                //            newCashColl.ToBankAccountID = fromPrefix == "B" ? fromID : (int?)null;
-                //            newCashColl.IsActive = true;
-                //            newCashColl.LocationID = cashTransfer.LocationID;
-                //            newCashColl.OurCompanyID = location.OurCompanyID;
-                //            newCashColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
-                //            newCashColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                //            newCashColl.RecordIP = OfficeHelper.GetIPAddress();
-                //            newCashColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newCashColl.ExchangeRate;
-                //            newCashColl.SystemCurrency = ourcompany.Currency;
-                //            newCashColl.SlipNumber = cashTransfer.SlipNumber;
-                //            newCashColl.SlipDate = sDatetime;
-                //            newCashColl.StatusID = 1;
-                //            newCashColl.EnvironmentID = 2;
-                //            newCashColl.TrackingNumber = cashTransfer.TrackingNumber;
-                //            newCashColl.ReferenceID = refID == true ? Convert.ToInt64(refID) : (long?)null;
-                //            newCashColl.UID = Guid.NewGuid();
-
-                //            string FileName = string.Empty;
-
-                //            if (documentFile != null)
-                //            {
-                //                FileName = Guid.NewGuid().ToString();
-                //                string ext = System.IO.Path.GetExtension(documentFile.FileName);
-                //                FileName = FileName + ext;
-
-                //                if (documentFile != null && documentFile.ContentLength > 0)
-                //                {
-                //                    try
-                //                    {
-                //                        documentFile.SaveAs(Path.Combine(Server.MapPath("../Document/Bank"), FileName));
-                //                        newCashColl.SlipDocument = FileName;
-                //                    }
-                //                    catch (Exception ex)
-                //                    {
-                //                    }
-                //                }
-                //            }
-                //            List<string> varmi = Db.DocumentBankTransfer.Select(x => (string)x.ReferenceCode).ToList();
-
-                //            string rndNumber = location.OurCompanyID.ToString() + DateTime.Now.ToString("yy");
-                //            Random rnd = new Random();
-                //            for (int i = 1; i < 6; i++)
-                //            {
-                //                rndNumber += rnd.Next(0, 9).ToString();
-                //            }
-                //            if (!varmi.Contains((string)rndNumber))
-                //            {
-                //                newCashColl.ReferenceCode = rndNumber;
-                //            }
-                //            else
-                //            {
-                //                for (int i = 1; i < 6; i++)
-                //                {
-                //                    rndNumber += rnd.Next(0, 9).ToString();
-                //                }
-                //                newCashColl.ReferenceCode = rndNumber;
-                //            }
-
-
-
-                //            Db.DocumentBankTransfer.Add(newCashColl);
-                //            Db.SaveChanges();
-
-
-                //            result.IsSuccess = true;
-                //            result.Message = "Havale / EFT başarı ile eklendi";
-
-                //            // log atılır
-                //            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", newCashColl.ID.ToString(), "Cash", "BankTransfer", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newCashColl);
-                //        }
-                //        else
-                //        {
-                //            result.Message = $"Kasa bakiyesi { amount } { currency } tutar için yeterli değildir. Kullanılabilir bakiye { balance } { currency } tutardır.";
-                //            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "BankTransfer", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                //        }
-
-
-                //    }
-                //    catch (Exception ex)
-                //    {
-
-                //        result.Message = $"Havale / EFT eklenemedi : {ex.Message}";
-                //        OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "BankTransfer", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                //    }
-                //}
 
 
             }
@@ -2995,7 +3071,7 @@ namespace ActionForce.Office.Controllers
                         var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(docDate));
 
                         var balance = Db.GetCashBalance(location.LocationID, cash.ID).FirstOrDefault().Value;
-                        if (balance >= amount)
+                        if ((balance + isOpen.Amount) >= amount)
                         {
                             DocumentBankTransfer self = new DocumentBankTransfer()
                             {
@@ -3600,6 +3676,32 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        public ActionResult FilterSalary(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("SalaryPayment", "Cash");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
         public ActionResult AddCashSalaryPayment(NewCashSalaryPayment cashSalary)
         {
             Result<CashActions> result = new Result<CashActions>()
@@ -3660,7 +3762,9 @@ namespace ActionForce.Office.Controllers
                         newCashColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newCashColl.ExchangeRate;
                         newCashColl.SystemCurrency = ourcompany.Currency;
                         newCashColl.SalaryType = cashSalary.SalaryType;
-                        newCashColl.ReferenceID = refID == true ? Convert.ToInt64(refID) : (long?)null;
+                        newCashColl.ReferenceID = refID == false ? Convert.ToInt64(cashSalary.ReferanceID) : (long?)null;
+                        newCashColl.EnvironmentID = 2;
+                        newCashColl.UID = Guid.NewGuid();
 
                         Db.DocumentSalaryPayment.Add(newCashColl);
                         Db.SaveChanges();
@@ -3676,7 +3780,7 @@ namespace ActionForce.Office.Controllers
                         }
 
                         //maaş hesap işlemi
-                        OfficeHelper.AddEmployeeAction(newCashColl.ToEmployeeID, newCashColl.LocationID, newCashColl.ActionTypeID, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.Description, 1, newCashColl.Amount, 0, newCashColl.Currency, null, null, cashSalary.SalaryType, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
+                        OfficeHelper.AddEmployeeAction(newCashColl.ToEmployeeID, newCashColl.LocationID, newCashColl.ActionTypeID, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.Description, 1, 0, newCashColl.Amount, newCashColl.Currency, null, null, cashSalary.SalaryType, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
 
                         result.IsSuccess = true;
                         result.Message = "Maaş Avans ödemesi başarı ile eklendi";

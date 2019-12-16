@@ -459,6 +459,7 @@ namespace ActionForce.Office
                         bankTransfer.SlipDate = transfer.SlipDate;
                         bankTransfer.StatusID = 1;
                         bankTransfer.EnvironmentID = 2;
+                        bankTransfer.ReferenceID = transfer.ReferanceID;
                         bankTransfer.UID = transfer.UID;
                         
 
