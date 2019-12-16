@@ -223,7 +223,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" Width="1.5" PointX="3.375" PointY="48.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeCashActions" Width="1.5" PointX="49.375" PointY="0.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentCashRecorderSlip" Width="1.5" PointX="27.375" PointY="39.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDayResultDocuments" Width="1.5" PointX="49.375" PointY="7.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDayResultDocuments" Width="1.5" PointX="51.25" PointY="7.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentCashRecorderSlip" Width="1.5" PointX="49.375" PointY="13.75" />
       </Diagram>
     </edmx:Diagrams>

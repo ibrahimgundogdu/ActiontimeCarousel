@@ -38,6 +38,7 @@ namespace ActionForce.Office
 
 
         public IEnumerable<TotalModel> HeaderTotals { get; set; }
+        public IEnumerable<TotalModel> MiddleTotals { get; set; }
         public IEnumerable<TotalModel> FooterTotals { get; set; }
 
     }

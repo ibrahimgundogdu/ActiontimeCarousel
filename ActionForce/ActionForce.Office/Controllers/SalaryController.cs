@@ -91,7 +91,7 @@ namespace ActionForce.Office.Controllers
             if (cashSalary != null)
             {
                 var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSalary.ActinTypeID);
-                
+
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSalary.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashSalary.EmployeeID.Substring(0, 1);
@@ -128,7 +128,7 @@ namespace ActionForce.Office.Controllers
 
 
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.AddSalaryEarn(earn,model.Authentication);
+                result = documentManager.AddSalaryEarn(earn, model.Authentication);
 
             }
 
@@ -391,7 +391,7 @@ namespace ActionForce.Office.Controllers
         public string SalaryEarn(string id)
         {
             SalaryControlModel model = new SalaryControlModel();
-            
+
             var fromPrefix = id.Substring(0, 1);
             var fromID = Convert.ToInt32(id.Substring(1, id.Length - 1));
 
@@ -494,7 +494,7 @@ namespace ActionForce.Office.Controllers
                 payment.FromCashID = (int?)cashSalary.BankAccountID == 0 ? cash.ID : (int?)null;
                 payment.SalaryTypeID = cashSalary.SalaryType;
                 payment.TimeZone = location.Timezone;
-                
+
 
 
                 DocumentManager documentManager = new DocumentManager();
@@ -728,7 +728,7 @@ namespace ActionForce.Office.Controllers
 
                         if (empaction != null)
                         {
-                            
+
                             empaction.ProcessDate = docDate;
                             empaction.Payment = isCash.Amount;
                             empaction.Collection = 0;
@@ -914,7 +914,7 @@ namespace ActionForce.Office.Controllers
 
             if (!string.IsNullOrEmpty(key))
             {
-                key = key.ToUpper().Replace("İ", "I").Replace("Ü","U").Replace("Ğ", "G").Replace("Ş", "S").Replace("Ç", "C").Replace("Ö", "O");
+                key = key.ToUpper().Replace("İ", "I").Replace("Ü", "U").Replace("Ğ", "G").Replace("Ş", "S").Replace("Ç", "C").Replace("Ö", "O");
                 model.UnitSalaryDistList = model.UnitSalaryDistList.Where(x => x.FullNameSearch.Contains(key)).ToList();
             }
 
@@ -933,7 +933,7 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialUnitSalaryList", model);
         }
-        
+
         [HttpPost]
         [AllowAnonymous]
         public PartialViewResult SaveSalaryUnit(NewEmployeeSalary empSalary)
@@ -996,7 +996,7 @@ namespace ActionForce.Office.Controllers
                 {
                     result.IsSuccess = true;
                     result.Message = $"{our.FullName} Employee { isSalary.DateStart } tarihinde ücret girişi mevcuttur. Kontrol edip güncel tarihli ücret girişi yapabilirsiniz.";
-                    
+
                 }
 
                 model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.EmployeeID == empSalary.EmployeeID).ToList();
@@ -1025,7 +1025,7 @@ namespace ActionForce.Office.Controllers
 
             if (id != null)
             {
-                
+
                 var isCash = Db.EmployeeSalary.FirstOrDefault(x => x.ID == id);
                 if (isCash != null)
                 {
@@ -1068,14 +1068,13 @@ namespace ActionForce.Office.Controllers
         public PartialViewResult SalaryUnit(int? id)
         {
             SalaryControlModel model = new SalaryControlModel();
-            
+
             model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.EmployeeID == id).ToList();
-            model.UnitSalary = model.UnitSalaryList.OrderByDescending(x=> x.DateStart).FirstOrDefault();
+            model.UnitSalary = model.UnitSalaryList.OrderByDescending(x => x.DateStart).FirstOrDefault();
             return PartialView("_PartialAddEmployeeSalary", model);
         }
 
-
-
+        [AllowAnonymous]
         public ActionResult Current(int? employeeid)
         {
             SalaryControlModel model = new SalaryControlModel();
@@ -1107,38 +1106,26 @@ namespace ActionForce.Office.Controllers
                 List<TotalModel> headerTotals = new List<TotalModel>();
 
 
-                if (model.CurrentCompany.Currency == "USD")
+                headerTotals.Add(new TotalModel()
                 {
-                    headerTotals.Add(new TotalModel()
-                    {
-                        Currency = "USD",
-                        Type = "Salary",
-                        Total = balanceData.Where(x => x.Currency == "USD").Sum(x => x.Amount) ?? 0
-                    });
-                }
-                else
+                    Currency = "TRL",
+                    Type = "Salary",
+                    Total = balanceData.Where(x => x.Currency == "TRL").Sum(x => x.Amount) ?? 0
+                });
+
+                headerTotals.Add(new TotalModel()
                 {
-                    headerTotals.Add(new TotalModel()
-                    {
-                        Currency = "TRL",
-                        Type = "Salary",
-                        Total = balanceData.Where(x => x.Currency == "TRL").Sum(x => x.Amount) ?? 0
-                    });
+                    Currency = "USD",
+                    Type = "Salary",
+                    Total = balanceData.Where(x => x.Currency == "USD").Sum(x => x.Amount) ?? 0
+                });
 
-                    headerTotals.Add(new TotalModel()
-                    {
-                        Currency = "USD",
-                        Type = "Salary",
-                        Total = balanceData.Where(x => x.Currency == "USD").Sum(x => x.Amount) ?? 0
-                    });
-
-                    headerTotals.Add(new TotalModel()
-                    {
-                        Currency = "EUR",
-                        Type = "Salary",
-                        Total = balanceData.Where(x => x.Currency == "EUR").Sum(x => x.Amount) ?? 0
-                    });
-                }
+                headerTotals.Add(new TotalModel()
+                {
+                    Currency = "EUR",
+                    Type = "Salary",
+                    Total = balanceData.Where(x => x.Currency == "EUR").Sum(x => x.Amount) ?? 0
+                });
 
                 model.HeaderTotals = headerTotals;
             }
@@ -1146,87 +1133,94 @@ namespace ActionForce.Office.Controllers
             {
                 List<TotalModel> headerTotals = new List<TotalModel>();
 
-                if (model.CurrentCompany.Currency == "USD")
+                headerTotals.Add(new TotalModel()
                 {
-                    headerTotals.Add(new TotalModel()
-                    {
-                        Currency = "USD",
-                        Type = "Salary",
-                        Total = 0
-                    });
-                }
-                else
+                    Currency = "TRL",
+                    Type = "Salary",
+                    Total = 0
+                });
+
+                headerTotals.Add(new TotalModel()
                 {
-                    headerTotals.Add(new TotalModel()
-                    {
-                        Currency = "TRL",
-                        Type = "Salary",
-                        Total = 0
-                    });
+                    Currency = "USD",
+                    Type = "Salary",
+                    Total = 0
+                });
 
-                    headerTotals.Add(new TotalModel()
-                    {
-                        Currency = "USD",
-                        Type = "Salary",
-                        Total = 0
-                    });
-
-                    headerTotals.Add(new TotalModel()
-                    {
-                        Currency = "EUR",
-                        Type = "Salary",
-                        Total = 0
-                    });
-                }
+                headerTotals.Add(new TotalModel()
+                {
+                    Currency = "EUR",
+                    Type = "Salary",
+                    Total = 0
+                });
 
                 model.HeaderTotals = headerTotals;
             }
 
 
+
+
             List<TotalModel> footerTotals = new List<TotalModel>(); // ilk başta header ile footer aynı olur ekranda foreach içinde footer değişir. 
 
-            if (model.CurrentCompany.Currency == "USD")
+            footerTotals.Add(new TotalModel()
             {
-                footerTotals.Add(new TotalModel()
-                {
-                    Currency = "USD",
-                    Type = "Salary",
-                    Total = model.HeaderTotals.FirstOrDefault(x => x.Currency == "USD").Total
-                });
-            }
-            else
+                Currency = "TRL",
+                Type = "Salary",
+                Total = model.HeaderTotals.FirstOrDefault(x => x.Currency == "TRL").Total
+            });
+
+
+
+            footerTotals.Add(new TotalModel()
             {
-                footerTotals.Add(new TotalModel()
-                {
-                    Currency = "TRL",
-                    Type = "Salary",
-                    Total = model.HeaderTotals.FirstOrDefault(x => x.Currency == "TRL").Total
-                });
+                Currency = "USD",
+                Type = "Salary",
+                Total = model.HeaderTotals.FirstOrDefault(x => x.Currency == "USD").Total
+            });
 
 
 
-                footerTotals.Add(new TotalModel()
-                {
-                    Currency = "USD",
-                    Type = "Salary",
-                    Total = model.HeaderTotals.FirstOrDefault(x => x.Currency == "USD").Total
-                });
+            footerTotals.Add(new TotalModel()
+            {
+                Currency = "EUR",
+                Type = "Salary",
+                Total = model.HeaderTotals.FirstOrDefault(x => x.Currency == "EUR").Total
+            });
 
 
 
-                footerTotals.Add(new TotalModel()
-                {
-                    Currency = "EUR",
-                    Type = "Salary",
-                    Total = model.HeaderTotals.FirstOrDefault(x => x.Currency == "EUR").Total
-                });
-            }
 
-            
-
-           
 
             model.FooterTotals = footerTotals;
+
+
+
+            List<TotalModel> middleTotals = new List<TotalModel>();
+
+            middleTotals.Add(new TotalModel()
+            {
+                Currency = "TRL",
+                Type = "Salary",
+                Total = 0
+            });
+
+            middleTotals.Add(new TotalModel()
+            {
+                Currency = "USD",
+                Type = "Salary",
+                Total = 0
+            });
+
+            middleTotals.Add(new TotalModel()
+            {
+                Currency = "EUR",
+                Type = "Salary",
+                Total = 0
+            });
+
+            model.MiddleTotals = middleTotals;
+
+
 
 
             return View(model);
@@ -1255,7 +1249,7 @@ namespace ActionForce.Office.Controllers
 
             TempData["filter"] = model;
 
-            return RedirectToAction("Current", "Action");
+            return RedirectToAction("Current", "Salary");
         }
 
     }
