@@ -109,10 +109,11 @@
                         <td>
                             @if (item.SlipDocument != null)
                             {
-                                @*<a href="#modal6" onclick="@item.ID" data-toggle="modal" data-animation="effect-scale">
-                                    <img src="@(string.Format("../Document/Expense/{0}",item.SlipDocument))" class="img-fluid img-thumbnail" width="64">
-                                </a>*@
-                                <img src="@(string.Format("../Document/Expense/{0}",item.SlipDocument))" class="img-fluid img-thumbnail" width="64">
+                                
+                                <a target="_blank" href="@(string.Format("../Document/Expense/{0}",item.SlipDocument))">
+                                    <img class="img-fluid img-thumbnail thumb" src="@(string.Format("../Document/Expense/{0}",item.SlipDocument))" alt="@item.SlipDocument" width="64">
+                                </a>
+                                @*<img src="@(string.Format("../Document/Expense/{0}",item.SlipDocument))" class="img-fluid img-thumbnail" width="64">*@
                             }
 
 

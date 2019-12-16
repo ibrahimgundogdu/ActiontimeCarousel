@@ -418,6 +418,116 @@ namespace ActionForce.Office
         }
 
 
+
+        public Result<DocumentCashExpense> AddCashExpense(CashExpense expense, HttpPostedFileBase file, AuthenticationModel authentication)
+        {
+            Result<DocumentCashExpense> result = new Result<DocumentCashExpense>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            if (expense != null && authentication != null)
+            {
+                using (ActionTimeEntities Db = new ActionTimeEntities())
+                {
+                    try
+                    {
+                        var balance = Db.GetCashBalance(expense.LocationID, expense.CashID).FirstOrDefault() ?? 0;
+
+                        if (balance >= expense.Amount)
+                        {
+                            DocumentCashExpense cashExpense = new DocumentCashExpense();
+
+                            cashExpense.ActionTypeID = expense.ActionTypeID;
+                            cashExpense.ActionTypeName = expense.ActionTypeName;
+                            cashExpense.Amount = expense.Amount;
+                            cashExpense.CashID = expense.CashID;
+                            cashExpense.Currency = expense.Currency;
+                            cashExpense.Date = expense.DocumentDate;
+                            cashExpense.Description = expense.Description;
+                            cashExpense.DocumentNumber = OfficeHelper.GetDocumentNumber(expense.OurCompanyID, "EXP");
+                            cashExpense.ExchangeRate = expense.ExchangeRate;
+                            cashExpense.ToBankAccountID = expense.ToBankAccountID;
+                            cashExpense.ToEmployeeID = expense.ToEmployeeID;
+                            cashExpense.ToCustomerID = expense.ToCustomerID;
+                            cashExpense.IsActive = true;
+                            cashExpense.LocationID = expense.LocationID;
+                            cashExpense.OurCompanyID = expense.OurCompanyID;
+                            cashExpense.RecordDate = DateTime.UtcNow.AddHours(expense.TimeZone.Value);
+                            cashExpense.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                            cashExpense.RecordIP = OfficeHelper.GetIPAddress();
+                            cashExpense.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == expense.Currency ? expense.Amount : expense.Amount * expense.ExchangeRate;
+                            cashExpense.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+                            cashExpense.SlipNumber = expense.SlipNumber;
+                            cashExpense.ReferenceID = expense.ReferanceID;
+                            cashExpense.EnvironmentID = 2;
+                            cashExpense.UID = Guid.NewGuid();
+
+                            if (file != null && file.ContentLength > 0)
+                            {
+
+                                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                                cashExpense.SlipDocument = filename;
+                                string folder = "Document/Expense";
+                                expense.SlipPath = expense.SlipPath + folder;
+                                try
+                                {
+                                    file.SaveAs(Path.Combine(expense.SlipPath, filename));
+                                }
+                                catch (Exception ex)
+                                {
+                                }
+                            }
+
+
+
+                            Db.DocumentCashExpense.Add(cashExpense);
+                            Db.SaveChanges();
+
+                            // cari hesap işlemesi
+                            OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
+
+                            //if (cashExpense.ToBankAccountID > 0)
+                            //{
+                            //    OfficeHelper.AddBankAction(cashExpense.LocationID, cashExpense.ToEmployeeID, cashExpense.ToBankAccountID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
+                            //}
+                            //else
+                            //{
+                            //    OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, cashExpense.ToEmployeeID > 0 ? cashExpense.ToEmployeeID : (int?)null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
+                            //}
+
+                            //if (cashExpense.ToEmployeeID > 0)
+                            //{
+                            //    OfficeHelper.AddEmployeeAction(cashExpense.ToEmployeeID, cashExpense.LocationID, cashExpense.ActionTypeID, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.Description, 1, 0, cashExpense.Amount, cashExpense.Currency, null, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
+                            //}
+
+
+                            result.IsSuccess = true;
+                            result.Message = "Masraf ödeme fişi başarı ile eklendi";
+
+                            // log atılır
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", cashExpense.ID.ToString(), "Cash", "Expense", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, cashExpense);
+                        }
+                        else
+                        {
+                            result.Message = $"Kasa bakiyesi { expense.Amount } { expense.Currency } tutar için yeterli değildir. Kullanılabilir bakiye { balance } { expense.Currency } tutardır.";
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "Expense", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"Masraf ödeme fişi eklenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "Expense", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+
+                }
+            }
+
+            return result;
+        }
+
         public Result<DocumentBankTransfer> AddBankTransfer(BankTransfer transfer, HttpPostedFileBase file, AuthenticationModel authentication)
         {
             Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()
