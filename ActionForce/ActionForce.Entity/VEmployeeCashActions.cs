@@ -42,5 +42,12 @@ namespace ActionForce.Entity
         public Nullable<double> UnitPrice { get; set; }
         public Nullable<double> QuantityHour { get; set; }
         public Nullable<double> TotalAmount { get; set; }
+        public string DocumentNumber { get; set; }
+        public string DocumentNumberE { get; set; }
+        public string SalaryTypeName { get; set; }
+        public string LocationName { get; set; }
+        public Nullable<int> FromBankAccountID { get; set; }
+        public string FromName { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
     }
 }
