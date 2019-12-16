@@ -43,7 +43,7 @@
                             <div class="card mg-b-20 mg-lg-b-25">
                                 <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                                     <h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.Detail.ActionName}"))</h6>
-                                    <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="29" />
+                                    <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="33" />
                                     <input id="UID" name="UID" type="hidden" value="@(Model.Detail.UID)" />
                                     <nav class="nav">
                                         <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.Detail.Date.Value.ToLongDateString())</span></a>
@@ -103,11 +103,17 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Fiş Tarihi</label>
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Fiş Tarih</label>
                                             <div class="col-sm-9">
-                                                <input id="SlipDate" name="SlipDate" type="text" class="form-control" placeholder="Fiş Tarih" value="@(Model.Detail.SlipDate.Value.ToString("yyyy-MM-dd"))" required>
+                                                <input id="SlipDate" name="SlipDate" type="text" class="form-control" placeholder="Tarih" value="@(Model.Detail.SlipDate.Value.ToString("yyyy-MM-dd"))" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Fiş Saati</label>
+                                            <div class="col-sm-9">
+                                                <input id="SlipTime" name="SlipTime" type="text" class="form-control" placeholder="hh:mm" value="@(Model.Detail.Date.Value.ToString("hh:mm"))" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -266,6 +272,11 @@
                             delimiter: '-',
                             datePattern: ['Y', 'm', 'd'],
 
+                        });
+
+                        var cleaveF = new Cleave('#SlipTime', {
+                            time: true,
+                            timePattern: ['h', 'm']
                         });
                         //var cleave = new Cleave('#Amount', {
                         //    numeral: true

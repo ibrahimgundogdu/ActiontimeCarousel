@@ -340,7 +340,10 @@
     <Content Include="Document\Bank\0f4dca42-8052-4b27-9561-3000df710c0b.jpg" />
     <Content Include="Document\Bank\1ec47086-186e-4a9e-9e20-b8717df360ce.jpg" />
     <Content Include="Document\CashRecorder\088c905f-fb05-4d2f-9720-4cc3fb92eb2e.jpeg" />
+    <Content Include="Document\CashRecorder\1008599d-82c5-4255-931f-07655ccc0f66.png" />
     <Content Include="Document\CashRecorder\7417a563-f763-437a-8853-bf1048d84ce0.png" />
+    <Content Include="Document\CashRecorder\8b5ed55b-ee01-401d-a1f7-8e00ac20dd2b.jpeg" />
+    <Content Include="Document\CashRecorder\9bad91d5-a507-424a-870c-11c315485c1d.jpeg" />
     <Content Include="Document\CashRecorder\9fe48052-aa1f-4f03-a185-ea22de1e8e67.png" />
     <Content Include="Document\CashRecorder\b78eb891-e121-4c21-b0cc-88013e20e9c0.jpeg" />
     <Content Include="Document\CashRecorder\d11179a7-ea9e-49cf-9819-508a22e3ec45.jpg" />
@@ -2322,6 +2325,7 @@
     <Compile Include="Models\Document\BankTransfer.cs" />
     <Compile Include="Models\Document\DocumentManager.cs" />
     <Compile Include="Models\Document\SalaryEarn.cs" />
+    <Compile Include="Models\Document\CashExpense.cs" />
     <Compile Include="Models\Document\SalaryPayment.cs" />
     <Compile Include="Models\SalaryControlModel.cs" />
     <Compile Include="Models\CashControlModel.cs" />

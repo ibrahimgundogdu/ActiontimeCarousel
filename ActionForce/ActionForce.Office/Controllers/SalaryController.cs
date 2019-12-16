@@ -535,79 +535,7 @@ namespace ActionForce.Office.Controllers
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.AddSalaryPayment(payment, model.Authentication);
-
-
-                //try
-                //{
-                //    var balance = Db.GetCashBalance(location.LocationID, cash.ID).FirstOrDefault().Value;
-                //    if (balance >= amount)
-                //    {
-                //        //var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
-
-                //        DocumentSalaryPayment newCashColl = new DocumentSalaryPayment();
-
-                //        newCashColl.ActionTypeID = actType.ID;
-                //        newCashColl.ActionTypeName = actType.Name;
-                //        newCashColl.ToEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
-                //        newCashColl.Amount = amount;
-                //        newCashColl.FromCashID = (int?)cashSalary.BankAccountID == 0 ? cash.ID : (int?)null;
-                //        newCashColl.Currency = currency;
-                //        newCashColl.Date = docDate;
-                //        newCashColl.Description = cashSalary.Description;
-                //        newCashColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "SAP");
-                //        newCashColl.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
-                //        newCashColl.FromBankAccountID = (int?)cashSalary.BankAccountID > 0 ? cashSalary.BankAccountID : (int?)null;
-                //        newCashColl.IsActive = true;
-                //        newCashColl.LocationID = cashSalary.LocationID;
-                //        newCashColl.OurCompanyID = location.OurCompanyID;
-                //        newCashColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
-                //        newCashColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                //        newCashColl.RecordIP = OfficeHelper.GetIPAddress();
-                //        newCashColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newCashColl.ExchangeRate;
-                //        newCashColl.SystemCurrency = ourcompany.Currency;
-                //        newCashColl.SalaryType = cashSalary.SalaryType;
-                //        newCashColl.UID = Guid.NewGuid();
-
-                //        Db.DocumentSalaryPayment.Add(newCashColl);
-                //        Db.SaveChanges();
-
-                //        // cari hesap işlemesi
-
-                //        if (cashSalary.BankAccountID > 0)
-                //        {
-                //            OfficeHelper.AddBankAction(newCashColl.LocationID, newCashColl.ToEmployeeID, newCashColl.FromBankAccountID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, -1, 0, newCashColl.Amount, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
-                //        }
-                //        else
-                //        {
-                //            OfficeHelper.AddCashAction(newCashColl.FromCashID, newCashColl.LocationID, newCashColl.ToEmployeeID, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, -1, 0, newCashColl.Amount, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
-                //        }
-
-                //        //OfficeHelper.AddCashAction(newCashColl.FromCashID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, -1, 0, newCashColl.Amount, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
-
-                //        //maaş hesap işlemi
-                //        OfficeHelper.AddEmployeeAction(newCashColl.ToEmployeeID, newCashColl.LocationID, newCashColl.ActionTypeID, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.Description, 1, 0, newCashColl.Amount, newCashColl.Currency, null, null, cashSalary.SalaryType, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
-
-                //        result.IsSuccess = true;
-                //        result.Message = "Maaş Avans ödemesi başarı ile eklendi";
-
-                //        // log atılır
-                //        OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", newCashColl.ID.ToString(), "Salary", "SalaryPayment", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newCashColl);
-                //    }
-                //    else
-                //    {
-                //        result.Message = $"Kasa bakiyesi { amount } { currency } tutar için yeterli değildir. Kullanılabilir bakiye { balance } { currency } tutardır.";
-                //        OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", "-1", "Salary", "SalaryPayment", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                //    }
-
-
-                //}
-                //catch (Exception ex)
-                //{
-
-                //    result.Message = $"Maaş Avans eklenemedi : {ex.Message}";
-                //    OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", "-1", "Salary", "SalaryPayment", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-                //}
+                
 
             }
 
@@ -927,7 +855,7 @@ namespace ActionForce.Office.Controllers
 
 
         [AllowAnonymous]
-        public ActionResult Unit()  //
+        public ActionResult Unit()
         {
             SalaryControlModel model = new SalaryControlModel();
 
@@ -985,8 +913,9 @@ namespace ActionForce.Office.Controllers
 
             if (empSalary != null)
             {
-                var our = Db.VEmployeeSalary.FirstOrDefault(x => x.EmployeeID == empSalary.EmployeeID);
+                var our = Db.VEmployee.FirstOrDefault(x => x.EmployeeID == empSalary.EmployeeID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == our.OurCompanyID);
+
                 var hourly = Convert.ToDouble(empSalary.Hourly.Replace(".", ","));
                 var hourlyExtent = Convert.ToDouble(empSalary.HourlyExtend.Replace(".", ","));
                 var extendMultiplyRate = Convert.ToDouble(empSalary.ExtendMultiplyRate.Replace(".", ","));
@@ -1105,8 +1034,11 @@ namespace ActionForce.Office.Controllers
         {
             SalaryControlModel model = new SalaryControlModel();
 
+            model.CurrentEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == id);
+
             model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.EmployeeID == id).ToList();
             model.UnitSalary = model.UnitSalaryList.OrderByDescending(x => x.DateStart).FirstOrDefault();
+
             return PartialView("_PartialAddEmployeeSalary", model);
         }
 

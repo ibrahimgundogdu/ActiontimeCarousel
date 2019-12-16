@@ -142,6 +142,10 @@ namespace ActionForce.Office.Controllers
                 {
                     slipDate = Convert.ToDateTime(cashRecord.SlipDate).Date;
                 }
+
+               
+                DateTime sDatetime = slipDate.Add(Convert.ToDateTime(cashRecord.SlipTime).TimeOfDay);
+
                 var cash = OfficeHelper.GetCash(cashRecord.LocationID, cashRecord.Currency);
                 
                 try
@@ -156,7 +160,7 @@ namespace ActionForce.Office.Controllers
                     newCashColl.TotalAmount = totalamount;
                     newCashColl.Currency = currency;
                     newCashColl.Date = docDate;
-                    newCashColl.SlipDate = slipDate;
+                    newCashColl.SlipDate = sDatetime;
                     newCashColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "CR");
                     newCashColl.IsActive = true;
                     newCashColl.LocationID = cashRecord.LocationID;
@@ -254,6 +258,8 @@ namespace ActionForce.Office.Controllers
                 }
                 var cash = OfficeHelper.GetCash(cashRecord.LocationID, cashRecord.Currency);
 
+                DateTime sDatetime = slipDate.Add(Convert.ToDateTime(cashRecord.SlipTime).TimeOfDay);
+
                 var isDate = DateTime.Now.Date;
 
                 var isCash = Db.DocumentCashRecorderSlip.FirstOrDefault(x => x.UID == cashRecord.UID);
@@ -312,7 +318,7 @@ namespace ActionForce.Office.Controllers
                         }
                         isCash.Date = docDate;
                         isCash.SlipNumber = isCash.SlipNumber;
-                        isCash.SlipDate = slipDate;
+                        isCash.SlipDate = sDatetime;
                         isCash.NetAmount = netamount;
                         isCash.TotalAmount = totalamount;
                         isCash.UpdateDate = DateTime.UtcNow.AddHours(3);

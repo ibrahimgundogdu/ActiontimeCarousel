@@ -4,26 +4,26 @@
     @Html.AntiForgeryToken()
 
     <div class="card-header d-flex align-items-center justify-content-between">
-        <h6 class="mg-b-0">@(Model.UnitSalary?.FullName) <input id="EmployeeID" name="EmployeeID" value="@(Model.UnitSalary?.EmployeeID)" type="hidden" /></h6>
+        <h6 class="mg-b-0">@(Model.CurrentEmployee?.FullName) <input id="EmployeeID" name="EmployeeID" value="@(Model.CurrentEmployee?.EmployeeID)" type="hidden" /></h6>
     </div>
     <div class="card-body pd-0">
         
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="inputEmail4">Tarih</label>
-                    <input id="DateStart" name="DateStart" type="text" class="form-control" placeholder="Tarih" value="@(Model.UnitSalary.DateStart != null ? Model.UnitSalary.DateStart.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                    <input id="DateStart" name="DateStart" type="text" class="form-control" placeholder="Tarih"  required>
                 </div>
                 <div class="form-group col-md-3">
                     <label for="inputPassword4">Saatlik Ücret</label>
-                    <input id="Hourly" name="Hourly" type="text" class="form-control" value="@(Model.UnitSalary.Hourly?.ToString("N2"))" placeholder="Saatlik Ücret" required>
+                    <input id="Hourly" name="Hourly" type="text" class="form-control"  placeholder="Saatlik Ücret" required>
                 </div>
                 <div class="form-group col-md-3">
                     <label for="inputPassword4">Mesai Ücret</label>
-                    <input id="HourlyExtend" name="HourlyExtend" type="text" class="form-control" value="@(Model.UnitSalary.HourlyExtend?.ToString("N2"))" placeholder="Mesai Ücret" required>
+                    <input id="HourlyExtend" name="HourlyExtend" type="text" class="form-control"  placeholder="Mesai Ücret" required>
                 </div>
                 <div class="form-group col-md-1">
                     <label for="inputPassword4">Oran</label>
-                    <input id="ExtendMultiplyRate" name="ExtendMultiplyRate" type="text" class="form-control" value="@(Model.UnitSalary.ExtendMultiplyRate?.ToString("N2"))" placeholder="Oran" required>
+                    <input id="ExtendMultiplyRate" name="ExtendMultiplyRate" type="text" class="form-control"  placeholder="Oran" required>
                 </div>
                 <div class="form-group col-md-2">
                     <label for="inputPassword4">&nbsp;</label>

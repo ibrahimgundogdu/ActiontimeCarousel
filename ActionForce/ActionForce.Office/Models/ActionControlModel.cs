@@ -16,5 +16,6 @@ namespace ActionForce.Office
         public FilterModel Filters { get; set; }
         public IEnumerable<TotalModel> HeaderTotals { get; set; }
         public IEnumerable<TotalModel> FooterTotals { get; set; }
+        public IEnumerable<BankAccount> bankAccount { get; set; }
     }
 }

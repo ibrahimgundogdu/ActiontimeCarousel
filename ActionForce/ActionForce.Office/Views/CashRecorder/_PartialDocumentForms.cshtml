@@ -4,13 +4,13 @@
     <a href="#" class="close"><i data-feather="x"></i></a>
 
     <div class="pd-25 ht-100p tx-13">
-        @using (Html.BeginForm("AddCashRecorder", "Cash", FormMethod.Post))
+        @using (Html.BeginForm("AddCashRecorder", "CashRecorder", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
         <div>
             <h4>Yazarkasa Fişleri</h4>
             <p class="tx-color-03">yazarkasa fiş giriş işlemi yapar.</p>
-            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
+            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="33" />
             <div class="form-group">
                 <label>Lokasyon</label>
                 <select class="form-control" id="LocationID" name="LocationID" required>
@@ -49,9 +49,16 @@
                 <label>Döküman</label>
                 <input type="file" name="documentFile" id="documentFile" style="width: 100%;" class="form-control" />
             </div>
-            <div class="form-group">
-                <label>Fiş Tarih</label>
-                <input id="SlipDate" name="SlipDate" type="text" class="form-control" placeholder="Fiş Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+            
+            <div class="form-row">
+                <div class="form-group col-md-8">
+                    <label>Fiş Tarihi</label>
+                    <input id="SlipDate" name="SlipDate" type="text" class="form-control" placeholder="Fiş Tarihi" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Fiş Saati</label>
+                    <input id="SlipTime" name="SlipTime" type="text" class="form-control" placeholder="hh:mm" value="@(DateTime.Now.ToString("hh:mm"))" required>
+                </div>
             </div>
             <button class="btn btn-primary btn-block">Fiş Ekle</button>
         </div>
