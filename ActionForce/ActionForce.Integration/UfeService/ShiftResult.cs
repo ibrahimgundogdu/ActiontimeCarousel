@@ -10,6 +10,7 @@ namespace ActionForce.Integration.UfeService
     {
         public bool IsSuccess { get; set; }
         public string Message { get; set; }
+        public string Content { get; set; }
         public LocationShiftData Data { get; set; }
     }
 

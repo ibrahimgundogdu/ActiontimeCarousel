@@ -87,28 +87,30 @@
                                             <td class="tx-sm-13 bg-primary-light font-weight-bold">@(Model.CurrentDate.DateKey.ToShortDateString())</td>
                                             <td class="tx-sm-13 @(locationschedule != null && locationschedule.DurationMinute == null ? "bg-primary":"bg-primary-light") font-weight-bold">@(locationschedule != null ? locationschedule?.ShiftDateStart?.ToString("HH\\:mm") : "") @(locationschedule?.ShiftdateEnd != null ? " - " + locationschedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
                                             <td class="tx-sm-13 bg-primary-light font-weight-bold">@(locationshift != null ? locationshift?.ShiftDateStart?.ToString("HH\\:mm") : "") @(locationshift?.ShiftDateFinish != null ? " - " + locationshift?.ShiftDateFinish?.ToString("HH\\:mm") : "")</td>
-                                            <td class="tx-sm-13 bg-light font-weight-bold wd-20 text-center" id="@($"LocationStatus_{location.LocationID}_2")">@(locationshift != null && locationshift.DurationMinute == null ? Html.Raw($"<a href='#' onclick='CloseLocation({location.LocationID},2)'> <i class='text-info' data-feather='sun'></i></a>") : locationshift != null && locationshift.DurationMinute != null ? Html.Raw($"<a href='#'> <i class='text-primary' data-feather='moon'></i></a>") : Html.Raw($"<a href='#' onclick='OpenLocation({location.LocationID},2)'> <i class='text-default' data-feather='clock'></i></a>") )</td>
+                                            <td class="tx-sm-13 bg-light font-weight-bold wd-20 text-center" id="@($"LocationStatus_{location.LocationID}_2")">@(locationshift != null && locationshift.DurationMinute == null ? Html.Raw($"<a href='#' onclick='CloseLocation({location.LocationID},2)'> <i class='ion ion-md-sunny tx-sm-24'></i></a>") : locationshift != null && locationshift.DurationMinute != null ? Html.Raw($"<a href='#'> <i class='ion ion-md-moon tx-sm-24'></i></a>") : Html.Raw($"<a href='#' onclick='OpenLocation({location.LocationID},2)'> <i class='ion ion-md-alarm tx-sm-24'></i></a>") )</td>
 
 
-                                            <td class="tx-sm-13 bd-l" style="padding:7px !important;">
+                                            <td class="tx-sm-13 bd-l i-l" style="padding:7px !important;">
 
                                                 <table class="table table-hover pd-0 mg-0">
                                                     <tbody>
                                                         @foreach (var emp in employeelist)
                                                         {
+
                                                             var employeeschedule = Model.EmployeeSchedules.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == emp.EmployeeID);
                                                             var employeeshift = Model.EmployeeShifts.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == emp.EmployeeID);
                                                             var employeebreak = Model.EmployeeBreaks.Where(x => x.LocationID == location.LocationID && x.EmployeeID == emp.EmployeeID && x.BreakDurationMinute > 0).ToList();
                                                             var employeebreakcurrent = Model.EmployeeBreaks.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == emp.EmployeeID && x.BreakDurationMinute == null);
 
 
-                                                            <tr class="@(employeeshift != null && employeeshift.DurationMinute == null ? "table-info":"table-warning") ">
+                                                            <tr class="@(employeeshift != null && employeeshift.DurationMinute == null ? "table-info":"table-warning")" id="@($"EmployeeStatus_{location.LocationID}_{emp.EmployeeID}_2")">
                                                                 <td class="wd-300 tx-sm-13 font-weight-bold">@emp.FullName</td>
                                                                 <td class="wd-md-120 @(employeeshift != null && employeeshift.DurationMinute == null ? "bg-info":"bg-warning") text-center" onclick="ss()" style="padding:2px !important;">@(employeeschedule != null ? employeeschedule?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeschedule?.ShiftdateEnd != null ? " - " + employeeschedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
                                                                 <td class="wd-md-120 text-center" style="padding:4px !important;">@(employeeshift != null ? employeeshift?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeshift?.ShiftDateEnd != null ? " - " + employeeshift?.ShiftDateEnd?.ToString("HH\\:mm") : "")</td>
                                                                 <td class="bd-l wd-150">@(employeebreak.Count()) | @(employeebreak.Sum(x => x.BreakDurationMinute)) | @(employeebreak.Average(x => x.BreakDurationMinute)?.ToString("N2"))</td>
                                                                 <td class="tx-sm-10 text-right">@(employeebreakcurrent != null ? Html.Raw("<i data-feather='coffee'></i>") : employeeshift != null && employeeshift.DurationMinute == null ? Html.Raw("<i data-feather='watch'></i>") : employeeshift != null && employeeshift.DurationMinute != null ? Html.Raw("<i data-feather='cloud'></i>") : Html.Raw("") )</td>
                                                             </tr>
+
                                                         }
                                                     </tbody>
                                                 </table>

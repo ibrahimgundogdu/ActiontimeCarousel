@@ -230,7 +230,23 @@ function OpenLocation(id, envid) {
         },
     }).done(function (d) {
 
-        $("#LocationStatus_" + id + "_2").html(d);
+        var data = d; 
+        if (typeof (d) == "Object") { 
+            data = JSON.parse(d);
+        }
+        console.log(data);
+        $("#LocationStatus_" + id + "_2").html(data.Content);
+
+
+        $.toast({
+            heading: 'Information',
+            text: data.Message,
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+
 
     }).always(function () {
         $("#Loading").hide();
@@ -242,11 +258,11 @@ function CloseLocation(id, envid) {
 
     var data = new FormData();
 
-
     data.append('locationid', id);
     data.append('environmentid', envid);
 
-
+    console.log(id);
+    console.log(envid);
 
     $.ajax({
         cache: false,
@@ -254,14 +270,30 @@ function CloseLocation(id, envid) {
         processData: false,
         method: 'POST',
         type: 'POST',
-        url: "/Shift/OpenLocation",
+        url: "/Shift/CloseLocation",
         data: data,
         beforeSend: function () {
             $("#Loading").show();
         },
     }).done(function (d) {
 
-        $("#EmployeeSalary").html(d);
+        var data = d;
+        if (typeof (d) == "Object") {
+            data = JSON.parse(d);
+        }
+        console.log(data);
+        $("#LocationStatus_" + id + "_2").html(data.Content);
+
+
+        $.toast({
+            heading: 'Information',
+            text: data.Message,
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+
 
     }).always(function () {
         $("#Loading").hide();

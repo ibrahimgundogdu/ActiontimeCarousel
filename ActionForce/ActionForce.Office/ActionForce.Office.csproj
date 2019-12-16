@@ -2327,6 +2327,7 @@
     <Compile Include="Models\Document\SalaryEarn.cs" />
     <Compile Include="Models\Document\CashExpense.cs" />
     <Compile Include="Models\Document\SalaryPayment.cs" />
+    <Compile Include="Models\EmployeeShiftModel.cs" />
     <Compile Include="Models\SalaryControlModel.cs" />
     <Compile Include="Models\CashControlModel.cs" />
     <Compile Include="Models\FilterModel.cs" />
@@ -2536,6 +2537,7 @@
     <Content Include="Views\CashRecorder\_PartialDocumentForms.cshtml" />
     <Content Include="Views\Salary\Current.cshtml" />
     <Content Include="Views\Bank\Current.cshtml" />
+    <Content Include="Views\Shift\_PartialEmployeeShiftBreak.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

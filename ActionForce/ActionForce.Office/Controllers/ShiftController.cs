@@ -78,26 +78,43 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public string OpenLocation(int? locationid, int? environmentid)
+        public JsonResult OpenLocation(int? locationid, int? environmentid)
         {
-            Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
-            {
-                IsSuccess = false,
-                Message = string.Empty,
-                Data = null
-            };
-
             
             ResultControlModel model = new ResultControlModel();
             UfeServiceClient service = new UfeServiceClient(model.Authentication.ActionEmployee.Token);
 
-            var serviceresult = service.LocationShiftStart(locationid.Value, environmentid,0,0);
+            var serviceresult = service.LocationShiftStart(locationid.Value, environmentid, 0, 0);
 
-            string content = $"<a href='#' onclick='CloseLocation({locationid},{environmentid})'> <i class='text-info' data-feather='sun'></i></a>";
+            string content = $"<a href='#' onclick='OpenLocation({locationid},{environmentid})'> <i class='ion ion-md-alarm tx-sm-24'></i></a>";
+            if (serviceresult.IsSuccess == true)
+            {
+                content = $"<a href='#' onclick='CloseLocation({locationid},{environmentid})'> <i class='ion ion-md-sunny tx-sm-24'></i></a>";
+            }
+            serviceresult.Content = content;
 
-            return content;
+            return Json(serviceresult, JsonRequestBehavior.AllowGet);
+        }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult CloseLocation(int? locationid, int? environmentid)
+        {
+            
+            ResultControlModel model = new ResultControlModel();
+            UfeServiceClient service = new UfeServiceClient(model.Authentication.ActionEmployee.Token);
 
+            var serviceresult = service.LocationShiftEnd(locationid.Value, environmentid, 0, 0);
+
+            string content = $"<a href='#' onclick='CloseLocation({locationid},{environmentid})'> <i class='ion ion-md-sunny tx-sm-24'></i></a>";
+
+            if (serviceresult.IsSuccess == true)
+            {
+                content = $"<a href='#'> <i class='ion ion-md-moon tx-sm-24'></i></a>";
+            }
+            serviceresult.Content = content;
+
+            return Json(serviceresult, JsonRequestBehavior.AllowGet);
         }
 
     }
