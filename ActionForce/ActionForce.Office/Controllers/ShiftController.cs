@@ -78,13 +78,13 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public JsonResult OpenLocation(int? locationid, int? environmentid)
+        public JsonResult OpenLocation(int? locationid, int? environmentid, string date)
         {
-            
+
             ResultControlModel model = new ResultControlModel();
             UfeServiceClient service = new UfeServiceClient(model.Authentication.ActionEmployee.Token);
 
-            var serviceresult = service.LocationShiftStart(locationid.Value, environmentid, 0, 0);
+            var serviceresult = service.LocationShiftStart(locationid.Value, environmentid, 0, 0, date);
 
             string content = $"<a href='#' onclick='OpenLocation({locationid},{environmentid})'> <i class='ion ion-md-alarm tx-sm-24'></i></a>";
             if (serviceresult.IsSuccess == true)
@@ -98,13 +98,13 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public JsonResult CloseLocation(int? locationid, int? environmentid)
+        public JsonResult CloseLocation(int? locationid, int? environmentid, string date)
         {
-            
+
             ResultControlModel model = new ResultControlModel();
             UfeServiceClient service = new UfeServiceClient(model.Authentication.ActionEmployee.Token);
 
-            var serviceresult = service.LocationShiftEnd(locationid.Value, environmentid, 0, 0);
+            var serviceresult = service.LocationShiftEnd(locationid.Value, environmentid, 0, 0, date);
 
             string content = $"<a href='#' onclick='CloseLocation({locationid},{environmentid})'> <i class='ion ion-md-sunny tx-sm-24'></i></a>";
 

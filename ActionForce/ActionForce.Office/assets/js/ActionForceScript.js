@@ -209,13 +209,16 @@ function AddBankTransfer(id, itemid) {
 
 function OpenLocation(id, envid) {
 
+    var date = $("#CurrentDateCode").val();
     var data = new FormData();
 
     data.append('locationid', id);
     data.append('environmentid', envid);
+    data.append('date', date);
 
     console.log(id);
     console.log(envid);
+    console.log(date);
 
     $.ajax({
         cache: false,
@@ -230,8 +233,8 @@ function OpenLocation(id, envid) {
         },
     }).done(function (d) {
 
-        var data = d; 
-        if (typeof (d) == "Object") { 
+        var data = d;
+        if (typeof (d) == "Object") {
             data = JSON.parse(d);
         }
         console.log(data);
@@ -255,14 +258,16 @@ function OpenLocation(id, envid) {
 
 function CloseLocation(id, envid) {
 
-
+    var date = $("#CurrentDateCode").val();
     var data = new FormData();
 
     data.append('locationid', id);
     data.append('environmentid', envid);
+    data.append('date', date);
 
     console.log(id);
     console.log(envid);
+    console.log(date);
 
     $.ajax({
         cache: false,

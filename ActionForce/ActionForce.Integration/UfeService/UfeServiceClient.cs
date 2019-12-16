@@ -22,10 +22,10 @@ namespace ActionForce.Integration.UfeService
             Client.AddDefaultHeader("authorization", $"Basic {Token}");
         }
 
-        public LocationShiftResult LocationShiftStart(int locationID, int? environmentID, double? latitude, double? longitude)
+        public LocationShiftResult LocationShiftStart(int locationID, int? environmentID, double? latitude, double? longitude, string _Date)
         {
             var request = new RestRequest("Location/ShiftStart", Method.POST);
-            request.AddJsonBody(new { LocationID = locationID, EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude });
+            request.AddJsonBody(new { LocationID = locationID, EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude, Date = _Date });
             var response = Client.Execute<LocationShiftResult>(request);
             if (response.ResponseStatus == ResponseStatus.Completed && response.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -34,10 +34,10 @@ namespace ActionForce.Integration.UfeService
             return null;
         }
 
-        public LocationShiftResult LocationShiftEnd(int locationID, int? environmentID, double? latitude, double? longitude)
+        public LocationShiftResult LocationShiftEnd(int locationID, int? environmentID, double? latitude, double? longitude, string _Date)
         {
             var request = new RestRequest("Location/ShiftEnd", Method.POST);
-            request.AddJsonBody(new { LocationID = locationID, EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude });
+            request.AddJsonBody(new { LocationID = locationID, EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude, Date = _Date });
             var response = Client.Execute<LocationShiftResult>(request);
             if (response.ResponseStatus == ResponseStatus.Completed && response.StatusCode == System.Net.HttpStatusCode.OK)
             {

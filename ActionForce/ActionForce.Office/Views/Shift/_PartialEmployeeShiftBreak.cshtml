@@ -16,4 +16,5 @@
         <td class="bd-l wd-150">@(employeebreak.Count()) | @(employeebreak.Sum(x => x.BreakDurationMinute)) | @(employeebreak.Average(x => x.BreakDurationMinute)?.ToString("N2"))</td>
         <td class="tx-sm-10 text-right">@(employeebreakcurrent != null ? Html.Raw("<i data-feather='coffee'></i>") : employeeshift != null && employeeshift.DurationMinute == null ? Html.Raw("<i data-feather='watch'></i>") : employeeshift != null && employeeshift.DurationMinute != null ? Html.Raw("<i data-feather='cloud'></i>") : Html.Raw("") )</td>
     </tr>
+
 }
