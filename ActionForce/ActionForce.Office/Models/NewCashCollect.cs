@@ -259,6 +259,7 @@ namespace ActionForce.Office
         public string Currency { get; set; }
         public string DocumentDate { get; set; }
         public string SlipDate { get; set; }
+        public string SlipTime { get; set; }
         public string SlipNumber { get; set; }
         public string SlipFile { get; set; }
         public Guid UID { get; set; }

@@ -985,8 +985,9 @@ namespace ActionForce.Office.Controllers
 
             if (empSalary != null)
             {
-                var our = Db.VEmployeeSalary.FirstOrDefault(x => x.EmployeeID == empSalary.EmployeeID);
+                var our = Db.VEmployee.FirstOrDefault(x => x.EmployeeID == empSalary.EmployeeID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == our.OurCompanyID);
+
                 var hourly = Convert.ToDouble(empSalary.Hourly.Replace(".", ","));
                 var hourlyExtent = Convert.ToDouble(empSalary.HourlyExtend.Replace(".", ","));
                 var extendMultiplyRate = Convert.ToDouble(empSalary.ExtendMultiplyRate.Replace(".", ","));
@@ -1105,8 +1106,11 @@ namespace ActionForce.Office.Controllers
         {
             SalaryControlModel model = new SalaryControlModel();
 
+            model.CurrentEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == id);
+
             model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.EmployeeID == id).ToList();
             model.UnitSalary = model.UnitSalaryList.OrderByDescending(x => x.DateStart).FirstOrDefault();
+
             return PartialView("_PartialAddEmployeeSalary", model);
         }
 

@@ -1249,6 +1249,7 @@ namespace ActionForce.Office.Controllers
                 model.Filters = filterModel;
             }
 
+            model.bankAccount = Db.BankAccount.ToList();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
