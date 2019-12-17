@@ -109,8 +109,10 @@
                             <td>
                                 @if (item.SlipFile != null)
                                 {
-                                
-                                    <img src="@(string.Format("../"+ item.SlipPath +"/{0}",item.SlipFile))" class="img-fluid img-thumbnail" width="64">
+                                    <a target="_blank" href="@(string.Format("../"+ item.SlipPath +"/{0}",item.SlipFile))">
+                                        <img class="img-fluid img-thumbnail thumb" src="@(string.Format("../"+ item.SlipPath +"/{0}",item.SlipFile))" alt="@item.SlipFile" width="64">
+                                    </a>
+                                    
                                 }
 
 

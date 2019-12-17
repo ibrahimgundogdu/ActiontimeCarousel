@@ -83,7 +83,7 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddPosCollection(NewPosCollect posCollect)
         {
-            Result<BankActions> result = new Result<BankActions>()
+            Result<DocumentPosCollections> result = new Result<DocumentPosCollections>()
             {
                 IsSuccess = false,
                 Message = string.Empty,
@@ -108,58 +108,30 @@ namespace ActionForce.Office.Controllers
                 {
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
-                //var cash = OfficeHelper.GetCash(posCollect.LocationID, posCollect.Currency);
+                
                 var refID = string.IsNullOrEmpty(posCollect.ReferanceID);
+                var exchange = OfficeHelper.GetExchange(docDate);
 
-                try
-                {
-                    var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+                PosCollection pos = new PosCollection();
 
-                    DocumentPosCollections newPosColl = new DocumentPosCollections();
+                pos.ActinTypeID = actType.ID;
+                pos.ActionTypeName = actType.Name;
+                pos.Amount = amount;
+                pos.BankAccountID = posCollect.BankAccountID;
+                pos.Currency = currency;
+                pos.DocumentDate = docDate;
+                pos.Description = posCollect.Description;
+                pos.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                pos.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                pos.LocationID = posCollect.LocationID;
+                pos.OurCompanyID = location.OurCompanyID;
+                pos.TimeZone = timezone;
+                pos.ReferanceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
+                pos.TerminalID = posTerminal != null ? posTerminal.TerminalID?.ToString() : "";
 
-                    newPosColl.ActionTypeID = actType.ID;
-                    newPosColl.ActionTypeName = actType.Name;
-                    newPosColl.Amount = amount;
-                    newPosColl.Currency = currency;
-                    newPosColl.Date = docDate;
-                    newPosColl.Description = posCollect.Description;
-                    newPosColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "PC");
-                    newPosColl.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
-                    newPosColl.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                    newPosColl.IsActive = true;
-                    newPosColl.LocationID = posCollect.LocationID;
-                    newPosColl.OurCompanyID = location.OurCompanyID;
-                    newPosColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
-                    newPosColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                    newPosColl.RecordIP = OfficeHelper.GetIPAddress();
-                    newPosColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newPosColl.ExchangeRate;
-                    newPosColl.SystemCurrency = ourcompany.Currency;
-                    newPosColl.EnvironmentID = 2;
-                    newPosColl.BankAccountID = posCollect.BankAccountID;
-                    newPosColl.ReferenceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
-                    //newPosColl.TerminalID = posTerminal.TerminalNumber != "" ? posTerminal != null ? posTerminal.TerminalNumber : "" : "";
-                    newPosColl.UID = Guid.NewGuid();
-
-                    Db.DocumentPosCollections.Add(newPosColl);
-                    Db.SaveChanges();
-
-                    // cari hesap işlemesi
-                    OfficeHelper.AddBankAction(newPosColl.LocationID, null, newPosColl.BankAccountID, null, newPosColl.ActionTypeID, newPosColl.Date, newPosColl.ActionTypeName, newPosColl.ID, newPosColl.Date, newPosColl.DocumentNumber, newPosColl.Description, 1, newPosColl.Amount, 0, newPosColl.Currency, null, null, newPosColl.RecordEmployeeID, newPosColl.RecordDate);
-
-                    result.IsSuccess = true;
-                    result.Message = "Pos Tahsilatı başarı ile eklendi";
-
-                    // log atılır
-                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", newPosColl.ID.ToString(), "Bank", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newPosColl);
-
-                }
-                catch (Exception ex)
-                {
-
-                    result.Message = $"Pos Tahsilatı eklenemedi : {ex.Message}";
-                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", "-1", "Bank", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty,null);
-
-                }
+                DocumentManager documentManager = new DocumentManager();
+                result = documentManager.AddPosCollection(pos, model.Authentication);
+                
 
             }
 
@@ -239,12 +211,13 @@ namespace ActionForce.Office.Controllers
                 var exchanges = posCollect.ExchangeRate;
                 var isDate = DateTime.Now.Date;
                 var isKasa = posCollect.BankAccountID;
-
+                int? locId = location.LocationID;
                 var isCash = Db.DocumentPosCollections.FirstOrDefault(x => x.UID == posCollect.UID);
                 if (isCash != null)
                 {
                     try
                     {
+                        locId = isCash.LocationID;
                         isDate = Convert.ToDateTime(isCash.Date);
                         isKasa = Convert.ToInt32(isCash.BankAccountID);
                         var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(docDate));
@@ -277,7 +250,7 @@ namespace ActionForce.Office.Controllers
                             TerminalID = isCash.TerminalID,
                             EnvironmentID = isCash.EnvironmentID
                         };
-
+                        isCash.LocationID = posCollect.LocationID;
                         isCash.Date = docDate;
                         isCash.BankAccountID = posCollect.BankAccountID;
                         isCash.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
@@ -293,10 +266,11 @@ namespace ActionForce.Office.Controllers
 
                         Db.SaveChanges();
 
-                        var cashaction = Db.BankActions.FirstOrDefault(x => x.BankAccountID == isKasa && x.LocationID == isCash.LocationID && x.BankActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
+                        var cashaction = Db.BankActions.FirstOrDefault(x => x.BankAccountID == isKasa && x.LocationID == locId && x.BankActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
 
                         if (cashaction != null)
                         {
+                            cashaction.LocationID = isCash.LocationID;
                             cashaction.Collection = isCash.Amount;
                             cashaction.Currency = posCollect.Currency;
                             cashaction.BankAccountID = posCollect.BankAccountID;
@@ -491,7 +465,7 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddPosCancel(NewPosCancel posCollect)
         {
-            Result<BankActions> result = new Result<BankActions>()
+            Result<DocumentPosCancel> result = new Result<DocumentPosCancel>()
             {
                 IsSuccess = false,
                 Message = string.Empty,
@@ -519,55 +493,28 @@ namespace ActionForce.Office.Controllers
                 //var cash = OfficeHelper.GetCash(posCollect.LocationID, posCollect.Currency);
                 var refID = string.IsNullOrEmpty(posCollect.ReferanceID);
 
-                try
-                {
-                    var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+                var exchange = OfficeHelper.GetExchange(docDate);
 
-                    DocumentPosCancel newPosColl = new DocumentPosCancel();
+                PosCancel pos = new PosCancel();
 
-                    newPosColl.ActionTypeID = actType.ID;
-                    newPosColl.ActionTypeName = actType.Name;
-                    newPosColl.Amount = amount;
-                    newPosColl.Currency = currency;
-                    newPosColl.Date = docDate;
-                    newPosColl.Description = posCollect.Description;
-                    newPosColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "PCN");
-                    newPosColl.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
-                    newPosColl.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                    newPosColl.IsActive = true;
-                    newPosColl.LocationID = posCollect.LocationID;
-                    newPosColl.OurCompanyID = location.OurCompanyID;
-                    newPosColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
-                    newPosColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                    newPosColl.RecordIP = OfficeHelper.GetIPAddress();
-                    newPosColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newPosColl.ExchangeRate;
-                    newPosColl.SystemCurrency = ourcompany.Currency;
-                    newPosColl.EnvironmentID = 2;
-                    newPosColl.FromBankAccountID = posCollect.BankAccountID;
-                    newPosColl.ReferenceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
-                    //newPosColl.TerminalID = posTerminal.TerminalNumber != "" ? posTerminal != null ? posTerminal.TerminalNumber : "" : "";
-                    newPosColl.UID = Guid.NewGuid();
+                pos.ActinTypeID = actType.ID;
+                pos.ActionTypeName = actType.Name;
+                pos.Amount = amount;
+                pos.FromBankAccountID = posCollect.BankAccountID;
+                pos.Currency = currency;
+                pos.DocumentDate = docDate;
+                pos.Description = posCollect.Description;
+                pos.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                pos.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                pos.LocationID = posCollect.LocationID;
+                pos.OurCompanyID = location.OurCompanyID;
+                pos.TimeZone = timezone;
+                pos.ReferanceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
+                pos.TerminalID = posTerminal != null ? posTerminal.TerminalID?.ToString() : "";
 
-                    Db.DocumentPosCancel.Add(newPosColl);
-                    Db.SaveChanges();
-
-                    
-                    OfficeHelper.AddBankAction(newPosColl.LocationID, null, newPosColl.FromBankAccountID, null, newPosColl.ActionTypeID, newPosColl.Date, newPosColl.ActionTypeName, newPosColl.ID, newPosColl.Date, newPosColl.DocumentNumber, newPosColl.Description, -1, 0, newPosColl.Amount, newPosColl.Currency, null, null, newPosColl.RecordEmployeeID, newPosColl.RecordDate);
-
-                    result.IsSuccess = true;
-                    result.Message = "Pos İptali başarı ile eklendi";
-
-                    
-                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", newPosColl.ID.ToString(), "Bank", "PosCancel", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newPosColl);
-
-                }
-                catch (Exception ex)
-                {
-
-                    result.Message = $"Pos İptali eklenemedi : {ex.Message}";
-                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", "-1", "Bank", "PosCancel", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-                }
+                DocumentManager documentManager = new DocumentManager();
+                result = documentManager.AddPosCancel(pos, model.Authentication);
+                
 
             }
 
@@ -647,11 +594,13 @@ namespace ActionForce.Office.Controllers
                 var exchanges = posCollect.ExchangeRate;
                 var isDate = DateTime.Now.Date;
                 var isKasa = posCollect.BankAccountID;
+                int? locId = location.LocationID;
                 var isCash = Db.DocumentPosCancel.FirstOrDefault(x => x.UID == posCollect.UID);
                 if (isCash != null)
                 {
                     try
                     {
+                        locId = isCash.LocationID;
                         isDate = Convert.ToDateTime(isCash.Date);
                         isKasa = Convert.ToInt32(isCash.FromBankAccountID);
                         var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(docDate));
@@ -684,7 +633,7 @@ namespace ActionForce.Office.Controllers
                             TerminalID = isCash.TerminalID,
                             EnvironmentID = isCash.EnvironmentID
                         };
-
+                        isCash.LocationID = posCollect.LocationID;
                         isCash.Date = docDate;
                         isCash.FromBankAccountID = posCollect.BankAccountID;
                         isCash.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
@@ -700,10 +649,11 @@ namespace ActionForce.Office.Controllers
 
                         Db.SaveChanges();
 
-                        var cashaction = Db.BankActions.FirstOrDefault(x => x.BankAccountID == isKasa && x.LocationID == isCash.LocationID && x.BankActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
+                        var cashaction = Db.BankActions.FirstOrDefault(x => x.BankAccountID == isKasa && x.LocationID == locId && x.BankActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
 
                         if (cashaction != null)
                         {
+                            cashaction.LocationID = isCash.LocationID;
                             cashaction.Payment = isCash.Amount;
                             cashaction.Currency = posCollect.Currency;
                             cashaction.BankAccountID = posCollect.BankAccountID;
@@ -862,7 +812,7 @@ namespace ActionForce.Office.Controllers
             }
 
 
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value);
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
 
             return View(model);
         }
@@ -897,7 +847,7 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddPosRefund(NewPosReturn posCollect)
         {
-            Result<BankActions> result = new Result<BankActions>()
+            Result<DocumentPosRefund> result = new Result<DocumentPosRefund>()
             {
                 IsSuccess = false,
                 Message = string.Empty,
@@ -925,55 +875,29 @@ namespace ActionForce.Office.Controllers
                 //var cash = OfficeHelper.GetCash(posCollect.LocationID, posCollect.Currency);
 
                 var refID = string.IsNullOrEmpty(posCollect.ReferanceID);
-                try
-                {
-                    var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
 
-                    DocumentPosRefund newPosColl = new DocumentPosRefund();
+                var exchange = OfficeHelper.GetExchange(docDate);
 
-                    newPosColl.ActionTypeID = actType.ID;
-                    newPosColl.ActionTypeName = actType.Name;
-                    newPosColl.Amount = amount;
-                    newPosColl.Currency = currency;
-                    newPosColl.Date = docDate;
-                    newPosColl.Description = posCollect.Description;
-                    newPosColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "PRF");
-                    newPosColl.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
-                    newPosColl.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                    newPosColl.IsActive = true;
-                    newPosColl.LocationID = posCollect.LocationID;
-                    newPosColl.OurCompanyID = location.OurCompanyID;
-                    newPosColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
-                    newPosColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                    newPosColl.RecordIP = OfficeHelper.GetIPAddress();
-                    newPosColl.SystemAmount = ourcompany.Currency == currency ? amount : amount * newPosColl.ExchangeRate;
-                    newPosColl.SystemCurrency = ourcompany.Currency;
-                    newPosColl.EnvironmentID = 2;
-                    newPosColl.FromBankAccountID = posCollect.BankAccountID;
-                    newPosColl.ReferenceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
-                    //newPosColl.TerminalID = posTerminal.TerminalNumber != "" ? posTerminal != null ? posTerminal.TerminalNumber : "" : "";
-                    newPosColl.UID = Guid.NewGuid();
+                PosRefund pos = new PosRefund();
 
-                    Db.DocumentPosRefund.Add(newPosColl);
-                    Db.SaveChanges();
+                pos.ActinTypeID = actType.ID;
+                pos.ActionTypeName = actType.Name;
+                pos.Amount = amount;
+                pos.FromBankAccountID = posCollect.BankAccountID;
+                pos.Currency = currency;
+                pos.DocumentDate = docDate;
+                pos.Description = posCollect.Description;
+                pos.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                pos.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                pos.LocationID = posCollect.LocationID;
+                pos.OurCompanyID = location.OurCompanyID;
+                pos.TimeZone = timezone;
+                pos.ReferanceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
+                pos.TerminalID = posTerminal != null ? posTerminal.TerminalID?.ToString() : "";
 
-                    // cari hesap işlemesi
-                    OfficeHelper.AddBankAction(newPosColl.LocationID, null, newPosColl.FromBankAccountID, null, newPosColl.ActionTypeID, newPosColl.Date, newPosColl.ActionTypeName, newPosColl.ID, newPosColl.Date, newPosColl.DocumentNumber, newPosColl.Description, -1, 0, newPosColl.Amount, newPosColl.Currency, null, null, newPosColl.RecordEmployeeID, newPosColl.RecordDate);
-
-                    result.IsSuccess = true;
-                    result.Message = "Pos İade başarı ile eklendi";
-
-                    // log atılır
-                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", newPosColl.ID.ToString(), "Bank", "PosRefund", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newPosColl);
-
-                }
-                catch (Exception ex)
-                {
-
-                    result.Message = $"Pos İade eklenemedi : {ex.Message}";
-                    OfficeHelper.AddApplicationLog("Office", "Bank", "Insert", "-1", "Bank", "PosRefund", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-                }
+                DocumentManager documentManager = new DocumentManager();
+                result = documentManager.AddPosRefund(pos, model.Authentication);
+                
 
             }
 
@@ -1053,7 +977,7 @@ namespace ActionForce.Office.Controllers
                 var exchanges = posCollect.ExchangeRate;
                 var isDate = DateTime.Now.Date;
                 var isKasa = posCollect.BankAccountID;
-
+                int? locId = location.LocationID;
                 var isCash = Db.DocumentPosRefund.FirstOrDefault(x => x.UID == posCollect.UID);
                 if (isCash != null)
                 {
@@ -1061,6 +985,7 @@ namespace ActionForce.Office.Controllers
                     {
                         isDate = Convert.ToDateTime(isCash.Date);
                         isKasa = Convert.ToInt32(isCash.FromBankAccountID);
+                        locId = isCash.LocationID;
                         var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(docDate));
 
                         DocumentPosRefund self = new DocumentPosRefund()
@@ -1091,7 +1016,7 @@ namespace ActionForce.Office.Controllers
                             TerminalID = isCash.TerminalID,
                             EnvironmentID = isCash.EnvironmentID
                         };
-
+                        isCash.LocationID = posCollect.LocationID;
                         isCash.Date = docDate;
                         isCash.FromBankAccountID = posCollect.BankAccountID;
                         isCash.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
@@ -1107,10 +1032,11 @@ namespace ActionForce.Office.Controllers
 
                         Db.SaveChanges();
 
-                        var cashaction = Db.BankActions.FirstOrDefault(x => x.BankAccountID == isKasa && x.LocationID == isCash.LocationID && x.BankActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
+                        var cashaction = Db.BankActions.FirstOrDefault(x => x.BankAccountID == isKasa && x.LocationID == locId && x.BankActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
 
                         if (cashaction != null)
                         {
+                            cashaction.LocationID = isCash.LocationID;
                             cashaction.Payment = isCash.Amount;
                             cashaction.Currency = posCollect.Currency;
                             cashaction.BankAccountID = posCollect.BankAccountID;

@@ -284,7 +284,7 @@ namespace ActionForce.Office.Controllers
 
             SalaryPayment payment = new SalaryPayment();
 
-            payment.ActionTypeID = typeid.Value;
+            payment.ActinTypeID = typeid.Value;
             payment.ActionTypeName = actType.Name;
             payment.Currency = location.Currency;
             payment.Description = description;
@@ -348,7 +348,7 @@ namespace ActionForce.Office.Controllers
 
             BankTransfer bankTransfer = new BankTransfer();
 
-            bankTransfer.ActionTypeID = actType.ID;
+            bankTransfer.ActinTypeID = actType.ID;
             bankTransfer.ActionTypeName = actType.Name;
             bankTransfer.Amount = transamount;
             bankTransfer.Commission = transcommission;

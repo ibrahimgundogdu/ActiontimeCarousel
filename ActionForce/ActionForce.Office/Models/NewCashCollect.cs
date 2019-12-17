@@ -30,6 +30,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
         public string ReferanceID { get; set; }
+        public int PayMethodID { get; set; }
         public Guid UID { get; set; }
     }
     public class NewCashExchange

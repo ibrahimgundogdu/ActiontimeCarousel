@@ -79,6 +79,7 @@
                         <th>Para Br.</th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
+                        <th>Döküman</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -103,6 +104,18 @@
                         <td class="tx-sm-13">@(item.ToCurrency)</td>
                         <td class="tx-sm-13">@item.RecorderFullName</td>
                         <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                        <td>
+                            @if (item.SlipDocument != null)
+                            {
+
+                                <a target="_blank" href="@(string.Format("../Document/Exchange/{0}",item.SlipDocument))">
+                                    <img class="img-fluid img-thumbnail thumb" src="@(string.Format("../Document/Exchange/{0}",item.SlipDocument))" alt="@item.SlipDocument" width="64">
+                                </a>
+                                @*<img src="@(string.Format("../Document/Expense/{0}",item.SlipDocument))" class="img-fluid img-thumbnail" width="64">*@
+                            }
+
+
+                        </td>
                         <td class="tx-sm-13 text-right"><a href="@("/Cash/ExchangeDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
                         @if (item.IsActive == true)
                         {
