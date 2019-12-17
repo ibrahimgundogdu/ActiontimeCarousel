@@ -1,7 +1,8 @@
 ﻿@model EmployeeShiftModel
 @{
 
-
+    var location = Model.Location;
+    var employee = Model.Employee;
     var employeeschedule = Model.EmployeeSchedule;
     var employeeshift = Model.EmployeeShift;
     var employeebreak = Model.EmployeeBreaks;
@@ -9,12 +10,54 @@
 
 
 
-    <tr class="@(employeeshift != null && employeeshift.DurationMinute == null ? "table-info":"table-warning")" id="@($"EmployeeStatus_{Model.Location.LocationID}_{Model.Employee.EmployeeID}_2")">
-        <td class="wd-300 tx-sm-13 font-weight-bold">@Model.Employee.FullName</td>
-        <td class="wd-md-120 @(employeeshift != null && employeeshift.DurationMinute == null ? "bg-info":"bg-warning") text-center" onclick="ss()" style="padding:2px !important;">@(employeeschedule != null ? employeeschedule?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeschedule?.ShiftdateEnd != null ? " - " + employeeschedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
-        <td class="wd-md-120 text-center" style="padding:4px !important;">@(employeeshift != null ? employeeshift?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeshift?.ShiftDateEnd != null ? " - " + employeeshift?.ShiftDateEnd?.ToString("HH\\:mm") : "")</td>
-        <td class="bd-l wd-150">@(employeebreak.Count()) | @(employeebreak.Sum(x => x.BreakDurationMinute)) | @(employeebreak.Average(x => x.BreakDurationMinute)?.ToString("N2"))</td>
-        <td class="tx-sm-10 text-right">@(employeebreakcurrent != null ? Html.Raw("<i data-feather='coffee'></i>") : employeeshift != null && employeeshift.DurationMinute == null ? Html.Raw("<i data-feather='watch'></i>") : employeeshift != null && employeeshift.DurationMinute != null ? Html.Raw("<i data-feather='cloud'></i>") : Html.Raw("") )</td>
-    </tr>
+    <td class="wd-300 tx-sm-13 font-weight-bold">@employee.FullName</td>
+    <td class="wd-150 text-center @(employeeshift != null && employeeshift.DurationMinute == null ? "bg-info":"bg-warning")" onclick="ss()" style="padding:2px !important;">@(employeeschedule != null ? employeeschedule?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeschedule?.ShiftdateEnd != null ? " - " + employeeschedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
+    <td class="wd-150 text-center" style="padding:4px !important;">@(employeeshift != null ? employeeshift?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeshift?.ShiftDateEnd != null ? " - " + employeeshift?.ShiftDateEnd?.ToString("HH\\:mm") : "")</td>
+    <td class="wd-20 text-center">
+        @if (employeeshift == null)
+        {
+            <a href='#' class="text-warning font-weight-bold" onclick="StartEmployeeShift(@location.LocationID,@employee.EmployeeID,2)"> <i class="ion ion-md-finger-print tx-sm-24"></i></a>
+        }
+        else if (employeeshift != null && employeeshift.DurationMinute == null)
+        {
+            <a href='#' class="text-info font-weight-bold" onclick="FinishEmployeeShift(@location.LocationID,@employee.EmployeeID,2)"> <i class="ion ion-md-finger-print tx-sm-24"></i> </a>
 
+        }
+        else
+        {
+            <a href='#' class="text-dark"><i class="ion ion-md-glasses tx-sm-24"></i></a>
+        }
+
+    </td>
+    <td class="bd-l wd-150">@(employeebreak.Count()) | @(employeebreak.Sum(x => x.BreakDurationMinute)) | @(employeebreak.Average(x => x.BreakDurationMinute)?.ToString("N2"))</td>
+    <td class="wd-20 text-center">
+
+        @if (employeebreakcurrent == null)
+        {
+            <a href='#' class="text-info font-weight-bold" onclick='StartEmployeeBreak(@location.LocationID,@employee.EmployeeID,2)'> <i class='ion ion-md-timer tx-sm-24'></i></a>
+        }
+        else if (employeebreakcurrent != null && employeebreakcurrent.DurationMinute == null)
+        {
+            <a href='#' class="text-warning font-weight-bold" onclick='FinishEmployeeBreak(@location.LocationID,@employee.EmployeeID,2)'> <i class='ion ion-md-timer tx-sm-24'></i></a>
+        }
+        else
+        {
+            <a href='#' class="text-dark"><i class="ion ion-md-bicycle tx-sm-24"></i></a>
+        }
+    </td>
+    <td class="tx-sm-24 text-right">@(employeebreakcurrent != null ? Html.Raw("<i class='ion ion-md-cafe'></i>") : employeeshift != null && employeeshift.DurationMinute == null ? Html.Raw("<i class='ion ion-md-stopwatch'></i>") : employeeshift != null && employeeshift.DurationMinute != null ? Html.Raw("<i class='ion ion-md-cloud-outline'></i>") : Html.Raw("") )</td>
+}
+
+@if (Model.Result != null) //
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
 }

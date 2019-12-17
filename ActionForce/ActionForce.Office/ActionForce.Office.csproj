@@ -2538,6 +2538,7 @@
     <Content Include="Views\Salary\Current.cshtml" />
     <Content Include="Views\Bank\Current.cshtml" />
     <Content Include="Views\Shift\_PartialEmployeeShiftBreak.cshtml" />
+    <Content Include="Views\Shift\_PartialEditLocationShift.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

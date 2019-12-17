@@ -14,6 +14,9 @@ namespace ActionForce.Office
         public IEnumerable<LocationShift> LocationShifts { get; set; }
         public IEnumerable<LocationSchedule> LocationSchedules { get; set; }
 
+        public LocationShift LocationShift { get; set; }
+        public LocationSchedule LocationSchedule { get; set; }
+
         public IEnumerable<EmployeeShift> EmployeeShifts { get; set; }
         public IEnumerable<EmployeeShift> EmployeeBreaks { get; set; }
         public IEnumerable<Schedule> EmployeeSchedules { get; set; }

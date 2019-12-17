@@ -2,6 +2,7 @@
 using ActionForce.Integration.UfeService;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -58,17 +59,87 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult LocationShift()
+        public ActionResult LocationShift(string date)
         {
             ShiftControlModel model = new ShiftControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result<EmployeeShift> ?? null;
+            }
+
+            var _date = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            if (!string.IsNullOrEmpty(date))
+            {
+                _date = Convert.ToDateTime(date).Date;
+                datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+            }
+
+            var refresh = Db.SetShiftDates();
+
+            model.CurrentDate = datekey;
+            model.TodayDateCode = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date.ToString("yyyy-MM-dd");
+            model.CurrentDateCode = _date.ToString("yyyy-MM-dd");
+            model.PrevDateCode = _date.AddDays(-1).Date.ToString("yyyy-MM-dd");
+            model.NextDateCode = _date.AddDays(1).Date.ToString("yyyy-MM-dd");
+
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.Locations = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            List<int> locationids = model.Locations.Select(x => x.LocationID).ToList();
+
+            model.LocationSchedules = Db.LocationSchedule.Where(x => locationids.Contains(x.LocationID.Value) && x.ShiftDate == datekey.DateKey && x.StatusID == 2).ToList();
+            model.LocationShifts = Db.LocationShift.Where(x => locationids.Contains(x.LocationID) && x.ShiftDate == datekey.DateKey).ToList();
 
             return View(model);
         }
 
         [AllowAnonymous]
-        public ActionResult EmployeeShift()
+        public ActionResult EmployeeShift(string date)
         {
             ShiftControlModel model = new ShiftControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result<EmployeeShift> ?? null;
+            }
+
+            var _date = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            if (!string.IsNullOrEmpty(date))
+            {
+                _date = Convert.ToDateTime(date).Date;
+                datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+            }
+
+            var refresh = Db.SetShiftDates();
+
+            model.CurrentDate = datekey;
+            model.TodayDateCode = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date.ToString("yyyy-MM-dd");
+            model.CurrentDateCode = _date.ToString("yyyy-MM-dd");
+            model.PrevDateCode = _date.AddDays(-1).Date.ToString("yyyy-MM-dd");
+            model.NextDateCode = _date.AddDays(1).Date.ToString("yyyy-MM-dd");
+
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.Locations = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            List<int> locationids = model.Locations.Select(x => x.LocationID).ToList();
+
+            model.LocationSchedules = Db.LocationSchedule.Where(x => locationids.Contains(x.LocationID.Value) && x.ShiftDate == datekey.DateKey && x.StatusID == 2).ToList();
+            model.LocationShifts = Db.LocationShift.Where(x => locationids.Contains(x.LocationID) && x.ShiftDate == datekey.DateKey).ToList();
+
+            model.EmployeeSchedules = Db.Schedule.Where(x => locationids.Contains(x.LocationID.Value) && x.ShiftDate == model.CurrentDate.DateKey).ToList();
+            List<int> employeeids = model.EmployeeSchedules.Select(x => x.EmployeeID.Value).ToList();
+
+            model.Employees = Db.Employee.Where(x => employeeids.Contains(x.EmployeeID) && x.IsActive == true).ToList();
+
+            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.ShiftDate == model.CurrentDate.DateKey && x.IsWorkTime == true).ToList();
+            model.EmployeeBreaks = Db.EmployeeShift.Where(x => x.ShiftDate == model.CurrentDate.DateKey && x.IsBreakTime == true).ToList();
 
             return View(model);
         }
@@ -117,5 +188,220 @@ namespace ActionForce.Office.Controllers
             return Json(serviceresult, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult StartEmployeeShift(int locationid, int employeeid, int environmentid, string date)
+        {
+
+            EmployeeShiftModel model = new EmployeeShiftModel();
+
+            UfeServiceClient service = new UfeServiceClient(model.Authentication.ActionEmployee.Token);
+
+
+
+            var serviceresult = service.EmployeeShiftStart(locationid, employeeid, environmentid, 0, 0, date);
+
+            model.Result = new Result<EmployeeShift>() { IsSuccess = serviceresult.IsSuccess, Message = serviceresult.Message };
+            model.Employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == employeeid);
+            model.Location = Db.Location.FirstOrDefault(x => x.LocationID == locationid);
+
+            var shiftdate = model.Location.LocalDateTime.Value.Date;
+            if (!string.IsNullOrEmpty(date))
+            {
+                shiftdate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            }
+
+            model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsWorkTime == true);
+            model.EmployeeBreaks = Db.EmployeeShift.Where(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsBreakTime == true).ToList();
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.StatusID == 2);
+
+
+            return PartialView("_PartialEmployeeShiftBreak", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult FinishEmployeeShift(int locationid, int employeeid, int environmentid, string date)
+        {
+
+            EmployeeShiftModel model = new EmployeeShiftModel();
+
+            UfeServiceClient service = new UfeServiceClient(model.Authentication.ActionEmployee.Token);
+
+
+
+            var serviceresult = service.EmployeeShiftEnd(locationid, employeeid, environmentid, 0, 0, date);
+
+            model.Result = new Result<EmployeeShift>() { IsSuccess = serviceresult.IsSuccess, Message = serviceresult.Message };
+            model.Employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == employeeid);
+            model.Location = Db.Location.FirstOrDefault(x => x.LocationID == locationid);
+
+            var shiftdate = model.Location.LocalDateTime.Value.Date;
+            if (!string.IsNullOrEmpty(date))
+            {
+                shiftdate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            }
+
+            model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsWorkTime == true);
+            model.EmployeeBreaks = Db.EmployeeShift.Where(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsBreakTime == true).ToList();
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.StatusID == 2);
+
+
+            return PartialView("_PartialEmployeeShiftBreak", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult StartEmployeeBreak(int locationid, int employeeid, int environmentid, string date)
+        {
+
+            EmployeeShiftModel model = new EmployeeShiftModel();
+
+            UfeServiceClient service = new UfeServiceClient(model.Authentication.ActionEmployee.Token);
+
+
+
+            var serviceresult = service.EmployeeBreakStart(locationid, employeeid, environmentid, 0, 0, date);
+
+            model.Result = new Result<EmployeeShift>() { IsSuccess = serviceresult.IsSuccess, Message = serviceresult.Message };
+            model.Employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == employeeid);
+            model.Location = Db.Location.FirstOrDefault(x => x.LocationID == locationid);
+
+            var shiftdate = model.Location.LocalDateTime.Value.Date;
+            if (!string.IsNullOrEmpty(date))
+            {
+                shiftdate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            }
+
+            model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsWorkTime == true);
+            model.EmployeeBreaks = Db.EmployeeShift.Where(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsBreakTime == true).ToList();
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.StatusID == 2);
+
+
+            return PartialView("_PartialEmployeeShiftBreak", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult FinishEmployeeBreak(int locationid, int employeeid, int environmentid, string date)
+        {
+
+            EmployeeShiftModel model = new EmployeeShiftModel();
+
+            UfeServiceClient service = new UfeServiceClient(model.Authentication.ActionEmployee.Token);
+
+
+
+            var serviceresult = service.EmployeeBreakEnd(locationid, employeeid, environmentid, 0, 0, date);
+
+            model.Result = new Result<EmployeeShift>() { IsSuccess = serviceresult.IsSuccess, Message = serviceresult.Message };
+            model.Employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == employeeid);
+            model.Location = Db.Location.FirstOrDefault(x => x.LocationID == locationid);
+
+            var shiftdate = model.Location.LocalDateTime.Value.Date;
+            if (!string.IsNullOrEmpty(date))
+            {
+                shiftdate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+            }
+
+            model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsWorkTime == true);
+            model.EmployeeBreaks = Db.EmployeeShift.Where(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsBreakTime == true).ToList();
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.StatusID == 2);
+
+
+            return PartialView("_PartialEmployeeShiftBreak", model);
+        }
+
+
+        [AllowAnonymous]
+        public PartialViewResult EditLocationShift(int id, string date)
+        {
+            ShiftControlModel model = new ShiftControlModel();
+
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            if (!string.IsNullOrEmpty(date))
+            {
+                _date = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+            }
+
+
+            model.CurrentDate = datekey;
+
+            model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == id);
+
+
+            model.LocationSchedule = Db.LocationSchedule.FirstOrDefault(x => x.ShiftDate == datekey.DateKey && x.LocationID == id);
+            model.LocationShift = Db.LocationShift.FirstOrDefault(x => x.ShiftDate == datekey.DateKey && x.LocationID == id);
+
+
+
+            return PartialView("_PartialEditLocationShift", model);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult UpdateLocationShift(long ShiftID, string ShiftBeginDate, string ShiftBeginTime, string ShiftEndDate, string ShiftEndTime)
+        {
+            ShiftControlModel model = new ShiftControlModel();
+
+            var locationshift = Db.LocationShift.FirstOrDefault(x => x.ID == ShiftID);
+
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == locationshift.ShiftDate);
+            
+            DateTime? shiftBeginDate = null;
+            DateTime? shiftEndDate = null;
+
+            if (!string.IsNullOrEmpty(ShiftBeginDate))
+            {
+                shiftBeginDate = DateTime.ParseExact(ShiftBeginDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                if (!string.IsNullOrEmpty(ShiftBeginTime))
+                {
+                    TimeSpan shiftBeginTime;
+                    if (!TimeSpan.TryParse(ShiftBeginTime, out shiftBeginTime))
+                    {}
+
+                    shiftBeginDate = shiftBeginDate.Value.Add(shiftBeginTime);
+                }
+            }
+            else
+            {
+                locationshift.ShiftDateStart = null;
+            }
+
+            if (!string.IsNullOrEmpty(ShiftEndDate))
+            {
+                shiftEndDate = DateTime.ParseExact(ShiftEndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                if (!string.IsNullOrEmpty(ShiftEndTime))
+                {
+                    TimeSpan shiftEndTime;
+                    if (!TimeSpan.TryParse(ShiftEndTime, out shiftEndTime))
+                    { }
+                    shiftEndDate = shiftEndDate.Value.Add(shiftEndTime);
+                }
+            }
+            else
+            {
+                locationshift.ShiftDateFinish = null;
+            }
+
+            if (shiftBeginDate != null && shiftBeginDate is DateTime)
+            {
+                locationshift.ShiftDateStart = shiftBeginDate;
+            }
+
+            if (shiftEndDate != null && shiftEndDate is DateTime)
+            {
+                locationshift.ShiftDateFinish = shiftEndDate;
+            }
+
+            Db.SaveChanges();
+
+            return RedirectToAction("LocationShift",new { date = datekey.DateKey.ToString("yyyy-MM-dd") });
+        }
     }
 }

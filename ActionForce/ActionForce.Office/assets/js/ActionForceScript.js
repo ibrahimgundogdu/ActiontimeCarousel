@@ -304,3 +304,154 @@ function CloseLocation(id, envid) {
         $("#Loading").hide();
     });
 }
+
+function StartEmployeeShift(id, empid, envid) {
+
+    var date = $("#CurrentDateCode").val();
+    var data = new FormData();
+
+    data.append('locationid', id);
+    data.append('employeeid', empid);
+    data.append('environmentid', envid);
+    data.append('date', date);
+
+    console.log(id);
+    console.log(empid);
+    console.log(envid);
+    console.log(date);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Shift/StartEmployeeShift",
+        data: data,
+        beforeSend: function () {
+            $("#Loading").show();
+        },
+    }).done(function (data) {
+        //EmployeeStatus_175_4477_2
+        $("#EmployeeStatus_" + id + "_" + empid + "_2").html(data);
+        $("#EmployeeStatus_" + id + "_" + empid + "_2").removeClass();
+        $("#EmployeeStatus_" + id + "_" + empid + "_2").addClass('table-info');
+
+
+    }).always(function () {
+        $("#Loading").hide();
+    });
+}
+
+function FinishEmployeeShift(id, empid, envid) {
+
+    var date = $("#CurrentDateCode").val();
+    var data = new FormData();
+
+    data.append('locationid', id);
+    data.append('employeeid', empid);
+    data.append('environmentid', envid);
+    data.append('date', date);
+
+    console.log(id);
+    console.log(empid);
+    console.log(envid);
+    console.log(date);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Shift/FinishEmployeeShift",
+        data: data,
+        beforeSend: function () {
+            $("#Loading").show();
+        },
+    }).done(function (data) {
+
+        $("#EmployeeStatus_" + id + "_" + empid + "_2").html(data);
+        $("#EmployeeStatus_" + id + "_" + empid + "_2").removeClass();
+        $("#EmployeeStatus_" + id + "_" + empid + "_2").addClass('table-warning');
+
+
+    }).always(function () {
+        $("#Loading").hide();
+    });
+}
+
+function StartEmployeeBreak(id, empid, envid) {
+
+    var date = $("#CurrentDateCode").val();
+    var data = new FormData();
+
+    data.append('locationid', id);
+    data.append('employeeid', empid);
+    data.append('environmentid', envid);
+    data.append('date', date);
+
+    console.log(id);
+    console.log(empid);
+    console.log(envid);
+    console.log(date);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Shift/StartEmployeeBreak",
+        data: data,
+        beforeSend: function () {
+            $("#Loading").show();
+        },
+    }).done(function (data) {
+
+        $("#EmployeeStatus_" + id + "_" + empid + "_2").html(data);
+        $("#EmployeeStatus_" + id + "_" + empid + "_2").removeClass();
+        $("#EmployeeStatus_" + id + "_" + empid + "_2").addClass('table-info');
+
+
+    }).always(function () {
+        $("#Loading").hide();
+    });
+}
+
+function FinishEmployeeBreak(id, empid, envid) {
+
+    var date = $("#CurrentDateCode").val();
+    var data = new FormData();
+
+    data.append('locationid', id);
+    data.append('employeeid', empid);
+    data.append('environmentid', envid);
+    data.append('date', date);
+
+    console.log(id);
+    console.log(empid);
+    console.log(envid);
+    console.log(date);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Shift/FinishEmployeeBreak",
+        data: data,
+        beforeSend: function () {
+            $("#Loading").show();
+        },
+    }).done(function (data) {
+
+        $("#EmployeeStatus_" + id + "_" + empid + "_2").html(data);
+        $("#EmployeeStatus_" + id + "_" + empid + "_2").removeClass();
+        $("#EmployeeStatus_" + id + "_" + empid + "_2").addClass('table-info');
+
+    }).always(function () {
+        $("#Loading").hide();
+    });
+}

@@ -1,0 +1,74 @@
+﻿@model ShiftControlModel
+<a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</a>
+<div>
+    <h4>@Model.CurrentLocation.SortBy @Model.CurrentLocation.LocationName  @Model.CurrentLocation.Description @Model.CurrentLocation.State</h4>
+    <p class="tx-color-03">Lokasyon Mesai Detayı</p>
+
+
+    @using (Html.BeginForm("UpdateLocationShift", "Shift", FormMethod.Post))
+    {
+
+        <div class="table-responsive">
+            <table class="table table-striped mg-b-0">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width:25%;" class="bd-gray-100"></th>
+                        <th scope="col" style="width:15%;">Mesai Tarihi</th>
+                        <th scope="col" style="width:15%;" class="bd-l">Başlangıç Tarihi</th>
+                        <th scope="col" style="width:10%;" class="bd-r">Başlangıç Saati</th>
+                        <th scope="col" style="width:15%;" class="bd-l">Bitiş Tarihi</th>
+                        <th scope="col" style="width:10%;">Bitiş Saati </th>
+                        <th scope="col" style="width:10%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="col" class="bd-gray-100">Lokasyon Takvimi</th>
+                        <th scope="col">@(Model.LocationSchedule != null ? Model.LocationSchedule?.ShiftDate?.ToShortDateString() : "")</th>
+                        <th scope="col" colspan="2">@(Model.LocationSchedule != null && Model.LocationSchedule?.ShiftDateStart != null ? Model.LocationSchedule?.ShiftDateStart?.Date.ToShortDateString() + " " + Model.LocationSchedule?.ShiftDateStart?.ToString("HH\\:mm\\:ss") : "")</th>
+                        <th scope="col" colspan="2">@((Model.LocationSchedule != null && Model.LocationSchedule?.ShiftdateEnd != null) ? (Model.LocationSchedule?.ShiftdateEnd?.Date.ToShortDateString() + " " + Model.LocationSchedule?.ShiftdateEnd?.ToString("HH\\:mm\\:ss")) : "")</th>
+                        <th scope="col"></th>
+                    </tr>
+                    <tr>
+                        <th scope="row">
+                            Lokasyon Mesaisi
+                        </th>
+                        <th scope="row">
+                            <input id="ShiftID" name="ShiftID" type="hidden" value="@(Model.LocationShift?.ID)" />
+                            @(Model.LocationShift?.ShiftDate.ToShortDateString())
+                        </th>
+
+                        <td class="bd-l">
+                            <input name="ShiftBeginDate" type="text" class="form-control shiftdate" value="@(Model.LocationShift?.ShiftDateStart?.ToString("yyyy-MM-dd"))">
+                        </td>
+                        <td class="bd-r">
+                            <input name="ShiftBeginTime" type="text" class="form-control hourfull" value="@(Model.LocationShift?.ShiftDateStart?.ToString("HH\\:mm\\:ss"))">
+                        </td>
+
+                        <td class="bd-l">
+                            <input name="ShiftEndDate" type="text" class="form-control shiftdate" value="@(Model.LocationShift?.ShiftDateFinish?.ToString("yyyy-MM-dd"))">
+                        </td>
+                        <td>
+                            <input name="ShiftEndTime" type="text" class="form-control hourfull" value="@(Model.LocationShift?.ShiftDateFinish?.ToString("HH\\:mm\\:ss"))">
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group mg-t-10">
+            <button type="submit" class="btn btn-primary btn-block">Kaydet</button>
+        </div>
+    }
+
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('.hourfull').mask('00:00:00');
+        $('.shiftdate').mask('0000-00-00');
+    });
+</script>

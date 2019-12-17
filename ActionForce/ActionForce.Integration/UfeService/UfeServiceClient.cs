@@ -46,7 +46,7 @@ namespace ActionForce.Integration.UfeService
             return null;
         }
 
-        public EmployeeShiftResult EmployeeShiftStart(int locationID, int employeeID, int? environmentID, double? latitude, double? longitude)
+        public EmployeeShiftResult EmployeeShiftStart(int locationID, int employeeID, int? environmentID, double? latitude, double? longitude, string _Date)
         {
             var request = new RestRequest("Employee/ShiftStart", Method.POST);
             request.AddJsonBody(new { LocationID = locationID, EmployeeID = employeeID,  EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude });
@@ -58,7 +58,7 @@ namespace ActionForce.Integration.UfeService
             return null;
         }
 
-        public EmployeeShiftResult EmployeeShiftEnd(int locationID, int employeeID, int? environmentID, double? latitude, double? longitude)
+        public EmployeeShiftResult EmployeeShiftEnd(int locationID, int employeeID, int? environmentID, double? latitude, double? longitude, string _Date)
         {
             var request = new RestRequest("Employee/ShiftEnd", Method.POST);
             request.AddJsonBody(new { LocationID = locationID, EmployeeID = employeeID, EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude });
@@ -70,7 +70,7 @@ namespace ActionForce.Integration.UfeService
             return null;
         }
 
-        public EmployeeShiftResult EmployeeBreakStart(int locationID, int employeeID, int? environmentID, double? latitude, double? longitude)
+        public EmployeeShiftResult EmployeeBreakStart(int locationID, int employeeID, int? environmentID, double? latitude, double? longitude, string _Date)
         {
             var request = new RestRequest("Employee/BreakStart", Method.POST);
             request.AddJsonBody(new { LocationID = locationID, EmployeeID = employeeID, EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude });
@@ -82,7 +82,7 @@ namespace ActionForce.Integration.UfeService
             return null;
         }
 
-        public EmployeeShiftResult EmployeeBreakEnd(int locationID, int employeeID,int? environmentID, double? latitude, double? longitude)
+        public EmployeeShiftResult EmployeeBreakEnd(int locationID, int employeeID,int? environmentID, double? latitude, double? longitude, string _Date)
         {
             var request = new RestRequest("Employee/BreakEnd", Method.POST);
             request.AddJsonBody(new { LocationID = locationID, EmployeeID = employeeID, EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude });
