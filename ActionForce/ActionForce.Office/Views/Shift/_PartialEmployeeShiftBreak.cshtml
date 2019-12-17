@@ -12,7 +12,11 @@
 
     <td class="wd-300 tx-sm-13 font-weight-bold">@employee.FullName</td>
     <td class="wd-150 text-center @(employeeshift != null && employeeshift.DurationMinute == null ? "bg-info":"bg-warning")" onclick="ss()" style="padding:2px !important;">@(employeeschedule != null ? employeeschedule?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeschedule?.ShiftdateEnd != null ? " - " + employeeschedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
-    <td class="wd-150 text-center" style="padding:4px !important;">@(employeeshift != null ? employeeshift?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeshift?.ShiftDateEnd != null ? " - " + employeeshift?.ShiftDateEnd?.ToString("HH\\:mm") : "")</td>
+    <td class="wd-150 text-center" style="padding:4px !important;">
+        <a href="#modalEmployeeShift" data-toggle="modal" class="link-01" onclick="EditEmployeeShift(@location.LocationID,@employee.EmployeeID,'@Model.CurrentDateCode')">
+            @(employeeshift != null ? employeeshift?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeshift?.ShiftDateEnd != null ? " - " + employeeshift?.ShiftDateEnd?.ToString("HH\\:mm") : "")
+        </a>
+    </td>
     <td class="wd-20 text-center">
         @if (employeeshift == null)
         {
@@ -29,7 +33,11 @@
         }
 
     </td>
-    <td class="bd-l wd-150">@(employeebreak.Count()) | @(employeebreak.Sum(x => x.BreakDurationMinute)) | @(employeebreak.Average(x => x.BreakDurationMinute)?.ToString("N2"))</td>
+    <td class="bd-l wd-150">
+        <a href="#modalEmployeeBreak" data-toggle="modal" class="link-01" onclick="EditEmployeeBreak(@location.LocationID,@employee.EmployeeID,'@Model.CurrentDateCode')">
+            @(employeebreak.Count()) | @(employeebreak.Sum(x => x.BreakDurationMinute)) | @(employeebreak.Average(x => x.BreakDurationMinute)?.ToString("N2"))
+        </a>
+    </td>
     <td class="wd-20 text-center">
 
         @if (employeebreakcurrent == null)

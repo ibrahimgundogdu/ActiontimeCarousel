@@ -4,7 +4,7 @@
 </a>
 <div>
     <h4>@Model.CurrentLocation.SortBy @Model.CurrentLocation.LocationName  @Model.CurrentLocation.Description @Model.CurrentLocation.State</h4>
-    <p class="tx-color-03">Lokasyon Mesai Detayı</p>
+    <p class="tx-color-03">@Model.CurrentDate.DateKey.ToShortDateString() Lokasyon Mesai Detayı</p>
 
 
     @using (Html.BeginForm("UpdateLocationShift", "Shift", FormMethod.Post))

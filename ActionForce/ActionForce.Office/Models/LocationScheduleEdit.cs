@@ -33,4 +33,13 @@ namespace ActionForce.Office
         public string ShiftEndTime { get; set; }
         public string weekCode { get; set; }
     }
+
+    public class EmployeeBreakEdit
+    {
+        public int ShiftID { get; set; }
+        public string BreakBeginDate { get; set; }
+        public string BreakBeginTime { get; set; }
+        public string BreakEndDate { get; set; }
+        public string BreakEndTime { get; set; }
+    }
 }

@@ -86,7 +86,11 @@
                                             <td class="tx-sm-13 bg-primary-light font-weight-bold">@($"{location.LocationName} {location.Description} {location.State}")</td>
                                             <td class="tx-sm-13 bg-primary-light font-weight-bold">@(Model.CurrentDate.DateKey.ToShortDateString())</td>
                                             <td class="tx-sm-13 @(locationschedule != null && locationschedule.DurationMinute == null ? "bg-primary":"bg-primary-light") font-weight-bold">@(locationschedule != null ? locationschedule?.ShiftDateStart?.ToString("HH\\:mm") : "") @(locationschedule?.ShiftdateEnd != null ? " - " + locationschedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
-                                            <td class="tx-sm-13 bg-primary-light font-weight-bold">@(locationshift != null ? locationshift?.ShiftDateStart?.ToString("HH\\:mm") : "") @(locationshift?.ShiftDateFinish != null ? " - " + locationshift?.ShiftDateFinish?.ToString("HH\\:mm") : "")</td>
+                                            <td class="tx-sm-13 bg-primary-light font-weight-bold">
+                                                <a href="#modalLocationShift" data-toggle="modal" class="link-01" onclick="EditLocationShift(@location.LocationID,'@Model.CurrentDateCode')">
+                                                    @(locationshift != null ? locationshift?.ShiftDateStart?.ToString("HH\\:mm") : "") @(locationshift?.ShiftDateFinish != null ? " - " + locationshift?.ShiftDateFinish?.ToString("HH\\:mm") : "")
+                                                </a>
+                                            </td>
                                             <td class="tx-sm-13 bg-light font-weight-bold wd-20 text-center" id="@($"LocationStatus_{location.LocationID}_2")">@(locationshift != null && locationshift.DurationMinute == null ? Html.Raw($"<a href='#' onclick='CloseLocation({location.LocationID},2)'> <i class='ion ion-md-sunny tx-sm-24'></i></a>") : locationshift != null && locationshift.DurationMinute != null ? Html.Raw($"<a href='#'> <i class='ion ion-md-moon tx-sm-24'></i></a>") : Html.Raw($"<a href='#' onclick='OpenLocation({location.LocationID},2)'> <i class='ion ion-md-alarm tx-sm-24'></i></a>") )</td>
 
 
@@ -105,8 +109,12 @@
 
                                                             <tr class="@(employeeshift != null && employeeshift.DurationMinute == null ? "table-info":"table-warning")" id="@($"EmployeeStatus_{location.LocationID}_{emp.EmployeeID}_2")">
                                                                 <td class="wd-300 tx-sm-13 font-weight-bold">@emp.FullName</td>
-                                                                <td class="wd-150 text-center @(employeeshift != null && employeeshift.DurationMinute == null ? "bg-info":"bg-warning")" onclick="ss()" style="padding:2px !important;">@(employeeschedule != null ? employeeschedule?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeschedule?.ShiftdateEnd != null ? " - " + employeeschedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
-                                                                <td class="wd-150 text-center" style="padding:4px !important;">@(employeeshift != null ? employeeshift?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeshift?.ShiftDateEnd != null ? " - " + employeeshift?.ShiftDateEnd?.ToString("HH\\:mm") : "")</td>
+                                                                <td class="wd-150 text-center @(employeeshift != null && employeeshift.DurationMinute == null ? "bg-info":"bg-warning")" style="padding:2px !important;">@(employeeschedule != null ? employeeschedule?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeschedule?.ShiftdateEnd != null ? " - " + employeeschedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
+                                                                <td class="wd-150 text-center" style="padding:4px !important;">
+                                                                    <a href="#modalEmployeeShift" data-toggle="modal" class="link-01" onclick="EditEmployeeShift(@location.LocationID,@emp.EmployeeID,'@Model.CurrentDateCode')">
+                                                                        @(employeeshift != null ? employeeshift?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeshift?.ShiftDateEnd != null ? " - " + employeeshift?.ShiftDateEnd?.ToString("HH\\:mm") : "")
+                                                                    </a>
+                                                                </td>
                                                                 <td class="wd-20 text-center">
                                                                     @if (employeeshift == null)
                                                                     {
@@ -123,7 +131,11 @@
                                                                     }
 
                                                                 </td>
-                                                                <td class="bd-l wd-150">@(employeebreak.Count()) | @(employeebreak.Sum(x => x.BreakDurationMinute)) | @(employeebreak.Average(x => x.BreakDurationMinute)?.ToString("N2"))</td>
+                                                                <td class="bd-l wd-150">
+                                                                    <a href="#modalEmployeeBreak" data-toggle="modal" class="link-01" onclick="EditEmployeeBreak(@location.LocationID,@emp.EmployeeID,'@Model.CurrentDateCode')">
+                                                                        @(employeebreak.Count()) | @(employeebreak.Sum(x => x.BreakDurationMinute)) | @(employeebreak.Average(x => x.BreakDurationMinute)?.ToString("N2"))
+                                                                    </a>
+                                                                </td>
                                                                 <td class="wd-20 text-center">
 
                                                                     @if (employeebreakcurrent == null)
@@ -176,6 +188,35 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalLocationShift" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body pd-20 pd-sm-40" id="EditLocationShift">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEmployeeShift" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body pd-20 pd-sm-40" id="EditEmployeeShift">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEmployeeBreak" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body pd-20 pd-sm-40" id="EditEmployeeBreak">
+
+            </div>
+        </div>
+    </div>
+</div>
 
 @section canvasmenu {
 
@@ -215,7 +256,35 @@
 
         });
 
+        function EditLocationShift(locationid, date) {
+            $.ajax({
+                method: "GET",
+                url: "/Shift/EditLocationShift",
+                data: { id: locationid, date: date }
+            }).done(function (d) {
+                $("#EditLocationShift").html(d);
+            });
+        }
 
+        function EditEmployeeShift(locationid, employeeid, date) {
+            $.ajax({
+                method: "GET",
+                url: "/Shift/EditEmployeeShift",
+                data: { id: locationid, empid: employeeid, date: date }
+            }).done(function (d) {
+                $("#EditEmployeeShift").html(d);
+            });
+        }
+
+        function EditEmployeeBreak(locationid, employeeid, date) {
+            $.ajax({
+                method: "GET",
+                url: "/Shift/EditEmployeeBreak",
+                data: { id: locationid, empid: employeeid, date: date }
+            }).done(function (d) {
+                $("#EditEmployeeBreak").html(d);
+            });
+        }
 
     </script>
 

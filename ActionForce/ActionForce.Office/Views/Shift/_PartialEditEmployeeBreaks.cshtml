@@ -1,0 +1,98 @@
+﻿@model ShiftControlModel
+<a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</a>
+<div>
+    <h4>@Model.CurrentEmployee.FullName</h4>
+    <p class="tx-color-03">@Model.CurrentDate.DateKey.ToShortDateString() Çalışan Mesai Detayı</p>
+
+
+    @using (Html.BeginForm("UpdateEmployeeBreaks", "Shift", FormMethod.Post))
+    {
+
+        <div class="table-responsive">
+            <table class="table table-striped mg-b-0">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width:25%;" class="bd-gray-100"></th>
+                        <th scope="col" style="width:15%;">Mesai Tarihi</th>
+                        <th scope="col" style="width:15%;" class="bd-l">Başlangıç Tarihi</th>
+                        <th scope="col" style="width:10%;" class="bd-r">Başlangıç Saati</th>
+                        <th scope="col" style="width:15%;" class="bd-l">Bitiş Tarihi</th>
+                        <th scope="col" style="width:10%;">Bitiş Saati </th>
+                        <th scope="col" style="width:10%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="table-primary">
+                        <th scope="col" class="bd-gray-100">Çalışan Takvimi</th>
+                        <th scope="col">@(Model.EmployeeSchedule != null ? Model.EmployeeSchedule?.ShiftDate?.ToShortDateString() : "")</th>
+                        <th scope="col">@(Model.EmployeeSchedule != null && Model.EmployeeSchedule?.ShiftDateStart != null ? Model.EmployeeSchedule?.ShiftDateStart?.Date.ToShortDateString() : "")</th>
+                        <th scope="col">@(Model.EmployeeSchedule != null && Model.EmployeeSchedule?.ShiftDateStart != null ? Model.EmployeeSchedule?.ShiftDateStart?.ToString("HH\\:mm\\:ss") : "")</th>
+
+                        <th scope="col">@((Model.EmployeeSchedule != null && Model.EmployeeSchedule?.ShiftdateEnd != null) ? Model.EmployeeSchedule?.ShiftdateEnd?.Date.ToShortDateString() : "")</th>
+                        <th scope="col">@((Model.EmployeeSchedule != null && Model.EmployeeSchedule?.ShiftdateEnd != null) ? Model.EmployeeSchedule?.ShiftdateEnd?.ToString("HH\\:mm\\:ss") : "")</th>
+
+                        <th scope="col"></th>
+                    </tr>
+                    <tr class="table-info">
+                        <th scope="col" class="bd-gray-100">Çalışan Mesaisi</th>
+                        <th scope="col">@(Model.EmployeeShift != null ? Model.EmployeeShift?.ShiftDate?.ToShortDateString() : "")</th>
+                        <th scope="col">@(Model.EmployeeShift != null && Model.EmployeeShift?.ShiftDateStart != null ? Model.EmployeeShift?.ShiftDateStart?.Date.ToShortDateString() : "")</th>
+                        <th scope="col">@(Model.EmployeeShift != null && Model.EmployeeShift?.ShiftDateStart != null ? Model.EmployeeShift?.ShiftDateStart?.ToString("HH\\:mm\\:ss") : "")</th>
+
+                        <th scope="col">@((Model.EmployeeShift != null && Model.EmployeeShift?.ShiftDateEnd != null) ? Model.EmployeeShift?.ShiftDateEnd?.Date.ToShortDateString() : "")</th>
+                        <th scope="col">@((Model.EmployeeShift != null && Model.EmployeeShift?.ShiftDateEnd != null) ? Model.EmployeeShift?.ShiftDateEnd?.ToString("HH\\:mm\\:ss") : "")</th>
+
+                        <th scope="col"></th>
+                    </tr>
+
+                    @{ int index = 0;}
+
+                    @foreach (var item in Model.EmployeeBreaks.OrderBy(x => x.BreakDateStart))
+                    {
+                        <tr>
+                            <th scope="row">
+                                Çalışan  Molası @(index + 1)
+                            </th>
+                            <th scope="row">
+                                <input id="ShiftID" name="employeebreaks[@index].ShiftID" type="hidden" value="@(item.ID)" />
+                                @(item.ShiftDate?.ToShortDateString())
+                            </th>
+
+                            <td class="bd-l">
+                                <input name="employeebreaks[@index].BreakBeginDate" type="text" class="form-control shiftdate" value="@(item?.BreakDateStart?.ToString("yyyy-MM-dd"))">
+                            </td>
+                            <td class="bd-r">
+                                <input name="employeebreaks[@index].BreakBeginTime" type="text" class="form-control hourfull" value="@(item?.BreakDateStart?.ToString("HH\\:mm\\:ss"))">
+                            </td>
+
+                            <td class="bd-l">
+                                <input name="employeebreaks[@index].BreakEndDate" type="text" class="form-control shiftdate" value="@(item?.BreakDateEnd?.ToString("yyyy-MM-dd"))">
+                            </td>
+                            <td>
+                                <input name="employeebreaks[@index].BreakEndTime" type="text" class="form-control hourfull" value="@(item?.BreakDateEnd?.ToString("HH\\:mm\\:ss"))">
+                            </td>
+                            <td></td>
+                        </tr>
+                        index++;
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group mg-t-10">
+            <button type="submit" class="btn btn-primary btn-block">Kaydet</button>
+        </div>
+    }
+
+
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('.hourfull').mask('00:00:00');
+        $('.shiftdate').mask('0000-00-00');
+    });
+</script>
+

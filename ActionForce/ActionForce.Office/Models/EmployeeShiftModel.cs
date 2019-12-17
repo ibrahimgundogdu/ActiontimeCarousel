@@ -14,5 +14,6 @@ namespace ActionForce.Office
         public EmployeeShift EmployeeShift { get; set; }
         public List<EmployeeShift> EmployeeBreaks { get; set; }
         public Result<EmployeeShift> Result { get; set; }
+        public string CurrentDateCode { get; set; }
     }
 }

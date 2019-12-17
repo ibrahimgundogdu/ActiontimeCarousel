@@ -80,11 +80,11 @@
                     </ul>
                 </li>
                 <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" ? "show" : "")">
-                    <a href="/Employee" class="nav-link"><i data-feather="clock"></i> <span>Mesai & Mola</span></a>
+                    <a href="/Shift" class="nav-link"><i data-feather="clock"></i> <span>Mesai & Mola</span></a>
                     <ul>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Shift">01 Lokasyon Çalışan Mesai</a></li>
-                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" && this.ViewContext.RouteData.Values["action"].ToString() == "LocationShift" ? "class=active" : "")><a href="/Shift/LocationShift">02 Lokasyon Mesaileri</a></li>
-                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" && this.ViewContext.RouteData.Values["action"].ToString() == "EmployeeShift" ? "class=active" : "")><a href="/Shift/EmployeeShift">03 Çalışan Mesaileri</a></li>
+                        @*<li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" && this.ViewContext.RouteData.Values["action"].ToString() == "LocationShift" ? "class=active" : "")><a href="/Shift/LocationShift">02 Lokasyon Mesaileri</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" && this.ViewContext.RouteData.Values["action"].ToString() == "EmployeeShift" ? "class=active" : "")><a href="/Shift/EmployeeShift">03 Çalışan Mesaileri</a></li>*@
 
                     </ul>
                 </li>

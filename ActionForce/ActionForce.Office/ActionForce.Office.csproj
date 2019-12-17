@@ -2549,6 +2549,8 @@
     <Content Include="Views\Bank\Current.cshtml" />
     <Content Include="Views\Shift\_PartialEmployeeShiftBreak.cshtml" />
     <Content Include="Views\Shift\_PartialEditLocationShift.cshtml" />
+    <Content Include="Views\Shift\_PartialEditEmployeeShift.cshtml" />
+    <Content Include="Views\Shift\_PartialEditEmployeeBreaks.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

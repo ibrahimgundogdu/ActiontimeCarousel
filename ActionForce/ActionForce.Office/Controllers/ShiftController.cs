@@ -210,7 +210,7 @@ namespace ActionForce.Office.Controllers
             {
                 shiftdate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             }
-
+            model.CurrentDateCode = shiftdate.ToString("yyyy-MM-dd");
             model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsWorkTime == true);
             model.EmployeeBreaks = Db.EmployeeShift.Where(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsBreakTime == true).ToList();
             model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.StatusID == 2);
@@ -241,7 +241,7 @@ namespace ActionForce.Office.Controllers
             {
                 shiftdate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             }
-
+            model.CurrentDateCode = shiftdate.ToString("yyyy-MM-dd");
             model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsWorkTime == true);
             model.EmployeeBreaks = Db.EmployeeShift.Where(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsBreakTime == true).ToList();
             model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.StatusID == 2);
@@ -272,7 +272,7 @@ namespace ActionForce.Office.Controllers
             {
                 shiftdate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             }
-
+            model.CurrentDateCode = shiftdate.ToString("yyyy-MM-dd");
             model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsWorkTime == true);
             model.EmployeeBreaks = Db.EmployeeShift.Where(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsBreakTime == true).ToList();
             model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.StatusID == 2);
@@ -303,7 +303,7 @@ namespace ActionForce.Office.Controllers
             {
                 shiftdate = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
             }
-
+            model.CurrentDateCode = shiftdate.ToString("yyyy-MM-dd");
             model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsWorkTime == true);
             model.EmployeeBreaks = Db.EmployeeShift.Where(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.IsBreakTime == true).ToList();
             model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.LocationID == locationid && x.EmployeeID == employeeid && x.ShiftDate == shiftdate && x.StatusID == 2);
@@ -342,6 +342,55 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
+        public PartialViewResult EditEmployeeShift(int id, int empid, string date)
+        {
+            ShiftControlModel model = new ShiftControlModel();
+
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            if (!string.IsNullOrEmpty(date))
+            {
+                _date = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+            }
+
+            model.CurrentDate = datekey;
+            model.CurrentEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == empid);
+
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.ShiftDate == datekey.DateKey && x.LocationID == id && x.EmployeeID == empid);
+            model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.ShiftDate == datekey.DateKey && x.LocationID == id && x.EmployeeID == empid);
+
+            return PartialView("_PartialEditEmployeeShift", model);
+        }
+
+        [AllowAnonymous]
+        public PartialViewResult EditEmployeeBreak(int id, int empid, string date)
+        {
+            ShiftControlModel model = new ShiftControlModel();
+
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            if (!string.IsNullOrEmpty(date))
+            {
+                _date = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+            }
+
+            model.CurrentDate = datekey;
+            model.CurrentEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == empid);
+
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.ShiftDate == datekey.DateKey && x.LocationID == id && x.EmployeeID == empid);
+            model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.ShiftDate == datekey.DateKey && x.LocationID == id && x.EmployeeID == empid && x.IsWorkTime == true);
+            model.EmployeeBreaks = Db.EmployeeShift.Where(x => x.ShiftDate == datekey.DateKey && x.LocationID == id && x.EmployeeID == empid && x.IsBreakTime == true).ToList();
+
+            return PartialView("_PartialEditEmployeeBreaks", model);
+        }
+
+
+
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult UpdateLocationShift(long ShiftID, string ShiftBeginDate, string ShiftBeginTime, string ShiftEndDate, string ShiftEndTime)
         {
@@ -350,7 +399,7 @@ namespace ActionForce.Office.Controllers
             var locationshift = Db.LocationShift.FirstOrDefault(x => x.ID == ShiftID);
 
             var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == locationshift.ShiftDate);
-            
+
             DateTime? shiftBeginDate = null;
             DateTime? shiftEndDate = null;
 
@@ -362,7 +411,7 @@ namespace ActionForce.Office.Controllers
                 {
                     TimeSpan shiftBeginTime;
                     if (!TimeSpan.TryParse(ShiftBeginTime, out shiftBeginTime))
-                    {}
+                    { }
 
                     shiftBeginDate = shiftBeginDate.Value.Add(shiftBeginTime);
                 }
@@ -401,7 +450,144 @@ namespace ActionForce.Office.Controllers
 
             Db.SaveChanges();
 
-            return RedirectToAction("LocationShift",new { date = datekey.DateKey.ToString("yyyy-MM-dd") });
+            return RedirectToAction("LocationShift", new { date = datekey.DateKey.ToString("yyyy-MM-dd") });
         }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult UpdateEmployeeShift(long ShiftID, string ShiftBeginDate, string ShiftBeginTime, string ShiftEndDate, string ShiftEndTime)
+        {
+            ShiftControlModel model = new ShiftControlModel();
+
+            var employeeshift = Db.EmployeeShift.FirstOrDefault(x => x.ID == ShiftID);
+
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == employeeshift.ShiftDate);
+
+            DateTime? shiftBeginDate = null;
+            DateTime? shiftEndDate = null;
+
+            if (!string.IsNullOrEmpty(ShiftBeginDate))
+            {
+                shiftBeginDate = DateTime.ParseExact(ShiftBeginDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                if (!string.IsNullOrEmpty(ShiftBeginTime))
+                {
+                    TimeSpan shiftBeginTime;
+                    if (!TimeSpan.TryParse(ShiftBeginTime, out shiftBeginTime))
+                    { }
+
+                    shiftBeginDate = shiftBeginDate.Value.Add(shiftBeginTime);
+                }
+            }
+            else
+            {
+                employeeshift.ShiftDateStart = null;
+            }
+
+            if (!string.IsNullOrEmpty(ShiftEndDate))
+            {
+                shiftEndDate = DateTime.ParseExact(ShiftEndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                if (!string.IsNullOrEmpty(ShiftEndTime))
+                {
+                    TimeSpan shiftEndTime;
+                    if (!TimeSpan.TryParse(ShiftEndTime, out shiftEndTime))
+                    { }
+                    shiftEndDate = shiftEndDate.Value.Add(shiftEndTime);
+                }
+            }
+            else
+            {
+                employeeshift.ShiftDateEnd = null;
+            }
+
+            if (shiftBeginDate != null && shiftBeginDate is DateTime)
+            {
+                employeeshift.ShiftDateStart = shiftBeginDate;
+            }
+
+            if (shiftEndDate != null && shiftEndDate is DateTime)
+            {
+                employeeshift.ShiftDateEnd = shiftEndDate;
+            }
+
+            Db.SaveChanges();
+
+            return RedirectToAction("Index", new { date = datekey.DateKey.ToString("yyyy-MM-dd") });
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult UpdateEmployeeBreaks(EmployeeBreakEdit[] employeebreaks)
+        {
+            ShiftControlModel model = new ShiftControlModel();
+
+            string datekey = string.Empty;
+
+            foreach (var item in employeebreaks)
+            {
+                var employeebreak = Db.EmployeeShift.FirstOrDefault(x => x.ID == item.ShiftID);
+
+                datekey = Db.DateList.FirstOrDefault(x => x.DateKey == employeebreak.ShiftDate)?.DateKey.ToString("yyyy-MM-dd");
+
+                DateTime? breakBeginDate = null;
+                DateTime? breakEndDate = null;
+
+                if (!string.IsNullOrEmpty(item.BreakBeginDate))
+                {
+                    breakBeginDate = DateTime.ParseExact(item.BreakBeginDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                    if (!string.IsNullOrEmpty(item.BreakBeginTime))
+                    {
+                        TimeSpan breakBeginTime;
+                        if (!TimeSpan.TryParse(item.BreakBeginTime, out breakBeginTime))
+                        { }
+
+                        breakBeginDate = breakBeginDate.Value.Add(breakBeginTime);
+                    }
+                }
+                else
+                {
+                    employeebreak.BreakDateStart = null;
+                }
+
+                if (!string.IsNullOrEmpty(item.BreakEndDate))
+                {
+                    breakEndDate = DateTime.ParseExact(item.BreakEndDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                    if (!string.IsNullOrEmpty(item.BreakEndTime))
+                    {
+                        TimeSpan breakEndTime;
+                        if (!TimeSpan.TryParse(item.BreakEndTime, out breakEndTime))
+                        { }
+                        breakEndDate = breakEndDate.Value.Add(breakEndTime);
+                    }
+                }
+                else
+                {
+                    employeebreak.BreakDateEnd = null;
+                }
+
+                if (breakBeginDate != null && breakBeginDate is DateTime)
+                {
+                    employeebreak.BreakDateStart = breakBeginDate;
+                }
+
+                if (breakEndDate != null && breakEndDate is DateTime)
+                {
+                    employeebreak.BreakDateEnd = breakEndDate;
+                }
+
+                Db.SaveChanges();
+            }
+
+
+
+            return RedirectToAction("Index", new { date = datekey });
+        }
+
+
+
+
     }
 }
