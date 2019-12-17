@@ -8,7 +8,7 @@ namespace ActionForce.Office
     public class BankTransfer
     {
 
-        public int ActionTypeID { get; set; }
+        public int ActinTypeID { get; set; }
         public string ActionTypeName { get; set; }
         public double Amount { get; set; }
         public double Commission { get; set; }

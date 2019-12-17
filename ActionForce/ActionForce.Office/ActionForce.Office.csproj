@@ -353,6 +353,7 @@
     <Content Include="Document\Exchange\03276718-8b27-4f6e-91db-14a34e5e946b.jpg" />
     <Content Include="Document\Exchange\87a03806-5491-4cf7-bc2a-fe17df463b77.jpg" />
     <Content Include="Document\Exchange\917526f0-0959-4679-bfd1-b9cce47b0d76.jpg" />
+    <Content Include="Document\Expense\080affc7-8edd-4cc1-8ecf-4222cb4d0125.png" />
     <Content Include="Document\Expense\4418fe55-7e76-477e-ba09-48f04ae1cee6.jpg" />
     <Content Include="Document\Expense\a78d9ebd-9590-4ca6-8ddd-d32ea8065573.jpg" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
@@ -2323,6 +2324,15 @@
     <Compile Include="Models\CashCollection.cs" />
     <Compile Include="Models\DefinitionControlModel.cs" />
     <Compile Include="Models\Document\BankTransfer.cs" />
+    <Compile Include="Models\Document\CashRecorder.cs" />
+    <Compile Include="Models\Document\PosCancel.cs" />
+    <Compile Include="Models\Document\PosRefund.cs" />
+    <Compile Include="Models\Document\PosCollection.cs" />
+    <Compile Include="Models\Document\SaleExchange.cs" />
+    <Compile Include="Models\Document\CashOpen.cs" />
+    <Compile Include="Models\Document\CashPayment.cs" />
+    <Compile Include="Models\Document\CashSale.cs" />
+    <Compile Include="Models\Document\SaleReturn.cs" />
     <Compile Include="Models\Document\DocumentManager.cs" />
     <Compile Include="Models\Document\SalaryEarn.cs" />
     <Compile Include="Models\Document\CashExpense.cs" />

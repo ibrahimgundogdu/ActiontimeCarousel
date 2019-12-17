@@ -114,7 +114,7 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddCashRecorder(NewCashRecorder cashRecord, HttpPostedFileBase documentFile)
         {
-            Result<CashActions> result = new Result<CashActions>()
+            Result<DocumentCashRecorderSlip> result = new Result<DocumentCashRecorderSlip>()
             {
                 IsSuccess = false,
                 Message = string.Empty,
@@ -147,74 +147,31 @@ namespace ActionForce.Office.Controllers
                 DateTime sDatetime = slipDate.Add(Convert.ToDateTime(cashRecord.SlipTime).TimeOfDay);
 
                 var cash = OfficeHelper.GetCash(cashRecord.LocationID, cashRecord.Currency);
+
+                var exchange = OfficeHelper.GetExchange(docDate);
+
+                string path = Server.MapPath("/");
+
+                CashRecorder record = new CashRecorder();
+
+                record.ActinTypeID = actType.ID;
+                record.ActionTypeName = actType.Name;
+                record.NetAmount = netamount;
+                record.TotalAmount = totalamount;
+                record.Currency = currency;
+                record.DocumentDate = docDate;
+                record.LocationID = cashRecord.LocationID;
+                record.OurCompanyID = location.OurCompanyID;
+                record.TimeZone = timezone;
+                record.SlipNumber = cashRecord.SlipNumber;
+                record.SlipDate = sDatetime;
                 
-                try
-                {
-                    var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+                record.SlipPath = path;
 
-                    DocumentCashRecorderSlip newCashColl = new DocumentCashRecorderSlip();
+                DocumentManager documentManager = new DocumentManager();
+                result = documentManager.AddCashRecorder(record, documentFile, model.Authentication);
 
-                    newCashColl.ActionTypeID = actType.ID;
-                    newCashColl.ActionTypeName = actType.Name;
-                    newCashColl.NetAmount = netamount;
-                    newCashColl.TotalAmount = totalamount;
-                    newCashColl.Currency = currency;
-                    newCashColl.Date = docDate;
-                    newCashColl.SlipDate = sDatetime;
-                    newCashColl.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "CR");
-                    newCashColl.IsActive = true;
-                    newCashColl.LocationID = cashRecord.LocationID;
-                    newCashColl.OurCompanyID = location.OurCompanyID;
-                    newCashColl.RecordDate = DateTime.UtcNow.AddHours(timezone);
-                    newCashColl.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                    newCashColl.RecordIP = OfficeHelper.GetIPAddress();
-                    newCashColl.SlipNumber = cashRecord.SlipNumber;
-                    newCashColl.EnvironmentID = 2;
-                    newCashColl.UID = Guid.NewGuid();
-
-                    string FileName = string.Empty;
-
-                    if (documentFile != null)
-                    {
-                        FileName = Guid.NewGuid().ToString();
-                        string ext = System.IO.Path.GetExtension(documentFile.FileName);
-                        FileName = FileName + ext;
-
-                        if (documentFile != null && documentFile.ContentLength > 0)
-                        {
-                            try
-                            {
-                                documentFile.SaveAs(Path.Combine(Server.MapPath(("../Document/CashRecorder")), FileName));
-                                newCashColl.SlipFile = FileName;
-                                newCashColl.SlipPath = "Document/CashRecorder";
-                            }
-                            catch (Exception ex)
-                            {
-                            }
-                        }
-                    }
-
-                    Db.DocumentCashRecorderSlip.Add(newCashColl);
-                    Db.SaveChanges();
-
-                    // cari hesap işlemesi
-                    //OfficeHelper.AddCashAction(newCashColl.CashID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, -1, 0, newCashColl.Amount, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate);
-
-                    result.IsSuccess = true;
-                    result.Message = "Yazarkasa fişi başarı ile eklendi";
-
-                    // log atılır
-                    OfficeHelper.AddApplicationLog("Office", "CashRecorder", "Insert", newCashColl.ID.ToString(), "CashRecorder", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newCashColl);
-
-
-                }
-                catch (Exception ex)
-                {
-
-                    result.Message = $"Yazarkasa fişi eklenemedi : {ex.Message}";
-                    OfficeHelper.AddApplicationLog("Office", "CashRecorder", "Insert", "-1", "CashRecorder", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-                }
+                
 
             }
 
@@ -327,21 +284,7 @@ namespace ActionForce.Office.Controllers
 
                         Db.SaveChanges();
 
-                        //var cashaction = Db.CashActions.FirstOrDefault(x => x.CashID == isKasa && x.LocationID == isCash.LocationID && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessDate == isDate && x.DocumentNumber == isCash.DocumentNumber);
-
-                        //if (cashaction != null)
-                        //{
-                        //    cashaction.Payment = isCash.Amount;
-                        //    cashaction.Currency = cashExpense.Currency;
-                        //    cashaction.CashID = cash.ID;
-                        //    cashaction.ActionDate = docDate;
-                        //    cashaction.ProcessDate = docDate;
-                        //    cashaction.UpdateDate = isCash.UpdateDate;
-                        //    cashaction.UpdateEmployeeID = isCash.UpdateEmployee;
-
-                        //    Db.SaveChanges();
-
-                        //}
+                        
 
                         result.IsSuccess = true;
                         result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {totalamount} {currency} tutarındaki yazarkasa fişi başarı ile güncellendi";

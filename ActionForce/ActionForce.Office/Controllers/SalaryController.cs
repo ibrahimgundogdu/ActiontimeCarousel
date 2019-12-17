@@ -513,7 +513,7 @@ namespace ActionForce.Office.Controllers
                 var refID = string.IsNullOrEmpty(cashSalary.ReferanceID);
                 SalaryPayment payment = new SalaryPayment();
 
-                payment.ActionTypeID = actType.ID;
+                payment.ActinTypeID = actType.ID;
                 payment.ActionTypeName = actType.Name;
                 payment.Currency = cashSalary.Currency;
                 payment.Description = cashSalary.Description;
