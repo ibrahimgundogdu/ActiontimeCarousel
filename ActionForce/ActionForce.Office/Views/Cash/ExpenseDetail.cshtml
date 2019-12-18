@@ -81,7 +81,7 @@
                                                 <select class="form-control" id="FromID" name="FromID" required>
                                                     @foreach (var item in Model.FromList)
                                                     {
-                                                        <option value="@item.Code" @(Model.ExpenseDetail.ToBankAccountID != null ? Model.ExpenseDetail.ToBankAccountID == item.ID ? "selected" : "" : Model.ExpenseDetail.ToCustomerID != null ? Model.ExpenseDetail.ToCustomerID == item.ID ? "selected" : "" : Model.ExpenseDetail.ToEmployeeID == item.ID ? "selected" : "")>@(Html.Raw($"{item.Name}"))</option>
+                                                        <option value="@item.Code" @(Model.ExpenseDetail.ToBankAccountID == item.ID && item.Code.Substring(0,1) == "B" ? "selected" : Model.ExpenseDetail.ToCustomerID == item.ID && item.Code.Substring(0,1) == "A" ? "selected" : Model.ExpenseDetail.ToEmployeeID == item.ID && item.Code.Substring(0,1) == "E" ? "selected" : "")>@(Html.Raw($"{item.Name}"))</option>
                                                     }
                                                 </select>
                                             </div>

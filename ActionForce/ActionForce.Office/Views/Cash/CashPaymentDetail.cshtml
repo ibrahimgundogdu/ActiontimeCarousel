@@ -42,11 +42,11 @@
                         <div class="col-lg-6">
                             <div class="card mg-b-20 mg-lg-b-25">
                                 <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                                    <h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.CashDetail.ActionName}"))</h6>
+                                    <h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.PaymentDetail.ActionName}"))</h6>
                                     <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
-                                    <input id="UID" name="UID" type="hidden" value="@(Model.CashDetail.UID)" />
+                                    <input id="UID" name="UID" type="hidden" value="@(Model.PaymentDetail.UID)" />
                                     <nav class="nav">
-                                        <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CashDetail.Date.Value.ToLongDateString())</span></a>
+                                        <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.PaymentDetail.Date.Value.ToLongDateString())</span></a>
                                     </nav>
                                 </div><!-- card-header -->
                                 <div class="card-body pd-20">
@@ -54,19 +54,19 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Kasa Tipi</label>
                                             <div class="col-sm-9">
-                                                <span class="text-danger">@Model.CashDetail.ActionTypeName</span>
+                                                <span class="text-danger">@Model.PaymentDetail.ActionTypeName</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Kasa</label>
                                             <div class="col-sm-9">
-                                                <span class="text-danger">@Model.CashDetail.CashName</span>
+                                                <span class="text-danger">@Model.PaymentDetail.CashName</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Döküman Nr</label>
                                             <div class="col-sm-9">
-                                                <span class="text-danger">@Model.CashDetail.DocumentNumber</span>
+                                                <span class="text-danger">@Model.PaymentDetail.DocumentNumber</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -75,7 +75,7 @@
                                                 <select class="form-control" id="FromID" name="FromID" required>
                                                     @foreach (var item in Model.FromList)
                                                     {
-                                                        <option value="@item.Code" @(Model.CashDetail.FromBankAccountID != null ? Model.CashDetail.FromBankAccountID == item.ID ? "selected" : "" : Model.CashDetail.FromCustomerID != null ? Model.CashDetail.FromCustomerID == item.ID ? "selected" : "" : Model.CashDetail.FromEmployeeID == item.ID ? "selected" : "")>@(Html.Raw($"{item.Name}"))</option>
+                                                        <option value="@item.Code" @(Model.PaymentDetail.ToCustomerID == item.ID && item.Code.Substring(0,1) == "A" ? "selected" : Model.PaymentDetail.ToEmployeeID == item.ID && item.Code.Substring(0,1) == "E" ? "selected" : "")>@(Html.Raw($"{item.Name}"))</option>
                                                     }
                                                 </select>
                                             </div>
@@ -86,7 +86,7 @@
                                                 <select class="form-control" id="LocationID" name="LocationID" required>
                                                     @foreach (var item in Model.LocationList)
                                                     {
-                                                        <option value="@item.LocationID" @(Model.CashDetail.LocationID == item.LocationID ? "selected" : "")>@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                                                        <option value="@item.LocationID" @(Model.PaymentDetail.LocationID == item.LocationID ? "selected" : "")>@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
                                                     }
                                                 </select>
                                             </div>
@@ -94,7 +94,7 @@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Tutar</label>
                                             <div class="col-sm-9">
-                                                <input id="Amount" name="Amount" type="text" class="form-control" value="@Model.CashDetail.Amount" placeholder="Tutar" required>
+                                                <input id="Amount" name="Amount" type="text" class="form-control" value="@Model.PaymentDetail.Amount" placeholder="Tutar" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -103,7 +103,7 @@
                                                 <select class="form-control" id="Currency" name="Currency" required>
                                                     @foreach (var item in Model.CurrencyList)
                                                     {
-                                                        <option value="@item.Code" @(Model.CashDetail.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
+                                                        <option value="@item.Code" @(Model.PaymentDetail.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
                                                     }
                                                 </select>
                                             </div>
@@ -111,26 +111,26 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Kuru</label>
                                             <div class="col-sm-9">
-                                                <span class="text-danger">@Model.CashDetail.ExchangeRate</span>
+                                                <span class="text-danger">@Model.PaymentDetail.ExchangeRate</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Tutarı</label>
                                             <div class="col-sm-3">
-                                                <span class="text-danger">@($"{Model.CashDetail.SystemAmount} {Model.CashDetail.SystemCurrency}")</span>
+                                                <span class="text-danger">@($"{Model.PaymentDetail.SystemAmount} {Model.PaymentDetail.SystemCurrency}")</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Açıklama</label>
                                             <div class="col-sm-9">
-                                                <textarea id="Description" name="Description" rows="4" class="form-control" value="@Model.CashDetail.Description" placeholder="Açıklama"></textarea>
+                                                <textarea id="Description" name="Description" rows="4" class="form-control" value="@Model.PaymentDetail.Description" placeholder="Açıklama"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-3">Active?</div>
                                             <div class="col-sm-9">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" value="@Model.CashDetail.IsActive" checked="@Model.CashDetail.IsActive" class="custom-control-input">
+                                                    <input type="checkbox" value="@Model.PaymentDetail.IsActive" checked="@Model.PaymentDetail.IsActive" class="custom-control-input">
                                                     <label class="custom-control-label">Aktif mi?</label>
                                                 </div>
                                             </div>
@@ -139,13 +139,13 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
                                             <div class="col-sm-9">
-                                                <input id="ReferenceID" name="ReferenceID" type="text" class="form-control" value="@Model.CashDetail.ReferenceID" placeholder="Referans ID">
+                                                <input id="ReferenceID" name="ReferenceID" type="text" class="form-control" value="@Model.PaymentDetail.ReferenceID" placeholder="Referans ID">
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-0">
                                             <div class="col-sm-3"></div>
                                             <div class="col-sm-9">
-                                                @if (Model.CashDetail.IsActive == true)
+                                                @if (Model.PaymentDetail.IsActive == true)
                                                 {
                                                     <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
                                                 }
@@ -158,9 +158,9 @@
                                 </div>
                                 <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
                                     <nav class="nav nav-with-icon tx-13">
-                                        <a href="" class="nav-link"><i data-feather="user-plus"></i> @(Html.Raw($"{Model.CashDetail.RecorderFullName}"))</a>
-                                        <a href="" class="nav-link"><i data-feather="calendar"></i> @(Html.Raw($"{Model.CashDetail.RecordDate.Value.ToLongDateString()}"))</a>
-                                        <a href="" class="nav-link"><i data-feather="user-check"></i> @(Html.Raw($"{Model.CashDetail.UpdaterFullName}"))</a>
+                                        <a href="" class="nav-link"><i data-feather="user-plus"></i> @(Html.Raw($"{Model.PaymentDetail.RecorderFullName}"))</a>
+                                        <a href="" class="nav-link"><i data-feather="calendar"></i> @(Html.Raw($"{Model.PaymentDetail.RecordDate.Value.ToLongDateString()}"))</a>
+                                        <a href="" class="nav-link"><i data-feather="user-check"></i> @(Html.Raw($"{Model.PaymentDetail.UpdaterFullName}"))</a>
                                     </nav>
                                 </div><!-- card-footer -->
                             </div><!-- card -->
@@ -169,8 +169,8 @@
                             <div class="card">
                                 <div class="card-header pd-b-0 pd-x-20 bd-b-0">
                                     <div class="d-sm-flex align-items-center justify-content-between">
-                                        <h6 class="mg-b-0">@(Model.CashDetail.ActionName)</h6>
-                                        <p class="tx-12 tx-color-03 mg-b-0">@(Model.CashDetail.Date.Value.ToLongDateString())</p>
+                                        <h6 class="mg-b-0">@(Model.PaymentDetail.ActionName)</h6>
+                                        <p class="tx-12 tx-color-03 mg-b-0">@(Model.PaymentDetail.Date.Value.ToLongDateString())</p>
                                     </div>
                                 </div><!-- card-header -->
                                 <div class="card-body pd-20">
