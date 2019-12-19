@@ -24,11 +24,11 @@
                         <th scope="col" style="width:35%;">Mesai Tarihi</th>
                         <th scope="col" style="width:20%;" class="bd-l">Başlangıç Tarihi</th>
                         <th scope="col" style="width:10%;" class="bd-r">
-                            <input name="ShiftBeginTime" type="text" class="form-control form-control-sm shiftbegintime" value="" onchange="chkbTime()">
+                            <input name="ShiftBeginTime" type="text" class="form-control form-control-sm shiftbegintime" autocomplete="off" value="" onchange="chkbTime()">
                         </th>
                         <th scope="col" style="width:20%;" class="bd-l">Bitiş Tarihi</th>
                         <th scope="col" style="width:10%;">
-                            <input name="ShiftEndTime" type="text" class="form-control form-control-sm shiftendtime" value="" onchange="chkeTime()">
+                            <input name="ShiftEndTime" type="text" class="form-control form-control-sm shiftendtime" autocomplete="off" value="" onchange="chkeTime()">
 
                         </th>
                     </tr>
@@ -57,17 +57,17 @@
                             </th>
 
                             <td class="bd-l">
-                                <input name="schedulelist[@index].ShiftBeginDate" type="text" class="form-control shiftdate" value="@(day.DateKey.ToString("yyyy-MM-dd"))">
+                                <input name="schedulelist[@index].ShiftBeginDate" type="text" class="form-control shiftdate" autocomplete="off" value="@(day.DateKey.ToString("yyyy-MM-dd"))">
                             </td>
                             <td class="bd-r">
-                                <input name="schedulelist[@index].ShiftBeginTime" type="text" class="form-control shiftbtime" value="@(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToString("HH\\:mm") : "")">
+                                <input name="schedulelist[@index].ShiftBeginTime" type="text" class="form-control shiftbtime" autocomplete="off" value="@(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToString("HH\\:mm") : "")">
                             </td>
 
                             <td class="bd-l">
-                                <input name="schedulelist[@index].ShiftEndDate" type="text" class="form-control shiftdate" value="@(day.DateKey.ToString("yyyy-MM-dd"))">
+                                <input name="schedulelist[@index].ShiftEndDate" type="text" class="form-control shiftdate" autocomplete="off" value="@(day.DateKey.ToString("yyyy-MM-dd"))">
                             </td>
                             <td>
-                                <input name="schedulelist[@index].ShiftEndTime" type="text" class="form-control shiftetime" value="@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToString("HH\\:mm") : "")">
+                                <input name="schedulelist[@index].ShiftEndTime" type="text" class="form-control shiftetime" autocomplete="off" value="@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToString("HH\\:mm") : "")">
                             </td>
                         </tr>
 

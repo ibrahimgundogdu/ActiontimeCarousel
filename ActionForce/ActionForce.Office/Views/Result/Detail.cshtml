@@ -104,13 +104,13 @@
                                                         <td style="width:100px;"><strong>TRL (₺)</strong></td>
 
                                                         <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" id="N2TRL" name="N2TRL" class="form-control money font-weight-bold text-right text-info" placeholder="0" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID ==2 && x.Currency == " TRL")?.Quantity?.ToString("N2"))">
+                                                            <input type="text" id="N2TRL" name="N2TRL" class="form-control money font-weight-bold text-right text-info" autocomplete="off" placeholder="0" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID ==2 && x.Currency == " TRL")?.Quantity?.ToString("N2"))">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" id="N2TRL" name="N2TRL" class="form-control money font-weight-bold text-right text-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "TRL").Amount?.ToString("N2"))">
+                                                            <input type="text" id="N2TRL" name="N2TRL" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "TRL").Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" id="N2TRLD" name="N2TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "TRL").Description)" />
+                                                            <input type="text" id="N2TRLD" name="N2TRLD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "TRL").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -118,13 +118,13 @@
                                                             </a>
                                                         </td>
                                                         <td class="bd-l  text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="I5TRL" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "TRL")?.Quantity?.ToString("N2"))">
+                                                            <input type="text" name="I5TRL" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "TRL")?.Quantity?.ToString("N2"))">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="I5TRL" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "TRL")?.Amount?.ToString("N2"))">
+                                                            <input type="text" name="I5TRL" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "TRL")?.Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" name="I5TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "TRL").Description)" />
+                                                            <input type="text" name="I5TRLD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "TRL").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -136,13 +136,13 @@
                                                         <td>USD ($)</td>
 
                                                         <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="N2USD" class="form-control money font-weight-bold text-right text-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "USD")?.Quantity?.ToString("N2"))">
+                                                            <input type="text" name="N2USD" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "USD")?.Quantity?.ToString("N2"))">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="N2USD" class="form-control money font-weight-bold text-right text-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "USD")?.Amount?.ToString("N2"))">
+                                                            <input type="text" name="N2USD" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "USD")?.Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" name="N2USDD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "USD").Description)" />
+                                                            <input type="text" name="N2USDD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "USD").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -150,10 +150,10 @@
                                                             </a>
                                                         </td>
                                                         <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="I5USD" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "USD")?.Quantity?.ToString("N2"))">
+                                                            <input type="text" name="I5USD" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "USD")?.Quantity?.ToString("N2"))">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="I5USD" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "USD")?.Amount?.ToString("N2"))">
+                                                            <input type="text" name="I5USD" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "USD")?.Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
                                                             <input type="text" name="I5USDD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "USD").Description)" />
@@ -169,13 +169,13 @@
                                                         <td>EUR (€)</td>
 
                                                         <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="N2EUR" class="form-control money font-weight-bold text-right text-info" min="0" placeholder="0" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "EUR")?.Quantity?.ToString("N2"))">
+                                                            <input type="text" name="N2EUR" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "EUR")?.Quantity?.ToString("N2"))">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="N2EUR" class="form-control money font-weight-bold text-right text-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "EUR")?.Amount?.ToString("N2"))">
+                                                            <input type="text" name="N2EUR" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "EUR")?.Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" name="N2EURD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "EUR").Description)" />
+                                                            <input type="text" name="N2EURD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "EUR").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -183,13 +183,13 @@
                                                             </a>
                                                         </td>
                                                         <td class="bd-l" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="I5EUR" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "EUR")?.Quantity?.ToString("N2"))">
+                                                            <input type="text" name="I5EUR" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "EUR")?.Quantity?.ToString("N2"))">
                                                         </td>
                                                         <td class="" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="I5EUR" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "EUR")?.Amount?.ToString("N2"))">
+                                                            <input type="text" name="I5EUR" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "EUR")?.Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" name="I5EURD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "EUR").Description)" />
+                                                            <input type="text" name="I5EURD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "EUR").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -241,13 +241,13 @@
                                                         <td style="width:100px;"><strong>TRL (₺)</strong></td>
 
                                                         <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="S1TRL" class="form-control money font-weight-bold text-right tx-orange" placeholder="0" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 10 && x.Currency == " TRL")?.Quantity?.ToString("N2"))">
+                                                            <input type="text" name="S1TRL" class="form-control money font-weight-bold text-right tx-orange" autocomplete="off" placeholder="0" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 10 && x.Currency == " TRL")?.Quantity?.ToString("N2"))">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="S1TRL" class="form-control money font-weight-bold text-right tx-orange" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 10 && x.Currency == "TRL")?.Amount?.ToString("N2"))">
+                                                            <input type="text" name="S1TRL" class="form-control money font-weight-bold text-right tx-orange" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 10 && x.Currency == "TRL")?.Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" name="T1TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 10 && x.Currency == "TRL").Description)" />
+                                                            <input type="text" name="T1TRLD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 10 && x.Currency == "TRL").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -255,13 +255,13 @@
                                                             </a>
                                                         </td>
                                                         <td class="bd-l  text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="T4TRL" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 11 && x.Currency == "TRL")?.Quantity?.ToString("N2"))">
+                                                            <input type="text" name="T4TRL" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 11 && x.Currency == "TRL")?.Quantity?.ToString("N2"))">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="T4TRL" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 11 && x.Currency == "TRL")?.Amount?.ToString("N2"))">
+                                                            <input type="text" name="T4TRL" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 11 && x.Currency == "TRL")?.Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" name="T4TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 11 && x.Currency == "TRL").Description)" />
+                                                            <input type="text" name="T4TRLD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 11 && x.Currency == "TRL").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -311,10 +311,10 @@
                                                     <tr>
                                                         <td style="width:100px;"><strong>TRL (₺)</strong></td>
                                                         <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="T1TRL" class="form-control money font-weight-bold text-right text-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "TRL").Amount.Value.ToString("N2"))">
+                                                            <input type="text" name="T1TRL" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "TRL").Amount.Value.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" name="T1TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "TRL").Description)" />
+                                                            <input type="text" name="T1TRLD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "TRL").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -322,10 +322,10 @@
                                                             </a>
                                                         </td>
                                                         <td class="bd-l  text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="T4TRL" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "TRL").Amount?.ToString("N2"))">
+                                                            <input type="text" name="T4TRL" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "TRL").Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" name="T4TRLD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "TRL").Description)" />
+                                                            <input type="text" name="T4TRLD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "TRL").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -336,10 +336,10 @@
                                                     <tr>
                                                         <td>USD ($)</td>
                                                         <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="T1USD" class="form-control money font-weight-bold text-right text-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD").Amount.Value.ToString("N2"))">
+                                                            <input type="text" name="T1USD" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD").Amount.Value.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" name="T1USDD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD").Description)" />
+                                                            <input type="text" name="T1USDD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -347,10 +347,10 @@
                                                             </a>
                                                         </td>
                                                         <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="T4USD" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD").Amount?.ToString("N2"))">
+                                                            <input type="text" name="T4USD" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD").Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" name="T4USDD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD").Description)" />
+                                                            <input type="text" name="T4USDD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -362,10 +362,10 @@
 
                                                         <td>EUR (€)</td>
                                                         <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="T1EUR" class="form-control money font-weight-bold text-right text-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "EUR").Amount.Value.ToString("N2"))">
+                                                            <input type="text" name="T1EUR" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "EUR").Amount.Value.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" name="T1EURD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "EUR").Description)" />
+                                                            <input type="text" name="T1EURD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "EUR").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -373,10 +373,10 @@
                                                             </a>
                                                         </td>
                                                         <td class="bd-l" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="T4EUR" class="form-control money font-weight-bold text-right text-danger" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "EUR").Amount?.ToString("N2"))">
+                                                            <input type="text" name="T4EUR" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "EUR").Amount?.ToString("N2"))">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" name="T4EURD" class="form-control" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "EUR").Description)" />
+                                                            <input type="text" name="T4EURD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "EUR").Description)" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -426,22 +426,22 @@
                                                         <td style="width:100px;"><strong>USD ($)</strong></td>
 
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="E3USDA" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Amount?.ToString("N2"))">
+                                                            <input type="text" name="E3USDA" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Amount?.ToString("N2"))">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="E3USDE" class="form-control money4 font-weight-bold text-right" min="0" placeholder="0,0000" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Exchange?.ToString("N4"))">
+                                                            <input type="text" name="E3USDE" class="form-control money4 font-weight-bold text-right" autocomplete="off" min="0" placeholder="0,0000" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Exchange?.ToString("N4"))">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="E3USDC" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD").Currency)" readonly />
+                                                            <input type="text" name="E3USDC" class="form-control" autocomplete="off" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD").Currency)" readonly />
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="E3USDS" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.SystemAmount?.ToString("N2"))" readonly>
+                                                            <input type="text" name="E3USDS" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.SystemAmount?.ToString("N2"))" readonly>
                                                         </td>
                                                         <td style="width:200px; padding:1px !important;">
                                                             <input id="E7TRLF" name="E7TRLF" class="form-control" type="file" />
                                                         </td>
                                                         <td class="bd-l  text-right" style="padding:1px !important;">
-                                                            <input type="text" name="E3USDD" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Description)">
+                                                            <input type="text" name="E3USDD" class="form-control" autocomplete="off" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Description)">
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -455,22 +455,22 @@
                                                         <td style="width:100px;"><strong>EUR (€)</strong></td>
 
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="E3EURA" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Amount?.ToString("N2"))">
+                                                            <input type="text" name="E3EURA" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Amount?.ToString("N2"))">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="E3EURE" class="form-control money4 font-weight-bold text-right" min="0" placeholder="0,0000" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Exchange?.ToString("N4"))">
+                                                            <input type="text" name="E3EURE" class="form-control money4 font-weight-bold text-right" autocomplete="off" min="0" placeholder="0,0000" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Exchange?.ToString("N4"))">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="E3EURC" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR").Currency)" readonly />
+                                                            <input type="text" name="E3EURC" class="form-control" autocomplete="off" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR").Currency)" readonly />
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" name="E3EURS" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.SystemAmount?.ToString("N2"))" readonly>
+                                                            <input type="text" name="E3EURS" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.SystemAmount?.ToString("N2"))" readonly>
                                                         </td>
                                                         <td style="width:200px; padding:1px !important;">
                                                             <input id="E7TRLF" name="E7TRLF" class="form-control" type="file" />
                                                         </td>
                                                         <td class="bd-l  text-right" style="padding:1px !important;">
-                                                            <input type="text" name="E3EURD" class="form-control" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Description)">
+                                                            <input type="text" name="E3EURD" class="form-control" autocomplete="off" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Description)">
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary">
@@ -525,25 +525,25 @@
                                                             <td style="width:100px;"><strong>@item.ID</strong></td>
 
                                                             <td class="text-right" style="width:60px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLQ" class="form-control font-weight-bold text-right tx-info" min="0" placeholder="0" value="@(item.Quantity)">
+                                                                <input type="text" name="E6TRLQ" class="form-control font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0" value="@(item.Quantity)">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
+                                                                <input type="text" name="E6TRLA" class="form-control money font-weight-bold text-right" autocomplete="off" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLC" class="form-control" value="@(item.Currency)" readonly />
+                                                                <input type="text" name="E6TRLC" class="form-control" autocomplete="off" value="@(item.Currency)" readonly />
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLN" class="form-control font-weight-bold" value="@(item.SlipNumber)">
+                                                                <input type="text" name="E6TRLN" class="form-control font-weight-bold" autocomplete="off" value="@(item.SlipNumber)">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="ExpSlipDate" name="E6TRLD" class="form-control font-weight-bold" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
+                                                                <input type="text" id="ExpSlipDate" name="E6TRLD" class="form-control font-weight-bold" autocomplete="off" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
                                                             </td>
                                                             <td style="width:200px; padding:1px !important;">
                                                                 <input id="E7TRLF" name="E7TRLF" class="form-control" type="file" />
                                                             </td>
                                                             <td class="bd-l  text-right" style="padding:1px !important;">
-                                                                <input type="text" name="E6TRLDE" class="form-control" value="@(item.Description)">
+                                                                <input type="text" name="E6TRLDE" class="form-control" autocomplete="off" value="@(item.Description)">
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary">
@@ -610,26 +610,26 @@
                                                             </td>
 
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E7TRLA@(item.ID)" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
+                                                                <input type="text" id="E7TRLA@(item.ID)" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E7TRLCO@(item.ID)" class="form-control money font-weight-bold text-right tx-info" min="0" placeholder="0,00" value="0,00">
+                                                                <input type="text" id="E7TRLCO@(item.ID)" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00" value="0,00">
                                                             </td>
 
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E7TRLN@(item.ID)" class="form-control font-weight-bold" value="@(item.SlipNumber)">
+                                                                <input type="text" id="E7TRLN@(item.ID)" class="form-control font-weight-bold" autocomplete="off" value="@(item.SlipNumber)">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E7TRLD@(item.ID)" name="E7TRLD" class="form-control font-weight-bold shiftdate" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
+                                                                <input type="text" id="E7TRLD@(item.ID)" name="E7TRLD" class="form-control font-weight-bold shiftdate" autocomplete="off" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E7TRLR@(item.ID)" class="form-control font-weight-bold hourfull" value="@(item.SlipDate != null ? item.SlipDate?.TimeOfDay.ToString("HH\\:mm\\:00") :Model.CurrentDayResult.Date.ToString("00:00:00") )">
+                                                                <input type="text" id="E7TRLR@(item.ID)" class="form-control font-weight-bold hourfull" autocomplete="off" value="@(item.SlipDate != null ? item.SlipDate?.TimeOfDay.ToString("HH\\:mm\\:00") :Model.CurrentDayResult.Date.ToString("00:00:00") )">
                                                             </td>
                                                             <td style="width:200px; padding:1px !important;">
                                                                 <input id="E7TRLF@(item.ID)" class="form-control" type="file" />
                                                             </td>
                                                             <td class="text-right" style="padding:1px !important;">
-                                                                <input type="text" id="E7TRLDE@(item.ID)" class="form-control" value="@(item.Description)">
+                                                                <input type="text" id="E7TRLDE@(item.ID)" class="form-control" autocomplete="off" value="@(item.Description)">
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="AddBankTransfer(@Model.CurrentDayResult.ID,@item.ID);">
@@ -701,16 +701,16 @@
 
 
                                                             <td class="bd-l" style="width:60px; padding:1px !important;">
-                                                                <input type="text" id="S8SD@(emp)" class="form-control hour font-weight-bold" placeholder="00:00" value="@(salary.Duration != null ? salary.Duration.Value.ToString("hh\\:mm"):"00:00")" readonly />
+                                                                <input type="text" id="S8SD@(emp)" class="form-control hour font-weight-bold" autocomplete="off" placeholder="00:00" value="@(salary.Duration != null ? salary.Duration.Value.ToString("hh\\:mm"):"00:00")" readonly />
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="S8SU@(emp)" class="form-control money text-right" placeholder="0,00" value="@(salary.UnitHourPrice?.ToString("N2"))" readonly />
+                                                                <input type="text" id="S8SU@(emp)" class="form-control money text-right" autocomplete="off" placeholder="0,00" value="@(salary.UnitHourPrice?.ToString("N2"))" readonly />
                                                             </td>
                                                             <td class="text-right" style="width:120px; padding:1px !important;">
-                                                                <input type="text" id="S8ST@(emp)" class="form-control money text-right  font-weight-bold text-info" placeholder="0,00" value="@((salary.UnitHourPrice * salary.HourQuantity)?.ToString("N2"))" readonly />
+                                                                <input type="text" id="S8ST@(emp)" class="form-control money text-right  font-weight-bold text-info" autocomplete="off" placeholder="0,00" value="@((salary.UnitHourPrice * salary.HourQuantity)?.ToString("N2"))" readonly />
                                                             </td>
                                                             <td class="table-light" style="padding:1px !important;">
-                                                                <input type="text" id="S8SDE@(emp)" class="form-control" placeholder="" value="@(salary.Description)" />
+                                                                <input type="text" id="S8SDE@(emp)" class="form-control" autocomplete="off" placeholder="" value="@(salary.Description)" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="AddSalaryEarn(@Model.CurrentDayResult.ID,@salary.ID, @emp);">
@@ -718,10 +718,10 @@
                                                                 </a>
                                                             </td>
                                                             <td class="bd-l" style="width:120px; padding:1px !important;">
-                                                                <input type="text" id="S9PAMOUNT@(emp)" class="form-control money text-right font-weight-bold text-danger" placeholder="0,00" value="@(payment.Amount?.ToString("N2"))" />
+                                                                <input type="text" id="S9PAMOUNT@(emp)" class="form-control money text-right font-weight-bold text-danger" autocomplete="off" placeholder="0,00" value="@(payment.Amount?.ToString("N2"))" />
                                                             </td>
                                                             <td class="" style="padding:1px !important;">
-                                                                <input type="text" id="S9PDESC@(emp)" class="form-control" placeholder="" value="@(payment.Description)" />
+                                                                <input type="text" id="S9PDESC@(emp)" class="form-control" autocomplete="off" placeholder="" value="@(payment.Description)" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="AddSalaryPayment(@Model.CurrentDayResult.ID, @payment.ID, @emp);">
@@ -772,26 +772,26 @@
                                                     {
                                                         <tr>
                                                             <td style="width:160px; padding:1px !important;">
-                                                                <input type="text" id="E13TRLN" name="E13TRLN" class="form-control font-weight-bold" value="@(cr.SlipNumber)">
+                                                                <input type="text" id="E13TRLN" name="E13TRLN" class="form-control font-weight-bold" autocomplete="off" value="@(cr.SlipNumber)">
                                                                 <input id="E13TYPEID" type="hidden" value="33" />
                                                             </td>
                                                             <td style="width:120px; padding:1px !important;">
-                                                                <input type="text" id="E13TRLD" name="E13TRLD" class="form-control shiftdate font-weight-bold" value="@(cr.Date != null ? cr.Date.Value.ToString("yyyy-MM-dd") : Model.CurrentDate.DateKey.ToString("yyyy-MM-dd"))">
+                                                                <input type="text" id="E13TRLD" name="E13TRLD" class="form-control shiftdate font-weight-bold" autocomplete="off" value="@(cr.Date != null ? cr.Date.Value.ToString("yyyy-MM-dd") : Model.CurrentDate.DateKey.ToString("yyyy-MM-dd"))">
                                                             </td>
                                                             <td style="width:120px; padding:1px !important;">
-                                                                <input type="text" id="E13TRLT" name="E13TRLT" class="form-control hourfull font-weight-bold" value="@(cr.SlipDate != null ? cr.SlipDate.Value.TimeOfDay.ToString() : Model.CurrentDayResult.Date.TimeOfDay.ToString())">
+                                                                <input type="text" id="E13TRLT" name="E13TRLT" class="form-control hourfull font-weight-bold" autocomplete="off" value="@(cr.SlipDate != null ? cr.SlipDate.Value.TimeOfDay.ToString() : Model.CurrentDayResult.Date.TimeOfDay.ToString())">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E13TRLA" name="E13TRLA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(cr.Amount?.ToString("N2"))">
+                                                                <input type="text" id="E13TRLA" name="E13TRLA" class="form-control money font-weight-bold text-right" autocomplete="off" min="0" placeholder="0,00" value="@(cr.Amount?.ToString("N2"))">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E13TRLTA" name="E13TRLTA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(cr.SlipTotalAmount?.ToString("N2"))">
+                                                                <input type="text" id="E13TRLTA" name="E13TRLTA" class="form-control money font-weight-bold text-right" autocomplete="off" min="0" placeholder="0,00" value="@(cr.SlipTotalAmount?.ToString("N2"))">
                                                             </td>
                                                             <td style="width:200px; padding:1px !important;">
                                                                 <input id="E13TRLF" name="E13TRLF" class="form-control" type="file" />
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="E13TRLDE" name="E13TRLDE" class="form-control" value="@(cr.Description)">
+                                                                <input type="text" id="E13TRLDE" name="E13TRLDE" class="form-control" autocomplete="off" value="@(cr.Description)">
                                                             </td>
 
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
@@ -848,7 +848,7 @@
                                                             <input id="ResultFile" name="ResultFile" class="form-control" type="file" />
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" id="FileDescription" name="FileDescription" class="form-control">
+                                                            <input type="text" id="FileDescription" name="FileDescription" autocomplete="off" class="form-control">
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary" onclick="AddResultDocument(@Model.CurrentDayResult.ID);">

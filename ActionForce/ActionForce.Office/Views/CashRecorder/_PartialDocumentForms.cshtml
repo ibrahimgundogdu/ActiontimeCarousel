@@ -22,15 +22,15 @@
             </div>
             <div class="form-group">
                 <label>Tarih</label>
-                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
             </div>
             <div class="form-group">
                 <label>Net Tutar</label>
-                <input id="NetAmount" name="NetAmount" type="text" class="form-control" placeholder="Net Tutar" required>
+                <input id="NetAmount" name="NetAmount" type="text" class="form-control" autocomplete="off" placeholder="Net Tutar" required>
             </div>
             <div class="form-group">
                 <label>Toplam Tutar</label>
-                <input id="TotalAmount" name="TotalAmount" type="text" class="form-control" placeholder="Toplam Tutar" required>
+                <input id="TotalAmount" name="TotalAmount" type="text" class="form-control" autocomplete="off" placeholder="Toplam Tutar" required>
             </div>
             <div class="form-group">
                 <label>Para Birimi</label>
@@ -43,7 +43,7 @@
             </div>
             <div class="form-group">
                 <label>Fiş Numarası</label>
-                <input id="SlipNumber" name="SlipNumber" type="text" class="form-control" placeholder="Fiş Numarası">
+                <input id="SlipNumber" name="SlipNumber" type="text" class="form-control" autocomplete="off" placeholder="Fiş Numarası">
             </div>
             <div class="form-group">
                 <label>Döküman</label>
@@ -53,11 +53,11 @@
             <div class="form-row">
                 <div class="form-group col-md-8">
                     <label>Fiş Tarihi</label>
-                    <input id="SlipDate" name="SlipDate" type="text" class="form-control" placeholder="Fiş Tarihi" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                    <input id="SlipDate" name="SlipDate" type="text" class="form-control" autocomplete="off" placeholder="Fiş Tarihi" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
                 </div>
                 <div class="form-group col-md-4">
                     <label>Fiş Saati</label>
-                    <input id="SlipTime" name="SlipTime" type="text" class="form-control" placeholder="hh:mm" value="@(DateTime.Now.ToString("HH:mm"))" required>
+                    <input id="SlipTime" name="SlipTime" type="text" class="form-control" autocomplete="off" placeholder="hh:mm" value="@(DateTime.Now.ToString("HH:mm"))" required>
                 </div>
             </div>
             <button class="btn btn-primary btn-block">Fiş Ekle</button>

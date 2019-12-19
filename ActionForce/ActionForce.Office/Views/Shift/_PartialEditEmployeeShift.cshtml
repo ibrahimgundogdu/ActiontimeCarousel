@@ -41,17 +41,17 @@
                         </th>
 
                         <td class="bd-l">
-                            <input name="ShiftBeginDate" type="text" class="form-control shiftdate" value="@(Model.EmployeeShift?.ShiftDateStart?.ToString("yyyy-MM-dd"))">
+                            <input name="ShiftBeginDate" type="text" class="form-control shiftdate" autocomplete="off" value="@(Model.EmployeeShift?.ShiftDateStart?.ToString("yyyy-MM-dd"))">
                         </td>
                         <td class="bd-r">
-                            <input name="ShiftBeginTime" type="text" class="form-control hourfull" value="@(Model.EmployeeShift?.ShiftDateStart?.ToString("HH\\:mm\\:ss"))">
+                            <input name="ShiftBeginTime" type="text" class="form-control hourfull" autocomplete="off" value="@(Model.EmployeeShift?.ShiftDateStart?.ToString("HH\\:mm\\:ss"))">
                         </td>
 
                         <td class="bd-l">
-                            <input name="ShiftEndDate" type="text" class="form-control shiftdate" value="@(Model.EmployeeShift?.ShiftDateEnd?.ToString("yyyy-MM-dd"))">
+                            <input name="ShiftEndDate" type="text" class="form-control shiftdate" autocomplete="off" value="@(Model.EmployeeShift?.ShiftDateEnd?.ToString("yyyy-MM-dd"))">
                         </td>
                         <td>
-                            <input name="ShiftEndTime" type="text" class="form-control hourfull" value="@(Model.EmployeeShift?.ShiftDateEnd?.ToString("HH\\:mm\\:ss"))">
+                            <input name="ShiftEndTime" type="text" class="form-control hourfull" autocomplete="off" value="@(Model.EmployeeShift?.ShiftDateEnd?.ToString("HH\\:mm\\:ss"))">
                         </td>
                         <td></td>
                     </tr>

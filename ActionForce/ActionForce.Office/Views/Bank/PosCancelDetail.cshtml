@@ -77,7 +77,7 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Tarih</label>
                                             <div class="col-sm-9">
-                                                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" placeholder="Tarih" value="@(Model.PosCancelDetail.Date.Value.ToString("yyyy-MM-dd"))" required>
+                                                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.PosCancelDetail.Date.Value.ToString("yyyy-MM-dd"))" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -116,7 +116,7 @@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Tutar</label>
                                             <div class="col-sm-9">
-                                                <input id="Amount" name="Amount" type="text" class="form-control" value="@Model.PosCancelDetail.Amount" placeholder="Tutar" required>
+                                                <input id="Amount" name="Amount" type="text" class="form-control" autocomplete="off" value="@Model.PosCancelDetail.Amount" placeholder="Tutar" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -133,13 +133,13 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Kuru</label>
                                             <div class="col-sm-9">
-                                                <input id="ExchangeRate" name="ExchangeRate" type="text" class="form-control" placeholder="Döviz Kuru">
+                                                <input id="ExchangeRate" name="ExchangeRate" type="text" class="form-control" autocomplete="off" placeholder="Döviz Kuru">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Kur</label>
                                             <div class="col-sm-9">
-                                                <input id="Exchange" name="Exchange" type="text" class="form-control" value="@Model.PosCancelDetail.ExchangeRate" readonly>
+                                                <input id="Exchange" name="Exchange" type="text" class="form-control" autocomplete="off" value="@Model.PosCancelDetail.ExchangeRate" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group row">

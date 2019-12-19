@@ -33,7 +33,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            model.BankAccountList = Db.BankAccount.ToList();
+            model.BankAccountList = Db.BankAccount.Where(x => x.AccountTypeID == 2 && x.IsActive == true).ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
 
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
@@ -46,6 +46,10 @@ namespace ActionForce.Office.Controllers
                 model.PosCollections = model.PosCollections.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
 
             }
+            if (model.Filters.BankAccountID > 0)
+            {
+                model.PosCollections = model.PosCollections.Where(x => x.BankAccountID == model.Filters.BankAccountID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            }
 
 
             model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
@@ -55,11 +59,12 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult Filter(int? locationId, DateTime? beginDate, DateTime? endDate)
+        public ActionResult Filter(int? locationId, int? BankAccountID, DateTime? beginDate, DateTime? endDate)
         {
             FilterModel model = new FilterModel();
 
             model.LocationID = locationId;
+            model.BankAccountID = BankAccountID;
             model.DateBegin = beginDate;
             model.DateEnd = endDate;
 
@@ -162,7 +167,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            model.BankAccountList = Db.BankAccount.ToList();
+            model.BankAccountList = Db.BankAccount.Where(x => x.AccountTypeID == 2 && x.IsActive == true).ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
 
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
@@ -415,7 +420,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            model.BankAccountList = Db.BankAccount.ToList();
+            model.BankAccountList = Db.BankAccount.Where(x => x.AccountTypeID == 2 && x.IsActive == true).ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
 
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
@@ -428,7 +433,10 @@ namespace ActionForce.Office.Controllers
                 model.PosCancel = model.PosCancel.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
 
             }
-
+            if (model.Filters.BankAccountID > 0)
+            {
+                model.PosCancel = model.PosCancel.Where(x => x.FromBankAccountID == model.Filters.BankAccountID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            }
 
             model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
 
@@ -437,10 +445,10 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult FilterCancel(int? locationId, DateTime? beginDate, DateTime? endDate)
+        public ActionResult FilterCancel(int? locationId, int? BankAccountID, DateTime? beginDate, DateTime? endDate)
         {
             FilterModel model = new FilterModel();
-
+            model.BankAccountID = BankAccountID;
             model.LocationID = locationId;
             model.DateBegin = beginDate;
             model.DateEnd = endDate;
@@ -545,7 +553,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            model.BankAccountList = Db.BankAccount.ToList();
+            model.BankAccountList = Db.BankAccount.Where(x => x.AccountTypeID == 2 && x.IsActive == true).ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
 
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
@@ -797,7 +805,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            model.BankAccountList = Db.BankAccount.ToList();
+            model.BankAccountList = Db.BankAccount.Where(x => x.AccountTypeID == 2 && x.IsActive == true).ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
 
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
@@ -810,7 +818,10 @@ namespace ActionForce.Office.Controllers
                 model.PosRefund = model.PosRefund.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
 
             }
-
+            if (model.Filters.BankAccountID > 0)
+            {
+                model.PosRefund = model.PosRefund.Where(x => x.FromBankAccountID == model.Filters.BankAccountID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            }
 
             model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
 
@@ -819,10 +830,10 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult FilterRefund(int? locationId, DateTime? beginDate, DateTime? endDate)
+        public ActionResult FilterRefund(int? locationId, int? BankAccountID, DateTime? beginDate, DateTime? endDate)
         {
             FilterModel model = new FilterModel();
-
+            model.BankAccountID = BankAccountID;
             model.LocationID = locationId;
             model.DateBegin = beginDate;
             model.DateEnd = endDate;
@@ -928,7 +939,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            model.BankAccountList = Db.BankAccount.ToList();
+            model.BankAccountList = Db.BankAccount.Where(x => x.AccountTypeID == 2 && x.IsActive == true).ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
 
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);

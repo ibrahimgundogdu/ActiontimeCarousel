@@ -105,13 +105,13 @@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Tutar</label>
                                             <div class="col-sm-9">
-                                                <input id="Amount" name="Amount" type="text" class="form-control" value="@Model.TransferDetail.Amount" placeholder="Tutar" required>
+                                                <input id="Amount" name="Amount" type="text" class="form-control" autocomplete="off" value="@Model.TransferDetail.Amount" placeholder="Tutar" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Komisyon</label>
                                             <div class="col-sm-9">
-                                                <input id="Commission" name="Commission" type="text" class="form-control" value="@Model.TransferDetail.Commission" placeholder="Komisyon">
+                                                <input id="Commission" name="Commission" type="text" class="form-control" autocomplete="off" value="@Model.TransferDetail.Commission" placeholder="Komisyon">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -134,7 +134,7 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Kur</label>
                                             <div class="col-sm-9">
-                                                <input id="Exchange" name="Exchange" type="text" class="form-control" value="@Model.TransferDetail.ExchangeRate" readonly>
+                                                <input id="Exchange" name="Exchange" type="text" class="form-control" autocomplete="off" value="@Model.TransferDetail.ExchangeRate" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -152,19 +152,19 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Fiş Tarih</label>
                                             <div class="col-sm-9">
-                                                <input id="SlipDate" name="SlipDate" type="text" class="form-control" placeholder="Tarih" value="@(Model.TransferDetail.SlipDate.Value.ToString("yyyy-MM-dd"))" required>
+                                                <input id="SlipDate" name="SlipDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.TransferDetail.SlipDate.Value.ToString("yyyy-MM-dd"))" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Fiş Saati</label>
                                             <div class="col-sm-9">
-                                                <input id="SlipTime" name="SlipTime" type="text" class="form-control" placeholder="hh:mm" value="@(Model.TransferDetail.Date.Value.ToString("hh:mm"))" required>
+                                                <input id="SlipTime" name="SlipTime" type="text" class="form-control" autocomplete="off" placeholder="hh:mm" value="@(Model.TransferDetail.Date.Value.ToString("hh:mm"))" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Fiş Numarası</label>
                                             <div class="col-sm-9">
-                                                <input id="SlipNumber" name="SlipNumber" type="text" class="form-control" value="@Model.TransferDetail.SlipNumber" placeholder="Fiş Numarası">
+                                                <input id="SlipNumber" name="SlipNumber" type="text" class="form-control" autocomplete="off" value="@Model.TransferDetail.SlipNumber" placeholder="Fiş Numarası">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -188,15 +188,21 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Reference Code</label>
+                                            <div class="col-sm-9">
+                                                <input id="ReferenceCode" name="ReferenceCode" type="text" class="form-control" autocomplete="off" value="@Model.TransferDetail.ReferenceCode" placeholder="Reference Code">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
                                             <div class="col-sm-9">
-                                                <input id="ReferenceID" name="ReferenceID" type="text" class="form-control" value="@Model.TransferDetail.ReferenceID" placeholder="Referans ID">
+                                                <input id="ReferenceID" name="ReferenceID" type="text" class="form-control" autocomplete="off" value="@Model.TransferDetail.ReferenceID" placeholder="Referans ID">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Takip Numarası</label>
                                             <div class="col-sm-9">
-                                                <input id="TrackingNumber" name="TrackingNumber" type="text" class="form-control" value="@Model.TransferDetail.TrackingNumber" placeholder="Takip Numarası">
+                                                <input id="TrackingNumber" name="TrackingNumber" type="text" class="form-control" autocomplete="off" value="@Model.TransferDetail.TrackingNumber" placeholder="Takip Numarası">
                                             </div>
                                         </div>
                                         <div class="form-group row">

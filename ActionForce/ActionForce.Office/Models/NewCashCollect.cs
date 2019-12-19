@@ -56,6 +56,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
         public string ReferanceID { get; set; }
+        public string DocumentDate { get; set; }
         public Guid UID { get; set; }
     }
 

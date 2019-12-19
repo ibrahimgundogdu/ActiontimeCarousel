@@ -9,6 +9,7 @@ namespace ActionForce.Office
     {
         public int? LocationID { get; set; }
         public int? EmployeeID { get; set; }
+        public int? BankAccountID { get; set; }
         public DateTime? DateBegin { get; set; }
         public DateTime? DateEnd { get; set; }
     }
@@ -16,6 +17,7 @@ namespace ActionForce.Office
     public class ResultFilterModel
     {
         public int? LocationID { get; set; }
+        public int? BankAccountID { get; set; }
         public DateTime? ResultDate { get; set; }
         public long? ResultID { get; set; }
     }
