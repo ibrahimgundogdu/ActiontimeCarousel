@@ -806,6 +806,7 @@ namespace ActionForce.Office
                             cashExpense.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == expense.Currency ? expense.Amount : expense.Amount * expense.ExchangeRate;
                             cashExpense.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
                             cashExpense.SlipNumber = expense.SlipNumber;
+                            cashExpense.SlipDate = expense.SlipDate;
                             cashExpense.ReferenceID = expense.ReferanceID;
                             cashExpense.EnvironmentID = 2;
                             cashExpense.UID = Guid.NewGuid();

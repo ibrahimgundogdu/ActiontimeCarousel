@@ -203,6 +203,51 @@ function AddBankTransfer(id, itemid) {
     });
 }
 
+function AddExpense(id, itemid) {
+
+    var quantity = $('#E6TRLQ' + itemid).val();
+    var amount = $('#E6TRLA' + itemid).val();
+    var currency = $('#E6TRLC' + itemid).val();
+    var slipnumber = $('#E6TRLN' + itemid).val();
+    var slipdate = $('#SlipDate' + itemid).val();
+    var sliptime = $('#SlipTime' + itemid).val();
+    var description = $('#E6TRLDE' + itemid).val();
+
+    var data = new FormData();
+
+    jQuery.each(jQuery('#E7TRLF' + itemid)[0].files, function (i, file) {
+        data.append('file', file);
+    });
+
+    data.append('id', id);
+    data.append('itemid', itemid);
+    data.append('quantity', quantity);
+    data.append('amount', amount);
+    data.append('currency', currency);
+    data.append('slipnumber', slipnumber);
+    data.append('slipdate', slipdate);
+    data.append('sliptime', sliptime);
+    data.append('description', description);
+
+
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Result/AddExpense",
+        data: data,
+
+    }).done(function (d) {
+
+        $("#AddExpense").html(d);
+
+
+    });
+}
+
 
 
 // shift break scripts

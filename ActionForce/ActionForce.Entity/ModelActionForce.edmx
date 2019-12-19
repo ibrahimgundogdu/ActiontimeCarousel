@@ -827,6 +827,7 @@
           <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
           <Property Name="ActionTypeID" Type="int" />
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="SlipDate" Type="datetime" />
           <Property Name="SlipNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="SlipDocument" Type="nvarchar" MaxLength="50" />
           <Property Name="ResultID" Type="bigint" />
@@ -1652,6 +1653,28 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="Date" Type="date" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="LocationGoals">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="DateBegin" Type="date" />
+          <Property Name="DateEnd" Type="date" />
+          <Property Name="Year" Type="int" />
+          <Property Name="WeekNumber" Type="int" />
+          <Property Name="GoalTotalAmount" Type="float" />
+          <Property Name="ReelTotalAmount" Type="float" />
+          <Property Name="RateParcent" Type="float" />
+          <Property Name="ComputedDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="LocationParam">
           <Key>
             <PropertyRef Name="ID" />
@@ -2187,6 +2210,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LevelNumber" Type="int" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="SalaryCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentID" Type="int" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="4" />
+          <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="SaleChannel">
           <Key>
@@ -4421,6 +4454,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationAnimals" EntityType="Self.LocationAnimals" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationCR" EntityType="Self.LocationCR" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LocationGoals" EntityType="Self.LocationGoals" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationParam" EntityType="Self.LocationParam" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationPosTerminal" EntityType="Self.LocationPosTerminal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationSchedule" EntityType="Self.LocationSchedule" Schema="dbo" store:Type="Tables" />
@@ -4463,6 +4497,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="RoleGroupMembers" EntityType="Self.RoleGroupMembers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleGroupPermissions" EntityType="Self.RoleGroupPermissions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleLevel" EntityType="Self.RoleLevel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalaryCategory" EntityType="Self.SalaryCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SaleChannel" EntityType="Self.SaleChannel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Serials" EntityType="Self.Serials" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SerialsHistory" EntityType="Self.SerialsHistory" Schema="dbo" store:Type="Tables" />
@@ -6049,6 +6084,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VDayResultDocuments" EntityType="db293_ActionTimeDbModel.VDayResultDocuments" />
           <EntitySet Name="VDocumentCashRecorderSlip" EntityType="db293_ActionTimeDbModel.VDocumentCashRecorderSlip" />
           <FunctionImport Name="SetShiftDates" />
+          <EntitySet Name="LocationGoals" EntityType="db293_ActionTimeDbModel.LocationGoals" />
+          <EntitySet Name="SalaryCategory" EntityType="db293_ActionTimeDbModel.SalaryCategory" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -8516,6 +8553,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="SlipDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="DocumentCashPayments">
           <Key>
@@ -10244,6 +10282,38 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="LocationGoals">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="DateBegin" Type="DateTime" Precision="0" />
+          <Property Name="DateEnd" Type="DateTime" Precision="0" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="WeekNumber" Type="Int32" />
+          <Property Name="GoalTotalAmount" Type="Double" />
+          <Property Name="ReelTotalAmount" Type="Double" />
+          <Property Name="RateParcent" Type="Double" />
+          <Property Name="ComputedDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="SalaryCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentID" Type="Int32" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -12583,6 +12653,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentCashExpense">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentCashExpense">
               <MappingFragment StoreEntitySet="DocumentCashExpense">
+                <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
@@ -14378,6 +14449,40 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="SetShiftDates" FunctionName="db293_ActionTimeDbModel.Store.SetShiftDates" />
+          <EntitySetMapping Name="LocationGoals">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationGoals">
+              <MappingFragment StoreEntitySet="LocationGoals">
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="ComputedDate" ColumnName="ComputedDate" />
+                <ScalarProperty Name="RateParcent" ColumnName="RateParcent" />
+                <ScalarProperty Name="ReelTotalAmount" ColumnName="ReelTotalAmount" />
+                <ScalarProperty Name="GoalTotalAmount" ColumnName="GoalTotalAmount" />
+                <ScalarProperty Name="WeekNumber" ColumnName="WeekNumber" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalaryCategory">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SalaryCategory">
+              <MappingFragment StoreEntitySet="SalaryCategory">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

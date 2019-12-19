@@ -521,36 +521,39 @@
                                                 <tbody>
                                                     @foreach (var item in Model.DayResultItemList.Where(x => x.ResultItemID == 6).ToList())
                                                     {
-                                                        <tr>
-                                                            <td style="width:100px;"><strong>@item.ID</strong></td>
+                                                    <tr>
+                                                        <td style="width:100px;"><strong>@item.ID</strong></td>
 
-                                                            <td class="text-right" style="width:60px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLQ" class="form-control font-weight-bold text-right tx-info" min="0" placeholder="0" value="@(item.Quantity)">
-                                                            </td>
-                                                            <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLA" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
-                                                            </td>
-                                                            <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLC" class="form-control" value="@(item.Currency)" readonly />
-                                                            </td>
-                                                            <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" name="E6TRLN" class="form-control font-weight-bold" value="@(item.SlipNumber)">
-                                                            </td>
-                                                            <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="ExpSlipDate" name="E6TRLD" class="form-control font-weight-bold" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
-                                                            </td>
-                                                            <td style="width:200px; padding:1px !important;">
-                                                                <input id="E7TRLF" name="E7TRLF" class="form-control" type="file" />
-                                                            </td>
-                                                            <td class="bd-l  text-right" style="padding:1px !important;">
-                                                                <input type="text" name="E6TRLDE" class="form-control" value="@(item.Description)">
-                                                            </td>
-                                                            <td class="text-center" style="width:50px; padding:1px !important;">
-                                                                <a href="#" class="text-primary">
-                                                                    <i data-feather="plus-square"></i>
-                                                                </a>
-                                                            </td>
-                                                        </tr>
+                                                        <td class="text-right" style="width:60px; padding:1px !important;">
+                                                            <input type="text" id="E6TRLQ@(item.ID)" class="form-control font-weight-bold text-right tx-info" min="0" placeholder="0" value="@(item.Quantity)">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" id="E6TRLA@(item.ID)" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" id="E6TRLC@(item.ID)" class="form-control" value="@(item.Currency)" readonly />
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" id="E6TRLN@(item.ID)" class="form-control font-weight-bold" value="@(item.SlipNumber)">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" id="SlipDate@(item.ID)" class="form-control font-weight-bold" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
+                                                        </td>
+                                                        <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <input type="text" id="SlipTime@(item.ID)" class="form-control font-weight-bold" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
+                                                        </td>
+                                                        <td style="width:200px; padding:1px !important;">
+                                                            <input id="E7TRLF@(item.ID)" class="form-control" type="file" />
+                                                        </td>
+                                                        <td class="bd-l  text-right" style="padding:1px !important;">
+                                                            <input type="text" id="E6TRLDE@(item.ID)" class="form-control" value="@(item.Description)">
+                                                        </td>
+                                                        <td class="text-center" style="width:50px; padding:1px !important;">
+                                                            <a href="#" class="text-primary" onclick="AddExpense(@Model.CurrentDayResult.ID,@item.ID);">
+                                                                <i data-feather="plus-square"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
                                                     }
 
 
@@ -561,7 +564,7 @@
 
                                             </table>
                                         </div>
-                                        <div class="card-body pd-0" id="Expence">
+                                        <div class="card-body pd-0" id="AddExpense">
                                             @{Html.RenderPartial("_PartialExpence", Model);}
                                         </div>
                                     </div>
