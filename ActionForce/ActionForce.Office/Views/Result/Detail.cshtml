@@ -504,7 +504,7 @@
                                                 <thead class="bg-gray-100">
                                                     <tr>
                                                         <th>&nbsp;</th>
-                                                        <th colspan="8" class="text-center font-weight-bold"><span>(6) Masraf Detayı</span></th>
+                                                        <th colspan="9" class="text-center font-weight-bold"><span>(6) Masraf Detayı</span></th>
                                                     </tr>
                                                     <tr>
                                                         <th><span></span></th>
@@ -513,6 +513,7 @@
                                                         <th class=""><span>Para</span></th>
                                                         <th><span>Fiş No</span></th>
                                                         <th><span>Fiş Tarihi</span></th>
+                                                        <th><span>Fiş Saati</span></th>
                                                         <th><span>Masraf Fişi</span></th>
                                                         <th><span>Açıklama</span></th>
                                                         <th></th>
@@ -537,10 +538,10 @@
                                                             <input type="text" id="E6TRLN@(item.ID)" class="form-control font-weight-bold" value="@(item.SlipNumber)">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" id="SlipDate@(item.ID)" class="form-control font-weight-bold" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
+                                                            <input type="text" id="SlipDate@(item.ID)" class="form-control font-weight-bold shiftdate" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" id="SlipTime@(item.ID)" class="form-control font-weight-bold" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
+                                                            <input type="text" id="SlipTime@(item.ID)" class="form-control font-weight-bold hourfull" value="@(item.SlipDate != null ? item.SlipDate?.TimeOfDay.ToString("HH\\:mm\\:ss") :Model.CurrentDayResult.Date.ToString("HH\\:mm\\:ss") )">
                                                         </td>
                                                         <td style="width:200px; padding:1px !important;">
                                                             <input id="E7TRLF@(item.ID)" class="form-control" type="file" />
