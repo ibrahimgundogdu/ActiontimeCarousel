@@ -45,5 +45,7 @@ namespace ActionForce.Entity
         public Nullable<int> EnvironmentID { get; set; }
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<System.DateTime> SlipDate { get; set; }
+        public Nullable<int> ExpenseTypeID { get; set; }
+        public string ReferenceTableModel { get; set; }
     }
 }
