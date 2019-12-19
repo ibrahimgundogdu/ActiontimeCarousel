@@ -379,6 +379,68 @@ namespace ActionForce.Office.Controllers
             return PartialView("_PartialBankTransfer", model);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult AddExpense(long? id,  long? itemid, HttpPostedFileBase file, string quantity,string amount,string currency,string description, string slipnumber, string slipdate, string sliptime)
+        {
+            Result<DocumentCashExpense> result = new Result<DocumentCashExpense>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            ResultControlModel model = new ResultControlModel();
+
+            DocumentManager documentManager = new DocumentManager();
+
+            var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 29);
+            var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
+            var item = Db.DayResultItemList.FirstOrDefault(x => x.ID == itemid);
+            var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
+            var expenseamount = Convert.ToDouble(amount.Replace(".", ""));
+            var expensequantity = Convert.ToDouble(quantity.Replace(".", ""));
+            var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+            var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
+            DateTime? slipDatetime = null;
+
+            if (!string.IsNullOrEmpty(slipdate) && !string.IsNullOrEmpty(sliptime))
+            {
+                DateTime slipDate = Convert.ToDateTime(slipdate).Date;
+                slipDatetime = slipDate.Add(Convert.ToDateTime(sliptime).TimeOfDay);
+            }
+
+            CashExpense expense = new CashExpense();
+
+            expense.ActinTypeID = actType.ID;
+            expense.ActionTypeName = actType.Name;
+            expense.Amount = expenseamount;
+            expense.Currency = currency;
+            expense.Description = description;
+            expense.DocumentDate = dayresult.Date;
+            expense.EnvironmentID = 2;
+            expense.ExchangeRate = expense.Currency == "USD" ? exchange.USDA.Value : expense.Currency == "EUR" ? exchange.EURA.Value : 1;
+            expense.CashID = cash.ID;
+            expense.LocationID = location.LocationID;
+            expense.OurCompanyID = location.OurCompanyID;
+            expense.SlipDate = slipDatetime;
+            expense.SlipNumber = slipnumber;
+            expense.SlipPath = Server.MapPath("/");
+            expense.TimeZone = location.Timezone.Value;
+            expense.UID = Guid.NewGuid();
+            expense.ResultID = dayresult.ID;
+
+            result = documentManager.AddCashExpense(expense, file, model.Authentication);
+
+            model.DayResult = dayresult;
+            model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
+            model.CashActions = Db.VCashActions.Where(x => x.LocationID == dayresult.LocationID && x.ActionDate == dayresult.Date).ToList();
+            model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            TempData["result"] = result;
+
+            return PartialView("_PartialExpence", model);
+        }
 
 
 

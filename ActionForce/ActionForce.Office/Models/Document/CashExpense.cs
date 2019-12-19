@@ -28,5 +28,7 @@ namespace ActionForce.Office
         public long? ResultID { get; set; }
         public Guid? UID { get; set; }
         public string SlipPath { get; set; }
+        public DateTime? SlipDate { get; set; }
+
     }
 }

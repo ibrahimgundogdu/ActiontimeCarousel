@@ -323,6 +323,9 @@
     <Compile Include="LocationCR.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="LocationGoals.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="LocationParam.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -463,6 +466,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="RoleLevel.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SalaryCategory.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="SaleChannel.cs">
