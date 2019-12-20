@@ -595,213 +595,201 @@ namespace ActionForce.Office
             return result;
         }
 
-        //public Result<DocumentSaleExchange> EditSaleExchange(SaleExchange saleExchange, HttpPostedFileBase file, AuthenticationModel authentication)
-        //{
-        //    Result<DocumentSaleExchange> result = new Result<DocumentSaleExchange>()
-        //    {
-        //        IsSuccess = false,
-        //        Message = string.Empty,
-        //        Data = null
-        //    };
+        public Result<DocumentSaleExchange> EditSaleExchange(SaleExchange saleExchange, HttpPostedFileBase file, AuthenticationModel authentication)
+        {
+            Result<DocumentSaleExchange> result = new Result<DocumentSaleExchange>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
 
-        //    if (saleExchange != null && authentication != null)
-        //    {
+                var isExchange = Db.DocumentSaleExchange.FirstOrDefault(x => x.UID == saleExchange.UID);
 
-        //        using (ActionTimeEntities Db = new ActionTimeEntities())
-        //        {
+                try
+                {
+                    var location = Db.Location.FirstOrDefault(x => x.LocationID == saleExchange.LocationID);
+                    var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                    var currencyo = saleExchange.Currency;
+                    var currencyi = location.Currency != null ? location.Currency : ourcompany.Currency;
 
+                    var cash = OfficeHelper.GetCash(saleExchange.LocationID, currencyo);
 
+                    var casho = OfficeHelper.GetCash(saleExchange.LocationID, saleExchange.Currency);
+                    var cashi = OfficeHelper.GetCash(saleExchange.LocationID, currencyi);
+                    
+                    var locId = saleExchange.LocationID;
+                    var exchange = OfficeHelper.GetExchange(saleExchange.DocumentDate.Value);
 
-        //            try
-        //            {
-        //                var balance = Db.GetCashBalance(saleExchange.LocationID, saleExchange.FromCashID).FirstOrDefault() ?? 0;
-        //                if (balance >= saleExchange.Amount)
-        //                {
-        //                    DocumentSaleExchange sale = new DocumentSaleExchange();
+                    
+                    var isKasa = Convert.ToInt32(isExchange.ToCashID);
+                    var isKasao = Convert.ToInt32(isExchange.FromCashID);
 
-        //                    sale.ActionTypeID = saleExchange.ActinTypeID;
-        //                    sale.ActionTypeName = saleExchange.ActionTypeName;
-        //                    sale.Amount = saleExchange.Amount;
-        //                    sale.FromCashID = saleExchange.FromCashID;
-        //                    sale.Currency = saleExchange.Currency;
-        //                    sale.ToCashID = saleExchange.ToCashID;
-        //                    sale.ToCurrency = saleExchange.ToCurrency;
-        //                    sale.ToAmount = saleExchange.ToAmount;
-        //                    sale.Date = saleExchange.DocumentDate;
-        //                    sale.Description = saleExchange.Description;
-        //                    sale.DocumentNumber = OfficeHelper.GetDocumentNumber(saleExchange.OurCompanyID, "EXS");
-        //                    sale.ExchangeRate = saleExchange.ExchangeRate;
-        //                    sale.SaleExchangeRate = saleExchange.SaleExchangeRate;
-        //                    sale.IsActive = true;
-        //                    sale.LocationID = saleExchange.LocationID;
-        //                    sale.OurCompanyID = saleExchange.OurCompanyID;
-        //                    sale.RecordDate = DateTime.UtcNow.AddHours(saleExchange.TimeZone.Value);
-        //                    sale.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
-        //                    sale.RecordIP = OfficeHelper.GetIPAddress();
-        //                    sale.ReferenceID = saleExchange.ReferanceID;
-        //                    sale.EnvironmentID = 2;
-        //                    sale.UID = Guid.NewGuid();
+                    DocumentSaleExchange self = new DocumentSaleExchange()
+                    {
+                        ActionTypeID = isExchange.ActionTypeID,
+                        ActionTypeName = isExchange.ActionTypeName,
 
-        //                    if (file != null && file.ContentLength > 0)
-        //                    {
+                        FromCashID = isExchange.FromCashID,
+                        Amount = isExchange.Amount,
+                        Currency = isExchange.Currency,
 
-        //                        string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-        //                        sale.SlipDocument = filename;
-        //                        string folder = "Document/Exchange";
-        //                        saleExchange.SlipPath = saleExchange.SlipPath + folder;
-        //                        try
-        //                        {
-        //                            file.SaveAs(Path.Combine(saleExchange.SlipPath, filename));
-        //                        }
-        //                        catch (Exception ex)
-        //                        {
-        //                        }
-        //                    }
+                        SaleExchangeRate = isExchange.SaleExchangeRate,
+                        ToCashID = isExchange.ToCashID,
 
+                        ToAmount = (isExchange.Amount * isExchange.SaleExchangeRate),
+                        ToCurrency = isExchange.ToCurrency,
+                        Date = isExchange.Date,
+                        Description = isExchange.Description,
+                        DocumentNumber = isExchange.DocumentNumber,
+                        ExchangeRate = isExchange.ExchangeRate,
+                        ID = isExchange.ID,
+                        IsActive = isExchange.IsActive,
+                        LocationID = isExchange.LocationID,
+                        OurCompanyID = isExchange.OurCompanyID,
+                        RecordDate = isExchange.RecordDate,
+                        RecordEmployeeID = isExchange.RecordEmployeeID,
+                        RecordIP = isExchange.RecordIP,
+                        ReferenceID = isExchange.ReferenceID,
+                        UpdateDate = isExchange.UpdateDate,
+                        UpdateEmployee = isExchange.UpdateEmployee,
+                        UpdateIP = isExchange.UpdateIP,
+                        EnvironmentID = isExchange.EnvironmentID
+                    };
+                    isExchange.LocationID = saleExchange.LocationID;
+                    isExchange.FromCashID = casho.ID;
+                    isExchange.ToCashID = cashi.ID;
+                    isExchange.Date = saleExchange.DocumentDate;
+                    isExchange.Amount = saleExchange.Amount;
+                    isExchange.ToCurrency = currencyi;
+                    isExchange.Currency = currencyo;
+                    isExchange.ToAmount = (saleExchange.Amount * saleExchange.SaleExchangeRate);
+                    isExchange.Description = saleExchange.Description;
+                    isExchange.ExchangeRate = saleExchange.ExchangeRate != null ? saleExchange.ExchangeRate : self.ExchangeRate;
+                    isExchange.UpdateDate = DateTime.UtcNow.AddHours(3);
+                    isExchange.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                    isExchange.UpdateIP = OfficeHelper.GetIPAddress();
 
+                    if (file != null && file.ContentLength > 0)
+                    {
 
-        //                    Db.DocumentSaleExchange.Add(sale);
-        //                    Db.SaveChanges();
+                        string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                        isExchange.SlipDocument = filename;
+                        string folder = "Document/Exchange";
+                        saleExchange.SlipPath = saleExchange.SlipPath + folder;
+                        try
+                        {
+                            file.SaveAs(Path.Combine(saleExchange.SlipPath, filename));
+                        }
+                        catch (Exception ex)
+                        {
+                        }
+                    }
 
-
-        //                    // cari hesap işlemesi
-        //                    OfficeHelper.AddCashAction(sale.FromCashID, sale.LocationID, null, sale.ActionTypeID, sale.Date, sale.ActionTypeName, sale.ID, sale.Date, sale.DocumentNumber, sale.Description, -1, 0, sale.Amount, sale.Currency, null, null, sale.RecordEmployeeID, sale.RecordDate);
-        //                    OfficeHelper.AddCashAction(sale.ToCashID, sale.LocationID, null, sale.ActionTypeID, sale.Date, sale.ActionTypeName, sale.ID, sale.Date, sale.DocumentNumber, sale.Description, 1, sale.ToAmount, 0, sale.ToCurrency, null, null, sale.RecordEmployeeID, sale.RecordDate);
-
-        //                    result.IsSuccess = true;
-        //                    result.Message = $"{sale.Date} tarihli { sale.Amount } {sale.Currency} kasa döviz satışı başarı ile eklendi";
-
-        //                    // log atılır
-        //                    OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", sale.ID.ToString(), "Cash", "ExchangeSale", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, sale);
-        //                }
-        //                else
-        //                {
-        //                    result.Message = $"Kasa bakiyesi { saleExchange.Amount } { saleExchange.Currency } tutar için yeterli değildir. Kullanılabilir bakiye { balance } { saleExchange.Currency } tutardır.";
-        //                    OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "ExchangeSale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-        //                }
-
-
-
-        //            }
-        //            catch (Exception ex)
-        //            {
-
-        //                result.Message = $"{saleExchange.Amount} {saleExchange.Currency} kasa döviz satışı eklenemedi : {ex.Message}";
-        //                OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "ExchangeSale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-        //            }
-
-
-        //        }
-
-        //    }
-
-        //    return result;
-        //}
-
-        //public Result<DocumentSaleExchange> DeleteSaleExchange(long? id, AuthenticationModel authentication)
-        //{
-        //    Result<DocumentSaleExchange> result = new Result<DocumentSaleExchange>()
-        //    {
-        //        IsSuccess = false,
-        //        Message = string.Empty,
-        //        Data = null
-        //    };
-
-        //    if (saleExchange != null && authentication != null)
-        //    {
-
-        //        using (ActionTimeEntities Db = new ActionTimeEntities())
-        //        {
+                    Db.SaveChanges();
 
 
+                    var cashaction = Db.CashActions.FirstOrDefault(x => x.CashID == isKasao && x.LocationID == locId && x.CashActionTypeID == isExchange.ActionTypeID && x.ProcessID == isExchange.ID);
+                    var cashactioni = Db.CashActions.FirstOrDefault(x => x.CashID == isKasa && x.LocationID == locId && x.CashActionTypeID == isExchange.ActionTypeID && x.ProcessID == isExchange.ID);
+                    if (cashaction != null)
+                    {
+                        cashaction.LocationID = isExchange.LocationID;
+                        cashaction.CashID = isExchange.FromCashID;
+                        cashaction.Collection = isExchange.Amount;
+                        cashaction.Currency = isExchange.Currency;
+                        cashaction.ActionDate = saleExchange.DocumentDate;
+                        cashaction.ProcessDate = saleExchange.DocumentDate;
+                        cashaction.UpdateDate = isExchange.UpdateDate;
+                        cashaction.UpdateEmployeeID = isExchange.UpdateEmployee;
 
-        //            try
-        //            {
-        //                var balance = Db.GetCashBalance(saleExchange.LocationID, saleExchange.FromCashID).FirstOrDefault() ?? 0;
-        //                if (balance >= saleExchange.Amount)
-        //                {
-        //                    DocumentSaleExchange sale = new DocumentSaleExchange();
+                        Db.SaveChanges();
 
-        //                    sale.ActionTypeID = saleExchange.ActinTypeID;
-        //                    sale.ActionTypeName = saleExchange.ActionTypeName;
-        //                    sale.Amount = saleExchange.Amount;
-        //                    sale.FromCashID = saleExchange.FromCashID;
-        //                    sale.Currency = saleExchange.Currency;
-        //                    sale.ToCashID = saleExchange.ToCashID;
-        //                    sale.ToCurrency = saleExchange.ToCurrency;
-        //                    sale.ToAmount = saleExchange.ToAmount;
-        //                    sale.Date = saleExchange.DocumentDate;
-        //                    sale.Description = saleExchange.Description;
-        //                    sale.DocumentNumber = OfficeHelper.GetDocumentNumber(saleExchange.OurCompanyID, "EXS");
-        //                    sale.ExchangeRate = saleExchange.ExchangeRate;
-        //                    sale.SaleExchangeRate = saleExchange.SaleExchangeRate;
-        //                    sale.IsActive = true;
-        //                    sale.LocationID = saleExchange.LocationID;
-        //                    sale.OurCompanyID = saleExchange.OurCompanyID;
-        //                    sale.RecordDate = DateTime.UtcNow.AddHours(saleExchange.TimeZone.Value);
-        //                    sale.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
-        //                    sale.RecordIP = OfficeHelper.GetIPAddress();
-        //                    sale.ReferenceID = saleExchange.ReferanceID;
-        //                    sale.EnvironmentID = 2;
-        //                    sale.UID = Guid.NewGuid();
+                    }
+                    if (cashactioni != null)
+                    {
+                        cashactioni.LocationID = isExchange.LocationID;
+                        cashactioni.CashID = isExchange.ToCashID;
+                        cashactioni.Collection = isExchange.ToAmount;
+                        cashactioni.Currency = isExchange.ToCurrency;
+                        cashactioni.ActionDate = saleExchange.DocumentDate;
+                        cashactioni.ProcessDate = saleExchange.DocumentDate;
+                        cashactioni.UpdateDate = isExchange.UpdateDate;
+                        cashactioni.UpdateEmployeeID = isExchange.UpdateEmployee;
 
-        //                    if (file != null && file.ContentLength > 0)
-        //                    {
+                        Db.SaveChanges();
 
-        //                        string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-        //                        sale.SlipDocument = filename;
-        //                        string folder = "Document/Exchange";
-        //                        saleExchange.SlipPath = saleExchange.SlipPath + folder;
-        //                        try
-        //                        {
-        //                            file.SaveAs(Path.Combine(saleExchange.SlipPath, filename));
-        //                        }
-        //                        catch (Exception ex)
-        //                        {
-        //                        }
-        //                    }
+                    }
+                    result.IsSuccess = true;
+                    result.Message = $"{isExchange.ID} ID li {isExchange.Date} tarihli {isExchange.Amount} {isExchange.Currency} kasa döviz satışı başarı ile güncellendi";
 
 
+                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentSaleExchange>(self, isExchange, OfficeHelper.getIgnorelist());
+                    OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isExchange.ID.ToString(), "Cash", "ExchangeSale", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
-        //                    Db.DocumentSaleExchange.Add(sale);
-        //                    Db.SaveChanges();
-
-
-        //                    // cari hesap işlemesi
-        //                    OfficeHelper.AddCashAction(sale.FromCashID, sale.LocationID, null, sale.ActionTypeID, sale.Date, sale.ActionTypeName, sale.ID, sale.Date, sale.DocumentNumber, sale.Description, -1, 0, sale.Amount, sale.Currency, null, null, sale.RecordEmployeeID, sale.RecordDate);
-        //                    OfficeHelper.AddCashAction(sale.ToCashID, sale.LocationID, null, sale.ActionTypeID, sale.Date, sale.ActionTypeName, sale.ID, sale.Date, sale.DocumentNumber, sale.Description, 1, sale.ToAmount, 0, sale.ToCurrency, null, null, sale.RecordEmployeeID, sale.RecordDate);
-
-        //                    result.IsSuccess = true;
-        //                    result.Message = $"{sale.Date} tarihli { sale.Amount } {sale.Currency} kasa döviz satışı başarı ile eklendi";
-
-        //                    // log atılır
-        //                    OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", sale.ID.ToString(), "Cash", "ExchangeSale", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, sale);
-        //                }
-        //                else
-        //                {
-        //                    result.Message = $"Kasa bakiyesi { saleExchange.Amount } { saleExchange.Currency } tutar için yeterli değildir. Kullanılabilir bakiye { balance } { saleExchange.Currency } tutardır.";
-        //                    OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "ExchangeSale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-        //                }
+                }
+                catch (Exception ex)
+                {
+                    result.Message = $"{saleExchange.Amount} {saleExchange.Currency} kasa döviz satışı Güncellenemedi : {ex.Message}";
+                    OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "ExchangeSale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                }
 
 
+            }
 
-        //            }
-        //            catch (Exception ex)
-        //            {
+            return result;
+        }
 
-        //                result.Message = $"{saleExchange.Amount} {saleExchange.Currency} kasa döviz satışı eklenemedi : {ex.Message}";
-        //                OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "ExchangeSale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+        public Result<DocumentSaleExchange> DeleteSaleExchange(long? id, AuthenticationModel authentication)
+        {
+            Result<DocumentSaleExchange> result = new Result<DocumentSaleExchange>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
 
-        //            }
+            if (id != null)
+            {
 
+                using (ActionTimeEntities Db = new ActionTimeEntities())
+                {
+                    var isCash = Db.DocumentSaleExchange.FirstOrDefault(x => x.ID == id);
+                    if (isCash != null)
+                    {
+                        try
+                        {
+                            var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
 
-        //        }
+                            isCash.IsActive = false;
+                            isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
+                            isCash.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                            isCash.UpdateIP = OfficeHelper.GetIPAddress();
 
-        //    }
+                            Db.SaveChanges();
 
-        //    return result;
-        //}
+                            OfficeHelper.AddCashAction(isCash.FromCashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+                            OfficeHelper.AddCashAction(isCash.ToCashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, -1 * isCash.ToAmount, 0, isCash.ToCurrency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+
+                            result.IsSuccess = true;
+                            result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki kasa döviz satışı başarı ile iptal edildi";
+
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "ExchangeSale", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki kasa döviz satışı iptal edilemedi : {ex.Message}";
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", "-1", "Cash", "ExchangeSale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        }
+                    }
+                }
+
+            }
+
+            return result;
+        }
 
 
 
@@ -1188,6 +1176,159 @@ namespace ActionForce.Office
             return result;
         }
 
+        public Result<DocumentCashPayments> EditCashPayment(CashPayment payment, AuthenticationModel authentication)
+        {
+            Result<DocumentCashPayments> result = new Result<DocumentCashPayments>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var isPayment = Db.DocumentCashPayments.FirstOrDefault(x => x.UID == payment.UID);
+
+                if (isPayment != null)
+                {
+                    try
+                    {
+                        var cash = OfficeHelper.GetCash(payment.LocationID, payment.Currency);
+                        var location = Db.Location.FirstOrDefault(x => x.LocationID == payment.LocationID);
+                        var locId = isPayment.LocationID;
+                        var exchange = OfficeHelper.GetExchange(payment.DocumentDate.Value);
+
+                        DocumentCashPayments self = new DocumentCashPayments()
+                        {
+                            ActionTypeID = isPayment.ActionTypeID,
+                            ActionTypeName = isPayment.ActionTypeName,
+                            Amount = isPayment.Amount,
+                            CashID = isPayment.CashID,
+                            Currency = isPayment.Currency,
+                            Date = isPayment.Date,
+                            Description = isPayment.Description,
+                            DocumentNumber = isPayment.DocumentNumber,
+                            ExchangeRate = isPayment.ExchangeRate,
+                            ID = isPayment.ID,
+                            IsActive = isPayment.IsActive,
+                            LocationID = isPayment.LocationID,
+                            OurCompanyID = isPayment.OurCompanyID,
+                            RecordDate = isPayment.RecordDate,
+                            RecordEmployeeID = isPayment.RecordEmployeeID,
+                            RecordIP = isPayment.RecordIP,
+                            ReferenceID = isPayment.ReferenceID,
+                            SystemAmount = isPayment.SystemAmount,
+                            SystemCurrency = isPayment.SystemCurrency,
+                            UpdateDate = isPayment.UpdateDate,
+                            UpdateEmployee = isPayment.UpdateEmployee,
+                            UpdateIP = isPayment.UpdateIP,
+                            EnvironmentID = isPayment.EnvironmentID
+                        };
+                        isPayment.LocationID = payment.LocationID;
+                        isPayment.CashID = cash.ID;
+                        isPayment.Date = payment.DocumentDate;
+                        isPayment.ToEmployeeID = payment.ToEmployeeID ?? (int?)null;
+                        isPayment.ToCustomerID = payment.ToCustomerID ?? (int?)null;
+                        isPayment.Amount = payment.Amount;
+                        isPayment.Currency = payment.Currency;
+                        isPayment.Description = payment.Description;
+                        isPayment.ExchangeRate = payment.ExchangeRate != null ? payment.ExchangeRate : self.ExchangeRate;
+                        isPayment.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                        isPayment.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                        isPayment.UpdateIP = OfficeHelper.GetIPAddress();
+                        isPayment.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == payment.Currency ? payment.Amount : payment.Amount * isPayment.ExchangeRate;
+                        isPayment.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+
+                        Db.SaveChanges();
+
+                        var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == locId && x.CashActionTypeID == isPayment.ActionTypeID && x.ProcessID == isPayment.ID);
+
+                        if (cashaction != null)
+                        {
+                            cashaction.LocationID = isPayment.LocationID;
+                            cashaction.Collection = isPayment.Amount;
+                            cashaction.CashID = cash.ID;
+                            cashaction.Currency = payment.Currency;
+                            cashaction.ActionDate = payment.DocumentDate;
+                            cashaction.ProcessDate = payment.DocumentDate;
+                            cashaction.UpdateDate = isPayment.UpdateDate;
+                            cashaction.UpdateEmployeeID = isPayment.UpdateEmployee;
+
+                            Db.SaveChanges();
+
+                        }
+
+
+                        result.IsSuccess = true;
+                        result.Message = $"{isPayment.ID} ID li {isPayment.Date} tarihli {isPayment.Amount} {isPayment.Currency} tutarındaki kasa ödemesi başarı ile güncellendi";
+
+
+                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentCashPayments>(self, isPayment, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isPayment.ID.ToString(), "Cash", "CashPayment", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"{payment.Amount} {payment.Currency} tutarındaki kasa ödemesi güncellenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "CashPayment", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+
+
+                }
+            }
+
+            return result;
+        }
+
+        public Result<DocumentCashPayments> DeleteCashPayment(long? id, AuthenticationModel authentication)
+        {
+            Result<DocumentCashPayments> result = new Result<DocumentCashPayments>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            if (id != null)
+            {
+                using (ActionTimeEntities Db = new ActionTimeEntities())
+                {
+                    var isCash = Db.DocumentCashPayments.FirstOrDefault(x => x.ID == id);
+                    if (isCash != null)
+                    {
+                        try
+                        {
+                            var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+
+                            isCash.IsActive = false;
+                            isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
+                            isCash.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                            isCash.UpdateIP = OfficeHelper.GetIPAddress();
+
+                            Db.SaveChanges();
+
+                            OfficeHelper.AddCashAction(isCash.CashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+
+                            result.IsSuccess = true;
+                            result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki kasa ödemesi başarı ile iptal edildi";
+
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "CashPayment", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki kasa ödemesi iptal edilemedi : {ex.Message}";
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", "-1", "Cash", "CashPayment", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
+
 
         public Result<DocumentTicketSaleReturns> AddCashSaleReturn(SaleReturn sale,  AuthenticationModel authentication)
         {
@@ -1270,6 +1411,159 @@ namespace ActionForce.Office
             return result;
         }
 
+        public Result<DocumentTicketSaleReturns> EditCashSaleReturn(SaleReturn sale, AuthenticationModel authentication)
+        {
+            Result<DocumentTicketSaleReturns> result = new Result<DocumentTicketSaleReturns>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var isCash = Db.DocumentTicketSaleReturns.FirstOrDefault(x => x.UID == sale.UID);
+
+                if (isCash != null)
+                {
+                    try
+                    {
+                        var cash = OfficeHelper.GetCash(sale.LocationID, sale.Currency);
+                        var location = Db.Location.FirstOrDefault(x => x.LocationID == sale.LocationID);
+                        var locId = isCash.LocationID;
+                        var exchange = OfficeHelper.GetExchange(sale.DocumentDate.Value);
+
+                        DocumentTicketSaleReturns self = new DocumentTicketSaleReturns()
+                        {
+                            ActionTypeID = isCash.ActionTypeID,
+                            ActionTypeName = isCash.ActionTypeName,
+                            Amount = isCash.Amount,
+                            CashID = isCash.CashID,
+                            Currency = isCash.Currency,
+                            Date = isCash.Date,
+                            Description = isCash.Description,
+                            DocumentNumber = isCash.DocumentNumber,
+                            ExchangeRate = isCash.ExchangeRate,
+                            ID = isCash.ID,
+                            IsActive = isCash.IsActive,
+                            LocationID = isCash.LocationID,
+                            OurCompanyID = isCash.OurCompanyID,
+                            RecordDate = isCash.RecordDate,
+                            RecordEmployeeID = isCash.RecordEmployeeID,
+                            RecordIP = isCash.RecordIP,
+                            ReferenceID = isCash.ReferenceID,
+                            SystemAmount = isCash.SystemAmount,
+                            SystemCurrency = isCash.SystemCurrency,
+                            UpdateDate = isCash.UpdateDate,
+                            UpdateEmployee = isCash.UpdateEmployee,
+                            UpdateIP = isCash.UpdateIP,
+                            EnvironmentID = isCash.EnvironmentID
+                        };
+                        isCash.LocationID = sale.LocationID;
+                        isCash.CashID = cash.ID;
+                        isCash.Date = sale.DocumentDate;
+                        isCash.Quantity = sale.Quantity;
+                        isCash.PayMethodID = sale.PayMethodID;
+                        isCash.ToCustomerID = sale.ToCustomerID ?? (int?)null;
+                        isCash.Amount = sale.Amount;
+                        isCash.Description = sale.Description;
+                        isCash.ExchangeRate = sale.ExchangeRate != null ? sale.ExchangeRate : self.ExchangeRate;
+                        isCash.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                        isCash.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                        isCash.UpdateIP = OfficeHelper.GetIPAddress();
+                        isCash.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == sale.Currency ? sale.Amount : sale.Amount * isCash.ExchangeRate;
+                        isCash.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+
+                        Db.SaveChanges();
+
+                        var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == locId && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID);
+
+                        if (cashaction != null)
+                        {
+                            cashaction.LocationID = isCash.LocationID;
+                            cashaction.Collection = isCash.Amount;
+                            cashaction.CashID = cash.ID;
+                            cashaction.Currency = sale.Currency;
+                            cashaction.ActionDate = sale.DocumentDate;
+                            cashaction.ProcessDate = sale.DocumentDate;
+                            cashaction.UpdateDate = isCash.UpdateDate;
+                            cashaction.UpdateEmployeeID = isCash.UpdateEmployee;
+
+                            Db.SaveChanges();
+
+                        }
+
+                        result.IsSuccess = true;
+                        result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki {isCash.Quantity} adet bilet satış iadesi başarı ile güncellendi";
+
+
+                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentTicketSaleReturns>(self, isCash, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isCash.ID.ToString(), "Cash", "SaleReturn", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki {isCash.Quantity} adet bilet satış iadesi güncellenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "SaleReturn", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public Result<DocumentTicketSaleReturns> DeleteCashSaleReturn(long? id, AuthenticationModel authentication)
+        {
+            Result<DocumentTicketSaleReturns> result = new Result<DocumentTicketSaleReturns>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            if (id != null)
+            {
+                using (ActionTimeEntities Db = new ActionTimeEntities())
+                {
+                    var isCash = Db.DocumentTicketSaleReturns.FirstOrDefault(x => x.ID == id);
+                    if (isCash != null)
+                    {
+                        try
+                        {
+                            var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+
+                            isCash.IsActive = false;
+                            isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
+                            isCash.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                            isCash.UpdateIP = OfficeHelper.GetIPAddress();
+
+                            Db.SaveChanges();
+
+                            OfficeHelper.AddCashAction(isCash.CashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+
+
+                            result.IsSuccess = true;
+                            result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki {isCash.Quantity} adet bilet satış iadesi başarı ile iptal edildi";
+
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "SaleReturn", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                        }
+                        catch (Exception ex)
+                        {
+
+                            result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki {isCash.Quantity} adet bilet satış iade iptal edilemedi : {ex.Message}";
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", "-1", "Cash", "SaleReturn", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
+
 
         public Result<DocumentCashExpense> AddCashExpense(CashExpense expense, HttpPostedFileBase file, AuthenticationModel authentication)
         {
@@ -1301,9 +1595,9 @@ namespace ActionForce.Office
                             cashExpense.Description = expense.Description;
                             cashExpense.DocumentNumber = OfficeHelper.GetDocumentNumber(expense.OurCompanyID, "EXP");
                             cashExpense.ExchangeRate = expense.ExchangeRate;
-                            cashExpense.ToBankAccountID = expense.ToBankAccountID;
-                            cashExpense.ToEmployeeID = expense.ToEmployeeID;
-                            cashExpense.ToCustomerID = expense.ToCustomerID;
+                            cashExpense.ToBankAccountID = expense.ToBankAccountID ?? (int?)null;
+                            cashExpense.ToEmployeeID = expense.ToEmployeeID ?? (int?)null;
+                            cashExpense.ToCustomerID = expense.ToCustomerID ?? (int?)null;
                             cashExpense.IsActive = true;
                             cashExpense.LocationID = expense.LocationID;
                             cashExpense.OurCompanyID = expense.OurCompanyID;
@@ -1341,20 +1635,7 @@ namespace ActionForce.Office
 
                             // cari hesap işlemesi
                             OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
-
-                            //if (cashExpense.ToBankAccountID > 0)
-                            //{
-                            //    OfficeHelper.AddBankAction(cashExpense.LocationID, cashExpense.ToEmployeeID, cashExpense.ToBankAccountID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
-                            //}
-                            //else
-                            //{
-                            //    OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, cashExpense.ToEmployeeID > 0 ? cashExpense.ToEmployeeID : (int?)null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
-                            //}
-
-                            //if (cashExpense.ToEmployeeID > 0)
-                            //{
-                            //    OfficeHelper.AddEmployeeAction(cashExpense.ToEmployeeID, cashExpense.LocationID, cashExpense.ActionTypeID, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.Description, 1, 0, cashExpense.Amount, cashExpense.Currency, null, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
-                            //}
+                            
 
 
                             result.IsSuccess = true;
@@ -1380,6 +1661,180 @@ namespace ActionForce.Office
 
             return result;
         }
+
+        public Result<DocumentCashExpense> EditCashExpense(CashExpense expense, HttpPostedFileBase file, AuthenticationModel authentication)
+        {
+            Result<DocumentCashExpense> result = new Result<DocumentCashExpense>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var isExpense = Db.DocumentCashExpense.FirstOrDefault(x => x.UID == expense.UID);
+                if (isExpense != null)
+                {
+                    try
+                    {
+                        var cash = OfficeHelper.GetCash(expense.LocationID, expense.Currency);
+                        var location = Db.Location.FirstOrDefault(x => x.LocationID == expense.LocationID);
+                        var locId = isExpense.LocationID;
+                        var exchange = OfficeHelper.GetExchange(expense.DocumentDate.Value);
+
+                        DocumentCashExpense self = new DocumentCashExpense()
+                        {
+                            ActionTypeID = isExpense.ActionTypeID,
+                            ActionTypeName = isExpense.ActionTypeName,
+                            Amount = isExpense.Amount,
+                            CashID = isExpense.CashID,
+                            Currency = isExpense.Currency,
+                            Date = isExpense.Date,
+                            Description = isExpense.Description,
+                            DocumentNumber = isExpense.DocumentNumber,
+                            ExchangeRate = isExpense.ExchangeRate,
+                            ID = isExpense.ID,
+                            IsActive = isExpense.IsActive,
+                            LocationID = isExpense.LocationID,
+                            OurCompanyID = isExpense.OurCompanyID,
+                            RecordDate = isExpense.RecordDate,
+                            RecordEmployeeID = isExpense.RecordEmployeeID,
+                            RecordIP = isExpense.RecordIP,
+                            ReferenceID = isExpense.ReferenceID,
+                            SystemAmount = isExpense.SystemAmount,
+                            SystemCurrency = isExpense.SystemCurrency,
+                            UpdateDate = isExpense.UpdateDate,
+                            UpdateEmployee = isExpense.UpdateEmployee,
+                            UpdateIP = isExpense.UpdateIP,
+                            SlipNumber = isExpense.SlipNumber,
+                            SlipDocument = isExpense.SlipDocument,
+                            EnvironmentID = isExpense.EnvironmentID
+                        };
+
+                        string FileName = string.Empty;
+
+                        if (file != null && file.ContentLength > 0)
+                        {
+
+                            string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                            isExpense.SlipDocument = filename;
+                            string folder = "Document/Expense";
+                            expense.SlipPath = expense.SlipPath + folder;
+                            try
+                            {
+                                file.SaveAs(Path.Combine(expense.SlipPath, filename));
+                            }
+                            catch (Exception ex)
+                            {
+                            }
+                        }
+                        isExpense.LocationID = expense.LocationID;
+                        isExpense.CashID = cash.ID;
+                        isExpense.Date = expense.DocumentDate;
+                        isExpense.SlipNumber = expense.SlipNumber;
+                        isExpense.ToBankAccountID = expense.ToBankAccountID ?? (int?)null;
+                        isExpense.ToEmployeeID = expense.ToEmployeeID ?? (int?)null;
+                        isExpense.ToCustomerID = expense.ToCustomerID ?? (int?)null;
+                        isExpense.Amount = expense.Amount;
+                        isExpense.Currency = expense.Currency;
+                        isExpense.Description = expense.Description;
+                        isExpense.ExchangeRate = expense.ExchangeRate != null ? expense.ExchangeRate : self.ExchangeRate;
+                        isExpense.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                        isExpense.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                        isExpense.UpdateIP = OfficeHelper.GetIPAddress();
+                        isExpense.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == expense.Currency ? expense.Amount : expense.Amount * isExpense.ExchangeRate;
+                        isExpense.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+
+                        Db.SaveChanges();
+
+                        var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == locId && x.CashActionTypeID == isExpense.ActionTypeID && x.ProcessID == isExpense.ID);
+
+                        if (cashaction != null)
+                        {
+                            cashaction.LocationID = isExpense.LocationID;
+                            cashaction.Payment = isExpense.Amount;
+                            cashaction.Currency = isExpense.Currency;
+                            cashaction.CashID = cash.ID;
+                            cashaction.ActionDate = isExpense.Date;
+                            cashaction.ProcessDate = isExpense.Date;
+                            cashaction.UpdateDate = isExpense.UpdateDate;
+                            cashaction.UpdateEmployeeID = isExpense.UpdateEmployee;
+
+                            Db.SaveChanges();
+
+                        }
+
+                        result.IsSuccess = true;
+                        result.Message = $"{isExpense.ID} ID li {isExpense.Date} tarihli {isExpense.Amount} {isExpense.Currency} tutarındaki masraf ödeme fişi başarı ile güncellendi";
+
+
+                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentCashExpense>(self, isExpense, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isExpense.ID.ToString(), "Cash", "Expense", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"Masraf ödeme fişi güncellenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "Expense", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+                
+
+            }
+
+            return result;
+        }
+
+        public Result<DocumentCashExpense> DeleteCashExpense(long? id, AuthenticationModel authentication)
+        {
+            Result<DocumentCashExpense> result = new Result<DocumentCashExpense>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            if (id != null)
+            {
+                using (ActionTimeEntities Db = new ActionTimeEntities())
+                {
+                    var isCash = Db.DocumentCashExpense.FirstOrDefault(x => x.ID == id);
+                    if (isCash != null)
+                    {
+                        try
+                        {
+                            var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+
+                            isCash.IsActive = false;
+                            isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
+                            isCash.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                            isCash.UpdateIP = OfficeHelper.GetIPAddress();
+
+                            Db.SaveChanges();
+
+                            OfficeHelper.AddCashAction(isCash.CashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate);
+
+
+                            result.IsSuccess = true;
+                            result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki masraf ödeme fişi başarı ile iptal edildi";
+
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "Expense", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                        }
+                        catch (Exception ex)
+                        {
+
+                            result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki masraf ödeme fişi iptal edilemedi : {ex.Message}";
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", "-1", "Cash", "Expense", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
 
 
         public Result<DocumentBankTransfer> AddBankTransfer(BankTransfer transfer, HttpPostedFileBase file, AuthenticationModel authentication)
@@ -1465,6 +1920,452 @@ namespace ActionForce.Office
                     }
 
                 }
+            }
+
+            return result;
+        }
+
+        public Result<DocumentBankTransfer> EditBankTransfer(BankTransfer transfer, HttpPostedFileBase file, AuthenticationModel authentication)
+        {
+            Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var isTransfer = Db.DocumentBankTransfer.FirstOrDefault(x => x.UID == transfer.UID);
+                if (isTransfer != null)
+                {
+                    try
+                    {
+                        var cash = OfficeHelper.GetCash(transfer.LocationID, transfer.Currency);
+                        var location = Db.Location.FirstOrDefault(x => x.LocationID == transfer.LocationID);
+                        var locId = isTransfer.LocationID;
+                        var docDate = isTransfer.Date;
+                        var exchange = OfficeHelper.GetExchange(transfer.DocumentDate.Value);
+
+                        var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 29);
+
+                        DocumentBankTransfer self = new DocumentBankTransfer()
+                        {
+                            ActionTypeID = isTransfer.ActionTypeID,
+                            ActionTypeName = isTransfer.ActionTypeName,
+                            Amount = isTransfer.Amount,
+                            NetAmount = isTransfer.NetAmount,
+                            FromCashID = isTransfer.FromCashID,
+                            ToBankAccountID = isTransfer.ToBankAccountID,
+                            Currency = isTransfer.Currency,
+                            Date = isTransfer.Date,
+                            Description = isTransfer.Description,
+                            DocumentNumber = isTransfer.DocumentNumber,
+                            ExchangeRate = isTransfer.ExchangeRate,
+                            ID = isTransfer.ID,
+                            IsActive = isTransfer.IsActive,
+                            LocationID = isTransfer.LocationID,
+                            OurCompanyID = isTransfer.OurCompanyID,
+                            RecordDate = isTransfer.RecordDate,
+                            RecordEmployeeID = isTransfer.RecordEmployeeID,
+                            RecordIP = isTransfer.RecordIP,
+                            ReferenceID = isTransfer.ReferenceID,
+                            SystemAmount = isTransfer.SystemAmount,
+                            SystemCurrency = isTransfer.SystemCurrency,
+                            UpdateDate = isTransfer.UpdateDate,
+                            UpdateEmployee = isTransfer.UpdateEmployee,
+                            UpdateIP = isTransfer.UpdateIP,
+                            SlipNumber = isTransfer.SlipNumber,
+                            SlipDocument = isTransfer.SlipDocument,
+                            SlipDate = isTransfer.SlipDate,
+                            StatusID = isTransfer.StatusID,
+                            TrackingNumber = isTransfer.TrackingNumber,
+                            Commission = isTransfer.Commission,
+                            EnvironmentID = isTransfer.EnvironmentID
+
+                        };
+
+                        string FileName = string.Empty;
+                        if (transfer.StatusID == 2)
+                        {
+
+
+                            if (file != null && file.ContentLength > 0)
+                            {
+
+                                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                                isTransfer.SlipDocument = filename;
+                                string folder = "Document/Bank";
+                                transfer.SlipPath = transfer.SlipPath + folder;
+                                try
+                                {
+                                    file.SaveAs(Path.Combine(transfer.SlipPath, filename));
+                                }
+                                catch (Exception ex)
+                                {
+                                }
+                            }
+                            isTransfer.Commission = transfer.Commission;
+                            isTransfer.Date = transfer.DocumentDate;
+                            isTransfer.FromCashID = cash.ID;
+                            isTransfer.SlipDate = transfer.SlipDate;
+                            isTransfer.SlipNumber = transfer.SlipNumber;
+                            isTransfer.ToBankAccountID = transfer.ToBankID ?? (int?)null;
+                            isTransfer.Amount = transfer.Amount;
+                            isTransfer.Description = transfer.Description;
+                            isTransfer.ExchangeRate = transfer.ExchangeRate != null ? transfer.ExchangeRate : self.ExchangeRate;
+                            isTransfer.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                            isTransfer.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                            isTransfer.UpdateIP = OfficeHelper.GetIPAddress();
+                            isTransfer.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == transfer.Currency ? transfer.Amount : transfer.Amount * isTransfer.ExchangeRate;
+                            isTransfer.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+                            isTransfer.StatusID = transfer.StatusID;
+                            isTransfer.TrackingNumber = transfer.TrackingNumber;
+                            isTransfer.ReferenceCode = transfer.ReferanceCode;
+
+                            Db.SaveChanges();
+
+
+
+
+
+                            var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == locId && x.CashActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID);
+                            if (cashaction == null)
+                            {
+                                OfficeHelper.AddCashAction(isTransfer.FromCashID, isTransfer.LocationID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, -1, 0, isTransfer.NetAmount, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate);
+                            }
+
+                            result.IsSuccess = true;
+                            result.Message = $"{isTransfer.ID} ID li {isTransfer.Amount} {isTransfer.Currency} tutarındaki havale eft işlemi başarı ile lokasyon takip etti";
+
+                            var isExpense = Db.DocumentCashExpense.FirstOrDefault(x => x.ReferenceID == isTransfer.ID && x.Date == isTransfer.Date && x.LocationID == isTransfer.LocationID);
+                            if (isExpense == null)
+                            {
+                                DocumentCashExpense cashExpense = new DocumentCashExpense();
+
+                                cashExpense.ActionTypeID = actType.ID;
+                                cashExpense.ActionTypeName = actType.Name;
+                                cashExpense.Amount = isTransfer.Amount;
+                                cashExpense.CashID = isTransfer.FromCashID;
+                                cashExpense.Currency = isTransfer.Currency;
+                                cashExpense.Date = isTransfer.Date;
+                                cashExpense.Description = isTransfer.Description;
+                                cashExpense.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "EXP");
+                                cashExpense.ExchangeRate = isTransfer.ExchangeRate;
+                                cashExpense.ToBankAccountID = isTransfer.ToBankAccountID ?? (int?)null;
+                                cashExpense.ToEmployeeID = (int?)null;
+                                cashExpense.ToCustomerID = (int?)null;
+                                cashExpense.IsActive = true;
+                                cashExpense.LocationID = isTransfer.LocationID;
+                                cashExpense.OurCompanyID = isTransfer.OurCompanyID;
+                                cashExpense.RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                                cashExpense.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                                cashExpense.RecordIP = OfficeHelper.GetIPAddress();
+                                cashExpense.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == isTransfer.Currency ? isTransfer.Amount : isTransfer.Amount * cashExpense.ExchangeRate;
+                                cashExpense.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+                                cashExpense.SlipNumber = isTransfer.SlipNumber;
+                                cashExpense.SlipDate = isTransfer.SlipDate;
+                                cashExpense.ReferenceID = isTransfer.ID;
+                                cashExpense.EnvironmentID = 2;
+                                cashExpense.UID = Guid.NewGuid();
+
+                                if (file != null && file.ContentLength > 0)
+                                {
+
+                                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                                    cashExpense.SlipDocument = filename;
+                                    string folder = "Document/Expense";
+                                    transfer.SlipPath = transfer.SlipPath + folder;
+                                    try
+                                    {
+                                        file.SaveAs(Path.Combine(transfer.SlipPath, filename));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                    }
+                                }
+
+
+
+                                Db.DocumentCashExpense.Add(cashExpense);
+                                Db.SaveChanges();
+
+                                // cari hesap işlemesi
+                                OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
+
+                                var expaction = Db.CashActions.FirstOrDefault(x => x.LocationID == cashExpense.LocationID && x.CashActionTypeID == cashExpense.ID && x.ProcessID == cashExpense.ID);
+                                if (expaction == null)
+                                {
+
+                                    OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
+                                }
+                                OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", cashExpense.ID.ToString(), "Cash", "Expense", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                            }
+
+
+                            var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentBankTransfer>(self, isTransfer, OfficeHelper.getIgnorelist());
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isTransfer.ID.ToString(), "Cash", "BankTransfer", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        }
+                        else if (transfer.StatusID == 3)
+                        {
+
+
+                            if (file != null && file.ContentLength > 0)
+                            {
+
+                                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                                isTransfer.SlipDocument = filename;
+                                string folder = "Document/Bank";
+                                transfer.SlipPath = transfer.SlipPath + folder;
+                                try
+                                {
+                                    file.SaveAs(Path.Combine(transfer.SlipPath, filename));
+                                }
+                                catch (Exception ex)
+                                {
+                                }
+                            }
+                            isTransfer.Commission = transfer.Commission;
+                            isTransfer.Date = transfer.DocumentDate;
+                            isTransfer.FromCashID = cash.ID;
+                            isTransfer.SlipDate = transfer.SlipDate;
+                            isTransfer.SlipNumber = transfer.SlipNumber;
+                            isTransfer.ToBankAccountID = transfer.ToBankID ?? (int?)null;
+                            isTransfer.Amount = transfer.Amount;
+                            isTransfer.Description = transfer.Description;
+                            isTransfer.ExchangeRate = transfer.ExchangeRate != null ? transfer.ExchangeRate : self.ExchangeRate;
+                            isTransfer.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                            isTransfer.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                            isTransfer.UpdateIP = OfficeHelper.GetIPAddress();
+                            isTransfer.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == transfer.Currency ? transfer.Amount : transfer.Amount * isTransfer.ExchangeRate;
+                            isTransfer.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+                            isTransfer.StatusID = transfer.StatusID;
+                            isTransfer.TrackingNumber = transfer.TrackingNumber;
+                            isTransfer.ReferenceCode = transfer.ReferanceCode;
+
+                            Db.SaveChanges();
+                            
+
+                            var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == locId && x.CashActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID);
+                            if (cashaction == null)
+                            {
+                                OfficeHelper.AddCashAction(isTransfer.FromCashID, isTransfer.LocationID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, -1, 0, isTransfer.NetAmount, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate);
+                            }
+
+                            result.IsSuccess = true;
+                            result.Message = $"{isTransfer.ID} ID li {isTransfer.Amount} {isTransfer.Currency} tutarındaki havale eft işlemi başarı ile lokasyon onayladı";
+
+                            var isExpense = Db.DocumentCashExpense.FirstOrDefault(x => x.ReferenceID == isTransfer.ID && x.Date == isTransfer.Date && x.LocationID == isTransfer.LocationID);
+                            if (isExpense == null)
+                            {
+                                DocumentCashExpense cashExpense = new DocumentCashExpense();
+
+                                cashExpense.ActionTypeID = actType.ID;
+                                cashExpense.ActionTypeName = actType.Name;
+                                cashExpense.Amount = isTransfer.Amount;
+                                cashExpense.CashID = isTransfer.FromCashID;
+                                cashExpense.Currency = isTransfer.Currency;
+                                cashExpense.Date = isTransfer.Date;
+                                cashExpense.Description = isTransfer.Description;
+                                cashExpense.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "EXP");
+                                cashExpense.ExchangeRate = isTransfer.ExchangeRate;
+                                cashExpense.ToBankAccountID = isTransfer.ToBankAccountID ?? (int?)null;
+                                cashExpense.ToEmployeeID = (int?)null;
+                                cashExpense.ToCustomerID = (int?)null;
+                                cashExpense.IsActive = true;
+                                cashExpense.LocationID = isTransfer.LocationID;
+                                cashExpense.OurCompanyID = isTransfer.OurCompanyID;
+                                cashExpense.RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                                cashExpense.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                                cashExpense.RecordIP = OfficeHelper.GetIPAddress();
+                                cashExpense.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == isTransfer.Currency ? isTransfer.Amount : isTransfer.Amount * cashExpense.ExchangeRate;
+                                cashExpense.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+                                cashExpense.SlipNumber = isTransfer.SlipNumber;
+                                cashExpense.SlipDate = isTransfer.SlipDate;
+                                cashExpense.ReferenceID = isTransfer.ID;
+                                cashExpense.EnvironmentID = 2;
+                                cashExpense.UID = Guid.NewGuid();
+
+                                if (file != null && file.ContentLength > 0)
+                                {
+
+                                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                                    cashExpense.SlipDocument = filename;
+                                    string folder = "Document/Expense";
+                                    transfer.SlipPath = transfer.SlipPath + folder;
+                                    try
+                                    {
+                                        file.SaveAs(Path.Combine(transfer.SlipPath, filename));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                    }
+                                }
+
+
+
+                                Db.DocumentCashExpense.Add(cashExpense);
+                                Db.SaveChanges();
+
+                                // cari hesap işlemesi
+                                OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
+
+                                var expaction = Db.CashActions.FirstOrDefault(x => x.LocationID == cashExpense.LocationID && x.CashActionTypeID == cashExpense.ID && x.ProcessID == cashExpense.ID);
+                                if (expaction == null)
+                                {
+
+                                    OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
+                                }
+                                OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", cashExpense.ID.ToString(), "Cash", "Expense", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                            }
+
+
+                            var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentBankTransfer>(self, isTransfer, OfficeHelper.getIgnorelist());
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isTransfer.ID.ToString(), "Cash", "BankTransfer", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        }
+                        else if (transfer.StatusID == 4)
+                        {
+                            isTransfer.Commission = transfer.Commission;
+                            isTransfer.Date = transfer.DocumentDate;
+                            isTransfer.FromCashID = cash.ID;
+                            isTransfer.SlipDate = transfer.SlipDate;
+                            isTransfer.SlipNumber = transfer.SlipNumber;
+                            isTransfer.ToBankAccountID = transfer.ToBankID ?? (int?)null;
+                            isTransfer.Amount = transfer.Amount;
+                            isTransfer.Description = transfer.Description;
+                            isTransfer.ExchangeRate = transfer.ExchangeRate != null ? transfer.ExchangeRate : self.ExchangeRate;
+                            isTransfer.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                            isTransfer.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                            isTransfer.UpdateIP = OfficeHelper.GetIPAddress();
+                            isTransfer.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == transfer.Currency ? transfer.Amount : transfer.Amount * isTransfer.ExchangeRate;
+                            isTransfer.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+                            isTransfer.StatusID = transfer.StatusID;
+                            isTransfer.TrackingNumber = transfer.TrackingNumber;
+                            isTransfer.ReferenceCode = transfer.ReferanceCode;
+
+                            Db.SaveChanges();
+
+
+                            result.IsSuccess = true;
+                            result.Message = $"{isTransfer.ID} ID li {isTransfer.Amount} {isTransfer.Currency} tutarındaki havale eft işlemi başarı ile muhasebe takip etti";
+
+
+                            var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentBankTransfer>(self, isTransfer, OfficeHelper.getIgnorelist());
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isTransfer.ID.ToString(), "Cash", "BankTransfer", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        }
+                        else if (transfer.StatusID == 5)
+                        {
+                            if (file != null && file.ContentLength > 0)
+                            {
+
+                                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                                isTransfer.SlipDocument = filename;
+                                string folder = "Document/Bank";
+                                transfer.SlipPath = transfer.SlipPath + folder;
+                                try
+                                {
+                                    file.SaveAs(Path.Combine(transfer.SlipPath, filename));
+                                }
+                                catch (Exception ex)
+                                {
+                                }
+                            }
+                            isTransfer.Commission = transfer.Commission;
+                            isTransfer.Date = transfer.DocumentDate;
+                            isTransfer.FromCashID = cash.ID;
+                            isTransfer.SlipDate = transfer.SlipDate;
+                            isTransfer.SlipNumber = transfer.SlipNumber;
+                            isTransfer.ToBankAccountID = transfer.ToBankID ?? (int?)null;
+                            isTransfer.Amount = transfer.Amount;
+                            isTransfer.Description = transfer.Description;
+                            isTransfer.ExchangeRate = transfer.ExchangeRate != null ? transfer.ExchangeRate : self.ExchangeRate;
+                            isTransfer.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                            isTransfer.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                            isTransfer.UpdateIP = OfficeHelper.GetIPAddress();
+                            isTransfer.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == transfer.Currency ? transfer.Amount : transfer.Amount * isTransfer.ExchangeRate;
+                            isTransfer.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+                            isTransfer.StatusID = transfer.StatusID;
+                            isTransfer.TrackingNumber = transfer.TrackingNumber;
+                            isTransfer.ReferenceCode = transfer.ReferanceCode;
+
+                            Db.SaveChanges();
+
+                            OfficeHelper.AddBankAction(isTransfer.LocationID, null, isTransfer.ToBankAccountID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, 1, isTransfer.NetAmount, 0, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate);
+
+
+                            result.IsSuccess = true;
+                            result.Message = $"{isTransfer.ID} ID li {isTransfer.Amount} {isTransfer.Currency} tutarındaki havale eft işlemi başarı ile muhasebe onayladı";
+
+
+                            var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentBankTransfer>(self, isTransfer, OfficeHelper.getIgnorelist());
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isTransfer.ID.ToString(), "Cash", "BankTransfer", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        }
+                        else if (transfer.StatusID == 6)
+                        {
+                            isTransfer.IsActive = false;
+                            isTransfer.UpdateDate = DateTime.UtcNow.AddHours(3);
+                            isTransfer.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                            isTransfer.UpdateIP = OfficeHelper.GetIPAddress();
+
+                            Db.SaveChanges();
+                            
+
+                            OfficeHelper.AddCashAction(isTransfer.FromCashID, isTransfer.LocationID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, -1, 0, -1 * isTransfer.NetAmount, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate);
+                            OfficeHelper.AddBankAction(isTransfer.LocationID, null, isTransfer.ToBankAccountID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, 1, -1 * isTransfer.NetAmount, 0, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate);
+
+                            result.IsSuccess = true;
+                            result.Message = $"{isTransfer.ID} ID li {isTransfer.Amount} {isTransfer.Currency} tutarındaki havale eft işlemi muhasebe red etti";
+
+                            var isExp = Db.DocumentCashExpense.FirstOrDefault(x => x.ReferenceID == isTransfer.ID && x.Date == docDate && x.LocationID == isTransfer.LocationID);
+                            if (isExp != null)
+                            {
+                                isExp.IsActive = false;
+                                isExp.UpdateDate = DateTime.UtcNow.AddHours(3);
+                                isExp.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                                isExp.UpdateIP = OfficeHelper.GetIPAddress();
+
+                                Db.SaveChanges();
+
+                                var expaction = Db.CashActions.FirstOrDefault(x => x.LocationID == isExp.LocationID && x.CashActionTypeID == isExp.ID && x.ProcessID == isExp.ID);
+                                if (expaction != null)
+                                {
+
+                                    OfficeHelper.AddCashAction(isExp.CashID, isExp.LocationID, null, isExp.ActionTypeID, isExp.Date, isExp.ActionTypeName, isExp.ID, isExp.Date, isExp.DocumentNumber, isExp.Description, -1, 0, -1 * isExp.Amount, isExp.Currency, null, null, isExp.RecordEmployeeID, isExp.RecordDate);
+                                }
+
+                                OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isExp.ID.ToString(), "Cash", "Expense", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                            }
+
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isTransfer.ID.ToString(), "Cash", "BankTransfer", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        }
+                        else if (transfer.StatusID == 7)
+                        {
+                            isTransfer.IsActive = false;
+                            isTransfer.UpdateDate = DateTime.UtcNow.AddHours(3);
+                            isTransfer.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                            isTransfer.UpdateIP = OfficeHelper.GetIPAddress();
+
+                            Db.SaveChanges();
+
+
+                            OfficeHelper.AddCashAction(isTransfer.FromCashID, isTransfer.LocationID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, -1, 0, -1 * isTransfer.NetAmount, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate);
+                            OfficeHelper.AddBankAction(isTransfer.LocationID, null, isTransfer.ToBankAccountID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, 1, -1 * isTransfer.NetAmount, 0, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate);
+
+                            result.IsSuccess = true;
+                            result.Message = $"{isTransfer.ID} ID li {isTransfer.Amount} {isTransfer.Currency} tutarındaki havale eft işlemi iptal edildi";
+
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isTransfer.ID.ToString(), "Cash", "BankTransfer", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"Havale / EFT eklenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "BankTransfer", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+                
+
             }
 
             return result;
