@@ -205,7 +205,7 @@ function AddBankTransfer(id, itemid) {
 
 function AddExpense(id, itemid) {
 
-    var quantity = $('#E6TRLQ' + itemid).val();
+    var exptypeid = $('#ExpenseTypeID' + itemid).val();
     var amount = $('#E6TRLA' + itemid).val();
     var currency = $('#E6TRLC' + itemid).val();
     var slipnumber = $('#E6TRLN' + itemid).val();
@@ -221,7 +221,7 @@ function AddExpense(id, itemid) {
 
     data.append('id', id);
     data.append('itemid', itemid);
-    data.append('quantity', quantity);
+    data.append('exptypeid', exptypeid);
     data.append('amount', amount);
     data.append('currency', currency);
     data.append('slipnumber', slipnumber);

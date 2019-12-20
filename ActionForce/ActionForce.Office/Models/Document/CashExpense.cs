@@ -10,6 +10,7 @@ namespace ActionForce.Office
         public int ActinTypeID { get; set; }
         public string ActionTypeName { get; set; }
         public int? CashID { get; set; }
+        public int? ExpenseTypeID { get; set; }
         public int? ToEmployeeID { get; set; }
         public int? ToBankAccountID { get; set; }
         public int? ToCustomerID { get; set; }
@@ -29,6 +30,7 @@ namespace ActionForce.Office
         public Guid? UID { get; set; }
         public string SlipPath { get; set; }
         public DateTime? SlipDate { get; set; }
+
 
     }
 }
