@@ -43,6 +43,7 @@ namespace ActionForce.Office
         public string DocumentDate { get; set; }
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
+        public string SaleExchangeRate { get; set; }
         public string ReferanceID { get; set; }
         public Guid UID { get; set; }
     }

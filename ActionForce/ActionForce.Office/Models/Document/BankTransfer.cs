@@ -12,7 +12,7 @@ namespace ActionForce.Office
         public string ActionTypeName { get; set; }
         public double Amount { get; set; }
         public double Commission { get; set; }
-        public double ExchangeRate { get; set; }
+        public double? ExchangeRate { get; set; }
         public int LocationID { get; set; }
         public int OurCompanyID { get; set; }
         public int EmployeeID { get; set; }
@@ -29,6 +29,9 @@ namespace ActionForce.Office
         public string SlipNumber { get; set; }
         public DateTime? SlipDate { get; set; }
         public string SlipPath { get; set; }
+        public int StatusID { get; set; }
+        public string ReferanceCode { get; set; }
+        public string TrackingNumber { get; set; }
 
     }
 }
