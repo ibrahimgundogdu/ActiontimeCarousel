@@ -1611,6 +1611,7 @@ namespace ActionForce.Office
                             cashExpense.ReferenceID = expense.ReferanceID;
                             cashExpense.EnvironmentID = 2;
                             cashExpense.UID = Guid.NewGuid();
+                            cashExpense.ExpenseTypeID = expense.ExpenseTypeID;
 
                             if (file != null && file.ContentLength > 0)
                             {

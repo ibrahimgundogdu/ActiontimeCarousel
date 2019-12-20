@@ -381,7 +381,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public PartialViewResult AddExpense(long? id,  long? itemid, HttpPostedFileBase file, string quantity,string amount,string currency,string description, string slipnumber, string slipdate, string sliptime)
+        public PartialViewResult AddExpense(long? id,  long? itemid, HttpPostedFileBase file, int? exptypeid, string amount,string currency,string description, string slipnumber, string slipdate, string sliptime)
         {
             Result<DocumentCashExpense> result = new Result<DocumentCashExpense>()
             {
@@ -399,7 +399,7 @@ namespace ActionForce.Office.Controllers
             var item = Db.DayResultItemList.FirstOrDefault(x => x.ID == itemid);
             var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
             var expenseamount = Convert.ToDouble(amount.Replace(".", ""));
-            var expensequantity = Convert.ToDouble(quantity.Replace(".", ""));
+            var expensequantity = 1;
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
             DateTime? slipDatetime = null;
@@ -429,6 +429,8 @@ namespace ActionForce.Office.Controllers
             expense.TimeZone = location.Timezone.Value;
             expense.UID = Guid.NewGuid();
             expense.ResultID = dayresult.ID;
+            expense.ExpenseTypeID = exptypeid;
+        
 
             result = documentManager.AddCashExpense(expense, file, model.Authentication);
 
