@@ -133,6 +133,7 @@ namespace ActionForce.Office.Controllers
                 model.DocumentTypes = Db.DocumentType.Where(x => x.IsActive == true).ToList();
                 model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
                 model.BankActionTypes = Db.BankActionType.Where(x => x.IsActive == true).ToList();
+                model.ExpenseTypes = Db.ExpenseType.Where(x => x.IsActive == true && x.IsLocation == true).ToList();
                 model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == model.DayResult.LocationID);
                 model.Exchanges = Db.VDocumentSaleExchange.Where(x => x.LocationID == model.DayResult.LocationID && x.Date == model.DayResult.Date).ToList();
                 model.BankTransfers = Db.VDocumentBankTransfer.Where(x => x.LocationID == model.DayResult.LocationID && x.Date == model.DayResult.Date && x.IsActive == true).ToList();
@@ -399,7 +400,7 @@ namespace ActionForce.Office.Controllers
             var item = Db.DayResultItemList.FirstOrDefault(x => x.ID == itemid);
             var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
             var expenseamount = Convert.ToDouble(amount.Replace(".", ""));
-            var expensequantity = 1;
+            //var expensequantity = 1;
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
             DateTime? slipDatetime = null;

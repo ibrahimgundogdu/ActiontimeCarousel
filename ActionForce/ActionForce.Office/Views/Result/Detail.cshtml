@@ -508,7 +508,7 @@
                                                     </tr>
                                                     <tr>
                                                         <th><span></span></th>
-                                                        <th class="text-right"><span>Türü</span></th>
+                                                        <th><span>Türü</span></th>
                                                         <th class="text-right"><span>Tutar</span></th>
                                                         <th class=""><span>Para</span></th>
                                                         <th><span>Fiş No</span></th>
@@ -525,20 +525,21 @@
                                                     <tr>
                                                         <td style="width:100px;"><strong>@item.ID</strong></td>
 
-                                                        <td class="text-right" style="width:60px; padding:1px !important;">
+                                                        @*<td class="text-right" style="width:60px; padding:1px !important;">
                                                             <input type="text" id="E6TRLQ@(item.ID)" class="form-control font-weight-bold text-right tx-info" min="0" placeholder="0" value="@(item.Quantity)">
+                                                        </td>*@
+                                                        <td style="width:160px; padding:1px !important;">
+                                                            <select class="form-control" id="ExpenseTypeID@(item.ID)" name="ExpenseTypeID" required>
+                                                                @foreach (var exptype in Model.ExpenseTypes.OrderBy(x => x.SortBy))
+                                                                {
+                                                                    <option value="@exptype.ID" @(exptype.ID == 7 ? "selected" : "")>@($"{exptype.ExpenseName}")</option>
+                                                                }
+                                                            </select>
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
                                                             <input type="text" id="E6TRLA@(item.ID)" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
                                                         </td>
-                                                        <td style="width:240px; padding:1px !important;">
-                                                            <select class="form-control" id="ExpenseTypeID@(item.ID)" name="ExpenseTypeID" required>
-                                                                @foreach (var bank in Model.BankAccountList.Where(x => x.AccountTypeID == 1))
-                                                                {
-                                                                    <option value="@bank.ID" @(item.BankAccountID == bank.ID ? "selected" : "")>@($"{bank.BranchName} ({bank.Currency})")</option>
-                                                                }
-                                                            </select>
-                                                        </td>
+
 
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
                                                             <input type="text" id="E6TRLC@(item.ID)" class="form-control" value="@(item.Currency)" readonly />

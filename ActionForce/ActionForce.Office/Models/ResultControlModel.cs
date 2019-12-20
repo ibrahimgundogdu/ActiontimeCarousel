@@ -24,6 +24,7 @@ namespace ActionForce.Office
         public IEnumerable<DocumentType> DocumentTypes { get; set; }
         public IEnumerable<CashActionType> CashActionTypes { get; set; }
         public IEnumerable<BankActionType> BankActionTypes { get; set; }
+        public IEnumerable<ExpenseType> ExpenseTypes { get; set; }
 
         public IEnumerable<VCashActions> CashActions { get; set; }
         public IEnumerable<VEmployeeCashActions> EmployeeActions { get; set; }
