@@ -46,5 +46,8 @@ namespace ActionForce.Entity
         public string LocationFullName { get; set; }
         public string TerminalID { get; set; }
         public Nullable<System.Guid> UID { get; set; }
+        public Nullable<int> Quantity { get; set; }
+        public Nullable<long> ResultID { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
     }
 }

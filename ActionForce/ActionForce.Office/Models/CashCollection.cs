@@ -8,6 +8,7 @@ namespace ActionForce.Office
     public class CashCollection
     {
         public int ActinTypeID { get; set; }
+        public string ActinTypeName { get; set; }
         public int? FromEmployeeID { get; set; }
         public int? FromBankAccountID { get; set; }
         public int? FromCustomerID { get; set; }
@@ -19,5 +20,6 @@ namespace ActionForce.Office
         public double? ExchangeRate { get; set; }
         public int? EnvironmentID { get; set; }
         public Guid? UID { get; set; }
+        public long? ResultID { get; set; }
     }
 }

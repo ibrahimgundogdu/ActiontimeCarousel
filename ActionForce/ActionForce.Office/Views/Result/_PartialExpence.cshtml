@@ -1,6 +1,5 @@
 ﻿@model ResultControlModel
 @{
-    var typeids = Model.CashActionTypes.Where(x => new[] { "EXPENSESLİP", "EXPN" }.Contains(x.Code)).Select(x => x.ID).ToList();
 
     double? totaltrl = 0;
     string currency = "";
@@ -23,25 +22,33 @@
                     <th class="wd-20p">Belge No</th>
                     <th class="text-right">Tutar</th>
                     <th class="wd-5p">Para</th>
+                    <th>Tür</th>
                     <th>Detay</th>
+                    <th>Foto</th>
                     <th>Kayıt</th>
                 </tr>
             </thead>
             <tbody>
 
-                @foreach (var sale in Model.CashActions.Where(x => typeids.Contains(x.CashActionTypeID.Value)).OrderByDescending(x => x.RecordDate))
+                @foreach (var sale in Model.Expenses.OrderByDescending(x => x.RecordDate))
                 {
-                    <tr>
-                        <td class="tx-sm-13 bold">@sale.ID</td>
-                        <td class="tx-sm-13">@sale.ProcessName</td>
-                        <td class="tx-sm-13">@(sale.ActionDate?.ToShortDateString())</td>
-                        <td class="tx-sm-13">@sale.DocumentNumber</td>
-                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(sale.Amount?.ToString("N2"))</td>
-                        <td class="tx-sm-13">@sale.Currency</td>
-                        <td class="tx-sm-13">@sale.Description</td>
-                        <td class="tx-sm-13">@sale.RecordDate</td>
+                <tr>
+                    <td class="tx-sm-13 bold">@sale.ID</td>
+                    <td class="tx-sm-13">@sale.ActionTypeName</td>
+                    <td class="tx-sm-13">@(sale.Date?.ToShortDateString())</td>
+                    <td class="tx-sm-13">@sale.DocumentNumber</td>
+                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(sale.Amount?.ToString("N2"))</td>
+                    <td class="tx-sm-13">@sale.Currency</td>
+                    <td class="tx-sm-13">@sale.ExpenseTypeName</td>
+                    <td class="tx-sm-13">@sale.Description</td>
+                    <td class="tx-sm-13">
+                        <a target="_blank" href="@($"/Document/Expense/{sale.SlipDocument}")">
+                            <img class="thumb" src="@($"/Document/Expense/{sale.SlipDocument}")" alt="@(sale.SlipDocument)">
+                        </a>
+                    </td>
+                    <td class="tx-sm-13">@sale.RecordDate</td>
 
-                    </tr>
+                </tr>
 
                     totaltrl = totaltrl + sale.Amount;
                     currency = sale.Currency;

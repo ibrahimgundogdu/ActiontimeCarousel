@@ -248,6 +248,184 @@ function AddExpense(id, itemid) {
     });
 }
 
+function AddExchange(id, itemid, currency) {
+
+    var amount = $('#E3A' + currency).val();
+    var exchange = $('#E3E' + currency).val();
+    var sysamount = $('#E3S' + currency).val();
+    var description = $('#E3D' + currency).val();
+
+    var slipnumber = $('#SlipNumber' + currency).val();
+    var slipdate = $('#SlipDate' + currency).val();
+    var sliptime = $('#SlipTime' + currency).val();
+
+    var data = new FormData();
+
+    jQuery.each(jQuery('#E3F' + currency)[0].files, function (i, file) {
+        data.append('file', file);
+    });
+
+    data.append('id', id);
+    data.append('itemid', itemid);
+    data.append('amount', amount);
+    data.append('currency', currency);
+    data.append('exchange', exchange);
+    data.append('sysamount', sysamount);
+    data.append('slipnumber', slipnumber);
+    data.append('slipdate', slipdate);
+    data.append('sliptime', sliptime);
+    data.append('description', description);
+
+
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Result/AddExchange",
+        data: data,
+
+    }).done(function (d) {
+
+        $("#AddExchange").html(d);
+
+
+    });
+}
+
+function AddCollect(id, itemid, currency) {
+
+    var amount = $('#T1' + currency).val();
+    var description = $('#T1D' + currency).val();
+
+    var data = new FormData();
+
+    data.append('id', id);
+    data.append('itemid', itemid);
+    data.append('amount', amount);
+    data.append('currency', currency);
+    data.append('description', description);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Result/AddCollect",
+        data: data,
+
+    }).done(function (d) {
+
+        $("#CashCollectPayment").html(d);
+
+
+    });
+}
+
+function AddPayment(id, itemid, currency) {
+
+    var amount = $('#T4' + currency).val();
+    var description = $('#T4D' + currency).val();
+
+    var data = new FormData();
+
+
+    data.append('id', id);
+    data.append('itemid', itemid);
+    data.append('amount', amount);
+    data.append('currency', currency);
+    data.append('description', description);
+
+
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Result/AddPayment",
+        data: data,
+
+    }).done(function (d) {
+
+        $("#CashCollectPayment").html(d);
+
+
+    });
+}
+
+function AddCardSale(id, currency) {
+
+    
+    var quantity = $('#S10CSQ').val();
+    var amount = $('#S10CSA').val();
+    var description = $('#S10CSD').val();
+
+    var data = new FormData();
+
+    data.append('id', id);
+    data.append('quantity', quantity);
+    data.append('amount', amount);
+    data.append('currency', currency);
+    data.append('description', description);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Result/AddCardSale",
+        data: data,
+
+    }).done(function (d) {
+
+        $("#CardSale").html(d);
+
+
+    });
+}
+
+function AddCardRefund(id, currency) {
+
+    var quantity = $('#R11CRQ').val();
+    var amount = $('#R11CRA').val();
+    var description = $('#R11CRD').val();
+
+    var data = new FormData();
+
+    data.append('id', id);
+    data.append('quantity', quantity);
+    data.append('amount', amount);
+    data.append('currency', currency);
+    data.append('description', description);
+
+
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Result/AddCardRefund",
+        data: data,
+
+    }).done(function (d) {
+
+        $("#CardSale").html(d);
+
+
+    });
+}
+
+
+
+
 
 
 // shift break scripts

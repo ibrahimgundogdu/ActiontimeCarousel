@@ -330,19 +330,6 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddCashAction", cashIDParameter, locationIDParameter, employeeIDParameter, cashActionTypeIDParameter, actionDateParameter, processNameParameter, processIDParameter, processDateParameter, documentNumberParameter, descriptionParameter, directionParameter, collectionParameter, paymentParameter, currencyParameter, latitudeParameter, longitudeParameter, recordEmployeeIDParameter, recordDateParameter);
         }
     
-        public virtual ObjectResult<Nullable<double>> GetCashBalance(Nullable<int> locationID, Nullable<int> cashID)
-        {
-            var locationIDParameter = locationID.HasValue ?
-                new ObjectParameter("LocationID", locationID) :
-                new ObjectParameter("LocationID", typeof(int));
-    
-            var cashIDParameter = cashID.HasValue ?
-                new ObjectParameter("CashID", cashID) :
-                new ObjectParameter("CashID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetCashBalance", locationIDParameter, cashIDParameter);
-        }
-    
         public virtual ObjectResult<GetToList_Result> GetToList(Nullable<int> ourCompanyID)
         {
             var ourCompanyIDParameter = ourCompanyID.HasValue ?
@@ -676,6 +663,23 @@ namespace ActionForce.Entity
         public virtual int SetShiftDates()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetShiftDates");
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetCashBalance(Nullable<int> locationID, Nullable<int> cashID, Nullable<System.DateTime> date)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var cashIDParameter = cashID.HasValue ?
+                new ObjectParameter("CashID", cashID) :
+                new ObjectParameter("CashID", typeof(int));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetCashBalance", locationIDParameter, cashIDParameter, dateParameter);
         }
     }
 }

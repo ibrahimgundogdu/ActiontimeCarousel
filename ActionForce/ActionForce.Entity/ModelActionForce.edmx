@@ -946,6 +946,7 @@
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
           <Property Name="ToCustomerID" Type="int" />
+          <Property Name="Quantity" Type="int" />
           <Property Name="Amount" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="Date" Type="date" />
@@ -978,6 +979,7 @@
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
           <Property Name="FromCustomerID" Type="int" />
+          <Property Name="Quantity" Type="int" />
           <Property Name="Amount" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="Date" Type="date" />
@@ -1010,6 +1012,7 @@
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
           <Property Name="ToCustomerID" Type="int" />
+          <Property Name="Quantity" Type="int" />
           <Property Name="Amount" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="Date" Type="date" />
@@ -1128,6 +1131,8 @@
           <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
           <Property Name="ActionTypeID" Type="int" />
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="SlipDate" Type="datetime" />
+          <Property Name="SlipNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="SlipDocument" Type="nvarchar" MaxLength="50" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
@@ -3266,6 +3271,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashExpense' does 
           <Property Name="SlipNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="SlipDocument" Type="nvarchar" MaxLength="50" />
           <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="ReferenceTableModel" Type="nvarchar" MaxLength="50" />
+          <Property Name="SlipDate" Type="datetime" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="ExpenseTypeID" Type="int" />
+          <Property Name="ExpenseTypeName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashOpen' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -3411,6 +3422,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPosCancel' does no
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
           <Property Name="TerminalID" Type="nvarchar" MaxLength="40" />
           <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="Quantity" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPosCollection' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -3450,6 +3464,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPosCollection' doe
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
           <Property Name="TerminalID" Type="nvarchar" MaxLength="40" />
           <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="EnvironmentID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPosRefund' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -3489,6 +3506,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPosRefund' does no
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
           <Property Name="TerminalID" Type="nvarchar" MaxLength="40" />
           <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="Quantity" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSalaryEarn' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -3605,6 +3625,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSaleExchange' does
           <Property Name="SaleExchangeRate" Type="float" />
           <Property Name="OurCompanyName" Type="nvarchar" MaxLength="150" />
           <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="SlipDate" Type="datetime" />
+          <Property Name="SlipNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="EnvironmentID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentTicketSaleReturn' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4333,6 +4357,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <Function Name="GetCashBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="CashID" Type="int" Mode="In" />
+          <Parameter Name="Date" Type="date" Mode="In" />
         </Function>
         <Function Name="GetDocumentNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
@@ -4925,7 +4950,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentCashExpense].[LocationFullName] AS [LocationFullName], 
     [VDocumentCashExpense].[SlipNumber] AS [SlipNumber], 
     [VDocumentCashExpense].[SlipDocument] AS [SlipDocument], 
-    [VDocumentCashExpense].[UID] AS [UID]
+    [VDocumentCashExpense].[UID] AS [UID], 
+    [VDocumentCashExpense].[ReferenceTableModel] AS [ReferenceTableModel], 
+    [VDocumentCashExpense].[SlipDate] AS [SlipDate], 
+    [VDocumentCashExpense].[ResultID] AS [ResultID], 
+    [VDocumentCashExpense].[EnvironmentID] AS [EnvironmentID], 
+    [VDocumentCashExpense].[ExpenseTypeID] AS [ExpenseTypeID], 
+    [VDocumentCashExpense].[ExpenseTypeName] AS [ExpenseTypeName]
     FROM [dbo].[VDocumentCashExpense] AS [VDocumentCashExpense]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentCashOpen" EntityType="Self.VDocumentCashOpen" store:Type="Views" store:Schema="dbo">
@@ -5058,7 +5089,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentPosCancel].[UpdaterFullName] AS [UpdaterFullName], 
     [VDocumentPosCancel].[LocationFullName] AS [LocationFullName], 
     [VDocumentPosCancel].[TerminalID] AS [TerminalID], 
-    [VDocumentPosCancel].[UID] AS [UID]
+    [VDocumentPosCancel].[UID] AS [UID], 
+    [VDocumentPosCancel].[ResultID] AS [ResultID], 
+    [VDocumentPosCancel].[EnvironmentID] AS [EnvironmentID], 
+    [VDocumentPosCancel].[Quantity] AS [Quantity]
     FROM [dbo].[VDocumentPosCancel] AS [VDocumentPosCancel]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentPosCollection" EntityType="Self.VDocumentPosCollection" store:Type="Views" store:Schema="dbo">
@@ -5094,7 +5128,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentPosCollection].[UpdaterFullName] AS [UpdaterFullName], 
     [VDocumentPosCollection].[LocationFullName] AS [LocationFullName], 
     [VDocumentPosCollection].[TerminalID] AS [TerminalID], 
-    [VDocumentPosCollection].[UID] AS [UID]
+    [VDocumentPosCollection].[UID] AS [UID], 
+    [VDocumentPosCollection].[Quantity] AS [Quantity], 
+    [VDocumentPosCollection].[ResultID] AS [ResultID], 
+    [VDocumentPosCollection].[EnvironmentID] AS [EnvironmentID]
     FROM [dbo].[VDocumentPosCollection] AS [VDocumentPosCollection]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentPosRefund" EntityType="Self.VDocumentPosRefund" store:Type="Views" store:Schema="dbo">
@@ -5130,7 +5167,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentPosRefund].[UpdaterFullName] AS [UpdaterFullName], 
     [VDocumentPosRefund].[LocationFullName] AS [LocationFullName], 
     [VDocumentPosRefund].[TerminalID] AS [TerminalID], 
-    [VDocumentPosRefund].[UID] AS [UID]
+    [VDocumentPosRefund].[UID] AS [UID], 
+    [VDocumentPosRefund].[ResultID] AS [ResultID], 
+    [VDocumentPosRefund].[EnvironmentID] AS [EnvironmentID], 
+    [VDocumentPosRefund].[Quantity] AS [Quantity]
     FROM [dbo].[VDocumentPosRefund] AS [VDocumentPosRefund]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentSalaryEarn" EntityType="Self.VDocumentSalaryEarn" store:Type="Views" store:Schema="dbo">
@@ -5237,7 +5277,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentSaleExchange].[LocationFullName] AS [LocationFullName], 
     [VDocumentSaleExchange].[SaleExchangeRate] AS [SaleExchangeRate], 
     [VDocumentSaleExchange].[OurCompanyName] AS [OurCompanyName], 
-    [VDocumentSaleExchange].[UID] AS [UID]
+    [VDocumentSaleExchange].[UID] AS [UID], 
+    [VDocumentSaleExchange].[SlipDate] AS [SlipDate], 
+    [VDocumentSaleExchange].[SlipNumber] AS [SlipNumber], 
+    [VDocumentSaleExchange].[ResultID] AS [ResultID], 
+    [VDocumentSaleExchange].[EnvironmentID] AS [EnvironmentID]
     FROM [dbo].[VDocumentSaleExchange] AS [VDocumentSaleExchange]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentTicketSaleReturn" EntityType="Self.VDocumentTicketSaleReturn" store:Type="Views" store:Schema="dbo">
@@ -5942,10 +5986,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="VDocumentTicketSales" EntityType="db293_ActionTimeDbModel.VDocumentTicketSales" />
           <EntitySet Name="VDocumentSaleExchange" EntityType="db293_ActionTimeDbModel.VDocumentSaleExchange" />
-          <FunctionImport Name="GetCashBalance" ReturnType="Collection(Double)">
-            <Parameter Name="LocationID" Mode="In" Type="Int32" />
-            <Parameter Name="CashID" Mode="In" Type="Int32" />
-          </FunctionImport>
           <EntitySet Name="DocumentCashOpen" EntityType="db293_ActionTimeDbModel.DocumentCashOpen" />
           <EntitySet Name="VDocumentCashOpen" EntityType="db293_ActionTimeDbModel.VDocumentCashOpen" />
           <EntitySet Name="VDocumentCashPayments" EntityType="db293_ActionTimeDbModel.VDocumentCashPayments" />
@@ -6088,6 +6128,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImport Name="SetShiftDates" />
           <EntitySet Name="LocationGoals" EntityType="db293_ActionTimeDbModel.LocationGoals" />
           <EntitySet Name="SalaryCategory" EntityType="db293_ActionTimeDbModel.SalaryCategory" />
+          <FunctionImport Name="GetCashBalance" ReturnType="Collection(Double)">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="CashID" Mode="In" Type="Int32" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -8622,6 +8667,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="Quantity" Type="Int32" />
         </EntityType>
         <EntityType Name="DocumentSalaryPayment">
           <Key>
@@ -8688,6 +8734,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="SlipDate" Type="DateTime" Precision="3" />
+          <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DocumentTicketSaleReturns">
           <Key>
@@ -9070,6 +9118,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SaleExchangeRate" Type="Double" />
           <Property Name="OurCompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="SlipDate" Type="DateTime" Precision="3" />
+          <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="EnvironmentID" Type="Int32" />
         </EntityType>
         <EntityType Name="DocumentCashOpen">
           <Key>
@@ -9262,6 +9314,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="SlipDocument" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="ReferenceTableModel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SlipDate" Type="DateTime" Precision="3" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="ExpenseTypeID" Type="Int32" />
+          <Property Name="ExpenseTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VDocumentSalaryPayment">
           <Key>
@@ -9379,6 +9437,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
           <Property Name="TerminalID" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="EnvironmentID" Type="Int32" />
         </EntityType>
         <EntityType Name="VLocationSchedule">
           <Key>
@@ -9727,6 +9788,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="Quantity" Type="Int32" />
         </EntityType>
         <EntityType Name="DocumentPosRefund">
           <Key>
@@ -9759,6 +9821,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="Quantity" Type="Int32" />
         </EntityType>
         <EntityType Name="VDocumentPosCancel">
           <Key>
@@ -9796,6 +9859,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
           <Property Name="TerminalID" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" />
         </EntityType>
         <EntityType Name="VDocumentPosRefund">
           <Key>
@@ -9833,6 +9899,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
           <Property Name="TerminalID" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" />
         </EntityType>
         <EntityType Name="VDayResultItemList">
           <Key>
@@ -12729,6 +12798,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentPosCollections">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentPosCollections">
               <MappingFragment StoreEntitySet="DocumentPosCollections">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
@@ -12796,6 +12866,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentSaleExchange">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentSaleExchange">
               <MappingFragment StoreEntitySet="DocumentSaleExchange">
+                <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />
+                <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
@@ -13193,6 +13265,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentSaleExchange">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentSaleExchange">
               <MappingFragment StoreEntitySet="VDocumentSaleExchange">
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />
+                <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="OurCompanyName" ColumnName="OurCompanyName" />
                 <ScalarProperty Name="SaleExchangeRate" ColumnName="SaleExchangeRate" />
@@ -13228,7 +13304,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GetCashBalance" FunctionName="db293_ActionTimeDbModel.Store.GetCashBalance" />
           <EntitySetMapping Name="DocumentCashOpen">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentCashOpen">
               <MappingFragment StoreEntitySet="DocumentCashOpen">
@@ -13392,6 +13467,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentCashExpense">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentCashExpense">
               <MappingFragment StoreEntitySet="VDocumentCashExpense">
+                <ScalarProperty Name="ExpenseTypeName" ColumnName="ExpenseTypeName" />
+                <ScalarProperty Name="ExpenseTypeID" ColumnName="ExpenseTypeID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
+                <ScalarProperty Name="ReferenceTableModel" ColumnName="ReferenceTableModel" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="SlipDocument" ColumnName="SlipDocument" />
                 <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />
@@ -13521,6 +13602,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentPosCollection">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentPosCollection">
               <MappingFragment StoreEntitySet="VDocumentPosCollection">
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="TerminalID" ColumnName="TerminalID" />
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
@@ -13853,6 +13937,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentPosCancel">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentPosCancel">
               <MappingFragment StoreEntitySet="DocumentPosCancel">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
@@ -13886,6 +13971,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentPosRefund">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentPosRefund">
               <MappingFragment StoreEntitySet="DocumentPosRefund">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
@@ -13919,6 +14005,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentPosCancel">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentPosCancel">
               <MappingFragment StoreEntitySet="VDocumentPosCancel">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="TerminalID" ColumnName="TerminalID" />
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
@@ -13957,6 +14046,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentPosRefund">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentPosRefund">
               <MappingFragment StoreEntitySet="VDocumentPosRefund">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="TerminalID" ColumnName="TerminalID" />
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
@@ -14489,6 +14581,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetCashBalance" FunctionName="db293_ActionTimeDbModel.Store.GetCashBalance" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

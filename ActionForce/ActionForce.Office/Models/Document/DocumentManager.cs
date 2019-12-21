@@ -71,6 +71,7 @@ namespace ActionForce.Office
                         newCashColl.SystemCurrency = ourcompany.Currency;
                         newCashColl.EnvironmentID = collection.EnvironmentID;
                         newCashColl.UID = Guid.NewGuid();
+                        newCashColl.ResultID = collection.ResultID;
 
                         Db.DocumentCashCollections.Add(newCashColl);
                         Db.SaveChanges();
@@ -272,7 +273,7 @@ namespace ActionForce.Office
                 {
                     try
                     {
-                        var balance = Db.GetCashBalance(sale.LocationID, sale.CashID).FirstOrDefault() ?? 0;
+                        var balance = Db.GetCashBalance(sale.LocationID, sale.CashID, sale.DocumentDate).FirstOrDefault() ?? 0;
 
                         if (balance >= sale.Amount)
                         {
@@ -510,7 +511,7 @@ namespace ActionForce.Office
 
                     try
                     {
-                        var balance = Db.GetCashBalance(saleExchange.LocationID, saleExchange.FromCashID).FirstOrDefault() ?? 0;
+                        var balance = Db.GetCashBalance(saleExchange.LocationID, saleExchange.FromCashID, saleExchange.DocumentDate).FirstOrDefault() ?? 0;
                         if (balance >= saleExchange.Amount)
                         {
                             DocumentSaleExchange sale = new DocumentSaleExchange();
@@ -535,8 +536,11 @@ namespace ActionForce.Office
                             sale.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
                             sale.RecordIP = OfficeHelper.GetIPAddress();
                             sale.ReferenceID = saleExchange.ReferanceID;
-                            sale.EnvironmentID = 2;
+                            sale.EnvironmentID = saleExchange.EnvironmentID;
                             sale.UID = Guid.NewGuid();
+                            sale.SlipNumber = saleExchange.SlipNumber;
+                            sale.SlipDate = saleExchange.SlipDate;
+                            sale.ResultID = saleExchange.ResultID;
 
                             if (file != null && file.ContentLength > 0)
                             {
@@ -1113,7 +1117,7 @@ namespace ActionForce.Office
                 {
                     try
                     {
-                        var balance = Db.GetCashBalance(payment.LocationID, payment.CashID).FirstOrDefault() ?? 0;
+                        var balance = Db.GetCashBalance(payment.LocationID, payment.CashID, payment.DocumentDate).FirstOrDefault() ?? 0;
 
                         if (balance >= payment.Amount)
                         {
@@ -1345,7 +1349,7 @@ namespace ActionForce.Office
                 {
                     try
                     {
-                        var balance = Db.GetCashBalance(sale.LocationID, sale.CashID).FirstOrDefault() ?? 0;
+                        var balance = Db.GetCashBalance(sale.LocationID, sale.CashID, sale.DocumentDate).FirstOrDefault() ?? 0;
 
                         if (balance >= sale.Amount)
                         {
@@ -1580,7 +1584,7 @@ namespace ActionForce.Office
                 {
                     try
                     {
-                        var balance = Db.GetCashBalance(expense.LocationID, expense.CashID).FirstOrDefault() ?? 0;
+                        var balance = Db.GetCashBalance(expense.LocationID, expense.CashID, expense.DocumentDate).FirstOrDefault() ?? 0;
 
                         if (balance >= expense.Amount)
                         {
@@ -2461,7 +2465,7 @@ namespace ActionForce.Office
                 {
                     try
                     {
-                        var balance = Db.GetCashBalance(payment.LocationID, payment.FromCashID).FirstOrDefault() ?? 0;
+                        var balance = Db.GetCashBalance(payment.LocationID, payment.FromCashID, payment.DocumentDate).FirstOrDefault() ?? 0;
 
                         if (balance >= payment.Amount)
                         {
@@ -2741,7 +2745,8 @@ namespace ActionForce.Office
                         posCollection.TerminalID = collection.TerminalID;
                         posCollection.EnvironmentID = 2;
                         posCollection.UID = Guid.NewGuid();
-
+                        posCollection.Quantity = collection.Quantity;
+                        posCollection.ResultID = collection.ResultID;
 
 
 

@@ -10,6 +10,7 @@ namespace ActionForce.Office
         public int ActinTypeID { get; set; }
         public string ActionTypeName { get; set; }
         public int? FromCustomerID { get; set; }
+        public int? Quantity { get; set; }
         public int? BankAccountID { get; set; }
         public int LocationID { get; set; }
         public int OurCompanyID { get; set; }

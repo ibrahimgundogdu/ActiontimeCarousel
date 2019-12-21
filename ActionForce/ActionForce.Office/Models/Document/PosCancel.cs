@@ -13,6 +13,7 @@ namespace ActionForce.Office
         public int? FromBankAccountID { get; set; }
         public int LocationID { get; set; }
         public int OurCompanyID { get; set; }
+        public int? Quantity { get; set; }
         public double Amount { get; set; }
         public string Currency { get; set; }
         public DateTime? DocumentDate { get; set; }

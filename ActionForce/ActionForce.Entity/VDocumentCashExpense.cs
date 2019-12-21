@@ -50,5 +50,11 @@ namespace ActionForce.Entity
         public string SlipNumber { get; set; }
         public string SlipDocument { get; set; }
         public Nullable<System.Guid> UID { get; set; }
+        public string ReferenceTableModel { get; set; }
+        public Nullable<System.DateTime> SlipDate { get; set; }
+        public Nullable<long> ResultID { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
+        public Nullable<int> ExpenseTypeID { get; set; }
+        public string ExpenseTypeName { get; set; }
     }
 }
