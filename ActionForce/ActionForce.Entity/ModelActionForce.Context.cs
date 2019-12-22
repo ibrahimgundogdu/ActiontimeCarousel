@@ -681,5 +681,26 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetCashBalance", locationIDParameter, cashIDParameter, dateParameter);
         }
+    
+        public virtual int SetLocationSchedules(Nullable<int> ourCompanyID, Nullable<int> year, Nullable<int> weekNumber, Nullable<int> employeeID)
+        {
+            var ourCompanyIDParameter = ourCompanyID.HasValue ?
+                new ObjectParameter("OurCompanyID", ourCompanyID) :
+                new ObjectParameter("OurCompanyID", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var weekNumberParameter = weekNumber.HasValue ?
+                new ObjectParameter("WeekNumber", weekNumber) :
+                new ObjectParameter("WeekNumber", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetLocationSchedules", ourCompanyIDParameter, yearParameter, weekNumberParameter, employeeIDParameter);
+        }
     }
 }

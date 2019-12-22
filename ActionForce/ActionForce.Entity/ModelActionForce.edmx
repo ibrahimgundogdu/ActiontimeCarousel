@@ -1729,6 +1729,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UpdateEmployee" Type="int" />
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="ScheduleKey" Type="nvarchar" MaxLength="21" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="LocationShift">
           <Key>
@@ -4372,6 +4373,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <Function Name="GetToList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
         </Function>
+        <Function Name="SetLocationSchedules" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OurCompanyID" Type="int" Mode="In" />
+          <Parameter Name="Year" Type="int" Mode="In" />
+          <Parameter Name="WeekNumber" Type="int" Mode="In" />
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+        </Function>
         <Function Name="SetShiftDates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="UpdateCashAction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CashID" Type="int" Mode="In" />
@@ -6132,6 +6139,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
             <Parameter Name="CashID" Mode="In" Type="Int32" />
             <Parameter Name="Date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="SetLocationSchedules">
+            <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
+            <Parameter Name="Year" Mode="In" Type="Int32" />
+            <Parameter Name="WeekNumber" Mode="In" Type="Int32" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
           </FunctionImport>
           </EntityContainer>
         <EntityType Name="Action">
@@ -9503,6 +9516,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateEmployee" Type="Int32" />
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ScheduleKey" Type="String" MaxLength="21" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="VSchedule">
           <Key>
@@ -13686,6 +13700,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="LocationSchedule">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationSchedule">
               <MappingFragment StoreEntitySet="LocationSchedule">
+                <ScalarProperty Name="ScheduleKey" ColumnName="ScheduleKey" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
                 <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
@@ -14582,6 +14597,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetCashBalance" FunctionName="db293_ActionTimeDbModel.Store.GetCashBalance" />
+          <FunctionImportMapping FunctionImportName="SetLocationSchedules" FunctionName="db293_ActionTimeDbModel.Store.SetLocationSchedules" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
