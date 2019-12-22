@@ -423,6 +423,70 @@ function AddCardRefund(id, currency) {
     });
 }
 
+function AddCashSale(id, currency) {
+
+
+    var quantity = $('#N2Q'+currency).val();
+    var amount = $('#N2A' + currency).val();
+    var description = $('#N2D' + currency).val();
+
+    var data = new FormData();
+
+    data.append('id', id);
+    data.append('quantity', quantity);
+    data.append('amount', amount);
+    data.append('currency', currency);
+    data.append('description', description);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Result/AddCashSale",
+        data: data,
+
+    }).done(function (d) {
+
+        $("#CashSale").html(d);
+
+
+    });
+}
+
+function AddCashSaleRefund(id, currency) {
+
+    var quantity = $('#I5Q' + currency).val();
+    var amount = $('#I5A' + currency).val();
+    var description = $('#I5D' + currency).val();
+
+    var data = new FormData();
+
+    data.append('id', id);
+    data.append('quantity', quantity);
+    data.append('amount', amount);
+    data.append('currency', currency);
+    data.append('description', description);
+
+
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Result/AddCashSaleRefund",
+        data: data,
+
+    }).done(function (d) {
+
+        $("#CashSale").html(d);
+
+
+    });
+}
 
 
 

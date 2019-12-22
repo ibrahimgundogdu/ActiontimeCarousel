@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -127,8 +128,8 @@ namespace ActionForce.Office.Controllers
                 var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashRecord.ActinTypeID);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashRecord.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var netamount = Convert.ToDouble(cashRecord.NetAmount.Replace(".", ","));
-                var totalamount = Convert.ToDouble(cashRecord.TotalAmount.Replace(".", ","));
+                var netamount = Convert.ToDouble(cashRecord.NetAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var totalamount = Convert.ToDouble(cashRecord.TotalAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashRecord.Currency;
                 var docDate = DateTime.Now.Date;
                 var slipDate = DateTime.Now.Date;
@@ -198,8 +199,8 @@ namespace ActionForce.Office.Controllers
                 var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashRecord.ActinTypeID);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashRecord.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var netamount = Convert.ToDouble(cashRecord.NetAmount.Replace(".", ","));
-                var totalamount = Convert.ToDouble(cashRecord.TotalAmount.Replace(".", ","));
+                var netamount = Convert.ToDouble(cashRecord.NetAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var totalamount = Convert.ToDouble(cashRecord.TotalAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashRecord.Currency;
                 var docDate = DateTime.Now.Date;
                 var slipDate = DateTime.Now.Date;

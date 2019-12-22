@@ -43,6 +43,10 @@ namespace ActionForce.Office
         public Location CurrentLocation { get; set; }
         public DateList CurrentDate { get; set; }
         public Result<DayResult> Result { get; set; }
+        public IEnumerable<TotalModel> DevirTotal { get; set; }
+        public IEnumerable<TotalModel> CurrentDayTotal { get; set; }
+
+
 
 
         public string TodayDateCode { get; set; }

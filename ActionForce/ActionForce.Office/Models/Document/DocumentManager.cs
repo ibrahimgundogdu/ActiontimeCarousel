@@ -1,6 +1,7 @@
 ﻿using ActionForce.Entity;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -273,59 +274,46 @@ namespace ActionForce.Office
                 {
                     try
                     {
-                        var balance = Db.GetCashBalance(sale.LocationID, sale.CashID, sale.DocumentDate).FirstOrDefault() ?? 0;
 
-                        if (balance >= sale.Amount)
-                        {
-                            DocumentTicketSales ticketSale = new DocumentTicketSales();
+                        DocumentTicketSales ticketSale = new DocumentTicketSales();
 
-                            ticketSale.ActionTypeID = sale.ActinTypeID;
-                            ticketSale.ActionTypeName = sale.ActionTypeName;
-                            ticketSale.Amount = sale.Amount;
-                            ticketSale.CashID = sale.CashID;
-                            ticketSale.Currency = sale.Currency;
-                            ticketSale.Date = sale.DocumentDate;
-                            ticketSale.Description = sale.Description;
-                            ticketSale.DocumentNumber = OfficeHelper.GetDocumentNumber(sale.OurCompanyID, "TS");
-                            ticketSale.ExchangeRate = sale.ExchangeRate;
-                            ticketSale.FromCustomerID = sale.FromCustomerID;
-                            ticketSale.IsActive = true;
-                            ticketSale.LocationID = sale.LocationID;
-                            ticketSale.OurCompanyID = sale.OurCompanyID;
-                            ticketSale.RecordDate = DateTime.UtcNow.AddHours(sale.TimeZone.Value);
-                            ticketSale.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
-                            ticketSale.RecordIP = OfficeHelper.GetIPAddress();
-                            ticketSale.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == sale.Currency ? sale.Amount : sale.Amount * sale.ExchangeRate;
-                            ticketSale.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
-                            ticketSale.ReferenceID = sale.ReferanceID;
-                            ticketSale.Quantity = sale.Quantity;
-                            ticketSale.PayMethodID = sale.PayMethodID;
-                            ticketSale.EnvironmentID = 2;
-                            ticketSale.UID = Guid.NewGuid();
+                        ticketSale.ActionTypeID = sale.ActinTypeID;
+                        ticketSale.ActionTypeName = sale.ActionTypeName;
+                        ticketSale.Amount = sale.Amount;
+                        ticketSale.CashID = sale.CashID;
+                        ticketSale.Currency = sale.Currency;
+                        ticketSale.Date = sale.DocumentDate;
+                        ticketSale.Description = sale.Description;
+                        ticketSale.DocumentNumber = OfficeHelper.GetDocumentNumber(sale.OurCompanyID, "TS");
+                        ticketSale.ExchangeRate = sale.ExchangeRate;
+                        ticketSale.FromCustomerID = sale.FromCustomerID;
+                        ticketSale.IsActive = true;
+                        ticketSale.LocationID = sale.LocationID;
+                        ticketSale.OurCompanyID = sale.OurCompanyID;
+                        ticketSale.RecordDate = DateTime.UtcNow.AddHours(sale.TimeZone.Value);
+                        ticketSale.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        ticketSale.RecordIP = OfficeHelper.GetIPAddress();
+                        ticketSale.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == sale.Currency ? sale.Amount : sale.Amount * sale.ExchangeRate;
+                        ticketSale.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+                        ticketSale.ReferenceID = sale.ReferanceID;
+                        ticketSale.Quantity = sale.Quantity;
+                        ticketSale.PayMethodID = sale.PayMethodID;
+                        ticketSale.EnvironmentID = sale.EnvironmentID;
+                        ticketSale.UID = Guid.NewGuid();
+                        ticketSale.ResultID = sale.ResultID;
 
+                        Db.DocumentTicketSales.Add(ticketSale);
+                        Db.SaveChanges();
 
+                        // cari hesap işlemesi
+                        OfficeHelper.AddCashAction(ticketSale.CashID, ticketSale.LocationID, null, ticketSale.ActionTypeID, ticketSale.Date, ticketSale.ActionTypeName, ticketSale.ID, ticketSale.Date, ticketSale.DocumentNumber, ticketSale.Description, -1, ticketSale.Amount, 0, ticketSale.Currency, null, null, ticketSale.RecordEmployeeID, ticketSale.RecordDate);
 
+                        result.IsSuccess = true;
+                        result.Message = "Bilet satış başarı ile eklendi";
 
-                            Db.DocumentTicketSales.Add(ticketSale);
-                            Db.SaveChanges();
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", ticketSale.ID.ToString(), "Cash", "Sale", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, ticketSale);
 
-                            // cari hesap işlemesi
-                            OfficeHelper.AddCashAction(ticketSale.CashID, ticketSale.LocationID, null, ticketSale.ActionTypeID, ticketSale.Date, ticketSale.ActionTypeName, ticketSale.ID, ticketSale.Date, ticketSale.DocumentNumber, ticketSale.Description, -1, ticketSale.Amount, 0, ticketSale.Currency, null, null, ticketSale.RecordEmployeeID, ticketSale.RecordDate);
-
-
-
-
-                            result.IsSuccess = true;
-                            result.Message = "Bilet satış başarı ile eklendi";
-
-                            // log atılır
-                            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", ticketSale.ID.ToString(), "Cash", "Sale", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, ticketSale);
-                        }
-                        else
-                        {
-                            result.Message = $"Kasa bakiyesi { sale.Amount } { sale.Currency } tutar için yeterli değildir. Kullanılabilir bakiye { balance } { sale.Currency } tutardır.";
-                            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "Sale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                        }
                     }
                     catch (Exception ex)
                     {
@@ -473,7 +461,7 @@ namespace ActionForce.Office
 
                             result.IsSuccess = true;
                             result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki {isCash.Quantity} adet bilet satış başarı ile iptal edildi";
-                            
+
                             OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "Sale", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
                         }
@@ -507,7 +495,7 @@ namespace ActionForce.Office
                 using (ActionTimeEntities Db = new ActionTimeEntities())
                 {
 
-                    
+
 
                     try
                     {
@@ -580,7 +568,7 @@ namespace ActionForce.Office
                             OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "ExchangeSale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                         }
 
-                        
+
 
                     }
                     catch (Exception ex)
@@ -623,11 +611,11 @@ namespace ActionForce.Office
 
                     var casho = OfficeHelper.GetCash(saleExchange.LocationID, saleExchange.Currency);
                     var cashi = OfficeHelper.GetCash(saleExchange.LocationID, currencyi);
-                    
+
                     var locId = saleExchange.LocationID;
                     var exchange = OfficeHelper.GetExchange(saleExchange.DocumentDate.Value);
 
-                    
+
                     var isKasa = Convert.ToInt32(isExchange.ToCashID);
                     var isKasao = Convert.ToInt32(isExchange.FromCashID);
 
@@ -808,7 +796,7 @@ namespace ActionForce.Office
 
             if (cashOpen != null && authentication != null)
             {
-                
+
                 using (ActionTimeEntities Db = new ActionTimeEntities())
                 {
 
@@ -828,7 +816,7 @@ namespace ActionForce.Office
                     {
                         try
                         {
-                            
+
 
                             DocumentCashOpen open = new DocumentCashOpen();
 
@@ -944,9 +932,9 @@ namespace ActionForce.Office
                             result.Message = $"{amount} {currency} tutarındaki kasa açılış fişi güncellenemedi : {ex.Message}";
                             OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "CashOpen", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                         }
-                        
+
                     }
-                    
+
 
                 }
 
@@ -1145,7 +1133,7 @@ namespace ActionForce.Office
                             cashPayment.ReferenceID = payment.ReferanceID;
                             cashPayment.EnvironmentID = 2;
                             cashPayment.UID = Guid.NewGuid();
-                            
+
 
 
                             Db.DocumentCashPayments.Add(cashPayment);
@@ -1153,7 +1141,7 @@ namespace ActionForce.Office
 
                             // cari hesap işlemesi
                             OfficeHelper.AddCashAction(cashPayment.CashID, cashPayment.LocationID, null, cashPayment.ActionTypeID, cashPayment.Date, cashPayment.ActionTypeName, cashPayment.ID, cashPayment.Date, cashPayment.DocumentNumber, cashPayment.Description, -1, 0, cashPayment.Amount, cashPayment.Currency, null, null, cashPayment.RecordEmployeeID, cashPayment.RecordDate);
-                            
+
 
 
                             result.IsSuccess = true;
@@ -1334,7 +1322,7 @@ namespace ActionForce.Office
 
 
 
-        public Result<DocumentTicketSaleReturns> AddCashSaleReturn(SaleReturn sale,  AuthenticationModel authentication)
+        public Result<DocumentTicketSaleReturns> AddCashSaleReturn(SaleReturn sale, AuthenticationModel authentication)
         {
             Result<DocumentTicketSaleReturns> result = new Result<DocumentTicketSaleReturns>()
             {
@@ -1379,7 +1367,7 @@ namespace ActionForce.Office
                             ticketSale.EnvironmentID = 2;
                             ticketSale.UID = Guid.NewGuid();
 
-                            
+
 
 
                             Db.DocumentTicketSaleReturns.Add(ticketSale);
@@ -1388,7 +1376,7 @@ namespace ActionForce.Office
                             // cari hesap işlemesi
                             OfficeHelper.AddCashAction(ticketSale.CashID, ticketSale.LocationID, null, ticketSale.ActionTypeID, ticketSale.Date, ticketSale.ActionTypeName, ticketSale.ID, ticketSale.Date, ticketSale.DocumentNumber, ticketSale.Description, -1, 0, ticketSale.Amount, ticketSale.Currency, null, null, ticketSale.RecordEmployeeID, ticketSale.RecordDate);
 
-                            
+
 
 
                             result.IsSuccess = true;
@@ -1640,7 +1628,7 @@ namespace ActionForce.Office
 
                             // cari hesap işlemesi
                             OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
-                            
+
 
 
                             result.IsSuccess = true;
@@ -1783,7 +1771,7 @@ namespace ActionForce.Office
                         OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "Expense", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
                 }
-                
+
 
             }
 
@@ -1885,7 +1873,7 @@ namespace ActionForce.Office
                         bankTransfer.EnvironmentID = 2;
                         bankTransfer.ReferenceID = transfer.ReferanceID;
                         bankTransfer.UID = transfer.UID;
-                        
+
 
 
                         if (file != null && file.ContentLength > 0)
@@ -2149,7 +2137,7 @@ namespace ActionForce.Office
                             isTransfer.ReferenceCode = transfer.ReferanceCode;
 
                             Db.SaveChanges();
-                            
+
 
                             var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == locId && x.CashActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID);
                             if (cashaction == null)
@@ -2313,7 +2301,7 @@ namespace ActionForce.Office
                             isTransfer.UpdateIP = OfficeHelper.GetIPAddress();
 
                             Db.SaveChanges();
-                            
+
 
                             OfficeHelper.AddCashAction(isTransfer.FromCashID, isTransfer.LocationID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, -1, 0, -1 * isTransfer.NetAmount, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate);
                             OfficeHelper.AddBankAction(isTransfer.LocationID, null, isTransfer.ToBankAccountID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, 1, -1 * isTransfer.NetAmount, 0, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate);
@@ -2369,7 +2357,7 @@ namespace ActionForce.Office
                         OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "BankTransfer", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
                 }
-                
+
 
             }
 
@@ -2639,8 +2627,8 @@ namespace ActionForce.Office
                         if (dayresult != null)
                         {
                             locationid = dayresult.LocationID;
-                            double? netamount = Convert.ToDouble(slipamount.Replace(".", ""));
-                            double? totalamount = Convert.ToDouble(sliptotalmount.Replace(".", ""));
+                            double? netamount = Convert.ToDouble(slipamount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                            double? totalamount = Convert.ToDouble(sliptotalmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                             DateTime? date = Convert.ToDateTime(slipdate);
                             TimeSpan? time = Convert.ToDateTime(sliptime).TimeOfDay;
                             DateTime? slipdatetime = date.Value.Add(time.Value);
@@ -2966,7 +2954,7 @@ namespace ActionForce.Office
 
                         Db.DocumentCashRecorderSlip.Add(cashRedord);
                         Db.SaveChanges();
-                        
+
 
                         result.IsSuccess = true;
                         result.Message = "Yazarkasa fişi başarı ile eklendi";

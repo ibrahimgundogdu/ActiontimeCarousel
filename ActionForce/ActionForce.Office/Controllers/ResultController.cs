@@ -1,6 +1,7 @@
 ﻿using ActionForce.Entity;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -158,6 +159,29 @@ namespace ActionForce.Office.Controllers
 
                 model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
 
+                var trlCash = OfficeHelper.GetCash(model.DayResult.LocationID, "TRL");
+                var usdCash = OfficeHelper.GetCash(model.DayResult.LocationID, "USD");
+                var eurCash = OfficeHelper.GetCash(model.DayResult.LocationID, "EUR");
+
+                List <TotalModel> devirtotals = new List<TotalModel>();
+                devirtotals.Add(new TotalModel()
+                {
+                    Currency = "TRL",
+                    Total = Db.GetCashBalance(model.DayResult.LocationID,trlCash.ID, model.DayResult.Date.AddDays(-1) ).FirstOrDefault() ?? 0
+                });
+                devirtotals.Add(new TotalModel()
+                {
+                    Currency = "USD",
+                    Total = Db.GetCashBalance(model.DayResult.LocationID, usdCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0
+                });
+                devirtotals.Add(new TotalModel()
+                {
+                    Currency = "EUR",
+                    Total = Db.GetCashBalance(model.DayResult.LocationID, eurCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0
+                });
+
+                model.DevirTotal = devirtotals;
+
             }
             else
             {
@@ -243,8 +267,8 @@ namespace ActionForce.Office.Controllers
                 var item = Db.DayResultItemList.FirstOrDefault(x => x.ID == itemid);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
                 TimeSpan? sure = Convert.ToDateTime(duration + ":00").TimeOfDay;
-                var unitPrice = Convert.ToDouble(unithprice.Replace(".", ""));
-                var totalAmount = Convert.ToDouble(totalamount.Replace(".", ""));
+                var unitPrice = Convert.ToDouble(unithprice.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var totalAmount = Convert.ToDouble(totalamount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
                 var issuccess = OfficeHelper.CalculateSalaryEarn(id, employeeid.Value, dayresult.Date, dayresult.LocationID, model.Authentication);
             }
@@ -280,7 +304,7 @@ namespace ActionForce.Office.Controllers
             var actType = Db.CashActionType.FirstOrDefault(x => x.ID == typeid);
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
             var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
-            var payamount = Convert.ToDouble(amount.Replace(".", ""));
+            var payamount = Convert.ToDouble(amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, location.Currency);
 
@@ -336,8 +360,8 @@ namespace ActionForce.Office.Controllers
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
             var item = Db.DayResultItemList.FirstOrDefault(x => x.ID == itemid);
             var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
-            var transamount = Convert.ToDouble(amount.Replace(".", ""));
-            var transcommission = Convert.ToDouble(comission.Replace(".", ""));
+            var transamount = Convert.ToDouble(amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+            var transcommission = Convert.ToDouble(comission.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, location.Currency);
             DateTime? slipDatetime = null;
@@ -401,7 +425,7 @@ namespace ActionForce.Office.Controllers
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
             var item = Db.DayResultItemList.FirstOrDefault(x => x.ID == itemid);
             var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
-            var expenseamount = Convert.ToDouble(amount.Replace(".", ""));
+            var expenseamount = Convert.ToDouble(amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
             //var expensequantity = 1;
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
@@ -467,8 +491,8 @@ namespace ActionForce.Office.Controllers
             var item = Db.DayResultItemList.FirstOrDefault(x => x.ID == itemid);
             var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
 
-            var exchangeamount = Convert.ToDouble(amount.Replace(".", ""));
-            var exchangerate = Convert.ToDouble(exchange.Replace(".", ""));
+            var exchangeamount = Convert.ToDouble(amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+            var exchangerate = Convert.ToDouble(exchange.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
 
             //var expensequantity = 1;
@@ -540,7 +564,7 @@ namespace ActionForce.Office.Controllers
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
             var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
 
-            var paymentamount = Convert.ToDouble(amount.Replace(".", ""));
+            var paymentamount = Convert.ToDouble(amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
@@ -590,7 +614,7 @@ namespace ActionForce.Office.Controllers
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
             var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
 
-            var paymentamount = Convert.ToDouble(amount.Replace(".", ""));
+            var paymentamount = Convert.ToDouble(amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
@@ -646,7 +670,7 @@ namespace ActionForce.Office.Controllers
             var posTerminal = Db.LocationPosTerminal.FirstOrDefault(x => x.LocationID == location.LocationID && x.IsActive == true && x.IsMaster == true);
             var bankaccount = Db.VBankAccount.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 2 && x.IsActive == true && x.IsMaster == true);
 
-            var saleamount = Convert.ToDouble(amount.Replace(".", ""));
+            var saleamount = Convert.ToDouble(amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
             var salequantity = Convert.ToInt32(quantity);
 
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
@@ -706,8 +730,8 @@ namespace ActionForce.Office.Controllers
             var posTerminal = Db.LocationPosTerminal.FirstOrDefault(x => x.LocationID == location.LocationID && x.IsActive == true && x.IsMaster == true);
             var bankaccount = Db.VBankAccount.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 2 && x.IsActive == true && x.IsMaster == true);
 
-            var saleamount = Convert.ToDouble(amount.Replace(".", ""));
-            var salequantity = Convert.ToInt32(quantity.Replace(".", ""));
+            var saleamount = Convert.ToDouble(amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+            var salequantity = Convert.ToInt32(quantity.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
@@ -744,6 +768,125 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialCardSale", model);
         }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult AddCashSale(long? id, string amount, string quantity, string currency, string description)
+        {
+            Result<DocumentTicketSales> result = new Result<DocumentTicketSales>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            ResultControlModel model = new ResultControlModel();
+
+            DocumentManager documentManager = new DocumentManager();
+
+            var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 24);
+            var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
+            var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
+            
+            var saleamount = Convert.ToDouble(amount.Replace(".", "").Replace(",","."),CultureInfo.InvariantCulture);
+            var salequantity = Convert.ToInt32(quantity);
+
+            var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+            var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
+
+            CashSale cashsale = new CashSale();
+
+            cashsale.ActinTypeID = actType.ID;
+            cashsale.ActionTypeName = actType.Name;
+            cashsale.Amount = saleamount;
+            cashsale.Quantity = salequantity;
+            cashsale.Currency = currency;
+            cashsale.Description = description;
+            cashsale.DocumentDate = dayresult.Date;
+            cashsale.EnvironmentID = 2;
+            cashsale.ExchangeRate = cashsale.Currency == "USD" ? exchange.USDA.Value : cashsale.Currency == "EUR" ? exchange.EURA.Value : 1;
+            cashsale.LocationID = location.LocationID;
+            cashsale.UID = Guid.NewGuid();
+            cashsale.ResultID = dayresult.ID;
+            cashsale.FromCustomerID = Db.Customer.FirstOrDefault(x => x.OurCompanyID == location.OurCompanyID && x.IsActive == true)?.ID ?? null;
+            cashsale.TimeZone = location.Timezone;
+            cashsale.OurCompanyID = location.OurCompanyID;
+            cashsale.CashID = cash.ID;
+            cashsale.PayMethodID = 1; // cash
+
+            result = documentManager.AddCashSale(cashsale, model.Authentication);
+
+            model.DayResult = dayresult;
+
+            model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
+            model.CashActions = Db.VCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date).ToList();
+
+            model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return PartialView("_PartialCashSale", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult AddCashSaleRefund(long? id, string amount, string quantity, string currency, string description)
+        {
+            Result<DocumentTicketSaleReturns> result = new Result<DocumentTicketSaleReturns>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            ResultControlModel model = new ResultControlModel();
+
+            DocumentManager documentManager = new DocumentManager();
+
+            var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 28);
+            var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
+            var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
+            
+            var saleamount = Convert.ToDouble(amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+            var salequantity = Convert.ToInt32(quantity);
+
+            var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+            var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
+
+            SaleReturn salereturn = new SaleReturn();
+
+            salereturn.ActinTypeID = actType.ID;
+            salereturn.ActionTypeName = actType.Name;
+            salereturn.Amount = saleamount;
+            salereturn.Quantity = salequantity;
+            salereturn.Currency = currency;
+            salereturn.Description = description;
+            salereturn.DocumentDate = dayresult.Date;
+            salereturn.EnvironmentID = 2;
+            salereturn.ExchangeRate = salereturn.Currency == "USD" ? exchange.USDA.Value : salereturn.Currency == "EUR" ? exchange.EURA.Value : 1;
+            salereturn.LocationID = location.LocationID;
+            salereturn.UID = Guid.NewGuid();
+            salereturn.ResultID = dayresult.ID;
+            salereturn.ToCustomerID = Db.Customer.FirstOrDefault(x => x.OurCompanyID == location.OurCompanyID && x.IsActive == true)?.ID ?? null;
+            salereturn.TimeZone = location.Timezone;
+            salereturn.OurCompanyID = location.OurCompanyID;
+            salereturn.CashID = cash.ID;
+            salereturn.PayMethodID = 1; // cash
+            
+
+            result = documentManager.AddCashSaleReturn(salereturn, model.Authentication);
+
+            model.DayResult = dayresult;
+
+            model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
+            model.CashActions = Db.VCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date).ToList();
+
+            model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return PartialView("_PartialCashSale", model);
+        }
+
+
+
 
     }
 }

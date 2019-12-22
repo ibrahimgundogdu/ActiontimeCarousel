@@ -629,5 +629,16 @@ namespace ActionForce.Office.Controllers
 
             return View();
         }
+
+        [AllowAnonymous]
+        public ActionResult SetLocationSchedule(int? OurCompanyID, int? WeekNumber, int? Year, int? EmployeeID)
+        {
+            Db.SetLocationSchedules(OurCompanyID, Year, WeekNumber, EmployeeID);
+
+            string weekkey = $"{Year}-{WeekNumber}";
+
+            return RedirectToAction("Location","Schedule",new { week = weekkey });
+        }
+        
     }
 }

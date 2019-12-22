@@ -1,6 +1,7 @@
 ﻿using ActionForce.Entity;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -103,7 +104,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = posCollect.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(posCollect.FromID.Substring(1, posCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(posCollect.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(posCollect.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = posCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -202,7 +203,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = posCollect.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(posCollect.FromID.Substring(1, posCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(posCollect.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(posCollect.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = posCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -262,7 +263,7 @@ namespace ActionForce.Office.Controllers
                         isCash.Amount = amount;
                         isCash.Currency = posCollect.Currency;
                         isCash.Description = isCash.Description;
-                        isCash.ExchangeRate = exchanges != null ? Convert.ToDouble(posCollect.ExchangeRate.ToString().Replace(".", ",")) : currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                        isCash.ExchangeRate = exchanges != null ? Convert.ToDouble(posCollect.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
                         isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
                         isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
                         isCash.UpdateIP = OfficeHelper.GetIPAddress();
@@ -488,7 +489,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = posCollect.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(posCollect.FromID.Substring(1, posCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(posCollect.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(posCollect.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = posCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -588,7 +589,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = posCollect.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(posCollect.FromID.Substring(1, posCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(posCollect.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(posCollect.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = posCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -648,7 +649,7 @@ namespace ActionForce.Office.Controllers
                         isCash.Amount = amount;
                         isCash.Currency = posCollect.Currency;
                         isCash.Description = isCash.Description;
-                        isCash.ExchangeRate = exchanges != null ? Convert.ToDouble(posCollect.ExchangeRate.ToString().Replace(".", ",")) : currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                        isCash.ExchangeRate = exchanges != null ? Convert.ToDouble(posCollect.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
                         isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
                         isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
                         isCash.UpdateIP = OfficeHelper.GetIPAddress();
@@ -873,7 +874,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = posCollect.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(posCollect.FromID.Substring(1, posCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(posCollect.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(posCollect.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = posCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -974,7 +975,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = posCollect.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(posCollect.FromID.Substring(1, posCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(posCollect.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(posCollect.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = posCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -1034,7 +1035,7 @@ namespace ActionForce.Office.Controllers
                         isCash.Amount = amount;
                         isCash.Currency = posCollect.Currency;
                         isCash.Description = isCash.Description;
-                        isCash.ExchangeRate = exchanges != null ? Convert.ToDouble(posCollect.ExchangeRate.ToString().Replace(".", ",")) : currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                        isCash.ExchangeRate = exchanges != null ? Convert.ToDouble(posCollect.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
                         isCash.UpdateDate = DateTime.UtcNow.AddHours(3);
                         isCash.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
                         isCash.UpdateIP = OfficeHelper.GetIPAddress();

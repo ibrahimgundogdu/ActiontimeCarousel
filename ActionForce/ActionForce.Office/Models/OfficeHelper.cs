@@ -2,6 +2,7 @@
 using ActionForce.Integration;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -236,10 +237,10 @@ namespace ActionForce.Office
                         if (item != null && item.TP_DK_EUR_A != null && item.TP_DK_USD_A != null)
                         {
                             newexchange.Date = processDate;
-                            newexchange.EURA = Convert.ToDouble(item.TP_DK_EUR_A.Replace(".", ","));
-                            newexchange.EURS = Convert.ToDouble(item.TP_DK_EUR_S.Replace(".", ","));
-                            newexchange.USDA = Convert.ToDouble(item.TP_DK_USD_A.Replace(".", ","));
-                            newexchange.USDS = Convert.ToDouble(item.TP_DK_USD_S.Replace(".", ","));
+                            newexchange.EURA = Convert.ToDouble(item.TP_DK_EUR_A.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                            newexchange.EURS = Convert.ToDouble(item.TP_DK_EUR_S.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                            newexchange.USDA = Convert.ToDouble(item.TP_DK_USD_A.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                            newexchange.USDS = Convert.ToDouble(item.TP_DK_USD_S.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
                             db.Exchange.Add(newexchange);
                             db.SaveChanges();
@@ -1416,6 +1417,8 @@ namespace ActionForce.Office
 
                         var locschedule = db.LocationSchedule.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date);
                         var location = db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
+                        var locationstats = db.LocationStats.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.StatsID == 2 && x.OptionID == 3);
+
 
                         if (locschedule != null)
                         {
@@ -1427,6 +1430,14 @@ namespace ActionForce.Office
 
                             double? durationhour = 0;
                             double? unithour = hourprice?.Hourly ?? 0;
+
+
+                            if (location.OurCompanyID == 1 && locationstats != null)
+                            {
+                                unithour = unithour + 1;
+                            }
+
+
                             TimeSpan? duration = null;
 
                             if (employeeschedule != null && employeeshift != null)

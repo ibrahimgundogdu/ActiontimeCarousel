@@ -1,6 +1,7 @@
 ﻿using ActionForce.Entity;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -98,7 +99,6 @@ namespace ActionForce.Office.Controllers
                 var fromID = Convert.ToInt32(cashSalary.EmployeeID.Substring(1, cashSalary.EmployeeID.Length - 1));
 
 
-                //var amount = Convert.ToDouble(cashSalary.TotalAmount.Replace(".", ","));
                 var currency = cashSalary.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -161,7 +161,6 @@ namespace ActionForce.Office.Controllers
                 var fromPrefix = cashCollect.EmployeeID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashCollect.EmployeeID.Substring(1, cashCollect.EmployeeID.Length - 1));
 
-                //var amount = Convert.ToDouble(cashCollect.TotalAmount.Replace(".", ","));
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -498,7 +497,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashSalary.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashSalary.FromID.Substring(1, cashSalary.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashSalary.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(cashSalary.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashSalary.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -564,7 +563,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashCollect.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashCollect.FromID.Substring(1, cashCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashCollect.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(cashCollect.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -916,9 +915,9 @@ namespace ActionForce.Office.Controllers
                 var our = Db.VEmployee.FirstOrDefault(x => x.EmployeeID == empSalary.EmployeeID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == our.OurCompanyID);
 
-                var hourly = Convert.ToDouble(empSalary.Hourly.Replace(".", ","));
-                var hourlyExtent = Convert.ToDouble(empSalary.HourlyExtend.Replace(".", ","));
-                var extendMultiplyRate = Convert.ToDouble(empSalary.ExtendMultiplyRate.Replace(".", ","));
+                var hourly = Convert.ToDouble(empSalary.Hourly.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var hourlyExtent = Convert.ToDouble(empSalary.HourlyExtend.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var extendMultiplyRate = Convert.ToDouble(empSalary.ExtendMultiplyRate.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
                 var docDate = DateTime.Now.Date;
 

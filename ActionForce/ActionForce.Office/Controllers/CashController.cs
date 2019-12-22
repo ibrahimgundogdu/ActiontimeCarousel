@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -102,7 +103,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashCollect.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashCollect.FromID.Substring(1, cashCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashCollect.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(cashCollect.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -153,10 +154,10 @@ namespace ActionForce.Office.Controllers
             {
                 var fromPrefix = cashCollect.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashCollect.FromID.Substring(1, cashCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashCollect.Amount.ToString().Replace(".", ","));
+                var amount = Convert.ToDouble(cashCollect.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashCollect.ExchangeRate) ? Convert.ToDouble(cashCollect.ExchangeRate.ToString().Replace(".", ",")) : (double?)null;
+                var exchanges = !string.IsNullOrEmpty(cashCollect.ExchangeRate) ? Convert.ToDouble(cashCollect.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
                 if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
@@ -335,7 +336,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashSale.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashSale.FromID.Substring(1, cashSale.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashSale.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(cashSale.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var refID = string.IsNullOrEmpty(cashSale.ReferanceID);
                 var currency = cashSale.Currency;
                 var docDate = DateTime.Now.Date;
@@ -392,11 +393,11 @@ namespace ActionForce.Office.Controllers
             {
                 var fromPrefix = cashSale.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashSale.FromID.Substring(1, cashSale.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashSale.Amount.ToString().Replace(".", ","));
+                var amount = Convert.ToDouble(cashSale.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var quantity = Convert.ToInt32(cashSale.Quantity);
                 var currency = cashSale.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashSale.ExchangeRate) ? Convert.ToDouble(cashSale.ExchangeRate.ToString().Replace(".", ",")) : (double?)null;
+                var exchanges = !string.IsNullOrEmpty(cashSale.ExchangeRate) ? Convert.ToDouble(cashSale.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
                 if (DateTime.TryParse(cashSale.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashSale.DocumentDate).Date;
@@ -575,8 +576,8 @@ namespace ActionForce.Office.Controllers
                 var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSale.ActinTypeID);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSale.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var amount = Convert.ToDouble(cashSale.Amount.Replace(".", ","));
-                var exchangerate = Convert.ToDouble(cashSale.Exchange.Replace(".", ","));
+                var amount = Convert.ToDouble(cashSale.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var exchangerate = Convert.ToDouble(cashSale.Exchange.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 var currencyo = cashSale.Currency;
                 var currencyi = location.Currency != null ? location.Currency : ourcompany.Currency;
@@ -642,11 +643,11 @@ namespace ActionForce.Office.Controllers
             if (cashCollect != null)
             {
                 
-                var amount = Convert.ToDouble(cashCollect.Amount.ToString().Replace(".", ","));
+                var amount = Convert.ToDouble(cashCollect.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashCollect.ExchangeRate) ? Convert.ToDouble(cashCollect.ExchangeRate.ToString().Replace(".", ",")) : (double?)null;
-                var saleExchange = Convert.ToDouble(cashCollect.Exchange.Replace(".", ","));
+                var exchanges = !string.IsNullOrEmpty(cashCollect.ExchangeRate) ? Convert.ToDouble(cashCollect.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
+                var saleExchange = Convert.ToDouble(cashCollect.Exchange.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
                 if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
                 {
@@ -828,7 +829,7 @@ namespace ActionForce.Office.Controllers
                 var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashOpen.ActinTypeID);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashOpen.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var amount = Convert.ToDouble(cashOpen.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(cashOpen.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashOpen.Currency;
                 var cash = OfficeHelper.GetCash(cashOpen.LocationID, cashOpen.Currency);
                 var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
@@ -878,9 +879,9 @@ namespace ActionForce.Office.Controllers
             if (cashOpen != null)
             {
                 
-                var amount = Convert.ToDouble(cashOpen.Amount.ToString().Replace(".", ","));
+                var amount = Convert.ToDouble(cashOpen.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashOpen.Currency;
-                var exchanges = !string.IsNullOrEmpty(cashOpen.ExchangeRate) ? Convert.ToDouble(cashOpen.ExchangeRate.ToString().Replace(".", ",")) : (double?)null;
+                var exchanges = !string.IsNullOrEmpty(cashOpen.ExchangeRate) ? Convert.ToDouble(cashOpen.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
                 
 
                 CashOpen sale = new CashOpen();
@@ -1055,7 +1056,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashPayment.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashPayment.FromID.Substring(1, cashPayment.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashPayment.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(cashPayment.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashPayment.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -1117,10 +1118,10 @@ namespace ActionForce.Office.Controllers
             {
                 var fromPrefix = cashPayment.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashPayment.FromID.Substring(1, cashPayment.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashPayment.Amount.ToString().Replace(".", ","));
+                var amount = Convert.ToDouble(cashPayment.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashPayment.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashPayment.ExchangeRate) ? Convert.ToDouble(cashPayment.ExchangeRate.ToString().Replace(".", ",")) : (double?)null;
+                var exchanges = !string.IsNullOrEmpty(cashPayment.ExchangeRate) ? Convert.ToDouble(cashPayment.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
                 if (DateTime.TryParse(cashPayment.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashPayment.DocumentDate).Date;
@@ -1298,7 +1299,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashSaleReturn.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashSaleReturn.FromID.Substring(1, cashSaleReturn.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashSaleReturn.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(cashSaleReturn.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashSaleReturn.Currency;
                 var docDate = DateTime.Now.Date;
                 if (DateTime.TryParse(cashSaleReturn.DocumentDate, out docDate))
@@ -1357,11 +1358,11 @@ namespace ActionForce.Office.Controllers
             {
                 var fromPrefix = cashSale.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashSale.FromID.Substring(1, cashSale.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashSale.Amount.ToString().Replace(".", ","));
+                var amount = Convert.ToDouble(cashSale.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var quantity = Convert.ToInt32(cashSale.Quantity);
                 var currency = cashSale.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashSale.ExchangeRate) ? Convert.ToDouble(cashSale.ExchangeRate.ToString().Replace(".", ",")) : (double?)null;
+                var exchanges = !string.IsNullOrEmpty(cashSale.ExchangeRate) ? Convert.ToDouble(cashSale.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
                 if (DateTime.TryParse(cashSale.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashSale.DocumentDate).Date;
@@ -1542,7 +1543,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashExpense.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashExpense.FromID.Substring(1, cashExpense.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashExpense.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(cashExpense.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashExpense.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -1607,10 +1608,10 @@ namespace ActionForce.Office.Controllers
             {
                 var fromPrefix = cashExpense.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashExpense.FromID.Substring(1, cashExpense.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashExpense.Amount.ToString().Replace(".", ","));
+                var amount = Convert.ToDouble(cashExpense.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashExpense.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashExpense.ExchangeRate) ? Convert.ToDouble(cashExpense.ExchangeRate.ToString().Replace(".", ",")) : (double?)null;
+                var exchanges = !string.IsNullOrEmpty(cashExpense.ExchangeRate) ? Convert.ToDouble(cashExpense.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
                 if (DateTime.TryParse(cashExpense.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashExpense.DocumentDate).Date;
@@ -1791,8 +1792,8 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashTransfer.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashTransfer.FromID.Substring(1, cashTransfer.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashTransfer.Amount.Replace(".", ","));
-                var commision = Convert.ToDouble(cashTransfer.Commission.Replace(".", ","));
+                var amount = Convert.ToDouble(cashTransfer.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var commision = Convert.ToDouble(cashTransfer.Commission.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashTransfer.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -1865,12 +1866,12 @@ namespace ActionForce.Office.Controllers
             {
                 var fromPrefix = cashTransfer.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashTransfer.FromID.Substring(1, cashTransfer.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashTransfer.Amount.ToString().Replace(".", ","));
-                var commision = Convert.ToDouble(cashTransfer.Commission.ToString().Replace(".", ","));
+                var amount = Convert.ToDouble(cashTransfer.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var commision = Convert.ToDouble(cashTransfer.Commission.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashTransfer.Currency;
                 var docDate = DateTime.Now.Date;
                 var slipDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashTransfer.ExchangeRate) ? Convert.ToDouble(cashTransfer.ExchangeRate.ToString().Replace(".", ",")) : (double?)null;
+                var exchanges = !string.IsNullOrEmpty(cashTransfer.ExchangeRate) ? Convert.ToDouble(cashTransfer.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
                 if (DateTime.TryParse(cashTransfer.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashTransfer.DocumentDate).Date;
@@ -2040,7 +2041,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashSalary.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashSalary.FromID.Substring(1, cashSalary.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashSalary.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(cashSalary.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashSalary.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -2107,7 +2108,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashCollect.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashCollect.FromID.Substring(1, cashCollect.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashCollect.Amount.Replace(".", ","));
+                var amount = Convert.ToDouble(cashCollect.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;

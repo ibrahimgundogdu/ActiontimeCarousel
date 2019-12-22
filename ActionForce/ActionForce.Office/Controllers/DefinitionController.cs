@@ -1,6 +1,7 @@
 ﻿using ActionForce.Entity;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -87,7 +88,7 @@ namespace ActionForce.Office.Controllers
                 var our = Db.Location.FirstOrDefault(x => x.LocationID == locCash.LocationID);
                 //var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == our.OurCompanyID);
 
-                var blockedAmount = Convert.ToDouble(locCash.BlockedAmount.Replace(".", ","));
+                var blockedAmount = Convert.ToDouble(locCash.BlockedAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
                 var isCash = Db.Cash.FirstOrDefault(x => x.LocationID == locCash.LocationID && x.Currency == locCash.Currency);
 

@@ -5,7 +5,7 @@
     double? total = 0;
 }
 
-@if (Model.BankActions != null)
+@if (Model.BankActions != null && Model.BankActions.Count() > 0)
 {
     <div class="table">
         <table class="table table-sm table-hover">
