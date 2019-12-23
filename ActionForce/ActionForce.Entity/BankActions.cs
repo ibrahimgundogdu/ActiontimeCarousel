@@ -37,5 +37,6 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
+        public Nullable<System.Guid> ProcessUID { get; set; }
     }
 }

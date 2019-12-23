@@ -33,18 +33,27 @@
 
                 @foreach (var sale in Model.BankActions.Where(x => typeids.Contains(x.BankActionTypeID.Value)).OrderByDescending(x => x.RecordDate))
                 {
-                    <tr>
+                <tr>
 
-                        <td class="tx-sm-13 bold">@sale.ID</td>
-                        <td class="tx-sm-13">@sale.ProcessName</td>
-                        <td class="tx-sm-13">@(sale.ActionDate?.ToShortDateString())</td>
-                        <td class="tx-sm-13">@sale.DocumentNumber</td>
-                        <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(sale.Amount >= 0 ? sale.Amount?.ToString("N2") : "")</td>
-                        <td class="tx-sm-13 text-right bg-warning-light font-weight-bold text-danger">@(sale.Amount < 0 ? sale.Amount?.ToString("N2") : "")</td>
-                        <td class="tx-sm-13">@sale.Currency</td>
-                        <td class="tx-sm-13">@sale.RecordDate</td>
+                    <td class="tx-sm-13 bold">@sale.ID</td>
+                    <td class="tx-sm-13">@sale.ProcessName</td>
+                    <td class="tx-sm-13">@(sale.ActionDate?.ToShortDateString())</td>
+                    <td class="tx-sm-13">
+                        @if (sale.Amount >= 0)
+                        {
+                            <a href="@($"/Bank/Detail/{sale.ProcessUID}")" target="_blank" class="">@(sale.DocumentNumber)</a>
+                        }
+                        else
+                        {
+                            <a href="@($"/Bank/PosCancelDetail/{sale.ProcessUID}")" target="_blank" class="">@(sale.DocumentNumber)</a>
+                        }
+                    </td>
+                    <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(sale.Amount >= 0 ? sale.Amount?.ToString("N2") : "")</td>
+                    <td class="tx-sm-13 text-right bg-warning-light font-weight-bold text-danger">@(sale.Amount < 0 ? sale.Amount?.ToString("N2") : "")</td>
+                    <td class="tx-sm-13">@sale.Currency</td>
+                    <td class="tx-sm-13">@sale.RecordDate</td>
 
-                    </tr>
+                </tr>
 
                     total = total + sale.Amount;
                 }

@@ -417,6 +417,7 @@
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="UpdateEmployeeID" Type="int" />
           <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="ProcessUID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="BankActionType">
           <Key>
@@ -523,6 +524,7 @@
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="UpdateEmployeeID" Type="int" />
           <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="ProcessUID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="CashActionType">
           <Key>
@@ -1254,6 +1256,7 @@
           <Property Name="LocationID" Type="int" />
           <Property Name="EmployeeID" Type="int" />
           <Property Name="ActionTypeID" Type="int" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
           <Property Name="ProcessName" Type="nvarchar" MaxLength="50" />
           <Property Name="ProcessID" Type="int" />
           <Property Name="ProcessDate" Type="date" />
@@ -1270,6 +1273,7 @@
           <Property Name="SalaryTypeID" Type="int" />
           <Property Name="UpdateEmployeeID" Type="int" />
           <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="ProcessUID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="EmployeeDismissal">
           <Key>
@@ -2939,6 +2943,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VBankActions' does not have
           <Property Name="PosID" Type="int" />
           <Property Name="EmployeeID" Type="int" />
           <Property Name="ProcessID" Type="bigint" />
+          <Property Name="Direction" Type="smallint" />
+          <Property Name="Collection" Type="float" />
+          <Property Name="Payment" Type="float" />
+          <Property Name="ProcessUID" Type="uniqueidentifier" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCash' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -2985,6 +2993,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashActions' does not have
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="EmployeeID" Type="int" />
           <Property Name="ProcessID" Type="bigint" />
+          <Property Name="Payment" Type="float" />
+          <Property Name="Collection" Type="float" />
+          <Property Name="Direction" Type="smallint" />
+          <Property Name="ProcessUID" Type="uniqueidentifier" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashBankActions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -3793,6 +3805,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeCashActions' does 
           <Property Name="FromBankAccountID" Type="int" />
           <Property Name="FromName" Type="varchar" MaxLength="8" Nullable="false" />
           <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="ProcessUID" Type="uniqueidentifier" />
+          <Property Name="ActionDocumentNumber" Type="nvarchar" MaxLength="16" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeSalary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4316,6 +4330,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="Longitude" Type="float" Mode="In" />
           <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
           <Parameter Name="RecordDate" Type="datetime" Mode="In" />
+          <Parameter Name="ProcessUID" Type="uniqueidentifier" Mode="In" />
         </Function>
         <Function Name="AddCashAction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CashID" Type="int" Mode="In" />
@@ -4336,6 +4351,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="Longitude" Type="float" Mode="In" />
           <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
           <Parameter Name="RecordDate" Type="datetime" Mode="In" />
+          <Parameter Name="ProcessUID" Type="uniqueidentifier" Mode="In" />
         </Function>
         <Function Name="AddEmployeeAction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
@@ -4354,6 +4370,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="SalaryTypeID" Type="int" Mode="In" />
           <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
           <Parameter Name="RecordDate" Type="datetime" Mode="In" />
+          <Parameter Name="ProcessUID" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="DocumentNumber" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="GetCashBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -4665,7 +4683,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VBankActions].[ActionTypeName] AS [ActionTypeName], 
     [VBankActions].[PosID] AS [PosID], 
     [VBankActions].[EmployeeID] AS [EmployeeID], 
-    [VBankActions].[ProcessID] AS [ProcessID]
+    [VBankActions].[ProcessID] AS [ProcessID], 
+    [VBankActions].[Direction] AS [Direction], 
+    [VBankActions].[Collection] AS [Collection], 
+    [VBankActions].[Payment] AS [Payment], 
+    [VBankActions].[ProcessUID] AS [ProcessUID]
     FROM [dbo].[VBankActions] AS [VBankActions]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VCash" EntityType="Self.VCash" store:Type="Views" store:Schema="dbo">
@@ -4704,7 +4726,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VCashActions].[UpdateDate] AS [UpdateDate], 
     [VCashActions].[Name] AS [Name], 
     [VCashActions].[EmployeeID] AS [EmployeeID], 
-    [VCashActions].[ProcessID] AS [ProcessID]
+    [VCashActions].[ProcessID] AS [ProcessID], 
+    [VCashActions].[Payment] AS [Payment], 
+    [VCashActions].[Collection] AS [Collection], 
+    [VCashActions].[Direction] AS [Direction], 
+    [VCashActions].[ProcessUID] AS [ProcessUID]
     FROM [dbo].[VCashActions] AS [VCashActions]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VCashBankActions" EntityType="Self.VCashBankActions" store:Type="Views" store:Schema="dbo">
@@ -5437,7 +5463,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeCashActions].[LocationName] AS [LocationName], 
     [VEmployeeCashActions].[FromBankAccountID] AS [FromBankAccountID], 
     [VEmployeeCashActions].[FromName] AS [FromName], 
-    [VEmployeeCashActions].[UID] AS [UID]
+    [VEmployeeCashActions].[UID] AS [UID], 
+    [VEmployeeCashActions].[ProcessUID] AS [ProcessUID], 
+    [VEmployeeCashActions].[ActionDocumentNumber] AS [ActionDocumentNumber]
     FROM [dbo].[VEmployeeCashActions] AS [VEmployeeCashActions]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VEmployeeSalary" EntityType="Self.VEmployeeSalary" store:Type="Views" store:Schema="dbo">
@@ -5971,26 +5999,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VBankActions" EntityType="db293_ActionTimeDbModel.VBankActions" />
           <EntitySet Name="VCashActions" EntityType="db293_ActionTimeDbModel.VCashActions" />
           <EntitySet Name="VCashBankActions" EntityType="db293_ActionTimeDbModel.VCashBankActions" />
-          <FunctionImport Name="AddCashAction">
-            <Parameter Name="CashID" Mode="In" Type="Int32" />
-            <Parameter Name="LocationID" Mode="In" Type="Int32" />
-            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
-            <Parameter Name="CashActionTypeID" Mode="In" Type="Int32" />
-            <Parameter Name="ActionDate" Mode="In" Type="DateTime" />
-            <Parameter Name="ProcessName" Mode="In" Type="String" />
-            <Parameter Name="ProcessID" Mode="In" Type="Int64" />
-            <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
-            <Parameter Name="DocumentNumber" Mode="In" Type="String" />
-            <Parameter Name="Description" Mode="In" Type="String" />
-            <Parameter Name="Direction" Mode="In" Type="Int16" />
-            <Parameter Name="Collection" Mode="In" Type="Double" />
-            <Parameter Name="Payment" Mode="In" Type="Double" />
-            <Parameter Name="Currency" Mode="In" Type="String" />
-            <Parameter Name="Latitude" Mode="In" Type="Double" />
-            <Parameter Name="Longitude" Mode="In" Type="Double" />
-            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
-            <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
-          </FunctionImport>
           <EntitySet Name="VDocumentTicketSales" EntityType="db293_ActionTimeDbModel.VDocumentTicketSales" />
           <EntitySet Name="VDocumentSaleExchange" EntityType="db293_ActionTimeDbModel.VDocumentSaleExchange" />
           <EntitySet Name="DocumentCashOpen" EntityType="db293_ActionTimeDbModel.DocumentCashOpen" />
@@ -6009,27 +6017,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="ExpenseType" EntityType="db293_ActionTimeDbModel.ExpenseType" />
           <EntitySet Name="Schedule" EntityType="db293_ActionTimeDbModel.Schedule" />
           <EntitySet Name="VDocumentPosCollection" EntityType="db293_ActionTimeDbModel.VDocumentPosCollection" />
-          <FunctionImport Name="AddBankAction">
-            <Parameter Name="LocationID" Mode="In" Type="Int32" />
-            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
-            <Parameter Name="BankAccountID" Mode="In" Type="Int32" />
-            <Parameter Name="PosID" Mode="In" Type="Int32" />
-            <Parameter Name="BankActionTypeID" Mode="In" Type="Int32" />
-            <Parameter Name="ActionDate" Mode="In" Type="DateTime" />
-            <Parameter Name="ProcessName" Mode="In" Type="String" />
-            <Parameter Name="ProcessID" Mode="In" Type="Int64" />
-            <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
-            <Parameter Name="DocumentNumber" Mode="In" Type="String" />
-            <Parameter Name="Description" Mode="In" Type="String" />
-            <Parameter Name="Direction" Mode="In" Type="Int16" />
-            <Parameter Name="Collection" Mode="In" Type="Double" />
-            <Parameter Name="Payment" Mode="In" Type="Double" />
-            <Parameter Name="Currency" Mode="In" Type="String" />
-            <Parameter Name="Latitude" Mode="In" Type="Double" />
-            <Parameter Name="Longitude" Mode="In" Type="Double" />
-            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
-            <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
-          </FunctionImport>
           <EntitySet Name="VLocationSchedule" EntityType="db293_ActionTimeDbModel.VLocationSchedule" />
           <EntitySet Name="WeekList" EntityType="db293_ActionTimeDbModel.WeekList" />
           <FunctionImport Name="UpdateCashAction">
@@ -6110,24 +6097,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="BankTransferStatus" EntityType="db293_ActionTimeDbModel.BankTransferStatus" />
           <EntitySet Name="DocumentBankTransfer" EntityType="db293_ActionTimeDbModel.DocumentBankTransfer" />
           <EntitySet Name="VDocumentBankTransfer" EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" />
-          <FunctionImport Name="AddEmployeeAction">
-            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
-            <Parameter Name="LocationID" Mode="In" Type="Int32" />
-            <Parameter Name="ActionTypeID" Mode="In" Type="Int32" />
-            <Parameter Name="ProcessName" Mode="In" Type="String" />
-            <Parameter Name="ProcessID" Mode="In" Type="Int64" />
-            <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
-            <Parameter Name="ProcessDetail" Mode="In" Type="String" />
-            <Parameter Name="Direction" Mode="In" Type="Int16" />
-            <Parameter Name="Collection" Mode="In" Type="Double" />
-            <Parameter Name="Payment" Mode="In" Type="Double" />
-            <Parameter Name="Currency" Mode="In" Type="String" />
-            <Parameter Name="Latitude" Mode="In" Type="Double" />
-            <Parameter Name="Longitude" Mode="In" Type="Double" />
-            <Parameter Name="SalaryTypeID" Mode="In" Type="Int32" />
-            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
-            <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
-          </FunctionImport>
           <EntitySet Name="VEmployeeCashActions" EntityType="db293_ActionTimeDbModel.VEmployeeCashActions" />
           <EntitySet Name="DocumentCashRecorderSlip" EntityType="db293_ActionTimeDbModel.DocumentCashRecorderSlip" />
           <EntitySet Name="VDayResultDocuments" EntityType="db293_ActionTimeDbModel.VDayResultDocuments" />
@@ -6145,6 +6114,69 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="Year" Mode="In" Type="Int32" />
             <Parameter Name="WeekNumber" Mode="In" Type="Int32" />
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AddBankAction">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="BankAccountID" Mode="In" Type="Int32" />
+            <Parameter Name="PosID" Mode="In" Type="Int32" />
+            <Parameter Name="BankActionTypeID" Mode="In" Type="Int32" />
+            <Parameter Name="ActionDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ProcessName" Mode="In" Type="String" />
+            <Parameter Name="ProcessID" Mode="In" Type="Int64" />
+            <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
+            <Parameter Name="DocumentNumber" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="Direction" Mode="In" Type="Int16" />
+            <Parameter Name="Collection" Mode="In" Type="Double" />
+            <Parameter Name="Payment" Mode="In" Type="Double" />
+            <Parameter Name="Currency" Mode="In" Type="String" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ProcessUID" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="AddCashAction">
+            <Parameter Name="CashID" Mode="In" Type="Int32" />
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="CashActionTypeID" Mode="In" Type="Int32" />
+            <Parameter Name="ActionDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ProcessName" Mode="In" Type="String" />
+            <Parameter Name="ProcessID" Mode="In" Type="Int64" />
+            <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
+            <Parameter Name="DocumentNumber" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="Direction" Mode="In" Type="Int16" />
+            <Parameter Name="Collection" Mode="In" Type="Double" />
+            <Parameter Name="Payment" Mode="In" Type="Double" />
+            <Parameter Name="Currency" Mode="In" Type="String" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ProcessUID" Mode="In" Type="Guid" />
+          </FunctionImport>
+          <FunctionImport Name="AddEmployeeAction">
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="ActionTypeID" Mode="In" Type="Int32" />
+            <Parameter Name="ProcessName" Mode="In" Type="String" />
+            <Parameter Name="ProcessID" Mode="In" Type="Int64" />
+            <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ProcessDetail" Mode="In" Type="String" />
+            <Parameter Name="Direction" Mode="In" Type="Int16" />
+            <Parameter Name="Collection" Mode="In" Type="Double" />
+            <Parameter Name="Payment" Mode="In" Type="Double" />
+            <Parameter Name="Currency" Mode="In" Type="String" />
+            <Parameter Name="Latitude" Mode="In" Type="Double" />
+            <Parameter Name="Longitude" Mode="In" Type="Double" />
+            <Parameter Name="SalaryTypeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ProcessUID" Mode="In" Type="Guid" />
+            <Parameter Name="DocumentNumber" Mode="In" Type="String" />
           </FunctionImport>
           </EntityContainer>
         <EntityType Name="Action">
@@ -6747,6 +6779,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="SalaryTypeID" Type="Int32" />
           <Property Name="LocationID" Type="Int32" />
+          <Property Name="ProcessUID" Type="Guid" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="EmployeeDismissal">
           <Key>
@@ -8951,6 +8985,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateEmployeeID" Type="Int32" />
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="ProcessUID" Type="Guid" />
         </EntityType>
         <EntityType Name="CashActions">
           <Key>
@@ -8978,6 +9013,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateEmployeeID" Type="Int32" />
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="ProcessUID" Type="Guid" />
         </EntityType>
         <EntityType Name="VBankActions">
           <Key>
@@ -9004,6 +9040,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="PosID" Type="Int32" />
           <Property Name="EmployeeID" Type="Int32" />
           <Property Name="ProcessID" Type="Int64" />
+          <Property Name="Direction" Type="Int16" />
+          <Property Name="Collection" Type="Double" />
+          <Property Name="Payment" Type="Double" />
+          <Property Name="ProcessUID" Type="Guid" />
         </EntityType>
         <EntityType Name="VCashActions">
           <Key>
@@ -9029,6 +9069,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="EmployeeID" Type="Int32" />
           <Property Name="ProcessID" Type="Int64" />
+          <Property Name="Payment" Type="Double" />
+          <Property Name="Collection" Type="Double" />
+          <Property Name="Direction" Type="Int16" />
+          <Property Name="ProcessUID" Type="Guid" />
         </EntityType>
         <EntityType Name="VCashBankActions">
           <Key>
@@ -10281,6 +10325,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="FromBankAccountID" Type="Int32" />
           <Property Name="FromName" Type="String" Nullable="false" MaxLength="8" FixedLength="false" Unicode="false" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="ProcessUID" Type="Guid" />
+          <Property Name="ActionDocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DocumentCashRecorderSlip">
           <Key>
@@ -11009,6 +11055,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="EmployeeCashActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeeCashActions">
               <MappingFragment StoreEntitySet="EmployeeCashActions">
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="SalaryTypeID" ColumnName="SalaryTypeID" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
@@ -13102,6 +13150,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="BankActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.BankActions">
               <MappingFragment StoreEntitySet="BankActions">
+                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
                 <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
                 <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
@@ -13131,6 +13180,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="CashActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CashActions">
               <MappingFragment StoreEntitySet="CashActions">
+                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
                 <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
                 <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
@@ -13159,6 +13209,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VBankActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VBankActions">
               <MappingFragment StoreEntitySet="VBankActions">
+                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
+                <ScalarProperty Name="Payment" ColumnName="Payment" />
+                <ScalarProperty Name="Collection" ColumnName="Collection" />
+                <ScalarProperty Name="Direction" ColumnName="Direction" />
                 <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="PosID" ColumnName="PosID" />
@@ -13186,6 +13240,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VCashActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCashActions">
               <MappingFragment StoreEntitySet="VCashActions">
+                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
+                <ScalarProperty Name="Direction" ColumnName="Direction" />
+                <ScalarProperty Name="Collection" ColumnName="Collection" />
+                <ScalarProperty Name="Payment" ColumnName="Payment" />
                 <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -13236,7 +13294,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AddCashAction" FunctionName="db293_ActionTimeDbModel.Store.AddCashAction" />
           <EntitySetMapping Name="VDocumentTicketSales">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentTicketSales">
               <MappingFragment StoreEntitySet="VDocumentTicketSales">
@@ -13654,7 +13711,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AddBankAction" FunctionName="db293_ActionTimeDbModel.Store.AddBankAction" />
           <EntitySetMapping Name="VLocationSchedule">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationSchedule">
               <MappingFragment StoreEntitySet="VLocationSchedule">
@@ -14432,10 +14488,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AddEmployeeAction" FunctionName="db293_ActionTimeDbModel.Store.AddEmployeeAction" />
           <EntitySetMapping Name="VEmployeeCashActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeCashActions">
               <MappingFragment StoreEntitySet="VEmployeeCashActions">
+                <ScalarProperty Name="ActionDocumentNumber" ColumnName="ActionDocumentNumber" />
+                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="FromName" ColumnName="FromName" />
                 <ScalarProperty Name="FromBankAccountID" ColumnName="FromBankAccountID" />
@@ -14598,6 +14655,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetCashBalance" FunctionName="db293_ActionTimeDbModel.Store.GetCashBalance" />
           <FunctionImportMapping FunctionImportName="SetLocationSchedules" FunctionName="db293_ActionTimeDbModel.Store.SetLocationSchedules" />
+          <FunctionImportMapping FunctionImportName="AddBankAction" FunctionName="db293_ActionTimeDbModel.Store.AddBankAction" />
+          <FunctionImportMapping FunctionImportName="AddCashAction" FunctionName="db293_ActionTimeDbModel.Store.AddCashAction" />
+          <FunctionImportMapping FunctionImportName="AddEmployeeAction" FunctionName="db293_ActionTimeDbModel.Store.AddEmployeeAction" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

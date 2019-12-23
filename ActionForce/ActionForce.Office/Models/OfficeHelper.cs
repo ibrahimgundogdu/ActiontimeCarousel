@@ -237,10 +237,10 @@ namespace ActionForce.Office
                         if (item != null && item.TP_DK_EUR_A != null && item.TP_DK_USD_A != null)
                         {
                             newexchange.Date = processDate;
-                            newexchange.EURA = Convert.ToDouble(item.TP_DK_EUR_A.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                            newexchange.EURS = Convert.ToDouble(item.TP_DK_EUR_S.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                            newexchange.USDA = Convert.ToDouble(item.TP_DK_USD_A.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                            newexchange.USDS = Convert.ToDouble(item.TP_DK_USD_S.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                            newexchange.EURA = Convert.ToDouble(item.TP_DK_EUR_A, CultureInfo.InvariantCulture);
+                            newexchange.EURS = Convert.ToDouble(item.TP_DK_EUR_S, CultureInfo.InvariantCulture);
+                            newexchange.USDA = Convert.ToDouble(item.TP_DK_USD_A, CultureInfo.InvariantCulture);
+                            newexchange.USDS = Convert.ToDouble(item.TP_DK_USD_S, CultureInfo.InvariantCulture);
 
                             db.Exchange.Add(newexchange);
                             db.SaveChanges();
@@ -263,27 +263,27 @@ namespace ActionForce.Office
             
         }
 
-        public static void AddCashAction(int? CashID, int? LocationID, int? EmployeeID, int? CashActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? RecordEmployeeID, DateTime? RecordDate)
+        public static void AddCashAction(int? CashID, int? LocationID, int? EmployeeID, int? CashActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? RecordEmployeeID, DateTime? RecordDate,Guid ProcessUID)
         {
             using (ActionTimeEntities db = new ActionTimeEntities())
             {
-                db.AddCashAction(CashID, LocationID, EmployeeID, CashActionTypeID, ActionDate, ProcessName, ProcessID, ProcessDate, DocumentNumber, Description, Direction, Collection, Payment, Currency, Latitude, Longitude, RecordEmployeeID, RecordDate);
+                db.AddCashAction(CashID, LocationID, EmployeeID, CashActionTypeID, ActionDate, ProcessName, ProcessID, ProcessDate, DocumentNumber, Description, Direction, Collection, Payment, Currency, Latitude, Longitude, RecordEmployeeID, RecordDate, ProcessUID);
             }
         }
 
-        public static void AddBankAction(int? LocationID, int? EmployeeID, int? BankAccountID, int? PosID, int? BankActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? RecordEmployeeID, DateTime? RecordDate)
+        public static void AddBankAction(int? LocationID, int? EmployeeID, int? BankAccountID, int? PosID, int? BankActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? RecordEmployeeID, DateTime? RecordDate, Guid ProcessUID)
         {
             using (ActionTimeEntities db = new ActionTimeEntities())
             {
-                db.AddBankAction(LocationID, EmployeeID, BankAccountID, PosID, BankActionTypeID, ActionDate, ProcessName, ProcessID, ProcessDate, DocumentNumber, Description, Direction, Collection, Payment, Currency, Latitude, Longitude, RecordEmployeeID, RecordDate);
+                db.AddBankAction(LocationID, EmployeeID, BankAccountID, PosID, BankActionTypeID, ActionDate, ProcessName, ProcessID, ProcessDate, DocumentNumber, Description, Direction, Collection, Payment, Currency, Latitude, Longitude, RecordEmployeeID, RecordDate, ProcessUID);
             }
         }
 
-        public static void AddEmployeeAction(int? EmployeeID, int? LocationID, int? ActionTypeID, string ProcessName, long? ProcessID, DateTime? ProcessDate, string ProcessDetail, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? SalaryTypeID, int? RecordEmployeeID, DateTime? RecordDate)
+        public static void AddEmployeeAction(int? EmployeeID, int? LocationID, int? ActionTypeID, string ProcessName, long? ProcessID, DateTime? ProcessDate, string ProcessDetail, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? SalaryTypeID, int? RecordEmployeeID, DateTime? RecordDate, Guid ProcessUID, string DocumentNumber)
         {
             using (ActionTimeEntities db = new ActionTimeEntities())
             {
-                db.AddEmployeeAction(EmployeeID, LocationID, ActionTypeID, ProcessName, ProcessID, ProcessDate, ProcessDetail, Direction, Collection, Payment, Currency, Latitude, Longitude, SalaryTypeID, RecordEmployeeID, RecordDate);
+                db.AddEmployeeAction(EmployeeID, LocationID, ActionTypeID, ProcessName, ProcessID, ProcessDate, ProcessDetail, Direction, Collection, Payment, Currency, Latitude, Longitude, SalaryTypeID, RecordEmployeeID, RecordDate, ProcessUID, DocumentNumber);
             }
         }
 

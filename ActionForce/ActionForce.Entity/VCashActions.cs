@@ -34,5 +34,9 @@ namespace ActionForce.Entity
         public string Name { get; set; }
         public Nullable<int> EmployeeID { get; set; }
         public Nullable<long> ProcessID { get; set; }
+        public Nullable<double> Payment { get; set; }
+        public Nullable<double> Collection { get; set; }
+        public Nullable<short> Direction { get; set; }
+        public Nullable<System.Guid> ProcessUID { get; set; }
     }
 }

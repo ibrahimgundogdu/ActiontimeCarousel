@@ -34,5 +34,7 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> SalaryTypeID { get; set; }
         public Nullable<int> LocationID { get; set; }
+        public Nullable<System.Guid> ProcessUID { get; set; }
+        public string DocumentNumber { get; set; }
     }
 }

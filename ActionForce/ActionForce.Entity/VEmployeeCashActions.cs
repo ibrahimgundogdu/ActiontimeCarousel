@@ -49,5 +49,7 @@ namespace ActionForce.Entity
         public Nullable<int> FromBankAccountID { get; set; }
         public string FromName { get; set; }
         public Nullable<System.Guid> UID { get; set; }
+        public Nullable<System.Guid> ProcessUID { get; set; }
+        public string ActionDocumentNumber { get; set; }
     }
 }

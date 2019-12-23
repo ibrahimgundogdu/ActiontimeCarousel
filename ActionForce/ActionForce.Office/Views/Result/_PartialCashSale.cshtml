@@ -40,7 +40,17 @@
                         <td class="tx-sm-13 bold">@sale.ID</td>
                         <td class="tx-sm-13">@sale.ProcessName</td>
                         <td class="tx-sm-13">@(sale.ActionDate?.ToShortDateString())</td>
-                        <td class="tx-sm-13">@sale.DocumentNumber</td>
+                        <td class="tx-sm-13">
+                            @if (sale.Amount >= 0)
+                            {
+                            <a href="@($"/Cash/SaleDetail/{sale.ProcessUID}")" target="_blank" class="">@(sale.DocumentNumber)</a>
+                            }
+                            else
+                            {
+                            <a href="@($"/Cash/SaleRefundDetail/{sale.ProcessUID}")"  target="_blank" class="">@(sale.DocumentNumber)</a>
+                            }
+
+                        </td>
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(sale.Amount >= 0 ? sale.Amount?.ToString("N2") : "")</td>
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(sale.Amount < 0 ? sale.Amount?.ToString("N2") : "")</td>
                         <td class="tx-sm-13">@sale.Currency</td>
