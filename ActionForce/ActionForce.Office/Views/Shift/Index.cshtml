@@ -91,13 +91,13 @@
                                                     @(locationshift != null ? locationshift?.ShiftDateStart?.ToString("HH\\:mm") : "") @(locationshift?.ShiftDateFinish != null ? " - " + locationshift?.ShiftDateFinish?.ToString("HH\\:mm") : "")
                                                 </a>
                                             </td>
-                                            <td class="tx-sm-13 bg-light font-weight-bold wd-20 text-center" id="@($"LocationStatus_{location.LocationID}_2")">@(locationshift != null && locationshift.DurationMinute == null ? Html.Raw($"<a href='#' onclick='CloseLocation({location.LocationID},2)'> <i class='ion ion-md-sunny tx-sm-24'></i></a>") : locationshift != null && locationshift.DurationMinute != null ? Html.Raw($"<a href='#'> <i class='ion ion-md-moon tx-sm-24'></i></a>") : Html.Raw($"<a href='#' onclick='OpenLocation({location.LocationID},2)'> <i class='ion ion-md-alarm tx-sm-24'></i></a>") )</td>
+                                            <td class="tx-sm-13 bg-light font-weight-bold wd-20 text-center" id="@($"LocationStatus_{location.LocationID}_2")">@(locationshift != null && locationshift.DurationMinute == null ? Html.Raw($"<a href='#' title='Lokasyon Kapat' onclick='CloseLocation({location.LocationID},2)'> <i class='ion ion-md-sunny tx-sm-24'></i></a>") : locationshift != null && locationshift.DurationMinute != null ? Html.Raw($"<a href='#' title='Lokasyon Kapatılmış'> <i class='ion ion-md-moon tx-sm-24'></i></a>") : Html.Raw($"<a href='#' title='Lokasyon Aç' onclick='OpenLocation({location.LocationID},2)'> <i class='ion ion-md-alarm tx-sm-24'></i></a>") )</td>
 
 
                                             <td class="tx-sm-13 bd-l i-l" style="padding:7px !important;">
 
                                                 <table class="table table-hover pd-0 mg-0">
-                                                    <tbody >
+                                                    <tbody>
                                                         @foreach (var emp in employeelist)
                                                         {
 
@@ -118,16 +118,16 @@
                                                                 <td class="wd-20 text-center">
                                                                     @if (employeeshift == null)
                                                                     {
-                                                                        <a href='#' class="text-warning font-weight-bold" onclick="StartEmployeeShift(@location.LocationID,@emp.EmployeeID,2)"> <i class="ion ion-md-finger-print tx-sm-24"></i></a>
+                                                                        <a href='#' class="text-warning font-weight-bold" title="Mesai Başlat" onclick="StartEmployeeShift(@location.LocationID,@emp.EmployeeID,2)"> <i class="ion ion-md-finger-print tx-sm-24"></i></a>
                                                                     }
                                                                     else if (employeeshift != null && employeeshift.DurationMinute == null)
                                                                     {
-                                                                        <a href='#' class="text-info font-weight-bold" onclick="FinishEmployeeShift(@location.LocationID,@emp.EmployeeID,2)"> <i class="ion ion-md-finger-print tx-sm-24"></i> </a>
+                                                                        <a href='#' class="text-info font-weight-bold" title="Mesai Bitir" onclick="FinishEmployeeShift(@location.LocationID,@emp.EmployeeID,2)"> <i class="ion ion-md-finger-print tx-sm-24"></i> </a>
 
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a href='#' class="text-dark"><i class="ion ion-md-glasses tx-sm-24"></i></a>
+                                                                        <a href='#' title="Mesai Bitmiş" class="text-dark"><i class="ion ion-md-glasses tx-sm-24"></i></a>
                                                                     }
 
                                                                 </td>
@@ -140,15 +140,15 @@
 
                                                                     @if (employeebreakcurrent == null)
                                                                     {
-                                                                        <a href='#' class="text-info font-weight-bold" onclick='StartEmployeeBreak(@location.LocationID,@emp.EmployeeID,2)'> <i class='ion ion-md-timer tx-sm-24'></i></a>
+                                                                        <a href='#' class="text-info font-weight-bold" title="Mola Başlat" onclick='StartEmployeeBreak(@location.LocationID,@emp.EmployeeID,2)'> <i class='ion ion-md-timer tx-sm-24'></i></a>
                                                                     }
                                                                     else if (employeebreakcurrent != null && employeebreakcurrent.DurationMinute == null)
                                                                     {
-                                                                        <a href='#' class="text-warning font-weight-bold" onclick='FinishEmployeeBreak(@location.LocationID,@emp.EmployeeID,2)'> <i class='ion ion-md-timer tx-sm-24'></i></a>
+                                                                        <a href='#' class="text-warning font-weight-bold" title="Mola Bitir" onclick='FinishEmployeeBreak(@location.LocationID,@emp.EmployeeID,2)'> <i class='ion ion-md-timer tx-sm-24'></i></a>
                                                                     }
                                                                     else
                                                                     {
-                                                                        <a href='#' class="text-dark"><i class="ion ion-md-bicycle tx-sm-24"></i></a>
+                                                                        <a href='#' title="Mola Bitmiş" class="text-dark"><i class="ion ion-md-bicycle tx-sm-24"></i></a>
                                                                     }
                                                                 </td>
                                                                 <td class="tx-sm-24 text-right">@(employeebreakcurrent != null ? Html.Raw("<i class='ion ion-md-cafe'></i>") : employeeshift != null && employeeshift.DurationMinute == null ? Html.Raw("<i class='ion ion-md-stopwatch'></i>") : employeeshift != null && employeeshift.DurationMinute != null ? Html.Raw("<i class='ion ion-md-cloud-outline'></i>") : Html.Raw("") )</td>
@@ -287,7 +287,7 @@
         }
 
     </script>
-
+    
     @if (Model.Result != null) //
     {
         <script type="text/javascript">
