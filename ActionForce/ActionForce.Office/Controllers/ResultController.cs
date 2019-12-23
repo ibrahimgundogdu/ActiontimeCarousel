@@ -155,6 +155,9 @@ namespace ActionForce.Office.Controllers
                 model.DayResultDocuments = Db.VDayResultDocuments.Where(x => x.LocationID == model.DayResult.LocationID && x.Date == model.DayResult.Date && x.IsActive == true).ToList();
                 model.DayResultDocuments = Db.VDayResultDocuments.Where(x => x.LocationID == model.DayResult.LocationID && x.Date == model.DayResult.Date && x.IsActive == true).ToList();
 
+                model.ResultStates = Db.ResultState.Where(x => x.IsActive == true).ToList();
+                model.Resultstatus = Db.Resultstatus.Where(x => x.IsActive == true).ToList();
+
                 model.CurrencyList = OfficeHelper.GetCurrency();
 
                 model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
@@ -464,6 +467,7 @@ namespace ActionForce.Office.Controllers
             model.DayResult = dayresult;
             model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
             model.CashActions = Db.VCashActions.Where(x => x.LocationID == dayresult.LocationID && x.ActionDate == dayresult.Date).ToList();
+            model.Expenses = Db.VDocumentCashExpense.Where(x => x.LocationID == dayresult.LocationID && x.Date == dayresult.Date && x.IsActive == true).ToList();
             model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
 
             TempData["result"] = result;
