@@ -2032,7 +2032,7 @@ namespace ActionForce.Office
                             result.Message = $"{isTransfer.ID} ID li {isTransfer.Amount} {isTransfer.Currency} tutarındaki havale eft işlemi başarı ile lokasyon takip etti";
 
                             var isExpense = Db.DocumentCashExpense.FirstOrDefault(x => x.ReferenceID == isTransfer.ID && x.Date == isTransfer.Date && x.LocationID == isTransfer.LocationID);
-                            if (isExpense == null)
+                            if (isExpense == null && isTransfer.Commission > 0)
                             {
                                 DocumentCashExpense cashExpense = new DocumentCashExpense();
 
@@ -2149,7 +2149,7 @@ namespace ActionForce.Office
                             result.Message = $"{isTransfer.ID} ID li {isTransfer.Amount} {isTransfer.Currency} tutarındaki havale eft işlemi başarı ile lokasyon onayladı";
 
                             var isExpense = Db.DocumentCashExpense.FirstOrDefault(x => x.ReferenceID == isTransfer.ID && x.Date == isTransfer.Date && x.LocationID == isTransfer.LocationID);
-                            if (isExpense == null)
+                            if (isExpense == null && isTransfer.Commission > 0)
                             {
                                 DocumentCashExpense cashExpense = new DocumentCashExpense();
 
@@ -2321,7 +2321,7 @@ namespace ActionForce.Office
                             result.Message = $"{isTransfer.ID} ID li {isTransfer.Amount} {isTransfer.Currency} tutarındaki havale eft işlemi muhasebe red etti";
 
                             var isExp = Db.DocumentCashExpense.FirstOrDefault(x => x.ReferenceID == isTransfer.ID && x.Date == docDate && x.LocationID == isTransfer.LocationID);
-                            if (isExp != null)
+                            if (isExp != null && isTransfer.Commission > 0)
                             {
                                 isExp.IsActive = false;
                                 isExp.UpdateDate = DateTime.UtcNow.AddHours(3);
@@ -2369,7 +2369,7 @@ namespace ActionForce.Office
                             result.Message = $"{isTransfer.ID} ID li {isTransfer.Amount} {isTransfer.Currency} tutarındaki havale eft işlemi iptal edildi";
 
                             var isExp = Db.DocumentCashExpense.FirstOrDefault(x => x.ReferenceID == isTransfer.ID && x.Date == docDate && x.LocationID == isTransfer.LocationID);
-                            if (isExp != null)
+                            if (isExp != null && isTransfer.Commission > 0)
                             {
                                 isExp.IsActive = false;
                                 isExp.UpdateDate = DateTime.UtcNow.AddHours(3);

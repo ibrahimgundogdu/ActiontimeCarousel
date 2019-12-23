@@ -1793,7 +1793,7 @@ namespace ActionForce.Office.Controllers
                 var fromPrefix = cashTransfer.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashTransfer.FromID.Substring(1, cashTransfer.FromID.Length - 1));
                 var amount = Convert.ToDouble(cashTransfer.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var commision = Convert.ToDouble(cashTransfer.Commission.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var commision = !string.IsNullOrEmpty(cashTransfer.Commission) ? Convert.ToDouble(cashTransfer.Commission.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : 0;
                 var currency = cashTransfer.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
@@ -1871,7 +1871,7 @@ namespace ActionForce.Office.Controllers
                 var fromPrefix = cashTransfer.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashTransfer.FromID.Substring(1, cashTransfer.FromID.Length - 1));
                 var amount = Convert.ToDouble(cashTransfer.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var commision = Convert.ToDouble(cashTransfer.Commission.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var commision = !string.IsNullOrEmpty(cashTransfer.Commission) ? Convert.ToDouble(cashTransfer.Commission.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture): 0;
                 var currency = cashTransfer.Currency;
                 var docDate = DateTime.Now.Date;
                 var slipDate = DateTime.Now.Date;
