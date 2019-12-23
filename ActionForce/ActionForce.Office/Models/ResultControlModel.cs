@@ -25,6 +25,8 @@ namespace ActionForce.Office
         public IEnumerable<CashActionType> CashActionTypes { get; set; }
         public IEnumerable<BankActionType> BankActionTypes { get; set; }
         public IEnumerable<ExpenseType> ExpenseTypes { get; set; }
+        public IEnumerable<ResultState> ResultStates { get; set; }
+        public IEnumerable<Resultstatus> Resultstatus { get; set; }
 
         public IEnumerable<VCashActions> CashActions { get; set; }
         public IEnumerable<VEmployeeCashActions> EmployeeActions { get; set; }
