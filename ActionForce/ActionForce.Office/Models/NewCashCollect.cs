@@ -140,6 +140,7 @@ namespace ActionForce.Office
         public int BankAccountID { get; set; }
         public int SalaryType { get; set; }
         public string ReferanceID { get; set; }
+        public double ExchangeRate { get; set; }
         public Guid UID { get; set; }
     }
     public class NewPosCollect

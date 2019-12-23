@@ -16,6 +16,7 @@ namespace ActionForce.Office
         public string Currency { get; set; }
         public DateTime? DocumentDate { get; set; }
         public DateTime? SlipDate { get; set; }
+        public DateTime? SlipTime { get; set; }
         public int? EnvironmentID { get; set; }
         public string SlipNumber { get; set; }
         public string SlipFile { get; set; }

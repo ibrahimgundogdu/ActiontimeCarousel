@@ -14,7 +14,7 @@ namespace ActionForce.Office
         public double TotalAmount { get; set; }
         public int LocationID { get; set; }
         public int OurCompanyID { get; set; }
-        public int EmployeeID { get; set; }
+        public int? EmployeeID { get; set; }
         public string Currency { get; set; }
         public DateTime? DocumentDate { get; set; }
         public string Description { get; set; }
