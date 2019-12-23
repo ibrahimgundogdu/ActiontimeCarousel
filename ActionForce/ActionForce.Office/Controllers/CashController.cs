@@ -1800,8 +1800,12 @@ namespace ActionForce.Office.Controllers
 
                 var refID = string.IsNullOrEmpty(cashTransfer.ReferanceID);
 
-                DateTime sDate = Convert.ToDateTime(cashTransfer.SlipDate).Date;
-                DateTime sDatetime = sDate.Add(Convert.ToDateTime(cashTransfer.SlipTime).TimeOfDay);
+                DateTime? date = Convert.ToDateTime(cashTransfer.SlipDate);
+                TimeSpan? time = Convert.ToDateTime(cashTransfer.SlipTime).TimeOfDay;
+                DateTime? slipdatetime = date.Value.Add(time.Value);
+
+                //DateTime sDate = Convert.ToDateTime(cashTransfer.SlipDate).Date;
+                //DateTime sDatetime = sDate.Add(Convert.ToDateTime(cashTransfer.SlipTime).TimeOfDay);
 
                 if (DateTime.TryParse(cashTransfer.DocumentDate, out docDate))
                 {
@@ -1831,7 +1835,7 @@ namespace ActionForce.Office.Controllers
                 bankTransfer.FromCashID = cash.ID;
                 bankTransfer.LocationID = location.LocationID;
                 bankTransfer.OurCompanyID = location.OurCompanyID;
-                bankTransfer.SlipDate = sDatetime;
+                bankTransfer.SlipDate = slipdatetime;
                 bankTransfer.SlipNumber = cashTransfer.SlipNumber;
                 bankTransfer.SlipPath = Server.MapPath("/");
                 bankTransfer.TimeZone = location.Timezone.Value;
@@ -1881,9 +1885,11 @@ namespace ActionForce.Office.Controllers
                 {
                     slipDate = Convert.ToDateTime(cashTransfer.SlipDate).Date;
                 }
-                
-                DateTime sDatetime = slipDate.Add(Convert.ToDateTime(cashTransfer.SlipTime).TimeOfDay);
 
+                //DateTime sDatetime = slipDate.Add(Convert.ToDateTime(cashTransfer.SlipTime).TimeOfDay);
+                DateTime? date = Convert.ToDateTime(cashTransfer.SlipDate);
+                TimeSpan? time = Convert.ToDateTime(cashTransfer.SlipTime).TimeOfDay;
+                DateTime? slipdatetime = date.Value.Add(time.Value);
 
                 BankTransfer sale = new BankTransfer();
                 sale.ActinTypeID = cashTransfer.ActinTypeID;
@@ -1897,7 +1903,7 @@ namespace ActionForce.Office.Controllers
                 sale.UID = cashTransfer.UID;
                 sale.ExchangeRate = exchanges;
                 sale.Commission = commision;
-                sale.SlipDate = sDatetime;
+                sale.SlipDate = slipdatetime;
                 sale.TrackingNumber = cashTransfer.TrackingNumber;
                 sale.ReferanceCode = cashTransfer.ReferenceCode;
                 sale.StatusID = cashTransfer.StatusID;
