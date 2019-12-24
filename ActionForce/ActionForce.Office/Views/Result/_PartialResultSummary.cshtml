@@ -82,6 +82,12 @@
                     <td class="text-right">@((Model.CashActions.Where(x => x.Currency == "EUR").Sum(x => x.Amount))?.ToString("N2"))</td>
                     <td class="text-right">@((Model.CashActions.Where(x => x.Currency == "TRL").Sum(x => x.Amount))?.ToString("N2"))</td>
                 </tr>
+                <tr class="table-info">
+                    <td><b>Kart Bakiye</b></td>
+                    <td class="text-right">@(Model.BankActions.Where(x => cardsales.Contains(x.BankActionTypeID.Value) && x.Currency == "USD").Sum(x => x.Amount)?.ToString("N2"))</td>
+                    <td class="text-right">@(Model.BankActions.Where(x => cardsales.Contains(x.BankActionTypeID.Value) && x.Currency == "EUR").Sum(x => x.Amount)?.ToString("N2"))</td>
+                    <td class="text-right">@(Model.BankActions.Where(x => cardsales.Contains(x.BankActionTypeID.Value) && x.Currency == "TRL").Sum(x => x.Amount)?.ToString("N2"))</td>
+                </tr>
                 <tr class="table-primary">
                     <td><b>Toplam Bakiye</b></td>
                     <td class="text-right">@((Model.CashActions.Where(x => x.Currency == "USD").Sum(x => x.Amount) + Model.BankActions.Where(x => cardsales.Contains(x.BankActionTypeID.Value) && x.Currency == "USD").Sum(x => x.Amount))?.ToString("N2"))</td>

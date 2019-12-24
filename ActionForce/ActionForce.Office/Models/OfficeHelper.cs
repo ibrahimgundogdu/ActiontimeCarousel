@@ -1573,7 +1573,7 @@ namespace ActionForce.Office
                                     //log at
                                     db.SaveChanges();
 
-                                    var empaction = db.EmployeeCashActions.FirstOrDefault(x => x.EmployeeID == employeeid && x.ActionTypeID == 32 && x.ProcessID == existssalaryearn.ID && x.ProcessDate == dayresult.Date);
+                                    var empaction = db.EmployeeCashActions.FirstOrDefault(x => x.EmployeeID == employeeid && x.ActionTypeID == 32 && x.ProcessID == existssalaryearn.ID && x.ProcessDate == dayresult.Date && x.ProcessUID == existssalaryearn.UID);
 
                                     if (empaction != null)
                                     {
@@ -1585,6 +1585,10 @@ namespace ActionForce.Office
 
                                         db.SaveChanges();
 
+                                    }
+                                    else
+                                    {
+                                        OfficeHelper.AddEmployeeAction(existssalaryearn.EmployeeID, existssalaryearn.LocationID, existssalaryearn.ActionTypeID, existssalaryearn.ActionTypeName, existssalaryearn.ID, existssalaryearn.Date, existssalaryearn.Description, 1, existssalaryearn.TotalAmount, 0, existssalaryearn.Currency, null, null, null, existssalaryearn.RecordEmployeeID, existssalaryearn.RecordDate, existssalaryearn.UID.Value, existssalaryearn.DocumentNumber);
                                     }
 
 

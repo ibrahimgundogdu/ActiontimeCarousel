@@ -114,6 +114,7 @@ function AddSalaryEarn(id, itemid, employeeid) {
     }).done(function (d) {
 
         $("#EmployeeSalary").html(d);
+        ResultSummary(id);
 
     }).always(function () {
         $("#Loading").hide();
@@ -153,7 +154,7 @@ function AddSalaryPayment(id, itemid, employeeid) {
     }).done(function (d) {
 
         $("#EmployeeSalary").html(d);
-
+        ResultSummary(id);
 
     });
 }
@@ -198,7 +199,7 @@ function AddBankTransfer(id, itemid) {
     }).done(function (d) {
 
         $("#BankTransfer").html(d);
-
+        ResultSummary(id);
 
     });
 }
@@ -229,8 +230,6 @@ function AddExpense(id, itemid) {
     data.append('sliptime', sliptime);
     data.append('description', description);
 
-
-
     $.ajax({
         cache: false,
         contentType: false,
@@ -241,10 +240,8 @@ function AddExpense(id, itemid) {
         data: data,
 
     }).done(function (d) {
-
         $("#AddExpense").html(d);
-
-
+        ResultSummary(id);
     });
 }
 
@@ -290,7 +287,7 @@ function AddExchange(id, itemid, currency) {
     }).done(function (d) {
 
         $("#AddExchange").html(d);
-
+        ResultSummary(id);
 
     });
 }
@@ -320,7 +317,7 @@ function AddCollect(id, itemid, currency) {
     }).done(function (d) {
 
         $("#CashCollectPayment").html(d);
-
+        ResultSummary(id);
 
     });
 }
@@ -353,7 +350,7 @@ function AddPayment(id, itemid, currency) {
     }).done(function (d) {
 
         $("#CashCollectPayment").html(d);
-
+        ResultSummary(id);
 
     });
 }
@@ -385,7 +382,7 @@ function AddCardSale(id, currency) {
     }).done(function (d) {
 
         $("#CardSale").html(d);
-
+        ResultSummary(id);
 
     });
 }
@@ -418,7 +415,7 @@ function AddCardRefund(id, currency) {
     }).done(function (d) {
 
         $("#CardSale").html(d);
-
+        ResultSummary(id);
 
     });
 }
@@ -450,7 +447,7 @@ function AddCashSale(id, currency) {
     }).done(function (d) {
 
         $("#CashSale").html(d);
-
+        ResultSummary(id);
 
     });
 }
@@ -483,11 +480,33 @@ function AddCashSaleRefund(id, currency) {
     }).done(function (d) {
 
         $("#CashSale").html(d);
-
+        ResultSummary(id);
 
     });
 }
 
+function ResultSummary(id) {
+
+    var data = new FormData();
+
+    data.append('id', id);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Result/ResultSummary",
+        data: data,
+
+    }).done(function (d) {
+
+        $("#ResultSummary").html(d);
+
+
+    });
+}
 
 
 

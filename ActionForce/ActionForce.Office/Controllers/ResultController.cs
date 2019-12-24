@@ -166,11 +166,11 @@ namespace ActionForce.Office.Controllers
                 var usdCash = OfficeHelper.GetCash(model.DayResult.LocationID, "USD");
                 var eurCash = OfficeHelper.GetCash(model.DayResult.LocationID, "EUR");
 
-                List <TotalModel> devirtotals = new List<TotalModel>();
+                List<TotalModel> devirtotals = new List<TotalModel>();
                 devirtotals.Add(new TotalModel()
                 {
                     Currency = "TRL",
-                    Total = Db.GetCashBalance(model.DayResult.LocationID,trlCash.ID, model.DayResult.Date.AddDays(-1) ).FirstOrDefault() ?? 0
+                    Total = Db.GetCashBalance(model.DayResult.LocationID, trlCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0
                 });
                 devirtotals.Add(new TotalModel()
                 {
@@ -793,8 +793,8 @@ namespace ActionForce.Office.Controllers
             var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 24);
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
             var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
-            
-            var saleamount = Convert.ToDouble(amount.Replace(".", "").Replace(",","."),CultureInfo.InvariantCulture);
+
+            var saleamount = Convert.ToDouble(amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
             var salequantity = Convert.ToInt32(quantity);
 
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
@@ -850,7 +850,7 @@ namespace ActionForce.Office.Controllers
             var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 28);
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
             var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
-            
+
             var saleamount = Convert.ToDouble(amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
             var salequantity = Convert.ToInt32(quantity);
 
@@ -876,7 +876,7 @@ namespace ActionForce.Office.Controllers
             salereturn.OurCompanyID = location.OurCompanyID;
             salereturn.CashID = cash.ID;
             salereturn.PayMethodID = 1; // cash
-            
+
 
             result = documentManager.AddCashSaleReturn(salereturn, model.Authentication);
 
@@ -890,7 +890,58 @@ namespace ActionForce.Office.Controllers
             return PartialView("_PartialCashSale", model);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult ResultSummary(long? id)
+        {
+            Result<DocumentTicketSaleReturns> result = new Result<DocumentTicketSaleReturns>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
 
+            ResultControlModel model = new ResultControlModel();
+           
+            var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
+            var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
+
+            model.DayResult = dayresult;
+
+            model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
+            model.CashActions = Db.VCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date).ToList();
+            model.BankActions = Db.VBankActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date).ToList();
+
+            var trlCash = OfficeHelper.GetCash(model.DayResult.LocationID, "TRL");
+            var usdCash = OfficeHelper.GetCash(model.DayResult.LocationID, "USD");
+            var eurCash = OfficeHelper.GetCash(model.DayResult.LocationID, "EUR");
+
+            List<TotalModel> devirtotals = new List<TotalModel>();
+            devirtotals.Add(new TotalModel()
+            {
+                Currency = "TRL",
+                Total = Db.GetCashBalance(model.DayResult.LocationID, trlCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0
+            });
+            devirtotals.Add(new TotalModel()
+            {
+                Currency = "USD",
+                Total = Db.GetCashBalance(model.DayResult.LocationID, usdCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0
+            });
+            devirtotals.Add(new TotalModel()
+            {
+                Currency = "EUR",
+                Total = Db.GetCashBalance(model.DayResult.LocationID, eurCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0
+            });
+
+            model.DevirTotal = devirtotals;
+
+            model.ResultStates = Db.ResultState.Where(x => x.IsActive == true).ToList();
+            model.Resultstatus = Db.Resultstatus.Where(x => x.IsActive == true).ToList();
+
+            model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return PartialView("_PartialResultSummary", model);
+        }
 
 
     }

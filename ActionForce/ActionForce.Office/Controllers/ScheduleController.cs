@@ -488,6 +488,8 @@ namespace ActionForce.Office.Controllers
 
                         empschedule.ShiftDateStart = startdatetime;
                         empschedule.ShiftdateEnd = enddatetime;
+                        empschedule.ShiftStart = starttime;
+                        empschedule.ShiftEnd = endtime;
                         empschedule.UpdateDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
                         empschedule.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
                         empschedule.UpdateIP = OfficeHelper.GetIPAddress();
@@ -549,6 +551,9 @@ namespace ActionForce.Office.Controllers
                             locschedule.StatusID = 2;
                             locschedule.Week = datekey.WeekNumber;
                             locschedule.Year = datekey.WeekYear;
+
+                            locschedule.ShiftStart = starttime;
+                            locschedule.ShiftEnd = endtime;
 
                             locschedule.ShiftDateStart = startdatetime;
                             locschedule.ShiftdateEnd = enddatetime;
