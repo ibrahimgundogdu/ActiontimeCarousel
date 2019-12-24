@@ -42,7 +42,9 @@
                     <td class="tx-sm-13 bold">@item.ID</td>
                     <td class="tx-sm-13">@item.ActionTypeName</td>
                     <td class="tx-sm-13">@(item.Date?.ToShortDateString())</td>
-                    <td class="tx-sm-13">@(item.DocumentNumber)</td>
+                    <td class="tx-sm-13">
+                        <a href="@($"/Cash/TransferDetail/{item.UID}")" target="_blank" class="">@(item.DocumentNumber)</a>
+                    </td>
                     <td class="tx-sm-13">@(item.BankAccountName)</td>
                     <td class="tx-sm-13">@(item.SlipDate?.ToString())</td>
                     <td class="tx-sm-13">@(item.SlipNumber)</td>
