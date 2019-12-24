@@ -165,7 +165,7 @@ function AddBankTransfer(id, itemid) {
     var comission = $('#E7TRLCO' + itemid).val();
     var slipnumber = $('#E7TRLN' + itemid).val();
     var slipdate = $('#E7TRLD' + itemid).val();
-    var sliptime = $('#E7TRLD' + itemid).val();
+    var sliptime = $('#E7TRLR' + itemid).val();
     var description = $('#E7TRLDE' + itemid).val();
 
     var data = new FormData();

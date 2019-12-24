@@ -155,6 +155,7 @@ namespace ActionForce.Office
         public int BankAccountID { get; set; }
         public string TerminalID { get; set; }
         public string ExchangeRate { get; set; }
+        public string Exchange { get; set; }
         public string ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
