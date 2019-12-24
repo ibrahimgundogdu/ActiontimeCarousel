@@ -1885,8 +1885,8 @@ namespace ActionForce.Office.Controllers
                 {
                     slipDate = Convert.ToDateTime(cashTransfer.SlipDate).Date;
                 }
+                
 
-                //DateTime sDatetime = slipDate.Add(Convert.ToDateTime(cashTransfer.SlipTime).TimeOfDay);
                 DateTime? date = Convert.ToDateTime(cashTransfer.SlipDate);
                 TimeSpan? time = Convert.ToDateTime(cashTransfer.SlipTime).TimeOfDay;
                 DateTime? slipdatetime = date.Value.Add(time.Value);

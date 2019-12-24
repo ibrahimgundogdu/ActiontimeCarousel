@@ -114,7 +114,7 @@
                         <td class="tx-sm-13">@item.RecorderFullName</td>
                         <td class="tx-sm-13 text-right">@item.RecordDate</td>
                         <td class="tx-sm-13 text-right">@item.ReferenceCode</td>
-                        <td class="tx-sm-13">@($"{item.Date.Value.ToShortDateString()} {item.Date.Value.ToShortTimeString()}")</td>
+                        <td class="tx-sm-13">@($"{item.SlipDate.Value.ToShortDateString()} {item.SlipDate.Value.ToString("HH:mm:ss")}")</td>
                         <td class="tx-sm-13 text-right">@item.SlipNumber</td>
                         <td>
                             @if (item.SlipDocument != null)
@@ -215,7 +215,7 @@
 
             var cleaveF = new Cleave('#SlipTime', {
                 time: true,
-                timePattern: ['h', 'm']
+                timePattern: ['h', 'm', 's']
             });
             //var cleave = new Cleave('#Amount', {
             //    numeral: true

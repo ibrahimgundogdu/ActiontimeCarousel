@@ -163,7 +163,7 @@
                             <td class="tx-sm-13 bold">@item.LocationID</td>
                             <td class="tx-sm-13">@item.ProcessDate.Value.ToShortDateString()</td>
                             <td class="tx-sm-13">@item.ProcessName</td>
-                            <td class="tx-sm-13">@item.DocumentNumber</td>
+                            <td class="tx-sm-13"><a href="@(item.DocumentNumber.ToCharArray().Where(c => Char.IsLetter(c)).ToString() == "CC" ? "/CashDetail/" + @item.ProcessUID : item.DocumentNumber.ToCharArray().Where(c => Char.IsLetter(c)).ToString() == "TS" ? "/SaleDetail/" + @item.ProcessUID : item.DocumentNumber.ToCharArray().Where(c => Char.IsLetter(c)).ToString() == "EXS" ? "/Exchangeetail/" + @item.ProcessUID : "#")" target="_blank">@item.DocumentNumber</a></td>
                             <td class="tx-sm-13 text-right bg-primary-light">@(item.CashCollection != null ? item.CashCollection.Value.ToString("N2") : "")</td>
                             <td class="tx-sm-13 text-right bg-primary-light">@(item.CashPaymnet != null ? item.CashPaymnet.Value.ToString("N2") : "")</td>
                             <td class="tx-sm-13 text-right bg-primary-light">@(item.CashAmount != null ? item.CashAmount.Value.ToString("N2") : "")</td>

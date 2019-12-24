@@ -35,5 +35,6 @@ namespace ActionForce.Entity
         public Nullable<double> CardAmount { get; set; }
         public string Currency { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
+        public Nullable<System.Guid> ProcessUID { get; set; }
     }
 }

@@ -3026,6 +3026,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashBankActions' does not 
           <Property Name="CardAmount" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="RecordDate" Type="datetime" />
+          <Property Name="ProcessUID" Type="uniqueidentifier" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashRecorders' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4755,7 +4756,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VCashBankActions].[CardPayment] AS [CardPayment], 
     [VCashBankActions].[CardAmount] AS [CardAmount], 
     [VCashBankActions].[Currency] AS [Currency], 
-    [VCashBankActions].[RecordDate] AS [RecordDate]
+    [VCashBankActions].[RecordDate] AS [RecordDate], 
+    [VCashBankActions].[ProcessUID] AS [ProcessUID]
     FROM [dbo].[VCashBankActions] AS [VCashBankActions]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VCashRecorders" EntityType="Self.VCashRecorders" store:Type="Views" store:Schema="dbo">
@@ -9100,6 +9102,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CardAmount" Type="Double" />
           <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="ProcessUID" Type="Guid" />
         </EntityType>
         <EntityType Name="VDocumentTicketSales">
           <Key>
@@ -13270,6 +13273,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VCashBankActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCashBankActions">
               <MappingFragment StoreEntitySet="VCashBankActions">
+                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
                 <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="CardAmount" ColumnName="CardAmount" />
