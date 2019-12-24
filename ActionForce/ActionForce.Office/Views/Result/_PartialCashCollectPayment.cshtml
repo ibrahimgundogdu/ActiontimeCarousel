@@ -35,18 +35,28 @@
 
                 @foreach (var sale in Model.CashActions.Where(x => typeids.Contains(x.CashActionTypeID.Value)).OrderByDescending(x => x.RecordDate))
                 {
-                    <tr>
+                <tr>
 
-                        <td class="tx-sm-13 bold">@sale.ID</td>
-                        <td class="tx-sm-13">@sale.ProcessName</td>
-                        <td class="tx-sm-13">@(sale.ActionDate?.ToShortDateString())</td>
-                        <td class="tx-sm-13">@sale.DocumentNumber</td>
-                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(sale.Amount >= 0 ? sale.Amount?.ToString("N2") : "")</td>
-                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(sale.Amount < 0 ? sale.Amount?.ToString("N2") : "")</td>
-                        <td class="tx-sm-13">@sale.Currency</td>
-                        <td class="tx-sm-13">@sale.RecordDate</td>
+                    <td class="tx-sm-13 bold">@sale.ID</td>
+                    <td class="tx-sm-13">@sale.ProcessName</td>
+                    <td class="tx-sm-13">@(sale.ActionDate?.ToShortDateString())</td>
+                    <td class="tx-sm-13">
+                        @if (sale.Amount >= 0)
+                        {
+                            <a href="@($"/Cash/CashDetail/{sale.ProcessUID}")" target="_blank" class="">@(sale.DocumentNumber)</a>
+                        }
+                        else
+                        {
+                            <a href="@($"/Cash/PaymentDetail/{sale.ProcessUID}")" target="_blank" class="">@(sale.DocumentNumber)</a>
+                        }
 
-                    </tr>
+                    </td>
+                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(sale.Amount >= 0 ? sale.Amount?.ToString("N2") : "")</td>
+                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(sale.Amount < 0 ? sale.Amount?.ToString("N2") : "")</td>
+                    <td class="tx-sm-13">@sale.Currency</td>
+                    <td class="tx-sm-13">@sale.RecordDate</td>
+
+                </tr>
 
                     if (sale.Currency == "TRL")
                     {

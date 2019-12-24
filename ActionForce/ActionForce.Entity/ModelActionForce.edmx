@@ -3397,6 +3397,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashRecorderSlip' 
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="ResultID" Type="bigint" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPosCancel' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5088,7 +5090,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentCashRecorderSlip].[ActionName] AS [ActionName], 
     [VDocumentCashRecorderSlip].[RecorderFullName] AS [RecorderFullName], 
     [VDocumentCashRecorderSlip].[UpdaterFullName] AS [UpdaterFullName], 
-    [VDocumentCashRecorderSlip].[LocationFullName] AS [LocationFullName]
+    [VDocumentCashRecorderSlip].[LocationFullName] AS [LocationFullName], 
+    [VDocumentCashRecorderSlip].[EnvironmentID] AS [EnvironmentID], 
+    [VDocumentCashRecorderSlip].[ResultID] AS [ResultID]
     FROM [dbo].[VDocumentCashRecorderSlip] AS [VDocumentCashRecorderSlip]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentPosCancel" EntityType="Self.VDocumentPosCancel" store:Type="Views" store:Schema="dbo">
@@ -10418,6 +10422,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="ResultID" Type="Int64" />
         </EntityType>
         <EntityType Name="LocationGoals">
           <Key>
@@ -14593,6 +14599,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentCashRecorderSlip">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentCashRecorderSlip">
               <MappingFragment StoreEntitySet="VDocumentCashRecorderSlip">
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
                 <ScalarProperty Name="UpdaterFullName" ColumnName="UpdaterFullName" />
                 <ScalarProperty Name="RecorderFullName" ColumnName="RecorderFullName" />
