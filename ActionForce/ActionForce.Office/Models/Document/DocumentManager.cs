@@ -2060,6 +2060,19 @@ namespace ActionForce.Office
                             {
                                 OfficeHelper.AddCashAction(isTransfer.FromCashID, isTransfer.LocationID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, -1, 0, isTransfer.NetAmount, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate, isTransfer.UID.Value);
                             }
+                            else
+                            {
+                                cashaction.LocationID = isTransfer.LocationID;
+                                cashaction.Collection = isTransfer.Amount;
+                                cashaction.CashID = isTransfer.FromCashID;
+                                cashaction.Currency = isTransfer.Currency;
+                                cashaction.ActionDate = isTransfer.Date;
+                                cashaction.ProcessDate = isTransfer.Date;
+                                cashaction.UpdateDate = isTransfer.UpdateDate;
+                                cashaction.UpdateEmployeeID = isTransfer.UpdateEmployee;
+
+                                Db.SaveChanges();
+                            }
 
                             result.IsSuccess = true;
                             result.Message = $"{isTransfer.ID} ID li {isTransfer.Amount} {isTransfer.Currency} tutarındaki havale eft işlemi başarı ile lokasyon takip etti";
@@ -2125,6 +2138,19 @@ namespace ActionForce.Office
 
                                     OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate, cashExpense.UID.Value);
                                 }
+                                else
+                                {
+                                    cashaction.LocationID = isTransfer.LocationID;
+                                    cashaction.Collection = isTransfer.Commission;
+                                    cashaction.CashID = isTransfer.FromCashID;
+                                    cashaction.Currency = isTransfer.Currency;
+                                    cashaction.ActionDate = isTransfer.Date;
+                                    cashaction.ProcessDate = isTransfer.Date;
+                                    cashaction.UpdateDate = isTransfer.UpdateDate;
+                                    cashaction.UpdateEmployeeID = isTransfer.UpdateEmployee;
+
+                                    Db.SaveChanges();
+                                }
                                 OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", cashExpense.ID.ToString(), "Cash", "Expense", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                             }
 
@@ -2176,6 +2202,19 @@ namespace ActionForce.Office
                             if (cashaction == null)
                             {
                                 OfficeHelper.AddCashAction(isTransfer.FromCashID, isTransfer.LocationID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, -1, 0, isTransfer.NetAmount, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate, isTransfer.UID.Value);
+                            }
+                            else
+                            {
+                                cashaction.LocationID = isTransfer.LocationID;
+                                cashaction.Collection = isTransfer.Amount;
+                                cashaction.CashID = isTransfer.FromCashID;
+                                cashaction.Currency = isTransfer.Currency;
+                                cashaction.ActionDate = isTransfer.Date;
+                                cashaction.ProcessDate = isTransfer.Date;
+                                cashaction.UpdateDate = isTransfer.UpdateDate;
+                                cashaction.UpdateEmployeeID = isTransfer.UpdateEmployee;
+
+                                Db.SaveChanges();
                             }
 
                             result.IsSuccess = true;
@@ -2241,6 +2280,19 @@ namespace ActionForce.Office
                                 {
 
                                     OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate, cashExpense.UID.Value);
+                                }
+                                else
+                                {
+                                    cashaction.LocationID = isTransfer.LocationID;
+                                    cashaction.Collection = isTransfer.Commission;
+                                    cashaction.CashID = isTransfer.FromCashID;
+                                    cashaction.Currency = isTransfer.Currency;
+                                    cashaction.ActionDate = isTransfer.Date;
+                                    cashaction.ProcessDate = isTransfer.Date;
+                                    cashaction.UpdateDate = isTransfer.UpdateDate;
+                                    cashaction.UpdateEmployeeID = isTransfer.UpdateEmployee;
+
+                                    Db.SaveChanges();
                                 }
                                 OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", cashExpense.ID.ToString(), "Cash", "Expense", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                             }
@@ -2317,9 +2369,22 @@ namespace ActionForce.Office
                             Db.SaveChanges();
 
                             var expbank = Db.BankActions.FirstOrDefault(x => x.LocationID == isTransfer.LocationID && x.BankActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID && x.ProcessUID == isTransfer.UID);
-                            if (expbank != null)
+                            if (expbank == null)
                             {
                                 OfficeHelper.AddBankAction(isTransfer.LocationID, null, isTransfer.ToBankAccountID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, 1, isTransfer.NetAmount, 0, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate, isTransfer.UID.Value);
+                            }
+                            else
+                            {
+                                expbank.LocationID = isTransfer.LocationID;
+                                expbank.Collection = isTransfer.Amount;
+                                expbank.Currency = isTransfer.Currency;
+                                expbank.BankAccountID = isTransfer.ToBankAccountID;
+                                expbank.ActionDate = isTransfer.Date;
+                                expbank.ProcessDate = isTransfer.Date;
+                                expbank.UpdateDate = isTransfer.UpdateDate;
+                                expbank.UpdateEmployeeID = isTransfer.UpdateEmployee;
+
+                                Db.SaveChanges();
                             }
 
                             result.IsSuccess = true;
