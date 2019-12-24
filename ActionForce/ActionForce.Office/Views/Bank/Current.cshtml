@@ -155,7 +155,10 @@
                         <td class="tx-sm-13">@item.ProcessDate.Value.ToShortDateString()</td>
                         <td class="tx-sm-13">@item.ProcessName</td>
                         <td class="tx-sm-13">@(Model.bankAccount.FirstOrDefault(x => x.ID == item.BankAccountID).AccountName)</td>
-                        <td class="tx-sm-13">@item.DocumentNumber</td>
+                        <td class="tx-sm-13">
+                            
+                            <a href="@(item.Prefix == "" ? "/Bank/Detail/" + @item.ProcessUID : item.ActionTypeID == 5 ? "/Bank/PosCancelDetail/" + @item.ProcessUID : item.ActionTypeID == 3 ? "/Bank/PosRefundDetail/" + @item.ProcessUID : "#")" target="_blank">@item.DocumentNumber</a>
+                        </td>
                         <td class="tx-sm-13 text-right bg-primary-light">@(item.CardCollection != null ? item.CardCollection.Value.ToString("N2") : "")</td>
                         <td class="tx-sm-13 text-right bg-primary-light">@(item.CardPayment != null ? item.CardPayment.Value.ToString("N2") : "")</td>
                         <td class="tx-sm-13 text-right bg-primary-light">@(item.CardAmount != null ? item.CardAmount.Value.ToString("N2") : "")</td>

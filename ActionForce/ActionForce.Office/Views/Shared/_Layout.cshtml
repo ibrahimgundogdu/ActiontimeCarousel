@@ -267,16 +267,14 @@
             }
 
         });
-      
-
-
-      });
         $(function () {
             $('.shiftbegintime').mask('00:00');
             $('.hour').mask('00:00');
             $('.hourfull').mask('00:00:00');
             $('.shiftdate').mask('0000-00-00');
-            $('.money').mask("##0,00", { reverse: true });
+            $('.quantity').mask("#.##0", { reverse: true });
+            $('.number').mask("##0", { reverse: true });
+            $('.money').mask("#.##0,00", { reverse: true });
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
     </script>

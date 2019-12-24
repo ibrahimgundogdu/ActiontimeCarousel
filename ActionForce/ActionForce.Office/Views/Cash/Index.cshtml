@@ -99,7 +99,7 @@
                             <td class="tx-sm-13">@item.ActionTypeName</td>
                             <td class="tx-sm-13">@item.CustomerFullName @item.EmployeeFullName @item.BankAccountName </td>
                             <td class="tx-sm-13">@item.DocumentNumber</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
                             <td class="tx-sm-13">@(item.Currency)</td>
                             <td class="tx-sm-13">@item.RecorderFullName</td>
                             <td class="tx-sm-13 text-right">@item.RecordDate</td>

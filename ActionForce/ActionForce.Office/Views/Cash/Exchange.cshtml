@@ -97,10 +97,10 @@
                         <td class="tx-sm-13">@item.ToCashName</td>
                         <td class="tx-sm-13">@item.ActionTypeName</td>
                         <td class="tx-sm-13">@item.DocumentNumber</td>
-                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
                         <td class="tx-sm-13">@(item.Currency)</td>
-                        <td class="tx-sm-13">@(item.ExchangeRate != null ? item.ExchangeRate.Value.ToString("N2") : "")</td>
-                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.ToAmount != null ? item.ToAmount.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13">@(item.ExchangeRate?.ToString("N4"))</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.ToAmount?.ToString("N2"))</td>
                         <td class="tx-sm-13">@(item.ToCurrency)</td>
                         <td class="tx-sm-13">@item.RecorderFullName</td>
                         <td class="tx-sm-13 text-right">@item.RecordDate</td>

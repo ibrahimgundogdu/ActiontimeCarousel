@@ -157,7 +157,8 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(cashCollect.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashCollect.ExchangeRate) ? Convert.ToDouble(cashCollect.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
+                double? newexchanges = Convert.ToDouble(cashCollect.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? exchanges = Convert.ToDouble(cashCollect.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
@@ -175,7 +176,14 @@ namespace ActionForce.Office.Controllers
                 collection.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                 collection.LocationID = cashCollect.LocationID;
                 collection.UID = cashCollect.UID;
-                collection.ExchangeRate = exchanges;
+                if (newexchanges > 0)
+                {
+                    collection.ExchangeRate = newexchanges;
+                }
+                else
+                {
+                    collection.ExchangeRate = exchanges;
+                }
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditCashCollection(collection, model.Authentication);
@@ -397,7 +405,8 @@ namespace ActionForce.Office.Controllers
                 var quantity = Convert.ToInt32(cashSale.Quantity);
                 var currency = cashSale.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashSale.ExchangeRate) ? Convert.ToDouble(cashSale.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
+                double? newexchanges = Convert.ToDouble(cashSale.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? exchanges = Convert.ToDouble(cashSale.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(cashSale.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashSale.DocumentDate).Date;
@@ -413,9 +422,17 @@ namespace ActionForce.Office.Controllers
                 sale.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                 sale.LocationID = cashSale.LocationID;
                 sale.UID = cashSale.UID;
-                sale.ExchangeRate = exchanges;
                 sale.Quantity = quantity;
                 sale.PayMethodID = sale.PayMethodID;
+
+                if (newexchanges > 0)
+                {
+                    sale.ExchangeRate = newexchanges;
+                }
+                else
+                {
+                    sale.ExchangeRate = exchanges;
+                }
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditCashSale(sale, model.Authentication);
@@ -646,7 +663,8 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(cashCollect.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashCollect.ExchangeRate) ? Convert.ToDouble(cashCollect.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
+                double? newexchanges = Convert.ToDouble(cashCollect.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? exchanges = Convert.ToDouble(cashCollect.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var saleExchange = Convert.ToDouble(cashCollect.Exchange.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
                 if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
@@ -665,8 +683,16 @@ namespace ActionForce.Office.Controllers
                 sale.EnvironmentID = 2;
                 sale.LocationID = cashCollect.LocationID;
                 sale.UID = cashCollect.UID;
-                sale.ExchangeRate = exchanges;
                 sale.SaleExchangeRate = saleExchange;
+
+                if (newexchanges > 0)
+                {
+                    sale.ExchangeRate = newexchanges;
+                }
+                else
+                {
+                    sale.ExchangeRate = exchanges;
+                }
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditSaleExchange(sale, documentFile, model.Authentication);
@@ -881,8 +907,9 @@ namespace ActionForce.Office.Controllers
                 
                 var amount = Convert.ToDouble(cashOpen.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashOpen.Currency;
-                var exchanges = !string.IsNullOrEmpty(cashOpen.ExchangeRate) ? Convert.ToDouble(cashOpen.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
-                
+                double? newexchanges = Convert.ToDouble(cashOpen.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? exchanges = Convert.ToDouble(cashOpen.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
 
                 CashOpen sale = new CashOpen();
                 sale.ActinTypeID = cashOpen.ActinTypeID;
@@ -892,7 +919,14 @@ namespace ActionForce.Office.Controllers
                 sale.EnvironmentID = 2;
                 sale.LocationID = cashOpen.LocationID;
                 sale.UID = cashOpen.UID;
-                sale.ExchangeRate = exchanges;
+                if (newexchanges > 0)
+                {
+                    sale.ExchangeRate = newexchanges;
+                }
+                else
+                {
+                    sale.ExchangeRate = exchanges;
+                }
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditCashOpen(sale, model.Authentication);
@@ -1121,7 +1155,8 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(cashPayment.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashPayment.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashPayment.ExchangeRate) ? Convert.ToDouble(cashPayment.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
+                double? newexchanges = Convert.ToDouble(cashPayment.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? exchanges = Convert.ToDouble(cashPayment.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(cashPayment.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashPayment.DocumentDate).Date;
@@ -1138,7 +1173,14 @@ namespace ActionForce.Office.Controllers
                 payment.ToEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                 payment.LocationID = cashPayment.LocationID;
                 payment.UID = cashPayment.UID;
-                payment.ExchangeRate = exchanges;
+                if (newexchanges > 0)
+                {
+                    payment.ExchangeRate = newexchanges;
+                }
+                else
+                {
+                    payment.ExchangeRate = exchanges;
+                }
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditCashPayment(payment, model.Authentication);
@@ -1362,7 +1404,8 @@ namespace ActionForce.Office.Controllers
                 var quantity = Convert.ToInt32(cashSale.Quantity);
                 var currency = cashSale.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashSale.ExchangeRate) ? Convert.ToDouble(cashSale.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
+                double? newexchanges = Convert.ToDouble(cashSale.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? exchanges = Convert.ToDouble(cashSale.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(cashSale.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashSale.DocumentDate).Date;
@@ -1378,9 +1421,16 @@ namespace ActionForce.Office.Controllers
                 sale.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                 sale.LocationID = cashSale.LocationID;
                 sale.UID = cashSale.UID;
-                sale.ExchangeRate = exchanges;
                 sale.Quantity = quantity;
                 sale.PayMethodID = sale.PayMethodID;
+                if (newexchanges > 0)
+                {
+                    sale.ExchangeRate = newexchanges;
+                }
+                else
+                {
+                    sale.ExchangeRate = exchanges;
+                }
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditCashSaleReturn(sale, model.Authentication);
@@ -1611,7 +1661,8 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(cashExpense.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashExpense.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashExpense.ExchangeRate) ? Convert.ToDouble(cashExpense.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
+                double? newexchanges = Convert.ToDouble(cashExpense.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? exchanges = Convert.ToDouble(cashExpense.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(cashExpense.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashExpense.DocumentDate).Date;
@@ -1629,7 +1680,14 @@ namespace ActionForce.Office.Controllers
                 sale.ToEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                 sale.LocationID = cashExpense.LocationID;
                 sale.UID = cashExpense.UID;
-                sale.ExchangeRate = exchanges;
+                if (newexchanges > 0)
+                {
+                    sale.ExchangeRate = newexchanges;
+                }
+                else
+                {
+                    sale.ExchangeRate = exchanges;
+                }
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditCashExpense(sale, documentFile, model.Authentication);
@@ -1875,7 +1933,8 @@ namespace ActionForce.Office.Controllers
                 var currency = cashTransfer.Currency;
                 var docDate = DateTime.Now.Date;
                 var slipDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashTransfer.ExchangeRate) ? Convert.ToDouble(cashTransfer.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
+                double? newexchanges = Convert.ToDouble(cashTransfer.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? exchanges = Convert.ToDouble(cashTransfer.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(cashTransfer.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashTransfer.DocumentDate).Date;
@@ -1901,12 +1960,20 @@ namespace ActionForce.Office.Controllers
                 sale.ToBankID = fromPrefix == "B" ? fromID : (int?)null;
                 sale.LocationID = cashTransfer.LocationID;
                 sale.UID = cashTransfer.UID;
-                sale.ExchangeRate = exchanges;
                 sale.Commission = commision;
                 sale.SlipDate = slipdatetime;
                 sale.TrackingNumber = cashTransfer.TrackingNumber;
                 sale.ReferanceCode = cashTransfer.ReferenceCode;
                 sale.StatusID = cashTransfer.StatusID;
+
+                if (newexchanges > 0)
+                {
+                    sale.ExchangeRate = newexchanges;
+                }
+                else
+                {
+                    sale.ExchangeRate = exchanges;
+                }
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditBankTransfer(sale, documentFile, model.Authentication);
@@ -2123,7 +2190,8 @@ namespace ActionForce.Office.Controllers
                 {
                     docDate = Convert.ToDateTime(cashSalary.DocumentDate).Date;
                 }
-                var exchanges = Convert.ToDouble(cashSalary.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? newexchanges = Convert.ToDouble(cashSalary.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? exchanges = Convert.ToDouble(cashSalary.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
 
                 SalaryPayment sale = new SalaryPayment();
@@ -2134,9 +2202,17 @@ namespace ActionForce.Office.Controllers
                 sale.Amount = amount;
                 sale.Description = cashSalary.Description;
                 sale.FromBankID = cashSalary.BankAccountID;
-                sale.ExchangeRate = exchanges;
                 sale.SalaryTypeID = cashSalary.SalaryType;
                 sale.UID = cashSalary.UID;
+
+                if (newexchanges > 0)
+                {
+                    sale.ExchangeRate = newexchanges;
+                }
+                else
+                {
+                    sale.ExchangeRate = exchanges;
+                }
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditSalaryPayment(sale, model.Authentication);

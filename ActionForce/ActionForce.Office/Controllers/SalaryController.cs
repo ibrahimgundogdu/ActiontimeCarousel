@@ -161,7 +161,6 @@ namespace ActionForce.Office.Controllers
                 var quantity = Convert.ToDouble(cashEarn.QuantityHour.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashEarn.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = !string.IsNullOrEmpty(cashEarn.ExchangeRate) ? Convert.ToDouble(cashEarn.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : (double?)null;
                 if (DateTime.TryParse(cashEarn.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashEarn.DocumentDate).Date;
@@ -179,6 +178,8 @@ namespace ActionForce.Office.Controllers
                 sale.UID = cashEarn.UID;
                 sale.UnitPrice = unit;
                 sale.QuantityHour = quantity;
+
+                
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditSalaryEarn(sale, model.Authentication);
@@ -433,7 +434,8 @@ namespace ActionForce.Office.Controllers
                 {
                     docDate = Convert.ToDateTime(cashSalary.DocumentDate).Date;
                 }
-                var exchanges = Convert.ToDouble(cashSalary.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? newexchanges = Convert.ToDouble(cashSalary.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? exchanges = Convert.ToDouble(cashSalary.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
 
                 SalaryPayment sale = new SalaryPayment();
@@ -444,9 +446,17 @@ namespace ActionForce.Office.Controllers
                 sale.Amount = amount;
                 sale.Description = cashSalary.Description;
                 sale.FromBankID = cashSalary.BankAccountID;
-                sale.ExchangeRate = exchanges;
                 sale.SalaryTypeID = cashSalary.SalaryType;
                 sale.UID = cashSalary.UID;
+
+                if (newexchanges > 0)
+                {
+                    sale.ExchangeRate = newexchanges;
+                }
+                else
+                {
+                    sale.ExchangeRate = exchanges;
+                }
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditSalaryPayment(sale, model.Authentication);

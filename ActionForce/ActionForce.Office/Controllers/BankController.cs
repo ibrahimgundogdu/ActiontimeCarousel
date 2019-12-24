@@ -368,7 +368,6 @@ namespace ActionForce.Office.Controllers
                 {
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
-                //var cash = OfficeHelper.GetCash(posCollect.LocationID, posCollect.Currency);
                 var refID = string.IsNullOrEmpty(posCollect.ReferanceID);
 
                 var exchange = OfficeHelper.GetExchange(docDate);
@@ -459,7 +458,9 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(posCollect.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = posCollect.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = Convert.ToDouble(posCollect.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
+                double? newexchanges = Convert.ToDouble(posCollect.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? exchanges = Convert.ToDouble(posCollect.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(posCollect.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
@@ -475,8 +476,16 @@ namespace ActionForce.Office.Controllers
                 payment.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                 payment.FromBankAccountID = posCollect.BankAccountID;
                 payment.LocationID = posCollect.LocationID;
-                payment.ExchangeRate = exchanges;
                 payment.UID = posCollect.UID;
+
+                if (newexchanges > 0)
+                {
+                    payment.ExchangeRate = newexchanges;
+                }
+                else
+                {
+                    payment.ExchangeRate = exchanges;
+                }
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditPosCancel(payment, model.Authentication);
@@ -703,7 +712,8 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(posCollect.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = posCollect.Currency;
                 var docDate = DateTime.Now.Date;
-                var exchanges = Convert.ToDouble(posCollect.ExchangeRate.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? newexchanges = Convert.ToDouble(posCollect.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                double? exchanges = Convert.ToDouble(posCollect.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(posCollect.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
@@ -719,8 +729,16 @@ namespace ActionForce.Office.Controllers
                 payment.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                 payment.FromBankAccountID = posCollect.BankAccountID;
                 payment.LocationID = posCollect.LocationID;
-                payment.ExchangeRate = exchanges;
                 payment.UID = posCollect.UID;
+
+                if (newexchanges > 0)
+                {
+                    payment.ExchangeRate = newexchanges;
+                }
+                else
+                {
+                    payment.ExchangeRate = exchanges;
+                }
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditPosRefund(payment, model.Authentication);

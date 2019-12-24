@@ -157,13 +157,14 @@
                     @foreach (var item in Model.ActionList)
                     {
                         Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency && x.Type == item.Module).Total += item.Module == "Cash" ? item.CashAmount ?? 0 : item.CardAmount ?? 0;
-
+                        
+                        
                         <tr>
 
                             <td class="tx-sm-13 bold">@item.LocationID</td>
                             <td class="tx-sm-13">@item.ProcessDate.Value.ToShortDateString()</td>
                             <td class="tx-sm-13">@item.ProcessName</td>
-                            <td class="tx-sm-13"><a href="@(item.DocumentNumber.ToCharArray().Where(c => Char.IsLetter(c)).ToString() == "CC" ? "/CashDetail/" + @item.ProcessUID : item.DocumentNumber.ToCharArray().Where(c => Char.IsLetter(c)).ToString() == "TS" ? "/SaleDetail/" + @item.ProcessUID : item.DocumentNumber.ToCharArray().Where(c => Char.IsLetter(c)).ToString() == "EXS" ? "/Exchangeetail/" + @item.ProcessUID : "#")" target="_blank">@item.DocumentNumber</a></td>
+                            <td class="tx-sm-13"><a href="@(item.Module == "Cash" ? (item.ActionTypeID == 23 ? "/Cash/CashDetail/" + @item.ProcessUID : item.ActionTypeID == 24 ? "/Cash/SaleDetail/" + @item.ProcessUID : item.ActionTypeID == 25 ? "/Cash/ExchangeDetail/" + @item.ProcessUID : item.ActionTypeID == 26 ? "/Cash/OpenDetail/" + @item.ProcessUID : item.ActionTypeID == 27 ? "/Cash/PaymentDetail/" + @item.ProcessUID : item.ActionTypeID == 28 ? "/Cash/SaleRefundDetail/" + @item.ProcessUID : item.ActionTypeID == 29 ? "/Cash/ExpenseDetail/" + @item.ProcessUID : item.ActionTypeID == 30 ? "/Cash/TransferDetail/" + @item.ProcessUID : item.ActionTypeID == 31 ? "/Cash/SalaryDetail/" + @item.ProcessUID : "#") : (item.ActionTypeID == 1 ? "/Bank/Detail/" + @item.ProcessUID : item.ActionTypeID == 5 ? "/Bank/PosCancelDetail/" + @item.ProcessUID : item.ActionTypeID == 3 ? "/Bank/PosRefundDetail/" + @item.ProcessUID : "#"))" target="_blank">@item.DocumentNumber</a></td>
                             <td class="tx-sm-13 text-right bg-primary-light">@(item.CashCollection != null ? item.CashCollection.Value.ToString("N2") : "")</td>
                             <td class="tx-sm-13 text-right bg-primary-light">@(item.CashPaymnet != null ? item.CashPaymnet.Value.ToString("N2") : "")</td>
                             <td class="tx-sm-13 text-right bg-primary-light">@(item.CashAmount != null ? item.CashAmount.Value.ToString("N2") : "")</td>

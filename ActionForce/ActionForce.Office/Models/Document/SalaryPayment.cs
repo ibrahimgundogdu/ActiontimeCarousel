@@ -10,7 +10,7 @@ namespace ActionForce.Office
         public int ActinTypeID { get; set; }
         public string ActionTypeName { get; set; }
         public double Amount { get; set; }
-        public double ExchangeRate { get; set; }
+        public double? ExchangeRate { get; set; }
         public int LocationID { get; set; }
         public int OurCompanyID { get; set; }
         public int EmployeeID { get; set; }
