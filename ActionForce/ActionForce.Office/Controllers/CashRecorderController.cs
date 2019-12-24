@@ -235,7 +235,7 @@ namespace ActionForce.Office.Controllers
                 record.TimeZone = timezone;
                 record.SlipNumber = cashRecord.SlipNumber;
                 record.SlipDate = sDatetime;
-
+                record.UID = cashRecord.UID;
                 record.SlipPath = path;
 
                 DocumentManager documentManager = new DocumentManager();

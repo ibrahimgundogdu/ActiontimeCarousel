@@ -2136,6 +2136,7 @@ namespace ActionForce.Office.Controllers
                 sale.FromBankID = cashSalary.BankAccountID;
                 sale.ExchangeRate = exchanges;
                 sale.SalaryTypeID = cashSalary.SalaryType;
+                sale.UID = cashSalary.UID;
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditSalaryPayment(sale, model.Authentication);
