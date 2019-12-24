@@ -368,7 +368,6 @@ namespace ActionForce.Office.Controllers
                 {
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
-                //var cash = OfficeHelper.GetCash(posCollect.LocationID, posCollect.Currency);
                 var refID = string.IsNullOrEmpty(posCollect.ReferanceID);
 
                 var exchange = OfficeHelper.GetExchange(docDate);

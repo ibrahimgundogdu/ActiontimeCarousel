@@ -1898,7 +1898,39 @@ namespace ActionForce.Office
                         Db.DocumentBankTransfer.Add(bankTransfer);
                         Db.SaveChanges();
 
+                        if (new int?[] {2,3,4,5 }.Contains( bankTransfer.StatusID))
+                        {
+                            var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == bankTransfer.LocationID && x.CashActionTypeID == bankTransfer.ActionTypeID && x.ProcessID == bankTransfer.ID && x.ProcessUID == bankTransfer.UID);
+                            if (cashaction == null)
+                            {
+                                OfficeHelper.AddCashAction(bankTransfer.FromCashID, bankTransfer.LocationID, null, bankTransfer.ActionTypeID, bankTransfer.Date, bankTransfer.ActionTypeName, bankTransfer.ID, bankTransfer.Date, bankTransfer.DocumentNumber, bankTransfer.Description, -1, 0, bankTransfer.NetAmount, bankTransfer.Currency, null, null, bankTransfer.RecordEmployeeID, bankTransfer.RecordDate, bankTransfer.UID.Value);
+                            }
+                        }
+                        else if (new int?[] { 6, 7 }.Contains(bankTransfer.StatusID))
+                        {
+                            var expaction = Db.CashActions.FirstOrDefault(x => x.LocationID == bankTransfer.LocationID && x.CashActionTypeID == bankTransfer.ActionTypeID && x.ProcessID == bankTransfer.ID && x.ProcessUID == bankTransfer.UID);
+                            if (expaction != null)
+                            {
 
+                                OfficeHelper.AddCashAction(bankTransfer.FromCashID, bankTransfer.LocationID, null, bankTransfer.ActionTypeID, bankTransfer.Date, bankTransfer.ActionTypeName, bankTransfer.ID, bankTransfer.Date, bankTransfer.DocumentNumber, bankTransfer.Description, -1, 0, -1 * bankTransfer.NetAmount, bankTransfer.Currency, null, null, bankTransfer.RecordEmployeeID, bankTransfer.RecordDate, bankTransfer.UID.Value);
+                            }
+                            var expbank = Db.BankActions.FirstOrDefault(x => x.LocationID == bankTransfer.LocationID && x.BankActionTypeID == bankTransfer.ActionTypeID && x.ProcessID == bankTransfer.ID && x.ProcessUID == bankTransfer.UID);
+                            if (expbank != null)
+                            {
+                                OfficeHelper.AddBankAction(bankTransfer.LocationID, null, bankTransfer.ToBankAccountID, null, bankTransfer.ActionTypeID, bankTransfer.Date, bankTransfer.ActionTypeName, bankTransfer.ID, bankTransfer.Date, bankTransfer.DocumentNumber, bankTransfer.Description, 1, -1 * bankTransfer.NetAmount, 0, bankTransfer.Currency, null, null, bankTransfer.RecordEmployeeID, bankTransfer.RecordDate, bankTransfer.UID.Value);
+                            }
+                        }
+
+                        if (bankTransfer.StatusID == 5)
+                        {
+                            var cashaction = Db.BankActions.FirstOrDefault(x => x.LocationID == bankTransfer.LocationID && x.BankActionTypeID == bankTransfer.ActionTypeID && x.ProcessID == bankTransfer.ID && x.ProcessUID == bankTransfer.UID);
+                            if (cashaction == null)
+                            {
+                                OfficeHelper.AddBankAction(bankTransfer.LocationID, null, bankTransfer.ToBankAccountID, null, bankTransfer.ActionTypeID, bankTransfer.Date, bankTransfer.ActionTypeName, bankTransfer.ID, bankTransfer.Date, bankTransfer.DocumentNumber, bankTransfer.Description, 1, bankTransfer.NetAmount, 0, bankTransfer.Currency, null, null, bankTransfer.RecordEmployeeID, bankTransfer.RecordDate, bankTransfer.UID.Value);
+                            }
+
+                        }
+                        
                         result.IsSuccess = true;
                         result.Message = "Havale / EFT bildirimi başarı ile eklendi";
 
@@ -1974,6 +2006,7 @@ namespace ActionForce.Office
                             StatusID = isTransfer.StatusID,
                             TrackingNumber = isTransfer.TrackingNumber,
                             Commission = isTransfer.Commission,
+                            UID = isTransfer.UID,
                             EnvironmentID = isTransfer.EnvironmentID
 
                         };
@@ -2022,7 +2055,7 @@ namespace ActionForce.Office
 
 
 
-                            var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == locId && x.CashActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID);
+                            var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == locId && x.CashActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID && x.ProcessUID == isTransfer.UID);
                             if (cashaction == null)
                             {
                                 OfficeHelper.AddCashAction(isTransfer.FromCashID, isTransfer.LocationID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, -1, 0, isTransfer.NetAmount, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate, isTransfer.UID.Value);
@@ -2086,7 +2119,7 @@ namespace ActionForce.Office
                                 // cari hesap işlemesi
                                 //OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
 
-                                var expaction = Db.CashActions.FirstOrDefault(x => x.LocationID == cashExpense.LocationID && x.CashActionTypeID == cashExpense.ActionTypeID && x.ProcessID == cashExpense.ID);
+                                var expaction = Db.CashActions.FirstOrDefault(x => x.LocationID == cashExpense.LocationID && x.CashActionTypeID == cashExpense.ActionTypeID && x.ProcessID == cashExpense.ID && x.ProcessUID == cashExpense.UID);
                                 if (expaction == null)
                                 {
 
@@ -2139,7 +2172,7 @@ namespace ActionForce.Office
                             Db.SaveChanges();
 
 
-                            var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == locId && x.CashActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID);
+                            var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == locId && x.CashActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID && x.ProcessUID == isTransfer.UID);
                             if (cashaction == null)
                             {
                                 OfficeHelper.AddCashAction(isTransfer.FromCashID, isTransfer.LocationID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, -1, 0, isTransfer.NetAmount, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate, isTransfer.UID.Value);
@@ -2203,7 +2236,7 @@ namespace ActionForce.Office
                                 // cari hesap işlemesi
                                 //OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate);
 
-                                var expaction = Db.CashActions.FirstOrDefault(x => x.LocationID == cashExpense.LocationID && x.CashActionTypeID == cashExpense.ActionTypeID && x.ProcessID == cashExpense.ID);
+                                var expaction = Db.CashActions.FirstOrDefault(x => x.LocationID == cashExpense.LocationID && x.CashActionTypeID == cashExpense.ActionTypeID && x.ProcessID == cashExpense.ID && x.ProcessUID == cashExpense.UID);
                                 if (expaction == null)
                                 {
 
@@ -2283,8 +2316,11 @@ namespace ActionForce.Office
 
                             Db.SaveChanges();
 
-                            OfficeHelper.AddBankAction(isTransfer.LocationID, null, isTransfer.ToBankAccountID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, 1, isTransfer.NetAmount, 0, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate, isTransfer.UID.Value);
-
+                            var expbank = Db.BankActions.FirstOrDefault(x => x.LocationID == isTransfer.LocationID && x.BankActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID && x.ProcessUID == isTransfer.UID);
+                            if (expbank != null)
+                            {
+                                OfficeHelper.AddBankAction(isTransfer.LocationID, null, isTransfer.ToBankAccountID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, 1, isTransfer.NetAmount, 0, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate, isTransfer.UID.Value);
+                            }
 
                             result.IsSuccess = true;
                             result.Message = $"{isTransfer.ID} ID li {isTransfer.Amount} {isTransfer.Currency} tutarındaki havale eft işlemi başarı ile muhasebe onayladı";
@@ -2302,21 +2338,18 @@ namespace ActionForce.Office
 
                             Db.SaveChanges();
 
-                            var expaction = Db.CashActions.FirstOrDefault(x => x.LocationID == isTransfer.LocationID && x.CashActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID);
+                            var expaction = Db.CashActions.FirstOrDefault(x => x.LocationID == isTransfer.LocationID && x.CashActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID && x.ProcessUID == isTransfer.UID);
                             if (expaction != null)
                             {
 
                                 OfficeHelper.AddCashAction(isTransfer.FromCashID, isTransfer.LocationID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, -1, 0, -1 * isTransfer.NetAmount, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate, isTransfer.UID.Value);
                             }
-                            var expbank = Db.BankActions.FirstOrDefault(x => x.LocationID == isTransfer.LocationID && x.BankActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID);
+                            var expbank = Db.BankActions.FirstOrDefault(x => x.LocationID == isTransfer.LocationID && x.BankActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID && x.ProcessUID == isTransfer.UID);
                             if (expbank != null)
                             {
                                 OfficeHelper.AddBankAction(isTransfer.LocationID, null, isTransfer.ToBankAccountID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, 1, -1 * isTransfer.NetAmount, 0, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate, isTransfer.UID.Value);
                             }
-
-                            //OfficeHelper.AddCashAction(isTransfer.FromCashID, isTransfer.LocationID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, -1, 0, -1 * isTransfer.NetAmount, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate);
-                            //OfficeHelper.AddBankAction(isTransfer.LocationID, null, isTransfer.ToBankAccountID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, 1, -1 * isTransfer.NetAmount, 0, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate);
-
+                            
                             result.IsSuccess = true;
                             result.Message = $"{isTransfer.ID} ID li {isTransfer.Amount} {isTransfer.Currency} tutarındaki havale eft işlemi muhasebe red etti";
 
@@ -2330,7 +2363,7 @@ namespace ActionForce.Office
 
                                 Db.SaveChanges();
 
-                                var expactions = Db.CashActions.FirstOrDefault(x => x.LocationID == isExp.LocationID && x.CashActionTypeID == isExp.ActionTypeID && x.ProcessID == isExp.ID);
+                                var expactions = Db.CashActions.FirstOrDefault(x => x.LocationID == isExp.LocationID && x.CashActionTypeID == isExp.ActionTypeID && x.ProcessID == isExp.ID && x.ProcessUID == isExp.UID);
                                 if (expactions != null)
                                 {
 
@@ -2351,13 +2384,13 @@ namespace ActionForce.Office
 
                             Db.SaveChanges();
 
-                            var expaction = Db.CashActions.FirstOrDefault(x => x.LocationID == isTransfer.LocationID && x.CashActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID);
+                            var expaction = Db.CashActions.FirstOrDefault(x => x.LocationID == isTransfer.LocationID && x.CashActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID && x.ProcessUID == isTransfer.UID);
                             if (expaction != null)
                             {
 
                                 OfficeHelper.AddCashAction(isTransfer.FromCashID, isTransfer.LocationID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, -1, 0, -1 * isTransfer.NetAmount, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate, isTransfer.UID.Value);
                             }
-                            var expbank = Db.BankActions.FirstOrDefault(x => x.LocationID == isTransfer.LocationID && x.BankActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID);
+                            var expbank = Db.BankActions.FirstOrDefault(x => x.LocationID == isTransfer.LocationID && x.BankActionTypeID == isTransfer.ActionTypeID && x.ProcessID == isTransfer.ID && x.ProcessUID == isTransfer.UID);
                             if (expbank != null)
                             {
                                 OfficeHelper.AddBankAction(isTransfer.LocationID, null, isTransfer.ToBankAccountID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, 1, -1 * isTransfer.NetAmount, 0, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate, isTransfer.UID.Value);
@@ -2378,7 +2411,7 @@ namespace ActionForce.Office
 
                                 Db.SaveChanges();
 
-                                var expactions = Db.CashActions.FirstOrDefault(x => x.LocationID == isExp.LocationID && x.CashActionTypeID == isExp.ID && x.ProcessID == isExp.ID);
+                                var expactions = Db.CashActions.FirstOrDefault(x => x.LocationID == isExp.LocationID && x.CashActionTypeID == isExp.ID && x.ProcessID == isExp.ID && x.ProcessUID == isExp.UID);
                                 if (expactions != null)
                                 {
 

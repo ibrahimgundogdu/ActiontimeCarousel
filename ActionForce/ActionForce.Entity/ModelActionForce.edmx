@@ -3027,6 +3027,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashBankActions' does not 
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="ProcessUID" Type="uniqueidentifier" />
+          <Property Name="ActionTypeID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashRecorders' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4423,6 +4424,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="UpdateEmployeeID" Type="int" Mode="In" />
           <Parameter Name="UpdateDate" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="VDocumentNumberPrefix" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="varchar">
+          <Parameter Name="documentNumber" Type="varchar" Mode="In" />
+        </Function>
         <EntityContainer Name="db293_ActionTimeDbModelStoreContainer">
           <EntitySet Name="Action" EntityType="Self.Action" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ActionAccounts" EntityType="Self.ActionAccounts" Schema="dbo" store:Type="Tables" />
@@ -4759,7 +4763,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VCashBankActions].[CardAmount] AS [CardAmount], 
     [VCashBankActions].[Currency] AS [Currency], 
     [VCashBankActions].[RecordDate] AS [RecordDate], 
-    [VCashBankActions].[ProcessUID] AS [ProcessUID]
+    [VCashBankActions].[ProcessUID] AS [ProcessUID], 
+    [VCashBankActions].[ActionTypeID] AS [ActionTypeID]
     FROM [dbo].[VCashBankActions] AS [VCashBankActions]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VCashRecorders" EntityType="Self.VCashRecorders" store:Type="Views" store:Schema="dbo">
@@ -9107,6 +9112,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
           <Property Name="ProcessUID" Type="Guid" />
+          <Property Name="ActionTypeID" Type="Int32" />
         </EntityType>
         <EntityType Name="VDocumentTicketSales">
           <Key>
@@ -13279,6 +13285,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VCashBankActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCashBankActions">
               <MappingFragment StoreEntitySet="VCashBankActions">
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
                 <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
                 <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />

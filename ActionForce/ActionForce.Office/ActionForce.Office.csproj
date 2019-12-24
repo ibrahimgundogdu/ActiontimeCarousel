@@ -2341,6 +2341,7 @@
     <Compile Include="Models\ScheduleControlModel.cs" />
     <Compile Include="Models\ScheduleItem.cs" />
     <Compile Include="Models\ShiftControlModel.cs" />
+    <Compile Include="Models\DocumentPrefix.cs" />
     <Compile Include="Models\TotalModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
