@@ -398,6 +398,7 @@ namespace ActionForce.Office.Controllers
             bankTransfer.ToBankID = bankid;
             bankTransfer.UID = Guid.NewGuid();
             bankTransfer.ResultID = dayresult.ID;
+            bankTransfer.StatusID = 3;
 
             result = documentManager.AddBankTransfer(bankTransfer, file, model.Authentication);
 

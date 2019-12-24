@@ -29,7 +29,7 @@ namespace ActionForce.Office
         public string SlipNumber { get; set; }
         public DateTime? SlipDate { get; set; }
         public string SlipPath { get; set; }
-        public int StatusID { get; set; }
+        public int? StatusID { get; set; }
         public string ReferanceCode { get; set; }
         public string TrackingNumber { get; set; }
 

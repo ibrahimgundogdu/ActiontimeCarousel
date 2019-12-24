@@ -1869,7 +1869,7 @@ namespace ActionForce.Office
                         bankTransfer.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
                         bankTransfer.SlipNumber = transfer.SlipNumber;
                         bankTransfer.SlipDate = transfer.SlipDate;
-                        bankTransfer.StatusID = 1;
+                        bankTransfer.StatusID = transfer.StatusID ?? 1;
                         bankTransfer.EnvironmentID = 2;
                         bankTransfer.ReferenceID = transfer.ReferanceID;
                         bankTransfer.UID = transfer.UID;
@@ -3225,6 +3225,7 @@ namespace ActionForce.Office
                             TerminalID = isPos.TerminalID,
                             EnvironmentID = isPos.EnvironmentID
                         };
+
                         isPos.LocationID = collection.LocationID;
                         isPos.Date = collection.DocumentDate;
                         isPos.BankAccountID = collection.BankAccountID;
@@ -3236,7 +3237,7 @@ namespace ActionForce.Office
                         isPos.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
                         isPos.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
                         isPos.UpdateIP = OfficeHelper.GetIPAddress();
-                        isPos.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == collection.Currency ? collection.Amount : collection.Amount * isPos.ExchangeRate;
+                        isPos.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == collection.Currency ? collection.Amount : collection.Amount * collection.ExchangeRate;
                         isPos.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
 
                         Db.SaveChanges();
