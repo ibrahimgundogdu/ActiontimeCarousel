@@ -35,7 +35,7 @@
                 </div>
                 <div class="form-group">
                     <label>Referans ID</label>
-                    <input id="ReferansID" name="ReferansID" autocomplete="off" type="text" class="form-control" placeholder="Referans ID">
+                    <input id="ReferansID" name="ReferansID" autocomplete="off" type="text" class="form-control number" placeholder="Referans ID">
                 </div>
                 <div class="form-group">
                     <label>Para Birimi</label>
@@ -48,7 +48,7 @@
                 </div>
                 <div class="form-group">
                     <label>Tarih</label>
-                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control DocumentDate" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
                 </div>
                 <div class="form-group">
                     <label>Açıklama</label>
@@ -93,7 +93,7 @@
                 </div>
                 <div class="form-group">
                     <label>Bilet Adeti</label>
-                    <input id="Quantity" name="Quantity" type="number" class="form-control" autocomplete="off" placeholder="Adet" required>
+                    <input id="Quantity" name="Quantity" type="number" class="form-control quantity" autocomplete="off" placeholder="Adet" required>
                 </div>
                 <div class="form-group">
                     <label>Satış Tutarı</label>
@@ -110,7 +110,7 @@
                 </div>
                 <div class="form-group">
                     <label>Tarih</label>
-                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
                 </div>
                 <div class="form-group">
                     <label>Açıklama</label>
@@ -119,7 +119,7 @@
 
                 <div class="form-group">
                     <label>Referans ID</label>
-                    <input id="ReferanceID" name="ReferanceID" type="text" autocomplete="off" class="form-control" placeholder="Referans ID">
+                    <input id="ReferanceID" name="ReferanceID" type="text" autocomplete="off" class="form-control number" placeholder="Referans ID">
                 </div>
                 <button class="btn btn-primary btn-block">Tahsilat Ekle</button>
             </div>
@@ -166,11 +166,11 @@
                 </div>
                 <div class="form-group">
                     <label>Kur Değeri</label>
-                    <input id="Exchange" name="Exchange" type="text" class="form-control" autocomplete="off" placeholder="Kur" required>
+                    <input id="Exchange" name="Exchange" type="text" class="form-control money4" autocomplete="off" placeholder="Kur" required>
                 </div>
                 <div class="form-group">
                     <label>Tarihi</label>
-                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
                 </div>
                 <div class="form-group">
                     <label>Dekontu</label>
@@ -179,7 +179,7 @@
 
                 <div class="form-group">
                     <label>Referans ID</label>
-                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control" autocomplete="off" placeholder="Referans ID">
+                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control number" autocomplete="off" placeholder="Referans ID">
                 </div>
                 <div class="form-group">
                     <label>Açıklama</label>
@@ -229,7 +229,7 @@
                 </div>
                 <div class="form-group">
                     <label>Referans ID</label>
-                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control" autocomplete="off" placeholder="Referans ID">
+                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control number" autocomplete="off" placeholder="Referans ID">
                 </div>
                 <div class="form-group">
                     <label>Açıklama</label>
@@ -286,11 +286,11 @@
                 </div>
                 <div class="form-group">
                     <label>Tarih</label>
-                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
                 </div>
                 <div class="form-group">
                     <label>Referans ID</label>
-                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control" autocomplete="off" placeholder="Referans ID">
+                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control number" autocomplete="off" placeholder="Referans ID">
                 </div>
                 <div class="form-group">
                     <label>Açıklama</label>
@@ -345,7 +345,7 @@
                 </div>
                 <div class="form-group">
                     <label>Bilet Adeti</label>
-                    <input id="Quantity" name="Quantity" type="number" class="form-control" autocomplete="off" placeholder="Adet" required>
+                    <input id="Quantity" name="Quantity" type="number" class="form-control quantity" autocomplete="off" placeholder="Adet" required>
                 </div>
                 <div class="form-group">
                     <label>Satış Tutarı</label>
@@ -362,11 +362,11 @@
                 </div>
                 <div class="form-group">
                     <label>Tarih</label>
-                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
                 </div>
                 <div class="form-group">
                     <label>Referans ID</label>
-                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control" autocomplete="off" placeholder="Referans ID">
+                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control number" autocomplete="off" placeholder="Referans ID">
                 </div>
                 <div class="form-group">
                     <label>Açıklama</label>
@@ -425,7 +425,7 @@
                 </div>
                 <div class="form-group">
                     <label>Tarih</label>
-                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
                 </div>
                 <div class="form-group">
                     <label>Fiş Nr.</label>
@@ -437,7 +437,7 @@
                 </div>
                 <div class="form-group">
                     <label>Referans ID</label>
-                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control" autocomplete="off" placeholder="Referans ID">
+                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control number" autocomplete="off" placeholder="Referans ID">
                 </div>
                 <div class="form-group">
                     <label>Açıklama</label>
@@ -500,7 +500,7 @@
                 </div>
                 <div class="form-group">
                     <label>Tarih</label>
-                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
                 </div>
                 <div class="form-group">
                     <label>Fiş Nr.</label>
@@ -509,11 +509,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-8">
                         <label>Fiş Tarihi</label>
-                        <input id="SlipDate" name="SlipDate" type="text" class="form-control" autocomplete="off" placeholder="Fiş Tarihi" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                        <input id="SlipDate" name="SlipDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Fiş Tarihi" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
                     </div>
                     <div class="form-group col-md-4">
                         <label>Fiş Saati</label>
-                        <input id="SlipTime" name="SlipTime" type="text" class="form-control hourfull" autocomplete="off" placeholder="hh:mm" value="@(DateTime.Now.ToString("HH:mm:ss"))" required>
+                        <input id="SlipTime" name="SlipTime" type="text" class="form-control hourfull" autocomplete="off" placeholder="hh:mm:ss" value="@(DateTime.Now.ToString("HH:mm:ss"))" required>
                     </div>
                 </div>
 
@@ -523,7 +523,7 @@
                 </div>
                 <div class="form-group">
                     <label>Referans ID</label>
-                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control" autocomplete="off" placeholder="Referans ID">
+                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control number" autocomplete="off" placeholder="Referans ID">
                 </div>
                 <div class="form-group">
                     <label>Açıklama</label>
@@ -599,11 +599,11 @@
                 </div>
                 <div class="form-group">
                     <label>Tarih</label>
-                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
                 </div>
                 <div class="form-group">
                     <label>Referans ID</label>
-                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control" autocomplete="off" placeholder="Referans ID">
+                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control number" autocomplete="off" placeholder="Referans ID">
                 </div>
                 <div class="form-group">
                     <label>Açıklama</label>

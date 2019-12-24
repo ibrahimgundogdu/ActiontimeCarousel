@@ -66,7 +66,7 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Tarih</label>
                                             <div class="col-sm-9">
-                                                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.Detail.Date.Value.ToString("yyyy-MM-dd"))" required>
+                                                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.Detail.Date.Value.ToString("yyyy-MM-dd"))" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -107,13 +107,13 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Fiş Tarih</label>
                                             <div class="col-sm-9">
-                                                <input id="SlipDate" name="SlipDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.Detail.SlipDate.Value.ToString("yyyy-MM-dd"))" required>
+                                                <input id="SlipDate" name="SlipDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.Detail.SlipDate.Value.ToString("yyyy-MM-dd"))" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Fiş Saati</label>
                                             <div class="col-sm-9">
-                                                <input id="SlipTime" name="SlipTime" type="text" class="form-control" autocomplete="off" placeholder="hh:mm:ss" value="@(Model.Detail.SlipDate.Value.ToString("hh:mm:ss"))" required>
+                                                <input id="SlipTime" name="SlipTime" type="text" class="form-control hourfull" autocomplete="off" placeholder="hh:mm:ss" value="@(Model.Detail.SlipDate.Value.ToString("hh:mm:ss"))" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">

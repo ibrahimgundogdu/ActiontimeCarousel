@@ -15,6 +15,7 @@ namespace ActionForce.Office
         public string DocumentDate { get; set; }
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
+        public string Exchange { get; set; }
         public Guid UID { get; set; }
     }
 
@@ -29,6 +30,7 @@ namespace ActionForce.Office
         public string DocumentDate { get; set; }
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
+        public string Exchange { get; set; }
         public string ReferanceID { get; set; }
         public int PayMethodID { get; set; }
         public Guid UID { get; set; }
@@ -56,6 +58,7 @@ namespace ActionForce.Office
         public string Amount { get; set; }
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
+        public string Exchange { get; set; }
         public string ReferanceID { get; set; }
         public string DocumentDate { get; set; }
         public Guid UID { get; set; }
@@ -72,6 +75,7 @@ namespace ActionForce.Office
         public string DocumentDate { get; set; }
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
+        public string Exchange { get; set; }
         public string ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
@@ -87,6 +91,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public int PayMethodID { get; set; }
         public string ExchangeRate { get; set; }
+        public string Exchange { get; set; }
         public string ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
@@ -103,6 +108,7 @@ namespace ActionForce.Office
         public string SlipNumber { get; set; }
         public string SlipDocument { get; set; }
         public string ExchangeRate { get; set; }
+        public string Exchange { get; set; }
         public string ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
@@ -122,6 +128,7 @@ namespace ActionForce.Office
         public int StatusID { get; set; }
         public string ReferenceCode { get; set; }
         public string ExchangeRate { get; set; }
+        public string Exchange { get; set; }
         public string TrackingNumber { get; set; }
         public string Commission { get; set; }
         public string ReferanceID { get; set; }
@@ -140,7 +147,8 @@ namespace ActionForce.Office
         public int BankAccountID { get; set; }
         public int SalaryType { get; set; }
         public string ReferanceID { get; set; }
-        public double ExchangeRate { get; set; }
+        public string ExchangeRate { get; set; }
+        public string Exchange { get; set; }
         public Guid UID { get; set; }
     }
     public class NewPosCollect
@@ -149,6 +157,7 @@ namespace ActionForce.Office
         public string FromID { get; set; }
         public int LocationID { get; set; }
         public string Amount { get; set; }
+        public int Quantity { get; set; }
         public string Currency { get; set; }
         public string DocumentDate { get; set; }
         public string Description { get; set; }
@@ -165,11 +174,13 @@ namespace ActionForce.Office
         public string FromID { get; set; }
         public int LocationID { get; set; }
         public string Amount { get; set; }
+        public int Quantity { get; set; }
         public string Currency { get; set; }
         public string DocumentDate { get; set; }
         public string Description { get; set; }
         public int BankAccountID { get; set; }
         public string ExchangeRate { get; set; }
+        public string Exchange { get; set; }
         public string ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
@@ -179,11 +190,13 @@ namespace ActionForce.Office
         public string FromID { get; set; }
         public int LocationID { get; set; }
         public string Amount { get; set; }
+        public int Quantity { get; set; }
         public string Currency { get; set; }
         public string DocumentDate { get; set; }
         public string Description { get; set; }
         public int BankAccountID { get; set; }
         public string ExchangeRate { get; set; }
+        public string Exchange { get; set; }
         public string ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
@@ -199,6 +212,7 @@ namespace ActionForce.Office
         public string DocumentDate { get; set; }
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
+        public string Exchange { get; set; }
         public string ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
