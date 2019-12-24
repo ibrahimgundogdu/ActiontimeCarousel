@@ -1845,7 +1845,7 @@ namespace ActionForce.Office.Controllers
 
             if (cashTransfer != null)
             {
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashTransfer.ActinTypeID);
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashTransfer.ActionTypeID);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashTransfer.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashTransfer.FromID.Substring(0, 1);
@@ -1856,7 +1856,7 @@ namespace ActionForce.Office.Controllers
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
 
-                var refID = string.IsNullOrEmpty(cashTransfer.ReferanceID);
+                long? refID = cashTransfer.ReferanceID ?? (long?)null;
 
                 DateTime? date = Convert.ToDateTime(cashTransfer.SlipDate);
                 TimeSpan? time = Convert.ToDateTime(cashTransfer.SlipTime).TimeOfDay;
@@ -1898,7 +1898,7 @@ namespace ActionForce.Office.Controllers
                 bankTransfer.SlipPath = Server.MapPath("/");
                 bankTransfer.TimeZone = location.Timezone.Value;
                 bankTransfer.ToBankID = fromPrefix == "B" ? fromID : (int?)null;
-                bankTransfer.ReferanceID = refID == false ? Convert.ToInt64(cashTransfer.ReferanceID) : (long?)null;
+                bankTransfer.ReferanceID = refID;
                 bankTransfer.UID = Guid.NewGuid();
 
 
@@ -1931,52 +1931,60 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(cashTransfer.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var commision = !string.IsNullOrEmpty(cashTransfer.Commission) ? Convert.ToDouble(cashTransfer.Commission.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture): 0;
                 var currency = cashTransfer.Currency;
-                var docDate = DateTime.Now.Date;
-                var slipDate = DateTime.Now.Date;
+                bool? isActive = !string.IsNullOrEmpty(cashTransfer.IsActive) ? true : false;
+
                 double? newexchanges = Convert.ToDouble(cashTransfer.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? exchanges = Convert.ToDouble(cashTransfer.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
+                var docDate = DateTime.Now.Date;
+                var slipDate = DateTime.Now.Date;
+
                 if (DateTime.TryParse(cashTransfer.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashTransfer.DocumentDate).Date;
                 }
 
-                if (DateTime.TryParse(cashTransfer.SlipDate, out docDate))
+                if (DateTime.TryParse(cashTransfer.SlipDate, out slipDate))
                 {
                     slipDate = Convert.ToDateTime(cashTransfer.SlipDate).Date;
                 }
                 
-
-                DateTime? date = Convert.ToDateTime(cashTransfer.SlipDate);
                 TimeSpan? time = Convert.ToDateTime(cashTransfer.SlipTime).TimeOfDay;
-                DateTime? slipdatetime = date.Value.Add(time.Value);
+                DateTime? slipdatetime = slipDate.Add(time.Value);
 
-                BankTransfer sale = new BankTransfer();
-                sale.ActinTypeID = cashTransfer.ActinTypeID;
-                sale.Amount = amount;
-                sale.Currency = currency;
-                sale.Description = cashTransfer.Description;
-                sale.DocumentDate = docDate;
-                sale.EnvironmentID = 2;
-                sale.ToBankID = fromPrefix == "B" ? fromID : (int?)null;
-                sale.LocationID = cashTransfer.LocationID;
-                sale.UID = cashTransfer.UID;
-                sale.Commission = commision;
-                sale.SlipDate = slipdatetime;
-                sale.TrackingNumber = cashTransfer.TrackingNumber;
-                sale.ReferanceCode = cashTransfer.ReferenceCode;
-                sale.StatusID = cashTransfer.StatusID;
+                BankTransfer banktransfer = new BankTransfer();
+
+                banktransfer.ActinTypeID = cashTransfer.ActionTypeID;
+                banktransfer.Amount = amount;
+                banktransfer.Currency = currency;
+                banktransfer.Description = cashTransfer.Description;
+                banktransfer.DocumentDate = docDate;
+                banktransfer.ToBankID = fromPrefix == "B" ? fromID : (int?)null;
+                banktransfer.LocationID = cashTransfer.LocationID;
+                banktransfer.UID = cashTransfer.UID;
+                banktransfer.Commission = commision;
+                banktransfer.SlipDate = slipdatetime;
+                banktransfer.TrackingNumber = cashTransfer.TrackingNumber;
+                banktransfer.ReferanceCode = cashTransfer.ReferenceCode;
+                banktransfer.StatusID = cashTransfer.StatusID;
+                banktransfer.IsActive = isActive;
+                banktransfer.SlipNumber = cashTransfer.SlipNumber;
+                banktransfer.TrackingNumber = cashTransfer.TrackingNumber;
+                banktransfer.SlipPath = Server.MapPath("/");
+
+
 
                 if (newexchanges > 0)
                 {
-                    sale.ExchangeRate = newexchanges;
+                    banktransfer.ExchangeRate = newexchanges;
                 }
                 else
                 {
-                    sale.ExchangeRate = exchanges;
+                    banktransfer.ExchangeRate = exchanges;
                 }
 
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.EditBankTransfer(sale, documentFile, model.Authentication);
+                result = documentManager.EditBankTransfer(banktransfer, documentFile, model.Authentication);
 
             }
 
@@ -2016,7 +2024,11 @@ namespace ActionForce.Office.Controllers
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.TransferDetail = Db.VDocumentBankTransfer.FirstOrDefault(x => x.UID == id);
-            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "BankTransfer" && x.Environment == "Office" && x.ProcessID == model.TransferDetail.ID.ToString()).ToList();
+
+            if (model.TransferDetail != null)
+            {
+                model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "BankTransfer" && x.Environment == "Office" && x.ProcessID == model.TransferDetail.ID.ToString()).ToList();
+            }
 
             model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "B").ToList();
 

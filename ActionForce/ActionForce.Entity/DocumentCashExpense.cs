@@ -47,5 +47,6 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> SlipDate { get; set; }
         public Nullable<int> ExpenseTypeID { get; set; }
         public string ReferenceTableModel { get; set; }
+        public string SlipPath { get; set; }
     }
 }

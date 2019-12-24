@@ -32,6 +32,6 @@ namespace ActionForce.Office
         public int? StatusID { get; set; }
         public string ReferanceCode { get; set; }
         public string TrackingNumber { get; set; }
-
+        public bool? IsActive { get; set; }
     }
 }

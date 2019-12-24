@@ -837,6 +837,7 @@
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
           <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="SlipPath" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="DocumentCashOpen">
           <Key>
@@ -3294,6 +3295,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashExpense' does 
           <Property Name="EnvironmentID" Type="int" />
           <Property Name="ExpenseTypeID" Type="int" />
           <Property Name="ExpenseTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SlipPath" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashOpen' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5001,7 +5003,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentCashExpense].[ResultID] AS [ResultID], 
     [VDocumentCashExpense].[EnvironmentID] AS [EnvironmentID], 
     [VDocumentCashExpense].[ExpenseTypeID] AS [ExpenseTypeID], 
-    [VDocumentCashExpense].[ExpenseTypeName] AS [ExpenseTypeName]
+    [VDocumentCashExpense].[ExpenseTypeName] AS [ExpenseTypeName], 
+    [VDocumentCashExpense].[SlipPath] AS [SlipPath]
     FROM [dbo].[VDocumentCashExpense] AS [VDocumentCashExpense]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentCashOpen" EntityType="Self.VDocumentCashOpen" store:Type="Views" store:Schema="dbo">
@@ -8664,6 +8667,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SlipDate" Type="DateTime" Precision="3" />
           <Property Name="ExpenseTypeID" Type="Int32" />
           <Property Name="ReferenceTableModel" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SlipPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DocumentCashPayments">
           <Key>
@@ -9395,6 +9399,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="ExpenseTypeID" Type="Int32" />
           <Property Name="ExpenseTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SlipPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VDocumentSalaryPayment">
           <Key>
@@ -12808,6 +12813,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentCashExpense">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentCashExpense">
               <MappingFragment StoreEntitySet="DocumentCashExpense">
+                <ScalarProperty Name="SlipPath" ColumnName="SlipPath" />
                 <ScalarProperty Name="ReferenceTableModel" ColumnName="ReferenceTableModel" />
                 <ScalarProperty Name="ExpenseTypeID" ColumnName="ExpenseTypeID" />
                 <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
@@ -13561,6 +13567,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentCashExpense">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentCashExpense">
               <MappingFragment StoreEntitySet="VDocumentCashExpense">
+                <ScalarProperty Name="SlipPath" ColumnName="SlipPath" />
                 <ScalarProperty Name="ExpenseTypeName" ColumnName="ExpenseTypeName" />
                 <ScalarProperty Name="ExpenseTypeID" ColumnName="ExpenseTypeID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />

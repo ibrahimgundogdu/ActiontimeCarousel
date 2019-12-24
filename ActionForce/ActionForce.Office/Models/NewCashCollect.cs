@@ -114,7 +114,7 @@ namespace ActionForce.Office
     }
     public class NewCashBankTransfer
     {
-        public int ActinTypeID { get; set; }
+        public int ActionTypeID { get; set; }
         public string FromID { get; set; }
         public int LocationID { get; set; }
         public string Amount { get; set; }
@@ -131,8 +131,9 @@ namespace ActionForce.Office
         public string Exchange { get; set; }
         public string TrackingNumber { get; set; }
         public string Commission { get; set; }
-        public string ReferanceID { get; set; }
+        public long? ReferanceID { get; set; }
         public Guid UID { get; set; }
+        public string IsActive { get; set; }
     }
     public class NewCashSalaryPayment
     {

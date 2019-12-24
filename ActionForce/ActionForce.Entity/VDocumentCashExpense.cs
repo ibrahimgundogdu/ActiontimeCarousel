@@ -56,5 +56,6 @@ namespace ActionForce.Entity
         public Nullable<int> EnvironmentID { get; set; }
         public Nullable<int> ExpenseTypeID { get; set; }
         public string ExpenseTypeName { get; set; }
+        public string SlipPath { get; set; }
     }
 }
