@@ -222,6 +222,7 @@ namespace ActionForce.Office.Controllers
                 payment.BankAccountID = posCollect.BankAccountID;
                 payment.LocationID = posCollect.LocationID;
                 payment.ExchangeRate = exchanges;
+                payment.UID = posCollect.UID;
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditPosCollection(payment, model.Authentication);
@@ -465,6 +466,7 @@ namespace ActionForce.Office.Controllers
                 payment.FromBankAccountID = posCollect.BankAccountID;
                 payment.LocationID = posCollect.LocationID;
                 payment.ExchangeRate = exchanges;
+                payment.UID = posCollect.UID;
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditPosCancel(payment, model.Authentication);
@@ -708,6 +710,7 @@ namespace ActionForce.Office.Controllers
                 payment.FromBankAccountID = posCollect.BankAccountID;
                 payment.LocationID = posCollect.LocationID;
                 payment.ExchangeRate = exchanges;
+                payment.UID = posCollect.UID;
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.EditPosRefund(payment, model.Authentication);

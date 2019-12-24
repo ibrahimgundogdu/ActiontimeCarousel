@@ -94,7 +94,7 @@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Tutar</label>
                                             <div class="col-sm-9">
-                                                <input id="Amount" name="Amount" type="text" class="form-control" autocomplete="off" value="@Model.ExchangeDetail.Amount" placeholder="Tutar" required>
+                                                <input id="Amount" name="Amount" type="text" class="form-control money" autocomplete="off" value="@Model.ExchangeDetail.Amount" placeholder="Tutar" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -111,13 +111,13 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Kuru</label>
                                             <div class="col-sm-9">
-                                                <input id="ExchangeRate" name="ExchangeRate" type="text" autocomplete="off" class="form-control" placeholder="Döviz Kuru">
+                                                <input id="ExchangeRate" name="ExchangeRate" type="text" autocomplete="off" class="form-control money" placeholder="Döviz Kuru">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Kur</label>
                                             <div class="col-sm-9">
-                                                <input id="Exchange" name="Exchange" type="text" class="form-control" autocomplete="off" value="@Model.ExchangeDetail.ExchangeRate" readonly>
+                                                <input id="Exchange" name="Exchange" type="text" class="form-control money" autocomplete="off" value="@Model.ExchangeDetail.ExchangeRate" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -295,7 +295,14 @@
 
         });
 
-
+        $(function () {
+            $('.shiftbegintime').mask('00:00');
+            $('.hour').mask('00:00');
+            $('.hourfull').mask('00:00:00');
+            $('.shiftdate').mask('0000-00-00');
+            $('.money').mask("#.##0,00", { reverse: true });
+            $('.money4').mask("#.##0,0000", { reverse: true });
+        });
 
 
 

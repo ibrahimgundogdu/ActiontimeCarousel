@@ -94,7 +94,7 @@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Tutar</label>
                                             <div class="col-sm-9">
-                                                <input id="Amount" name="Amount" type="text" class="form-control" autocomplete="off" value="@Model.PaymentDetail.Amount" placeholder="Tutar" required>
+                                                <input id="Amount" name="Amount" type="text" class="form-control money" autocomplete="off" value="@Model.PaymentDetail.Amount" placeholder="Tutar" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -210,70 +210,79 @@
     <script src="/lib/cleave.js/cleave.min.js"></script>
     <script>
 
-                    $(function () {
-                        'use strict'
-                        $('.select2').select2({
-                            placeholder: 'Lokasyon Seçiminiz',
-                            searchInputPlaceholder: 'Search options'
-                        });
+            $(function () {
+                'use strict'
+                $('.select2').select2({
+                    placeholder: 'Lokasyon Seçiminiz',
+                    searchInputPlaceholder: 'Search options'
+                });
 
-                        var dateFormat = 'yy-mm-dd',
-                            from = $('#dateFrom')
-                                .datepicker({
-                                    defaultDate: '+1w',
-                                    numberOfMonths: 2,
-                                    dateFormat: "yy-mm-dd",
-                                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                                    firstDay: 1
-                                })
-                                .on('change', function () {
-                                    to.datepicker('option', 'minDate', getDate(this));
-                                }),
-                            to = $('#dateTo').datepicker({
-                                defaultDate: '+1w',
-                                numberOfMonths: 2,
-                                dateFormat: "yy-mm-dd",
-                                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                                firstDay: 1
-                            })
-                                .on('change', function () {
-                                    from.datepicker('option', 'maxDate', getDate(this));
-                                });
-
-                        $('#DocumentDate').datepicker({
+                var dateFormat = 'yy-mm-dd',
+                    from = $('#dateFrom')
+                        .datepicker({
+                            defaultDate: '+1w',
+                            numberOfMonths: 2,
                             dateFormat: "yy-mm-dd",
                             dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
                             monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                             firstDay: 1
+                        })
+                        .on('change', function () {
+                            to.datepicker('option', 'minDate', getDate(this));
+                        }),
+                    to = $('#dateTo').datepicker({
+                        defaultDate: '+1w',
+                        numberOfMonths: 2,
+                        dateFormat: "yy-mm-dd",
+                        dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                        monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                        firstDay: 1
+                    })
+                        .on('change', function () {
+                            from.datepicker('option', 'maxDate', getDate(this));
                         });
 
-                        var cleaveC = new Cleave('#DocumentDate', {
-                            date: true,
-                            delimiter: '-',
-                            datePattern: ['Y', 'm', 'd'],
+                $('#DocumentDate').datepicker({
+                    dateFormat: "yy-mm-dd",
+                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                    firstDay: 1
+                });
 
-                        });
-                        //var cleave = new Cleave('#Amount', {
-                        //    numeral: true
-                        //});
-                        //var cleave2 = new Cleave('#Exchange', {
-                        //    numeral: true
-                        //});
-                        function getDate(element) {
-                            var date;
-                            try {
-                                date = $.datepicker.parseDate(dateFormat, element.value);
-                            } catch (error) {
-                                date = null;
-                            }
+                var cleaveC = new Cleave('#DocumentDate', {
+                    date: true,
+                    delimiter: '-',
+                    datePattern: ['Y', 'm', 'd'],
 
-                            return date;
+                });
+                //var cleave = new Cleave('#Amount', {
+                //    numeral: true
+                //});
+                //var cleave2 = new Cleave('#Exchange', {
+                //    numeral: true
+                //});
+                function getDate(element) {
+                    var date;
+                    try {
+                        date = $.datepicker.parseDate(dateFormat, element.value);
+                    } catch (error) {
+                        date = null;
+                    }
 
-                        }
+                    return date;
 
-                    });
+                }
+
+        });
+
+        $(function () {
+            $('.shiftbegintime').mask('00:00');
+            $('.hour').mask('00:00');
+            $('.hourfull').mask('00:00:00');
+            $('.shiftdate').mask('0000-00-00');
+            $('.money').mask("#.##0,00", { reverse: true });
+            $('.money4').mask("#.##0,0000", { reverse: true });
+        });
 
 
 

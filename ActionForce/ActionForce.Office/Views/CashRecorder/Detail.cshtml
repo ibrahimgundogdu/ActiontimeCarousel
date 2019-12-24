@@ -83,13 +83,13 @@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Net Tutar</label>
                                             <div class="col-sm-9">
-                                                <input id="NetAmount" name="NetAmount" type="text" class="form-control" autocomplete="off" value="@Model.Detail.NetAmount" placeholder="Net Tutar" required>
+                                                <input id="NetAmount" name="NetAmount" type="text" class="form-control money" autocomplete="off" value="@Model.Detail.NetAmount" placeholder="Net Tutar" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Toplam Tutar</label>
                                             <div class="col-sm-9">
-                                                <input id="TotalAmount" name="TotalAmount" type="text" class="form-control" autocomplete="off" value="@Model.Detail.TotalAmount" placeholder="Toplam Tutar" required>
+                                                <input id="TotalAmount" name="TotalAmount" type="text" class="form-control money" autocomplete="off" value="@Model.Detail.TotalAmount" placeholder="Toplam Tutar" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -113,7 +113,7 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Fiş Saati</label>
                                             <div class="col-sm-9">
-                                                <input id="SlipTime" name="SlipTime" type="text" class="form-control" autocomplete="off" placeholder="hh:mm" value="@(Model.Detail.Date.Value.ToString("hh:mm"))" required>
+                                                <input id="SlipTime" name="SlipTime" type="text" class="form-control" autocomplete="off" placeholder="hh:mm:ss" value="@(Model.Detail.SlipDate.Value.ToString("hh:mm:ss"))" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -299,7 +299,15 @@
                     });
 
 
-
+        $(function () {
+            $('.shiftbegintime').mask('00:00');
+            $('.hour').mask('00:00');
+            $('.hourfull').mask('00:00:00');
+            $('.shiftdate').mask('0000-00-00');
+            $('.money').mask("#.##0,00", { reverse: true });
+            $('.quantity').mask("##0", { reverse: true });
+            $('.money4').mask("#.##0,0000", { reverse: true });
+        });
 
 
     </script>

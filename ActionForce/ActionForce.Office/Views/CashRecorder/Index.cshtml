@@ -104,7 +104,7 @@
                             <td class="tx-sm-13">@(item.Currency)</td>
                             <td class="tx-sm-13">@item.RecorderFullName</td>
                             <td class="tx-sm-13 text-right">@item.RecordDate</td>
-                            <td class="tx-sm-13">@item.SlipDate.Value.ToShortDateString()</td>
+                            <td class="tx-sm-13">@($"{item.SlipDate.Value.ToShortDateString()} {item.SlipDate.Value.ToString("HH:mm:ss")}")</td>
                             <td class="tx-sm-13">@item.SlipNumber</td>
                             <td>
                                 @if (item.SlipFile != null)
