@@ -401,7 +401,7 @@ namespace ActionForce.Office.Controllers
             bankTransfer.ResultID = dayresult.ID;
             bankTransfer.StatusID = 3;
 
-            result = documentManager.AddBankTransfer(bankTransfer, file, model.Authentication);
+            result = documentManager.AddBankTransfer(bankTransfer, model.Authentication);
 
             model.BankTransfers = Db.VDocumentBankTransfer.Where(x => x.LocationID == dayresult.LocationID && x.Date == dayresult.Date).ToList();
             model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
@@ -556,7 +556,7 @@ namespace ActionForce.Office.Controllers
             saleExchange.ToCurrency = "TRL";
 
 
-            result = documentManager.AddSaleExchange(saleExchange, file, model.Authentication);
+            result = documentManager.AddSaleExchange(saleExchange, model.Authentication);
 
             model.DayResult = dayresult;
 

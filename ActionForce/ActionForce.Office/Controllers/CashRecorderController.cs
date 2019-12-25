@@ -166,11 +166,27 @@ namespace ActionForce.Office.Controllers
                 record.TimeZone = timezone;
                 record.SlipNumber = cashRecord.SlipNumber;
                 record.SlipDate = sDatetime;
-                
-                record.SlipPath = path;
+
+                record.SlipFile = "";
+                record.SlipPath = "";
+
+                if (documentFile != null && documentFile.ContentLength > 0)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
+                    record.SlipFile = filename;
+                    record.SlipPath = "/Document/CashRecord";
+
+                    try
+                    {
+                        documentFile.SaveAs(Path.Combine(Server.MapPath(record.SlipPath), filename));
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
 
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.AddCashRecorder(record, documentFile, model.Authentication);
+                result = documentManager.AddCashRecorder(record, model.Authentication);
 
                 
 
@@ -236,10 +252,27 @@ namespace ActionForce.Office.Controllers
                 record.SlipNumber = cashRecord.SlipNumber;
                 record.SlipDate = sDatetime;
                 record.UID = cashRecord.UID;
-                record.SlipPath = path;
+
+                record.SlipPath = "";
+                record.SlipFile = "";
+
+                if (documentFile != null && documentFile.ContentLength > 0)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
+                    record.SlipFile = filename;
+                    record.SlipPath = "/Document/CashRecorder";
+
+                    try
+                    {
+                        documentFile.SaveAs(Path.Combine(Server.MapPath(record.SlipPath), filename));
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
 
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.EditCashRecorder(record, documentFile, model.Authentication);
+                result = documentManager.EditCashRecorder(record, model.Authentication);
                 
 
             }
