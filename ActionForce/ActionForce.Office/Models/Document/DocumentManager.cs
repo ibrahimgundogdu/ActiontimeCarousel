@@ -373,6 +373,7 @@ namespace ActionForce.Office
                             UpdateDate = isCash.UpdateDate,
                             UpdateEmployee = isCash.UpdateEmployee,
                             UpdateIP = isCash.UpdateIP,
+                            PayMethodID = isCash.PayMethodID,
                             EnvironmentID = isCash.EnvironmentID
                         };
                         isCash.LocationID = sale.LocationID;
@@ -894,13 +895,13 @@ namespace ActionForce.Office
 
 
                             var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentCashOpen>(self, isOpen, OfficeHelper.getIgnorelist());
-                            OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isOpen.ID.ToString(), "Cash", "CashOpen", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isOpen.ID.ToString(), "Cash", "Open", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                         }
                         catch (Exception ex)
                         {
 
                             result.Message = $"{amount} {currency} tutarındaki kasa açılış fişi güncellenemedi : {ex.Message}";
-                            OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "CashOpen", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "Open", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                         }
 
                     }
@@ -992,13 +993,13 @@ namespace ActionForce.Office
 
 
                         var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentCashOpen>(self, isOpen, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isOpen.ID.ToString(), "Cash", "CashOpen", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isOpen.ID.ToString(), "Cash", "Open", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
                     catch (Exception ex)
                     {
 
                         result.Message = $"{isOpen.Amount} {isOpen.Currency} tutarındaki kasa açılış fişi güncellenemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "CashOpen", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "Open", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
                 }
 
@@ -1973,8 +1974,8 @@ namespace ActionForce.Office
 
                         var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == transfer.LocationID && x.Date == transfer.DocumentDate);
 
-                        
 
+                        isTransfer.ReferenceID = transfer.ReferanceID;
                         isTransfer.Commission = transfer.Commission;
                         isTransfer.Date = transfer.DocumentDate;
                         isTransfer.FromCashID = cash.ID;
@@ -2306,8 +2307,6 @@ namespace ActionForce.Office
                             isCash.UpdateIP = OfficeHelper.GetIPAddress();
 
                             Db.SaveChanges();
-
-                            OfficeHelper.AddCashAction(isCash.EmployeeID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.TotalAmount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
 
                             //maaş hesap işlemi
                             OfficeHelper.AddEmployeeAction(isCash.EmployeeID, isCash.LocationID, isCash.ActionTypeID, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.Description, 1, -1 * isCash.TotalAmount, 0, isCash.Currency, null, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value, isCash.DocumentNumber);
@@ -3479,6 +3478,7 @@ namespace ActionForce.Office
                         cashRedord.SlipNumber = record.SlipNumber;
                         cashRedord.EnvironmentID = 2;
                         cashRedord.UID = Guid.NewGuid();
+                        cashRedord.ResultID = record.ResultID;
 
                         cashRedord.SlipPath = record.SlipPath;
                         cashRedord.SlipFile = record.SlipFile;

@@ -129,7 +129,7 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Tutarı</label>
                                             <div class="col-sm-3">
-                                                <span class="text-danger">@($"{Model.ExpenseDetail.SystemAmount} {Model.ExpenseDetail.SystemCurrency}")</span>
+                                                <span class="text-danger">@($"{Model.ExpenseDetail.SystemAmount?.ToString("N4")} {Model.ExpenseDetail.SystemCurrency}")</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">

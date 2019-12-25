@@ -146,11 +146,10 @@
 }
 
 @section scripts {
-    <script src="/lib/cleave.js/cleave.min.js"></script>
     <script>
 
         $(function () {
-            'use strict'
+
             $('.select2').select2({
                 placeholder: 'Lokasyon Seçiminiz',
                 searchInputPlaceholder: 'Search options'
@@ -188,12 +187,7 @@
                 firstDay: 1
             });
 
-            var cleaveC = new Cleave('#DocumentDate', {
-                date: true,
-                delimiter: '-',
-                datePattern: ['Y', 'm', 'd'],
 
-            });
 
             $('#SlipDate').datepicker({
                 dateFormat: "yy-mm-dd",
@@ -201,19 +195,6 @@
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
             });
-
-            var cleaveC = new Cleave('#SlipDate', {
-                date: true,
-                delimiter: '-',
-                datePattern: ['Y', 'm', 'd'],
-
-            });
-            //var cleave = new Cleave('#Amount', {
-            //    numeral: true
-            //});
-            //var cleave2 = new Cleave('#Exchange', {
-            //    numeral: true
-            //});
             function getDate(element) {
                 var date;
                 try {

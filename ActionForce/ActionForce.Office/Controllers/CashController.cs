@@ -423,7 +423,7 @@ namespace ActionForce.Office.Controllers
                 sale.LocationID = cashSale.LocationID;
                 sale.UID = cashSale.UID;
                 sale.Quantity = quantity;
-                sale.PayMethodID = sale.PayMethodID;
+                sale.PayMethodID = cashSale.PayMethodID;
 
                 if (newexchanges > 0)
                 {
@@ -594,7 +594,6 @@ namespace ActionForce.Office.Controllers
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSale.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var amount = Convert.ToDouble(cashSale.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var exchangerate = Convert.ToDouble(cashSale.Exchange.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 var currencyo = cashSale.Currency;
                 var currencyi = location.Currency != null ? location.Currency : ourcompany.Currency;
@@ -608,7 +607,10 @@ namespace ActionForce.Office.Controllers
 
                 var refID = string.IsNullOrEmpty(cashSale.ReferanceID);
                 string path = Server.MapPath("/");
+                
+
                 var exchange = OfficeHelper.GetExchange(docDate);
+                var exchangerate = Convert.ToDouble(cashSale.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
                 SaleExchange sale = new SaleExchange();
 
@@ -627,13 +629,15 @@ namespace ActionForce.Office.Controllers
                 sale.DocumentDate = docDate;
                 sale.LocationID = cashSale.LocationID;
 
-                sale.ExchangeRate = currencyo == "USD" ? exchange.USDA : currencyo == "EUR" ? exchange.EURA : 1;
+                sale.ExchangeRate = exchangerate > 0 ? exchangerate : currencyo == "USD" ? exchange.USDA : currencyo == "EUR" ? exchange.EURA : 1;
                 sale.OurCompanyID = location.OurCompanyID;
                 sale.TimeZone = timezone;
                 sale.ReferanceID = refID == false ? Convert.ToInt64(cashSale.ReferanceID) : (long?)null;
 
                 sale.SlipPath = "";
                 sale.SlipDocument = "";
+
+                
 
                 if (documentFile != null && documentFile.ContentLength > 0)
                 {
@@ -945,7 +949,11 @@ namespace ActionForce.Office.Controllers
                 double? newexchanges = Convert.ToDouble(cashOpen.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? exchanges = Convert.ToDouble(cashOpen.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
-
+                var docDate = DateTime.Now.Date;
+                if (DateTime.TryParse(cashOpen.DocumentDate, out docDate))
+                {
+                    docDate = Convert.ToDateTime(cashOpen.DocumentDate).Date;
+                }
                 CashOpen sale = new CashOpen();
                 sale.ActinTypeID = cashOpen.ActinTypeID;
                 sale.Amount = amount;
@@ -954,6 +962,7 @@ namespace ActionForce.Office.Controllers
                 sale.EnvironmentID = 2;
                 sale.LocationID = cashOpen.LocationID;
                 sale.UID = cashOpen.UID;
+                sale.DocumentDate = docDate;
                 if (newexchanges > 0)
                 {
                     sale.ExchangeRate = newexchanges;
@@ -1028,7 +1037,7 @@ namespace ActionForce.Office.Controllers
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.OpenDetail = Db.VDocumentCashOpen.FirstOrDefault(x => x.UID == id);
-            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "CashOpen" && x.Environment == "Office" && x.ProcessID == model.CashDetail.ID.ToString()).ToList();
+            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Open" && x.Environment == "Office" && x.ProcessID == model.OpenDetail.ID.ToString()).ToList();
 
             model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
 
@@ -1915,7 +1924,7 @@ namespace ActionForce.Office.Controllers
 
             if (cashTransfer != null)
             {
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashTransfer.ActionTypeID);
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashTransfer.ActinTypeID);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashTransfer.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var fromPrefix = cashTransfer.FromID.Substring(0, 1);
@@ -2039,7 +2048,7 @@ namespace ActionForce.Office.Controllers
 
                 BankTransfer banktransfer = new BankTransfer();
 
-                banktransfer.ActinTypeID = cashTransfer.ActionTypeID;
+                banktransfer.ActinTypeID = cashTransfer.ActinTypeID;
                 banktransfer.Amount = amount;
                 banktransfer.Currency = currency;
                 banktransfer.Description = cashTransfer.Description;
@@ -2056,7 +2065,7 @@ namespace ActionForce.Office.Controllers
                 banktransfer.SlipNumber = cashTransfer.SlipNumber;
                 banktransfer.TrackingNumber = cashTransfer.TrackingNumber;
                 banktransfer.SlipPath = Server.MapPath("/");
-
+                banktransfer.ReferanceID = cashTransfer.ReferanceID;
                 banktransfer.SlipPath = "";
                 banktransfer.SlipDocument = "";
 

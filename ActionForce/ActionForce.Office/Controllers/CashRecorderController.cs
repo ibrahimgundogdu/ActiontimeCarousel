@@ -87,26 +87,16 @@ namespace ActionForce.Office.Controllers
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
 
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
+            
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+            //model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.Detail = Db.VDocumentCashRecorderSlip.FirstOrDefault(x => x.UID == id);
+
             model.History = Db.ApplicationLog.Where(x => x.Controller == "CashRecorder" && x.ProcessID == model.Detail.ID.ToString()).ToList();
-            
+
 
             return View(model);
         }
@@ -125,6 +115,8 @@ namespace ActionForce.Office.Controllers
 
             if (cashRecord != null)
             {
+
+                
                 var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashRecord.ActinTypeID);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashRecord.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
@@ -144,7 +136,7 @@ namespace ActionForce.Office.Controllers
                     slipDate = Convert.ToDateTime(cashRecord.SlipDate).Date;
                 }
 
-               
+                var resultID = Db.DayResult.FirstOrDefault(x => x.LocationID == cashRecord.LocationID && x.Date == docDate)?.ID;
                 DateTime sDatetime = slipDate.Add(Convert.ToDateTime(cashRecord.SlipTime).TimeOfDay);
 
                 var cash = OfficeHelper.GetCash(cashRecord.LocationID, cashRecord.Currency);
@@ -166,7 +158,8 @@ namespace ActionForce.Office.Controllers
                 record.TimeZone = timezone;
                 record.SlipNumber = cashRecord.SlipNumber;
                 record.SlipDate = sDatetime;
-
+                record.ResultID = resultID;
+                
                 record.SlipFile = "";
                 record.SlipPath = "";
 

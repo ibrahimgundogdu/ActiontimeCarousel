@@ -114,7 +114,7 @@ namespace ActionForce.Office
     }
     public class NewCashBankTransfer
     {
-        public int ActionTypeID { get; set; }
+        public int ActinTypeID { get; set; }
         public string FromID { get; set; }
         public int LocationID { get; set; }
         public string Amount { get; set; }
