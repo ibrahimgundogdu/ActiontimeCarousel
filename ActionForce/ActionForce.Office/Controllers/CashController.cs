@@ -634,7 +634,7 @@ namespace ActionForce.Office.Controllers
                 sale.SlipPath = path;
 
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.AddSaleExchange(sale, documentFile, model.Authentication);
+                result = documentManager.AddSaleExchange(sale, model.Authentication);
 
                 
             }
