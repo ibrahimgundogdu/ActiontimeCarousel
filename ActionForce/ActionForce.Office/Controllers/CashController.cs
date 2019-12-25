@@ -1608,7 +1608,6 @@ namespace ActionForce.Office.Controllers
 
                 var exchange = OfficeHelper.GetExchange(docDate);
 
-                string path = Server.MapPath("/");
                 CashExpense expense = new CashExpense();
 
                 expense.ActinTypeID = actType.ID;
@@ -1628,10 +1627,28 @@ namespace ActionForce.Office.Controllers
                 expense.TimeZone = timezone;
                 expense.SlipNumber = cashExpense.SlipNumber;
                 expense.ReferanceID = refID == false ? Convert.ToInt64(cashExpense.ReferanceID) : (long?)null;
-                expense.SlipPath = path;
+
+                expense.SlipPath = "";
+                expense.SlipDocument = "";
+
+                if (documentFile != null && documentFile.ContentLength > 0)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
+                    expense.SlipDocument = filename;
+                    expense.SlipPath = "/Document/Expense";
+
+                    try
+                    {
+                        documentFile.SaveAs(Path.Combine(Server.MapPath(expense.SlipPath), filename));
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+
 
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.AddCashExpense(expense, documentFile, model.Authentication);
+                result = documentManager.AddCashExpense(expense, model.Authentication);
                 
 
             }
@@ -1680,6 +1697,24 @@ namespace ActionForce.Office.Controllers
                 sale.ToEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                 sale.LocationID = cashExpense.LocationID;
                 sale.UID = cashExpense.UID;
+                sale.SlipPath = "";
+                sale.SlipDocument = "";
+
+                if (documentFile != null && documentFile.ContentLength > 0)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
+                    sale.SlipDocument = filename;
+                    sale.SlipPath = "/Document/Expense";
+
+                    try
+                    {
+                        documentFile.SaveAs(Path.Combine(Server.MapPath(sale.SlipPath), filename));
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+
                 if (newexchanges > 0)
                 {
                     sale.ExchangeRate = newexchanges;

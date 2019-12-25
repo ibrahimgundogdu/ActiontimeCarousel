@@ -28,14 +28,14 @@
                             </ol>
                         </nav>
                         <h4 class="mg-b-0 tx-spacing--1">Kasa Tahsilatı Detayı</h4>
-                    </div>
+                    </div>s 
                     <div class="d-none d-md-block">
                         @{Html.RenderPartial("_PartialAddCashMenu");}
                     </div>
                 </div>
 
 
-                @using (Html.BeginForm("EditCashExpense", "Cash", FormMethod.Post))
+                @using (Html.BeginForm("EditCashExpense", "Cash", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
                     <div class="row row-xs">

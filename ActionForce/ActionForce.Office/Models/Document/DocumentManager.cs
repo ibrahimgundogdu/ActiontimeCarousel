@@ -1557,7 +1557,7 @@ namespace ActionForce.Office
 
 
 
-        public Result<DocumentCashExpense> AddCashExpense(CashExpense expense, HttpPostedFileBase file, AuthenticationModel authentication)
+        public Result<DocumentCashExpense> AddCashExpense(CashExpense expense, AuthenticationModel authentication)
         {
             Result<DocumentCashExpense> result = new Result<DocumentCashExpense>()
             {
@@ -1576,71 +1576,51 @@ namespace ActionForce.Office
 
                         //if (balance >= expense.Amount)
                         //{
-                            DocumentCashExpense cashExpense = new DocumentCashExpense();
+                        DocumentCashExpense cashExpense = new DocumentCashExpense();
 
-                            cashExpense.ActionTypeID = expense.ActinTypeID;
-                            cashExpense.ActionTypeName = expense.ActionTypeName;
-                            cashExpense.Amount = expense.Amount;
-                            cashExpense.CashID = expense.CashID;
-                            cashExpense.Currency = expense.Currency;
-                            cashExpense.Date = expense.DocumentDate;
-                            cashExpense.Description = expense.Description;
-                            cashExpense.DocumentNumber = OfficeHelper.GetDocumentNumber(expense.OurCompanyID, "EXP");
-                            cashExpense.ExchangeRate = expense.ExchangeRate;
-                            cashExpense.ToBankAccountID = expense.ToBankAccountID ?? (int?)null;
-                            cashExpense.ToEmployeeID = expense.ToEmployeeID ?? (int?)null;
-                            cashExpense.ToCustomerID = expense.ToCustomerID ?? (int?)null;
-                            cashExpense.IsActive = true;
-                            cashExpense.LocationID = expense.LocationID;
-                            cashExpense.OurCompanyID = expense.OurCompanyID;
-                            cashExpense.RecordDate = DateTime.UtcNow.AddHours(expense.TimeZone.Value);
-                            cashExpense.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
-                            cashExpense.RecordIP = OfficeHelper.GetIPAddress();
-                            cashExpense.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == expense.Currency ? expense.Amount : expense.Amount * expense.ExchangeRate;
-                            cashExpense.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
-                            cashExpense.SlipNumber = expense.SlipNumber;
-                            cashExpense.SlipDate = expense.SlipDate;
-                            cashExpense.ReferenceID = expense.ReferanceID;
-                            cashExpense.EnvironmentID = 2;
-                            cashExpense.UID = Guid.NewGuid();
-                            cashExpense.ExpenseTypeID = expense.ExpenseTypeID;
-                            cashExpense.SlipPath = expense.SlipPath;
+                        cashExpense.ActionTypeID = expense.ActinTypeID;
+                        cashExpense.ActionTypeName = expense.ActionTypeName;
+                        cashExpense.Amount = expense.Amount;
+                        cashExpense.CashID = expense.CashID;
+                        cashExpense.Currency = expense.Currency;
+                        cashExpense.Date = expense.DocumentDate;
+                        cashExpense.Description = expense.Description;
+                        cashExpense.DocumentNumber = OfficeHelper.GetDocumentNumber(expense.OurCompanyID, "EXP");
+                        cashExpense.ExchangeRate = expense.ExchangeRate;
+                        cashExpense.ToBankAccountID = expense.ToBankAccountID ?? (int?)null;
+                        cashExpense.ToEmployeeID = expense.ToEmployeeID ?? (int?)null;
+                        cashExpense.ToCustomerID = expense.ToCustomerID ?? (int?)null;
+                        cashExpense.IsActive = true;
+                        cashExpense.LocationID = expense.LocationID;
+                        cashExpense.OurCompanyID = expense.OurCompanyID;
+                        cashExpense.RecordDate = DateTime.UtcNow.AddHours(expense.TimeZone.Value);
+                        cashExpense.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        cashExpense.RecordIP = OfficeHelper.GetIPAddress();
+                        cashExpense.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == expense.Currency ? expense.Amount : expense.Amount * expense.ExchangeRate;
+                        cashExpense.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+                        cashExpense.SlipNumber = expense.SlipNumber;
+                        cashExpense.SlipDate = expense.SlipDate;
+                        cashExpense.ReferenceID = expense.ReferanceID;
+                        cashExpense.EnvironmentID = 2;
+                        cashExpense.UID = Guid.NewGuid();
+                        cashExpense.ExpenseTypeID = expense.ExpenseTypeID;
+                        cashExpense.SlipPath = expense.SlipPath;
+                        cashExpense.SlipDocument = expense.SlipDocument;
 
-                            if (file != null && file.ContentLength > 0)
-                            {
 
-                                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                                cashExpense.SlipDocument = filename;
-                                string folder = "Document/Expense";
-                                expense.SlipPath = expense.SlipPath + folder;
-                                try
-                                {
-                                    file.SaveAs(Path.Combine(expense.SlipPath, filename));
-                                }
-                                catch (Exception ex)
-                                {
-                                }
-                            }
-                            else if(!string.IsNullOrEmpty(expense.SlipDocument))
-                            {
-                                cashExpense.SlipDocument = expense.SlipDocument;
-                            }
+                        Db.DocumentCashExpense.Add(cashExpense);
+                        Db.SaveChanges();
+
+                        // cari hesap işlemesi
+                        OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate, cashExpense.UID.Value);
 
 
 
-                            Db.DocumentCashExpense.Add(cashExpense);
-                            Db.SaveChanges();
+                        result.IsSuccess = true;
+                        result.Message = "Masraf ödeme fişi başarı ile eklendi";
 
-                            // cari hesap işlemesi
-                            OfficeHelper.AddCashAction(cashExpense.CashID, cashExpense.LocationID, null, cashExpense.ActionTypeID, cashExpense.Date, cashExpense.ActionTypeName, cashExpense.ID, cashExpense.Date, cashExpense.DocumentNumber, cashExpense.Description, -1, 0, cashExpense.Amount, cashExpense.Currency, null, null, cashExpense.RecordEmployeeID, cashExpense.RecordDate, cashExpense.UID.Value);
-
-
-
-                            result.IsSuccess = true;
-                            result.Message = "Masraf ödeme fişi başarı ile eklendi";
-
-                            // log atılır
-                            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", cashExpense.ID.ToString(), "Cash", "Expense", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, cashExpense);
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", cashExpense.ID.ToString(), "Cash", "Expense", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, cashExpense);
                         //}
                         //else
                         //{
@@ -1710,23 +1690,9 @@ namespace ActionForce.Office
                             EnvironmentID = isExpense.EnvironmentID
                         };
 
-                        string FileName = string.Empty;
-
-                        if (file != null && file.ContentLength > 0)
-                        {
-
-                            string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                            isExpense.SlipDocument = filename;
-                            string folder = "Document/Expense";
-                            expense.SlipPath = expense.SlipPath + folder;
-                            try
-                            {
-                                file.SaveAs(Path.Combine(expense.SlipPath, filename));
-                            }
-                            catch (Exception ex)
-                            {
-                            }
-                        }
+                        
+                        isExpense.SlipDocument = expense.SlipDocument;
+                        isExpense.SlipPath = expense.SlipPath;
                         isExpense.LocationID = expense.LocationID;
                         isExpense.CashID = cash.ID;
                         isExpense.Date = expense.DocumentDate;
@@ -2139,7 +2105,7 @@ namespace ActionForce.Office
                                 expense.ToBankAccountID = isTransfer.ToBankAccountID;
                                 expense.SlipPath = isTransfer.SlipPath;
 
-                                var expenseresult = AddCashExpense(expense, null, authentication);
+                                var expenseresult = AddCashExpense(expense, authentication);
                                 result.Message += $" {expenseresult.Message}";
                             }
                         }

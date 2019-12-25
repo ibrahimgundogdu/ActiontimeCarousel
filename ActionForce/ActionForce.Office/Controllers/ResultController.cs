@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -461,9 +462,26 @@ namespace ActionForce.Office.Controllers
             expense.UID = Guid.NewGuid();
             expense.ResultID = dayresult.ID;
             expense.ExpenseTypeID = exptypeid;
+            expense.SlipPath = "";
+            expense.SlipDocument = "";
+
+            if (file != null && file.ContentLength > 0)
+            {
+                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                expense.SlipDocument = filename;
+                expense.SlipPath = "/Document/Expense";
+
+                try
+                {
+                    file.SaveAs(Path.Combine(Server.MapPath(expense.SlipPath), filename));
+                }
+                catch (Exception ex)
+                {
+                }
+            }
 
 
-            result = documentManager.AddCashExpense(expense, file, model.Authentication);
+            result = documentManager.AddCashExpense(expense, model.Authentication);
 
             model.DayResult = dayresult;
             model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
