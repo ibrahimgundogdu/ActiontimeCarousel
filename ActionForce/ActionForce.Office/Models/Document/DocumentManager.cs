@@ -569,7 +569,7 @@ namespace ActionForce.Office
             return result;
         }
 
-        public Result<DocumentSaleExchange> EditSaleExchange(SaleExchange saleExchange, HttpPostedFileBase file, AuthenticationModel authentication)
+        public Result<DocumentSaleExchange> EditSaleExchange(SaleExchange saleExchange, AuthenticationModel authentication)
         {
             Result<DocumentSaleExchange> result = new Result<DocumentSaleExchange>()
             {
@@ -630,6 +630,8 @@ namespace ActionForce.Office
                         UpdateDate = isExchange.UpdateDate,
                         UpdateEmployee = isExchange.UpdateEmployee,
                         UpdateIP = isExchange.UpdateIP,
+                        SlipPath = isExchange.SlipPath,
+                        SlipDocument = isExchange.SlipDocument,
                         EnvironmentID = isExchange.EnvironmentID
                     };
                     isExchange.LocationID = saleExchange.LocationID;
@@ -645,22 +647,8 @@ namespace ActionForce.Office
                     isExchange.UpdateDate = DateTime.UtcNow.AddHours(3);
                     isExchange.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
                     isExchange.UpdateIP = OfficeHelper.GetIPAddress();
-
-                    if (file != null && file.ContentLength > 0)
-                    {
-
-                        string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                        isExchange.SlipDocument = filename;
-                        string folder = "Document/Exchange";
-                        saleExchange.SlipPath = saleExchange.SlipPath + folder;
-                        try
-                        {
-                            file.SaveAs(Path.Combine(saleExchange.SlipPath, filename));
-                        }
-                        catch (Exception ex)
-                        {
-                        }
-                    }
+                    isExchange.SlipDocument = saleExchange.SlipDocument;
+                    isExchange.SlipPath = saleExchange.SlipPath;
 
                     Db.SaveChanges();
 
@@ -1554,10 +1542,7 @@ namespace ActionForce.Office
                 {
                     try
                     {
-                        //var balance = Db.GetCashBalance(expense.LocationID, expense.CashID, expense.DocumentDate).FirstOrDefault() ?? 0;
-
-                        //if (balance >= expense.Amount)
-                        //{
+                        
                         DocumentCashExpense cashExpense = new DocumentCashExpense();
 
                         cashExpense.ActionTypeID = expense.ActinTypeID;
@@ -1603,12 +1588,7 @@ namespace ActionForce.Office
 
                         // log atılır
                         OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", cashExpense.ID.ToString(), "Cash", "Expense", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, cashExpense);
-                        //}
-                        //else
-                        //{
-                        //    result.Message = $"Kasa bakiyesi { expense.Amount } { expense.Currency } tutar için yeterli değildir. Kullanılabilir bakiye { balance } { expense.Currency } tutardır.";
-                        //    OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "Expense", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                        //}
+                        
                     }
                     catch (Exception ex)
                     {
@@ -1622,7 +1602,7 @@ namespace ActionForce.Office
             return result;
         }
 
-        public Result<DocumentCashExpense> EditCashExpense(CashExpense expense, HttpPostedFileBase file, AuthenticationModel authentication)
+        public Result<DocumentCashExpense> EditCashExpense(CashExpense expense, AuthenticationModel authentication)
         {
             Result<DocumentCashExpense> result = new Result<DocumentCashExpense>()
             {
@@ -1798,6 +1778,13 @@ namespace ActionForce.Office
                 {
                     try
                     {
+                        var cash = OfficeHelper.GetCash(transfer.LocationID, transfer.Currency);
+                        var location = Db.Location.FirstOrDefault(x => x.LocationID == transfer.LocationID);
+                        var exchange = OfficeHelper.GetExchange(transfer.DocumentDate.Value);
+
+                        var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 29);
+
+                        var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == transfer.LocationID && x.Date == transfer.DocumentDate);
 
                         DocumentBankTransfer bankTransfer = new DocumentBankTransfer();
 
@@ -1836,6 +1823,41 @@ namespace ActionForce.Office
 
                         if (new int?[] { 2, 3, 4, 5 }.Contains(bankTransfer.StatusID))
                         {
+                            if (bankTransfer.Commission > 0)  // komisyonlu işlem ise
+                            {
+                                var isExpense = Db.DocumentCashExpense.FirstOrDefault(x => x.ReferenceID == bankTransfer.ID && x.Date == bankTransfer.Date && x.LocationID == bankTransfer.LocationID);
+                                if (isExpense == null)
+                                {
+                                    CashExpense expense = new CashExpense();
+
+                                    expense.ActinTypeID = actType.ID;
+                                    expense.ActionTypeName = actType.Name;
+                                    expense.Amount = bankTransfer.Commission.Value;
+                                    expense.Currency = bankTransfer.Currency;
+                                    expense.Description = bankTransfer.Description;
+                                    expense.DocumentDate = bankTransfer.Date;
+                                    expense.EnvironmentID = bankTransfer.EnvironmentID;
+                                    expense.ExchangeRate = expense.Currency == "USD" ? exchange.USDA.Value : expense.Currency == "EUR" ? exchange.EURA.Value : 1;
+                                    expense.CashID = cash.ID;
+                                    expense.LocationID = location.LocationID;
+                                    expense.OurCompanyID = location.OurCompanyID;
+                                    expense.SlipDate = bankTransfer.SlipDate;
+                                    expense.SlipNumber = bankTransfer.SlipNumber;
+                                    expense.SlipDocument = bankTransfer.SlipDocument;
+                                    expense.TimeZone = location.Timezone.Value;
+                                    expense.UID = Guid.NewGuid();
+                                    expense.ExpenseTypeID = 25;
+                                    expense.ReferanceID = bankTransfer.ID;
+                                    expense.ResultID = dayresult?.ID;
+                                    expense.ToBankAccountID = bankTransfer.ToBankAccountID;
+                                    expense.SlipPath = bankTransfer.SlipPath;
+
+                                    var expenseresult = AddCashExpense(expense, authentication);
+                                    result.Message += $" {expenseresult.Message}";
+                                }
+                                
+                            }
+
                             var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == bankTransfer.LocationID && x.CashActionTypeID == bankTransfer.ActionTypeID && x.ProcessID == bankTransfer.ID && x.ProcessUID == bankTransfer.UID);
                             if (cashaction == null)
                             {
@@ -1857,7 +1879,7 @@ namespace ActionForce.Office
                             }
                         }
 
-                        if (bankTransfer.StatusID == 5)
+                        if (new int?[] { 5 }.Contains(bankTransfer.StatusID))
                         {
                             var cashaction = Db.BankActions.FirstOrDefault(x => x.LocationID == bankTransfer.LocationID && x.BankActionTypeID == bankTransfer.ActionTypeID && x.ProcessID == bankTransfer.ID && x.ProcessUID == bankTransfer.UID);
                             if (cashaction == null)
@@ -1886,7 +1908,7 @@ namespace ActionForce.Office
             return result;
         }
 
-        public Result<DocumentBankTransfer> EditBankTransfer(BankTransfer transfer, HttpPostedFileBase file, AuthenticationModel authentication)
+        public Result<DocumentBankTransfer> EditBankTransfer(BankTransfer transfer, AuthenticationModel authentication)
         {
             Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()
             {
@@ -1946,28 +1968,12 @@ namespace ActionForce.Office
                             ReferenceCode = isTransfer.ReferenceCode,
                             ResultID = isTransfer.ResultID,
                             SlipPath = isTransfer.SlipPath
+
                         };
 
                         var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == transfer.LocationID && x.Date == transfer.DocumentDate);
 
-                        string FileName = string.Empty;
-
-                        if (file != null && file.ContentLength > 0)
-                        {
-
-                            string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                            isTransfer.SlipDocument = filename;
-
-                            string folder = "Document/Bank";
-                            transfer.SlipPath = Path.Combine(transfer.SlipPath, folder);
-                            try
-                            {
-                                file.SaveAs(Path.Combine(transfer.SlipPath, filename));
-                            }
-                            catch (Exception ex)
-                            {
-                            }
-                        }
+                        
 
                         isTransfer.Commission = transfer.Commission;
                         isTransfer.Date = transfer.DocumentDate;
@@ -1989,6 +1995,8 @@ namespace ActionForce.Office
                         isTransfer.LocationID = transfer.LocationID;
                         isTransfer.Currency = transfer.Currency;
                         isTransfer.IsActive = transfer.IsActive;
+                        isTransfer.SlipDocument = transfer.SlipDocument;
+                        isTransfer.SlipPath = transfer.SlipPath;
 
                         Db.SaveChanges();
 
@@ -3910,7 +3918,7 @@ namespace ActionForce.Office
 
 
 
-        public Result<DocumentCashRecorderSlip> AddCashRecorder(CashRecorder record, HttpPostedFileBase file, AuthenticationModel authentication)
+        public Result<DocumentCashRecorderSlip> AddCashRecorder(CashRecorder record, AuthenticationModel authentication)
         {
             Result<DocumentCashRecorderSlip> result = new Result<DocumentCashRecorderSlip>()
             {
@@ -3945,24 +3953,8 @@ namespace ActionForce.Office
                         cashRedord.EnvironmentID = 2;
                         cashRedord.UID = Guid.NewGuid();
 
-                        if (file != null && file.ContentLength > 0)
-                        {
-
-                            string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                            cashRedord.SlipFile = filename;
-                            string folder = "Document/CashRecorder";
-
-                            record.SlipPath = record.SlipPath + folder;
-                            try
-                            {
-                                file.SaveAs(Path.Combine(record.SlipPath, filename));
-
-                                cashRedord.SlipPath = folder;
-                            }
-                            catch (Exception ex)
-                            {
-                            }
-                        }
+                        cashRedord.SlipPath = record.SlipPath;
+                        cashRedord.SlipFile = record.SlipFile;
 
 
                         Db.DocumentCashRecorderSlip.Add(cashRedord);
@@ -3987,7 +3979,7 @@ namespace ActionForce.Office
             return result;
         }
 
-        public Result<DocumentCashRecorderSlip> EditCashRecorder(CashRecorder record, HttpPostedFileBase file, AuthenticationModel authentication)
+        public Result<DocumentCashRecorderSlip> EditCashRecorder(CashRecorder record, AuthenticationModel authentication)
         {
             Result<DocumentCashRecorderSlip> result = new Result<DocumentCashRecorderSlip>()
             {
@@ -4057,24 +4049,8 @@ namespace ActionForce.Office
                             isRecord.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
                             isRecord.UpdateIP = OfficeHelper.GetIPAddress();
 
-                            if (file != null && file.ContentLength > 0)
-                            {
-
-                                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                                isRecord.SlipFile = filename;
-                                string folder = "Document/CashRecorder";
-
-                                record.SlipPath = record.SlipPath + folder;
-                                try
-                                {
-                                    file.SaveAs(Path.Combine(record.SlipPath, filename));
-
-                                    isRecord.SlipPath = folder;
-                                }
-                                catch (Exception ex)
-                                {
-                                }
-                            }
+                            isRecord.SlipFile = record.SlipFile;
+                            isRecord.SlipPath = record.SlipPath;
 
                             Db.SaveChanges();
 
@@ -4087,7 +4063,7 @@ namespace ActionForce.Office
                     }
                     catch (Exception ex)
                     {
-                        result.Message = $"{isRecord.ID} {file} dosyası güncellenemedi : {ex.Message}";
+                        result.Message = $"{isRecord.ID} {isRecord.SlipFile} dosyası güncellenemedi : {ex.Message}";
                         OfficeHelper.AddApplicationLog("Office", "Result Document", "Update", "-1", "CashRecorder", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(locationid)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
                 }

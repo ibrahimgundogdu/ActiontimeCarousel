@@ -30,7 +30,6 @@ namespace ActionForce.Office
         public string SlipDocument { get; set; }
         public DateTime? SlipDate { get; set; }
         public string SlipPath { get; set; }
-        public string SlipDocument { get; set; }
         public int? StatusID { get; set; }
         public string ReferanceCode { get; set; }
         public string TrackingNumber { get; set; }
