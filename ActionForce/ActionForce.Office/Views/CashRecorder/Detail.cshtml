@@ -35,7 +35,7 @@
                 </div>
 
 
-                @using (Html.BeginForm("EditCashRecorder", "Cash", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("EditCashRecorder", "CashRecorder", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
                     <div class="row row-xs">
@@ -83,13 +83,13 @@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Net Tutar</label>
                                             <div class="col-sm-9">
-                                                <input id="NetAmount" name="NetAmount" type="text" class="form-control money" autocomplete="off" value="@Model.Detail.NetAmount" placeholder="Net Tutar" required>
+                                                <input id="NetAmount" name="NetAmount" type="text" class="form-control money" autocomplete="off" value="@(Model.Detail.NetAmount?.ToString("N2"))" placeholder="Net Tutar" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Toplam Tutar</label>
                                             <div class="col-sm-9">
-                                                <input id="TotalAmount" name="TotalAmount" type="text" class="form-control money" autocomplete="off" value="@Model.Detail.TotalAmount" placeholder="Toplam Tutar" required>
+                                                <input id="TotalAmount" name="TotalAmount" type="text" class="form-control money" autocomplete="off" value="@(Model.Detail.TotalAmount?.ToString("N2"))" placeholder="Toplam Tutar" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">

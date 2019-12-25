@@ -28,6 +28,7 @@ namespace ActionForce.Office
         public IEnumerable<PayMethod> PayMethodList { get; set; }
         public IEnumerable<BankTransferStatus> StatusList { get; set; }
         public IEnumerable<BankAccount> BankAccountList { get; set; }
+        public IEnumerable<SalaryCategory> SalaryCategories { get; set; }
 
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }

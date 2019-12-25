@@ -278,7 +278,7 @@ namespace ActionForce.Office.Controllers
             }
 
             TempData["result"] = result;
-            return RedirectToAction("Index", new { id = cashRecord.UID });
+            return RedirectToAction("Detail", new { id = cashRecord.UID });
 
         }
 

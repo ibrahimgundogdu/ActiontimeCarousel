@@ -15,7 +15,7 @@ namespace ActionForce.Office
         public IEnumerable<VEmployeeCashActions> EmployeeActionList { get; set; }
         public IEnumerable<Employee> EmployeeList { get; set; }
 
-
+        public IEnumerable<SalaryCategory> SalaryCategories { get; set; }
         public IEnumerable<Cash> CashList { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
         public IEnumerable<FromAccountModel> FromList { get; set; }

@@ -2160,6 +2160,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
@@ -2383,6 +2384,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();

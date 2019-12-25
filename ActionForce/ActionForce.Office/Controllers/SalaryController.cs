@@ -35,7 +35,7 @@ namespace ActionForce.Office.Controllers
             }
             model.BankAccountList = Db.BankAccount.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
-
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 1 && x.IsActive == true).ToList();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
@@ -236,6 +236,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 1 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
@@ -302,6 +303,7 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
             model.UnitPrice = Db.EmployeeSalary.ToList();
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.SalaryPayment = Db.VDocumentSalaryPayment.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
@@ -514,6 +516,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
