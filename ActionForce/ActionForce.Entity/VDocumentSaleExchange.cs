@@ -50,5 +50,6 @@ namespace ActionForce.Entity
         public string SlipNumber { get; set; }
         public Nullable<long> ResultID { get; set; }
         public Nullable<int> EnvironmentID { get; set; }
+        public string SlipPath { get; set; }
     }
 }

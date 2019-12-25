@@ -24,6 +24,7 @@
                 <th>Belge Tarihi</th>
                 <th>Belge No</th>
                 <th>Banka Hesabı</th>
+                <th></th>
                 <th>Dekont Tarihi</th>
                 <th>Dekont No</th>
                 <th>Referans No</th>
@@ -38,25 +39,30 @@
         <tbody>
             @foreach (var item in Model.BankTransfers.OrderByDescending(x => x.RecordDate))
             {
-                <tr>
-                    <td class="tx-sm-13 bold">@item.ID</td>
-                    <td class="tx-sm-13">@item.ActionTypeName</td>
-                    <td class="tx-sm-13">@(item.Date?.ToShortDateString())</td>
-                    <td class="tx-sm-13">
-                        <a href="@($"/Cash/TransferDetail/{item.UID}")" target="_blank" class="">@(item.DocumentNumber)</a>
-                    </td>
-                    <td class="tx-sm-13">@(item.BankAccountName)</td>
-                    <td class="tx-sm-13">@(item.SlipDate?.ToString())</td>
-                    <td class="tx-sm-13">@(item.SlipNumber)</td>
-                    <td class="tx-sm-13">@(item.ReferenceCode)</td>
-                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.Amount?.ToString("N2"))</td>
-                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.Commission?.ToString("N2"))</td>
-                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.NetAmount?.ToString("N2"))</td>
-                    <td class="tx-sm-13">@item.Currency</td>
-                    <td class="tx-sm-13">@item.StatusName</td>
-                    <td class="tx-sm-13">@item.RecordDate</td>
+            <tr>
+                <td class="tx-sm-13 bold">@item.ID</td>
+                <td class="tx-sm-13">@item.ActionTypeName</td>
+                <td class="tx-sm-13">@(item.Date?.ToShortDateString())</td>
+                <td class="tx-sm-13">
+                    <a href="@($"/Cash/TransferDetail/{item.UID}")" target="_blank" class="">@(item.DocumentNumber)</a>
+                </td>
+                <td class="tx-sm-13">@(item.BankAccountName)</td>
+                <td class="tx-sm-13">
+                    <a target="_blank" href="@($"{item.SlipPath}/{item.SlipDocument}")">
+                        <img class="thumb" src="@($"{item.SlipPath}/{item.SlipDocument}")" alt="@(item.SlipDocument)">
+                    </a>
+                </td>
+                <td class="tx-sm-13">@(item.SlipDate?.ToString())</td>
+                <td class="tx-sm-13">@(item.SlipNumber)</td>
+                <td class="tx-sm-13">@(item.ReferenceCode)</td>
+                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.Amount?.ToString("N2"))</td>
+                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.Commission?.ToString("N2"))</td>
+                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-danger">@(item.NetAmount?.ToString("N2"))</td>
+                <td class="tx-sm-13">@item.Currency</td>
+                <td class="tx-sm-13">@item.StatusName</td>
+                <td class="tx-sm-13">@item.RecordDate</td>
 
-                </tr>
+            </tr>
 
                 total = total + item.Amount;
                 totalcom = totalcom + item.Commission;
@@ -67,7 +73,7 @@
         </tbody>
         <tfoot>
             <tr>
-                <th colspan="7"></th>
+                <th colspan="8"></th>
                 <th>Toplam</th>
                 <th class="text-right bg-light  text-danger">@(total?.ToString("N2"))</th>
                 <th class="text-right bg-light  text-danger">@(totalcom?.ToString("N2"))</th>

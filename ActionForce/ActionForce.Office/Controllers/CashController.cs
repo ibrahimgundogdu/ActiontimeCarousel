@@ -1936,8 +1936,24 @@ namespace ActionForce.Office.Controllers
                 bankTransfer.ReferanceID = refID;
                 bankTransfer.UID = Guid.NewGuid();
 
+                if (documentFile != null && documentFile.ContentLength > 0)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
+                    bankTransfer.SlipPath = "/Document/Bank";
 
-                result = documentManager.AddBankTransfer(bankTransfer, documentFile, model.Authentication);
+                    string mappath = Server.MapPath(bankTransfer.SlipPath);
+                    try
+                    {
+                        documentFile.SaveAs(Path.Combine(mappath, filename));
+                        bankTransfer.SlipDocument = filename;
+                    }
+                    catch (Exception ex)
+                    {
+                    }
+                }
+
+
+                result = documentManager.AddBankTransfer(bankTransfer, model.Authentication);
 
 
             }

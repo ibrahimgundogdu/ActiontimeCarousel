@@ -210,8 +210,27 @@ namespace ActionForce.Office.Controllers
             ResultControlModel model = new ResultControlModel();
 
             DocumentManager documentManager = new DocumentManager();
-            string path = Server.MapPath("/");
-            result = documentManager.AddResultDocument(id, file, path, typeid, description, model.Authentication);
+
+
+            string path = string.Empty;
+            string filename = string.Empty;
+
+            if (file != null && file.ContentLength > 0)
+            {
+                filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                path = "/Document/Envelope";
+                string mappath = Server.MapPath(path);
+
+                try
+                {
+                    file.SaveAs(Path.Combine(mappath, filename));
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+
+            result = documentManager.AddResultDocument(id, filename, path, typeid, description, model.Authentication);
 
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
 
@@ -237,8 +256,29 @@ namespace ActionForce.Office.Controllers
             ResultControlModel model = new ResultControlModel();
 
             DocumentManager documentManager = new DocumentManager();
-            string path = Server.MapPath("/");
-            result = documentManager.AddCashRecorder(id, file, path, typeid, description, slipnumber, slipdate, sliptime, slipamount, sliptotalmount, model.Authentication);
+
+
+            string path = string.Empty;
+            string filename = string.Empty;
+
+            if (file != null && file.ContentLength > 0)
+            {
+                filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                path = "/Document/CashRecorder";
+                string mappath = Server.MapPath(path);
+
+                try
+                {
+                    file.SaveAs(Path.Combine(mappath, filename));
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+
+
+
+            result = documentManager.AddCashRecorder(id, filename, path, typeid, description, slipnumber, slipdate, sliptime, slipamount, sliptotalmount, model.Authentication);
 
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
 
@@ -400,8 +440,29 @@ namespace ActionForce.Office.Controllers
             bankTransfer.UID = Guid.NewGuid();
             bankTransfer.ResultID = dayresult.ID;
             bankTransfer.StatusID = 3;
+            bankTransfer.SlipDocument = string.Empty;
+            
 
-            result = documentManager.AddBankTransfer(bankTransfer, file, model.Authentication);
+            if (file != null && file.ContentLength > 0)
+            {
+                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+
+                bankTransfer.SlipPath = "/Document/Bank";
+                string mappath = Server.MapPath(bankTransfer.SlipPath);
+
+                try
+                {
+                    file.SaveAs(Path.Combine(mappath, filename));
+
+                    bankTransfer.SlipDocument = filename;
+                    
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+
+            result = documentManager.AddBankTransfer(bankTransfer, model.Authentication);
 
             model.BankTransfers = Db.VDocumentBankTransfer.Where(x => x.LocationID == dayresult.LocationID && x.Date == dayresult.Date).ToList();
             model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
@@ -462,24 +523,25 @@ namespace ActionForce.Office.Controllers
             expense.UID = Guid.NewGuid();
             expense.ResultID = dayresult.ID;
             expense.ExpenseTypeID = exptypeid;
-            expense.SlipPath = "";
-            expense.SlipDocument = "";
 
             if (file != null && file.ContentLength > 0)
             {
                 string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                expense.SlipDocument = filename;
+
                 expense.SlipPath = "/Document/Expense";
+                string mappath = Server.MapPath(expense.SlipPath);
 
                 try
                 {
-                    file.SaveAs(Path.Combine(Server.MapPath(expense.SlipPath), filename));
+                    file.SaveAs(Path.Combine(mappath, filename));
+
+                    expense.SlipDocument = filename;
+
                 }
                 catch (Exception ex)
                 {
                 }
             }
-
 
             result = documentManager.AddCashExpense(expense, model.Authentication);
 
@@ -555,8 +617,26 @@ namespace ActionForce.Office.Controllers
             saleExchange.ToAmount = (saleExchange.Amount * saleExchange.SaleExchangeRate);
             saleExchange.ToCurrency = "TRL";
 
+            if (file != null && file.ContentLength > 0)
+            {
+                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
-            result = documentManager.AddSaleExchange(saleExchange, file, model.Authentication);
+                saleExchange.SlipPath = "/Document/Exchange";
+                string mappath = Server.MapPath(saleExchange.SlipPath);
+
+                try
+                {
+                    file.SaveAs(Path.Combine(mappath, filename));
+
+                    saleExchange.SlipDocument = filename;
+
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+
+            result = documentManager.AddSaleExchange(saleExchange, model.Authentication);
 
             model.DayResult = dayresult;
 

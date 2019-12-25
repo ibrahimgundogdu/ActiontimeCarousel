@@ -480,7 +480,7 @@ namespace ActionForce.Office
 
 
 
-        public Result<DocumentSaleExchange> AddSaleExchange(SaleExchange saleExchange, HttpPostedFileBase file, AuthenticationModel authentication)
+        public Result<DocumentSaleExchange> AddSaleExchange(SaleExchange saleExchange, AuthenticationModel authentication)
         {
             Result<DocumentSaleExchange> result = new Result<DocumentSaleExchange>()
             {
@@ -494,8 +494,6 @@ namespace ActionForce.Office
 
                 using (ActionTimeEntities Db = new ActionTimeEntities())
                 {
-
-
 
                     try
                     {
@@ -529,24 +527,8 @@ namespace ActionForce.Office
                             sale.SlipNumber = saleExchange.SlipNumber;
                             sale.SlipDate = saleExchange.SlipDate;
                             sale.ResultID = saleExchange.ResultID;
-
-                            if (file != null && file.ContentLength > 0)
-                            {
-
-                                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                                sale.SlipDocument = filename;
-                                string folder = "Document/Exchange";
-                                saleExchange.SlipPath = saleExchange.SlipPath + folder;
-                                try
-                                {
-                                    file.SaveAs(Path.Combine(saleExchange.SlipPath, filename));
-                                }
-                                catch (Exception ex)
-                                {
-                                }
-                            }
-
-
+                            sale.SlipDocument = saleExchange.SlipDocument;
+                            sale.SlipPath = saleExchange.SlipPath;
 
                             Db.DocumentSaleExchange.Add(sale);
                             Db.SaveChanges();
@@ -1801,7 +1783,7 @@ namespace ActionForce.Office
 
 
 
-        public Result<DocumentBankTransfer> AddBankTransfer(BankTransfer transfer, HttpPostedFileBase file, AuthenticationModel authentication)
+        public Result<DocumentBankTransfer> AddBankTransfer(BankTransfer transfer, AuthenticationModel authentication)
         {
             Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()
             {
@@ -1844,25 +1826,8 @@ namespace ActionForce.Office
                         bankTransfer.EnvironmentID = 2;
                         bankTransfer.ReferenceID = transfer.ReferanceID;
                         bankTransfer.UID = transfer.UID;
-
-
-
-                        if (file != null && file.ContentLength > 0)
-                        {
-
-                            string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                            bankTransfer.SlipDocument = filename;
-                            string folder = "Document/Bank";
-                            bankTransfer.SlipPath = folder;
-                            transfer.SlipPath = transfer.SlipPath + folder;
-                            try
-                            {
-                                file.SaveAs(Path.Combine(transfer.SlipPath, filename));
-                            }
-                            catch (Exception ex)
-                            {
-                            }
-                        }
+                        bankTransfer.SlipDocument = transfer.SlipDocument;
+                        bankTransfer.SlipPath = transfer.SlipPath;
 
                         bankTransfer.ReferenceCode = OfficeHelper.BankReferenceCode(bankTransfer.OurCompanyID.Value);
 
@@ -3145,7 +3110,7 @@ namespace ActionForce.Office
 
 
 
-        public Result<DayResultDocuments> AddResultDocument(long? id, HttpPostedFileBase file, string path, int? typeid, string description, AuthenticationModel authentication)
+        public Result<DayResultDocuments> AddResultDocument(long? id, string filename, string path, int? typeid, string description, AuthenticationModel authentication)
         {
             Result<DayResultDocuments> result = new Result<DayResultDocuments>()
             {
@@ -3181,26 +3146,8 @@ namespace ActionForce.Office
                             resultDocuments.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
                             resultDocuments.RecordIP = OfficeHelper.GetIPAddress();
                             resultDocuments.ResultID = dayresult.ID;
-
-
-
-
-                            if (file != null && file.ContentLength > 0)
-                            {
-
-                                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                                resultDocuments.FileName = filename;
-                                string folder = "Document/CashRecorder";
-                                resultDocuments.FilePath = folder;
-                                path = path + folder;
-                                try
-                                {
-                                    file.SaveAs(Path.Combine(path, filename));
-                                }
-                                catch (Exception ex)
-                                {
-                                }
-                            }
+                            resultDocuments.FileName = filename;
+                            resultDocuments.FilePath = path;
 
                             Db.DayResultDocuments.Add(resultDocuments);
                             Db.SaveChanges();
@@ -3214,7 +3161,7 @@ namespace ActionForce.Office
                     }
                     catch (Exception ex)
                     {
-                        result.Message = $"{id} {file} dosyası eklenemedi : {ex.Message}";
+                        result.Message = $"{id} {filename} dosyası eklenemedi : {ex.Message}";
                         OfficeHelper.AddApplicationLog("Office", "Result Document", "Insert", "-1", "Result", "Detail", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(locationid)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
 
@@ -3224,7 +3171,7 @@ namespace ActionForce.Office
             return result;
         }
 
-        public Result<DocumentCashRecorderSlip> AddCashRecorder(long? id, HttpPostedFileBase file, string path, int? typeid, string description, string slipnumber, string slipdate, string sliptime, string slipamount, string sliptotalmount, AuthenticationModel authentication)
+        public Result<DocumentCashRecorderSlip> AddCashRecorder(long? id, string filename, string path, int? typeid, string description, string slipnumber, string slipdate, string sliptime, string slipamount, string sliptotalmount, AuthenticationModel authentication)
         {
             Result<DocumentCashRecorderSlip> result = new Result<DocumentCashRecorderSlip>()
             {
@@ -3252,7 +3199,6 @@ namespace ActionForce.Office
                             TimeSpan? time = Convert.ToDateTime(sliptime).TimeOfDay;
                             DateTime? slipdatetime = date.Value.Add(time.Value);
 
-
                             DocumentCashRecorderSlip resultCashSlip = new DocumentCashRecorderSlip();
 
                             resultCashSlip.ActionTypeID = typeid;
@@ -3272,27 +3218,11 @@ namespace ActionForce.Office
                             resultCashSlip.SlipNumber = slipnumber;
                             resultCashSlip.TotalAmount = totalamount;
                             resultCashSlip.UID = Guid.NewGuid();
-
-                            if (file != null && file.ContentLength > 0)
-                            {
-
-                                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
-                                resultCashSlip.SlipFile = filename;
-                                string folder = "Document/CashRecorder";
-                                resultCashSlip.SlipPath = folder;
-                                path = path + folder;
-                                try
-                                {
-                                    file.SaveAs(Path.Combine(path, filename));
-                                }
-                                catch (Exception ex)
-                                {
-                                }
-                            }
+                            resultCashSlip.SlipFile = filename;
+                            resultCashSlip.SlipPath = path;
 
                             Db.DocumentCashRecorderSlip.Add(resultCashSlip);
                             Db.SaveChanges();
-
 
                             result.IsSuccess = true;
                             result.Message = $"{resultCashSlip.ID} ID li {resultCashSlip.SlipDate} tarihli {resultCashSlip.SlipFile} isimli dosya ile beraber kayıt başarı ile eklendi.";
@@ -3302,7 +3232,7 @@ namespace ActionForce.Office
                     }
                     catch (Exception ex)
                     {
-                        result.Message = $"{id} {file} dosyası eklenemedi : {ex.Message}";
+                        result.Message = $"{id} {filename} dosyası eklenemedi : {ex.Message}";
                         OfficeHelper.AddApplicationLog("Office", "Result Document", "Insert", "-1", "Result", "Detail", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(locationid)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
 
