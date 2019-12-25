@@ -352,30 +352,38 @@ namespace ActionForce.Office.Controllers
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, location.Currency);
 
-
-            SalaryPayment payment = new SalaryPayment();
-
-            payment.ActinTypeID = typeid.Value;
-            payment.ActionTypeName = actType.Name;
-            payment.Currency = location.Currency;
-            payment.Description = description;
-            payment.DocumentDate = dayresult.Date;
-            payment.EmployeeID = employeeid.Value;
-            payment.EnvironmentID = 2;
-            payment.LocationID = dayresult.LocationID;
-            payment.OurCompanyID = location.OurCompanyID;
-            payment.ResultID = id;
-            payment.TimeZone = location.Timezone;
-            payment.Amount = payamount;
-            payment.UID = Guid.NewGuid();
-            payment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA.Value : payment.Currency == "EUR" ? exchange.EURA.Value : 1;
-            payment.FromCashID = cash.ID;
-            payment.SalaryTypeID = 2;
-            payment.TimeZone = location.Timezone;
+            if (payamount > 0)
+            {
 
 
-            result = documentManager.AddSalaryPayment(payment, model.Authentication);
 
+                SalaryPayment payment = new SalaryPayment();
+
+                payment.ActinTypeID = typeid.Value;
+                payment.ActionTypeName = actType.Name;
+                payment.Currency = location.Currency;
+                payment.Description = description;
+                payment.DocumentDate = dayresult.Date;
+                payment.EmployeeID = employeeid.Value;
+                payment.EnvironmentID = 2;
+                payment.LocationID = dayresult.LocationID;
+                payment.OurCompanyID = location.OurCompanyID;
+                payment.ResultID = id;
+                payment.TimeZone = location.Timezone;
+                payment.Amount = payamount;
+                payment.UID = Guid.NewGuid();
+                payment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA.Value : payment.Currency == "EUR" ? exchange.EURA.Value : 1;
+                payment.FromCashID = cash.ID;
+                payment.SalaryTypeID = 2;
+                payment.TimeZone = location.Timezone;
+
+
+                result = documentManager.AddSalaryPayment(payment, model.Authentication);
+            }
+            else
+            {
+                result.Message = "Tutar 0 dan büyük olmalı";
+            }
             model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
             model.EmployeeActions = Db.VEmployeeCashActions.Where(x => x.LocationID == dayresult.LocationID && x.ProcessDate == dayresult.Date).ToList();
             model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
@@ -416,53 +424,59 @@ namespace ActionForce.Office.Controllers
                 slipDatetime = slipDate.Add(Convert.ToDateTime(sliptime).TimeOfDay);
             }
 
-
-            BankTransfer bankTransfer = new BankTransfer();
-
-            bankTransfer.ActinTypeID = actType.ID;
-            bankTransfer.ActionTypeName = actType.Name;
-            bankTransfer.Amount = transamount;
-            bankTransfer.Commission = transcommission;
-            bankTransfer.Currency = location.Currency;
-            bankTransfer.Description = description;
-            bankTransfer.DocumentDate = dayresult.Date;
-            bankTransfer.EmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-            bankTransfer.EnvironmentID = 2;
-            bankTransfer.ExchangeRate = bankTransfer.Currency == "USD" ? exchange.USDA.Value : bankTransfer.Currency == "EUR" ? exchange.EURA.Value : 1;
-            bankTransfer.FromCashID = cash.ID;
-            bankTransfer.LocationID = location.LocationID;
-            bankTransfer.OurCompanyID = location.OurCompanyID;
-            bankTransfer.SlipDate = slipDatetime;
-            bankTransfer.SlipNumber = slipnumber;
-            bankTransfer.SlipPath = Server.MapPath("/");
-            bankTransfer.TimeZone = location.Timezone.Value;
-            bankTransfer.ToBankID = bankid;
-            bankTransfer.UID = Guid.NewGuid();
-            bankTransfer.ResultID = dayresult.ID;
-            bankTransfer.StatusID = 3;
-            bankTransfer.SlipDocument = string.Empty;
-            
-
-            if (file != null && file.ContentLength > 0)
+            if (transamount > 0)
             {
-                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                BankTransfer bankTransfer = new BankTransfer();
 
-                bankTransfer.SlipPath = "/Document/Bank";
-                string mappath = Server.MapPath(bankTransfer.SlipPath);
+                bankTransfer.ActinTypeID = actType.ID;
+                bankTransfer.ActionTypeName = actType.Name;
+                bankTransfer.Amount = transamount;
+                bankTransfer.Commission = transcommission;
+                bankTransfer.Currency = location.Currency;
+                bankTransfer.Description = description;
+                bankTransfer.DocumentDate = dayresult.Date;
+                bankTransfer.EmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                bankTransfer.EnvironmentID = 2;
+                bankTransfer.ExchangeRate = bankTransfer.Currency == "USD" ? exchange.USDA.Value : bankTransfer.Currency == "EUR" ? exchange.EURA.Value : 1;
+                bankTransfer.FromCashID = cash.ID;
+                bankTransfer.LocationID = location.LocationID;
+                bankTransfer.OurCompanyID = location.OurCompanyID;
+                bankTransfer.SlipDate = slipDatetime;
+                bankTransfer.SlipNumber = slipnumber;
+                bankTransfer.SlipPath = Server.MapPath("/");
+                bankTransfer.TimeZone = location.Timezone.Value;
+                bankTransfer.ToBankID = bankid;
+                bankTransfer.UID = Guid.NewGuid();
+                bankTransfer.ResultID = dayresult.ID;
+                bankTransfer.StatusID = 3;
+                bankTransfer.SlipDocument = string.Empty;
 
-                try
+
+                if (file != null && file.ContentLength > 0)
                 {
-                    file.SaveAs(Path.Combine(mappath, filename));
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
-                    bankTransfer.SlipDocument = filename;
-                    
+                    bankTransfer.SlipPath = "/Document/Bank";
+                    string mappath = Server.MapPath(bankTransfer.SlipPath);
+
+                    try
+                    {
+                        file.SaveAs(Path.Combine(mappath, filename));
+
+                        bankTransfer.SlipDocument = filename;
+
+                    }
+                    catch (Exception ex)
+                    {
+                    }
                 }
-                catch (Exception ex)
-                {
-                }
+
+                result = documentManager.AddBankTransfer(bankTransfer, model.Authentication);
             }
-
-            result = documentManager.AddBankTransfer(bankTransfer, model.Authentication);
+            else
+            {
+                result.Message = "Tutar 0 dan büyük olmalı.";
+            }
 
             model.BankTransfers = Db.VDocumentBankTransfer.Where(x => x.LocationID == dayresult.LocationID && x.Date == dayresult.Date).ToList();
             model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
@@ -503,48 +517,57 @@ namespace ActionForce.Office.Controllers
                 slipDatetime = slipDate.Add(Convert.ToDateTime(sliptime).TimeOfDay);
             }
 
-            CashExpense expense = new CashExpense();
-
-            expense.ActinTypeID = actType.ID;
-            expense.ActionTypeName = actType.Name;
-            expense.Amount = expenseamount;
-            expense.Currency = currency;
-            expense.Description = description;
-            expense.DocumentDate = dayresult.Date;
-            expense.EnvironmentID = 2;
-            expense.ExchangeRate = expense.Currency == "USD" ? exchange.USDA.Value : expense.Currency == "EUR" ? exchange.EURA.Value : 1;
-            expense.CashID = cash.ID;
-            expense.LocationID = location.LocationID;
-            expense.OurCompanyID = location.OurCompanyID;
-            expense.SlipDate = slipDatetime;
-            expense.SlipNumber = slipnumber;
-            expense.SlipPath = Server.MapPath("/");
-            expense.TimeZone = location.Timezone.Value;
-            expense.UID = Guid.NewGuid();
-            expense.ResultID = dayresult.ID;
-            expense.ExpenseTypeID = exptypeid;
-
-            if (file != null && file.ContentLength > 0)
+            if (expenseamount > 0)
             {
-                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
-                expense.SlipPath = "/Document/Expense";
-                string mappath = Server.MapPath(expense.SlipPath);
 
-                try
+
+                CashExpense expense = new CashExpense();
+
+                expense.ActinTypeID = actType.ID;
+                expense.ActionTypeName = actType.Name;
+                expense.Amount = expenseamount;
+                expense.Currency = currency;
+                expense.Description = description;
+                expense.DocumentDate = dayresult.Date;
+                expense.EnvironmentID = 2;
+                expense.ExchangeRate = expense.Currency == "USD" ? exchange.USDA.Value : expense.Currency == "EUR" ? exchange.EURA.Value : 1;
+                expense.CashID = cash.ID;
+                expense.LocationID = location.LocationID;
+                expense.OurCompanyID = location.OurCompanyID;
+                expense.SlipDate = slipDatetime;
+                expense.SlipNumber = slipnumber;
+                expense.SlipPath = Server.MapPath("/");
+                expense.TimeZone = location.Timezone.Value;
+                expense.UID = Guid.NewGuid();
+                expense.ResultID = dayresult.ID;
+                expense.ExpenseTypeID = exptypeid;
+
+                if (file != null && file.ContentLength > 0)
                 {
-                    file.SaveAs(Path.Combine(mappath, filename));
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
-                    expense.SlipDocument = filename;
+                    expense.SlipPath = "/Document/Expense";
+                    string mappath = Server.MapPath(expense.SlipPath);
 
+                    try
+                    {
+                        file.SaveAs(Path.Combine(mappath, filename));
+
+                        expense.SlipDocument = filename;
+
+                    }
+                    catch (Exception ex)
+                    {
+                    }
                 }
-                catch (Exception ex)
-                {
-                }
+
+                result = documentManager.AddCashExpense(expense, model.Authentication);
             }
-
-            result = documentManager.AddCashExpense(expense, model.Authentication);
-
+            else
+            {
+                result.Message = "Tutar 0 dan büyük olmalı";
+            }
             model.DayResult = dayresult;
             model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
             model.CashActions = Db.VCashActions.Where(x => x.LocationID == dayresult.LocationID && x.ActionDate == dayresult.Date).ToList();
@@ -593,50 +616,60 @@ namespace ActionForce.Office.Controllers
                 slipDatetime = slipDate.Add(Convert.ToDateTime(sliptime).TimeOfDay);
             }
 
-            SaleExchange saleExchange = new SaleExchange();
-
-            saleExchange.ActinTypeID = actType.ID;
-            saleExchange.ActionTypeName = actType.Name;
-            saleExchange.Amount = exchangeamount;
-            saleExchange.Currency = currency;
-            saleExchange.Description = description;
-            saleExchange.DocumentDate = dayresult.Date;
-            saleExchange.EnvironmentID = 2;
-            saleExchange.ExchangeRate = saleExchange.Currency == "USD" ? exchangeitem.USDA.Value : saleExchange.Currency == "EUR" ? exchangeitem.EURA.Value : 1;
-            saleExchange.FromCashID = fromcash.ID;
-            saleExchange.ToCashID = tocash.ID;
-            saleExchange.LocationID = location.LocationID;
-            saleExchange.OurCompanyID = location.OurCompanyID;
-            saleExchange.SlipDate = slipDatetime;
-            saleExchange.SlipNumber = slipnumber;
-            saleExchange.SlipPath = Server.MapPath("/");
-            saleExchange.TimeZone = location.Timezone.Value;
-            saleExchange.UID = Guid.NewGuid();
-            saleExchange.ResultID = dayresult.ID;
-            saleExchange.SaleExchangeRate = exchangerate;
-            saleExchange.ToAmount = (saleExchange.Amount * saleExchange.SaleExchangeRate);
-            saleExchange.ToCurrency = "TRL";
-
-            if (file != null && file.ContentLength > 0)
+            if (exchangeamount > 0)
             {
-                string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
-                saleExchange.SlipPath = "/Document/Exchange";
-                string mappath = Server.MapPath(saleExchange.SlipPath);
 
-                try
+
+                SaleExchange saleExchange = new SaleExchange();
+
+                saleExchange.ActinTypeID = actType.ID;
+                saleExchange.ActionTypeName = actType.Name;
+                saleExchange.Amount = exchangeamount;
+                saleExchange.Currency = currency;
+                saleExchange.Description = description;
+                saleExchange.DocumentDate = dayresult.Date;
+                saleExchange.EnvironmentID = 2;
+                saleExchange.ExchangeRate = saleExchange.Currency == "USD" ? exchangeitem.USDA.Value : saleExchange.Currency == "EUR" ? exchangeitem.EURA.Value : 1;
+                saleExchange.FromCashID = fromcash.ID;
+                saleExchange.ToCashID = tocash.ID;
+                saleExchange.LocationID = location.LocationID;
+                saleExchange.OurCompanyID = location.OurCompanyID;
+                saleExchange.SlipDate = slipDatetime;
+                saleExchange.SlipNumber = slipnumber;
+                saleExchange.SlipPath = Server.MapPath("/");
+                saleExchange.TimeZone = location.Timezone.Value;
+                saleExchange.UID = Guid.NewGuid();
+                saleExchange.ResultID = dayresult.ID;
+                saleExchange.SaleExchangeRate = exchangerate;
+                saleExchange.ToAmount = (saleExchange.Amount * saleExchange.SaleExchangeRate);
+                saleExchange.ToCurrency = "TRL";
+
+                if (file != null && file.ContentLength > 0)
                 {
-                    file.SaveAs(Path.Combine(mappath, filename));
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
-                    saleExchange.SlipDocument = filename;
+                    saleExchange.SlipPath = "/Document/Exchange";
+                    string mappath = Server.MapPath(saleExchange.SlipPath);
 
+                    try
+                    {
+                        file.SaveAs(Path.Combine(mappath, filename));
+
+                        saleExchange.SlipDocument = filename;
+
+                    }
+                    catch (Exception ex)
+                    {
+                    }
                 }
-                catch (Exception ex)
-                {
-                }
+
+                result = documentManager.AddSaleExchange(saleExchange, model.Authentication);
             }
-
-            result = documentManager.AddSaleExchange(saleExchange, model.Authentication);
+            else
+            {
+                result.Message = "Tutar 0 dan büyük olmalıdır ";
+            }
 
             model.DayResult = dayresult;
 
@@ -672,23 +705,32 @@ namespace ActionForce.Office.Controllers
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
 
-            CashCollection cashcollection = new CashCollection();
+            if (paymentamount > 0)
+            {
 
-            cashcollection.ActinTypeID = actType.ID;
-            cashcollection.ActinTypeName = actType.Name;
-            cashcollection.Amount = paymentamount;
-            cashcollection.Currency = currency;
-            cashcollection.Description = description;
-            cashcollection.DocumentDate = dayresult.Date;
-            cashcollection.EnvironmentID = 2;
-            cashcollection.ExchangeRate = cashcollection.Currency == "USD" ? exchange.USDA.Value : cashcollection.Currency == "EUR" ? exchange.EURA.Value : 1;
-            cashcollection.LocationID = location.LocationID;
-            cashcollection.UID = Guid.NewGuid();
-            cashcollection.ResultID = dayresult.ID;
-            cashcollection.FromCustomerID = Db.Customer.FirstOrDefault(x => x.OurCompanyID == location.OurCompanyID && x.IsActive == true)?.ID ?? null;
 
-            result = documentManager.AddCashCollection(cashcollection, model.Authentication);
 
+                CashCollection cashcollection = new CashCollection();
+
+                cashcollection.ActinTypeID = actType.ID;
+                cashcollection.ActinTypeName = actType.Name;
+                cashcollection.Amount = paymentamount;
+                cashcollection.Currency = currency;
+                cashcollection.Description = description;
+                cashcollection.DocumentDate = dayresult.Date;
+                cashcollection.EnvironmentID = 2;
+                cashcollection.ExchangeRate = cashcollection.Currency == "USD" ? exchange.USDA.Value : cashcollection.Currency == "EUR" ? exchange.EURA.Value : 1;
+                cashcollection.LocationID = location.LocationID;
+                cashcollection.UID = Guid.NewGuid();
+                cashcollection.ResultID = dayresult.ID;
+                cashcollection.FromCustomerID = Db.Customer.FirstOrDefault(x => x.OurCompanyID == location.OurCompanyID && x.IsActive == true)?.ID ?? null;
+
+                result = documentManager.AddCashCollection(cashcollection, model.Authentication);
+            }
+            else
+            {
+                result.Message = "Tutar 0 dan büyük olmalıdır.";
+            }
             model.DayResult = dayresult;
 
             model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
@@ -722,26 +764,35 @@ namespace ActionForce.Office.Controllers
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
 
-            CashPayment cashpayment = new CashPayment();
+            if (paymentamount > 0)
+            {
 
-            cashpayment.ActinTypeID = actType.ID;
-            cashpayment.Amount = paymentamount;
-            cashpayment.Currency = currency;
-            cashpayment.Description = description;
-            cashpayment.DocumentDate = dayresult.Date;
-            cashpayment.EnvironmentID = 2;
-            cashpayment.ExchangeRate = cashpayment.Currency == "USD" ? exchange.USDA.Value : cashpayment.Currency == "EUR" ? exchange.EURA.Value : 1;
-            cashpayment.LocationID = location.LocationID;
-            cashpayment.UID = Guid.NewGuid();
-            cashpayment.ResultID = dayresult.ID;
-            cashpayment.ToCustomerID = Db.Customer.FirstOrDefault(x => x.OurCompanyID == location.OurCompanyID && x.IsActive == true)?.ID ?? null;
-            cashpayment.CashID = cash.ID;
-            cashpayment.TimeZone = location.Timezone;
-            cashpayment.OurCompanyID = location.OurCompanyID;
-            cashpayment.ActionTypeName = actType.Name;
 
-            result = documentManager.AddCashPayment(cashpayment, model.Authentication);
 
+                CashPayment cashpayment = new CashPayment();
+
+                cashpayment.ActinTypeID = actType.ID;
+                cashpayment.Amount = paymentamount;
+                cashpayment.Currency = currency;
+                cashpayment.Description = description;
+                cashpayment.DocumentDate = dayresult.Date;
+                cashpayment.EnvironmentID = 2;
+                cashpayment.ExchangeRate = cashpayment.Currency == "USD" ? exchange.USDA.Value : cashpayment.Currency == "EUR" ? exchange.EURA.Value : 1;
+                cashpayment.LocationID = location.LocationID;
+                cashpayment.UID = Guid.NewGuid();
+                cashpayment.ResultID = dayresult.ID;
+                cashpayment.ToCustomerID = Db.Customer.FirstOrDefault(x => x.OurCompanyID == location.OurCompanyID && x.IsActive == true)?.ID ?? null;
+                cashpayment.CashID = cash.ID;
+                cashpayment.TimeZone = location.Timezone;
+                cashpayment.OurCompanyID = location.OurCompanyID;
+                cashpayment.ActionTypeName = actType.Name;
+
+                result = documentManager.AddCashPayment(cashpayment, model.Authentication);
+            }
+            else
+            {
+                result.Message = "Tutar 0 dan büyük olmalıdır";
+            }
             model.DayResult = dayresult;
 
             model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
@@ -779,28 +830,38 @@ namespace ActionForce.Office.Controllers
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
 
-            PosCollection poscollection = new PosCollection();
+            if (saleamount > 0)
+            {
 
-            poscollection.ActinTypeID = actType.ID;
-            poscollection.ActionTypeName = actType.Name;
-            poscollection.Amount = saleamount;
-            poscollection.Quantity = salequantity;
-            poscollection.Currency = currency;
-            poscollection.Description = description;
-            poscollection.DocumentDate = dayresult.Date;
-            poscollection.EnvironmentID = 2;
-            poscollection.ExchangeRate = poscollection.Currency == "USD" ? exchange.USDA.Value : poscollection.Currency == "EUR" ? exchange.EURA.Value : 1;
-            poscollection.LocationID = location.LocationID;
-            poscollection.UID = Guid.NewGuid();
-            poscollection.ResultID = dayresult.ID;
-            poscollection.FromCustomerID = Db.Customer.FirstOrDefault(x => x.OurCompanyID == location.OurCompanyID && x.IsActive == true)?.ID ?? null;
-            poscollection.BankAccountID = bankaccount.ID;
-            poscollection.TerminalID = posTerminal?.TerminalID.ToString() ?? "";
-            poscollection.ResultID = dayresult.ID;
-            poscollection.TimeZone = location.Timezone;
-            poscollection.OurCompanyID = location.OurCompanyID;
 
-            result = documentManager.AddPosCollection(poscollection, model.Authentication);
+
+                PosCollection poscollection = new PosCollection();
+
+                poscollection.ActinTypeID = actType.ID;
+                poscollection.ActionTypeName = actType.Name;
+                poscollection.Amount = saleamount;
+                poscollection.Quantity = salequantity;
+                poscollection.Currency = currency;
+                poscollection.Description = description;
+                poscollection.DocumentDate = dayresult.Date;
+                poscollection.EnvironmentID = 2;
+                poscollection.ExchangeRate = poscollection.Currency == "USD" ? exchange.USDA.Value : poscollection.Currency == "EUR" ? exchange.EURA.Value : 1;
+                poscollection.LocationID = location.LocationID;
+                poscollection.UID = Guid.NewGuid();
+                poscollection.ResultID = dayresult.ID;
+                poscollection.FromCustomerID = Db.Customer.FirstOrDefault(x => x.OurCompanyID == location.OurCompanyID && x.IsActive == true)?.ID ?? null;
+                poscollection.BankAccountID = bankaccount.ID;
+                poscollection.TerminalID = posTerminal?.TerminalID.ToString() ?? "";
+                poscollection.ResultID = dayresult.ID;
+                poscollection.TimeZone = location.Timezone;
+                poscollection.OurCompanyID = location.OurCompanyID;
+
+                result = documentManager.AddPosCollection(poscollection, model.Authentication);
+            }
+            else
+            {
+                result.Message = "Tutar 0 dan büyük olmalıdır.";
+            }
 
             model.DayResult = dayresult;
 
@@ -839,28 +900,38 @@ namespace ActionForce.Office.Controllers
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
 
-            PosCancel poscancel = new PosCancel();
-
-            poscancel.ActinTypeID = actType.ID;
-            poscancel.ActionTypeName = actType.Name;
-            poscancel.Amount = saleamount;
-            poscancel.Quantity = salequantity;
-            poscancel.Currency = currency;
-            poscancel.Description = description;
-            poscancel.DocumentDate = dayresult.Date;
-            poscancel.EnvironmentID = 2;
-            poscancel.ExchangeRate = poscancel.Currency == "USD" ? exchange.USDA.Value : poscancel.Currency == "EUR" ? exchange.EURA.Value : 1;
-            poscancel.LocationID = location.LocationID;
-            poscancel.UID = Guid.NewGuid();
-            poscancel.ResultID = dayresult.ID;
-            poscancel.FromBankAccountID = bankaccount.ID;
-            poscancel.TerminalID = posTerminal?.TerminalID.ToString() ?? "";
-            poscancel.ResultID = dayresult.ID;
-            poscancel.TimeZone = location.Timezone;
-            poscancel.OurCompanyID = location.OurCompanyID;
+            if (saleamount > 0)
+            {
 
 
-            result = documentManager.AddPosCancel(poscancel, model.Authentication);
+
+                PosCancel poscancel = new PosCancel();
+
+                poscancel.ActinTypeID = actType.ID;
+                poscancel.ActionTypeName = actType.Name;
+                poscancel.Amount = saleamount;
+                poscancel.Quantity = salequantity;
+                poscancel.Currency = currency;
+                poscancel.Description = description;
+                poscancel.DocumentDate = dayresult.Date;
+                poscancel.EnvironmentID = 2;
+                poscancel.ExchangeRate = poscancel.Currency == "USD" ? exchange.USDA.Value : poscancel.Currency == "EUR" ? exchange.EURA.Value : 1;
+                poscancel.LocationID = location.LocationID;
+                poscancel.UID = Guid.NewGuid();
+                poscancel.ResultID = dayresult.ID;
+                poscancel.FromBankAccountID = bankaccount.ID;
+                poscancel.TerminalID = posTerminal?.TerminalID.ToString() ?? "";
+                poscancel.ResultID = dayresult.ID;
+                poscancel.TimeZone = location.Timezone;
+                poscancel.OurCompanyID = location.OurCompanyID;
+
+                result = documentManager.AddPosCancel(poscancel, model.Authentication);
+
+            }
+            else
+            {
+                result.Message = "Tutar 0 dan büyük olmalıdır.";
+            }
 
             model.DayResult = dayresult;
 
@@ -898,28 +969,37 @@ namespace ActionForce.Office.Controllers
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
 
-            CashSale cashsale = new CashSale();
+            if (saleamount > 0)
+            {
 
-            cashsale.ActinTypeID = actType.ID;
-            cashsale.ActionTypeName = actType.Name;
-            cashsale.Amount = saleamount;
-            cashsale.Quantity = salequantity;
-            cashsale.Currency = currency;
-            cashsale.Description = description;
-            cashsale.DocumentDate = dayresult.Date;
-            cashsale.EnvironmentID = 2;
-            cashsale.ExchangeRate = cashsale.Currency == "USD" ? exchange.USDA.Value : cashsale.Currency == "EUR" ? exchange.EURA.Value : 1;
-            cashsale.LocationID = location.LocationID;
-            cashsale.UID = Guid.NewGuid();
-            cashsale.ResultID = dayresult.ID;
-            cashsale.FromCustomerID = Db.Customer.FirstOrDefault(x => x.OurCompanyID == location.OurCompanyID && x.IsActive == true)?.ID ?? null;
-            cashsale.TimeZone = location.Timezone;
-            cashsale.OurCompanyID = location.OurCompanyID;
-            cashsale.CashID = cash.ID;
-            cashsale.PayMethodID = 1; // cash
 
-            result = documentManager.AddCashSale(cashsale, model.Authentication);
 
+                CashSale cashsale = new CashSale();
+
+                cashsale.ActinTypeID = actType.ID;
+                cashsale.ActionTypeName = actType.Name;
+                cashsale.Amount = saleamount;
+                cashsale.Quantity = salequantity;
+                cashsale.Currency = currency;
+                cashsale.Description = description;
+                cashsale.DocumentDate = dayresult.Date;
+                cashsale.EnvironmentID = 2;
+                cashsale.ExchangeRate = cashsale.Currency == "USD" ? exchange.USDA.Value : cashsale.Currency == "EUR" ? exchange.EURA.Value : 1;
+                cashsale.LocationID = location.LocationID;
+                cashsale.UID = Guid.NewGuid();
+                cashsale.ResultID = dayresult.ID;
+                cashsale.FromCustomerID = Db.Customer.FirstOrDefault(x => x.OurCompanyID == location.OurCompanyID && x.IsActive == true)?.ID ?? null;
+                cashsale.TimeZone = location.Timezone;
+                cashsale.OurCompanyID = location.OurCompanyID;
+                cashsale.CashID = cash.ID;
+                cashsale.PayMethodID = 1; // cash
+
+                result = documentManager.AddCashSale(cashsale, model.Authentication);
+            }
+            else
+            {
+                result.Message = "Tutar 0 dan büyük olmalıdır";
+            }
             model.DayResult = dayresult;
 
             model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
@@ -955,28 +1035,35 @@ namespace ActionForce.Office.Controllers
             var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
             var cash = OfficeHelper.GetCash(dayresult.LocationID, currency);
 
-            SaleReturn salereturn = new SaleReturn();
+            if (saleamount > 0)
+            {
 
-            salereturn.ActinTypeID = actType.ID;
-            salereturn.ActionTypeName = actType.Name;
-            salereturn.Amount = saleamount;
-            salereturn.Quantity = salequantity;
-            salereturn.Currency = currency;
-            salereturn.Description = description;
-            salereturn.DocumentDate = dayresult.Date;
-            salereturn.EnvironmentID = 2;
-            salereturn.ExchangeRate = salereturn.Currency == "USD" ? exchange.USDA.Value : salereturn.Currency == "EUR" ? exchange.EURA.Value : 1;
-            salereturn.LocationID = location.LocationID;
-            salereturn.UID = Guid.NewGuid();
-            salereturn.ResultID = dayresult.ID;
-            salereturn.ToCustomerID = Db.Customer.FirstOrDefault(x => x.OurCompanyID == location.OurCompanyID && x.IsActive == true)?.ID ?? null;
-            salereturn.TimeZone = location.Timezone;
-            salereturn.OurCompanyID = location.OurCompanyID;
-            salereturn.CashID = cash.ID;
-            salereturn.PayMethodID = 1; // cash
+                SaleReturn salereturn = new SaleReturn();
 
+                salereturn.ActinTypeID = actType.ID;
+                salereturn.ActionTypeName = actType.Name;
+                salereturn.Amount = saleamount;
+                salereturn.Quantity = salequantity;
+                salereturn.Currency = currency;
+                salereturn.Description = description;
+                salereturn.DocumentDate = dayresult.Date;
+                salereturn.EnvironmentID = 2;
+                salereturn.ExchangeRate = salereturn.Currency == "USD" ? exchange.USDA.Value : salereturn.Currency == "EUR" ? exchange.EURA.Value : 1;
+                salereturn.LocationID = location.LocationID;
+                salereturn.UID = Guid.NewGuid();
+                salereturn.ResultID = dayresult.ID;
+                salereturn.ToCustomerID = Db.Customer.FirstOrDefault(x => x.OurCompanyID == location.OurCompanyID && x.IsActive == true)?.ID ?? null;
+                salereturn.TimeZone = location.Timezone;
+                salereturn.OurCompanyID = location.OurCompanyID;
+                salereturn.CashID = cash.ID;
+                salereturn.PayMethodID = 1; // cash
 
-            result = documentManager.AddCashSaleReturn(salereturn, model.Authentication);
+                result = documentManager.AddCashSaleReturn(salereturn, model.Authentication);
+            }
+            else
+            {
+                result.Message = "Tutar 0 dan büyük olmalı.";
+            }
 
             model.DayResult = dayresult;
 
@@ -1000,7 +1087,7 @@ namespace ActionForce.Office.Controllers
             };
 
             ResultControlModel model = new ResultControlModel();
-           
+
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
             var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
 
