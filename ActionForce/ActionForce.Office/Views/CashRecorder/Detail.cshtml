@@ -43,8 +43,8 @@
                             <div class="card mg-b-20 mg-lg-b-25">
                                 <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                                     <h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.Detail.ActionName}"))</h6>
-                                    <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="33" />
-                                    <input id="UID" name="UID" type="hidden" value="@(Model.Detail.UID)" />
+                                    <input name="ActinTypeID" type="hidden" value="33" />
+                                    <input name="UID" type="hidden" value="@(Model.Detail.UID)" />
                                     <nav class="nav">
                                         <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.Detail.Date.Value.ToLongDateString())</span></a>
                                     </nav>
@@ -64,15 +64,15 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Tarih</label>
+                                            <label for="UpdateDocumentDate" class="col-sm-3 col-form-label">Tarih</label>
                                             <div class="col-sm-9">
-                                                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.Detail.Date.Value.ToString("yyyy-MM-dd"))" required>
+                                                <input id="UpdateDocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.Detail.Date.Value.ToString("yyyy-MM-dd"))" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Lokasyon</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" id="LocationID" name="LocationID" required>
+                                                <select class="form-control" name="LocationID" required>
                                                     @foreach (var item in Model.LocationList)
                                                     {
                                                         <option value="@item.LocationID" @(Model.Detail.LocationID == item.LocationID ? "selected" : "")>@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
@@ -81,21 +81,21 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Net Tutar</label>
+                                            <label for="NetAmount" class="col-sm-3 col-form-label">Net Tutar</label>
                                             <div class="col-sm-9">
-                                                <input id="NetAmount" name="NetAmount" type="text" class="form-control money" autocomplete="off" value="@(Model.Detail.NetAmount?.ToString("N2"))" placeholder="Net Tutar" required>
+                                                <input name="NetAmount" type="text" class="form-control money" autocomplete="off" value="@(Model.Detail.NetAmount?.ToString("N2"))" placeholder="Net Tutar" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Toplam Tutar</label>
+                                            <label for="TotalAmount" class="col-sm-3 col-form-label">Toplam Tutar</label>
                                             <div class="col-sm-9">
-                                                <input id="TotalAmount" name="TotalAmount" type="text" class="form-control money" autocomplete="off" value="@(Model.Detail.TotalAmount?.ToString("N2"))" placeholder="Toplam Tutar" required>
+                                                <input name="TotalAmount" type="text" class="form-control money" autocomplete="off" value="@(Model.Detail.TotalAmount?.ToString("N2"))" placeholder="Toplam Tutar" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Para Birimi</label>
+                                            <label for="Currency" class="col-sm-3 col-form-label">Para Birimi</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" id="Currency" name="Currency" required>
+                                                <select class="form-control" name="Currency" required>
                                                     @foreach (var item in Model.CurrencyList)
                                                     {
                                                         <option value="@item.Code" @(Model.Detail.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
@@ -105,37 +105,37 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Fiş Tarih</label>
+                                            <label for="SlipDate" class="col-sm-3 col-form-label">Fiş Tarih</label>
                                             <div class="col-sm-9">
-                                                <input id="SlipDate" name="SlipDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.Detail.SlipDate.Value.ToString("yyyy-MM-dd"))" required>
+                                                <input id="UpdateSlipDate" name="SlipDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.Detail.SlipDate.Value.ToString("yyyy-MM-dd"))" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Fiş Saati</label>
+                                            <label for="SlipTime" class="col-sm-3 col-form-label">Fiş Saati</label>
                                             <div class="col-sm-9">
-                                                <input id="SlipTime" name="SlipTime" type="text" class="form-control hourfull" autocomplete="off" placeholder="hh:mm:ss" value="@(Model.Detail.SlipDate.Value.ToString("hh:mm:ss"))" required>
+                                                <input name="SlipTime" type="text" class="form-control hourfull" autocomplete="off" placeholder="hh:mm:ss" value="@(Model.Detail.SlipDate.Value.ToString("hh:mm:ss"))" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Fiş Numarası</label>
+                                            <label for="SlipNumber" class="col-sm-3 col-form-label">Fiş Numarası</label>
                                             <div class="col-sm-9">
-                                                <input id="SlipNumber" name="SlipNumber" type="text" class="form-control" autocomplete="off" value="@Model.Detail.SlipNumber" placeholder="Fiş Numarası">
+                                                <input name="SlipNumber" type="text" class="form-control" autocomplete="off" value="@Model.Detail.SlipNumber" placeholder="Fiş Numarası">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Dekont</label>
+                                            <label for="documentFile" class="col-sm-3 col-form-label">Dekont</label>
                                             <div class="col-sm-7">
-                                                <input type="file" name="documentFile" id="documentFile" value="@Model.Detail.SlipFile" style="width: 100%;" class="form-control" />
+                                                <input type="file" name="documentFile" value="@Model.Detail.SlipFile" style="width: 100%;" class="form-control" />
                                             </div>
                                             <div class="col-sm-2">
-                                                <img src=@($"~/{Model.Detail.SlipPath}/{Model.Detail.SlipFile}") class="img-thumbnail" alt="Responsive image">
+                                                <img src=@($"{Model.Detail.SlipPath}/{Model.Detail.SlipFile}") class="img-thumbnail" alt="@(Model.Detail.SlipFile)">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-3">Active?</div>
                                             <div class="col-sm-9">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" value="@Model.Detail.IsActive" checked="@Model.Detail.IsActive" class="custom-control-input">
+                                                    <input type="checkbox" name="IsActive" value="@Model.Detail.IsActive" checked="@Model.Detail.IsActive" class="custom-control-input">
                                                     <label class="custom-control-label">Aktif mi?</label>
                                                 </div>
                                             </div>
@@ -220,7 +220,12 @@
             firstDay: 1
         });
 
-
+        $('#UpdateDocumentDate').datepicker({
+            dateFormat: "yy-mm-dd",
+            dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+            monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+            firstDay: 1
+        });
 
         $('#SlipDate').datepicker({
             dateFormat: "yy-mm-dd",
@@ -229,7 +234,12 @@
             firstDay: 1
         });
 
-
+        $('#UpdateSlipDate').datepicker({
+            dateFormat: "yy-mm-dd",
+            dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+            monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+            firstDay: 1
+        });
 
         $(function () {
             $('.shiftbegintime').mask('00:00');
