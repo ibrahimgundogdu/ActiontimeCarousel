@@ -631,27 +631,10 @@ namespace ActionForce.Office.Controllers
                 sale.OurCompanyID = location.OurCompanyID;
                 sale.TimeZone = timezone;
                 sale.ReferanceID = refID == false ? Convert.ToInt64(cashSale.ReferanceID) : (long?)null;
-
-                sale.SlipPath = "";
-                sale.SlipDocument = "";
-
-                if (documentFile != null && documentFile.ContentLength > 0)
-                {
-                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
-                    sale.SlipDocument = filename;
-                    sale.SlipPath = "/Document/Exchange";
-
-                    try
-                    {
-                        documentFile.SaveAs(Path.Combine(Server.MapPath(sale.SlipPath), filename));
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                }
+                sale.SlipPath = path;
 
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.AddSaleExchange(sale, model.Authentication);
+                result = documentManager.AddSaleExchange(sale, documentFile, model.Authentication);
 
                 
             }
@@ -702,23 +685,6 @@ namespace ActionForce.Office.Controllers
                 sale.UID = cashCollect.UID;
                 sale.SaleExchangeRate = saleExchange;
 
-                sale.SlipPath = "";
-                sale.SlipDocument = "";
-                if (documentFile != null && documentFile.ContentLength > 0)
-                {
-                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
-                    sale.SlipDocument = filename;
-                    sale.SlipPath = "/Document/Exchange";
-
-                    try
-                    {
-                        documentFile.SaveAs(Path.Combine(Server.MapPath(sale.SlipPath), filename));
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                }
-
                 if (newexchanges > 0)
                 {
                     sale.ExchangeRate = newexchanges;
@@ -729,7 +695,7 @@ namespace ActionForce.Office.Controllers
                 }
 
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.EditSaleExchange(sale, model.Authentication);
+                result = documentManager.EditSaleExchange(sale, documentFile, model.Authentication);
 
 
             }
@@ -1759,7 +1725,7 @@ namespace ActionForce.Office.Controllers
                 }
 
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.EditCashExpense(sale, model.Authentication);
+                result = documentManager.EditCashExpense(sale, documentFile, model.Authentication);
 
             }
 
@@ -1931,6 +1897,9 @@ namespace ActionForce.Office.Controllers
                 TimeSpan? time = Convert.ToDateTime(cashTransfer.SlipTime).TimeOfDay;
                 DateTime? slipdatetime = date.Value.Add(time.Value);
 
+                //DateTime sDate = Convert.ToDateTime(cashTransfer.SlipDate).Date;
+                //DateTime sDatetime = sDate.Add(Convert.ToDateTime(cashTransfer.SlipTime).TimeOfDay);
+
                 if (DateTime.TryParse(cashTransfer.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashTransfer.DocumentDate).Date;
@@ -1966,23 +1935,24 @@ namespace ActionForce.Office.Controllers
                 bankTransfer.ToBankID = fromPrefix == "B" ? fromID : (int?)null;
                 bankTransfer.ReferanceID = refID;
                 bankTransfer.UID = Guid.NewGuid();
-                bankTransfer.SlipDocument = "";
-                bankTransfer.SlipPath = "";
 
                 if (documentFile != null && documentFile.ContentLength > 0)
                 {
                     string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
-                    bankTransfer.SlipDocument = filename;
                     bankTransfer.SlipPath = "/Document/Bank";
 
+                    string mappath = Server.MapPath(bankTransfer.SlipPath);
                     try
                     {
-                        documentFile.SaveAs(Path.Combine(Server.MapPath(bankTransfer.SlipPath), filename));
+                        documentFile.SaveAs(Path.Combine(mappath, filename));
+                        bankTransfer.SlipDocument = filename;
                     }
                     catch (Exception ex)
                     {
                     }
                 }
+
+
                 result = documentManager.AddBankTransfer(bankTransfer, model.Authentication);
 
 
@@ -2053,22 +2023,7 @@ namespace ActionForce.Office.Controllers
                 banktransfer.TrackingNumber = cashTransfer.TrackingNumber;
                 banktransfer.SlipPath = Server.MapPath("/");
 
-                banktransfer.SlipPath = "";
-                banktransfer.SlipDocument = "";
-                if (documentFile != null && documentFile.ContentLength > 0)
-                {
-                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
-                    banktransfer.SlipDocument = filename;
-                    banktransfer.SlipPath = "/Document/Bank";
 
-                    try
-                    {
-                        documentFile.SaveAs(Path.Combine(Server.MapPath(banktransfer.SlipPath), filename));
-                    }
-                    catch (Exception ex)
-                    {
-                    }
-                }
 
                 if (newexchanges > 0)
                 {
@@ -2080,7 +2035,7 @@ namespace ActionForce.Office.Controllers
                 }
 
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.EditBankTransfer(banktransfer, model.Authentication);
+                result = documentManager.EditBankTransfer(banktransfer, documentFile, model.Authentication);
 
             }
 
@@ -2387,7 +2342,7 @@ namespace ActionForce.Office.Controllers
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.SalaryDetail = Db.VDocumentSalaryPayment.FirstOrDefault(x => x.UID == id);
-            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && new string[] { "Index", "Salary" }.Contains(x.Action) && x.Environment == "Office" && x.ProcessID == model.SalaryDetail.ID.ToString()).ToList();
+            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Index" && x.Environment == "Office" && x.ProcessID == model.SalaryDetail.ID.ToString()).ToList();
 
             model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
 

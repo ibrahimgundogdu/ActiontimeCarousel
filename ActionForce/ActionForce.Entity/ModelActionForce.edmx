@@ -1136,6 +1136,7 @@
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="SlipDate" Type="datetime" />
           <Property Name="SlipNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="SlipPath" Type="nvarchar" MaxLength="50" />
           <Property Name="SlipDocument" Type="nvarchar" MaxLength="50" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
@@ -3650,6 +3651,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSaleExchange' does
           <Property Name="SlipNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="SlipPath" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentTicketSaleReturn' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5331,7 +5333,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentSaleExchange].[SlipDate] AS [SlipDate], 
     [VDocumentSaleExchange].[SlipNumber] AS [SlipNumber], 
     [VDocumentSaleExchange].[ResultID] AS [ResultID], 
-    [VDocumentSaleExchange].[EnvironmentID] AS [EnvironmentID]
+    [VDocumentSaleExchange].[EnvironmentID] AS [EnvironmentID], 
+    [VDocumentSaleExchange].[SlipPath] AS [SlipPath]
     FROM [dbo].[VDocumentSaleExchange] AS [VDocumentSaleExchange]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentTicketSaleReturn" EntityType="Self.VDocumentTicketSaleReturn" store:Type="Views" store:Schema="dbo">
@@ -8801,6 +8804,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UID" Type="Guid" />
           <Property Name="SlipDate" Type="DateTime" Precision="3" />
           <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SlipPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DocumentTicketSaleReturns">
           <Key>
@@ -9201,6 +9205,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="SlipPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DocumentCashOpen">
           <Key>
@@ -12954,6 +12959,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentSaleExchange">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentSaleExchange">
               <MappingFragment StoreEntitySet="DocumentSaleExchange">
+                <ScalarProperty Name="SlipPath" ColumnName="SlipPath" />
                 <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />
                 <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
@@ -13365,6 +13371,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentSaleExchange">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentSaleExchange">
               <MappingFragment StoreEntitySet="VDocumentSaleExchange">
+                <ScalarProperty Name="SlipPath" ColumnName="SlipPath" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />

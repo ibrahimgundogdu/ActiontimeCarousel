@@ -32,8 +32,8 @@
                     <td class="tx-sm-13">@sale.SlipNumber</td>
                     <td class="tx-sm-13">@(sale.SlipDate?.ToString())</td>
                     <td class="tx-sm-13">
-                        <a target="_blank" href="@($"/{sale.SlipPath}/{sale.SlipFile}")">
-                            <img class="thumb" src="@($"/{sale.SlipPath}/{sale.SlipFile}")" alt="@(sale.SlipFile)">
+                        <a target="_blank" href="@($"{sale.SlipPath}/{sale.SlipFile}")">
+                            <img class="thumb" src="@($"{sale.SlipPath}/{sale.SlipFile}")" alt="@(sale.SlipFile)">
                         </a>
                     </td>
                     <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(sale.NetAmount != null ? sale.NetAmount?.ToString("N2") : "")</td>
