@@ -110,20 +110,26 @@
 
         </table>
     </div>
-    <input id="DayresultID" type="hidden" value="@(Model.DayResult.ID)" />
-    <div class="form-group pd-l-20 pd-r-20">
-        <label>Durum</label>
-        <select class="form-control" id="StateID" required>
-            @foreach (var item in Model.ResultStates)
-            {
-                <option value="@item.StateID" @(item.StateID == Model.DayResult.StateID ? "selected":"")>@(Html.Raw($"{item.StateName}"))</option>
-            }
-        </select>
-    </div>
+    @using (Html.BeginForm("SetResultState", "Result", FormMethod.Post))
+    {
+        <input name="DayresultID" type="hidden" value="@(Model.DayResult.ID)" />
+        <input name="LocationID" type="hidden" value="@(Model.DayResult.LocationID)" />
+        
+<div class="form-group pd-l-20 pd-r-20">
+    <label>Durum</label>
+    <select class="form-control" name="StateID" required>
+        @foreach (var item in Model.ResultStates)
+        {
+            <option value="@item.StateID" @(item.StateID == Model.DayResult.StateID ? "selected" : "")>@(Html.Raw($"{item.StateName}"))</option>
+        }
+    </select>
+</div>
 
-    <div class="card-footer text-center tx-13">
-        <a href="" class="btn btn-warning btn-block">Durumu Onayla <i class="icon ion-md-arrow-down mg-l-5"></i></a>
-    </div><!-- card-footer -->
+<div class="card-footer text-center tx-13">
+    <input id="btnResultStateSubmit" class="btn btn-warning btn-block" type="submit" value="Durumu Onayla" />
+</div>
+}
+
 </div>
 
 @if (Model.Result != null) //

@@ -49,7 +49,7 @@ namespace ActionForce.Integration.UfeService
         public EmployeeShiftResult EmployeeShiftStart(int locationID, int employeeID, int? environmentID, double? latitude, double? longitude, string _Date)
         {
             var request = new RestRequest("Employee/ShiftStart", Method.POST);
-            request.AddJsonBody(new { LocationID = locationID, EmployeeID = employeeID,  EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude });
+            request.AddJsonBody(new { LocationID = locationID, EmployeeID = employeeID,  EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude, Date = _Date });
             var response = Client.Execute<EmployeeShiftResult>(request);
             if (response.ResponseStatus == ResponseStatus.Completed && response.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -61,7 +61,7 @@ namespace ActionForce.Integration.UfeService
         public EmployeeShiftResult EmployeeShiftEnd(int locationID, int employeeID, int? environmentID, double? latitude, double? longitude, string _Date)
         {
             var request = new RestRequest("Employee/ShiftEnd", Method.POST);
-            request.AddJsonBody(new { LocationID = locationID, EmployeeID = employeeID, EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude });
+            request.AddJsonBody(new { LocationID = locationID, EmployeeID = employeeID, EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude, Date = _Date });
             var response = Client.Execute<EmployeeShiftResult>(request);
             if (response.ResponseStatus == ResponseStatus.Completed && response.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -73,7 +73,7 @@ namespace ActionForce.Integration.UfeService
         public EmployeeShiftResult EmployeeBreakStart(int locationID, int employeeID, int? environmentID, double? latitude, double? longitude, string _Date)
         {
             var request = new RestRequest("Employee/BreakStart", Method.POST);
-            request.AddJsonBody(new { LocationID = locationID, EmployeeID = employeeID, EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude });
+            request.AddJsonBody(new { LocationID = locationID, EmployeeID = employeeID, EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude, Date = _Date });
             var response = Client.Execute<EmployeeShiftResult>(request);
             if (response.ResponseStatus == ResponseStatus.Completed && response.StatusCode == System.Net.HttpStatusCode.OK)
             {
@@ -85,7 +85,7 @@ namespace ActionForce.Integration.UfeService
         public EmployeeShiftResult EmployeeBreakEnd(int locationID, int employeeID,int? environmentID, double? latitude, double? longitude, string _Date)
         {
             var request = new RestRequest("Employee/BreakEnd", Method.POST);
-            request.AddJsonBody(new { LocationID = locationID, EmployeeID = employeeID, EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude });
+            request.AddJsonBody(new { LocationID = locationID, EmployeeID = employeeID, EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude, Date = _Date });
             var response = Client.Execute<EmployeeShiftResult>(request);
             if (response.ResponseStatus == ResponseStatus.Completed && response.StatusCode == System.Net.HttpStatusCode.OK)
             {

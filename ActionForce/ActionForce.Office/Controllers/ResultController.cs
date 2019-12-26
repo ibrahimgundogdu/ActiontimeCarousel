@@ -104,7 +104,6 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
-
         [AllowAnonymous]
         public ActionResult Detail(string id, int? locationID, string date)
         {
@@ -194,7 +193,6 @@ namespace ActionForce.Office.Controllers
 
             return View(model);
         }
-
 
         [HttpPost]
         [AllowAnonymous]
@@ -802,7 +800,6 @@ namespace ActionForce.Office.Controllers
             return PartialView("_PartialCashCollectPayment", model);
         }
 
-
         [HttpPost]
         [AllowAnonymous]
         public PartialViewResult AddCardSale(long? id, string amount, string quantity, string currency, string description)
@@ -942,7 +939,6 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialCardSale", model);
         }
-
 
         [HttpPost]
         [AllowAnonymous]
@@ -1128,6 +1124,89 @@ namespace ActionForce.Office.Controllers
             return PartialView("_PartialResultSummary", model);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult SetResultState(long? DayresultID, int? StateID, int? LocationID)
+        {
+            Result<DayResult> result = new Result<DayResult>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
 
+            string dateKey = DateTime.Now.ToString("yyyy-MM-dd");
+            var location = Db.Location.FirstOrDefault(x => x.LocationID == LocationID);
+
+            ResultControlModel model = new ResultControlModel();
+
+            if (DayresultID > 0 && StateID > 0)
+            {
+                var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == DayresultID);
+                
+                if (dayresult != null)
+                {
+                    
+                    DayResult self = new DayResult()
+                    {
+                        Date = dayresult.Date,
+                        Description = dayresult.Description,
+                        DayResultItemList = dayresult.DayResultItemList,
+                        EnvironmentID = dayresult.EnvironmentID,
+                        ID = dayresult.ID,
+                        RecordDate = dayresult.RecordDate,
+                        IsActive = dayresult.IsActive,
+                        UID = dayresult.UID,
+                        IsMobile = dayresult.IsMobile,
+                        Latitude = dayresult.Latitude,
+                        LocationID = dayresult.LocationID,
+                        Longitude = dayresult.Longitude,
+                        RecordEmployeeID = dayresult.RecordEmployeeID,
+                        RecordIP = dayresult.RecordIP,
+                        StateID = dayresult.StateID,
+                        StatusID = dayresult.StatusID,
+                        UpdateDate = dayresult.UpdateDate,
+                        UpdateEmployeeID = dayresult.UpdateEmployeeID,
+                        UpdateIP = dayresult.UpdateIP
+                    };
+
+                    dayresult.StateID = StateID.Value;
+
+                    if (StateID == 5)
+                    {
+                        dayresult.IsActive = false;
+                    }
+                    else
+                    {
+                        dayresult.IsActive = true;
+                    }
+
+                    Db.SaveChanges();
+
+                    dateKey = dayresult.Date.ToString("yyyy-MM-dd");
+
+                    result.IsSuccess = true;
+                    result.Message = "Günsonu durumu başarı ile güncellendi.";
+
+                    // eski sisteme uyumlu kayıtlar at.
+
+
+
+                    // log at
+                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<DayResult>(self, dayresult, OfficeHelper.getIgnorelist());
+                    OfficeHelper.AddApplicationLog("Office", "Result", "Update", dayresult.ID.ToString(), "Result", "Detail", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                }
+
+            }
+            else
+            {
+                result.Message = "Günsonu veya durum bilgisi hatalı";
+                OfficeHelper.AddApplicationLog("Office", "Result", "Update", DayresultID.ToString(), "Result", "Detail", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+            }
+
+            TempData["result"] = result;
+
+            return RedirectToAction("Envelope", new { date = dateKey });
+        }
     }
 }
