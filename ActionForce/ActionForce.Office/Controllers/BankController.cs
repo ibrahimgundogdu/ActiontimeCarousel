@@ -156,24 +156,11 @@ namespace ActionForce.Office.Controllers
                 model.Result = TempData["result"] as Result<BankActions> ?? null;
             }
 
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
             model.BankAccountList = Db.BankAccount.Where(x => x.AccountTypeID == 2 && x.IsActive == true).ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
 
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.Detail = Db.VDocumentPosCollection.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Bank" && x.Action == "Index" && x.Environment == "Office" && x.ProcessID == model.Detail.ID.ToString()).ToList();
@@ -409,25 +396,11 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<BankActions> ?? null;
             }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
             model.BankAccountList = Db.BankAccount.Where(x => x.AccountTypeID == 2 && x.IsActive == true).ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
 
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.PosCancelDetail = Db.VDocumentPosCancel.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Bank" && x.Action == "PosCancel" && x.Environment == "Office" && x.ProcessID == model.PosCancelDetail.ID.ToString()).ToList();
@@ -663,25 +636,11 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<BankActions> ?? null;
             }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
             model.BankAccountList = Db.BankAccount.Where(x => x.AccountTypeID == 2 && x.IsActive == true).ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
 
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.PosRefundDetail = Db.VDocumentPosRefund.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Bank" && x.Action == "PosRefund" && x.Environment == "Office" && x.ProcessID == model.PosRefundDetail.ID.ToString()).ToList();

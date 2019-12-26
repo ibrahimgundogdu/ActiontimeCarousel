@@ -24,6 +24,7 @@ namespace ActionForce.Office
         public long? ResultID { get; set; }
         public int? EnvironmentID { get; set; }
         public int? TimeZone { get; set; }
+        public int? CategoryID { get; set; }
         public Guid UID { get; set; }
     }
 }

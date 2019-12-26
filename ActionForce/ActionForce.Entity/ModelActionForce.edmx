@@ -1065,6 +1065,7 @@
           <Property Name="IsActive" Type="bit" />
           <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
           <Property Name="ActionTypeID" Type="int" />
+          <Property Name="CategoryID" Type="int" />
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
@@ -1100,6 +1101,7 @@
           <Property Name="IsActive" Type="bit" />
           <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
           <Property Name="ActionTypeID" Type="int" />
+          <Property Name="CategoryID" Type="int" />
           <Property Name="SalaryType" Type="int" />
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="ResultID" Type="bigint" />
@@ -3568,6 +3570,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSalaryEarn' does n
           <Property Name="SystemUnitPrice" Type="float" />
           <Property Name="SystemQuantityHour" Type="float" />
           <Property Name="SystemTotalAmount" Type="float" />
+          <Property Name="CategoryID" Type="int" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSalaryPayment' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -3608,6 +3612,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSalaryPayment' doe
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
           <Property Name="SalaryType" Type="int" />
           <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="CategoryID" Type="int" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSaleExchange' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5256,7 +5262,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentSalaryEarn].[QuantityHour] AS [QuantityHour], 
     [VDocumentSalaryEarn].[SystemUnitPrice] AS [SystemUnitPrice], 
     [VDocumentSalaryEarn].[SystemQuantityHour] AS [SystemQuantityHour], 
-    [VDocumentSalaryEarn].[SystemTotalAmount] AS [SystemTotalAmount]
+    [VDocumentSalaryEarn].[SystemTotalAmount] AS [SystemTotalAmount], 
+    [VDocumentSalaryEarn].[CategoryID] AS [CategoryID], 
+    [VDocumentSalaryEarn].[CategoryName] AS [CategoryName]
     FROM [dbo].[VDocumentSalaryEarn] AS [VDocumentSalaryEarn]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentSalaryPayment" EntityType="Self.VDocumentSalaryPayment" store:Type="Views" store:Schema="dbo">
@@ -5293,7 +5301,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentSalaryPayment].[UpdaterFullName] AS [UpdaterFullName], 
     [VDocumentSalaryPayment].[LocationFullName] AS [LocationFullName], 
     [VDocumentSalaryPayment].[SalaryType] AS [SalaryType], 
-    [VDocumentSalaryPayment].[UID] AS [UID]
+    [VDocumentSalaryPayment].[UID] AS [UID], 
+    [VDocumentSalaryPayment].[CategoryID] AS [CategoryID], 
+    [VDocumentSalaryPayment].[CategoryName] AS [CategoryName]
     FROM [dbo].[VDocumentSalaryPayment] AS [VDocumentSalaryPayment]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentSaleExchange" EntityType="Self.VDocumentSaleExchange" store:Type="Views" store:Schema="dbo">
@@ -8769,6 +8779,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="SalaryType" Type="Int32" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="CategoryID" Type="Int32" />
         </EntityType>
         <EntityType Name="DocumentSaleExchange">
           <Key>
@@ -8903,6 +8914,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SystemUnitPrice" Type="Double" />
           <Property Name="SystemQuantityHour" Type="Double" />
           <Property Name="SystemTotalAmount" Type="Double" />
+          <Property Name="CategoryID" Type="Int32" />
         </EntityType>
         <EntityType Name="VDocumentCashCollections">
           <Key>
@@ -9443,6 +9455,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
           <Property Name="SalaryType" Type="Int32" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <ComplexType Name="GetPersonList_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -10065,6 +10079,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SystemUnitPrice" Type="Double" />
           <Property Name="SystemQuantityHour" Type="Double" />
           <Property Name="SystemTotalAmount" Type="Double" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VBankAccount">
           <Key>
@@ -12925,6 +12941,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentSalaryPayment">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentSalaryPayment">
               <MappingFragment StoreEntitySet="DocumentSalaryPayment">
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="SalaryType" ColumnName="SalaryType" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
@@ -13064,6 +13081,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentSalaryEarn">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentSalaryEarn">
               <MappingFragment StoreEntitySet="DocumentSalaryEarn">
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="SystemTotalAmount" ColumnName="SystemTotalAmount" />
                 <ScalarProperty Name="SystemQuantityHour" ColumnName="SystemQuantityHour" />
                 <ScalarProperty Name="SystemUnitPrice" ColumnName="SystemUnitPrice" />
@@ -13623,6 +13641,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentSalaryPayment">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentSalaryPayment">
               <MappingFragment StoreEntitySet="VDocumentSalaryPayment">
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="SalaryType" ColumnName="SalaryType" />
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
@@ -14238,6 +14258,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentSalaryEarn">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentSalaryEarn">
               <MappingFragment StoreEntitySet="VDocumentSalaryEarn">
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="SystemTotalAmount" ColumnName="SystemTotalAmount" />
                 <ScalarProperty Name="SystemQuantityHour" ColumnName="SystemQuantityHour" />
                 <ScalarProperty Name="SystemUnitPrice" ColumnName="SystemUnitPrice" />

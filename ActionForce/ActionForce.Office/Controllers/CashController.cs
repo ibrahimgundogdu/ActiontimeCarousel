@@ -35,11 +35,11 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
-
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
@@ -226,26 +226,13 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.CashDetail = Db.VDocumentCashCollections.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Index" && x.Environment == "Office" && x.ProcessID == model.CashDetail.ID.ToString()).ToList();
@@ -279,6 +266,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
@@ -476,26 +464,13 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.SaleDetail = Db.VDocumentTicketSales.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Sale" && x.Environment == "Office" && x.ProcessID == model.SaleDetail.ID.ToString()).ToList();
@@ -529,6 +504,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
@@ -649,7 +625,7 @@ namespace ActionForce.Office.Controllers
                     {
                         documentFile.SaveAs(Path.Combine(Server.MapPath(sale.SlipPath), filename));
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }
@@ -719,7 +695,7 @@ namespace ActionForce.Office.Controllers
                     {
                         documentFile.SaveAs(Path.Combine(Server.MapPath(sale.SlipPath), filename));
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }
@@ -776,26 +752,13 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.ExchangeDetail = Db.VDocumentSaleExchange.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "ExchangeSale" && x.Environment == "Office" && x.ProcessID == model.ExchangeDetail.ID.ToString()).ToList();
@@ -829,6 +792,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
@@ -1015,26 +979,13 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.OpenDetail = Db.VDocumentCashOpen.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Open" && x.Environment == "Office" && x.ProcessID == model.OpenDetail.ID.ToString()).ToList();
@@ -1068,6 +1019,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
@@ -1267,26 +1219,13 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.PaymentDetail = Db.VDocumentCashPayments.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "CashPayment" && x.Environment == "Office" && x.ProcessID == model.PaymentDetail.ID.ToString()).ToList();
@@ -1320,6 +1259,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
@@ -1518,26 +1458,13 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.SalesRefundDetail = Db.VDocumentTicketSaleReturn.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "SaleReturn" && x.Environment == "Office" && x.ProcessID == model.SalesRefundDetail.ID.ToString()).ToList();
@@ -1571,6 +1498,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
@@ -1685,7 +1613,7 @@ namespace ActionForce.Office.Controllers
                     {
                         documentFile.SaveAs(Path.Combine(Server.MapPath(expense.SlipPath), filename));
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }
@@ -1754,7 +1682,7 @@ namespace ActionForce.Office.Controllers
                     {
                         documentFile.SaveAs(Path.Combine(Server.MapPath(sale.SlipPath), filename));
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }
@@ -1810,26 +1738,13 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.ExpenseDetail = Db.VDocumentCashExpense.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Expense" && x.Environment == "Office" && x.ProcessID == model.ExpenseDetail.ID.ToString()).ToList();
@@ -1863,6 +1778,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
@@ -1990,7 +1906,7 @@ namespace ActionForce.Office.Controllers
                     {
                         documentFile.SaveAs(Path.Combine(Server.MapPath(bankTransfer.SlipPath), filename));
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }
@@ -2079,7 +1995,7 @@ namespace ActionForce.Office.Controllers
                     {
                         documentFile.SaveAs(Path.Combine(Server.MapPath(banktransfer.SlipPath), filename));
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }
@@ -2112,26 +2028,13 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.TransferDetail = Db.VDocumentBankTransfer.FirstOrDefault(x => x.UID == id);
 
@@ -2272,7 +2175,7 @@ namespace ActionForce.Office.Controllers
                 payment.SalaryTypeID = cashSalary.SalaryType;
                 payment.TimeZone = location.Timezone;
                 payment.ReferanceID = refID == false ? Convert.ToInt64(cashSalary.ReferanceID) : (long?)null;
-
+                payment.CategoryID = cashSalary.CategoryID ?? (int?)null;
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.AddSalaryPayment(payment, model.Authentication);
@@ -2327,7 +2230,7 @@ namespace ActionForce.Office.Controllers
                 sale.FromBankID = cashSalary.BankAccountID;
                 sale.SalaryTypeID = cashSalary.SalaryType;
                 sale.UID = cashSalary.UID;
-
+                sale.CategoryID = cashSalary.CategoryID;
                 if (newexchanges > 0)
                 {
                     sale.ExchangeRate = newexchanges;
@@ -2380,19 +2283,6 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -2400,7 +2290,6 @@ namespace ActionForce.Office.Controllers
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.SalaryDetail = Db.VDocumentSalaryPayment.FirstOrDefault(x => x.UID == id);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Index" && x.Environment == "Office" && x.ProcessID == model.SalaryDetail.ID.ToString()).ToList();

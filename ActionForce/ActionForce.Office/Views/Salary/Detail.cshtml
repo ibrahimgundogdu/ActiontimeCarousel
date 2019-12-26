@@ -96,6 +96,18 @@
                                                 </select>
                                             </div>
                                         </div>
+
+                                        <div class="form-group row">
+                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Kategori</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control select2" name="CategoryID">
+                                                    @foreach (var item in Model.SalaryCategories)
+                                                    {
+                                                        <option value="@item.ID" @(Model.Detail.CategoryID == item.ID ? "selected" : "")>@($"{item.SortBy} ({item.CategoryName})")</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Tutar</label>
                                             <div class="col-sm-9">
@@ -106,7 +118,7 @@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Saatlik Ücret</label>
                                             <div class="col-sm-9">
-                                                <input id="UnitPrice" name="UnitPrice" type="text" class="form-control money" autocomplete="off" value="@(Model.Detail.UnitPrice?.ToString("N2"))"  placeholder="Birim Fiyat" readonly required>
+                                                <input id="UnitPrice" name="UnitPrice" type="text" class="form-control money" autocomplete="off" value="@(Model.Detail.UnitPrice?.ToString("N2"))" placeholder="Birim Fiyat" readonly required>
 
                                             </div>
                                         </div>

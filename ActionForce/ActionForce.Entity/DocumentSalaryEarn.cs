@@ -41,5 +41,6 @@ namespace ActionForce.Entity
         public Nullable<double> SystemUnitPrice { get; set; }
         public Nullable<double> SystemQuantityHour { get; set; }
         public Nullable<double> SystemTotalAmount { get; set; }
+        public Nullable<int> CategoryID { get; set; }
     }
 }

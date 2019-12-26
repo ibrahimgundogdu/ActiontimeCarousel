@@ -150,6 +150,7 @@ namespace ActionForce.Office
         public string ReferanceID { get; set; }
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
+        public int? CategoryID { get; set; }
         public Guid UID { get; set; }
     }
     public class NewPosCollect
@@ -215,6 +216,7 @@ namespace ActionForce.Office
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
         public string ReferanceID { get; set; }
+        public int? CategoryID { get; set; }
         public Guid UID { get; set; }
     }
     public class NewEmployeeSalary

@@ -48,8 +48,8 @@
                             <div class="card mg-b-20 mg-lg-b-25">
                                 <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                                     <h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.PaymentDetail.ActionName}"))</h6>
-                                    <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
-                                    <input id="UID" name="UID" type="hidden" value="@(Model.PaymentDetail.UID)" />
+                                    <input name="ActinTypeID" type="hidden" value="23" />
+                                    <input name="UID" type="hidden" value="@(Model.PaymentDetail.UID)" />
                                     <nav class="nav">
                                         <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.PaymentDetail.Date.Value.ToLongDateString())</span></a>
                                     </nav>
@@ -77,13 +77,13 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Tarih</label>
                                             <div class="col-sm-9">
-                                                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.PaymentDetail.Date.Value.ToString("yyyy-MM-dd"))" required>
+                                                <input id="UpdateDocumentDate" name="DocumentDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.PaymentDetail.Date.Value.ToString("yyyy-MM-dd"))" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Kimden</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" id="FromID" name="FromID" required>
+                                                <select class="form-control select2" name="FromID" required>
                                                     @foreach (var item in Model.FromList)
                                                     {
                                                         <option value="@item.Code" @(Model.PaymentDetail.ToCustomerID != null ? Model.PaymentDetail.ToCustomerID == item.ID ? "selected" : "" : Model.PaymentDetail.ToEmployeeID == item.ID ? "selected" : "")>@(Html.Raw($"{item.Name}"))</option>
@@ -94,7 +94,7 @@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Lokasyon</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" id="LocationID" name="LocationID" required>
+                                                <select class="form-control select2" name="LocationID" required>
                                                     @foreach (var item in Model.LocationList)
                                                     {
                                                         <option value="@item.LocationID" @(Model.PaymentDetail.LocationID == item.LocationID ? "selected" : "")>@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
@@ -105,13 +105,13 @@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Tutar</label>
                                             <div class="col-sm-9">
-                                                <input id="Amount" name="Amount" type="text" class="form-control money" autocomplete="off" value="@(Model.PaymentDetail.Amount?.ToString("N2"))" placeholder="Tutar" required>
+                                                <input name="Amount" type="text" class="form-control money" autocomplete="off" value="@(Model.PaymentDetail.Amount?.ToString("N2"))" placeholder="Tutar" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Para Birimi</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" id="Currency" name="Currency" required>
+                                                <select class="form-control" name="Currency" required>
                                                     @foreach (var item in Model.CurrencyList)
                                                     {
                                                         <option value="@item.Code" @(Model.PaymentDetail.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
@@ -122,13 +122,13 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Kuru</label>
                                             <div class="col-sm-9">
-                                                <input id="ExchangeRate" name="ExchangeRate" type="text" class="form-control money4" autocomplete="off" placeholder="Döviz Kuru">
+                                                <input name="ExchangeRate" type="text" class="form-control money4" autocomplete="off" placeholder="Döviz Kuru">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Kur</label>
                                             <div class="col-sm-9">
-                                                <input id="Exchange" name="Exchange" type="text" class="form-control money4" autocomplete="off" value="@(Model.PaymentDetail.ExchangeRate?.ToString("N4"))" readonly>
+                                                <input name="Exchange" type="text" class="form-control money4" autocomplete="off" value="@(Model.PaymentDetail.ExchangeRate?.ToString("N4"))" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -140,20 +140,20 @@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Açıklama</label>
                                             <div class="col-sm-9">
-                                                <textarea id="Description" name="Description" rows="4" class="form-control" value="@Model.PaymentDetail.Description" placeholder="Açıklama"></textarea>
+                                                <textarea name="Description" rows="4" class="form-control" value="@Model.PaymentDetail.Description" placeholder="Açıklama"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
                                             <div class="col-sm-9">
-                                                <input id="ReferenceID" name="ReferenceID" type="text" class="form-control" autocomplete="off" value="@Model.PaymentDetail.ReferenceID" placeholder="Referans ID">
+                                                <input name="ReferenceID" type="text" class="form-control" autocomplete="off" value="@Model.PaymentDetail.ReferenceID" placeholder="Referans ID">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <div class="col-sm-3">Active?</div>
                                             <div class="col-sm-9">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" value="@Model.PaymentDetail.IsActive" checked="@Model.PaymentDetail.IsActive" class="custom-control-input">
+                                                    <input type="checkbox" value="@Model.PaymentDetail.IsActive" name="IsActive" checked="@Model.PaymentDetail.IsActive" class="custom-control-input">
                                                     <label class="custom-control-label">Aktif mi?</label>
                                                 </div>
                                             </div>

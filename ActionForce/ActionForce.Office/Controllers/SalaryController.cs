@@ -126,7 +126,7 @@ namespace ActionForce.Office.Controllers
                 earn.UnitPrice = (double?)cashSalary.UnitPrice;
                 earn.TimeZone = location.Timezone;
                 earn.OurCompanyID = location.OurCompanyID;
-
+                earn.CategoryID = cashSalary.CategoryID ?? (int?)null;
 
 
                 DocumentManager documentManager = new DocumentManager();
@@ -178,7 +178,7 @@ namespace ActionForce.Office.Controllers
                 sale.UID = cashEarn.UID;
                 sale.UnitPrice = unit;
                 sale.QuantityHour = quantity;
-
+                sale.CategoryID = cashEarn.CategoryID;
                 
 
                 DocumentManager documentManager = new DocumentManager();
@@ -394,7 +394,7 @@ namespace ActionForce.Office.Controllers
                 payment.SalaryTypeID = cashSalary.SalaryType;
                 payment.TimeZone = location.Timezone;
                 payment.ReferanceID = refID == false ? Convert.ToInt64(cashSalary.ReferanceID) : (long?)null;
-
+                payment.CategoryID = cashSalary.CategoryID ?? (int?)null;
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.AddSalaryPayment(payment, model.Authentication);
@@ -450,6 +450,7 @@ namespace ActionForce.Office.Controllers
                 sale.FromBankID = cashSalary.BankAccountID;
                 sale.SalaryTypeID = cashSalary.SalaryType;
                 sale.UID = cashSalary.UID;
+                sale.CategoryID = cashSalary.CategoryID;
 
                 if (newexchanges > 0)
                 {

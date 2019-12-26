@@ -48,8 +48,8 @@
                             <div class="card mg-b-20 mg-lg-b-25">
                                 <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                                     @*<h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.OpenDetail.ActionName}"))</h6>*@
-                                    <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="26" />
-                                    <input id="UID" name="UID" type="hidden" value="@(Model.OpenDetail.UID)" />
+                                    <input name="ActinTypeID" type="hidden" value="26" />
+                                    <input name="UID" type="hidden" value="@(Model.OpenDetail.UID)" />
                                     <nav class="nav">
                                         <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.OpenDetail.Date.Value.ToLongDateString())</span></a>
                                     </nav>
@@ -77,13 +77,13 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Tarih</label>
                                             <div class="col-sm-9">
-                                                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.OpenDetail.Date.Value.ToString("yyyy-MM-dd"))" required>
+                                                <input id="UpdateDocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.OpenDetail.Date.Value.ToString("yyyy-MM-dd"))" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Lokasyon</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" id="LocationID" name="LocationID" required>
+                                                <select class="form-control select2" name="LocationID" required>
                                                     @foreach (var item in Model.LocationList)
                                                     {
                                                         <option value="@item.LocationID" @(Model.OpenDetail.LocationID == item.LocationID ? "selected" : "")>@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
@@ -94,13 +94,13 @@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Tutar</label>
                                             <div class="col-sm-9">
-                                                <input id="Amount" name="Amount" type="text" class="form-control money" autocomplete="off" value="@(Model.OpenDetail.Amount?.ToString("N2"))" placeholder="Tutar" required>
+                                                <input name="Amount" type="text" class="form-control money" autocomplete="off" value="@(Model.OpenDetail.Amount?.ToString("N2"))" placeholder="Tutar" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Para Birimi</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control" id="Currency" name="Currency" required>
+                                                <select class="form-control" name="Currency" required>
                                                     @foreach (var item in Model.CurrencyList)
                                                     {
                                                         <option value="@item.Code" @(Model.OpenDetail.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
@@ -111,13 +111,13 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Kuru</label>
                                             <div class="col-sm-9">
-                                                <input id="ExchangeRate" name="ExchangeRate" type="text" class="form-control money4" autocomplete="off" placeholder="Döviz Kuru">
+                                                <input name="ExchangeRate" type="text" class="form-control money4" autocomplete="off" placeholder="Döviz Kuru">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Kur</label>
                                             <div class="col-sm-9">
-                                                <input id="Exchange" name="Exchange" type="text" class="form-control money4" autocomplete="off" value="@(Model.OpenDetail.ExchangeRate?.ToString("N4"))" readonly>
+                                                <input name="Exchange" type="text" class="form-control money4" autocomplete="off" value="@(Model.OpenDetail.ExchangeRate?.ToString("N4"))" readonly>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -136,7 +136,7 @@
                                             <div class="col-sm-3">Active?</div>
                                             <div class="col-sm-9">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" value="@Model.OpenDetail.IsActive" checked="@Model.OpenDetail.IsActive" class="custom-control-input">
+                                                    <input type="checkbox" value="@Model.OpenDetail.IsActive" name="IsActive" checked="@Model.OpenDetail.IsActive" class="custom-control-input">
                                                     <label class="custom-control-label">Aktif mi?</label>
                                                 </div>
                                             </div>
@@ -144,7 +144,7 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
                                             <div class="col-sm-9">
-                                                <input id="ReferenceID" name="ReferenceID" type="text" class="form-control" autocomplete="off" value="@Model.OpenDetail.ReferenceID" placeholder="Referans ID">
+                                                <input name="ReferenceID" type="text" class="form-control" autocomplete="off" value="@Model.OpenDetail.ReferenceID" placeholder="Referans ID">
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-0">
@@ -227,61 +227,12 @@
                 searchInputPlaceholder: 'Search options'
             });
 
-            var dateFormat = 'yy-mm-dd',
-                from = $('#dateFrom')
-                    .datepicker({
-                        defaultDate: '+1w',
-                        numberOfMonths: 2,
-                        dateFormat: "yy-mm-dd",
-                        dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                        monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                        firstDay: 1
-                    })
-                    .on('change', function () {
-                        to.datepicker('option', 'minDate', getDate(this));
-                    }),
-                to = $('#dateTo').datepicker({
-                    defaultDate: '+1w',
-                    numberOfMonths: 2,
-                    dateFormat: "yy-mm-dd",
-                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                    firstDay: 1
-                })
-                    .on('change', function () {
-                        from.datepicker('option', 'maxDate', getDate(this));
-                    });
-
-            $('#DocumentDate').datepicker({
+            $('#UpdateDocumentDate').datepicker({
                 dateFormat: "yy-mm-dd",
                 dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
             });
-
-            var cleaveC = new Cleave('#DocumentDate', {
-                date: true,
-                delimiter: '-',
-                datePattern: ['Y', 'm', 'd'],
-
-            });
-            //var cleave = new Cleave('#Amount', {
-            //    numeral: true
-            //});
-            //var cleave2 = new Cleave('#Exchange', {
-            //    numeral: true
-            //});
-            function getDate(element) {
-                var date;
-                try {
-                    date = $.datepicker.parseDate(dateFormat, element.value);
-                } catch (error) {
-                    date = null;
-                }
-
-                return date;
-
-            }
 
         });
 

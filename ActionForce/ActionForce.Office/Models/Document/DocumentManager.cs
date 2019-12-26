@@ -2156,7 +2156,7 @@ namespace ActionForce.Office
                         salaryEarn.SystemQuantityHour = salary.SystemQuantityHour;
                         salaryEarn.SystemTotalAmount = salary.SystemTotalAmount;
                         salaryEarn.SystemUnitPrice = salary.SystemUnitPrice;
-
+                        salaryEarn.CategoryID = salary.CategoryID;
 
                         Db.DocumentSalaryEarn.Add(salaryEarn);
                         Db.SaveChanges();
@@ -2230,10 +2230,11 @@ namespace ActionForce.Office
                             UpdateDate = isEarn.UpdateDate,
                             UpdateEmployee = isEarn.UpdateEmployee,
                             UpdateIP = isEarn.UpdateIP,
+                            CategoryID = isEarn.CategoryID,
                             EnvironmentID = isEarn.EnvironmentID
                         };
 
-
+                        isEarn.CategoryID = salary.CategoryID;
                         isEarn.EmployeeID = salary.EmployeeID;
                         isEarn.TotalAmount = (double)((double?)salary.UnitPrice * (double)salary.QuantityHour);
                         isEarn.UnitPrice = (double?)salary.UnitPrice;
@@ -2380,7 +2381,7 @@ namespace ActionForce.Office
                             salaryPayment.EnvironmentID = payment.EnvironmentID;
                             salaryPayment.ReferenceID = payment.ReferanceID;
                             salaryPayment.ResultID = payment.ResultID;
-
+                            salaryPayment.CategoryID = payment.CategoryID;
                             Db.DocumentSalaryPayment.Add(salaryPayment);
                             Db.SaveChanges();
 
@@ -2476,8 +2477,10 @@ namespace ActionForce.Office
                             UpdateDate = isPayment.UpdateDate,
                             UpdateEmployee = isPayment.UpdateEmployee,
                             UpdateIP = isPayment.UpdateIP,
+                            CategoryID = isPayment.CategoryID,
                             EnvironmentID = isPayment.EnvironmentID
                         };
+                        isPayment.CategoryID = payment.CategoryID;
                         isPayment.LocationID = payment.LocationID;
                         isPayment.Currency = payment.Currency;
                         isPayment.Date = payment.DocumentDate;

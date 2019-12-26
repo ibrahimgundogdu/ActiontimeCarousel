@@ -225,7 +225,7 @@ namespace ActionForce.Office.Controllers
                 {
                     file.SaveAs(Path.Combine(mappath, filename));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }
@@ -271,7 +271,7 @@ namespace ActionForce.Office.Controllers
                 {
                     file.SaveAs(Path.Combine(mappath, filename));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                 }
             }
@@ -466,7 +466,7 @@ namespace ActionForce.Office.Controllers
                         bankTransfer.SlipDocument = filename;
 
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }
@@ -557,7 +557,7 @@ namespace ActionForce.Office.Controllers
                         expense.SlipDocument = filename;
 
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }
@@ -659,7 +659,7 @@ namespace ActionForce.Office.Controllers
                         saleExchange.SlipDocument = filename;
 
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }

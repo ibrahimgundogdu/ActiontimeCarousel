@@ -30,6 +30,15 @@
                 </select>
             </div>
             <div class="form-group">
+                <label>Kategori</label>
+                <select class="form-control" id="CategoryID" name="CategoryID">
+                    @foreach (var item in Model.SalaryCategories)
+                    {
+                        <option value="@item.ID">@($"{item.SortBy} ({item.CategoryName})")</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
                 <label>Saatlik Ücret</label>
                 <input id="UnitPrice" name="UnitPrice" type="text" class="form-control money" autocomplete="off" placeholder="Saatlik Ücret" readonly required>
             </div>
@@ -38,9 +47,9 @@
                 <input id="QuantityHour" name="QuantityHour" type="text" class="form-control quantity" autocomplete="off" placeholder="Toplam Saat" required>
             </div>
             @*<div class="form-group">
-                <label>Toplam Tutar</label>
-                <input id="TotalAmount" name="TotalAmount" type="text" class="form-control" placeholder="Tutar" required>
-            </div>*@
+            <label>Toplam Tutar</label>
+            <input id="TotalAmount" name="TotalAmount" type="text" class="form-control" placeholder="Tutar" required>
+        </div>*@
             <div class="form-group">
                 <label>Para Birimi</label>
                 <select class="form-control" id="Currency" name="Currency" required>
@@ -92,6 +101,15 @@
                     @foreach (var item in Model.LocationList)
                     {
                         <option value="@item.LocationID">@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Kategori</label>
+                <select class="form-control" id="CategoryID" name="CategoryID">
+                    @foreach (var item in Model.SalaryCategories)
+                    {
+                        <option value="@item.ID">@($"{item.SortBy} ({item.CategoryName})")</option>
                     }
                 </select>
             </div>

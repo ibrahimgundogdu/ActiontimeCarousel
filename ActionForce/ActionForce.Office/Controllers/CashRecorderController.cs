@@ -173,7 +173,7 @@ namespace ActionForce.Office.Controllers
                     {
                         documentFile.SaveAs(Path.Combine(Server.MapPath(record.SlipPath), filename));
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }
@@ -259,7 +259,7 @@ namespace ActionForce.Office.Controllers
                     {
                         documentFile.SaveAs(Path.Combine(Server.MapPath(record.SlipPath), filename));
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                     }
                 }
