@@ -109,32 +109,45 @@ namespace ActionForce.Office.Controllers
                 }
                 var cash = OfficeHelper.GetCash(cashSalary.LocationID, cashSalary.Currency);
                 // tahsilat eklenir.
+                double? quantity = cashSalary.QuantityHour;
+                double? price = cashSalary.UnitPrice;
+                if (quantity > 0 && price > 0)
+                {
+                    SalaryEarn earn = new SalaryEarn();
 
-                SalaryEarn earn = new SalaryEarn();
-
-                earn.ActionTypeID = actType.ID;
-                earn.ActionTypeName = actType.Name;
-                earn.Currency = cashSalary.Currency;
-                earn.Description = cashSalary.Description;
-                earn.DocumentDate = docDate;
-                earn.EmployeeID = fromID;
-                earn.EnvironmentID = 2;
-                earn.LocationID = location.LocationID;
-                earn.QuantityHour = (double)cashSalary.QuantityHour;
-                earn.TotalAmount = (double)((double)cashSalary.QuantityHour * (double?)cashSalary.UnitPrice);
-                earn.UID = Guid.NewGuid();
-                earn.UnitPrice = (double?)cashSalary.UnitPrice;
-                earn.TimeZone = location.Timezone;
-                earn.OurCompanyID = location.OurCompanyID;
-                earn.CategoryID = cashSalary.CategoryID ?? (int?)null;
+                    earn.ActionTypeID = actType.ID;
+                    earn.ActionTypeName = actType.Name;
+                    earn.Currency = cashSalary.Currency;
+                    earn.Description = cashSalary.Description;
+                    earn.DocumentDate = docDate;
+                    earn.EmployeeID = fromID;
+                    earn.EnvironmentID = 2;
+                    earn.LocationID = location.LocationID;
+                    earn.QuantityHour = quantity;
+                    earn.TotalAmount = (double)((double)cashSalary.QuantityHour * (double?)cashSalary.UnitPrice);
+                    earn.UID = Guid.NewGuid();
+                    earn.UnitPrice = (double?)cashSalary.UnitPrice;
+                    earn.TimeZone = location.Timezone;
+                    earn.OurCompanyID = location.OurCompanyID;
+                    earn.CategoryID = cashSalary.CategoryID ?? (int?)null;
 
 
-                DocumentManager documentManager = new DocumentManager();
-                result = documentManager.AddSalaryEarn(earn, model.Authentication);
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.AddSalaryEarn(earn, model.Authentication);
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                }
+                
 
             }
 
-            TempData["result"] = result;
+            Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
 
             return RedirectToAction("Index", "Salary");
         }
@@ -166,27 +179,41 @@ namespace ActionForce.Office.Controllers
                     docDate = Convert.ToDateTime(cashEarn.DocumentDate).Date;
                 }
 
-                SalaryEarn sale = new SalaryEarn();
-                sale.ActionTypeID = cashEarn.ActinTypeID;
-                sale.TotalAmount = amount;
-                sale.Currency = currency;
-                sale.Description = cashEarn.Description;
-                sale.DocumentDate = docDate;
-                sale.EnvironmentID = 2;
-                sale.EmployeeID = fromPrefix == "E" ? fromID : (int?)null;
-                sale.LocationID = cashEarn.LocationID;
-                sale.UID = cashEarn.UID;
-                sale.UnitPrice = unit;
-                sale.QuantityHour = quantity;
-                sale.CategoryID = cashEarn.CategoryID;
-                
+                var price = Convert.ToDouble(cashEarn.UnitPrice.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                if (quantity > 0 && price > 0)
+                {
+                    SalaryEarn sale = new SalaryEarn();
+                    sale.ActionTypeID = cashEarn.ActinTypeID;
+                    sale.TotalAmount = amount;
+                    sale.Currency = currency;
+                    sale.Description = cashEarn.Description;
+                    sale.DocumentDate = docDate;
+                    sale.EnvironmentID = 2;
+                    sale.EmployeeID = fromPrefix == "E" ? fromID : (int?)null;
+                    sale.LocationID = cashEarn.LocationID;
+                    sale.UID = cashEarn.UID;
+                    sale.UnitPrice = unit;
+                    sale.QuantityHour = quantity;
+                    sale.CategoryID = cashEarn.CategoryID;
 
-                DocumentManager documentManager = new DocumentManager();
-                result = documentManager.EditSalaryEarn(sale, model.Authentication);
+
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.EditSalaryEarn(sale, model.Authentication);
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                }
+
+                
 
             }
 
-            TempData["result"] = result;
+            Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
             return RedirectToAction("Detail", new { id = cashEarn.UID });
 
         }
@@ -209,7 +236,10 @@ namespace ActionForce.Office.Controllers
                 result = documentManager.DeleteSalaryEarn(id, model.Authentication);
             }
 
-            TempData["result"] = result;
+            Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
             return RedirectToAction("Index", "Salary");
 
         }
@@ -374,35 +404,48 @@ namespace ActionForce.Office.Controllers
                 var cash = OfficeHelper.GetCash(cashSalary.LocationID, cashSalary.Currency);
                 // tahsilat eklenir.
                 var refID = string.IsNullOrEmpty(cashSalary.ReferanceID);
-                SalaryPayment payment = new SalaryPayment();
 
-                payment.ActinTypeID = actType.ID;
-                payment.ActionTypeName = actType.Name;
-                payment.Currency = cashSalary.Currency;
-                payment.Description = cashSalary.Description;
-                payment.DocumentDate = docDate;
-                payment.EmployeeID = fromPrefix == "E" ? fromID : (int)0; ;
-                payment.EnvironmentID = 2;
-                payment.LocationID = location.LocationID;
-                payment.Amount = amount;
-                payment.UID = Guid.NewGuid();
-                payment.TimeZone = location.Timezone;
-                payment.OurCompanyID = location.OurCompanyID;
-                payment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA.Value : payment.Currency == "EUR" ? exchange.EURA.Value : 1;
-                payment.FromBankID = (int?)cashSalary.BankAccountID > 0 ? cashSalary.BankAccountID : (int?)null;
-                payment.FromCashID = (int?)cashSalary.BankAccountID == 0 ? cash.ID : (int?)null;
-                payment.SalaryTypeID = cashSalary.SalaryType;
-                payment.TimeZone = location.Timezone;
-                payment.ReferanceID = refID == false ? Convert.ToInt64(cashSalary.ReferanceID) : (long?)null;
-                payment.CategoryID = cashSalary.CategoryID ?? (int?)null;
+                if (amount > 0)
+                {
+                    SalaryPayment payment = new SalaryPayment();
 
-                DocumentManager documentManager = new DocumentManager();
-                result = documentManager.AddSalaryPayment(payment, model.Authentication);
+                    payment.ActinTypeID = actType.ID;
+                    payment.ActionTypeName = actType.Name;
+                    payment.Currency = cashSalary.Currency;
+                    payment.Description = cashSalary.Description;
+                    payment.DocumentDate = docDate;
+                    payment.EmployeeID = fromPrefix == "E" ? fromID : (int)0; ;
+                    payment.EnvironmentID = 2;
+                    payment.LocationID = location.LocationID;
+                    payment.Amount = amount;
+                    payment.UID = Guid.NewGuid();
+                    payment.TimeZone = location.Timezone;
+                    payment.OurCompanyID = location.OurCompanyID;
+                    payment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA.Value : payment.Currency == "EUR" ? exchange.EURA.Value : 1;
+                    payment.FromBankID = (int?)cashSalary.BankAccountID > 0 ? cashSalary.BankAccountID : (int?)null;
+                    payment.FromCashID = (int?)cashSalary.BankAccountID == 0 ? cash.ID : (int?)null;
+                    payment.SalaryTypeID = cashSalary.SalaryType;
+                    payment.TimeZone = location.Timezone;
+                    payment.ReferanceID = refID == false ? Convert.ToInt64(cashSalary.ReferanceID) : (long?)null;
+                    payment.CategoryID = cashSalary.CategoryID ?? (int?)null;
+
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.AddSalaryPayment(payment, model.Authentication);
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                }
+                
                 
 
             }
 
-            TempData["result"] = result;
+            Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
 
             return RedirectToAction("SalaryPayment", "Salary");
         }
@@ -439,35 +482,46 @@ namespace ActionForce.Office.Controllers
                 double? newexchanges = Convert.ToDouble(cashSalary.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? exchanges = Convert.ToDouble(cashSalary.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
-
-                SalaryPayment sale = new SalaryPayment();
-                sale.LocationID = cashSalary.ActinTypeID;
-                sale.Currency = cashSalary.Currency;
-                sale.DocumentDate = docDate;
-                sale.EmployeeID = fromPrefix == "E" ? fromID : (int)0;
-                sale.Amount = amount;
-                sale.Description = cashSalary.Description;
-                sale.FromBankID = cashSalary.BankAccountID;
-                sale.SalaryTypeID = cashSalary.SalaryType;
-                sale.UID = cashSalary.UID;
-                sale.CategoryID = cashSalary.CategoryID;
-
-                if (newexchanges > 0)
+                if (amount > 0)
                 {
-                    sale.ExchangeRate = newexchanges;
+                    SalaryPayment sale = new SalaryPayment();
+                    sale.LocationID = cashSalary.ActinTypeID;
+                    sale.Currency = cashSalary.Currency;
+                    sale.DocumentDate = docDate;
+                    sale.EmployeeID = fromPrefix == "E" ? fromID : (int)0;
+                    sale.Amount = amount;
+                    sale.Description = cashSalary.Description;
+                    sale.FromBankID = cashSalary.BankAccountID;
+                    sale.SalaryTypeID = cashSalary.SalaryType;
+                    sale.UID = cashSalary.UID;
+                    sale.CategoryID = cashSalary.CategoryID;
+
+                    if (newexchanges > 0)
+                    {
+                        sale.ExchangeRate = newexchanges;
+                    }
+                    else
+                    {
+                        sale.ExchangeRate = exchanges;
+                    }
+
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.EditSalaryPayment(sale, model.Authentication);
                 }
                 else
                 {
-                    sale.ExchangeRate = exchanges;
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-
-                DocumentManager documentManager = new DocumentManager();
-                result = documentManager.EditSalaryPayment(sale, model.Authentication);
+                
                 
 
             }
 
-            TempData["result"] = result;
+            Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
             return RedirectToAction("SalaryDetail", new { id = cashSalary.UID });
 
         }
@@ -490,7 +544,10 @@ namespace ActionForce.Office.Controllers
                 result = documentManager.DeleteSalaryPayment(id, model.Authentication);
             }
 
-            TempData["result"] = result;
+            Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
             return RedirectToAction("SalaryPayment", "Salary");
 
         }

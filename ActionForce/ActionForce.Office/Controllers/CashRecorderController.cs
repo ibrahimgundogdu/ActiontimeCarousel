@@ -145,47 +145,59 @@ namespace ActionForce.Office.Controllers
 
                 string path = Server.MapPath("/");
 
-                CashRecorder record = new CashRecorder();
-
-                record.ActinTypeID = actType.ID;
-                record.ActionTypeName = actType.Name;
-                record.NetAmount = netamount;
-                record.TotalAmount = totalamount;
-                record.Currency = currency;
-                record.DocumentDate = docDate;
-                record.LocationID = cashRecord.LocationID;
-                record.OurCompanyID = location.OurCompanyID;
-                record.TimeZone = timezone;
-                record.SlipNumber = cashRecord.SlipNumber;
-                record.SlipDate = sDatetime;
-                record.ResultID = resultID;
-                
-                record.SlipFile = "";
-                record.SlipPath = "";
-
-                if (documentFile != null && documentFile.ContentLength > 0)
+                if (netamount > 0)
                 {
-                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
-                    record.SlipFile = filename;
-                    record.SlipPath = "/Document/CashRecord";
+                    CashRecorder record = new CashRecorder();
 
-                    try
+                    record.ActinTypeID = actType.ID;
+                    record.ActionTypeName = actType.Name;
+                    record.NetAmount = netamount;
+                    record.TotalAmount = totalamount;
+                    record.Currency = currency;
+                    record.DocumentDate = docDate;
+                    record.LocationID = cashRecord.LocationID;
+                    record.OurCompanyID = location.OurCompanyID;
+                    record.TimeZone = timezone;
+                    record.SlipNumber = cashRecord.SlipNumber;
+                    record.SlipDate = sDatetime;
+                    record.ResultID = resultID;
+
+                    record.SlipFile = "";
+                    record.SlipPath = "";
+
+                    if (documentFile != null && documentFile.ContentLength > 0)
                     {
-                        documentFile.SaveAs(Path.Combine(Server.MapPath(record.SlipPath), filename));
+                        string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
+                        record.SlipFile = filename;
+                        record.SlipPath = "/Document/CashRecord";
+
+                        try
+                        {
+                            documentFile.SaveAs(Path.Combine(Server.MapPath(record.SlipPath), filename));
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
-                    catch (Exception)
-                    {
-                    }
+
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.AddCashRecorder(record, model.Authentication);
                 }
-
-                DocumentManager documentManager = new DocumentManager();
-                result = documentManager.AddCashRecorder(record, model.Authentication);
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                }
+                
 
                 
 
             }
 
-            TempData["result"] = result;
+            Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
 
             return RedirectToAction("Index", "CashRecorder");
         }
@@ -234,43 +246,55 @@ namespace ActionForce.Office.Controllers
 
                 string path = Server.MapPath("/");
 
-                CashRecorder record = new CashRecorder();
-                
-                record.NetAmount = netamount;
-                record.TotalAmount = totalamount;
-                record.Currency = currency;
-                record.DocumentDate = docDate;
-                record.LocationID = cashRecord.LocationID;
-                record.TimeZone = timezone;
-                record.SlipNumber = cashRecord.SlipNumber;
-                record.SlipDate = sDatetime;
-                record.UID = cashRecord.UID;
-
-                record.SlipPath = "";
-                record.SlipFile = "";
-
-                if (documentFile != null && documentFile.ContentLength > 0)
+                if (netamount > 0)
                 {
-                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
-                    record.SlipFile = filename;
-                    record.SlipPath = "/Document/CashRecorder";
+                    CashRecorder record = new CashRecorder();
 
-                    try
+                    record.NetAmount = netamount;
+                    record.TotalAmount = totalamount;
+                    record.Currency = currency;
+                    record.DocumentDate = docDate;
+                    record.LocationID = cashRecord.LocationID;
+                    record.TimeZone = timezone;
+                    record.SlipNumber = cashRecord.SlipNumber;
+                    record.SlipDate = sDatetime;
+                    record.UID = cashRecord.UID;
+
+                    //record.SlipPath = "";
+                    //record.SlipFile = "";
+
+                    if (documentFile != null && documentFile.ContentLength > 0)
                     {
-                        documentFile.SaveAs(Path.Combine(Server.MapPath(record.SlipPath), filename));
+                        string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
+                        record.SlipFile = filename;
+                        record.SlipPath = "/Document/CashRecorder";
+
+                        try
+                        {
+                            documentFile.SaveAs(Path.Combine(Server.MapPath(record.SlipPath), filename));
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
-                    catch (Exception)
-                    {
-                    }
+
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.EditCashRecorder(record, model.Authentication);
                 }
-
-                DocumentManager documentManager = new DocumentManager();
-                result = documentManager.EditCashRecorder(record, model.Authentication);
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                }
+                
                 
 
             }
 
-            TempData["result"] = result;
+            Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
             return RedirectToAction("Detail", new { id = cashRecord.UID });
 
         }
@@ -293,7 +317,10 @@ namespace ActionForce.Office.Controllers
                 result = documentManager.DeleteCashRecorder(id, model.Authentication);
             }
 
-            TempData["result"] = result;
+            Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
             return RedirectToAction("Index", "CashRecorder");
 
         }
