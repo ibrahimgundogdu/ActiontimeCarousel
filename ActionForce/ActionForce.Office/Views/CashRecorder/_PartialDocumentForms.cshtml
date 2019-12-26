@@ -25,6 +25,14 @@
                 <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
             </div>
             <div class="form-group">
+                <label>Nakit Tutar</label>
+                <input id="CashAmount" name="CashAmount" type="text" class="form-control money" autocomplete="off" placeholder="Nakit Tutar" required>
+            </div>
+            <div class="form-group">
+                <label>Kredi Tutar</label>
+                <input id="CardAmount" name="CardAmount" type="text" class="form-control money" autocomplete="off" placeholder="Kredi Tutar" required>
+            </div>
+            <div class="form-group">
                 <label>Net Tutar</label>
                 <input id="NetAmount" name="NetAmount" type="text" class="form-control money" autocomplete="off" placeholder="Net Tutar" required>
             </div>
@@ -42,14 +50,14 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Fiş Numarası</label>
+                <label>Z Raporu Numarası</label>
                 <input id="SlipNumber" name="SlipNumber" type="text" class="form-control" autocomplete="off" placeholder="Fiş Numarası">
             </div>
             <div class="form-group">
                 <label>Döküman</label>
                 <input type="file" name="documentFile" id="documentFile" style="width: 100%;" class="form-control" />
             </div>
-            
+
             <div class="form-row">
                 <div class="form-group col-md-8">
                     <label>Fiş Tarihi</label>
@@ -57,7 +65,7 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label>Fiş Saati</label>
-                    <input id="SlipTime" name="SlipTime" type="text" class="form-control hourfull" autocomplete="off" placeholder="hh:mm:ss" value="@(DateTime.Now.ToString("HH:mm:ss"))" required>
+                    <input id="SlipTime" name="SlipTime" type="text" class="form-control hourfull" autocomplete="off" placeholder="00:00:00" value="@(DateTime.Now.ToString("HH:mm:ss"))" required>
                 </div>
             </div>
             <button class="btn btn-primary btn-block">Fiş Ekle</button>

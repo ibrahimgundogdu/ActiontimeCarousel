@@ -276,6 +276,8 @@ namespace ActionForce.Office
     {
         public int ActinTypeID { get; set; }
         public int LocationID { get; set; }
+        public string CashAmount { get; set; }
+        public string CardAmount { get; set; }
         public string NetAmount { get; set; }
         public string TotalAmount { get; set; }
         public string Currency { get; set; }

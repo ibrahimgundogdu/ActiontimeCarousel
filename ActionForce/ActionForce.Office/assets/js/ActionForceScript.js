@@ -38,6 +38,8 @@ function AddCashRecorder(id) {
     var slipdate = $('#E13TRLD').val();
     var sliptime = $('#E13TRLT').val();
     var slipamount = $('#E13TRLA').val();
+    var slipcashamount = $('#E13TRLNA').val();
+    var slipcardamount = $('#E13TRLKA').val();
     var sliptotalmount = $('#E13TRLTA').val();
 
 
@@ -53,6 +55,8 @@ function AddCashRecorder(id) {
     data.append('slipnumber', slipnumber);
     data.append('slipdate', slipdate);
     data.append('sliptime', sliptime);
+    data.append('slipcashamount', slipcashamount);
+    data.append('slipcardamount', slipcardamount);
     data.append('slipamount', slipamount);
     data.append('sliptotalmount', sliptotalmount);
 
@@ -508,7 +512,19 @@ function ResultSummary(id) {
     });
 }
 
+function SumCashRecorder() {
 
+    var cash = $("#E13TRLNA").val().replace(',','.');
+    var card = $("#E13TRLKA").val().replace(',', '.');
+    var toplam = Number(cash) + Number(card) || 0.00;
+    
+    $("#E13TRLA").val(toplam.toString().replace('.', ','));
+
+    console.log(cash);
+    console.log(card);
+    console.log(toplam);
+
+}
 
 
 // shift break scripts

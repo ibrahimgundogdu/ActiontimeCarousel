@@ -81,6 +81,18 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="CashAmount" class="col-sm-3 col-form-label">Nakit Tutar</label>
+                                            <div class="col-sm-9">
+                                                <input name="CashAmount" type="text" class="form-control money" autocomplete="off" value="@(Model.Detail.CashAmount?.ToString("N2"))" placeholder="Nakit Tutar" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="CardAmount" class="col-sm-3 col-form-label">Kredi Tutar</label>
+                                            <div class="col-sm-9">
+                                                <input name="CardAmount" type="text" class="form-control money" autocomplete="off" value="@(Model.Detail.CreditAmount?.ToString("N2"))" placeholder="Kredi Tutar" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="NetAmount" class="col-sm-3 col-form-label">Net Tutar</label>
                                             <div class="col-sm-9">
                                                 <input name="NetAmount" type="text" class="form-control money" autocomplete="off" value="@(Model.Detail.NetAmount?.ToString("N2"))" placeholder="Net Tutar" required>
@@ -146,7 +158,7 @@
                                             <div class="col-sm-9">
                                                 @if (Model.Detail.IsActive == true)
                                                 {
-                                                    <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                    <button class="btn btn-primary btn-block">Yazarkasa Z Raporunu Güncelle</button>
                                                 }
 
                                             </div>
@@ -261,34 +273,34 @@
     <script>
 
 
-                    $(function () {
-                        'use strict'
+        $(function () {
+            'use strict'
 
-                        $('.off-canvas-menu').on('click', function (e) {
-                            e.preventDefault();
-                            var target = $(this).attr('href');
-                            $(target).addClass('show');
-                        });
-
-
-                        $('.off-canvas .close').on('click', function (e) {
-                            e.preventDefault();
-                            $(this).closest('.off-canvas').removeClass('show');
-                        })
-
-                        $(document).on('click touchstart', function (e) {
-                            e.stopPropagation();
-
-                            if (!$(e.target).closest('.off-canvas-menu').length) {
-                                var offCanvas = $(e.target).closest('.off-canvas').length;
-                                if (!offCanvas) {
-                                    $('.off-canvas.show').addClass('show');
-                                }
-                            }
-                        });
+            $('.off-canvas-menu').on('click', function (e) {
+                e.preventDefault();
+                var target = $(this).attr('href');
+                $(target).addClass('show');
+            });
 
 
-                    });
+            $('.off-canvas .close').on('click', function (e) {
+                e.preventDefault();
+                $(this).closest('.off-canvas').removeClass('show');
+            })
+
+            $(document).on('click touchstart', function (e) {
+                e.stopPropagation();
+
+                if (!$(e.target).closest('.off-canvas-menu').length) {
+                    var offCanvas = $(e.target).closest('.off-canvas').length;
+                    if (!offCanvas) {
+                        $('.off-canvas.show').addClass('show');
+                    }
+                }
+            });
+
+
+        });
     </script>
     @if (Model.Result != null) //
     {

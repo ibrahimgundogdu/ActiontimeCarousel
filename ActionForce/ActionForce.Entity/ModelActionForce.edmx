@@ -909,6 +909,8 @@
           <Property Name="DocumentNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="Date" Type="date" StoreGeneratedPattern="Computed" />
           <Property Name="SlipDate" Type="datetime" />
+          <Property Name="CashAmount" Type="float" />
+          <Property Name="CreditAmount" Type="float" />
           <Property Name="NetAmount" Type="float" />
           <Property Name="TotalAmount" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
@@ -2263,6 +2265,37 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="DateBegin" Type="datetime" />
           <Property Name="DateEnd" Type="datetime" />
         </EntityType>
+        <EntityType Name="Setcards">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SubscriptionID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="EmployeeFullname" Type="nvarchar" MaxLength="150" />
+          <Property Name="SicilNumber" Type="nvarchar" MaxLength="40" />
+          <Property Name="UserDescription" Type="nvarchar" MaxLength="50" />
+          <Property Name="SetcardNumber" Type="nvarchar" MaxLength="40" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="SetcardSubscription">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeID" Type="int" />
+          <Property Name="CompanyCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
+          <Property Name="BranchName" Type="nvarchar" MaxLength="150" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="SetcardSubscriptionType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="ShiftType">
           <Key>
             <PropertyRef Name="ID" />
@@ -3407,6 +3440,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashRecorderSlip' 
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
           <Property Name="EnvironmentID" Type="int" />
           <Property Name="ResultID" Type="bigint" />
+          <Property Name="CashAmount" Type="float" />
+          <Property Name="CreditAmount" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPosCancel' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4572,6 +4607,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="SaleChannel" EntityType="Self.SaleChannel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Serials" EntityType="Self.Serials" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SerialsHistory" EntityType="Self.SerialsHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Setcards" EntityType="Self.Setcards" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SetcardSubscription" EntityType="Self.SetcardSubscription" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SetcardSubscriptionType" EntityType="Self.SetcardSubscriptionType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ShiftType" EntityType="Self.ShiftType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SMSNumber" EntityType="Self.SMSNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Stats" EntityType="Self.Stats" Schema="dbo" store:Type="Tables" />
@@ -5111,7 +5149,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentCashRecorderSlip].[UpdaterFullName] AS [UpdaterFullName], 
     [VDocumentCashRecorderSlip].[LocationFullName] AS [LocationFullName], 
     [VDocumentCashRecorderSlip].[EnvironmentID] AS [EnvironmentID], 
-    [VDocumentCashRecorderSlip].[ResultID] AS [ResultID]
+    [VDocumentCashRecorderSlip].[ResultID] AS [ResultID], 
+    [VDocumentCashRecorderSlip].[CashAmount] AS [CashAmount], 
+    [VDocumentCashRecorderSlip].[CreditAmount] AS [CreditAmount]
     FROM [dbo].[VDocumentCashRecorderSlip] AS [VDocumentCashRecorderSlip]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentPosCancel" EntityType="Self.VDocumentPosCancel" store:Type="Views" store:Schema="dbo">
@@ -6208,6 +6248,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="ProcessUID" Mode="In" Type="Guid" />
             <Parameter Name="DocumentNumber" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="Setcards" EntityType="db293_ActionTimeDbModel.Setcards" />
+          <EntitySet Name="SetcardSubscription" EntityType="db293_ActionTimeDbModel.SetcardSubscription" />
+          <EntitySet Name="SetcardSubscriptionType" EntityType="db293_ActionTimeDbModel.SetcardSubscriptionType" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -10400,6 +10443,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="SlipPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="DateTime" annotation:StoreGeneratedPattern="Computed" Precision="0" />
+          <Property Name="CashAmount" Type="Double" />
+          <Property Name="CreditAmount" Type="Double" />
         </EntityType>
         <EntityType Name="VDayResultDocuments">
           <Key>
@@ -10461,6 +10506,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="ResultID" Type="Int64" />
+          <Property Name="CashAmount" Type="Double" />
+          <Property Name="CreditAmount" Type="Double" />
         </EntityType>
         <EntityType Name="LocationGoals">
           <Key>
@@ -10493,6 +10540,37 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Setcards">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SubscriptionID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="EmployeeFullname" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="SicilNumber" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="UserDescription" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SetcardNumber" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SetcardSubscription">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeID" Type="Int32" />
+          <Property Name="CompanyCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="BranchName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="SetcardSubscriptionType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -14593,6 +14671,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentCashRecorderSlip">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentCashRecorderSlip">
               <MappingFragment StoreEntitySet="DocumentCashRecorderSlip">
+                <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />
+                <ScalarProperty Name="CashAmount" ColumnName="CashAmount" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="SlipPath" ColumnName="SlipPath" />
                 <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />
@@ -14648,6 +14728,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentCashRecorderSlip">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentCashRecorderSlip">
               <MappingFragment StoreEntitySet="VDocumentCashRecorderSlip">
+                <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />
+                <ScalarProperty Name="CashAmount" ColumnName="CashAmount" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
@@ -14719,6 +14801,40 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImportMapping FunctionImportName="AddBankAction" FunctionName="db293_ActionTimeDbModel.Store.AddBankAction" />
           <FunctionImportMapping FunctionImportName="AddCashAction" FunctionName="db293_ActionTimeDbModel.Store.AddCashAction" />
           <FunctionImportMapping FunctionImportName="AddEmployeeAction" FunctionName="db293_ActionTimeDbModel.Store.AddEmployeeAction" />
+          <EntitySetMapping Name="Setcards">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Setcards">
+              <MappingFragment StoreEntitySet="Setcards">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SetcardNumber" ColumnName="SetcardNumber" />
+                <ScalarProperty Name="UserDescription" ColumnName="UserDescription" />
+                <ScalarProperty Name="SicilNumber" ColumnName="SicilNumber" />
+                <ScalarProperty Name="EmployeeFullname" ColumnName="EmployeeFullname" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="SubscriptionID" ColumnName="SubscriptionID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SetcardSubscription">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SetcardSubscription">
+              <MappingFragment StoreEntitySet="SetcardSubscription">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="CompanyCode" ColumnName="CompanyCode" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SetcardSubscriptionType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SetcardSubscriptionType">
+              <MappingFragment StoreEntitySet="SetcardSubscriptionType">
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

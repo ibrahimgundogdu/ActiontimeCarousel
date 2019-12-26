@@ -909,6 +909,8 @@
                                                         <th><span>Z Rapor No</span></th>
                                                         <th><span>Fiş Tarihi</span></th>
                                                         <th><span>Fiş Saati</span></th>
+                                                        <th class="text-right"><span>Nakit</span></th>
+                                                        <th class="text-right"><span>Kredi</span></th>
                                                         <th class="text-right"><span>Fiş Tutarı</span></th>
                                                         <th class="text-right"><span>Genel Tutar</span></th>
                                                         <th><span>Yazarkasa Fişi</span></th>
@@ -920,20 +922,26 @@
                                                     @foreach (var cr in Model.DayResultItemList.Where(x => x.ResultItemID == 13))
                                                     {
                                                         <tr>
-                                                            <td style="width:160px; padding:1px !important;">
+                                                            <td style="width:120px; padding:1px !important;">
                                                                 <input type="text" id="E13TRLN" name="E13TRLN" class="form-control font-weight-bold" autocomplete="off" value="@(cr.SlipNumber)">
                                                                 <input id="E13TYPEID" type="hidden" value="33" />
                                                             </td>
                                                             <td style="width:120px; padding:1px !important;">
                                                                 <input type="text" id="E13TRLD" name="E13TRLD" class="form-control shiftdate font-weight-bold" autocomplete="off" value="@(cr.Date != null ? cr.Date.Value.ToString("yyyy-MM-dd") : Model.CurrentDate.DateKey.ToString("yyyy-MM-dd"))">
                                                             </td>
-                                                            <td style="width:120px; padding:1px !important;">
+                                                            <td style="width:100px; padding:1px !important;">
                                                                 <input type="text" id="E13TRLT" name="E13TRLT" class="form-control hourfull font-weight-bold" autocomplete="off" value="@(cr.SlipDate != null ? cr.SlipDate.Value.TimeOfDay.ToString() : Model.CurrentDayResult.Date.TimeOfDay.ToString())">
+                                                            </td>
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" id="E13TRLNA" name="E13TRLNA" class="form-control money font-weight-bold text-right" onkeyup="SumCashRecorder()" autocomplete="off" min="0" placeholder="0,00" value="0,00">
+                                                            </td>
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                                <input type="text" id="E13TRLKA" name="E13TRLKA" class="form-control money font-weight-bold text-right" onkeyup="SumCashRecorder()" autocomplete="off" min="0" placeholder="0,00" value="0,00">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
                                                                 <input type="text" id="E13TRLA" name="E13TRLA" class="form-control money font-weight-bold text-right" autocomplete="off" min="0" placeholder="0,00" value="@(cr.Amount?.ToString("N2"))">
                                                             </td>
-                                                            <td class="text-right" style="width:100px; padding:1px !important;">
+                                                            <td class="text-right" style="width:140px; padding:1px !important;">
                                                                 <input type="text" id="E13TRLTA" name="E13TRLTA" class="form-control money font-weight-bold text-right" autocomplete="off" min="0" placeholder="0,00" value="@(cr.SlipTotalAmount?.ToString("N2"))">
                                                             </td>
                                                             <td style="width:200px; padding:1px !important;">

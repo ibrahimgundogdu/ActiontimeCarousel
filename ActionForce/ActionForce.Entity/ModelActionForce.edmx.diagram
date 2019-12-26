@@ -227,6 +227,9 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentCashRecorderSlip" Width="1.5" PointX="49.375" PointY="13.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationGoals" Width="1.5" PointX="49.375" PointY="20.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SalaryCategory" Width="1.5" PointX="47.375" PointY="43.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Setcards" Width="1.5" PointX="49.375" PointY="26.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.SetcardSubscription" Width="1.5" PointX="49.375" PointY="30.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.SetcardSubscriptionType" Width="1.5" PointX="11.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

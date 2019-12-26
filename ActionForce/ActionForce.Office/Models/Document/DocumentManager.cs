@@ -633,8 +633,13 @@ namespace ActionForce.Office
                         UpdateIP = isExchange.UpdateIP,
                         SlipPath = isExchange.SlipPath,
                         SlipDocument = isExchange.SlipDocument,
-                        EnvironmentID = isExchange.EnvironmentID
+                        EnvironmentID = isExchange.EnvironmentID,
+                        ResultID = isExchange.ResultID,
+                        SlipDate = isExchange.SlipDate,
+                        SlipNumber = isExchange.SlipNumber,
+                        UID = isExchange.UID
                     };
+
                     isExchange.LocationID = saleExchange.LocationID;
                     isExchange.FromCashID = casho.ID;
                     isExchange.ToCashID = cashi.ID;
@@ -648,8 +653,9 @@ namespace ActionForce.Office
                     isExchange.UpdateDate = DateTime.UtcNow.AddHours(saleExchange.TimeZone.Value);
                     isExchange.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
                     isExchange.UpdateIP = OfficeHelper.GetIPAddress();
-                    isExchange.SlipDocument = saleExchange.SlipDocument;
-                    isExchange.SlipPath = saleExchange.SlipPath;
+
+                    isExchange.SlipDocument = !string.IsNullOrEmpty(saleExchange.SlipDocument) ? saleExchange.SlipDocument : self.SlipDocument;
+                    isExchange.SlipPath = !string.IsNullOrEmpty(saleExchange.SlipPath) ? saleExchange.SlipPath : self.SlipPath;
 
                     Db.SaveChanges();
 
@@ -1543,7 +1549,7 @@ namespace ActionForce.Office
                 {
                     try
                     {
-                        
+
                         DocumentCashExpense cashExpense = new DocumentCashExpense();
 
                         cashExpense.ActionTypeID = expense.ActinTypeID;
@@ -1589,7 +1595,7 @@ namespace ActionForce.Office
 
                         // log atılır
                         OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", cashExpense.ID.ToString(), "Cash", "Expense", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(expense.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, cashExpense);
-                        
+
                     }
                     catch (Exception ex)
                     {
@@ -1650,12 +1656,21 @@ namespace ActionForce.Office
                             UpdateIP = isExpense.UpdateIP,
                             SlipNumber = isExpense.SlipNumber,
                             SlipDocument = isExpense.SlipDocument,
-                            EnvironmentID = isExpense.EnvironmentID
+                            EnvironmentID = isExpense.EnvironmentID,
+                            ExpenseTypeID = isExpense.ExpenseTypeID,
+                            ReferenceTableModel = isExpense.ReferenceTableModel,
+                            ResultID = isExpense.ResultID,
+                            SlipDate = isExpense.SlipDate,
+                            SlipPath = isExpense.SlipPath,
+                            ToBankAccountID = isExpense.ToBankAccountID,
+                            ToCustomerID = isExpense.ToCustomerID,
+                            ToEmployeeID = isExpense.ToEmployeeID,
+                            UID = isExpense.UID
                         };
 
-                        
-                        isExpense.SlipDocument = expense.SlipDocument;
-                        isExpense.SlipPath = expense.SlipPath;
+                        isExpense.SlipDocument = !string.IsNullOrEmpty(expense.SlipDocument) ? expense.SlipDocument : self.SlipDocument;
+                        isExpense.SlipPath = !string.IsNullOrEmpty(expense.SlipPath) ? expense.SlipPath : self.SlipPath;
+
                         isExpense.LocationID = expense.LocationID;
                         isExpense.CashID = cash.ID;
                         isExpense.Date = expense.DocumentDate;
@@ -1856,7 +1871,7 @@ namespace ActionForce.Office
                                     var expenseresult = AddCashExpense(expense, authentication);
                                     result.Message += $" {expenseresult.Message}";
                                 }
-                                
+
                             }
 
                             var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == bankTransfer.LocationID && x.CashActionTypeID == bankTransfer.ActionTypeID && x.ProcessID == bankTransfer.ID && x.ProcessUID == bankTransfer.UID);
@@ -1996,8 +2011,10 @@ namespace ActionForce.Office
                         isTransfer.LocationID = transfer.LocationID;
                         isTransfer.Currency = transfer.Currency;
                         isTransfer.IsActive = transfer.IsActive;
-                        isTransfer.SlipDocument = transfer.SlipDocument;
-                        isTransfer.SlipPath = transfer.SlipPath;
+                        isTransfer.SlipDocument = !string.IsNullOrEmpty(transfer.SlipDocument) ? transfer.SlipDocument : self.SlipDocument;
+                        isTransfer.SlipPath = !string.IsNullOrEmpty(transfer.SlipPath) ? transfer.SlipPath : self.SlipPath;
+
+
 
                         Db.SaveChanges();
 
@@ -2708,7 +2725,7 @@ namespace ActionForce.Office
             return result;
         }
 
-        public Result<DocumentCashRecorderSlip> AddCashRecorder(long? id, string filename, string path, int? typeid, string description, string slipnumber, string slipdate, string sliptime, string slipamount, string sliptotalmount, AuthenticationModel authentication)
+        public Result<DocumentCashRecorderSlip> AddCashRecorder(long? id, string filename, string path, int? typeid, string description, string slipnumber, string slipdate, string sliptime, string slipamount, string cashamount, string cardamount, string sliptotalmount, AuthenticationModel authentication)
         {
             Result<DocumentCashRecorderSlip> result = new Result<DocumentCashRecorderSlip>()
             {
@@ -2730,6 +2747,8 @@ namespace ActionForce.Office
                         if (dayresult != null)
                         {
                             locationid = dayresult.LocationID;
+                            double? scardamount = Convert.ToDouble(cardamount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                            double? scashamount = Convert.ToDouble(cashamount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                             double? netamount = Convert.ToDouble(slipamount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                             double? totalamount = Convert.ToDouble(sliptotalmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                             DateTime? date = Convert.ToDateTime(slipdate);
@@ -2757,6 +2776,8 @@ namespace ActionForce.Office
                             resultCashSlip.UID = Guid.NewGuid();
                             resultCashSlip.SlipFile = filename;
                             resultCashSlip.SlipPath = path;
+                            resultCashSlip.CashAmount = scashamount;
+                            resultCashSlip.CreditAmount = scardamount;
 
                             Db.DocumentCashRecorderSlip.Add(resultCashSlip);
                             Db.SaveChanges();
@@ -3482,6 +3503,9 @@ namespace ActionForce.Office
                         cashRedord.EnvironmentID = 2;
                         cashRedord.UID = Guid.NewGuid();
                         cashRedord.ResultID = record.ResultID;
+                        cashRedord.CashAmount = record.CashAmount;
+                        cashRedord.CreditAmount = record.CreditAmount;
+
 
                         cashRedord.SlipPath = record.SlipPath;
                         cashRedord.SlipFile = record.SlipFile;
@@ -3518,88 +3542,91 @@ namespace ActionForce.Office
                 Data = null
             };
 
-            int locationid = 0;
-
             using (ActionTimeEntities Db = new ActionTimeEntities())
             {
-               
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == record.LocationID);
                 var isRecord = Db.DocumentCashRecorderSlip.FirstOrDefault(x => x.UID == record.UID);
+
                 if (isRecord != null)
                 {
                     try
                     {
-                        var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == isRecord.ResultID);
 
-                        if (dayresult != null)
+                        double? netamount = Convert.ToDouble(record.NetAmount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                        double? totalamount = Convert.ToDouble(record.TotalAmount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                        DateTime? date = Convert.ToDateTime(record.SlipDate);
+                        TimeSpan? time = Convert.ToDateTime(record.SlipTime).TimeOfDay;
+                        DateTime? slipdatetime = date.Value.Add(time.Value);
+
+                        DocumentCashRecorderSlip resultCashSlip = new DocumentCashRecorderSlip()
                         {
-                            locationid = dayresult.LocationID;
-                            double? netamount = Convert.ToDouble(record.NetAmount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                            double? totalamount = Convert.ToDouble(record.TotalAmount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                            DateTime? date = Convert.ToDateTime(record.SlipDate);
-                            TimeSpan? time = Convert.ToDateTime(record.SlipTime).TimeOfDay;
-                            DateTime? slipdatetime = date.Value.Add(time.Value);
+                            ActionTypeID = isRecord.ActionTypeID,
+                            ActionTypeName = isRecord.ActionTypeName,
+                            NetAmount = isRecord.NetAmount,
+                            TotalAmount = isRecord.TotalAmount,
+                            Currency = isRecord.Currency,
+                            Date = isRecord.Date,
+                            SlipDate = isRecord.SlipDate,
+                            DocumentNumber = isRecord.DocumentNumber,
+                            ID = isRecord.ID,
+                            IsActive = isRecord.IsActive,
+                            LocationID = isRecord.LocationID,
+                            OurCompanyID = isRecord.OurCompanyID,
+                            RecordDate = isRecord.RecordDate,
+                            RecordEmployeeID = isRecord.RecordEmployeeID,
+                            RecordIP = isRecord.RecordIP,
+                            UpdateDate = isRecord.UpdateDate,
+                            UpdateEmployee = isRecord.UpdateEmployee,
+                            UpdateIP = isRecord.UpdateIP,
+                            SlipNumber = isRecord.SlipNumber,
+                            SlipFile = isRecord.SlipFile,
+                            SlipPath = isRecord.SlipPath,
+                            EnvironmentID = isRecord.EnvironmentID,
+                            CashAmount = isRecord.CashAmount,
+                            CreditAmount = isRecord.CreditAmount,
+                            ResultID = isRecord.ResultID,
+                            UID = isRecord.UID
+                        };
 
+                        isRecord.LocationID = isRecord.LocationID;
+                        isRecord.NetAmount = netamount;
+                        isRecord.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
+                        isRecord.RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                        isRecord.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        isRecord.RecordIP = OfficeHelper.GetIPAddress();
+                        isRecord.SlipDate = slipdatetime;
+                        isRecord.SlipNumber = record.SlipNumber;
+                        isRecord.TotalAmount = totalamount;
+                        isRecord.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                        isRecord.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                        isRecord.UpdateIP = OfficeHelper.GetIPAddress();
+                        isRecord.CashAmount = record.CashAmount;
+                        isRecord.CreditAmount = record.CreditAmount;
+                        isRecord.ResultID = record.ResultID > 0 ? record.ResultID : resultCashSlip.ResultID;
 
-                            DocumentCashRecorderSlip resultCashSlip = new DocumentCashRecorderSlip()
-                            {
-                                ActionTypeID = isRecord.ActionTypeID,
-                                ActionTypeName = isRecord.ActionTypeName,
-                                NetAmount = isRecord.NetAmount,
-                                TotalAmount = isRecord.TotalAmount,
-                                Currency = isRecord.Currency,
-                                Date = isRecord.Date,
-                                SlipDate = isRecord.SlipDate,
-                                DocumentNumber = isRecord.DocumentNumber,
-                                ID = isRecord.ID,
-                                IsActive = isRecord.IsActive,
-                                LocationID = isRecord.LocationID,
-                                OurCompanyID = isRecord.OurCompanyID,
-                                RecordDate = isRecord.RecordDate,
-                                RecordEmployeeID = isRecord.RecordEmployeeID,
-                                RecordIP = isRecord.RecordIP,
-                                UpdateDate = isRecord.UpdateDate,
-                                UpdateEmployee = isRecord.UpdateEmployee,
-                                UpdateIP = isRecord.UpdateIP,
-                                SlipNumber = isRecord.SlipNumber,
-                                SlipFile = isRecord.SlipFile,
-                                SlipPath = isRecord.SlipPath,
-                                EnvironmentID = isRecord.EnvironmentID
-                            };
-
-                            isRecord.LocationID = dayresult.LocationID;
-                            isRecord.NetAmount = netamount;
-                            isRecord.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
-                            isRecord.RecordDate = DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(locationid));
-                            isRecord.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
-                            isRecord.RecordIP = OfficeHelper.GetIPAddress();
-                            isRecord.ResultID = record.ResultID;
-                            isRecord.SlipDate = slipdatetime;
-                            isRecord.SlipNumber = record.SlipNumber;
-                            isRecord.TotalAmount = totalamount;
-                            isRecord.UpdateDate = DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(dayresult.LocationID));
-                            isRecord.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
-                            isRecord.UpdateIP = OfficeHelper.GetIPAddress();
-
-                            isRecord.SlipFile = record.SlipFile;
-                            isRecord.SlipPath = record.SlipPath;
-
-                            Db.SaveChanges();
-
-
-                            result.IsSuccess = true;
-                            result.Message = $"{isRecord.ID} ID li {isRecord.SlipDate} tarihli {isRecord.SlipFile} isimli dosya ile beraber kayıt başarı ile güncellendi.";
-
-                            OfficeHelper.AddApplicationLog("Office", "Result Cash Recorder", "Update", isRecord.ID.ToString(), "CashRecorder", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(locationid)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        if (isRecord.ResultID == null)
+                        {
+                            isRecord.ResultID = Db.DayResult.FirstOrDefault(x => x.LocationID == resultCashSlip.LocationID && x.Date == resultCashSlip.Date)?.ID;
                         }
+
+                        isRecord.SlipFile = !string.IsNullOrEmpty(record.SlipFile) ? record.SlipFile : resultCashSlip.SlipFile;
+                        isRecord.SlipPath = !string.IsNullOrEmpty(record.SlipPath) ? record.SlipPath : resultCashSlip.SlipPath;
+
+                        Db.SaveChanges();
+
+                        result.IsSuccess = true;
+                        result.Message = $"{isRecord.ID} ID li {isRecord.SlipDate} tarihli {isRecord.SlipFile} isimli dosya ile beraber kayıt başarı ile güncellendi.";
+
+                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentCashRecorderSlip>(resultCashSlip, isRecord, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Result Cash Recorder", "Update", isRecord.ID.ToString(), "CashRecorder", "Index", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
                     }
                     catch (Exception ex)
                     {
                         result.Message = $"{isRecord.ID} {isRecord.SlipFile} dosyası güncellenemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Result Document", "Update", "-1", "CashRecorder", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(locationid)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        OfficeHelper.AddApplicationLog("Office", "Result Document", "Update", "-1", "CashRecorder", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
                 }
-
-
             }
 
             return result;
@@ -3613,7 +3640,7 @@ namespace ActionForce.Office
                 Message = string.Empty,
                 Data = null
             };
-            
+
 
             if (id != null)
             {

@@ -121,6 +121,8 @@ namespace ActionForce.Office.Controllers
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashRecord.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 var netamount = Convert.ToDouble(cashRecord.NetAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var cashamount = Convert.ToDouble(cashRecord.CashAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var cardamount = Convert.ToDouble(cashRecord.CardAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var totalamount = Convert.ToDouble(cashRecord.TotalAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashRecord.Currency;
                 var docDate = DateTime.Now.Date;
@@ -152,6 +154,8 @@ namespace ActionForce.Office.Controllers
                     record.ActinTypeID = actType.ID;
                     record.ActionTypeName = actType.Name;
                     record.NetAmount = netamount;
+                    record.CashAmount = cashamount;
+                    record.CreditAmount = cardamount;
                     record.TotalAmount = totalamount;
                     record.Currency = currency;
                     record.DocumentDate = docDate;
@@ -169,7 +173,7 @@ namespace ActionForce.Office.Controllers
                     {
                         string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
                         record.SlipFile = filename;
-                        record.SlipPath = "/Document/CashRecord";
+                        record.SlipPath = "/Document/CashRecorder";
 
                         try
                         {
@@ -221,6 +225,8 @@ namespace ActionForce.Office.Controllers
                 var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashRecord.ActinTypeID);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashRecord.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                var cashamount = Convert.ToDouble(cashRecord.CashAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var cardamount = Convert.ToDouble(cashRecord.CardAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var netamount = Convert.ToDouble(cashRecord.NetAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var totalamount = Convert.ToDouble(cashRecord.TotalAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashRecord.Currency;
@@ -250,6 +256,8 @@ namespace ActionForce.Office.Controllers
                 {
                     CashRecorder record = new CashRecorder();
 
+                    record.CashAmount = cashamount;
+                    record.CreditAmount = cardamount;
                     record.NetAmount = netamount;
                     record.TotalAmount = totalamount;
                     record.Currency = currency;
@@ -259,6 +267,7 @@ namespace ActionForce.Office.Controllers
                     record.SlipNumber = cashRecord.SlipNumber;
                     record.SlipDate = sDatetime;
                     record.UID = cashRecord.UID;
+                   
 
                     //record.SlipPath = "";
                     //record.SlipFile = "";

@@ -230,6 +230,9 @@ namespace ActionForce.Entity
         public virtual DbSet<VDocumentCashRecorderSlip> VDocumentCashRecorderSlip { get; set; }
         public virtual DbSet<LocationGoals> LocationGoals { get; set; }
         public virtual DbSet<SalaryCategory> SalaryCategory { get; set; }
+        public virtual DbSet<Setcards> Setcards { get; set; }
+        public virtual DbSet<SetcardSubscription> SetcardSubscription { get; set; }
+        public virtual DbSet<SetcardSubscriptionType> SetcardSubscriptionType { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

@@ -242,7 +242,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public PartialViewResult AddCashRecorder(long? id, HttpPostedFileBase file, int? typeid, string description, string slipnumber, string slipdate, string sliptime, string slipamount, string sliptotalmount)
+        public PartialViewResult AddCashRecorder(long? id, HttpPostedFileBase file, int? typeid, string description, string slipnumber, string slipdate, string sliptime, string slipamount, string slipcashamount, string slipcardamount, string sliptotalmount)
         {
             Result<DocumentCashRecorderSlip> result = new Result<DocumentCashRecorderSlip>()
             {
@@ -254,7 +254,6 @@ namespace ActionForce.Office.Controllers
             ResultControlModel model = new ResultControlModel();
 
             DocumentManager documentManager = new DocumentManager();
-
 
             string path = string.Empty;
             string filename = string.Empty;
@@ -274,9 +273,7 @@ namespace ActionForce.Office.Controllers
                 }
             }
 
-
-
-            result = documentManager.AddCashRecorder(id, filename, path, typeid, description, slipnumber, slipdate, sliptime, slipamount, sliptotalmount, model.Authentication);
+            result = documentManager.AddCashRecorder(id, filename, path, typeid, description, slipnumber, slipdate, sliptime, slipamount, slipcashamount, slipcardamount, sliptotalmount, model.Authentication);
 
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
 

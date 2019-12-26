@@ -11,6 +11,8 @@ namespace ActionForce.Office
         public string ActionTypeName { get; set; }
         public int LocationID { get; set; }
         public int OurCompanyID { get; set; }
+        public double CashAmount { get; set; }
+        public double CreditAmount { get; set; }
         public double NetAmount { get; set; }
         public double TotalAmount { get; set; }
         public string Currency { get; set; }

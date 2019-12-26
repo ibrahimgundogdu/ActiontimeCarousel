@@ -38,5 +38,7 @@ namespace ActionForce.Entity
         public string SlipNumber { get; set; }
         public string SlipPath { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
+        public Nullable<double> CashAmount { get; set; }
+        public Nullable<double> CreditAmount { get; set; }
     }
 }

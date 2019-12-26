@@ -483,6 +483,15 @@
     <Compile Include="SerialsHistory.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="Setcards.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SetcardSubscription.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SetcardSubscriptionType.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="ShiftType.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

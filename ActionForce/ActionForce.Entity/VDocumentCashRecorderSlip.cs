@@ -42,5 +42,7 @@ namespace ActionForce.Entity
         public string LocationFullName { get; set; }
         public Nullable<int> EnvironmentID { get; set; }
         public Nullable<long> ResultID { get; set; }
+        public Nullable<double> CashAmount { get; set; }
+        public Nullable<double> CreditAmount { get; set; }
     }
 }
