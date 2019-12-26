@@ -109,7 +109,7 @@ namespace ActionForce.Office.Controllers
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 var posTerminal = Db.LocationPosTerminal.FirstOrDefault(x => x.LocationID == posCollect.LocationID && x.IsActive == true && x.IsMaster == true);
-
+                int? quantity = posCollect.Quantity;
                 if (DateTime.TryParse(posCollect.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
@@ -118,30 +118,42 @@ namespace ActionForce.Office.Controllers
                 var refID = string.IsNullOrEmpty(posCollect.ReferanceID);
                 var exchange = OfficeHelper.GetExchange(docDate);
 
-                PosCollection pos = new PosCollection();
+                if (amount > 0 && quantity > 0)
+                {
+                    PosCollection pos = new PosCollection();
 
-                pos.ActinTypeID = actType.ID;
-                pos.ActionTypeName = actType.Name;
-                pos.Amount = amount;
-                pos.BankAccountID = posCollect.BankAccountID;
-                pos.Currency = currency;
-                pos.DocumentDate = docDate;
-                pos.Description = posCollect.Description;
-                pos.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
-                pos.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                pos.LocationID = posCollect.LocationID;
-                pos.OurCompanyID = location.OurCompanyID;
-                pos.TimeZone = timezone;
-                pos.ReferanceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
-                pos.TerminalID = posTerminal != null ? posTerminal.TerminalID?.ToString() : "";
-
-                DocumentManager documentManager = new DocumentManager();
-                result = documentManager.AddPosCollection(pos, model.Authentication);
+                    pos.ActinTypeID = actType.ID;
+                    pos.ActionTypeName = actType.Name;
+                    pos.Amount = amount;
+                    pos.BankAccountID = posCollect.BankAccountID;
+                    pos.Currency = currency;
+                    pos.DocumentDate = docDate;
+                    pos.Description = posCollect.Description;
+                    pos.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                    pos.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                    pos.LocationID = posCollect.LocationID;
+                    pos.OurCompanyID = location.OurCompanyID;
+                    pos.TimeZone = timezone;
+                    pos.ReferanceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
+                    pos.TerminalID = posTerminal != null ? posTerminal.TerminalID?.ToString() : "";
+                    pos.Quantity = quantity;
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.AddPosCollection(pos, model.Authentication);
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                }
+                
                 
 
             }
 
-            TempData["result"] = result;
+            Result<BankActions> messageresult = new Result<BankActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
 
             return RedirectToAction("Index", "Bank");
         }
@@ -198,35 +210,47 @@ namespace ActionForce.Office.Controllers
                 {
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
-
-                PosCollection payment = new PosCollection();
-                payment.ActinTypeID = posCollect.ActinTypeID;
-                payment.Amount = amount;
-                payment.Currency = currency;
-                payment.Description = posCollect.Description;
-                payment.DocumentDate = docDate;
-                payment.EnvironmentID = 2;
-                payment.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                payment.BankAccountID = posCollect.BankAccountID;
-                payment.LocationID = posCollect.LocationID;
-                payment.UID = posCollect.UID;
-
-                if (newexchanges > 0)
+                int? quantity = posCollect.Quantity;
+                if (amount > 0 && quantity > 0)
                 {
-                    payment.ExchangeRate = newexchanges;
+                    PosCollection payment = new PosCollection();
+                    payment.ActinTypeID = posCollect.ActinTypeID;
+                    payment.Amount = amount;
+                    payment.Currency = currency;
+                    payment.Description = posCollect.Description;
+                    payment.DocumentDate = docDate;
+                    payment.EnvironmentID = 2;
+                    payment.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                    payment.BankAccountID = posCollect.BankAccountID;
+                    payment.LocationID = posCollect.LocationID;
+                    payment.UID = posCollect.UID;
+                    payment.Quantity = quantity;
+                    if (newexchanges > 0)
+                    {
+                        payment.ExchangeRate = newexchanges;
+                    }
+                    else
+                    {
+                        payment.ExchangeRate = exchanges;
+                    }
+
+
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.EditPosCollection(payment, model.Authentication);
                 }
                 else
                 {
-                    payment.ExchangeRate = exchanges;
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
                 
-
-                DocumentManager documentManager = new DocumentManager();
-                result = documentManager.EditPosCollection(payment, model.Authentication);
             }
-            
 
-            TempData["result"] = result;
+
+            Result<BankActions> messageresult = new Result<BankActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
             return RedirectToAction("Detail", new { id = posCollect.UID });
         }
         
@@ -248,7 +272,10 @@ namespace ActionForce.Office.Controllers
                 result = documentManager.DeletePosCollection(id, model.Authentication);
             }
 
-            TempData["result"] = result;
+            Result<BankActions> messageresult = new Result<BankActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
 
             return RedirectToAction("Index", "Bank");
         }
@@ -350,7 +377,7 @@ namespace ActionForce.Office.Controllers
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 var posTerminal = Db.LocationPosTerminal.FirstOrDefault(x => x.LocationID == posCollect.LocationID && x.IsActive == true && x.IsMaster == true);
-
+                int? quantity = posCollect.Quantity;
                 if (DateTime.TryParse(posCollect.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
@@ -359,30 +386,42 @@ namespace ActionForce.Office.Controllers
 
                 var exchange = OfficeHelper.GetExchange(docDate);
 
-                PosCancel pos = new PosCancel();
+                if (amount > 0 && quantity > 0)
+                {
+                    PosCancel pos = new PosCancel();
 
-                pos.ActinTypeID = actType.ID;
-                pos.ActionTypeName = actType.Name;
-                pos.Amount = amount;
-                pos.FromBankAccountID = posCollect.BankAccountID;
-                pos.Currency = currency;
-                pos.DocumentDate = docDate;
-                pos.Description = posCollect.Description;
-                pos.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
-                pos.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                pos.LocationID = posCollect.LocationID;
-                pos.OurCompanyID = location.OurCompanyID;
-                pos.TimeZone = timezone;
-                pos.ReferanceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
-                pos.TerminalID = posTerminal != null ? posTerminal.TerminalID?.ToString() : "";
+                    pos.ActinTypeID = actType.ID;
+                    pos.ActionTypeName = actType.Name;
+                    pos.Amount = amount;
+                    pos.FromBankAccountID = posCollect.BankAccountID;
+                    pos.Currency = currency;
+                    pos.DocumentDate = docDate;
+                    pos.Description = posCollect.Description;
+                    pos.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                    pos.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                    pos.LocationID = posCollect.LocationID;
+                    pos.OurCompanyID = location.OurCompanyID;
+                    pos.TimeZone = timezone;
+                    pos.ReferanceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
+                    pos.TerminalID = posTerminal != null ? posTerminal.TerminalID?.ToString() : "";
 
-                DocumentManager documentManager = new DocumentManager();
-                result = documentManager.AddPosCancel(pos, model.Authentication);
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.AddPosCancel(pos, model.Authentication);
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                }
+                
                 
 
             }
 
-            TempData["result"] = result;
+            Result<BankActions> messageresult = new Result<BankActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
 
             return RedirectToAction("PosCancel", "Bank");
         }
@@ -438,33 +477,45 @@ namespace ActionForce.Office.Controllers
                 {
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
-
-                PosCancel payment = new PosCancel();
-                payment.ActinTypeID = posCollect.ActinTypeID;
-                payment.Amount = amount;
-                payment.Currency = currency;
-                payment.Description = posCollect.Description;
-                payment.DocumentDate = docDate;
-                payment.EnvironmentID = 2;
-                payment.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                payment.FromBankAccountID = posCollect.BankAccountID;
-                payment.LocationID = posCollect.LocationID;
-                payment.UID = posCollect.UID;
-
-                if (newexchanges > 0)
+                int? quantity = posCollect.Quantity;
+                if (amount > 0 && quantity > 0)
                 {
-                    payment.ExchangeRate = newexchanges;
+                    PosCancel payment = new PosCancel();
+                    payment.ActinTypeID = posCollect.ActinTypeID;
+                    payment.Amount = amount;
+                    payment.Currency = currency;
+                    payment.Description = posCollect.Description;
+                    payment.DocumentDate = docDate;
+                    payment.EnvironmentID = 2;
+                    payment.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                    payment.FromBankAccountID = posCollect.BankAccountID;
+                    payment.LocationID = posCollect.LocationID;
+                    payment.UID = posCollect.UID;
+
+                    if (newexchanges > 0)
+                    {
+                        payment.ExchangeRate = newexchanges;
+                    }
+                    else
+                    {
+                        payment.ExchangeRate = exchanges;
+                    }
+
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.EditPosCancel(payment, model.Authentication);
                 }
                 else
                 {
-                    payment.ExchangeRate = exchanges;
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-
-                DocumentManager documentManager = new DocumentManager();
-                result = documentManager.EditPosCancel(payment, model.Authentication);
+                
             }
 
-            TempData["result"] = result;
+            Result<BankActions> messageresult = new Result<BankActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
             return RedirectToAction("PosCancelDetail", new { id = posCollect.UID });
         }
 
@@ -486,7 +537,10 @@ namespace ActionForce.Office.Controllers
                 result = documentManager.DeletePosCancel(id, model.Authentication);
             }
 
-            TempData["result"] = result;
+            Result<BankActions> messageresult = new Result<BankActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
 
             return RedirectToAction("PosCancel", "Bank");
         }
@@ -599,30 +653,44 @@ namespace ActionForce.Office.Controllers
 
                 var exchange = OfficeHelper.GetExchange(docDate);
 
-                PosRefund pos = new PosRefund();
+                int? quantity = posCollect.Quantity;
+                if (amount > 0 && quantity > 0)
+                {
+                    PosRefund pos = new PosRefund();
 
-                pos.ActinTypeID = actType.ID;
-                pos.ActionTypeName = actType.Name;
-                pos.Amount = amount;
-                pos.FromBankAccountID = posCollect.BankAccountID;
-                pos.Currency = currency;
-                pos.DocumentDate = docDate;
-                pos.Description = posCollect.Description;
-                pos.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
-                pos.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                pos.LocationID = posCollect.LocationID;
-                pos.OurCompanyID = location.OurCompanyID;
-                pos.TimeZone = timezone;
-                pos.ReferanceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
-                pos.TerminalID = posTerminal != null ? posTerminal.TerminalID?.ToString() : "";
+                    pos.ActinTypeID = actType.ID;
+                    pos.ActionTypeName = actType.Name;
+                    pos.Amount = amount;
+                    pos.FromBankAccountID = posCollect.BankAccountID;
+                    pos.Currency = currency;
+                    pos.DocumentDate = docDate;
+                    pos.Description = posCollect.Description;
+                    pos.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                    pos.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                    pos.LocationID = posCollect.LocationID;
+                    pos.OurCompanyID = location.OurCompanyID;
+                    pos.TimeZone = timezone;
+                    pos.ReferanceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
+                    pos.TerminalID = posTerminal != null ? posTerminal.TerminalID?.ToString() : "";
 
-                DocumentManager documentManager = new DocumentManager();
-                result = documentManager.AddPosRefund(pos, model.Authentication);
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.AddPosRefund(pos, model.Authentication);
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                }
+
+                
                 
 
             }
 
-            TempData["result"] = result;
+            Result<BankActions> messageresult = new Result<BankActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
 
             return RedirectToAction("PosRefund", "Bank");
         }
@@ -678,32 +746,46 @@ namespace ActionForce.Office.Controllers
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
 
-                PosRefund payment = new PosRefund();
-                payment.ActinTypeID = posCollect.ActinTypeID;
-                payment.Amount = amount;
-                payment.Currency = currency;
-                payment.Description = posCollect.Description;
-                payment.DocumentDate = docDate;
-                payment.EnvironmentID = 2;
-                payment.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                payment.FromBankAccountID = posCollect.BankAccountID;
-                payment.LocationID = posCollect.LocationID;
-                payment.UID = posCollect.UID;
-
-                if (newexchanges > 0)
+                int? quantity = posCollect.Quantity;
+                if (amount > 0 && quantity > 0)
                 {
-                    payment.ExchangeRate = newexchanges;
+                    PosRefund payment = new PosRefund();
+                    payment.ActinTypeID = posCollect.ActinTypeID;
+                    payment.Amount = amount;
+                    payment.Currency = currency;
+                    payment.Description = posCollect.Description;
+                    payment.DocumentDate = docDate;
+                    payment.EnvironmentID = 2;
+                    payment.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                    payment.FromBankAccountID = posCollect.BankAccountID;
+                    payment.LocationID = posCollect.LocationID;
+                    payment.UID = posCollect.UID;
+
+                    if (newexchanges > 0)
+                    {
+                        payment.ExchangeRate = newexchanges;
+                    }
+                    else
+                    {
+                        payment.ExchangeRate = exchanges;
+                    }
+
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.EditPosRefund(payment, model.Authentication);
                 }
                 else
                 {
-                    payment.ExchangeRate = exchanges;
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
 
-                DocumentManager documentManager = new DocumentManager();
-                result = documentManager.EditPosRefund(payment, model.Authentication);
+                
             }
 
-            TempData["result"] = result;
+            Result<BankActions> messageresult = new Result<BankActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
             return RedirectToAction("PosRefundDetail", new { id = posCollect.UID });
         }
 
@@ -725,7 +807,10 @@ namespace ActionForce.Office.Controllers
                 result = documentManager.DeletePosRefund(id, model.Authentication);
             }
 
-            TempData["result"] = result;
+            Result<BankActions> messageresult = new Result<BankActions>();
+            messageresult.Message = result.Message;
+
+            TempData["result"] = messageresult;
 
             return RedirectToAction("PosRefund", "Bank");
         }
