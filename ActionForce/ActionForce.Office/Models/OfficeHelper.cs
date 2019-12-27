@@ -126,7 +126,7 @@ namespace ActionForce.Office
             return fromList;
         }
 
-        
+
 
         public static IEnumerable<Currency> GetCurrency()
         {
@@ -251,7 +251,7 @@ namespace ActionForce.Office
                         {
                             return db.Exchange.OrderByDescending(x => x.Date).FirstOrDefault();
                         }
-                        
+
                     }
                     else
                     {
@@ -260,10 +260,10 @@ namespace ActionForce.Office
 
                 }
             }
-            
+
         }
 
-        public static void AddCashAction(int? CashID, int? LocationID, int? EmployeeID, int? CashActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? RecordEmployeeID, DateTime? RecordDate,Guid ProcessUID)
+        public static void AddCashAction(int? CashID, int? LocationID, int? EmployeeID, int? CashActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? RecordEmployeeID, DateTime? RecordDate, Guid ProcessUID)
         {
             using (ActionTimeEntities db = new ActionTimeEntities())
             {
@@ -1686,7 +1686,7 @@ namespace ActionForce.Office
 
                                 }).FirstOrDefault());
 
-                                
+
                             }
                         }
 
@@ -1698,5 +1698,37 @@ namespace ActionForce.Office
 
             return issuccess;
         }
+
+        public static bool CheckSalaryEarn(long? resultid, DateTime? date, int? locationid, AuthenticationModel authentication)
+        {
+            bool issuccess = false;
+
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                var location = db.Location.FirstOrDefault(x => x.LocationID == locationid);
+                var dayresult = db.DayResult.FirstOrDefault(x => x.LocationID == locationid && x.Date == date);
+                var locschedule = db.LocationSchedule.FirstOrDefault(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date);
+
+                if (locschedule != null)
+                {
+                    var empschedules = db.Schedule.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date).ToList();
+                    List<int> empids = empschedules.Select(x => x.EmployeeID.Value).ToList();
+
+
+                    var empshifts = db.EmployeeShift.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date && empids.Contains(x.EmployeeID.Value)).ToList();
+                    var empunits = db.EmployeeSalary.Where(x => empids.Contains(x.EmployeeID) && x.DateStart <= dayresult.Date).ToList();
+
+                    foreach (var emp in empids)
+                    {
+                        var calculate = CalculateSalaryEarn(dayresult.ID, emp, dayresult.Date, dayresult.LocationID, authentication);
+                    }
+
+                    issuccess = true;
+                }
+            }
+
+            return issuccess;
+        }
+
     }
 }

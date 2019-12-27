@@ -1140,10 +1140,10 @@ namespace ActionForce.Office.Controllers
             if (DayresultID > 0 && StateID > 0)
             {
                 var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == DayresultID);
-                
+
                 if (dayresult != null)
                 {
-                    
+
                     DayResult self = new DayResult()
                     {
                         Date = dayresult.Date,
@@ -1205,5 +1205,44 @@ namespace ActionForce.Office.Controllers
 
             return RedirectToAction("Envelope", new { date = dateKey });
         }
+
+        [AllowAnonymous]
+        public ActionResult RecalculateSalary(int? LocationID, string Date, string UID)
+        {
+            Result<DayResult> result = new Result<DayResult>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            DateTime? dateKey = Convert.ToDateTime(Date).Date;
+            var location = Db.Location.FirstOrDefault(x => x.LocationID == LocationID);
+
+            ResultControlModel model = new ResultControlModel();
+
+            if (dateKey != null && location != null)
+            {
+                var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == location.LocationID && x.Date == dateKey);
+
+                if (dayresult != null)
+                {
+                    var check = OfficeHelper.CheckSalaryEarn(dayresult.ID, dateKey, location.LocationID, model.Authentication);
+                }
+
+                result.IsSuccess = true;
+                result.Message = "Çalışan hakedişleri kontrol edildi";
+            }
+            else
+            {
+                result.Message = $"{LocationID} lokasyon id si  ve {Date} tarihinden biri hatalı";
+                OfficeHelper.AddApplicationLog("Office", "Result", "Update", "0", "Result", "EmployeeSalary", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+            }
+
+            TempData["result"] = result;
+
+            return RedirectToAction("Detail", new { id = UID });
+        }
+
     }
 }

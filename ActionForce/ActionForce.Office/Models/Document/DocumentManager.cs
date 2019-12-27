@@ -2779,6 +2779,7 @@ namespace ActionForce.Office
                             resultCashSlip.SlipPath = path;
                             resultCashSlip.CashAmount = scashamount;
                             resultCashSlip.CreditAmount = scardamount;
+                            resultCashSlip.Date = slipdatetime?.Date;
 
                             Db.DocumentCashRecorderSlip.Add(resultCashSlip);
                             Db.SaveChanges();
