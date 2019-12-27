@@ -361,7 +361,7 @@ function AddPayment(id, itemid, currency) {
 
 function AddCardSale(id, currency) {
 
-    
+
     var quantity = $('#S10CSQ').val();
     var amount = $('#S10CSA').val();
     var description = $('#S10CSD').val();
@@ -427,7 +427,7 @@ function AddCardRefund(id, currency) {
 function AddCashSale(id, currency) {
 
 
-    var quantity = $('#N2Q'+currency).val();
+    var quantity = $('#N2Q' + currency).val();
     var amount = $('#N2A' + currency).val();
     var description = $('#N2D' + currency).val();
 
@@ -514,10 +514,10 @@ function ResultSummary(id) {
 
 function SumCashRecorder() {
 
-    var cash = $("#E13TRLNA").val().replace(',','.');
+    var cash = $("#E13TRLNA").val().replace(',', '.');
     var card = $("#E13TRLKA").val().replace(',', '.');
     var toplam = Number(cash) + Number(card) || 0.00;
-    
+
     $("#E13TRLA").val(toplam.toString().replace('.', ','));
 
     console.log(cash);
@@ -531,249 +531,279 @@ function SumCashRecorder() {
 
 function OpenLocation(id, envid) {
 
-    var date = $("#CurrentDateCode").val();
-    var data = new FormData();
+    var result = confirm("Lokasyonu açmak istediğinize emin misiniz?");
 
-    data.append('locationid', id);
-    data.append('environmentid', envid);
-    data.append('date', date);
+    if (result) {
 
-    console.log(id);
-    console.log(envid);
-    console.log(date);
+        var date = $("#CurrentDateCode").val();
+        var data = new FormData();
 
-    $.ajax({
-        cache: false,
-        contentType: false,
-        processData: false,
-        method: 'POST',
-        type: 'POST',
-        url: "/Shift/OpenLocation",
-        data: data,
-        beforeSend: function () {
-            $("#Loading").show();
-        },
-    }).done(function (d) {
+        data.append('locationid', id);
+        data.append('environmentid', envid);
+        data.append('date', date);
 
-        var data = d;
-        if (typeof (d) == "Object") {
-            data = JSON.parse(d);
-        }
-        console.log(data);
-        $("#LocationStatus_" + id + "_2").html(data.Content);
+        console.log(id);
+        console.log(envid);
+        console.log(date);
+
+        $.ajax({
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            type: 'POST',
+            url: "/Shift/OpenLocation",
+            data: data,
+            beforeSend: function () {
+                $("#Loading").show();
+            },
+        }).done(function (d) {
+
+            var data = d;
+            if (typeof (d) == "Object") {
+                data = JSON.parse(d);
+            }
+            console.log(data);
+            $("#LocationStatus_" + id + "_2").html(data.Content);
 
 
-        $.toast({
-            heading: 'Information',
-            text: data.Message,
-            showHideTransition: 'slide',
-            icon: 'info',
-            hideAfter: 5000,
-            position: 'bottom-right',
+            $.toast({
+                heading: 'Information',
+                text: data.Message,
+                showHideTransition: 'slide',
+                icon: 'info',
+                hideAfter: 5000,
+                position: 'bottom-right',
+            });
+
+
+        }).always(function () {
+            $("#Loading").hide();
         });
-
-
-    }).always(function () {
-        $("#Loading").hide();
-    });
+    };
 }
 
 function CloseLocation(id, envid) {
 
-    var date = $("#CurrentDateCode").val();
-    var data = new FormData();
+    var result = confirm("Lokasyonu kapatmak istediğinize emin misiniz?");
 
-    data.append('locationid', id);
-    data.append('environmentid', envid);
-    data.append('date', date);
+    if (result) {
 
-    console.log(id);
-    console.log(envid);
-    console.log(date);
+        var date = $("#CurrentDateCode").val();
+        var data = new FormData();
 
-    $.ajax({
-        cache: false,
-        contentType: false,
-        processData: false,
-        method: 'POST',
-        type: 'POST',
-        url: "/Shift/CloseLocation",
-        data: data,
-        beforeSend: function () {
-            $("#Loading").show();
-        },
-    }).done(function (d) {
+        data.append('locationid', id);
+        data.append('environmentid', envid);
+        data.append('date', date);
 
-        var data = d;
-        if (typeof (d) == "Object") {
-            data = JSON.parse(d);
-        }
-        console.log(data);
-        $("#LocationStatus_" + id + "_2").html(data.Content);
+        console.log(id);
+        console.log(envid);
+        console.log(date);
+
+        $.ajax({
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            type: 'POST',
+            url: "/Shift/CloseLocation",
+            data: data,
+            beforeSend: function () {
+                $("#Loading").show();
+            },
+        }).done(function (d) {
+
+            var data = d;
+            if (typeof (d) == "Object") {
+                data = JSON.parse(d);
+            }
+            console.log(data);
+            $("#LocationStatus_" + id + "_2").html(data.Content);
 
 
-        $.toast({
-            heading: 'Information',
-            text: data.Message,
-            showHideTransition: 'slide',
-            icon: 'info',
-            hideAfter: 5000,
-            position: 'bottom-right',
+            $.toast({
+                heading: 'Information',
+                text: data.Message,
+                showHideTransition: 'slide',
+                icon: 'info',
+                hideAfter: 5000,
+                position: 'bottom-right',
+            });
+
+
+        }).always(function () {
+            $("#Loading").hide();
         });
-
-
-    }).always(function () {
-        $("#Loading").hide();
-    });
+    };
 }
 
 function StartEmployeeShift(id, empid, envid) {
 
-    var date = $("#CurrentDateCode").val();
-    var data = new FormData();
+    var result = confirm("Çalışanın mesaisini başlatmak istediğinize emin misiniz?");
 
-    data.append('locationid', id);
-    data.append('employeeid', empid);
-    data.append('environmentid', envid);
-    data.append('date', date);
+    if (result) {
 
-    console.log(id);
-    console.log(empid);
-    console.log(envid);
-    console.log(date);
+        var date = $("#CurrentDateCode").val();
+        var data = new FormData();
 
-    $.ajax({
-        cache: false,
-        contentType: false,
-        processData: false,
-        method: 'POST',
-        type: 'POST',
-        url: "/Shift/StartEmployeeShift",
-        data: data,
-        beforeSend: function () {
-            $("#Loading").show();
-        },
-    }).done(function (data) {
-        //EmployeeStatus_175_4477_2
-        $("#EmployeeStatus_" + id + "_" + empid + "_2").html(data);
-        $("#EmployeeStatus_" + id + "_" + empid + "_2").removeClass();
-        $("#EmployeeStatus_" + id + "_" + empid + "_2").addClass('table-info');
+        data.append('locationid', id);
+        data.append('employeeid', empid);
+        data.append('environmentid', envid);
+        data.append('date', date);
+
+        console.log(id);
+        console.log(empid);
+        console.log(envid);
+        console.log(date);
+
+        $.ajax({
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            type: 'POST',
+            url: "/Shift/StartEmployeeShift",
+            data: data,
+            beforeSend: function () {
+                $("#Loading").show();
+            },
+        }).done(function (data) {
+            //EmployeeStatus_175_4477_2
+            $("#EmployeeStatus_" + id + "_" + empid + "_2").html(data);
+            $("#EmployeeStatus_" + id + "_" + empid + "_2").removeClass();
+            $("#EmployeeStatus_" + id + "_" + empid + "_2").addClass('table-info');
 
 
-    }).always(function () {
-        $("#Loading").hide();
-    });
+        }).always(function () {
+            $("#Loading").hide();
+        });
+    }
 }
 
 function FinishEmployeeShift(id, empid, envid) {
 
-    var date = $("#CurrentDateCode").val();
-    var data = new FormData();
+    var result = confirm("Çalışanın mesaisini bitirmek istediğinize emin misiniz?");
 
-    data.append('locationid', id);
-    data.append('employeeid', empid);
-    data.append('environmentid', envid);
-    data.append('date', date);
+    if (result) {
 
-    console.log(id);
-    console.log(empid);
-    console.log(envid);
-    console.log(date);
+        var date = $("#CurrentDateCode").val();
+        var data = new FormData();
 
-    $.ajax({
-        cache: false,
-        contentType: false,
-        processData: false,
-        method: 'POST',
-        type: 'POST',
-        url: "/Shift/FinishEmployeeShift",
-        data: data,
-        beforeSend: function () {
-            $("#Loading").show();
-        },
-    }).done(function (data) {
+        data.append('locationid', id);
+        data.append('employeeid', empid);
+        data.append('environmentid', envid);
+        data.append('date', date);
 
-        $("#EmployeeStatus_" + id + "_" + empid + "_2").html(data);
-        $("#EmployeeStatus_" + id + "_" + empid + "_2").removeClass();
-        $("#EmployeeStatus_" + id + "_" + empid + "_2").addClass('table-warning');
+        console.log(id);
+        console.log(empid);
+        console.log(envid);
+        console.log(date);
+
+        $.ajax({
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            type: 'POST',
+            url: "/Shift/FinishEmployeeShift",
+            data: data,
+            beforeSend: function () {
+                $("#Loading").show();
+            },
+        }).done(function (data) {
+
+            $("#EmployeeStatus_" + id + "_" + empid + "_2").html(data);
+            $("#EmployeeStatus_" + id + "_" + empid + "_2").removeClass();
+            $("#EmployeeStatus_" + id + "_" + empid + "_2").addClass('table-warning');
 
 
-    }).always(function () {
-        $("#Loading").hide();
-    });
+        }).always(function () {
+            $("#Loading").hide();
+        });
+    }
 }
 
 function StartEmployeeBreak(id, empid, envid) {
 
-    var date = $("#CurrentDateCode").val();
-    var data = new FormData();
+    var result = confirm("Çalışanın molasını başlatmak istediğinize emin misiniz?");
 
-    data.append('locationid', id);
-    data.append('employeeid', empid);
-    data.append('environmentid', envid);
-    data.append('date', date);
+    if (result) {
 
-    console.log(id);
-    console.log(empid);
-    console.log(envid);
-    console.log(date);
+        var date = $("#CurrentDateCode").val();
+        var data = new FormData();
 
-    $.ajax({
-        cache: false,
-        contentType: false,
-        processData: false,
-        method: 'POST',
-        type: 'POST',
-        url: "/Shift/StartEmployeeBreak",
-        data: data,
-        beforeSend: function () {
-            $("#Loading").show();
-        },
-    }).done(function (data) {
+        data.append('locationid', id);
+        data.append('employeeid', empid);
+        data.append('environmentid', envid);
+        data.append('date', date);
 
-        $("#EmployeeStatus_" + id + "_" + empid + "_2").html(data);
-        $("#EmployeeStatus_" + id + "_" + empid + "_2").removeClass();
-        $("#EmployeeStatus_" + id + "_" + empid + "_2").addClass('table-info');
+        console.log(id);
+        console.log(empid);
+        console.log(envid);
+        console.log(date);
+
+        $.ajax({
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            type: 'POST',
+            url: "/Shift/StartEmployeeBreak",
+            data: data,
+            beforeSend: function () {
+                $("#Loading").show();
+            },
+        }).done(function (data) {
+
+            $("#EmployeeStatus_" + id + "_" + empid + "_2").html(data);
+            $("#EmployeeStatus_" + id + "_" + empid + "_2").removeClass();
+            $("#EmployeeStatus_" + id + "_" + empid + "_2").addClass('table-info');
 
 
-    }).always(function () {
-        $("#Loading").hide();
-    });
+        }).always(function () {
+            $("#Loading").hide();
+        });
+    }
 }
 
 function FinishEmployeeBreak(id, empid, envid) {
 
-    var date = $("#CurrentDateCode").val();
-    var data = new FormData();
+    var result = confirm("Çalışanın molasını bitirmek istediğinize emin misiniz?");
 
-    data.append('locationid', id);
-    data.append('employeeid', empid);
-    data.append('environmentid', envid);
-    data.append('date', date);
+    if (result) {
 
-    console.log(id);
-    console.log(empid);
-    console.log(envid);
-    console.log(date);
+        var date = $("#CurrentDateCode").val();
+        var data = new FormData();
 
-    $.ajax({
-        cache: false,
-        contentType: false,
-        processData: false,
-        method: 'POST',
-        type: 'POST',
-        url: "/Shift/FinishEmployeeBreak",
-        data: data,
-        beforeSend: function () {
-            $("#Loading").show();
-        },
-    }).done(function (data) {
+        data.append('locationid', id);
+        data.append('employeeid', empid);
+        data.append('environmentid', envid);
+        data.append('date', date);
 
-        $("#EmployeeStatus_" + id + "_" + empid + "_2").html(data);
-        $("#EmployeeStatus_" + id + "_" + empid + "_2").removeClass();
-        $("#EmployeeStatus_" + id + "_" + empid + "_2").addClass('table-info');
+        console.log(id);
+        console.log(empid);
+        console.log(envid);
+        console.log(date);
 
-    }).always(function () {
-        $("#Loading").hide();
-    });
+        $.ajax({
+            cache: false,
+            contentType: false,
+            processData: false,
+            method: 'POST',
+            type: 'POST',
+            url: "/Shift/FinishEmployeeBreak",
+            data: data,
+            beforeSend: function () {
+                $("#Loading").show();
+            },
+        }).done(function (data) {
+
+            $("#EmployeeStatus_" + id + "_" + empid + "_2").html(data);
+            $("#EmployeeStatus_" + id + "_" + empid + "_2").removeClass();
+            $("#EmployeeStatus_" + id + "_" + empid + "_2").addClass('table-info');
+
+        }).always(function () {
+            $("#Loading").hide();
+        });
+    }
 }

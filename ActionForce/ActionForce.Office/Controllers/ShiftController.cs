@@ -158,7 +158,7 @@ namespace ActionForce.Office.Controllers
             var serviceresult = service.LocationShiftStart(locationid.Value, environmentid, 0, 0, date);
 
             string content = $"<a href='#' onclick='OpenLocation({locationid},{environmentid})'> <i class='ion ion-md-alarm tx-sm-24'></i></a>";
-            if (serviceresult.IsSuccess == true)
+            if (serviceresult?.IsSuccess == true)
             {
                 content = $"<a href='#' onclick='CloseLocation({locationid},{environmentid})'> <i class='ion ion-md-sunny tx-sm-24'></i></a>";
             }
