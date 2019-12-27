@@ -514,11 +514,11 @@ function ResultSummary(id) {
 
 function SumCashRecorder() {
 
-    var cash = $("#E13TRLNA").val().replace(',', '.');
-    var card = $("#E13TRLKA").val().replace(',', '.');
-    var toplam = Number(cash) + Number(card) || 0.00;
+    var cash = $("#E13TRLNA").val().replace('.', '').replace(',', '.');
+    var card = $("#E13TRLKA").val().replace('.', '').replace(',', '.');
+    var toplam = parseFloat(cash) + parseFloat(card) || 0.00;
 
-    $("#E13TRLA").val(toplam.toString().replace('.', ','));
+    $("#E13TRLA").val(toplam.toFixed(2).toString());
 
     console.log(cash);
     console.log(card);

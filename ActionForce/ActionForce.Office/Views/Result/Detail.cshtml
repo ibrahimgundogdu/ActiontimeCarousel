@@ -61,7 +61,7 @@
 
                 <div class="card mg-b-20 mg-lg-b-25">
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@Model.CurrentDayResult.LocationFullName</h6>
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@($"{Model.CurrentLocation.SortBy} {Model.CurrentDayResult.LocationFullName}" )</h6>
                         <nav class="nav">
                             <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CurrentDate?.DateKey.ToShortDateString())</span></a>
                         </nav>
@@ -75,8 +75,8 @@
                                         <div class="card-header d-flex align-items-center justify-content-between">
                                             <h6 class="mg-b-0">Nakit Satış / İade İşlemleri</h6>
                                             <div class="d-flex tx-18">
-                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                                @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -256,8 +256,8 @@
                                         <div class="card-header d-flex align-items-center justify-content-between">
                                             <h6 class="mg-b-0">Kart Satış / İade İşlemleri</h6>
                                             <div class="d-flex tx-18">
-                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                                @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -330,8 +330,8 @@
                                         <div class="card-header d-flex align-items-center justify-content-between">
                                             <h6 class="mg-b-0">Nakit Tahsilat / Ödeme İşlemleri</h6>
                                             <div class="d-flex tx-18">
-                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                                @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -475,8 +475,8 @@
                                         <div class="card-header d-flex align-items-center justify-content-between">
                                             <h6 class="mg-b-0">Döviz Satış İşlemleri</h6>
                                             <div class="d-flex tx-18">
-                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                                @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -630,8 +630,8 @@
                                         <div class="card-header d-flex align-items-center justify-content-between">
                                             <h6 class="mg-b-0">Masraflar</h6>
                                             <div class="d-flex tx-18">
-                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                                @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -721,8 +721,8 @@
                                         <div class="card-header d-flex align-items-center justify-content-between">
                                             <h6 class="mg-b-0">Havale / EFT</h6>
                                             <div class="d-flex tx-18">
-                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                                @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -807,8 +807,8 @@
                                                 <a class="link-03 tx-12" id="Loading" style="display:none;">
                                                     Yükleniyor... &nbsp;&nbsp;
                                                 </a>
-                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                                <a href="/Result/RecalculateSalary?LocationID=@(Model.CurrentLocation.LocationID)&Date=@(Model.CurrentDate.DateKey.ToString("yyyy-MM-dd"))&UID=@(Model.CurrentDayResult.UID.Value.ToString())" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                @*<a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -895,8 +895,8 @@
                                         <div class="card-header d-flex align-items-center justify-content-between">
                                             <h6 class="mg-b-0">Yazarkasa</h6>
                                             <div class="d-flex tx-18">
-                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                                @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -972,8 +972,8 @@
                                         <div class="card-header d-flex align-items-center justify-content-between">
                                             <h6 class="mg-b-0">Dosyalar </h6>
                                             <div class="d-flex tx-18">
-                                                <a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>
+                                                @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
