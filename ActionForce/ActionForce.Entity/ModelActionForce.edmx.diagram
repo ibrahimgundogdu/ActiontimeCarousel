@@ -222,14 +222,14 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentBankTransfer" Width="1.5" PointX="47.375" PointY="34.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" Width="1.5" PointX="3.375" PointY="48.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeCashActions" Width="1.5" PointX="49.375" PointY="0.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentCashRecorderSlip" Width="1.5" PointX="27.375" PointY="39.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDayResultDocuments" Width="1.5" PointX="51.25" PointY="7.875" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentCashRecorderSlip" Width="1.5" PointX="49.375" PointY="13.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationGoals" Width="1.5" PointX="49.375" PointY="20.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SalaryCategory" Width="1.5" PointX="47.375" PointY="43.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Setcards" Width="1.5" PointX="49.375" PointY="26.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SetcardSubscription" Width="1.5" PointX="49.375" PointY="30.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SetcardSubscriptionType" Width="1.5" PointX="11.375" PointY="0.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentCashRecorderSlip" Width="1.5" PointX="27.375" PointY="39.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentCashRecorderSlip" Width="1.5" PointX="49.375" PointY="33.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

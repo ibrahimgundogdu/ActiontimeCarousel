@@ -16,7 +16,10 @@ namespace ActionForce.Entity
     {
         public long ID { get; set; }
         public string DocumentNumber { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
         public Nullable<System.DateTime> SlipDate { get; set; }
+        public Nullable<double> CashAmount { get; set; }
+        public Nullable<double> CreditAmount { get; set; }
         public Nullable<double> NetAmount { get; set; }
         public Nullable<double> TotalAmount { get; set; }
         public string Currency { get; set; }
@@ -31,14 +34,11 @@ namespace ActionForce.Entity
         public Nullable<bool> IsActive { get; set; }
         public string ActionTypeName { get; set; }
         public Nullable<int> ActionTypeID { get; set; }
+        public string SlipPath { get; set; }
         public string SlipFile { get; set; }
         public Nullable<long> ResultID { get; set; }
         public Nullable<int> EnvironmentID { get; set; }
         public Nullable<System.Guid> UID { get; set; }
         public string SlipNumber { get; set; }
-        public string SlipPath { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
-        public Nullable<double> CashAmount { get; set; }
-        public Nullable<double> CreditAmount { get; set; }
     }
 }
