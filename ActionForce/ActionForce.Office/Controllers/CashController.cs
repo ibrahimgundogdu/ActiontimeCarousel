@@ -106,7 +106,6 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(cashCollect.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
-                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
 
 
                 if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
@@ -127,6 +126,7 @@ namespace ActionForce.Office.Controllers
                     collection.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                     collection.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                     collection.LocationID = cashCollect.LocationID;
+                    collection.ReferansID = cashCollect.ReferansID ?? (int?)null;
                     collection.UID = Guid.NewGuid();
 
                     DocumentManager documentManager = new DocumentManager();
@@ -187,6 +187,7 @@ namespace ActionForce.Office.Controllers
                     collection.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                     collection.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                     collection.LocationID = cashCollect.LocationID;
+                    collection.ReferansID = cashCollect.ReferansID ?? (int?)null;
                     collection.UID = cashCollect.UID;
                     if (newexchanges > 0)
                     {

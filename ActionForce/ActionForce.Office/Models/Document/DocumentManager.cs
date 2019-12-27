@@ -73,6 +73,7 @@ namespace ActionForce.Office
                         newCashColl.EnvironmentID = collection.EnvironmentID;
                         newCashColl.UID = Guid.NewGuid();
                         newCashColl.ResultID = collection.ResultID;
+                        newCashColl.ReferenceID = collection.ReferansID;
 
                         Db.DocumentCashCollections.Add(newCashColl);
                         Db.SaveChanges();
@@ -155,6 +156,7 @@ namespace ActionForce.Office
                             ResultID = isCash.ResultID,
                             UID = isCash.UID
                         };
+                        isCash.ReferenceID = collection.ReferansID;
                         isCash.LocationID = collection.LocationID;
                         isCash.CashID = cash.ID;
                         isCash.Date = collection.DocumentDate;
