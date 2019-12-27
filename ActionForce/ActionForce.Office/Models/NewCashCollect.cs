@@ -16,7 +16,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
-        public int? ReferansID { get; set; }
+        public long? ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
 
@@ -32,7 +32,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
-        public string ReferanceID { get; set; }
+        public long? ReferanceID { get; set; }
         public int PayMethodID { get; set; }
         public Guid UID { get; set; }
     }
@@ -47,7 +47,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
         public string SaleExchangeRate { get; set; }
-        public string ReferanceID { get; set; }
+        public long? ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
 
@@ -60,7 +60,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
-        public string ReferanceID { get; set; }
+        public long? ReferanceID { get; set; }
         public string DocumentDate { get; set; }
         public Guid UID { get; set; }
     }
@@ -77,7 +77,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
-        public string ReferanceID { get; set; }
+        public long? ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
     public class NewTicketSaleReturn
@@ -93,7 +93,7 @@ namespace ActionForce.Office
         public int PayMethodID { get; set; }
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
-        public string ReferanceID { get; set; }
+        public long? ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
 
@@ -110,7 +110,7 @@ namespace ActionForce.Office
         public string SlipDocument { get; set; }
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
-        public string ReferanceID { get; set; }
+        public long? ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
     public class NewCashBankTransfer
@@ -148,7 +148,7 @@ namespace ActionForce.Office
         public int CashID { get; set; }
         public int BankAccountID { get; set; }
         public int SalaryType { get; set; }
-        public string ReferanceID { get; set; }
+        public long? ReferanceID { get; set; }
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
         public int? CategoryID { get; set; }
@@ -168,7 +168,7 @@ namespace ActionForce.Office
         public string TerminalID { get; set; }
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
-        public string ReferanceID { get; set; }
+        public long? ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
     public class NewPosCancel
@@ -184,7 +184,7 @@ namespace ActionForce.Office
         public int BankAccountID { get; set; }
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
-        public string ReferanceID { get; set; }
+        public long? ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
     public class NewPosReturn
@@ -200,7 +200,7 @@ namespace ActionForce.Office
         public int BankAccountID { get; set; }
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
-        public string ReferanceID { get; set; }
+        public long? ReferanceID { get; set; }
         public Guid UID { get; set; }
     }
     public class NewSalaryEarn
@@ -216,7 +216,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
-        public string ReferanceID { get; set; }
+        public long? ReferanceID { get; set; }
         public int? CategoryID { get; set; }
         public Guid UID { get; set; }
     }

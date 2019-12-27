@@ -403,7 +403,6 @@ namespace ActionForce.Office.Controllers
                 }
                 var cash = OfficeHelper.GetCash(cashSalary.LocationID, cashSalary.Currency);
                 // tahsilat eklenir.
-                var refID = string.IsNullOrEmpty(cashSalary.ReferanceID);
 
                 if (amount > 0)
                 {
@@ -426,7 +425,7 @@ namespace ActionForce.Office.Controllers
                     payment.FromCashID = (int?)cashSalary.BankAccountID == 0 ? cash.ID : (int?)null;
                     payment.SalaryTypeID = cashSalary.SalaryType;
                     payment.TimeZone = location.Timezone;
-                    payment.ReferanceID = refID == false ? Convert.ToInt64(cashSalary.ReferanceID) : (long?)null;
+                    payment.ReferanceID = cashSalary.ReferanceID;
                     payment.CategoryID = cashSalary.CategoryID ?? (int?)null;
 
                     DocumentManager documentManager = new DocumentManager();
@@ -495,7 +494,7 @@ namespace ActionForce.Office.Controllers
                     sale.SalaryTypeID = cashSalary.SalaryType;
                     sale.UID = cashSalary.UID;
                     sale.CategoryID = cashSalary.CategoryID;
-
+                    sale.ReferanceID = cashSalary.ReferanceID;
                     if (newexchanges > 0)
                     {
                         sale.ExchangeRate = newexchanges;

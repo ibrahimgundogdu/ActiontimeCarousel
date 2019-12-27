@@ -106,7 +106,7 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(cashCollect.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
-
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
 
                 if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
                 {
@@ -126,9 +126,8 @@ namespace ActionForce.Office.Controllers
                     collection.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                     collection.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                     collection.LocationID = cashCollect.LocationID;
-                    collection.ReferansID = cashCollect.ReferansID ?? (int?)null;
+                    collection.ReferanceID = cashCollect.ReferanceID;
                     collection.UID = Guid.NewGuid();
-
                     DocumentManager documentManager = new DocumentManager();
                     result = documentManager.AddCashCollection(collection, model.Authentication);
                 }
@@ -187,7 +186,7 @@ namespace ActionForce.Office.Controllers
                     collection.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
                     collection.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                     collection.LocationID = cashCollect.LocationID;
-                    collection.ReferansID = cashCollect.ReferansID ?? (int?)null;
+                    collection.ReferanceID = cashCollect.ReferanceID;
                     collection.UID = cashCollect.UID;
                     if (newexchanges > 0)
                     {
@@ -359,7 +358,6 @@ namespace ActionForce.Office.Controllers
                 var fromPrefix = cashSale.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashSale.FromID.Substring(1, cashSale.FromID.Length - 1));
                 var amount = Convert.ToDouble(cashSale.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var refID = string.IsNullOrEmpty(cashSale.ReferanceID);
                 var currency = cashSale.Currency;
                 var docDate = DateTime.Now.Date;
                 if (DateTime.TryParse(cashSale.DocumentDate, out docDate))
@@ -388,7 +386,7 @@ namespace ActionForce.Office.Controllers
                     sale.LocationID = cashSale.LocationID;
                     sale.OurCompanyID = location.OurCompanyID;
                     sale.TimeZone = timezone;
-                    sale.ReferanceID = refID == false ? Convert.ToInt64(cashSale.ReferanceID) : (long?)null;
+                    sale.ReferanceID = cashSale.ReferanceID;
 
                     DocumentManager documentManager = new DocumentManager();
                     result = documentManager.AddCashSale(sale, model.Authentication);
@@ -431,12 +429,15 @@ namespace ActionForce.Office.Controllers
                 var quantity = Convert.ToInt32(cashSale.Quantity);
                 var currency = cashSale.Currency;
                 var docDate = DateTime.Now.Date;
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSale.LocationID);
                 double? newexchanges = Convert.ToDouble(cashSale.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? exchanges = Convert.ToDouble(cashSale.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(cashSale.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashSale.DocumentDate).Date;
                 }
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 if (amount > 0 && quantity > 0)
                 {
                     CashSale sale = new CashSale();
@@ -451,7 +452,8 @@ namespace ActionForce.Office.Controllers
                     sale.UID = cashSale.UID;
                     sale.Quantity = quantity;
                     sale.PayMethodID = cashSale.PayMethodID;
-
+                    sale.ReferanceID = cashSale.ReferanceID;
+                    sale.TimeZone = timezone;
                     if (newexchanges > 0)
                     {
                         sale.ExchangeRate = newexchanges;
@@ -632,8 +634,7 @@ namespace ActionForce.Office.Controllers
                 }
                 var casho = OfficeHelper.GetCash(cashSale.LocationID, currencyo);
                 var cashi = OfficeHelper.GetCash(cashSale.LocationID, currencyi);
-
-                var refID = string.IsNullOrEmpty(cashSale.ReferanceID);
+                
                 string path = Server.MapPath("/");
                 
 
@@ -662,11 +663,11 @@ namespace ActionForce.Office.Controllers
                     sale.ExchangeRate = exchangerate > 0 ? exchangerate : currencyo == "USD" ? exchange.USDA : currencyo == "EUR" ? exchange.EURA : 1;
                     sale.OurCompanyID = location.OurCompanyID;
                     sale.TimeZone = timezone;
-                    sale.ReferanceID = refID == false ? Convert.ToInt64(cashSale.ReferanceID) : (long?)null;
+                    sale.ReferanceID = cashSale.ReferanceID;
 
                     sale.SlipPath = "";
                     sale.SlipDocument = "";
-
+                    sale.TimeZone = timezone;
 
 
                     if (documentFile != null && documentFile.ContentLength > 0)
@@ -724,10 +725,12 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(cashCollect.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashCollect.LocationID);
                 double? newexchanges = Convert.ToDouble(cashCollect.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? exchanges = Convert.ToDouble(cashCollect.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var saleExchange = Convert.ToDouble(cashCollect.Exchange.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
@@ -745,7 +748,8 @@ namespace ActionForce.Office.Controllers
                     sale.LocationID = cashCollect.LocationID;
                     sale.UID = cashCollect.UID;
                     sale.SaleExchangeRate = saleExchange;
-
+                    sale.ReferanceID = cashCollect.ReferanceID;
+                    sale.TimeZone = timezone;
                     //sale.SlipPath = "";
                     //sale.SlipDocument = "";
 
@@ -941,7 +945,6 @@ namespace ActionForce.Office.Controllers
                 var cash = OfficeHelper.GetCash(cashOpen.LocationID, cashOpen.Currency);
                 var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-                var refID = string.IsNullOrEmpty(cashOpen.ReferanceID);
                 var docDate = new DateTime(DateTime.Now.Year, 1, 1);
 
                 if (amount > 0)
@@ -959,7 +962,7 @@ namespace ActionForce.Office.Controllers
                     open.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
                     open.OurCompanyID = location.OurCompanyID;
                     open.TimeZone = timezone;
-                    open.ReferanceID = refID == false ? Convert.ToInt64(cashOpen.ReferanceID) : (long?)null;
+                    open.ReferanceID = cashOpen.ReferanceID;
 
                     DocumentManager documentManager = new DocumentManager();
                     result = documentManager.AddCashOpen(open, model.Authentication);
@@ -1002,7 +1005,9 @@ namespace ActionForce.Office.Controllers
                 var currency = cashOpen.Currency;
                 double? newexchanges = Convert.ToDouble(cashOpen.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? exchanges = Convert.ToDouble(cashOpen.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashOpen.LocationID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 var docDate = DateTime.Now.Date;
                 if (DateTime.TryParse(cashOpen.DocumentDate, out docDate))
                 {
@@ -1020,6 +1025,8 @@ namespace ActionForce.Office.Controllers
                     sale.LocationID = cashOpen.LocationID;
                     sale.UID = cashOpen.UID;
                     sale.DocumentDate = docDate;
+                    sale.ReferanceID = cashOpen.ReferanceID;
+                    sale.TimeZone = timezone;
                     if (newexchanges > 0)
                     {
                         sale.ExchangeRate = newexchanges;
@@ -1196,8 +1203,7 @@ namespace ActionForce.Office.Controllers
                 var currency = cashPayment.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-
-                var refID = string.IsNullOrEmpty(cashPayment.ReferanceID);
+                
 
                 if (DateTime.TryParse(cashPayment.DocumentDate, out docDate))
                 {
@@ -1225,7 +1231,7 @@ namespace ActionForce.Office.Controllers
                     payment.LocationID = cashPayment.LocationID;
                     payment.OurCompanyID = location.OurCompanyID;
                     payment.TimeZone = timezone;
-                    payment.ReferanceID = refID == false ? Convert.ToInt64(cashPayment.ReferanceID) : (long?)null;
+                    payment.ReferanceID = cashPayment.ReferanceID;
 
                     DocumentManager documentManager = new DocumentManager();
                     result = documentManager.AddCashPayment(payment, model.Authentication);
@@ -1269,6 +1275,9 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(cashPayment.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashPayment.Currency;
                 var docDate = DateTime.Now.Date;
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashPayment.LocationID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 double? newexchanges = Convert.ToDouble(cashPayment.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? exchanges = Convert.ToDouble(cashPayment.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(cashPayment.DocumentDate, out docDate))
@@ -1289,6 +1298,8 @@ namespace ActionForce.Office.Controllers
                     payment.ToEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                     payment.LocationID = cashPayment.LocationID;
                     payment.UID = cashPayment.UID;
+                    payment.ReferanceID = cashPayment.ReferanceID;
+                    payment.TimeZone = timezone;
                     if (newexchanges > 0)
                     {
                         payment.ExchangeRate = newexchanges;
@@ -1466,8 +1477,7 @@ namespace ActionForce.Office.Controllers
                     docDate = Convert.ToDateTime(cashSaleReturn.DocumentDate).Date;
                 }
                 var cash = OfficeHelper.GetCash(cashSaleReturn.LocationID, cashSaleReturn.Currency);
-
-                var refID = string.IsNullOrEmpty(cashSaleReturn.ReferanceID);
+                
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 var exchange = OfficeHelper.GetExchange(docDate);
 
@@ -1489,7 +1499,7 @@ namespace ActionForce.Office.Controllers
                     sale.LocationID = cashSaleReturn.LocationID;
                     sale.OurCompanyID = location.OurCompanyID;
                     sale.TimeZone = timezone;
-                    sale.ReferanceID = refID == false ? Convert.ToInt64(cashSaleReturn.ReferanceID) : (long?)null;
+                    sale.ReferanceID = cashSaleReturn.ReferanceID;
 
                     DocumentManager documentManager = new DocumentManager();
                     result = documentManager.AddCashSaleReturn(sale, model.Authentication);
@@ -1533,6 +1543,9 @@ namespace ActionForce.Office.Controllers
                 var quantity = Convert.ToInt32(cashSale.Quantity);
                 var currency = cashSale.Currency;
                 var docDate = DateTime.Now.Date;
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSale.LocationID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 double? newexchanges = Convert.ToDouble(cashSale.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? exchanges = Convert.ToDouble(cashSale.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(cashSale.DocumentDate, out docDate))
@@ -1554,6 +1567,8 @@ namespace ActionForce.Office.Controllers
                     sale.UID = cashSale.UID;
                     sale.Quantity = quantity;
                     sale.PayMethodID = sale.PayMethodID;
+                    sale.ReferanceID = cashSale.ReferanceID;
+                    sale.TimeZone = timezone;
                     if (newexchanges > 0)
                     {
                         sale.ExchangeRate = newexchanges;
@@ -1736,7 +1751,6 @@ namespace ActionForce.Office.Controllers
                 }
                 var cash = OfficeHelper.GetCash(cashExpense.LocationID, cashExpense.Currency);
                 
-                var refID = string.IsNullOrEmpty(cashExpense.ReferanceID);
 
                 var exchange = OfficeHelper.GetExchange(docDate);
 
@@ -1761,7 +1775,7 @@ namespace ActionForce.Office.Controllers
                     expense.OurCompanyID = location.OurCompanyID;
                     expense.TimeZone = timezone;
                     expense.SlipNumber = cashExpense.SlipNumber;
-                    expense.ReferanceID = refID == false ? Convert.ToInt64(cashExpense.ReferanceID) : (long?)null;
+                    expense.ReferanceID = cashExpense.ReferanceID;
 
                     expense.SlipPath = "";
                     expense.SlipDocument = "";
@@ -1823,6 +1837,10 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(cashExpense.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashExpense.Currency;
                 var docDate = DateTime.Now.Date;
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashExpense.LocationID);
+
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 double? newexchanges = Convert.ToDouble(cashExpense.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? exchanges = Convert.ToDouble(cashExpense.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(cashExpense.DocumentDate, out docDate))
@@ -1844,9 +1862,8 @@ namespace ActionForce.Office.Controllers
                     sale.ToEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                     sale.LocationID = cashExpense.LocationID;
                     sale.UID = cashExpense.UID;
-                    //sale.SlipPath = "";
-                    //sale.SlipDocument = "";
-
+                    sale.ReferanceID = cashExpense.ReferanceID;
+                    sale.TimeZone = timezone;
                     if (documentFile != null && documentFile.ContentLength > 0)
                     {
                         string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
@@ -2039,7 +2056,7 @@ namespace ActionForce.Office.Controllers
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
 
-                long? refID = cashTransfer.ReferanceID ?? (long?)null;
+                //long? refID = cashTransfer.ReferanceID ?? (long?)null;
 
                 DateTime? date = Convert.ToDateTime(cashTransfer.SlipDate);
                 TimeSpan? time = Convert.ToDateTime(cashTransfer.SlipTime).TimeOfDay;
@@ -2077,9 +2094,9 @@ namespace ActionForce.Office.Controllers
                     bankTransfer.SlipDate = slipdatetime;
                     bankTransfer.SlipNumber = cashTransfer.SlipNumber;
                     bankTransfer.SlipPath = Server.MapPath("/");
-                    bankTransfer.TimeZone = location.Timezone.Value;
+                    bankTransfer.TimeZone = timezone;
                     bankTransfer.ToBankID = fromPrefix == "B" ? fromID : (int?)null;
-                    bankTransfer.ReferanceID = refID;
+                    bankTransfer.ReferanceID = cashTransfer.ReferanceID;
                     bankTransfer.UID = Guid.NewGuid();
 
                     bankTransfer.SlipPath = "";
@@ -2142,7 +2159,10 @@ namespace ActionForce.Office.Controllers
                 var commision = !string.IsNullOrEmpty(cashTransfer.Commission) ? Convert.ToDouble(cashTransfer.Commission.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture): 0;
                 var currency = cashTransfer.Currency;
                 bool? isActive = !string.IsNullOrEmpty(cashTransfer.IsActive) ? true : false;
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashTransfer.LocationID);
 
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 double? newexchanges = Convert.ToDouble(cashTransfer.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? exchanges = Convert.ToDouble(cashTransfer.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
@@ -2184,7 +2204,7 @@ namespace ActionForce.Office.Controllers
                     banktransfer.TrackingNumber = cashTransfer.TrackingNumber;
                     banktransfer.SlipPath = Server.MapPath("/");
                     banktransfer.ReferanceID = cashTransfer.ReferanceID;
-                    //banktransfer.SlipPath = "";
+                    banktransfer.TimeZone = timezone;
                     //banktransfer.SlipDocument = "";
 
                     if (documentFile != null && documentFile.ContentLength > 0)
@@ -2356,7 +2376,6 @@ namespace ActionForce.Office.Controllers
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 
-                var refID = string.IsNullOrEmpty(cashSalary.ReferanceID);
 
                 if (DateTime.TryParse(cashSalary.DocumentDate, out docDate))
                 {
@@ -2380,14 +2399,13 @@ namespace ActionForce.Office.Controllers
                     payment.LocationID = location.LocationID;
                     payment.Amount = amount;
                     payment.UID = Guid.NewGuid();
-                    payment.TimeZone = location.Timezone;
+                    payment.TimeZone = timezone;
                     payment.OurCompanyID = location.OurCompanyID;
                     payment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA.Value : payment.Currency == "EUR" ? exchange.EURA.Value : 1;
                     payment.FromBankID = (int?)cashSalary.BankAccountID > 0 ? cashSalary.BankAccountID : (int?)null;
                     payment.FromCashID = (int?)cashSalary.BankAccountID == 0 ? cash.ID : (int?)null;
                     payment.SalaryTypeID = cashSalary.SalaryType;
-                    payment.TimeZone = location.Timezone;
-                    payment.ReferanceID = refID == false ? Convert.ToInt64(cashSalary.ReferanceID) : (long?)null;
+                    payment.ReferanceID = cashSalary.ReferanceID;
                     payment.CategoryID = cashSalary.CategoryID ?? (int?)null;
 
                     DocumentManager documentManager = new DocumentManager();
@@ -2455,6 +2473,8 @@ namespace ActionForce.Office.Controllers
                     sale.SalaryTypeID = cashSalary.SalaryType;
                     sale.UID = cashSalary.UID;
                     sale.CategoryID = cashSalary.CategoryID;
+                    sale.ReferanceID = cashSalary.ReferanceID;
+                    sale.TimeZone = timezone;
                     if (newexchanges > 0)
                     {
                         sale.ExchangeRate = newexchanges;

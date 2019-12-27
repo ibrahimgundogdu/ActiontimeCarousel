@@ -115,7 +115,6 @@ namespace ActionForce.Office.Controllers
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
                 
-                var refID = string.IsNullOrEmpty(posCollect.ReferanceID);
                 var exchange = OfficeHelper.GetExchange(docDate);
 
                 if (amount > 0 && quantity > 0)
@@ -134,7 +133,7 @@ namespace ActionForce.Office.Controllers
                     pos.LocationID = posCollect.LocationID;
                     pos.OurCompanyID = location.OurCompanyID;
                     pos.TimeZone = timezone;
-                    pos.ReferanceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
+                    pos.ReferanceID = posCollect.ReferanceID;
                     pos.TerminalID = posTerminal != null ? posTerminal.TerminalID?.ToString() : "";
                     pos.Quantity = quantity;
                     DocumentManager documentManager = new DocumentManager();
@@ -225,6 +224,7 @@ namespace ActionForce.Office.Controllers
                     payment.LocationID = posCollect.LocationID;
                     payment.UID = posCollect.UID;
                     payment.Quantity = quantity;
+                    payment.ReferanceID = posCollect.ReferanceID;
                     if (newexchanges > 0)
                     {
                         payment.ExchangeRate = newexchanges;
@@ -382,7 +382,6 @@ namespace ActionForce.Office.Controllers
                 {
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
-                var refID = string.IsNullOrEmpty(posCollect.ReferanceID);
 
                 var exchange = OfficeHelper.GetExchange(docDate);
 
@@ -402,7 +401,7 @@ namespace ActionForce.Office.Controllers
                     pos.LocationID = posCollect.LocationID;
                     pos.OurCompanyID = location.OurCompanyID;
                     pos.TimeZone = timezone;
-                    pos.ReferanceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
+                    pos.ReferanceID = posCollect.ReferanceID;
                     pos.TerminalID = posTerminal != null ? posTerminal.TerminalID?.ToString() : "";
 
                     DocumentManager documentManager = new DocumentManager();
@@ -491,7 +490,7 @@ namespace ActionForce.Office.Controllers
                     payment.FromBankAccountID = posCollect.BankAccountID;
                     payment.LocationID = posCollect.LocationID;
                     payment.UID = posCollect.UID;
-
+                    payment.ReferanceID = posCollect.ReferanceID;
                     if (newexchanges > 0)
                     {
                         payment.ExchangeRate = newexchanges;
@@ -647,9 +646,6 @@ namespace ActionForce.Office.Controllers
                 {
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
-                //var cash = OfficeHelper.GetCash(posCollect.LocationID, posCollect.Currency);
-
-                var refID = string.IsNullOrEmpty(posCollect.ReferanceID);
 
                 var exchange = OfficeHelper.GetExchange(docDate);
 
@@ -670,7 +666,7 @@ namespace ActionForce.Office.Controllers
                     pos.LocationID = posCollect.LocationID;
                     pos.OurCompanyID = location.OurCompanyID;
                     pos.TimeZone = timezone;
-                    pos.ReferanceID = refID == false ? Convert.ToInt64(posCollect.ReferanceID) : (long?)null;
+                    pos.ReferanceID = posCollect.ReferanceID;
                     pos.TerminalID = posTerminal != null ? posTerminal.TerminalID?.ToString() : "";
 
                     DocumentManager documentManager = new DocumentManager();
@@ -760,6 +756,7 @@ namespace ActionForce.Office.Controllers
                     payment.FromBankAccountID = posCollect.BankAccountID;
                     payment.LocationID = posCollect.LocationID;
                     payment.UID = posCollect.UID;
+                    payment.ReferanceID = posCollect.ReferanceID;
 
                     if (newexchanges > 0)
                     {

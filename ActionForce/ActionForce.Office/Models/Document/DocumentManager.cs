@@ -43,7 +43,7 @@ namespace ActionForce.Office
                         docDate = collection.DocumentDate.Value.Date;
                     }
                     var cash = OfficeHelper.GetCash(collection.LocationID, collection.Currency);
-
+                    var refID = collection.ReferanceID ?? (long?)null;
                     try
                     {
                         var exchange = OfficeHelper.GetExchange(docDate);
@@ -73,7 +73,7 @@ namespace ActionForce.Office
                         newCashColl.EnvironmentID = collection.EnvironmentID;
                         newCashColl.UID = Guid.NewGuid();
                         newCashColl.ResultID = collection.ResultID;
-                        newCashColl.ReferenceID = collection.ReferansID;
+                        newCashColl.ReferenceID = refID;
 
                         Db.DocumentCashCollections.Add(newCashColl);
                         Db.SaveChanges();
@@ -124,7 +124,7 @@ namespace ActionForce.Office
                         var location = Db.Location.FirstOrDefault(x => x.LocationID == collection.LocationID);
                         var locId = isCash.LocationID;
                         var exchange = OfficeHelper.GetExchange(collection.DocumentDate.Value);
-
+                        var refID = collection.ReferanceID ?? (long?)null;
                         DocumentCashCollections self = new DocumentCashCollections()
                         {
                             ActionTypeID = isCash.ActionTypeID,
@@ -156,7 +156,7 @@ namespace ActionForce.Office
                             ResultID = isCash.ResultID,
                             UID = isCash.UID
                         };
-                        isCash.ReferenceID = collection.ReferansID;
+                        isCash.ReferenceID = refID;
                         isCash.LocationID = collection.LocationID;
                         isCash.CashID = cash.ID;
                         isCash.Date = collection.DocumentDate;
@@ -276,7 +276,6 @@ namespace ActionForce.Office
                 {
                     try
                     {
-                        var location = Db.Location.FirstOrDefault(x => x.LocationID == sale.LocationID);
                         DocumentTicketSales ticketSale = new DocumentTicketSales();
 
                         ticketSale.ActionTypeID = sale.ActinTypeID;
@@ -320,7 +319,7 @@ namespace ActionForce.Office
                     catch (Exception ex)
                     {
                         result.Message = $"Bilet satış eklenemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "Sale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(sale.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "Sale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(sale.LocationID)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
 
                 }
@@ -417,14 +416,14 @@ namespace ActionForce.Office
 
 
                         var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentTicketSales>(self, isCash, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isCash.ID.ToString(), "Cash", "Sale", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(sale.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isCash.ID.ToString(), "Cash", "Sale", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
                     }
                     catch (Exception ex)
                     {
 
                         result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki {isCash.Quantity} adet bilet satışı güncellenemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "Sale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(sale.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "Sale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
                 }
             }
@@ -550,7 +549,7 @@ namespace ActionForce.Office
                         else
                         {
                             result.Message = $"Kasa bakiyesi { saleExchange.Amount } { saleExchange.Currency } tutar için yeterli değildir. Kullanılabilir bakiye { balance } { saleExchange.Currency } tutardır.";
-                            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "ExchangeSale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(saleExchange.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "ExchangeSale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(saleExchange.LocationID)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                         }
 
 
@@ -697,13 +696,13 @@ namespace ActionForce.Office
 
 
                     var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentSaleExchange>(self, isExchange, OfficeHelper.getIgnorelist());
-                    OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isExchange.ID.ToString(), "Cash", "ExchangeSale", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(saleExchange.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isExchange.ID.ToString(), "Cash", "ExchangeSale", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
                 }
                 catch (Exception ex)
                 {
                     result.Message = $"{saleExchange.Amount} {saleExchange.Currency} kasa döviz satışı Güncellenemedi : {ex.Message}";
-                    OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "ExchangeSale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(saleExchange.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    OfficeHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "ExchangeSale", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isExchange.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                 }
 
 
@@ -831,14 +830,14 @@ namespace ActionForce.Office
                             result.Message = $"{open.Date} tarihli { open.Amount } {open.Currency} tutarındaki kasa açılış fişi başarı ile eklendi";
 
                             // log atılır
-                            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", open.ID.ToString(), "Cash", "Open", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(cashOpen.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, open);
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", open.ID.ToString(), "Cash", "Open", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, open);
 
                         }
                         catch (Exception ex)
                         {
 
                             result.Message = $"{amount} {currency} tutarındaki kasa açılış fişi eklenemedi : {ex.Message}";
-                            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "Open", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(cashOpen.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "Open", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isOpen.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
                         }
                     }
@@ -903,7 +902,7 @@ namespace ActionForce.Office
 
 
                             var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentCashOpen>(self, isOpen, OfficeHelper.getIgnorelist());
-                            OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isOpen.ID.ToString(), "Cash", "Open", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(cashOpen.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                            OfficeHelper.AddApplicationLog("Office", "Cash", "Update", isOpen.ID.ToString(), "Cash", "Open", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                         }
                         catch (Exception ex)
                         {

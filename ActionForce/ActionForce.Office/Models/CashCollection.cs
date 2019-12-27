@@ -19,7 +19,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public double? ExchangeRate { get; set; }
         public int? EnvironmentID { get; set; }
-        public int? ReferansID { get; set; }
+        public long? ReferanceID { get; set; }
         public Guid? UID { get; set; }
         public long? ResultID { get; set; }
     }
