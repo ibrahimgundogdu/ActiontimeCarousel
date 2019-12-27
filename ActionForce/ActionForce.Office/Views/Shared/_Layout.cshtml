@@ -91,7 +91,15 @@
 
 
                 <li class="nav-label mg-t-10 active">Finans - Cari Hesap</li>
-                <li class="nav-item"><a href="/Action/Index" class="nav-link"><i data-feather="layers"></i> <span>Cari Hesap Ekstresi</span></a></li>
+
+
+                <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Action" ? "show" : "")">
+                    <a href="/Action/Index" class="nav-link"><i data-feather="layers"></i> <span>Cari Hesap İşlemleri</span></a>
+                    <ul>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Action" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Action/Index">01 Cari Hesap Ekstresi</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Action" && this.ViewContext.RouteData.Values["action"].ToString() == "Transfers" ? "class=active" : "")><a href="/Action/Transfers">02 Cari Virman</a></li>
+                    </ul>
+                </li>
                 <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Cash" ? "show" : "") ">
                     <a href="" class="nav-link"><i data-feather="hard-drive"></i> <span>Kasa Nakit İşlemleri</span></a>
                     <ul>

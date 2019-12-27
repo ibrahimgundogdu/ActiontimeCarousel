@@ -230,6 +230,8 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SetcardSubscriptionType" Width="1.5" PointX="11.375" PointY="0.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentCashRecorderSlip" Width="1.5" PointX="27.375" PointY="39.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentCashRecorderSlip" Width="1.5" PointX="49.375" PointY="33.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentTransfer" Width="1.5" PointX="21.375" PointY="50.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentTransfer" Width="1.5" PointX="37.375" PointY="50.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

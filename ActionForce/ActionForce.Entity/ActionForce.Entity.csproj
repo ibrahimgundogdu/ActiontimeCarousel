@@ -227,6 +227,9 @@
     <Compile Include="DocumentTicketSales.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="DocumentTransfer.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="DocumentType.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -661,6 +664,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VDocumentTicketSales.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VDocumentTransfer.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VEmployee.cs">

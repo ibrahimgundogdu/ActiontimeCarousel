@@ -2539,6 +2539,7 @@
     <Content Include="Views\Shift\_PartialEditLocationShift.cshtml" />
     <Content Include="Views\Shift\_PartialEditEmployeeShift.cshtml" />
     <Content Include="Views\Shift\_PartialEditEmployeeBreaks.cshtml" />
+    <Content Include="Views\Action\Transfers.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2549,7 +2550,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="icons\" />
-    <Folder Include="Views\Actions\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Finance\" />
     <Folder Include="Views\Logout\" />
