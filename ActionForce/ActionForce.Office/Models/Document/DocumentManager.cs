@@ -79,6 +79,8 @@ namespace ActionForce.Office
                         Db.SaveChanges();
 
 
+      
+
                         // cari hesap işlemesi
                         OfficeHelper.AddCashAction(newCashColl.CashID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, 1, newCashColl.Amount, 0, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate, newCashColl.UID.Value);
 
@@ -377,6 +379,7 @@ namespace ActionForce.Office
                             PayMethodID = isCash.PayMethodID,
                             EnvironmentID = isCash.EnvironmentID
                         };
+                        isCash.ReferenceID = sale.ReferanceID;
                         isCash.LocationID = sale.LocationID;
                         isCash.CashID = cash.ID;
                         isCash.Date = sale.DocumentDate;
@@ -640,7 +643,7 @@ namespace ActionForce.Office
                         SlipNumber = isExchange.SlipNumber,
                         UID = isExchange.UID
                     };
-
+                    isExchange.ReferenceID = saleExchange.ReferanceID;
                     isExchange.LocationID = saleExchange.LocationID;
                     isExchange.FromCashID = casho.ID;
                     isExchange.ToCashID = cashi.ID;
@@ -804,11 +807,11 @@ namespace ActionForce.Office
                             open.CashID = cash.ID;
                             open.Currency = currency;
                             open.Date = docDate;
-                            open.Description = open.Description;
+                            open.Description = cashOpen.Description;
                             open.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, "COS");
                             open.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
                             open.IsActive = true;
-                            open.LocationID = open.LocationID;
+                            open.LocationID = cashOpen.LocationID;
                             open.OurCompanyID = location.OurCompanyID;
                             open.RecordDate = DateTime.UtcNow.AddHours(timezone);
                             open.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
@@ -873,7 +876,7 @@ namespace ActionForce.Office
                             };
 
 
-
+                            isOpen.ReferenceID = cashOpen.ReferanceID;
                             isOpen.Amount = amount;
                             isOpen.Description = cashOpen.Description;
                             isOpen.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
@@ -969,7 +972,7 @@ namespace ActionForce.Office
                             EnvironmentID = isOpen.EnvironmentID
                         };
 
-
+                        isOpen.ReferenceID = cashOpen.ReferanceID;
                         isOpen.LocationID = cashOpen.LocationID;
                         isOpen.Amount = cashOpen.Amount;
                         isOpen.Description = cashOpen.Description;
@@ -1194,6 +1197,7 @@ namespace ActionForce.Office
                             UpdateIP = isPayment.UpdateIP,
                             EnvironmentID = isPayment.EnvironmentID
                         };
+                        isPayment.ReferenceID = payment.ReferanceID;
                         isPayment.LocationID = payment.LocationID;
                         isPayment.CashID = cash.ID;
                         isPayment.Date = payment.DocumentDate;
@@ -1429,6 +1433,7 @@ namespace ActionForce.Office
                             UpdateIP = isCash.UpdateIP,
                             EnvironmentID = isCash.EnvironmentID
                         };
+                        isCash.ReferenceID = sale.ReferanceID;
                         isCash.LocationID = sale.LocationID;
                         isCash.CashID = cash.ID;
                         isCash.Date = sale.DocumentDate;
@@ -1581,7 +1586,7 @@ namespace ActionForce.Office
                         cashExpense.ExpenseTypeID = expense.ExpenseTypeID;
                         cashExpense.SlipPath = expense.SlipPath;
                         cashExpense.SlipDocument = expense.SlipDocument;
-
+                        cashExpense.ReferenceTableModel = expense.ReferanceModel;
 
                         Db.DocumentCashExpense.Add(cashExpense);
                         Db.SaveChanges();
@@ -1668,7 +1673,9 @@ namespace ActionForce.Office
                             ToEmployeeID = isExpense.ToEmployeeID,
                             UID = isExpense.UID
                         };
-
+                        isExpense.SlipDate = expense.SlipDate;
+                        isExpense.ExpenseTypeID = expense.ExpenseTypeID ?? (int?)null;
+                        isExpense.ReferenceID = expense.ReferanceID;
                         isExpense.SlipDocument = !string.IsNullOrEmpty(expense.SlipDocument) ? expense.SlipDocument : self.SlipDocument;
                         isExpense.SlipPath = !string.IsNullOrEmpty(expense.SlipPath) ? expense.SlipPath : self.SlipPath;
 
@@ -1868,6 +1875,7 @@ namespace ActionForce.Office
                                     expense.ResultID = dayresult?.ID;
                                     expense.ToBankAccountID = bankTransfer.ToBankAccountID;
                                     expense.SlipPath = bankTransfer.SlipPath;
+                                    expense.ReferanceModel = transfer.ReferanceModel;
 
                                     var expenseresult = AddCashExpense(expense, authentication);
                                     result.Message += $" {expenseresult.Message}";
@@ -1986,7 +1994,7 @@ namespace ActionForce.Office
                             ResultID = isTransfer.ResultID,
                             SlipPath = isTransfer.SlipPath
 
-                        };
+                    };
 
                         var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == transfer.LocationID && x.Date == transfer.DocumentDate);
 
@@ -2096,6 +2104,7 @@ namespace ActionForce.Office
                                 expense.ResultID = dayresult?.ID;
                                 expense.ToBankAccountID = isTransfer.ToBankAccountID;
                                 expense.SlipPath = isTransfer.SlipPath;
+                                expense.ReferanceModel = transfer.ReferanceModel;
 
                                 var expenseresult = AddCashExpense(expense, authentication);
                                 result.Message += $" {expenseresult.Message}";
@@ -2119,7 +2128,7 @@ namespace ActionForce.Office
                     catch (Exception ex)
                     {
 
-                        result.Message = $"Havale / EFT eklenemedi : {ex.Message}";
+                        result.Message = $"Havale / EFT güncellenemedi : {ex.Message}";
                         OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "BankTransfer", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(transfer.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
                 }
@@ -2251,7 +2260,7 @@ namespace ActionForce.Office
                             CategoryID = isEarn.CategoryID,
                             EnvironmentID = isEarn.EnvironmentID
                         };
-
+                        isEarn.ReferenceID = salary.ReferanceID;
                         isEarn.CategoryID = salary.CategoryID;
                         isEarn.EmployeeID = salary.EmployeeID;
                         isEarn.TotalAmount = (double)((double?)salary.UnitPrice * (double)salary.QuantityHour);
@@ -2498,6 +2507,7 @@ namespace ActionForce.Office
                             CategoryID = isPayment.CategoryID,
                             EnvironmentID = isPayment.EnvironmentID
                         };
+                        isPayment.ReferenceID = payment.ReferanceID;
                         isPayment.CategoryID = payment.CategoryID;
                         isPayment.LocationID = payment.LocationID;
                         isPayment.Currency = payment.Currency;
@@ -2920,7 +2930,7 @@ namespace ActionForce.Office
                             TerminalID = isPos.TerminalID,
                             EnvironmentID = isPos.EnvironmentID
                         };
-
+                        isPos.ReferenceID = collection.ReferanceID;
                         isPos.LocationID = collection.LocationID;
                         isPos.Date = collection.DocumentDate;
                         isPos.BankAccountID = collection.BankAccountID;
@@ -3142,6 +3152,7 @@ namespace ActionForce.Office
                             TerminalID = isPos.TerminalID,
                             EnvironmentID = isPos.EnvironmentID
                         };
+                        isPos.ReferenceID = collection.ReferanceID;
                         isPos.LocationID = collection.LocationID;
                         isPos.Date = collection.DocumentDate;
                         isPos.FromBankAccountID = collection.FromBankAccountID;
@@ -3290,7 +3301,6 @@ namespace ActionForce.Office
 
 
 
-
                         Db.DocumentPosRefund.Add(posCollection);
                         Db.SaveChanges();
 
@@ -3363,6 +3373,7 @@ namespace ActionForce.Office
                             TerminalID = isPos.TerminalID,
                             EnvironmentID = isPos.EnvironmentID
                         };
+                        isPos.ReferenceID = collection.ReferanceID;
                         isPos.LocationID = collection.LocationID;
                         isPos.Date = collection.DocumentDate;
                         isPos.FromBankAccountID = collection.FromBankAccountID;

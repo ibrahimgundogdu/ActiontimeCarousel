@@ -35,6 +35,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -127,9 +128,10 @@ namespace ActionForce.Office.Controllers
                     collection.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                     collection.LocationID = cashCollect.LocationID;
                     collection.ReferanceID = cashCollect.ReferanceID;
-                    collection.UID = Guid.NewGuid();
                     DocumentManager documentManager = new DocumentManager();
                     result = documentManager.AddCashCollection(collection, model.Authentication);
+                    
+                    
                 }
                 else
                 {
@@ -196,7 +198,7 @@ namespace ActionForce.Office.Controllers
                     {
                         collection.ExchangeRate = exchanges;
                     }
-
+                    
                     DocumentManager documentManager = new DocumentManager();
                     result = documentManager.EditCashCollection(collection, model.Authentication);
                 }
@@ -251,6 +253,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -291,6 +294,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -518,6 +522,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -558,6 +563,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -834,6 +840,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -874,6 +881,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -1092,6 +1100,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -1132,6 +1141,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -1363,6 +1373,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -1403,6 +1414,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -1566,7 +1578,7 @@ namespace ActionForce.Office.Controllers
                     sale.LocationID = cashSale.LocationID;
                     sale.UID = cashSale.UID;
                     sale.Quantity = quantity;
-                    sale.PayMethodID = sale.PayMethodID;
+                    sale.PayMethodID = cashSale.PayMethodID;
                     sale.ReferanceID = cashSale.ReferanceID;
                     sale.TimeZone = timezone;
                     if (newexchanges > 0)
@@ -1633,6 +1645,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -1673,6 +1686,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -1742,13 +1756,23 @@ namespace ActionForce.Office.Controllers
                 var fromID = Convert.ToInt32(cashExpense.FromID.Substring(1, cashExpense.FromID.Length - 1));
                 var amount = Convert.ToDouble(cashExpense.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashExpense.Currency;
-                var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
+
+                var docDate = DateTime.Now.Date;
+                var slipDate = DateTime.Now.Date;
 
                 if (DateTime.TryParse(cashExpense.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashExpense.DocumentDate).Date;
                 }
+
+                if (DateTime.TryParse(cashExpense.SlipDate, out slipDate))
+                {
+                    slipDate = Convert.ToDateTime(cashExpense.SlipDate).Date;
+                }
+
+                TimeSpan? time = Convert.ToDateTime(cashExpense.SlipTime).TimeOfDay;
+                DateTime? slipdatetime = slipDate.Add(time.Value);
                 var cash = OfficeHelper.GetCash(cashExpense.LocationID, cashExpense.Currency);
                 
 
@@ -1776,7 +1800,8 @@ namespace ActionForce.Office.Controllers
                     expense.TimeZone = timezone;
                     expense.SlipNumber = cashExpense.SlipNumber;
                     expense.ReferanceID = cashExpense.ReferanceID;
-
+                    expense.ExpenseTypeID = cashExpense.ExpenseTypeID ?? (int?)null;
+                    expense.SlipDate = slipdatetime;
                     expense.SlipPath = "";
                     expense.SlipDocument = "";
 
@@ -1836,17 +1861,27 @@ namespace ActionForce.Office.Controllers
                 var fromID = Convert.ToInt32(cashExpense.FromID.Substring(1, cashExpense.FromID.Length - 1));
                 var amount = Convert.ToDouble(cashExpense.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashExpense.Currency;
-                var docDate = DateTime.Now.Date;
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashExpense.LocationID);
 
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 double? newexchanges = Convert.ToDouble(cashExpense.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? exchanges = Convert.ToDouble(cashExpense.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var docDate = DateTime.Now.Date;
+                var slipDate = DateTime.Now.Date;
+
                 if (DateTime.TryParse(cashExpense.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashExpense.DocumentDate).Date;
                 }
+
+                if (DateTime.TryParse(cashExpense.SlipDate, out slipDate))
+                {
+                    slipDate = Convert.ToDateTime(cashExpense.SlipDate).Date;
+                }
+
+                TimeSpan? time = Convert.ToDateTime(cashExpense.SlipTime).TimeOfDay;
+                DateTime? slipdatetime = slipDate.Add(time.Value);
 
                 if (amount > 0)
                 {
@@ -1864,6 +1899,9 @@ namespace ActionForce.Office.Controllers
                     sale.UID = cashExpense.UID;
                     sale.ReferanceID = cashExpense.ReferanceID;
                     sale.TimeZone = timezone;
+                    sale.ExpenseTypeID = cashExpense.ExpenseTypeID ?? (int?)null;
+                    sale.SlipNumber = cashExpense.SlipNumber;
+                    sale.SlipDate = slipdatetime;
                     if (documentFile != null && documentFile.ContentLength > 0)
                     {
                         string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);
@@ -1943,6 +1981,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -1983,6 +2022,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -2093,12 +2133,12 @@ namespace ActionForce.Office.Controllers
                     bankTransfer.OurCompanyID = location.OurCompanyID;
                     bankTransfer.SlipDate = slipdatetime;
                     bankTransfer.SlipNumber = cashTransfer.SlipNumber;
-                    bankTransfer.SlipPath = Server.MapPath("/");
+                    //bankTransfer.SlipPath = Server.MapPath("/");
                     bankTransfer.TimeZone = timezone;
                     bankTransfer.ToBankID = fromPrefix == "B" ? fromID : (int?)null;
                     bankTransfer.ReferanceID = cashTransfer.ReferanceID;
                     bankTransfer.UID = Guid.NewGuid();
-
+                    bankTransfer.ReferanceModel = "DocumentBankTransfer";
                     bankTransfer.SlipPath = "";
                     bankTransfer.SlipDocument = "";
 
@@ -2201,8 +2241,7 @@ namespace ActionForce.Office.Controllers
                     banktransfer.StatusID = cashTransfer.StatusID;
                     banktransfer.IsActive = isActive;
                     banktransfer.SlipNumber = cashTransfer.SlipNumber;
-                    banktransfer.TrackingNumber = cashTransfer.TrackingNumber;
-                    banktransfer.SlipPath = Server.MapPath("/");
+                    //banktransfer.SlipPath = cashTransfer.Slip;
                     banktransfer.ReferanceID = cashTransfer.ReferanceID;
                     banktransfer.TimeZone = timezone;
                     //banktransfer.SlipDocument = "";
@@ -2259,6 +2298,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -2303,6 +2343,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
@@ -2540,6 +2581,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();

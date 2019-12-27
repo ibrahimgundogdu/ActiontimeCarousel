@@ -90,7 +90,7 @@
                                                     }
                                                 </select>
                                             </div>
-                                            
+
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Lokasyon</label>
@@ -139,6 +139,12 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
+                                            <div class="col-sm-9">
+                                                <input name="ReferanceID" type="text" class="form-control" autocomplete="off" value="@Model.CashDetail.ReferenceID" placeholder="Referans ID">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Açıklama</label>
                                             <div class="col-sm-9">
                                                 <textarea name="Description" rows="4" class="form-control" value="@Model.CashDetail.Description" placeholder="Açıklama"></textarea>
@@ -151,12 +157,6 @@
                                                     <input type="checkbox" value="@Model.CashDetail.IsActive" name="IsActive" checked="@Model.CashDetail.IsActive" class="custom-control-input">
                                                     <label class="custom-control-label">Aktif mi?</label>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
-                                            <div class="col-sm-9">
-                                                <input name="ReferanceID" type="text" class="form-control" autocomplete="off" value="@Model.CashDetail.ReferenceID" placeholder="Referans ID">
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-0">

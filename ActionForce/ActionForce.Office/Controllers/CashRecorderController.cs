@@ -165,7 +165,6 @@ namespace ActionForce.Office.Controllers
                     record.SlipNumber = cashRecord.SlipNumber;
                     record.SlipDate = sDatetime;
                     record.ResultID = resultID;
-
                     record.SlipFile = "";
                     record.SlipPath = "";
 

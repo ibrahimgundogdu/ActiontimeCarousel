@@ -138,15 +138,15 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Açıklama</label>
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
                                             <div class="col-sm-9">
-                                                <textarea name="Description" rows="4" class="form-control" value="@Model.PaymentDetail.Description" placeholder="Açıklama"></textarea>
+                                                <input name="ReferanceID" type="text" class="form-control" autocomplete="off" value="@Model.PaymentDetail.ReferenceID" placeholder="Referans ID">
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
+                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Açıklama</label>
                                             <div class="col-sm-9">
-                                                <input name="ReferenceID" type="text" class="form-control" autocomplete="off" value="@Model.PaymentDetail.ReferenceID" placeholder="Referans ID">
+                                                <textarea name="Description" rows="4" class="form-control" value="@Model.PaymentDetail.Description" placeholder="Açıklama"></textarea>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -237,62 +237,14 @@
                 placeholder: 'Lokasyon Seçiminiz',
                 searchInputPlaceholder: 'Search options'
             });
+            
 
-            var dateFormat = 'yy-mm-dd',
-                from = $('#dateFrom')
-                    .datepicker({
-                        defaultDate: '+1w',
-                        numberOfMonths: 2,
-                        dateFormat: "yy-mm-dd",
-                        dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                        monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                        firstDay: 1
-                    })
-                    .on('change', function () {
-                        to.datepicker('option', 'minDate', getDate(this));
-                    }),
-                to = $('#dateTo').datepicker({
-                    defaultDate: '+1w',
-                    numberOfMonths: 2,
-                    dateFormat: "yy-mm-dd",
-                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                    firstDay: 1
-                })
-                    .on('change', function () {
-                        from.datepicker('option', 'maxDate', getDate(this));
-                    });
-
-            $('#DocumentDate').datepicker({
+            $('#UpdateDocumentDate').datepicker({
                 dateFormat: "yy-mm-dd",
                 dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
             });
-
-            var cleaveC = new Cleave('#DocumentDate', {
-                date: true,
-                delimiter: '-',
-                datePattern: ['Y', 'm', 'd'],
-
-            });
-            //var cleave = new Cleave('#Amount', {
-            //    numeral: true
-            //});
-            //var cleave2 = new Cleave('#Exchange', {
-            //    numeral: true
-            //});
-            function getDate(element) {
-                var date;
-                try {
-                    date = $.datepicker.parseDate(dateFormat, element.value);
-                } catch (error) {
-                    date = null;
-                }
-
-                return date;
-
-            }
 
         });
 
