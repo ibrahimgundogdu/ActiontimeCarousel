@@ -267,10 +267,7 @@ namespace ActionForce.Office.Controllers
                     record.SlipNumber = cashRecord.SlipNumber;
                     record.SlipDate = sDatetime;
                     record.UID = cashRecord.UID;
-                   
-
-                    //record.SlipPath = "";
-                    //record.SlipFile = "";
+                  
 
                     if (documentFile != null && documentFile.ContentLength > 0)
                     {

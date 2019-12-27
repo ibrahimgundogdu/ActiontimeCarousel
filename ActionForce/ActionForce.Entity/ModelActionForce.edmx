@@ -907,7 +907,7 @@
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="DocumentNumber" Type="nvarchar" MaxLength="20" />
-          <Property Name="Date" Type="date" StoreGeneratedPattern="Computed" />
+          <Property Name="Date" Type="date" />
           <Property Name="SlipDate" Type="datetime" />
           <Property Name="CashAmount" Type="float" />
           <Property Name="CreditAmount" Type="float" />
@@ -6168,9 +6168,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DocumentBankTransfer" EntityType="db293_ActionTimeDbModel.DocumentBankTransfer" />
           <EntitySet Name="VDocumentBankTransfer" EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" />
           <EntitySet Name="VEmployeeCashActions" EntityType="db293_ActionTimeDbModel.VEmployeeCashActions" />
-          <EntitySet Name="DocumentCashRecorderSlip" EntityType="db293_ActionTimeDbModel.DocumentCashRecorderSlip" />
           <EntitySet Name="VDayResultDocuments" EntityType="db293_ActionTimeDbModel.VDayResultDocuments" />
-          <EntitySet Name="VDocumentCashRecorderSlip" EntityType="db293_ActionTimeDbModel.VDocumentCashRecorderSlip" />
           <FunctionImport Name="SetShiftDates" />
           <EntitySet Name="LocationGoals" EntityType="db293_ActionTimeDbModel.LocationGoals" />
           <EntitySet Name="SalaryCategory" EntityType="db293_ActionTimeDbModel.SalaryCategory" />
@@ -6251,6 +6249,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Setcards" EntityType="db293_ActionTimeDbModel.Setcards" />
           <EntitySet Name="SetcardSubscription" EntityType="db293_ActionTimeDbModel.SetcardSubscription" />
           <EntitySet Name="SetcardSubscriptionType" EntityType="db293_ActionTimeDbModel.SetcardSubscriptionType" />
+          <EntitySet Name="DocumentCashRecorderSlip" EntityType="db293_ActionTimeDbModel.DocumentCashRecorderSlip" />
+          <EntitySet Name="VDocumentCashRecorderSlip" EntityType="db293_ActionTimeDbModel.VDocumentCashRecorderSlip" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -10415,37 +10415,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ProcessUID" Type="Guid" />
           <Property Name="ActionDocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="DocumentCashRecorderSlip">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DocumentNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="SlipDate" Type="DateTime" Precision="3" />
-          <Property Name="NetAmount" Type="Double" />
-          <Property Name="TotalAmount" Type="Double" />
-          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateEmployee" Type="Int32" />
-          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
-          <Property Name="ActionTypeID" Type="Int32" />
-          <Property Name="SlipFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ResultID" Type="Int64" />
-          <Property Name="EnvironmentID" Type="Int32" />
-          <Property Name="UID" Type="Guid" />
-          <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="SlipPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Date" Type="DateTime" annotation:StoreGeneratedPattern="Computed" Precision="0" />
-          <Property Name="CashAmount" Type="Double" />
-          <Property Name="CreditAmount" Type="Double" />
-        </EntityType>
         <EntityType Name="VDayResultDocuments">
           <Key>
             <PropertyRef Name="ID" />
@@ -10473,41 +10442,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="VDocumentCashRecorderSlip">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" />
-          <Property Name="DocumentNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Date" Type="DateTime" Precision="0" />
-          <Property Name="SlipDate" Type="DateTime" Precision="3" />
-          <Property Name="NetAmount" Type="Double" />
-          <Property Name="TotalAmount" Type="Double" />
-          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateEmployee" Type="Int32" />
-          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
-          <Property Name="ActionTypeID" Type="Int32" />
-          <Property Name="SlipPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SlipFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="UID" Type="Guid" />
-          <Property Name="ActionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
-          <Property Name="EnvironmentID" Type="Int32" />
-          <Property Name="ResultID" Type="Int64" />
-          <Property Name="CashAmount" Type="Double" />
-          <Property Name="CreditAmount" Type="Double" />
         </EntityType>
         <EntityType Name="LocationGoals">
           <Key>
@@ -10571,6 +10505,72 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="DocumentCashRecorderSlip">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="SlipDate" Type="DateTime" Precision="3" />
+          <Property Name="CashAmount" Type="Double" />
+          <Property Name="CreditAmount" Type="Double" />
+          <Property Name="NetAmount" Type="Double" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="SlipPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SlipFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VDocumentCashRecorderSlip">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="SlipDate" Type="DateTime" Precision="3" />
+          <Property Name="NetAmount" Type="Double" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="SlipPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SlipFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="ActionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="CashAmount" Type="Double" />
+          <Property Name="CreditAmount" Type="Double" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -14668,38 +14668,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="DocumentCashRecorderSlip">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentCashRecorderSlip">
-              <MappingFragment StoreEntitySet="DocumentCashRecorderSlip">
-                <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />
-                <ScalarProperty Name="CashAmount" ColumnName="CashAmount" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="SlipPath" ColumnName="SlipPath" />
-                <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />
-                <ScalarProperty Name="UID" ColumnName="UID" />
-                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
-                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
-                <ScalarProperty Name="SlipFile" ColumnName="SlipFile" />
-                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
-                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
-                <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
-                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="VDayResultDocuments">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDayResultDocuments">
               <MappingFragment StoreEntitySet="VDayResultDocuments">
@@ -14721,42 +14689,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="DocumentTypeID" ColumnName="DocumentTypeID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="VDocumentCashRecorderSlip">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentCashRecorderSlip">
-              <MappingFragment StoreEntitySet="VDocumentCashRecorderSlip">
-                <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />
-                <ScalarProperty Name="CashAmount" ColumnName="CashAmount" />
-                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
-                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
-                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
-                <ScalarProperty Name="UpdaterFullName" ColumnName="UpdaterFullName" />
-                <ScalarProperty Name="RecorderFullName" ColumnName="RecorderFullName" />
-                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
-                <ScalarProperty Name="UID" ColumnName="UID" />
-                <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />
-                <ScalarProperty Name="SlipFile" ColumnName="SlipFile" />
-                <ScalarProperty Name="SlipPath" ColumnName="SlipPath" />
-                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
-                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
-                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
-                <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -14831,6 +14763,74 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SetcardSubscriptionType">
               <MappingFragment StoreEntitySet="SetcardSubscriptionType">
                 <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DocumentCashRecorderSlip">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentCashRecorderSlip">
+              <MappingFragment StoreEntitySet="DocumentCashRecorderSlip">
+                <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="SlipFile" ColumnName="SlipFile" />
+                <ScalarProperty Name="SlipPath" ColumnName="SlipPath" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
+                <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />
+                <ScalarProperty Name="CashAmount" ColumnName="CashAmount" />
+                <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VDocumentCashRecorderSlip">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentCashRecorderSlip">
+              <MappingFragment StoreEntitySet="VDocumentCashRecorderSlip">
+                <ScalarProperty Name="CreditAmount" ColumnName="CreditAmount" />
+                <ScalarProperty Name="CashAmount" ColumnName="CashAmount" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="UpdaterFullName" ColumnName="UpdaterFullName" />
+                <ScalarProperty Name="RecorderFullName" ColumnName="RecorderFullName" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />
+                <ScalarProperty Name="SlipFile" ColumnName="SlipFile" />
+                <ScalarProperty Name="SlipPath" ColumnName="SlipPath" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="NetAmount" ColumnName="NetAmount" />
+                <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
