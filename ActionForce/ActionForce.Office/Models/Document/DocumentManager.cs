@@ -2750,7 +2750,7 @@ namespace ActionForce.Office
                             locationid = dayresult.LocationID;
                             double? scardamount = Convert.ToDouble(cardamount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                             double? scashamount = Convert.ToDouble(cashamount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                            double? netamount = Convert.ToDouble(slipamount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                            double? netamount = scardamount + scashamount; //Convert.ToDouble(slipamount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                             double? totalamount = Convert.ToDouble(sliptotalmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                             DateTime? date = Convert.ToDateTime(slipdate);
                             TimeSpan? time = Convert.ToDateTime(sliptime).TimeOfDay;

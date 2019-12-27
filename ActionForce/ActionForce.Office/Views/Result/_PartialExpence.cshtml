@@ -52,8 +52,8 @@
                     <td class="tx-sm-13">@sale.ExpenseTypeName</td>
                     <td class="tx-sm-13">@sale.Description</td>
                     <td class="tx-sm-13">
-                        <a target="_blank" href="@($"/Document/Expense/{sale.SlipDocument}")">
-                            <img class="thumb" src="@($"/Document/Expense/{sale.SlipDocument}")" alt="@(sale.SlipDocument)">
+                        <a target="_blank" href="@($"{sale.SlipPath}/{sale.SlipDocument}")">
+                            <img class="thumb" src="@($"{sale.SlipPath}/{sale.SlipDocument}")" alt="@(sale.SlipDocument)">
                         </a>
                     </td>
                     <td class="tx-sm-13">@sale.RecordDate</td>
