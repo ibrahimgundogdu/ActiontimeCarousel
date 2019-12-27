@@ -24,6 +24,7 @@ namespace ActionForce.Office
         public int? EnvironmentID { get; set; }
         public string SlipNumber { get; set; }
         public string SlipDocument { get; set; }
+        public string ReferanceModel { get; set; }
         public int? TimeZone { get; set; }
         public long? ReferanceID { get; set; }
         public long? ResultID { get; set; }

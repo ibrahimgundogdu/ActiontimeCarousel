@@ -388,64 +388,83 @@
         @using (Html.BeginForm("AddCashExpense", "Cash", FormMethod.Post, new { enctype = "multipart/form-data" }))
         {
             @Html.AntiForgeryToken()
-            <div>
-                <h4>Yeni Masraf Ödeme Fişi</h4>
-                <p class="tx-color-03">Masraf Ödeme Fişi giriş işlemi yapar.</p>
-                <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="29" />
-                <div class="form-group">
-                    <label>Kime</label>
-                    <select class="form-control" id="FromID" name="FromID" required>
-                        @foreach (var item in Model.FromList)
-                        {
-                            <option value="@item.Code">@(Html.Raw($"{item.Name}"))</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Lokasyon</label>
-                    <select class="form-control" id="LocationID" name="LocationID" required>
-                        @foreach (var item in Model.LocationList)
-                        {
-                            <option value="@item.LocationID">@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Tutar</label>
-                    <input id="Amount" name="Amount" type="text" class="form-control money" autocomplete="off" placeholder="Tutar" required>
-                </div>
-                <div class="form-group">
-                    <label>Para Birimi</label>
-                    <select class="form-control" id="Currency" name="Currency" required>
-                        @foreach (var item in Model.CurrencyList)
-                        {
-                            <option value="@item.Code">@($"{item.Code} ({item.Sign})")</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Tarih</label>
-                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
-                </div>
-                <div class="form-group">
-                    <label>Fiş Nr.</label>
-                    <input id="SlipNumber" name="SlipNumber" type="text" class="form-control" autocomplete="off" placeholder="Fiş Numarası" required>
-                </div>
-                <div class="form-group">
-                    <label>Döküman</label>
-                    <input type="file" name="documentFile" id="documentFile" style="width: 100%;" class="form-control" />
-                </div>
-                <div class="form-group">
-                    <label>Referans ID</label>
-                    <input id="ReferanceID" name="ReferanceID" type="text" class="form-control number" autocomplete="off" placeholder="Referans ID">
-                </div>
-                <div class="form-group">
-                    <label>Açıklama</label>
-                    <textarea id="Description" name="Description" rows="4" class="form-control" placeholder="Açıklama"></textarea>
-                </div>
-
-                <button class="btn btn-primary btn-block">Tahsilat Ekle</button>
+        <div>
+            <h4>Yeni Masraf Ödeme Fişi</h4>
+            <p class="tx-color-03">Masraf Ödeme Fişi giriş işlemi yapar.</p>
+            <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="29" />
+            <div class="form-group">
+                <label>Kime</label>
+                <select class="form-control" id="FromID" name="FromID" required>
+                    @foreach (var item in Model.FromList)
+                    {
+                        <option value="@item.Code">@(Html.Raw($"{item.Name}"))</option>
+                    }
+                </select>
             </div>
+            <div class="form-group">
+                <label>Lokasyon</label>
+                <select class="form-control" id="LocationID" name="LocationID" required>
+                    @foreach (var item in Model.LocationList)
+                    {
+                        <option value="@item.LocationID">@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Masraf Tipi</label>
+                <select class="form-control" id="ExpenseTypeID" name="ExpenseTypeID" required>
+                    @foreach (var item in Model.ExpenseTypeList)
+                    {
+                        <option value="@item.ID">@(Html.Raw($"{item.ExpenseName}"))</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tutar</label>
+                <input id="Amount" name="Amount" type="text" class="form-control money" autocomplete="off" placeholder="Tutar" required>
+            </div>
+            <div class="form-group">
+                <label>Para Birimi</label>
+                <select class="form-control" id="Currency" name="Currency" required>
+                    @foreach (var item in Model.CurrencyList)
+                    {
+                        <option value="@item.Code">@($"{item.Code} ({item.Sign})")</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Tarih</label>
+                <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+            </div>
+            <div class="form-group">
+                <label>Fiş Nr.</label>
+                <input id="SlipNumber" name="SlipNumber" type="text" class="form-control" autocomplete="off" placeholder="Fiş Numarası" required>
+            </div>
+            <div class="form-group">
+                <label>Döküman</label>
+                <input type="file" name="documentFile" id="documentFile" style="width: 100%;" class="form-control" />
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-8">
+                    <label>Fiş Tarihi</label>
+                    <input id="SlipDate" name="SlipDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Fiş Tarihi" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label>Fiş Saati</label>
+                    <input id="SlipTime" name="SlipTime" type="text" class="form-control hourfull" autocomplete="off" placeholder="hh:mm:ss" value="@(DateTime.Now.ToString("HH:mm:ss"))" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Referans ID</label>
+                <input id="ReferanceID" name="ReferanceID" type="text" class="form-control number" autocomplete="off" placeholder="Referans ID">
+            </div>
+            <div class="form-group">
+                <label>Açıklama</label>
+                <textarea id="Description" name="Description" rows="4" class="form-control" placeholder="Açıklama"></textarea>
+            </div>
+
+            <button class="btn btn-primary btn-block">Tahsilat Ekle</button>
+        </div>
 
         }
 

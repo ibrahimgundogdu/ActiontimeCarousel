@@ -140,6 +140,12 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
+                                            <div class="col-sm-9">
+                                                <input name="ReferanceID" type="text" class="form-control number" value="@Model.Detail.ReferenceID" autocomplete="off" placeholder="Referans ID">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Açıklama</label>
                                             <div class="col-sm-9">
                                                 <textarea name="Description" rows="4" class="form-control" value="@Model.Detail.Description" placeholder="Açıklama"></textarea>
@@ -152,12 +158,6 @@
                                                     <input type="checkbox" name="IsActive" value="@Model.Detail.IsActive" checked="@Model.Detail.IsActive" class="custom-control-input">
                                                     <label class="custom-control-label">Aktif mi?</label>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
-                                            <div class="col-sm-9">
-                                                <span class="text-danger">@Model.Detail.ReferenceID</span>
                                             </div>
                                         </div>
 

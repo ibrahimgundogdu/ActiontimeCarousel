@@ -111,6 +111,10 @@ namespace ActionForce.Office
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
         public long? ReferanceID { get; set; }
+        public int? ExpenseTypeID { get; set; }
+        public string ReferanceModel { get; set; }
+        public string SlipDate { get; set; }
+        public string SlipTime { get; set; }
         public Guid UID { get; set; }
     }
     public class NewCashBankTransfer
@@ -135,6 +139,7 @@ namespace ActionForce.Office
         public long? ReferanceID { get; set; }
         public Guid UID { get; set; }
         public string IsActive { get; set; }
+        public string ReferanceModel { get; set; }
     }
     public class NewCashSalaryPayment
     {

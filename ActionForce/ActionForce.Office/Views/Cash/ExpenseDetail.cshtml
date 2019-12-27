@@ -81,7 +81,7 @@
                                                 <select class="form-control select2" name="FromID" required>
                                                     @foreach (var item in Model.FromList)
                                                     {
-                                                        <option value="@item.Code" @(Model.ExpenseDetail.ToBankAccountID == item.ID && item.Code.Substring(0,1) == "B" ? "selected" : Model.ExpenseDetail.ToCustomerID == item.ID && item.Code.Substring(0,1) == "A" ? "selected" : Model.ExpenseDetail.ToEmployeeID == item.ID && item.Code.Substring(0,1) == "E" ? "selected" : "")>@(Html.Raw($"{item.Name}"))</option>
+                                                        <option value="@item.Code" @(Model.ExpenseDetail.ToBankAccountID == item.ID && item.Code.Substring(0, 1) == "B" ? "selected" : Model.ExpenseDetail.ToCustomerID == item.ID && item.Code.Substring(0, 1) == "A" ? "selected" : Model.ExpenseDetail.ToEmployeeID == item.ID && item.Code.Substring(0, 1) == "E" ? "selected" : "")>@(Html.Raw($"{item.Name}"))</option>
                                                     }
                                                 </select>
                                             </div>
@@ -93,6 +93,17 @@
                                                     @foreach (var item in Model.LocationList)
                                                     {
                                                         <option value="@item.LocationID" @(Model.ExpenseDetail.LocationID == item.LocationID ? "selected" : "")>@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Masraf Tipi</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control select2" name="ExpenseTypeID" required>
+                                                    @foreach (var item in Model.ExpenseTypeList)
+                                                    {
+                                                        <option value="@item.ID" @(Model.ExpenseDetail.ExpenseTypeID == item.ID ? "selected" : "")>@($"{item.SortBy} ({item.ExpenseName})")</option>
                                                     }
                                                 </select>
                                             </div>
@@ -139,9 +150,27 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
+                                            <div class="col-sm-9">
+                                                <input name="ReferanceID" type="text" class="form-control" autocomplete="off" value="@Model.ExpenseDetail.ReferenceID" placeholder="Referans ID">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Fiş Numarası</label>
                                             <div class="col-sm-9">
                                                 <input id="UpdateSlipNumber" name="SlipNumber" type="text" class="form-control" autocomplete="off" value="@Model.ExpenseDetail.SlipNumber" placeholder="Fiş Numarası">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="SlipDate" class="col-sm-3 col-form-label">Fiş Tarih</label>
+                                            <div class="col-sm-9">
+                                                <input id="UpdateSlipDate" name="SlipDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.ExpenseDetail.SlipDate?.ToString("yyyy-MM-dd"))" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="SlipTime" class="col-sm-3 col-form-label">Fiş Saati</label>
+                                            <div class="col-sm-9">
+                                                <input id="UpdateSlipTime" name="SlipTime" type="text" class="form-control hourfull" autocomplete="off" placeholder="hh:mm:ss" value="@(Model.ExpenseDetail.SlipDate?.ToString("HH\\:mm\\:ss") ?? "00:00:00")" required>
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -151,12 +180,6 @@
                                             </div>
                                             <div class="col-sm-2">
                                                 <img src="~/Document/Expense/@Model.ExpenseDetail.SlipDocument" class="img-thumbnail" alt="Responsive image">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
-                                            <div class="col-sm-9">
-                                                <input name="ReferenceID" type="text" class="form-control" autocomplete="off" value="@Model.ExpenseDetail.ReferenceID" placeholder="Referans ID">
                                             </div>
                                         </div>
                                         <div class="form-group row">
