@@ -24,7 +24,7 @@
                     <li class="breadcrumb-item active" aria-current="page">Cari Virman İşlemleri</li>
                 </ol>
             </nav>
-            <h4 class="mg-b-0 tx-spacing--1">Virman</h4>
+            <h4 class="mg-b-0 tx-spacing--1">Virmanlar</h4>
         </div>
         <div class="d-none d-md-block">
             <a href="/Action/AddTransfer" class="btn btn-primary btn-uppercase"><i data-feather="plus-square"></i> &nbsp; Virman Ekle</a>
@@ -69,80 +69,64 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th></th>
-                        <th colspan="2">Nereden</th>
-                        <th></th>
-                        <th colspan="2">Nereye</th>
-                        <th></th>
+                        <th colspan="3" class="bd-l">Nereden</th>
+                        <th colspan="3" class="bd-l">Nereye</th>
+                        <th class="bd-l"></th>
                         <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+
                     </tr>
                     <tr>
                         <th>#</th>
                         <th>Tarih</th>
                         <th>Belge No</th>
-                        <th>Lokasyon</th>
+                        <th>Taşıyıcı</th>
 
-
+                        <th class="bd-l">Lokasyon</th>
                         <th>Kaynak</th>
                         <th>Tarih</th>
 
-                        <th>Taşıyıcı</th>
-
+                        <th class="bd-l">Lokasyon</th>
                         <th>Hedef</th>
                         <th>Tarih</th>
 
-                        <th>Durum</th>
+                        <th class="bd-l">Durum</th>
                         <th>Tutar</th>
-                        <th>Para Br.</th>
 
                         <th>Aktif</th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
-                        <th></th>
-                        <th></th>
+
                     </tr>
                 </thead>
                 <tbody>
 
                     @foreach (var item in Model.Transfers)
                     {
-                    <tr style='@(item.IsActive == false ? "color: red" : "")'>
+                        <tr style='@(item.IsActive == false ? "color: red" : "")'>
+                            <td class="tx-sm-13 bold">@item.ID</td>
+                            <td class="tx-sm-13">@(item.DocumentDate?.ToShortDateString())</td>
+                            <td class="tx-sm-13"><a href="@("/Action/TransferDetail/" + @item.UID)">@item.DocumentNumber</a></td>
+                            <td class="tx-sm-13">@item.CarrierEmpFullName</td>
 
-                        <td class="tx-sm-13 bold">@item.ID</td>
-                        <td class="tx-sm-13">@(item.DocumentDate?.ToShortDateString())</td>
-                        <td class="tx-sm-13">@item.DocumentNumber</td>
-                        <td class="tx-sm-13">@item.FromLocationFullName</td>
+                            <td class="tx-sm-13 bd-l">@item.FromLocationFullName</td>
+                            <td class="tx-sm-13 bg-primary-light font-weight-bold">@($"{item.FromEmpFullName} {item.FromCashName} {item.FromBankAccountName} {item.FromCustFullName}")</td>
+                            <td class="tx-sm-13 bg-primary-light font-weight-bold">@(item.FromDate?.ToString())</td>
 
-                        <td class="tx-sm-13 bg-primary-light font-weight-bold">@($"{item.FromEmpFullName} {item.FromCashName} {item.FromBankAccountName} {item.FromCustFullName}")</td>
-                        <td class="tx-sm-13 bg-primary-light font-weight-bold">@(item.FromDate?.ToString())</td>
+                            <td class="tx-sm-13 bd-l">@item.ToLocationFullName</td>
+                            <td class="tx-sm-13 bg-primary-light font-weight-bold">@($"{item.ToEmpFullName} {item.ToCashName} {item.ToBankAccountName} {item.ToCustFullName}")</td>
+                            <td class="tx-sm-13 bg-primary-light font-weight-bold">@(item.ToDate?.ToString())</td>
 
-                        <td class="tx-sm-13">@item.CarrierEmpFullName</td>
+                            <td class="tx-sm-13 bd-l">@(item.StatusName)</td>
+                            <td class="tx-sm-13 text-right">@(item.Amount?.ToString("N2")) @(item.Currency)</td>
 
-                        <td class="tx-sm-13 bg-primary-light font-weight-bold">@($"{item.ToEmpFullName} {item.ToCashName} {item.ToBankAccountName} {item.ToCustFullName}")</td>
-                        <td class="tx-sm-13 bg-primary-light font-weight-bold">@(item.ToDate?.ToString())</td>
-
-                        <td class="tx-sm-13">@(item.StatusName)</td>
-                        <td class="tx-sm-13">@(item.Amount?.ToString("N2"))</td>
-                        <td class="tx-sm-13">@(item.Currency)</td>
-
-                        <td class="tx-sm-13">@(item.IsActive)</td>
-                        <td class="tx-sm-13">@(item.RecEmployeeName)</td>
-                        <td class="tx-sm-13 text-right">@item.RecordDate</td>
-                        <td class="tx-sm-13 text-right"><a href="@("/Action/TransferDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
-                        @if (item.IsActive == true)
-                        {
-                            <td class="tx-sm-13 text-right"><a href="#" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} tutarlı virmanı iptal etmek istediğine emin misin?')"))) DeleteTransfer(@item.ID)"><i data-feather="trash-2"></i></a></td>
-                        }
-
-                    </tr>
+                            <td class="tx-sm-13">@(item.IsActive)</td>
+                            <td class="tx-sm-13">@(item.RecEmployeeName)</td>
+                            <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                        </tr>
                     }
-
                 </tbody>
             </table>
         </div>
@@ -201,7 +185,7 @@
                 firstDay: 1
             });
 
-          
+
             function getDate(element) {
                 var date;
                 try {

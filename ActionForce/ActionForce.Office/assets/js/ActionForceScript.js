@@ -807,3 +807,335 @@ function FinishEmployeeBreak(id, empid, envid) {
         });
     }
 }
+
+// virman seçim işlemleri
+
+function FLocationCashSelect() {
+
+    var locationid = $('#FromLocationID  option:selected').val();
+    var date = $('#DocumentDate').val();
+
+    var data = new FormData();
+
+    data.append('locationid', locationid);
+    data.append('date', date);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Action/FLocationCashSelect",
+        data: data,
+        beforeSend: function () {
+            $("#Loading").show();
+        },
+    }).done(function (d) {
+
+        $("#SelectLocationCash").html(d);
+
+    }).always(function () {
+        $("#Loading").hide();
+    });
+
+};
+
+function FLocationCashSet(id, name) {
+
+    $('#FromCashID').val(id);
+    $('#FromName').val(name);
+
+    $('#FromBankID').val('');
+    $('#FromEmplID').val('');
+    $('#FromCustID').val('');
+};
+
+function FLocationBankSelect() {
+
+    var locationid = $('#FromLocationID  option:selected').val();
+    var date = $('#DocumentDate').val();
+
+    var data = new FormData();
+
+    data.append('locationid', locationid);
+    data.append('date', date);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Action/FLocationBankSelect",
+        data: data,
+        beforeSend: function () {
+            $("#Loading").show();
+        },
+    }).done(function (d) {
+
+        $("#SelectLocationBank").html(d);
+
+    }).always(function () {
+        $("#Loading").hide();
+    });
+
+};
+
+function FLocationBankSet(id, name) {
+
+    $('#FromBankID').val(id);
+    $('#FromName').val(name);
+
+    $('#FromCashID').val('');
+    $('#FromEmplID').val('');
+    $('#FromCustID').val('');
+};
+
+function FLocationEmployeeSelect() {
+
+    var locationid = $('#FromLocationID  option:selected').val();
+    var date = $('#DocumentDate').val();
+
+    var data = new FormData();
+
+    data.append('locationid', locationid);
+    data.append('date', date);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Action/FLocationEmployeeSelect",
+        data: data,
+        beforeSend: function () {
+            $("#Loading").show();
+        },
+    }).done(function (d) {
+
+        $("#SelectLocationEmployee").html(d);
+
+    }).always(function () {
+        $("#Loading").hide();
+    });
+
+};
+
+function FLocationEmployeeSet(id, name) {
+
+    $('#FromEmplID').val(id);
+    $('#FromName').val(name);
+
+    $('#FromCashID').val('');
+    $('#FromBankID').val('');
+    $('#FromCustID').val('');
+};
+
+function FLocationCustomerSelect() {
+
+    var locationid = $('#FromLocationID  option:selected').val();
+    var date = $('#DocumentDate').val();
+
+    var data = new FormData();
+
+    data.append('locationid', locationid);
+    data.append('date', date);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Action/FLocationCustomerSelect",
+        data: data,
+        beforeSend: function () {
+            $("#Loading").show();
+        },
+    }).done(function (d) {
+
+        $("#SelectLocationCustomer").html(d);
+
+    }).always(function () {
+        $("#Loading").hide();
+    });
+
+};
+
+function FLocationCustomerSet(id, name) {
+
+    $('#FromCustID').val(id);
+    $('#FromName').val(name);
+
+    $('#FromCashID').val('');
+    $('#FromBankID').val('');
+    $('#FromEmplID').val('');
+};
+
+
+function TLocationCashSelect() {
+
+    var locationid = $('#ToLocationID  option:selected').val();
+    var date = $('#DocumentDate').val();
+
+    var data = new FormData();
+
+    data.append('locationid', locationid);
+    data.append('date', date);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Action/TLocationCashSelect",
+        data: data,
+        beforeSend: function () {
+            $("#Loading").show();
+        },
+    }).done(function (d) {
+
+        $("#SelectTLocationCash").html(d);
+
+    }).always(function () {
+        $("#Loading").hide();
+    });
+
+};
+
+function TLocationCashSet(id, name) {
+
+    $('#ToCashID').val(id);
+    $('#ToName').val(name);
+
+    $('#ToBankID').val('');
+    $('#ToEmplID').val('');
+    $('#ToCustID').val('');
+};
+
+function TLocationBankSelect() {
+
+    var locationid = $('#ToLocationID  option:selected').val();
+    var date = $('#DocumentDate').val();
+
+    var data = new FormData();
+
+    data.append('locationid', locationid);
+    data.append('date', date);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Action/TLocationBankSelect",
+        data: data,
+        beforeSend: function () {
+            $("#Loading").show();
+        },
+    }).done(function (d) {
+
+        $("#SelectTLocationBank").html(d);
+
+    }).always(function () {
+        $("#Loading").hide();
+    });
+
+};
+
+function TLocationBankSet(id, name) {
+
+    $('#ToBankID').val(id);
+    $('#ToName').val(name);
+
+    $('#ToCashID').val('');
+    $('#ToEmplID').val('');
+    $('#ToCustID').val('');
+};
+
+function TLocationEmployeeSelect() {
+
+    var locationid = $('#ToLocationID  option:selected').val();
+    var date = $('#DocumentDate').val();
+
+    var data = new FormData();
+
+    data.append('locationid', locationid);
+    data.append('date', date);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Action/TLocationEmployeeSelect",
+        data: data,
+        beforeSend: function () {
+            $("#Loading").show();
+        },
+    }).done(function (d) {
+
+        $("#SelectTLocationEmployee").html(d);
+
+    }).always(function () {
+        $("#Loading").hide();
+    });
+
+};
+
+function TLocationEmployeeSet(id, name) {
+
+    $('#ToEmplID').val(id);
+    $('#ToName').val(name);
+
+    $('#ToCashID').val('');
+    $('#ToBankID').val('');
+    $('#ToCustID').val('');
+};
+
+function TLocationCustomerSelect() {
+
+    var locationid = $('#ToLocationID  option:selected').val();
+    var date = $('#DocumentDate').val();
+
+    var data = new FormData();
+
+    data.append('locationid', locationid);
+    data.append('date', date);
+
+    $.ajax({
+        cache: false,
+        contentType: false,
+        processData: false,
+        method: 'POST',
+        type: 'POST',
+        url: "/Action/TLocationCustomerSelect",
+        data: data,
+        beforeSend: function () {
+            $("#Loading").show();
+        },
+    }).done(function (d) {
+
+        $("#SelectTLocationCustomer").html(d);
+
+    }).always(function () {
+        $("#Loading").hide();
+    });
+
+};
+
+function TLocationCustomerSet(id, name) {
+
+    $('#ToCustID').val(id);
+    $('#ToName').val(name);
+
+    $('#ToCashID').val('');
+    $('#ToBankID').val('');
+    $('#ToEmplID').val('');
+};
+

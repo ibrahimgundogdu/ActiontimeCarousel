@@ -24,6 +24,6 @@ namespace ActionForce.Entity
         public Nullable<bool> IsMaster { get; set; }
         public Nullable<bool> cIsActive { get; set; }
         public string SortBy { get; set; }
-        public Nullable<int> ID { get; set; }
+        public int ID { get; set; }
     }
 }

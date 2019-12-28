@@ -3035,6 +3035,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCash' does not have a prim
           <Key>
             <PropertyRef Name="LocationID" />
             <PropertyRef Name="OurCompanyID" />
+            <PropertyRef Name="ID" />
           </Key>
           <Property Name="LocationID" Type="int" Nullable="false" />
           <Property Name="OurCompanyID" Type="int" Nullable="false" />
@@ -3046,7 +3047,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCash' does not have a prim
           <Property Name="IsMaster" Type="bit" />
           <Property Name="cIsActive" Type="bit" />
           <Property Name="SortBy" Type="nchar" MaxLength="4" />
-          <Property Name="ID" Type="int" />
+          <Property Name="ID" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashActions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6321,7 +6322,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VDayResultItemList" EntityType="db293_ActionTimeDbModel.VDayResultItemList" />
           <EntitySet Name="VDocumentSalaryEarn" EntityType="db293_ActionTimeDbModel.VDocumentSalaryEarn" />
           <EntitySet Name="VBankAccount" EntityType="db293_ActionTimeDbModel.VBankAccount" />
-          <EntitySet Name="VCash" EntityType="db293_ActionTimeDbModel.VCash" />
           <EntitySet Name="VEmployeeSalary" EntityType="db293_ActionTimeDbModel.VEmployeeSalary" />
           <EntitySet Name="VEmployeeSalaryDist" EntityType="db293_ActionTimeDbModel.VEmployeeSalaryDist" />
           <EntitySet Name="CashRecorders" EntityType="db293_ActionTimeDbModel.CashRecorders" />
@@ -6419,6 +6419,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VDocumentCashRecorderSlip" EntityType="db293_ActionTimeDbModel.VDocumentCashRecorderSlip" />
           <EntitySet Name="DocumentTransfer" EntityType="db293_ActionTimeDbModel.DocumentTransfer" />
           <EntitySet Name="VDocumentTransfer" EntityType="db293_ActionTimeDbModel.VDocumentTransfer" />
+          <EntitySet Name="VCash" EntityType="db293_ActionTimeDbModel.VCash" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -10314,23 +10315,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="VCash">
-          <Key>
-            <PropertyRef Name="LocationID" />
-            <PropertyRef Name="OurCompanyID" />
-          </Key>
-          <Property Name="LocationID" Type="Int32" Nullable="false" />
-          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="CashName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BlockedAmount" Type="Double" />
-          <Property Name="Currency" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="IsMaster" Type="Boolean" />
-          <Property Name="cIsActive" Type="Boolean" />
-          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
-          <Property Name="ID" Type="Int32" />
-        </EntityType>
         <EntityType Name="VEmployeeSalary">
           <Key>
             <PropertyRef Name="ID" />
@@ -10843,6 +10827,24 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="FromLocationID" Type="Int32" />
           <Property Name="ToLocationID" Type="Int32" />
           <Property Name="ToLocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VCash">
+          <Key>
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="OurCompanyID" />
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CashName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BlockedAmount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IsMaster" Type="Boolean" />
+          <Property Name="cIsActive" Type="Boolean" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
+          <Property Name="ID" Type="Int32" Nullable="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -14665,23 +14667,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="VCash">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCash">
-              <MappingFragment StoreEntitySet="VCash">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
-                <ScalarProperty Name="cIsActive" ColumnName="cIsActive" />
-                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="BlockedAmount" ColumnName="BlockedAmount" />
-                <ScalarProperty Name="CashName" ColumnName="CashName" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="VEmployeeSalary">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeSalary">
               <MappingFragment StoreEntitySet="VEmployeeSalary">
@@ -15210,6 +15195,23 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="FromEmployeeID" ColumnName="FromEmployeeID" />
                 <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VCash">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCash">
+              <MappingFragment StoreEntitySet="VCash">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="cIsActive" ColumnName="cIsActive" />
+                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="BlockedAmount" ColumnName="BlockedAmount" />
+                <ScalarProperty Name="CashName" ColumnName="CashName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

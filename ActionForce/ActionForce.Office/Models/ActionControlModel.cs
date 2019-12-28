@@ -9,10 +9,15 @@ namespace ActionForce.Office
     public class ActionControlModel : LayoutControlModel
     {
         public OurCompany CurrentCompany { get; set; }
-        public VLocation CurrentLocation { get; set; }
+        public Location CurrentLocation { get; set; }
         public Cash CurrentCash { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
+        public IEnumerable<Employee> EmployeeList { get; set; }
+        public IEnumerable<VCash> CashList { get; set; }
+        public IEnumerable<VBankAccount> BankAccountList { get; set; }
+        public IEnumerable<Customer> CustomerList { get; set; }
         public IEnumerable<VCashBankActions> ActionList { get; set; }
+        public IEnumerable<Currency> CurrencyList { get; set; }
         public FilterModel Filters { get; set; }
         public IEnumerable<TotalModel> HeaderTotals { get; set; }
         public IEnumerable<TotalModel> FooterTotals { get; set; }
@@ -21,6 +26,6 @@ namespace ActionForce.Office
         public VDocumentTransfer CurrentTransfer { get; set; }
         public IEnumerable<VDocumentTransfer> Transfers { get; set; }
         public Result<DocumentTransfer> Result { get; set; }
-
+        public DateTime? CurrentDate { get; set; }
     }
 }

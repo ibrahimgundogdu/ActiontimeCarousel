@@ -1,0 +1,22 @@
+﻿@model ActionControlModel
+<a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</a>
+<div>
+    <h4>@($"{Model.CurrentLocation.SortBy.Trim()} {Model.CurrentLocation.LocationName}") - @(Model.CurrentDate.Value.ToShortDateString())</h4>
+    <p class="tx-color-03"> Banka Hesabı Seçiminiz ?</p>
+    <div class="table-responsive">
+        <table class="table table-warning table-hover mg-b-0" data-dismiss="modal" aria-label="Close">
+            <tbody>
+                @foreach (var item in Model.BankAccountList)
+                {
+                <tr onclick="FLocationBankSet(@(item.ID),'@($"{item.AccountName} - {item.TypeName} ({item.Currency})")')">
+                    <th class="font-weight-bold">@(item.Currency)</th>
+                    <th>@($"{item.AccountName} {item.TypeName} ({item.Currency})" )</th>
+                    <th>@($"{item.TypeName}" )</th>
+                </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

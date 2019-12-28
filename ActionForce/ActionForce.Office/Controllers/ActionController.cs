@@ -1,5 +1,7 @@
-﻿using System;
+﻿using ActionForce.Entity;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -30,10 +32,10 @@ namespace ActionForce.Office.Controllers
 
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
-            
+            model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+
             model.ActionList = Db.VCashBankActions.Where(x => x.LocationID == model.Filters.LocationID && x.ActionDate >= model.Filters.DateBegin && x.ActionDate <= model.Filters.DateEnd).OrderBy(x => x.ActionDate).ToList();
-            
+
             var balanceData = Db.VCashBankActions.Where(x => x.LocationID == model.Filters.LocationID && x.ActionDate < model.Filters.DateBegin).ToList();
             if (balanceData != null && balanceData.Count > 0)
             {
@@ -138,7 +140,7 @@ namespace ActionForce.Office.Controllers
             {
                 Currency = "TRL",
                 Type = "Cash",
-                Total = model.HeaderTotals.FirstOrDefault(x=> x.Type == "Cash" && x.Currency == "TRL").Total
+                Total = model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total
             });
 
             footerTotals.Add(new TotalModel()
@@ -253,7 +255,7 @@ namespace ActionForce.Office.Controllers
             }
 
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+            model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.Transfers = Db.VDocumentTransfer.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.DocumentDate >= model.Filters.DateBegin && x.DocumentDate <= model.Filters.DateEnd).OrderBy(x => x.DocumentDate).ToList();
 
@@ -263,5 +265,212 @@ namespace ActionForce.Office.Controllers
             }
             return View(model);
         }
+
+        [AllowAnonymous]
+        public ActionResult AddTransfer()
+        {
+            ActionControlModel model = new ActionControlModel();
+
+            if (TempData["result"] != null)
+            {
+                if (TempData["result"] != null)
+                {
+                    model.Result = TempData["result"] as Result<DocumentTransfer> ?? null;
+                }
+            }
+
+
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            List<int> locationids = model.LocationList.Select(z => z.LocationID).ToList();
+            model.CashList = Db.VCash.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.ID > 0).ToList();
+            model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.CurrencyList = Db.Currency.ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddNewTransfer(newTransfer transfer)
+        {
+            Result<DocumentTransfer> result = new Result<DocumentTransfer>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            ActionControlModel model = new ActionControlModel();
+            var amount = Convert.ToDouble(transfer.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+            var date = Convert.ToDateTime(transfer.DocumentDate);
+            string uid = string.Empty;
+
+            if (transfer != null && amount >0)
+            {
+                DocumentManager manager = new DocumentManager();
+
+                TransferModel transfermodel = new TransferModel();
+
+                transfermodel.Amount = amount;
+                transfermodel.CarrierEmployeeID = transfer.CarrierEmployeeID;
+                transfermodel.Currency = transfer.Currency;
+                transfermodel.Description = transfer.Description;
+                transfermodel.DocumentDate = date;
+                transfermodel.FromBankID = transfer.FromBankID;
+                transfermodel.FromCashID = transfer.FromCashID;
+                transfermodel.FromCustID = transfer.FromCustID;
+                transfermodel.FromEmplID = transfer.FromEmplID;
+                transfermodel.FromLocationID = transfer.FromLocationID;
+                transfermodel.ToBankID = transfer.ToBankID;
+                transfermodel.ToCashID = transfer.ToCashID;
+                transfermodel.ToCustID = transfer.ToCustID;
+                transfermodel.ToEmplID = transfer.ToEmplID;
+                transfermodel.ToLocationID = transfer.ToLocationID;
+                transfermodel.UID = Guid.NewGuid();
+
+                uid = transfermodel.UID.ToString();
+
+                result = manager.AddTransfer(transfermodel, model.Authentication);
+            }
+            else
+            {
+                result.Message = "Tutar 0 dan büyük olduğuna emin olun";
+            }
+
+            TempData["result"] = result;
+
+            if (result.IsSuccess == true)
+            {
+                return RedirectToAction("Transfer", new { id = uid });
+            }
+            else
+            {
+                return RedirectToAction("AddTransfer");
+            }
+            
+        }
+
+
+
+
+
+
+
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult FLocationCashSelect(int? locationid, string date)
+        {
+            ActionControlModel model = new ActionControlModel();
+
+            model.CurrentDate = Convert.ToDateTime(date);
+            model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == locationid.Value);
+            model.CashList = Db.VCash.Where(x => x.LocationID == locationid).ToList();
+
+            return PartialView("_PartialSelectLocationCash", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult FLocationBankSelect(int? locationid, string date)
+        {
+            ActionControlModel model = new ActionControlModel();
+
+            model.CurrentDate = Convert.ToDateTime(date);
+            model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == locationid.Value);
+            model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.CurrentLocation.OurCompanyID).ToList();
+
+            return PartialView("_PartialSelectLocationBank", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult FLocationEmployeeSelect(int? locationid, string date)
+        {
+            ActionControlModel model = new ActionControlModel();
+
+            model.CurrentDate = Convert.ToDateTime(date);
+            model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == locationid.Value);
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.CurrentLocation.OurCompanyID).ToList();
+
+            return PartialView("_PartialSelectLocationEmployee", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult FLocationCustomerSelect(int? locationid, string date)
+        {
+            ActionControlModel model = new ActionControlModel();
+
+            model.CurrentDate = Convert.ToDateTime(date);
+            model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == locationid.Value);
+            model.CustomerList = Db.Customer.Where(x => x.OurCompanyID == model.CurrentLocation.OurCompanyID).ToList();
+
+            return PartialView("_PartialSelectLocationCustomer", model);
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult TLocationCashSelect(int? locationid, string date)
+        {
+            ActionControlModel model = new ActionControlModel();
+
+            model.CurrentDate = Convert.ToDateTime(date);
+            model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == locationid.Value);
+            model.CashList = Db.VCash.Where(x => x.LocationID == locationid).ToList();
+
+            return PartialView("_PartialSelectTLocationCash", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult TLocationBankSelect(int? locationid, string date)
+        {
+            ActionControlModel model = new ActionControlModel();
+
+            model.CurrentDate = Convert.ToDateTime(date);
+            model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == locationid.Value);
+            model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.CurrentLocation.OurCompanyID).ToList();
+
+            return PartialView("_PartialSelectTLocationBank", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult TLocationEmployeeSelect(int? locationid, string date)
+        {
+            ActionControlModel model = new ActionControlModel();
+
+            model.CurrentDate = Convert.ToDateTime(date);
+            model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == locationid.Value);
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.CurrentLocation.OurCompanyID).ToList();
+
+            return PartialView("_PartialSelectTLocationEmployee", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult TLocationCustomerSelect(int? locationid, string date)
+        {
+            ActionControlModel model = new ActionControlModel();
+
+            model.CurrentDate = Convert.ToDateTime(date);
+            model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == locationid.Value);
+            model.CustomerList = Db.Customer.Where(x => x.OurCompanyID == model.CurrentLocation.OurCompanyID).ToList();
+
+            return PartialView("_PartialSelectTLocationCustomer", model);
+        }
+
+
+
+
+
+
+
+
+
     }
 }

@@ -50,7 +50,7 @@ namespace ActionForce.Office.Controllers
             model.EmployeeSchedules = Db.Schedule.Where(x => locationids.Contains(x.LocationID.Value) && x.ShiftDate == model.CurrentDate.DateKey).ToList();
             List<int> employeeids = model.EmployeeSchedules.Select(x => x.EmployeeID.Value).ToList();
 
-            model.Employees = Db.Employee.Where(x => employeeids.Contains(x.EmployeeID) && x.IsActive == true).ToList();
+            model.Employees = Db.Employee.Where(x => employeeids.Contains(x.EmployeeID)).ToList();
 
             model.EmployeeShifts = Db.EmployeeShift.Where(x => x.ShiftDate == model.CurrentDate.DateKey && x.IsWorkTime == true).ToList();
             model.EmployeeBreaks = Db.EmployeeShift.Where(x => x.ShiftDate == model.CurrentDate.DateKey && x.IsBreakTime == true).ToList();

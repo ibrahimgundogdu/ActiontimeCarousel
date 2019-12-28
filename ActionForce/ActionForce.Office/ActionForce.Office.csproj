@@ -2324,7 +2324,9 @@
     <Compile Include="Models\Document\SalaryEarn.cs" />
     <Compile Include="Models\Document\CashExpense.cs" />
     <Compile Include="Models\Document\SalaryPayment.cs" />
+    <Compile Include="Models\Document\TransferModel.cs" />
     <Compile Include="Models\EmployeeShiftModel.cs" />
+    <Compile Include="Models\newTransfer.cs" />
     <Compile Include="Models\SalaryControlModel.cs" />
     <Compile Include="Models\CashControlModel.cs" />
     <Compile Include="Models\FilterModel.cs" />
@@ -2540,6 +2542,15 @@
     <Content Include="Views\Shift\_PartialEditEmployeeShift.cshtml" />
     <Content Include="Views\Shift\_PartialEditEmployeeBreaks.cshtml" />
     <Content Include="Views\Action\Transfers.cshtml" />
+    <Content Include="Views\Action\AddTransfer.cshtml" />
+    <Content Include="Views\Action\_PartialSelectLocationCash.cshtml" />
+    <Content Include="Views\Action\_PartialSelectLocationBank.cshtml" />
+    <Content Include="Views\Action\_PartialSelectLocationEmployee.cshtml" />
+    <Content Include="Views\Action\_PartialSelectLocationCustomer.cshtml" />
+    <Content Include="Views\Action\_PartialSelectTLocationCustomer.cshtml" />
+    <Content Include="Views\Action\_PartialSelectTLocationEmployee.cshtml" />
+    <Content Include="Views\Action\_PartialSelectTLocationBank.cshtml" />
+    <Content Include="Views\Action\_PartialSelectTLocationCash.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
