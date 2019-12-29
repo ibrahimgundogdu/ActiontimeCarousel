@@ -379,7 +379,7 @@ namespace ActionForce.Office.Controllers
 
             List<int> employeeids = model.EmployeeSchedule.Select(x => x.EmployeeID.Value).Distinct().ToList();
 
-            model.EmployeeLocations = Db.EmployeeLocation.Where(x => employeeids.Contains(x.EmployeeID) && x.LocationID == model.CurrentLocation.LocationID && x.IsActive == true && x.Employee.Role.Stage > 0).ToList();
+            model.EmployeeLocations = Db.EmployeeLocation.Where(x => employeeids.Contains(x.EmployeeID) || (x.LocationID == model.CurrentLocation.LocationID && x.IsActive == true && x.Employee.IsActive == true && x.Employee.Role.Stage > 0)).ToList();
 
 
             TempData["Model"] = model;
