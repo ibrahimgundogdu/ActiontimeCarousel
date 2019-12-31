@@ -100,7 +100,7 @@
                         <td class="tx-sm-13">@(item.CategoryName)</td>
                         <td class="tx-sm-13">@(item.SalaryType == 2 ? "Avans Ödemesi" : "Maaş Ödemesi")</td>
                         <td class="tx-sm-13">@(item.FromCashID != null ? item.CashName : item.BankAccountName)</td>
-                        <td class="tx-sm-13">@(item.FromCashID != null ? item.FromCashID : item.FromBankAccountID) </td>
+                        @*<td class="tx-sm-13">@(item.FromCashID != null ? item.FromCashID : item.FromBankAccountID) </td>*@
                         <td class="tx-sm-13">@item.ActionTypeName</td>
                         <td class="tx-sm-13">@item.EmployeeFullName </td>
                         <td class="tx-sm-13">@item.DocumentNumber</td>
