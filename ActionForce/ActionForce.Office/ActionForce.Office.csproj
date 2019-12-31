@@ -2561,6 +2561,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="icons\" />
+    <Folder Include="Views\Actions\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Finance\" />
     <Folder Include="Views\Logout\" />
