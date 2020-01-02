@@ -587,7 +587,107 @@ namespace ActionForce.Office.Controllers
         }
 
 
+        [AllowAnonymous]
+        public ActionResult Report(string week, string date)
+        {
+            ShiftControlModel model = new ShiftControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result<EmployeeShift> ?? null;
+            }
+
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            if (!string.IsNullOrEmpty(week))
+            {
+                var weekparts = week.Split('-');
+                int _year = Convert.ToInt32(weekparts[0]);
+                int _week = Convert.ToInt32(weekparts[1]);
+                datekey = Db.DateList.Where(x => x.WeekYear == _year && x.WeekNumber == _week).OrderBy(x => x.DateKey).FirstOrDefault();
+            }
+
+            if (!string.IsNullOrEmpty(date))
+            {
+                DateTime? _dateurl = Convert.ToDateTime(date).Date;
+                datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _dateurl);
+            }
+
+            string weekcode = $"{datekey.WeekYear}-{datekey.WeekNumber}";
+            var weekdatekeys = Db.DateList.Where(x => x.WeekYear == datekey.WeekYear && x.WeekNumber == datekey.WeekNumber).ToList();
+
+            model.WeekCode = weekcode;
+
+            model.CurrentDate = datekey;
+            model.WeekList = weekdatekeys;
+            model.FirstWeekDay = weekdatekeys.OrderBy(x => x.DateKey).FirstOrDefault();
+            model.LastWeekDay = weekdatekeys.OrderByDescending(x => x.DateKey).FirstOrDefault();
+
+            var prevdate = model.FirstWeekDay.DateKey.AddDays(-1).Date;
+            var nextdate = model.LastWeekDay.DateKey.AddDays(1).Date;
+
+            var prevday = Db.DateList.FirstOrDefault(x => x.DateKey == prevdate);
+            var nextday = Db.DateList.FirstOrDefault(x => x.DateKey == nextdate);
 
 
+            model.NextWeekCode = $"{nextday.WeekYear}-{nextday.WeekNumber}";
+            model.PrevWeekCode = $"{prevday.WeekYear}-{prevday.WeekNumber}";
+
+            List<DateTime> datelist = model.WeekList.Select(x => x.DateKey).Distinct().ToList();
+
+            model.LocationSchedules = Db.LocationSchedule.Where(x => datelist.Contains(x.ShiftDate.Value)).ToList();
+            model.EmployeeSchedules = Db.Schedule.Where(x => datelist.Contains(x.ShiftDate.Value)).ToList();
+
+            model.LocationShifts = Db.LocationShift.Where(x => datelist.Contains(x.ShiftDate)).ToList();
+            model.EmployeeShifts = Db.EmployeeShift.Where(x => datelist.Contains(x.ShiftDate.Value)).ToList();
+
+            model.Locations = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.Employees = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            TempData["model"] = model;
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public void ExportData()
+        {
+            ShiftControlModel model = new ShiftControlModel();
+
+            if (TempData["model"] != null)
+            {
+                model = TempData["model"] as ShiftControlModel;
+            }
+
+            Response.ClearContent();
+
+            Response.ContentType = "application/force-download";
+            Response.AddHeader("content-disposition",
+                "attachment; filename=" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
+            Response.Write("<html xmlns:x=\"urn:schemas-microsoft-com:office:excel\">");
+            Response.Write("<head>");
+            Response.Write("<META http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+            Response.Write("<!--[if gte mso 9]><xml>");
+            Response.Write("<x:ExcelWorkbook>");
+            Response.Write("<x:ExcelWorksheets>");
+            Response.Write("<x:ExcelWorksheet>");
+            Response.Write("<x:Name>Report Data</x:Name>");
+            Response.Write("<x:WorksheetOptions>");
+            Response.Write("<x:Print>");
+            Response.Write("<x:ValidPrinterInfo/>");
+            Response.Write("</x:Print>");
+            Response.Write("</x:WorksheetOptions>");
+            Response.Write("</x:ExcelWorksheet>");
+            Response.Write("</x:ExcelWorksheets>");
+            Response.Write("</x:ExcelWorkbook>");
+            Response.Write("</xml>");
+            Response.Write("<![endif]--> ");
+
+
+            View("~/Views/Shift/ReportView.cshtml", model).ExecuteResult(this.ControllerContext);
+            Response.Flush();
+            Response.End();
+        }
     }
 }
