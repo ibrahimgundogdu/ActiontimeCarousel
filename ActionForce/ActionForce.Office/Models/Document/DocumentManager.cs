@@ -79,7 +79,7 @@ namespace ActionForce.Office
                         Db.SaveChanges();
 
 
-      
+
 
                         // cari hesap işlemesi
                         OfficeHelper.AddCashAction(newCashColl.CashID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, 1, newCashColl.Amount, 0, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate, newCashColl.UID.Value);
@@ -467,7 +467,7 @@ namespace ActionForce.Office
                             result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki {isCash.Quantity} adet bilet satış başarı ile iptal edildi";
 
                             OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "Sale", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                            
+
                         }
                         catch (Exception ex)
                         {
@@ -1994,7 +1994,7 @@ namespace ActionForce.Office
                             ResultID = isTransfer.ResultID,
                             SlipPath = isTransfer.SlipPath
 
-                    };
+                        };
 
                         var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == transfer.LocationID && x.Date == transfer.DocumentDate);
 
@@ -3684,7 +3684,7 @@ namespace ActionForce.Office
                         isRecord.CreditAmount = record.CreditAmount;
                         isRecord.ResultID = record.ResultID > 0 ? record.ResultID : self.ResultID;
                         isRecord.Date = record.DocumentDate;
-                        
+
 
                         if (isRecord.ResultID == null)
                         {
@@ -3810,7 +3810,7 @@ namespace ActionForce.Office
                         doctransfer.DocumentDate = transfer.DocumentDate;
                         doctransfer.Description = transfer.Description;
                         doctransfer.DocumentNumber = OfficeHelper.GetDocumentNumber(authentication.ActionEmployee.OurCompanyID.Value, "TR");
-                        doctransfer.ExchangeRate = transfer.Currency == "USD" ? exchange.USDA : transfer.Currency == "EUR" ? exchange.EURA : 1; 
+                        doctransfer.ExchangeRate = transfer.Currency == "USD" ? exchange.USDA : transfer.Currency == "EUR" ? exchange.EURA : 1;
                         doctransfer.ToBankAccountID = transfer.ToBankID;
                         doctransfer.IsActive = true;
                         doctransfer.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
@@ -4050,5 +4050,94 @@ namespace ActionForce.Office
 
             return result;
         }
+
+
+        public Result<DocumentTransfer> CheckResultBackward(Guid id, AuthenticationModel authentication)
+        {
+            Result<DocumentTransfer> result = new Result<DocumentTransfer>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var isResult = Db.DayResult.FirstOrDefault(x => x.UID == id);
+
+                if (isResult != null)
+                {
+
+                    var location = Db.Location.FirstOrDefault(x => x.LocationID == isResult.LocationID);
+                    var datelist = Db.DateList.FirstOrDefault(x => x.DateKey == isResult.Date);
+
+                    var action = Db.Action.FirstOrDefault(x => x.LocationID == isResult.LocationID && x.ActionDate == isResult.Date);
+                    var actionrow = Db.ActionRow.FirstOrDefault(x => x.LocationID == isResult.LocationID && x.Date == isResult.Date);
+                    var actionrowresult = Db.ActionRowResult.FirstOrDefault(x => x.LocationID == isResult.LocationID && x.ResultDate == isResult.Date);
+
+                    try
+                    {
+                        if (action == null)
+                        {
+                            var newaction = new Entity.Action()
+                            {
+                                ActionDate = isResult.Date,
+                                ActionUID = Guid.NewGuid(),
+                                LocationID = isResult.LocationID,
+                                Metarials = 0,
+                                RecordDate = location.LocalDateTime,
+                                StateID = isResult.StateID,
+                                Week = datelist.WeekNumber,
+                                Year = datelist.WeekYear
+                            };
+                            Db.Action.Add(newaction);
+                            Db.SaveChanges();
+
+                            action = newaction;
+                        }
+
+
+                        if (actionrow == null)
+                        {
+                            var newactionrow = new Entity.ActionRow()
+                            {
+                                Date = isResult.Date,
+                                ActionRowUID = Guid.NewGuid(),
+                                LocationID = isResult.LocationID,
+                                ActionID = action.ActionID,
+                                StateID = isResult.StateID,
+                                Week = datelist.WeekNumber,
+                                Year = datelist.WeekYear,
+                                DateWMonth = $"{datelist.Day} {datelist.MonthName.Substring(0,3)} {datelist.Year}",
+                                Day = datelist.Day
+                            };
+                            Db.ActionRow.Add(newactionrow);
+                            Db.SaveChanges();
+
+                            actionrow = newactionrow;
+                        }
+
+                        if (actionrowresult == null)
+                        {
+
+                        }
+                        else
+                        {
+                            // 1 ocak 2020 den büyükse güncelle küçük ise güncelleme
+                        }
+
+
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+
+
+            }
+
+            return result;
+        }
+
     }
 }

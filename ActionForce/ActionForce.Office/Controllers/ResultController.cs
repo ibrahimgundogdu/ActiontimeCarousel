@@ -1187,7 +1187,10 @@ namespace ActionForce.Office.Controllers
 
                     // eski sisteme uyumlu kayıtlar at.
 
+                    if (StateID == 2 || StateID == 3 || StateID == 4 )
+                    {
 
+                    }
 
                     // log at
                     var isequal = OfficeHelper.PublicInstancePropertiesEqual<DayResult>(self, dayresult, OfficeHelper.getIgnorelist());
