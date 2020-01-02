@@ -153,10 +153,18 @@
 
                                         <div class="form-group row mg-b-0">
                                             <div class="col-sm-3"></div>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-3">
                                                 @if (Model.ExchangeDetail.IsActive == true)
                                                 {
                                                     <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                }
+
+                                            </div>
+                                            <div class="col-sm-3">
+                                                @if (Model.ExchangeDetail.IsActive == true)
+                                                {
+                                                    <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.ExchangeDetail.Amount?.ToString()) tutarlı döviz satışı iptal etmek istediğine emin misin?')? DeleteCashExchange('@Model.ExchangeDetail.UID') : ''">Döviz Satış Sil</button>
+                                                    @*<a href="#" class="btn btn-danger btn-icon" onclick="confirm('@(Model.SaleDetail.Amount?.ToString()) tutarlı @(Model.SaleDetail.Quantity?.ToString()) adet bilet satışı iptal etmek istediğine emin misin?')? DeleteCashSale('@Model.SaleDetail.UID') : ''">Tahsilat Sil</a>*@
                                                 }
 
                                             </div>
@@ -248,7 +256,19 @@
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
 
+        function DeleteCashExchange(id) {
 
+            window.location.href = "/Cash/DeleteCashExchange/" + id;
+
+            //$.ajax({
+            //    method: "GET",
+            //    url: "/Cash/DeleteCashSale",
+            //    data: { id: id }
+            //}).done(function (d) {
+            //    window.location.href = "/Cash/SaleDetail/" + id;
+            //    //$("#DeleteCashSale").html(d);
+            //});
+        }
 
     </script>
     <script>
