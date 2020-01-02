@@ -3271,7 +3271,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentBankTransfer' does
           <Property Name="CashName" Type="nvarchar" MaxLength="62" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="SlipNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="SlipDocument" Type="nvarchar" MaxLength="50" />
           <Property Name="ReferenceCode" Type="nvarchar" MaxLength="20" />
@@ -3325,7 +3325,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashCollections' d
           <Property Name="CashName" Type="nvarchar" MaxLength="62" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <!--Errors Found During Generation:
@@ -3366,7 +3366,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashExpense' does 
           <Property Name="CashName" Type="nvarchar" MaxLength="62" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="SlipNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="SlipDocument" Type="nvarchar" MaxLength="50" />
           <Property Name="UID" Type="uniqueidentifier" />
@@ -3404,7 +3404,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashOpen' does not
           <Property Name="ActionTypeID" Type="int" />
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="ExchangeRate" Type="float" />
           <Property Name="SystemAmount" Type="float" />
           <Property Name="SystemCurrency" Type="nvarchar" MaxLength="4" />
@@ -3448,7 +3448,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashPayments' does
           <Property Name="CashName" Type="nvarchar" MaxLength="62" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <!--Errors Found During Generation:
@@ -3482,7 +3482,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashRecorderSlip' 
           <Property Name="ActionName" Type="nvarchar" MaxLength="50" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="EnvironmentID" Type="int" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="CashAmount" Type="float" />
@@ -3523,7 +3523,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPosCancel' does no
           <Property Name="BankName" Type="nvarchar" MaxLength="56" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="TerminalID" Type="nvarchar" MaxLength="40" />
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="ResultID" Type="bigint" />
@@ -3565,7 +3565,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPosCollection' doe
           <Property Name="BankName" Type="nvarchar" MaxLength="56" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="TerminalID" Type="nvarchar" MaxLength="40" />
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="Quantity" Type="int" />
@@ -3607,7 +3607,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPosRefund' does no
           <Property Name="BankName" Type="nvarchar" MaxLength="56" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="TerminalID" Type="nvarchar" MaxLength="40" />
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="ResultID" Type="bigint" />
@@ -3643,7 +3643,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSalaryEarn' does n
           <Property Name="ActionName" Type="nvarchar" MaxLength="50" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="UnitPrice" Type="float" />
           <Property Name="QuantityHour" Type="float" />
@@ -3689,7 +3689,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSalaryPayment' doe
           <Property Name="CashName" Type="nvarchar" MaxLength="62" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="SalaryType" Type="int" />
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="CategoryID" Type="int" />
@@ -3773,7 +3773,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentTicketSaleReturn' 
           <Property Name="CashName" Type="nvarchar" MaxLength="62" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="Quantity" Type="int" />
           <Property Name="PayMethodID" Type="int" />
           <Property Name="PayMethodName" Type="nvarchar" MaxLength="50" />
@@ -3813,7 +3813,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentTicketSales' does 
           <Property Name="CashName" Type="nvarchar" MaxLength="62" />
           <Property Name="RecorderFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="UpdaterFullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="Quantity" Type="int" />
           <Property Name="PayMethodID" Type="int" />
           <Property Name="PayMethodName" Type="nvarchar" MaxLength="50" />
@@ -9164,7 +9164,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CashName" Type="String" MaxLength="62" FixedLength="false" Unicode="true" />
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
         </EntityType>
         <ComplexType Name="GetFromList_Result">
@@ -9383,7 +9383,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CashName" Type="String" MaxLength="62" FixedLength="false" Unicode="true" />
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="Quantity" Type="Int32" />
           <Property Name="PayMethodID" Type="Int32" />
           <Property Name="PayMethodName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -9485,7 +9485,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ActionTypeID" Type="Int32" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="ExchangeRate" Type="Double" />
           <Property Name="SystemAmount" Type="Double" />
           <Property Name="SystemCurrency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
@@ -9527,7 +9527,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CashName" Type="String" MaxLength="62" FixedLength="false" Unicode="true" />
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
         </EntityType>
         <ComplexType Name="GetToList_Result">
@@ -9568,7 +9568,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CashName" Type="String" MaxLength="62" FixedLength="false" Unicode="true" />
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="Quantity" Type="Int32" />
           <Property Name="PayMethodID" Type="Int32" />
           <Property Name="PayMethodName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -9618,7 +9618,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CashName" Type="String" MaxLength="62" FixedLength="false" Unicode="true" />
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="SlipDocument" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
@@ -9664,7 +9664,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CashName" Type="String" MaxLength="62" FixedLength="false" Unicode="true" />
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="SalaryType" Type="Int32" />
           <Property Name="UID" Type="Guid" />
           <Property Name="CategoryID" Type="Int32" />
@@ -9745,7 +9745,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="BankName" Type="String" MaxLength="56" FixedLength="false" Unicode="true" />
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="TerminalID" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
           <Property Name="Quantity" Type="Int32" />
@@ -10168,7 +10168,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="BankName" Type="String" MaxLength="56" FixedLength="false" Unicode="true" />
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="TerminalID" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
           <Property Name="ResultID" Type="Int64" />
@@ -10208,7 +10208,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="BankName" Type="String" MaxLength="56" FixedLength="false" Unicode="true" />
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="TerminalID" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
           <Property Name="ResultID" Type="Int64" />
@@ -10284,7 +10284,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ActionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
           <Property Name="UnitPrice" Type="Double" />
           <Property Name="QuantityHour" Type="Double" />
@@ -10507,7 +10507,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CashName" Type="String" MaxLength="62" FixedLength="false" Unicode="true" />
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="SlipDocument" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ReferenceCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
@@ -10718,7 +10718,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ActionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="ResultID" Type="Int64" />
           <Property Name="CashAmount" Type="Double" />

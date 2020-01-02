@@ -214,7 +214,7 @@ namespace ActionForce.Office
             return result;
         }
 
-        public Result<DocumentCashCollections> DeleteCashCollection(long? id, AuthenticationModel authentication)
+        public Result<DocumentCashCollections> DeleteCashCollection(Guid? id, AuthenticationModel authentication)
         {
             Result<DocumentCashCollections> result = new Result<DocumentCashCollections>()
             {
@@ -227,7 +227,7 @@ namespace ActionForce.Office
             {
                 using (ActionTimeEntities Db = new ActionTimeEntities())
                 {
-                    var isCash = Db.DocumentCashCollections.FirstOrDefault(x => x.ID == id);
+                    var isCash = Db.DocumentCashCollections.FirstOrDefault(x => x.UID == id);
                     if (isCash != null)
                     {
                         try
@@ -434,7 +434,7 @@ namespace ActionForce.Office
             return result;
         }
 
-        public Result<DocumentTicketSales> DeleteCashSale(long? id, AuthenticationModel authentication)
+        public Result<DocumentTicketSales> DeleteCashSale(Guid? id, AuthenticationModel authentication)
         {
             Result<DocumentTicketSales> result = new Result<DocumentTicketSales>()
             {
@@ -447,12 +447,11 @@ namespace ActionForce.Office
             {
                 using (ActionTimeEntities Db = new ActionTimeEntities())
                 {
-                    var isCash = Db.DocumentTicketSales.FirstOrDefault(x => x.ID == id);
+                    var isCash = Db.DocumentTicketSales.FirstOrDefault(x => x.UID == id);
                     if (isCash != null)
                     {
                         try
                         {
-                            var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
 
                             isCash.IsActive = false;
                             isCash.UpdateDate = DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3));
@@ -468,7 +467,7 @@ namespace ActionForce.Office
                             result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki {isCash.Quantity} adet bilet satış başarı ile iptal edildi";
 
                             OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "Sale", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
+                            
                         }
                         catch (Exception ex)
                         {
@@ -714,7 +713,7 @@ namespace ActionForce.Office
             return result;
         }
 
-        public Result<DocumentSaleExchange> DeleteSaleExchange(long? id, AuthenticationModel authentication)
+        public Result<DocumentSaleExchange> DeleteSaleExchange(Guid? id, AuthenticationModel authentication)
         {
             Result<DocumentSaleExchange> result = new Result<DocumentSaleExchange>()
             {
@@ -728,7 +727,7 @@ namespace ActionForce.Office
 
                 using (ActionTimeEntities Db = new ActionTimeEntities())
                 {
-                    var isCash = Db.DocumentSaleExchange.FirstOrDefault(x => x.ID == id);
+                    var isCash = Db.DocumentSaleExchange.FirstOrDefault(x => x.UID == id);
                     if (isCash != null)
                     {
                         try
@@ -875,7 +874,7 @@ namespace ActionForce.Office
                                 EnvironmentID = isOpen.EnvironmentID
                             };
 
-
+                            isOpen.Date = docDate;
                             isOpen.ReferenceID = cashOpen.ReferanceID;
                             isOpen.Amount = amount;
                             isOpen.Description = cashOpen.Description;
@@ -941,6 +940,7 @@ namespace ActionForce.Office
                 {
                     try
                     {
+                        var docDate = new DateTime(DateTime.Now.Year, 1, 1);
                         var cash = OfficeHelper.GetCash(cashOpen.LocationID, cashOpen.Currency);
                         var location = Db.Location.FirstOrDefault(x => x.LocationID == cashOpen.LocationID);
                         var locId = cashOpen.LocationID;
@@ -971,7 +971,7 @@ namespace ActionForce.Office
                             UpdateIP = isOpen.UpdateIP,
                             EnvironmentID = isOpen.EnvironmentID
                         };
-
+                        isOpen.Date = docDate;
                         isOpen.ReferenceID = cashOpen.ReferanceID;
                         isOpen.LocationID = cashOpen.LocationID;
                         isOpen.Amount = cashOpen.Amount;
@@ -2138,6 +2138,80 @@ namespace ActionForce.Office
 
             return result;
         }
+
+        //public Result<DocumentBankTransfer> DeleteCashBankTransfer(Guid? id, AuthenticationModel authentication)
+        //{
+        //    Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()
+        //    {
+        //        IsSuccess = false,
+        //        Message = string.Empty,
+        //        Data = null
+        //    };
+
+        //    if (id != null)
+        //    {
+        //        using (ActionTimeEntities Db = new ActionTimeEntities())
+        //        {
+        //            var isCash = Db.DocumentBankTransfer.FirstOrDefault(x => x.UID == id);
+        //            if (isCash != null)
+        //            {
+        //                try
+        //                {
+
+        //                    isCash.IsActive = false;
+        //                    isCash.UpdateDate = DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3));
+        //                    isCash.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+        //                    isCash.UpdateIP = OfficeHelper.GetIPAddress();
+
+        //                    Db.SaveChanges();
+
+        //                    var isexpenseexists = Db.DocumentCashExpense.FirstOrDefault(x => x.ReferenceID == isCash.ID && x.Date == isCash.Date && x.LocationID == isCash.LocationID);
+
+        //                    if (isexpenseexists != null)
+        //                    {
+        //                        var iscashexpenseexit = Db.CashActions.FirstOrDefault(x => x.LocationID == isexpenseexists.LocationID && x.CashActionTypeID == isexpenseexists.ActionTypeID && x.ProcessID == isexpenseexists.ID && x.ProcessUID == isexpenseexists.UID);
+        //                        if (iscashexpenseexit != null)
+        //                        {
+        //                            isexpenseexists.IsActive = false;
+        //                            isexpenseexists.UpdateDate = DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3));
+        //                            isexpenseexists.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+        //                            isexpenseexists.UpdateIP = OfficeHelper.GetIPAddress();
+        //                            Db.SaveChanges();
+        //                        }
+
+        //                        Db.DocumentCashExpense.Remove(isexpenseexists);
+        //                        Db.SaveChanges();
+        //                    }
+
+        //                    var expaction = Db.CashActions.FirstOrDefault(x => x.LocationID == isCash.LocationID && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessUID == isCash.UID);
+        //                    if (expaction != null)
+        //                    {
+
+        //                        OfficeHelper.AddCashAction(isCash.FromCashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.NetAmount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
+        //                    }
+        //                    var expbank = Db.BankActions.FirstOrDefault(x => x.LocationID == isCash.LocationID && x.BankActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID && x.ProcessUID == isCash.UID);
+        //                    if (expbank != null)
+        //                    {
+        //                        OfficeHelper.AddBankAction(isCash.LocationID, null, isCash.ToBankAccountID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, -1 * isCash.NetAmount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
+        //                    }
+
+        //                    result.IsSuccess = true;
+        //                    result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki havale eft başarı ile iptal edildi";
+
+        //                    OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "BankTransfer", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki havale eft iptal edilemedi : {ex.Message}";
+        //                    OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", "-1", "Cash", "BankTransfer", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+        //                }
+        //            }
+        //        }
+        //    }
+
+        //    return result;
+        //}
 
 
 
@@ -3963,7 +4037,7 @@ namespace ActionForce.Office
 
 
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
 
                         //result.Message = $"Havale / EFT güncellenemedi : {ex.Message}";

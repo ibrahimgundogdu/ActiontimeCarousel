@@ -82,8 +82,6 @@
                         <th>Para Br.</th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
-                        <th></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -98,16 +96,16 @@
                             <td class="tx-sm-13">@item.CashName</td>
                             <td class="tx-sm-13">@item.ActionTypeName</td>
                             <td class="tx-sm-13">@item.CustomerFullName @item.EmployeeFullName @item.BankAccountName </td>
-                            <td class="tx-sm-13">@item.DocumentNumber</td>
+                            <td class="tx-sm-13"><a href="@("/Cash/CashDetail/" + @item.UID)">@item.DocumentNumber</a></td>
                             <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
                             <td class="tx-sm-13">@(item.Currency)</td>
                             <td class="tx-sm-13">@item.RecorderFullName</td>
                             <td class="tx-sm-13 text-right">@item.RecordDate</td>
-                            <td class="tx-sm-13 text-right"><a href="@("/Cash/CashDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
-                            @if (item.IsActive == true)
+                            @*<td class="tx-sm-13 text-right"><a href="@("/Cash/CashDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>*@
+                            @*@if (item.IsActive == true)
                             {
                             <td class="tx-sm-13 text-right"><a href="/Cash/Index" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@item.Amount tutarlı tahsilatı iptal etmek istediğine emin misin?')) DeleteCashCollection(@item.ID)"><i data-feather="trash-2"></i></a></td>
-                            }
+                            }*@
                         </tr>
                     }
 
@@ -180,12 +178,6 @@
                 datePattern: ['Y', 'm', 'd'],
 
             });
-            //var cleave = new Cleave('#Amount', {
-            //    numeral: true
-            //});
-            //var cleave2 = new Cleave('#Exchange', {
-            //    numeral: true
-            //});
             function getDate(element) {
                 var date;
                 try {
@@ -200,17 +192,7 @@
 
         });
 
-        function DeleteCashCollection(id) {
-            $.ajax({
-                method: "GET",
-                url: "/Cash/DeleteCashCollection",
-                data: { id: id }
-            }).done(function (d) {
-                $("#DeleteCashCollection").html(d);
-            });
-        }
-
-
+        
 
     </script>
 

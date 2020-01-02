@@ -219,7 +219,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeleteCashCollection(long? id)
+        public ActionResult DeleteCashCollection(string id)
         {
             Result<DocumentCashCollections> result = new Result<DocumentCashCollections>()
             {
@@ -233,14 +233,15 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteCashCollection(id, model.Authentication);
+                result = documentManager.DeleteCashCollection(Guid.Parse(id), model.Authentication);
             }
 
             Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.IsSuccess = result.IsSuccess;
             messageresult.Message = result.Message;
 
             TempData["result"] = messageresult;
-            return RedirectToAction("Index", "Cash");
+            return RedirectToAction("CashDetail", new { id = id });
 
         }
 
@@ -488,7 +489,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeleteCashSale(int? id)
+        public ActionResult DeleteCashSale(string id)
         {
             Result<DocumentTicketSales> result = new Result<DocumentTicketSales>()
             {
@@ -502,14 +503,16 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteCashSale(id, model.Authentication);
+                result = documentManager.DeleteCashSale(Guid.Parse(id), model.Authentication);
             }
 
             Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.IsSuccess = result.IsSuccess;
             messageresult.Message = result.Message;
 
             TempData["result"] = messageresult;
-            return RedirectToAction("Sale", "Cash");
+            //return View(model);
+            return RedirectToAction("SaleDetail", new { id = id });
 
         }
 
@@ -806,7 +809,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeleteCashExchange(int? id)
+        public ActionResult DeleteCashExchange(string id)
         {
             Result<DocumentSaleExchange> result = new Result<DocumentSaleExchange>()
             {
@@ -820,14 +823,16 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteSaleExchange(id, model.Authentication);
+                result = documentManager.DeleteSaleExchange(Guid.Parse(id), model.Authentication);
             }
 
             Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.IsSuccess = result.IsSuccess;
             messageresult.Message = result.Message;
 
             TempData["result"] = messageresult;
-            return RedirectToAction("Exchange", "Cash");
+            return RedirectToAction("ExchangeDetail", new { id = id });
+            //return RedirectToAction("Exchange", "Cash");
 
         }
 
@@ -2288,6 +2293,32 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("TransferDetail", new { id = cashTransfer.UID });
 
         }
+        
+        //[AllowAnonymous]
+        //public ActionResult DeleteCashBankTransfer(Guid? id)
+        //{
+        //    Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()
+        //    {
+        //        IsSuccess = false,
+        //        Message = string.Empty,
+        //        Data = null
+        //    };
+        //    CashControlModel model = new CashControlModel();
+
+
+        //    if (id != null)
+        //    {
+        //        DocumentManager documentManager = new DocumentManager();
+        //        result = documentManager.DeleteCashBankTransfer(id, model.Authentication);
+        //    }
+
+        //    Result<CashActions> messageresult = new Result<CashActions>();
+        //    messageresult.Message = result.Message;
+
+        //    TempData["result"] = messageresult;
+        //    return RedirectToAction("TransferDetail", new { id = id });
+
+        //}
 
         [AllowAnonymous]
         public ActionResult TransferDetail(Guid? id)

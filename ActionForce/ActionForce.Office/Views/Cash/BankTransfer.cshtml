@@ -92,7 +92,6 @@
                         <th>Fiş Nr.</th>
                         <th>Döküman</th>
                         <th>Durum</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -107,7 +106,7 @@
                         <td class="tx-sm-13">@item.CashName</td>
                         <td class="tx-sm-13">@item.ActionTypeName</td>
                         <td class="tx-sm-13">@item.BankAccountName </td>
-                        <td class="tx-sm-13">@item.DocumentNumber</td>
+                        <td class="tx-sm-13"><a href="@("/Cash/TransferDetail/" + @item.UID)">@item.DocumentNumber</a></td>
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Commission?.ToString("N2"))</td>
                         <td class="tx-sm-13">@(item.Currency)</td>
@@ -123,7 +122,7 @@
                             }
                         </td>
                         <td class="tx-sm-13 text-right">@item.StatusName</td>
-                        <td class="tx-sm-13 text-right"><a href="@("/Cash/TransferDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
+                        @*<td class="tx-sm-13 text-right"><a href="@("/Cash/TransferDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>*@
 
 
                     </tr>
@@ -217,12 +216,6 @@
                 time: true,
                 timePattern: ['h', 'm', 's']
             });
-            //var cleave = new Cleave('#Amount', {
-            //    numeral: true
-            //});
-            //var cleave2 = new Cleave('#Exchange', {
-            //    numeral: true
-            //});
             function getDate(element) {
                 var date;
                 try {
@@ -236,16 +229,6 @@
             }
 
         });
-
-        function DeleteCashBankTransfer(id) {
-            $.ajax({
-                method: "GET",
-                url: "/Cash/DeleteCashBankTransfer",
-                data: { id: id }
-            }).done(function (d) {
-                $("#DeleteCashBankTransfer").html(d);
-            });
-        }
 
 
 

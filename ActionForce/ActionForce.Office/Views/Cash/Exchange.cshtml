@@ -80,8 +80,6 @@
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
                         <th>Döküman</th>
-                        <th></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -96,7 +94,7 @@
                         <td class="tx-sm-13">@item.FromCashName</td>
                         <td class="tx-sm-13">@item.ToCashName</td>
                         <td class="tx-sm-13">@item.ActionTypeName</td>
-                        <td class="tx-sm-13">@item.DocumentNumber</td>
+                        <td class="tx-sm-13"><a href="@("/Cash/ExchangeDetail/" + @item.UID)">@item.DocumentNumber</a></td>
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
                         <td class="tx-sm-13">@(item.Currency)</td>
                         <td class="tx-sm-13">@(item.ExchangeRate?.ToString("N4"))</td>
@@ -116,11 +114,11 @@
 
 
                         </td>
-                        <td class="tx-sm-13 text-right"><a href="@("/Cash/ExchangeDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
+                        @*<td class="tx-sm-13 text-right"><a href="@("/Cash/ExchangeDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
                         @if (item.IsActive == true)
                         {
                             <td class="tx-sm-13 text-right"><a href="/Cash/Exchange" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} döviz satışı iptal etmek istediğine emin misin?')"))) DeleteCashExchange(@item.ID)"><i data-feather="trash-2"></i></a></td>
-                        }
+                        }*@
 
                     </tr>
                     }
@@ -213,15 +211,15 @@
 
         });
         
-        function DeleteCashExchange(id) {
-            $.ajax({
-                method: "GET",
-                url: "/Cash/DeleteCashExchange",
-                data: { id: id }
-            }).done(function (d) {
-                $("#DeleteCashExchange").html(d);
-            });
-        }
+        //function DeleteCashExchange(id) {
+        //    $.ajax({
+        //        method: "GET",
+        //        url: "/Cash/DeleteCashExchange",
+        //        data: { id: id }
+        //    }).done(function (d) {
+        //        $("#DeleteCashExchange").html(d);
+        //    });
+        //}
             
     </script>
     <script>
