@@ -1183,13 +1183,17 @@ namespace ActionForce.Office.Controllers
                     dateKey = dayresult.Date.ToString("yyyy-MM-dd");
 
                     result.IsSuccess = true;
-                    result.Message = "Günsonu durumu başarı ile güncellendi.";
+                    result.Message = "Günsonu durumu başarı ile güncellendi. ";
 
                     // eski sisteme uyumlu kayıtlar at.
 
                     if (StateID == 2 || StateID == 3 || StateID == 4 )
                     {
+                        DocumentManager document = new DocumentManager();
+                        var islocal = Request.IsLocal;
 
+                       var updresult =  document.CheckResultBackward(dayresult.UID.Value, model.Authentication, islocal);
+                        result.Message +=  updresult.Message;
                     }
 
                     // log at
