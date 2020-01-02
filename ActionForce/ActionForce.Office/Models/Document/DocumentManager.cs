@@ -4302,6 +4302,22 @@ namespace ActionForce.Office
                                 OfficeHelper.AddApplicationLog("Office", "ActionRowResult", "Update", actionrowresult.ResultID.ToString(), "Result", "Detail", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
 
+                                if (envelope != null && !string.IsNullOrEmpty(envelope.FileName) && !islocal)
+                                {
+                                    try
+                                    {
+                                        string fileName = envelope.FileName;
+                                        string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Envelope";
+                                        string targetPath = @"C:\inetpub\wwwroot\Office\Documents";
+                                        string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
+                                        string destFile = System.IO.Path.Combine(targetPath, fileName);
+                                        System.IO.File.Copy(sourceFile, destFile, true);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                    }
+                                }
+
                             }
                             else
                             {
