@@ -82,43 +82,41 @@
                     <tr>
                         <th>#</th>
                         <th>Tarih</th>
+                        <th>Belge No</th>
                         <th>Lokasyon</th>
                         <th>Banka</th>
                         <th>İşlem</th>
                         <th>Bu Hesaptan</th>
-                        <th>Belge No</th>
                         <th>Tahsilat</th>
                         <th>Para Br.</th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
-                        <th></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
 
                     @foreach (var item in Model.PosCollections)
                     {
-                        <tr style='@(item.IsActive == false ? "color: red" : "")'>
+                    <tr style='@(item.IsActive == false ? "color: red" : "")'>
 
-                            <td class="tx-sm-13 bold">@item.ID</td>
-                            <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
-                            <td class="tx-sm-13">@item.LocationFullName</td>
-                            <td class="tx-sm-13">@item.BankAccountName</td>
-                            <td class="tx-sm-13">@item.ActionTypeName</td>
-                            <td class="tx-sm-13">@item.CustomerFullName</td>
-                            <td class="tx-sm-13">@item.DocumentNumber</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
-                            <td class="tx-sm-13">@(item.Currency)</td>
-                            <td class="tx-sm-13">@item.RecorderFullName</td>
-                            <td class="tx-sm-13 text-right">@item.RecordDate</td>
-                            <td class="tx-sm-13 text-right"><a href="@("/Bank/Detail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
-                            @if (item.IsActive == true)
-                            {
-                                <td class="tx-sm-13 text-right"><a href="/Bank/Index" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@item.Amount tutarlı tahsilatı iptal etmek istediğine emin misin?')) DeletePosCollection(@item.ID)"><i data-feather="trash-2"></i></a></td>
-                            }
+                        <td class="tx-sm-13 bold">@item.ID</td>
+                        <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                        <td class="tx-sm-13"><a href="@("/Bank/Detail/" + @item.UID)">@item.DocumentNumber</a></td>
+                        <td class="tx-sm-13">@item.LocationFullName</td>
+                        <td class="tx-sm-13">@item.BankAccountName</td>
+                        <td class="tx-sm-13">@item.ActionTypeName</td>
+                        <td class="tx-sm-13">@item.CustomerFullName</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13">@(item.Currency)</td>
+                        <td class="tx-sm-13">@item.RecorderFullName</td>
+                        <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                        @*<td class="tx-sm-13 text-right"><a href="@("/Bank/Detail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
+        @if (item.IsActive == true)
+        {
+            <td class="tx-sm-13 text-right"><a href="/Bank/Index" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@item.Amount tutarlı tahsilatı iptal etmek istediğine emin misin?')) DeletePosCollection(@item.ID)"><i data-feather="trash-2"></i></a></td>
+        }*@
 
-                        </tr>
+                    </tr>
                     }
 
                 </tbody>
@@ -187,19 +185,6 @@
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
             });
-
-            var cleaveC = new Cleave('#DocumentDate', {
-                date: true,
-                delimiter: '-',
-                datePattern: ['Y', 'm', 'd'],
-
-            });
-            //var cleave = new Cleave('#Amount', {
-            //    numeral: true
-            //});
-            //var cleave2 = new Cleave('#Exchange', {
-            //    numeral: true
-            //});
             function getDate(element) {
                 var date;
                 try {
@@ -215,15 +200,15 @@
         });
 
 
-        function DeletePosCollection(id) {
-            $.ajax({
-                method: "GET",
-                url: "/Bank/DeletePosCollection",
-                data: { id: id }
-            }).done(function (d) {
-                $("#DeletePosCollection").html(d);
-            });
-        }
+        //function DeletePosCollection(id) {
+        //    $.ajax({
+        //        method: "GET",
+        //        url: "/Bank/DeletePosCollection",
+        //        data: { id: id }
+        //    }).done(function (d) {
+        //        $("#DeletePosCollection").html(d);
+        //    });
+        //}
 
 
     </script>

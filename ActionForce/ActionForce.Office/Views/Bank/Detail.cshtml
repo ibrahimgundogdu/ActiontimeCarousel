@@ -178,10 +178,18 @@
 
                                         <div class="form-group row mg-b-0">
                                             <div class="col-sm-3"></div>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-3">
                                                 @if (Model.Detail.IsActive == true)
                                                 {
-                                                    <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                    <button class="btn btn-primary btn-block">Pos Tahsilat Güncelle</button>
+                                                }
+
+                                            </div>
+                                            <div class="col-sm-3">
+                                                @if (Model.Detail.IsActive == true)
+                                                {
+                                                    <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.Detail.Amount?.ToString()) tutarlı pos tahsilatı iptal etmek istediğine emin misin?')? DeletePosCollection('@Model.Detail.UID') : ''">Pos Tahsilat Sil</button>
+                                                    
                                                 }
 
                                             </div>
@@ -274,7 +282,16 @@
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
 
-
+        function DeletePosCollection(id) {
+            window.location.href = "/Bank/DeletePosCollection/" + id;
+            //$.ajax({
+            //    method: "GET",
+            //    url: "/Bank/DeletePosCollection",
+            //    data: { id: id }
+            //}).done(function (d) {
+            //    $("#DeletePosCollection").html(d);
+            //});
+        }
 
     </script>
     <script>

@@ -194,10 +194,18 @@
 
                                         <div class="form-group row mg-b-0">
                                             <div class="col-sm-3"></div>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-3">
                                                 @if (Model.ExpenseDetail.IsActive == true)
                                                 {
-                                                    <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                    <button class="btn btn-primary btn-block">Masraf Güncelle</button>
+                                                }
+
+                                            </div>
+                                            <div class="col-sm-3">
+                                                @if (Model.ExpenseDetail.IsActive == true)
+                                                {
+                                                    <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.ExpenseDetail.Amount?.ToString()) tutarlı bilet satış iadesini iptal etmek istediğine emin misin?')? DeleteCashExpense('@Model.ExpenseDetail.UID') : ''">Masraf Sil</button>
+                                                    
                                                 }
 
                                             </div>
@@ -296,7 +304,16 @@
             $('.money').mask("#.##0,00", { reverse: true });
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
-
+        function DeleteCashExpense(id) {
+            window.location.href = "/Cash/DeleteCashExpense/" + id;
+            //$.ajax({
+            //    method: "GET",
+            //    url: "/Cash/DeleteCashExpense",
+            //    data: { id: id }
+            //}).done(function (d) {
+            //    $("#DeleteCashExpense").html(d);
+            //});
+        }
 
     </script>
     <script>

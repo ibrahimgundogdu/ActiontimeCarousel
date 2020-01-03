@@ -73,15 +73,15 @@
                     <tr>
                         <th>#</th>
                         <th>Tarih</th>
+                        <th>Belge No</th>
                         <th>Lokasyon</th>
                         <th>Kasa</th>
                         <th>İşlem</th>
                         <th>Bu Hesaptan</th>
-                        <th>Belge No</th>
+                        <th>Ödeme Yöntemi</th>
                         <th>Adet</th>
                         <th>Tahsilat</th>
                         <th>Para Br.</th>
-                        <th>Ödeme Yöntemi</th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
                     </tr>
@@ -94,22 +94,22 @@
 
                         <td class="tx-sm-13 bold">@item.ID</td>
                         <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                        <td class="tx-sm-13"><a href="@("/Cash/SaleDetail/" + @item.UID)">@item.DocumentNumber</a></td>
                         <td class="tx-sm-13">@item.LocationFullName</td>
                         <td class="tx-sm-13">@item.CashName</td>
                         <td class="tx-sm-13">@item.ActionTypeName</td>
                         <td class="tx-sm-13">@item.CustomerFullName</td>
-                        <td class="tx-sm-13"><a href="@("/Cash/SaleDetail/" + @item.UID)">@item.DocumentNumber</a></td>
+                        <td class="tx-sm-13">@(item.PayMethodName)</td>
                         <td class="tx-sm-13">@item.Quantity</td>
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
                         <td class="tx-sm-13">@(item.Currency)</td>
-                        <td class="tx-sm-13">@(item.PayMethodName)</td>
                         <td class="tx-sm-13">@item.RecorderFullName</td>
                         <td class="tx-sm-13 text-right">@item.RecordDate</td>
                         @*<td class="tx-sm-13 text-right"><a href="@("/Cash/SaleDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
-                        @if (item.IsActive == true)
-                        {
-                            <td class="tx-sm-13 text-right"><a href="/Cash/Sale" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} tutarlı {item.Quantity} adet bilet satışı iptal etmek istediğine emin misin?')"))) DeleteCashSale(@item.ID)"><i data-feather="trash-2"></i></a></td>
-                        }*@
+        @if (item.IsActive == true)
+        {
+            <td class="tx-sm-13 text-right"><a href="/Cash/Sale" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} tutarlı {item.Quantity} adet bilet satışı iptal etmek istediğine emin misin?')"))) DeleteCashSale(@item.ID)"><i data-feather="trash-2"></i></a></td>
+        }*@
 
                     </tr>
                     }
@@ -175,13 +175,6 @@
                 dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
-            });
-
-            var cleaveC = new Cleave('#DocumentDate', {
-                date: true,
-                delimiter: '-',
-                datePattern: ['Y', 'm', 'd'],
-
             });
 
             function getDate(element) {

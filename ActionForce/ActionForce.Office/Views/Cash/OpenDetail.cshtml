@@ -74,12 +74,19 @@
                                                 <span class="text-danger">@Model.OpenDetail.DocumentNumber</span>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        @*<div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Tarih</label>
                                             <div class="col-sm-9">
-                                                <input id="UpdateDocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.OpenDetail.Date.Value.ToString("yyyy-MM-dd"))" required>
+                                                <select class="form-control select2" name="docDate" required>
+                                                    @for (int i = 2017; i <= DateTime.Now.Year; i++)
+                                                    {
+                                                        <option value="@(i)" @(Model.OpenDetail.Date != null ? Model.OpenDetail.Date.Value.Year.ToString() == i.ToString() ? "selected" : "" :  DateTime.Now.Year.ToString() == i.ToString() ? "selected" : "")>@(i.ToString())</option>
+                                                    }
+                                                </select>
+                                                    
+                                                    
                                             </div>
-                                        </div>
+                                        </div>*@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Lokasyon</label>
                                             <div class="col-sm-9">
@@ -149,10 +156,17 @@
                                         </div>
                                         <div class="form-group row mg-b-0">
                                             <div class="col-sm-3"></div>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-3">
                                                 @if (Model.OpenDetail.IsActive == true)
                                                 {
-                                                    <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                    <button class="btn btn-primary btn-block">Kasa Güncelle</button>
+                                                }
+
+                                            </div>
+                                            <div class="col-sm-3">
+                                                @if (Model.OpenDetail.IsActive == true)
+                                                {
+                                                    <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.OpenDetail.Amount?.ToString()) tutarlı kasa açılış fişi iptal etmek istediğine emin misin?')? DeleteCashOpen('@Model.OpenDetail.UID') : ''">Kasa Sil</button>
                                                 }
 
                                             </div>
@@ -244,7 +258,16 @@
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
 
-
+        function DeleteCashOpen(id) {
+            window.location.href = "/Cash/DeleteCashOpen/" + id;
+            //$.ajax({
+            //    method: "GET",
+            //    url: "/Cash/DeleteCashOpen",
+            //    data: { id: id }
+            //}).done(function (d) {
+            //    $("#DeleteCashOpen").html(d);
+            //});
+        }
 
     </script>
     <script>

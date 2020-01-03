@@ -45,7 +45,7 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
-            model.CashCollections = Db.VDocumentCashCollections.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.CashCollections = Db.VDocumentCashCollections.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
                 model.CashCollections = model.CashCollections.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -305,7 +305,7 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
-            model.CashSales = Db.VDocumentTicketSales.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.CashSales = Db.VDocumentTicketSales.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
                 model.CashSales = model.CashSales.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -577,7 +577,7 @@ namespace ActionForce.Office.Controllers
             var ourCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompany.CompanyID);
             model.CurrencyList = OfficeHelper.GetCurrency().Where(x => x.Code != ourCompany.Currency).ToList();
 
-            model.CashSaleExchanges = Db.VDocumentSaleExchange.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.CashSaleExchanges = Db.VDocumentSaleExchange.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
                 model.CashSaleExchanges = model.CashSaleExchanges.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -882,7 +882,7 @@ namespace ActionForce.Office.Controllers
             {
                 FilterModel filterModel = new FilterModel();
 
-                filterModel.DateBegin = new DateTime(DateTime.Now.Year, 1, 1);
+                filterModel.DateBegin = new DateTime(DateTime.Now.AddYears(-1).Year, 1, 1);
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
@@ -896,7 +896,7 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
-            model.CashOpenSlip = Db.VDocumentCashOpen.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.CashOpenSlip = Db.VDocumentCashOpen.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
                 model.CashOpenSlip = model.CashOpenSlip.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -918,7 +918,7 @@ namespace ActionForce.Office.Controllers
 
             if (beginDate == null)
             {
-                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                DateTime begin = DateTime.Now.AddYears(-1).Date;
                 model.DateBegin = new DateTime(begin.Year, 1, 1);
             }
 
@@ -958,7 +958,8 @@ namespace ActionForce.Office.Controllers
                 var cash = OfficeHelper.GetCash(cashOpen.LocationID, cashOpen.Currency);
                 var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-                var docDate = new DateTime(DateTime.Now.Year, 1, 1);
+                int docYear = cashOpen.docDate ?? DateTime.Now.Year;
+                var docDate = new DateTime(docYear, 1, 1);
 
                 if (amount > 0)
                 {
@@ -970,6 +971,7 @@ namespace ActionForce.Office.Controllers
                     open.Currency = currency;
                     open.Description = cashOpen.Description;
                     open.DocumentDate = docDate;
+                    open.docDate = docYear;
                     open.LocationID = cashOpen.LocationID;
                     open.CashID = cash.ID;
                     open.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
@@ -1021,11 +1023,11 @@ namespace ActionForce.Office.Controllers
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashOpen.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-                var docDate = DateTime.Now.Date;
-                if (DateTime.TryParse(cashOpen.DocumentDate, out docDate))
-                {
-                    docDate = Convert.ToDateTime(cashOpen.DocumentDate).Date;
-                }
+                //var docDate = DateTime.Now.Date;
+                //if (DateTime.TryParse(cashOpen.DocumentDate, out docDate))
+                //{
+                //    docDate = Convert.ToDateTime(cashOpen.DocumentDate).Date;
+                //}
 
                 if (amount > 0)
                 {
@@ -1037,9 +1039,10 @@ namespace ActionForce.Office.Controllers
                     sale.EnvironmentID = 2;
                     sale.LocationID = cashOpen.LocationID;
                     sale.UID = cashOpen.UID;
-                    sale.DocumentDate = docDate;
+                    //sale.DocumentDate = docDate;
                     sale.ReferanceID = cashOpen.ReferanceID;
                     sale.TimeZone = timezone;
+                    //sale.docDate = cashOpen.docDate ?? DateTime.Now.Year;
                     if (newexchanges > 0)
                     {
                         sale.ExchangeRate = newexchanges;
@@ -1071,7 +1074,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeleteCashOpen(int? id)
+        public ActionResult DeleteCashOpen(string id)
         {
             Result<DocumentCashOpen> result = new Result<DocumentCashOpen>()
             {
@@ -1085,14 +1088,15 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteCashOpen(id, model.Authentication);
+                result = documentManager.DeleteCashOpen(Guid.Parse(id), model.Authentication);
             }
 
             Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.IsSuccess = result.IsSuccess;
             messageresult.Message = result.Message;
 
             TempData["result"] = messageresult;
-            return RedirectToAction("Open", "Cash");
+            return RedirectToAction("OpenDetail", new { id = id });
 
         }
 
@@ -1156,7 +1160,7 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
-            model.CashPayments = Db.VDocumentCashPayments.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.CashPayments = Db.VDocumentCashPayments.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
                 model.CashPayments = model.CashPayments.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -1344,7 +1348,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeleteCashPayment(int? id)
+        public ActionResult DeleteCashPayment(string id)
         {
             Result<DocumentCashPayments> result = new Result<DocumentCashPayments>()
             {
@@ -1358,14 +1362,15 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteCashPayment(id, model.Authentication);
+                result = documentManager.DeleteCashPayment(Guid.Parse(id), model.Authentication);
             }
 
             Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.IsSuccess = result.IsSuccess;
             messageresult.Message = result.Message;
 
             TempData["result"] = messageresult;
-            return RedirectToAction("CashPayment", "Cash");
+            return RedirectToAction("PaymentDetail", new { id = id });
 
         }
 
@@ -1429,7 +1434,7 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
-            model.TicketSalesReturn = Db.VDocumentTicketSaleReturn.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.TicketSalesReturn = Db.VDocumentTicketSaleReturn.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
                 model.TicketSalesReturn = model.TicketSalesReturn.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -1616,7 +1621,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeleteTicketSaleReturn(int? id)
+        public ActionResult DeleteTicketSaleReturn(string id)
         {
             Result<DocumentTicketSaleReturns> result = new Result<DocumentTicketSaleReturns>()
             {
@@ -1630,14 +1635,16 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteCashSaleReturn(id, model.Authentication);
+                result = documentManager.DeleteCashSaleReturn(Guid.Parse(id), model.Authentication);
             }
 
             Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.IsSuccess = result.IsSuccess;
+
             messageresult.Message = result.Message;
 
             TempData["result"] = messageresult;
-            return RedirectToAction("SaleReturn", "Cash");
+            return RedirectToAction("SaleRefundDetail", new { id = id });
 
         }
 
@@ -1701,7 +1708,7 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
-            model.CashExpense = Db.VDocumentCashExpense.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.CashExpense = Db.VDocumentCashExpense.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
                 model.CashExpense = model.CashExpense.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -1952,7 +1959,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeleteCashExpense(int? id)
+        public ActionResult DeleteCashExpense(string id)
         {
             Result<DocumentCashExpense> result = new Result<DocumentCashExpense>()
             {
@@ -1966,14 +1973,14 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteCashExpense(id, model.Authentication);
+                result = documentManager.DeleteCashExpense(Guid.Parse(id), model.Authentication);
             }
 
             Result<CashActions> messageresult = new Result<CashActions>();
             messageresult.Message = result.Message;
 
             TempData["result"] = messageresult;
-            return RedirectToAction("Expense", "Cash");
+            return RedirectToAction("ExpenseDetail", new { id = id });
 
         }
 
@@ -2037,7 +2044,7 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
-            model.BankTransfer = Db.VDocumentBankTransfer.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.BankTransfer = Db.VDocumentBankTransfer.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
                 model.BankTransfer = model.BankTransfer.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -2293,32 +2300,33 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("TransferDetail", new { id = cashTransfer.UID });
 
         }
-        
-        //[AllowAnonymous]
-        //public ActionResult DeleteCashBankTransfer(Guid? id)
-        //{
-        //    Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()
-        //    {
-        //        IsSuccess = false,
-        //        Message = string.Empty,
-        //        Data = null
-        //    };
-        //    CashControlModel model = new CashControlModel();
+
+        [AllowAnonymous]
+        public ActionResult DeleteCashBankTransfer(string id)
+        {
+            Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            CashControlModel model = new CashControlModel();
 
 
-        //    if (id != null)
-        //    {
-        //        DocumentManager documentManager = new DocumentManager();
-        //        result = documentManager.DeleteCashBankTransfer(id, model.Authentication);
-        //    }
+            if (id != null)
+            {
+                DocumentManager documentManager = new DocumentManager();
+                result = documentManager.DeleteCashBankTransfer(Guid.Parse(id), model.Authentication);
+            }
 
-        //    Result<CashActions> messageresult = new Result<CashActions>();
-        //    messageresult.Message = result.Message;
+            Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.IsSuccess = result.IsSuccess;
+            messageresult.Message = result.Message;
 
-        //    TempData["result"] = messageresult;
-        //    return RedirectToAction("TransferDetail", new { id = id });
+            TempData["result"] = messageresult;
+            return RedirectToAction("TransferDetail", new { id = id });
 
-        //}
+        }
 
         [AllowAnonymous]
         public ActionResult TransferDetail(Guid? id)
@@ -2384,7 +2392,7 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
-            model.SalaryPayment = Db.VDocumentSalaryPayment.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.SalaryPayment = Db.VDocumentSalaryPayment.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
                 model.SalaryPayment = model.SalaryPayment.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -2578,7 +2586,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeleteSalaryPayment(int? id)
+        public ActionResult DeleteSalaryPayment(string id)
         {
             Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
             {
@@ -2592,15 +2600,15 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteSalaryPayment(id, model.Authentication);
+                result = documentManager.DeleteSalaryPayment(Guid.Parse(id), model.Authentication);
             }
 
             Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.IsSuccess = result.IsSuccess;
             messageresult.Message = result.Message;
 
             TempData["result"] = messageresult;
-            return RedirectToAction("SalaryPayment", "Cash");
-
+            return RedirectToAction("SalaryDetail", new { id = id });
         }
 
         [AllowAnonymous]
@@ -2622,7 +2630,9 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
             model.SalaryDetail = Db.VDocumentSalaryPayment.FirstOrDefault(x => x.UID == id);
-            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Index" && x.Environment == "Office" && x.ProcessID == model.SalaryDetail.ID.ToString()).ToList();
+            var ll = new string[] { "Cash", "Salary" };
+            //var ac = new string[] { "", "SalaryPayment" };
+            model.History = Db.ApplicationLog.Where(x => ll.Contains(x.Controller) && x.Action == "SalaryPayment" && x.Environment == "Office" && x.ProcessID == model.SalaryDetail.ID.ToString()).ToList();
 
             model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
 

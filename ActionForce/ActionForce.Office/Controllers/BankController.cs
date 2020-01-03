@@ -41,7 +41,7 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
-            model.PosCollections = Db.VDocumentPosCollection.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.PosCollections = Db.VDocumentPosCollection.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
                 model.PosCollections = model.PosCollections.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -255,7 +255,7 @@ namespace ActionForce.Office.Controllers
         }
         
         [AllowAnonymous]
-        public ActionResult DeletePosCollection(int? id)
+        public ActionResult DeletePosCollection(string id)
         {
             Result<DocumentPosCollections> result = new Result<DocumentPosCollections>()
             {
@@ -269,15 +269,16 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeletePosCollection(id, model.Authentication);
+                result = documentManager.DeletePosCollection(Guid.Parse(id), model.Authentication);
+                
             }
 
             Result<BankActions> messageresult = new Result<BankActions>();
             messageresult.Message = result.Message;
+            messageresult.IsSuccess = result.IsSuccess;
 
             TempData["result"] = messageresult;
-
-            return RedirectToAction("Index", "Bank");
+            return RedirectToAction("Detail", new { id = id });
         }
 
 
@@ -311,7 +312,7 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
-            model.PosCancel = Db.VDocumentPosCancel.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.PosCancel = Db.VDocumentPosCancel.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
                 model.PosCancel = model.PosCancel.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -519,7 +520,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeletePosCancel(int? id)
+        public ActionResult DeletePosCancel(string id)
         {
             Result<DocumentPosCancel> result = new Result<DocumentPosCancel>()
             {
@@ -533,15 +534,15 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeletePosCancel(id, model.Authentication);
+                result = documentManager.DeletePosCancel(Guid.Parse(id), model.Authentication);
             }
 
             Result<BankActions> messageresult = new Result<BankActions>();
             messageresult.Message = result.Message;
-
+            messageresult.IsSuccess = result.IsSuccess;
             TempData["result"] = messageresult;
 
-            return RedirectToAction("PosCancel", "Bank");
+            return RedirectToAction("PosCancelDetail", new { id = id });
         }
 
 
@@ -575,7 +576,7 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
-            model.PosRefund = Db.VDocumentPosRefund.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.PosRefund = Db.VDocumentPosRefund.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
                 model.PosRefund = model.PosRefund.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -787,7 +788,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeletePosRefund(int? id)
+        public ActionResult DeletePosRefund(string id)
         {
             Result<DocumentPosRefund> result = new Result<DocumentPosRefund>()
             {
@@ -801,15 +802,15 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeletePosRefund(id, model.Authentication);
+                result = documentManager.DeletePosRefund(Guid.Parse(id), model.Authentication);
             }
 
             Result<BankActions> messageresult = new Result<BankActions>();
             messageresult.Message = result.Message;
-
+            messageresult.IsSuccess = result.IsSuccess;
             TempData["result"] = messageresult;
 
-            return RedirectToAction("PosRefund", "Bank");
+            return RedirectToAction("PosRefundDetail", new { id = id });
         }
 
         [AllowAnonymous]

@@ -178,10 +178,18 @@
 
                                         <div class="form-group row mg-b-0">
                                             <div class="col-sm-3"></div>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-3">
                                                 @if (Model.PosRefundDetail.IsActive == true)
                                                 {
                                                     <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                }
+
+                                            </div>
+                                            <div class="col-sm-3">
+                                                @if (Model.PosRefundDetail.IsActive == true)
+                                                {
+                                                    <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.PosRefundDetail.Amount?.ToString()) tutarlı pos iadesi iptal etmek istediğine emin misin?')? DeletePosRefund('@Model.PosRefundDetail.UID') : ''">Pos Tahsilat Sil</button>
+
                                                 }
 
                                             </div>
@@ -273,7 +281,16 @@
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
 
-
+        function DeletePosRefund(id) {
+            window.location.href = "/Bank/DeletePosRefund/" + id;
+            //$.ajax({
+            //    method: "GET",
+            //    url: "/Bank/DeletePosRefund",
+            //    data: { id: id }
+            //}).done(function (d) {
+            //    $("#DeletePosRefund").html(d);
+            //});
+        }
     </script>
     <script>
 
