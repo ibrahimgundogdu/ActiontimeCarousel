@@ -25,6 +25,7 @@ namespace ActionForce.Office
         public IEnumerable<DocumentPrefix> docPrefix { get; set; }
         public VDocumentTransfer CurrentTransfer { get; set; }
         public IEnumerable<VDocumentTransfer> Transfers { get; set; }
+        public IEnumerable<DocumentTransferStatus> TransferStatus { get; set; }
         public Result<DocumentTransfer> Result { get; set; }
         public DateTime? CurrentDate { get; set; }
     }

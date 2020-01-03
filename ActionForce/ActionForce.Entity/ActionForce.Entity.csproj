@@ -230,6 +230,9 @@
     <Compile Include="DocumentTransfer.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="DocumentTransferStatus.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="DocumentType.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

@@ -1256,6 +1256,15 @@
           <Property Name="EnvironmentID" Type="int" />
           <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
+        <EntityType Name="DocumentTransferStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="2" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="DocumentType">
           <Key>
             <PropertyRef Name="TypeID" />
@@ -4641,6 +4650,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DocumentTicketSaleReturns" EntityType="Self.DocumentTicketSaleReturns" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentTicketSales" EntityType="Self.DocumentTicketSales" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentTransfer" EntityType="Self.DocumentTransfer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentTransferStatus" EntityType="Self.DocumentTransferStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentType" EntityType="Self.DocumentType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeCashActions" EntityType="Self.EmployeeCashActions" Schema="dbo" store:Type="Tables" />
@@ -6420,6 +6430,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DocumentTransfer" EntityType="db293_ActionTimeDbModel.DocumentTransfer" />
           <EntitySet Name="VDocumentTransfer" EntityType="db293_ActionTimeDbModel.VDocumentTransfer" />
           <EntitySet Name="VCash" EntityType="db293_ActionTimeDbModel.VCash" />
+          <EntitySet Name="DocumentTransferStatus" EntityType="db293_ActionTimeDbModel.DocumentTransferStatus" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -10846,6 +10857,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="true" />
           <Property Name="ID" Type="Int32" Nullable="false" />
         </EntityType>
+        <EntityType Name="DocumentTransferStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -15212,6 +15232,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DocumentTransferStatus">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentTransferStatus">
+              <MappingFragment StoreEntitySet="DocumentTransferStatus">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

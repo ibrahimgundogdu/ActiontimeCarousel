@@ -372,7 +372,7 @@ namespace ActionForce.Office.Controllers
             model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.CurrencyList = Db.Currency.ToList();
             model.CurrentTransfer = Db.VDocumentTransfer.FirstOrDefault(x => x.UID == id);
-
+            model.TransferStatus = Db.DocumentTransferStatus.ToList();
 
             return View(model);
         }
