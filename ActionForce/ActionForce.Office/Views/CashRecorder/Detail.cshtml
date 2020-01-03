@@ -155,10 +155,18 @@
 
                                         <div class="form-group row mg-b-0">
                                             <div class="col-sm-3"></div>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-3">
                                                 @if (Model.Detail.IsActive == true)
                                                 {
                                                     <button class="btn btn-primary btn-block">Yazarkasa Z Raporunu Güncelle</button>
+                                                }
+
+                                            </div>
+                                            <div class="col-sm-3">
+                                                @if (Model.Detail.IsActive == true)
+                                                {
+                                                    <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.Detail.NetAmount?.ToString()) tutarlı yazarkasa ödemesini iptal etmek istediğine emin misin?')? DeleteCashRecorder('@Model.Detail.UID') : ''">Maaş Avans Sil</button>
+
                                                 }
 
                                             </div>
@@ -268,6 +276,16 @@
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
 
+        function DeleteCashRecorder(id) {
+            window.location.href = "/CashRecorder/DeleteCashRecorder/" + id;
+            //$.ajax({
+            //    method: "GET",
+            //    url: "/CashRecorder/DeleteCashRecorder",
+            //    data: { id: id }
+            //}).done(function (d) {
+            //    $("#DeleteCashRecorder").html(d);
+            //});
+        }
 
     </script>
     <script>

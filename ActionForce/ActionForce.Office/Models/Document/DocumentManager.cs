@@ -2381,7 +2381,7 @@ namespace ActionForce.Office
             return result;
         }
 
-        public Result<DocumentSalaryEarn> DeleteSalaryEarn(long? id, AuthenticationModel authentication)
+        public Result<DocumentSalaryEarn> DeleteSalaryEarn(Guid? id, AuthenticationModel authentication)
         {
             Result<DocumentSalaryEarn> result = new Result<DocumentSalaryEarn>()
             {
@@ -2394,7 +2394,7 @@ namespace ActionForce.Office
             {
                 using (ActionTimeEntities Db = new ActionTimeEntities())
                 {
-                    var isCash = Db.DocumentSalaryEarn.FirstOrDefault(x => x.ID == id);
+                    var isCash = Db.DocumentSalaryEarn.FirstOrDefault(x => x.UID == id);
                     if (isCash != null)
                     {
                         try
@@ -3712,7 +3712,7 @@ namespace ActionForce.Office
             return result;
         }
 
-        public Result<DocumentCashRecorderSlip> DeleteCashRecorder(long? id, AuthenticationModel authentication)
+        public Result<DocumentCashRecorderSlip> DeleteCashRecorder(Guid? id, AuthenticationModel authentication)
         {
             Result<DocumentCashRecorderSlip> result = new Result<DocumentCashRecorderSlip>()
             {
@@ -3726,7 +3726,7 @@ namespace ActionForce.Office
             {
                 using (ActionTimeEntities Db = new ActionTimeEntities())
                 {
-                    var isRecord = Db.DocumentCashRecorderSlip.FirstOrDefault(x => x.ID == id);
+                    var isRecord = Db.DocumentCashRecorderSlip.FirstOrDefault(x => x.UID == id);
                     if (isRecord != null)
                     {
                         try

@@ -305,7 +305,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeleteCashRecorder(int? id)
+        public ActionResult DeleteCashRecorder(string id)
         {
             Result<DocumentCashRecorderSlip> result = new Result<DocumentCashRecorderSlip>()
             {
@@ -319,14 +319,14 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteCashRecorder(id, model.Authentication);
+                result = documentManager.DeleteCashRecorder(Guid.Parse(id), model.Authentication);
             }
 
             Result<CashActions> messageresult = new Result<CashActions>();
             messageresult.Message = result.Message;
 
             TempData["result"] = messageresult;
-            return RedirectToAction("Index", "CashRecorder");
+            return RedirectToAction("Detail", new { id = id });
 
         }
     }
