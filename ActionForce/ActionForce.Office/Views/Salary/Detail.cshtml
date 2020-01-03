@@ -163,10 +163,17 @@
 
                                         <div class="form-group row mg-b-0">
                                             <div class="col-sm-3"></div>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-3">
                                                 @if (Model.Detail.IsActive == true)
                                                 {
-                                                    <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                    <button class="btn btn-primary btn-block">Hakediş Güncelle</button>
+                                                }
+
+                                            </div>
+                                            <div class="col-sm-3">
+                                                @if (Model.Detail.IsActive == true)
+                                                {
+                                                <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.Detail.TotalAmount?.ToString()) tutarlı hakedişi iptal etmek istediğine emin misin?')? DeleteSalaryEarn('@Model.Detail.UID') : ''">Hakediş Sil</button>
                                                 }
 
                                             </div>
@@ -258,6 +265,18 @@
             $('.money').mask("#.##0,00", { reverse: true });
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
+
+        function DeleteSalaryEarn(id) {
+            window.location.href = "/Salary/DeleteSalaryEarn/" + id;
+            //$.ajax({
+            //    method: "GET",
+            //    url: "/Salary/DeleteSalaryEarn",
+            //    data: { id: id }
+            //}).done(function (d) {
+            //    $("#DeleteSalaryEarn").html(d);
+            //});
+        }
+
         function SalaryEarn(EmployeeID) {
             $.ajax({
                     method: "GET",

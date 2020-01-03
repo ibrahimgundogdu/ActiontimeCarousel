@@ -193,10 +193,18 @@
 
                                         <div class="form-group row mg-b-0">
                                             <div class="col-sm-3"></div>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-3">
                                                 @if (Model.SalaryDetail.IsActive == true)
                                                 {
-                                                    <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                    <button class="btn btn-primary btn-block">Maaş Avans Güncelle</button>
+                                                }
+
+                                            </div>
+                                            <div class="col-sm-3">
+                                                @if (Model.SalaryDetail.IsActive == true)
+                                                {
+                                                    <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.SalaryDetail.Amount?.ToString()) tutarlı maaş avans ödemesini iptal etmek istediğine emin misin?')? DeleteCashSalaryPayment('@Model.SalaryDetail.UID') : ''">Maaş Avans Sil</button>
+
                                                 }
 
                                             </div>
@@ -270,54 +278,34 @@
                 searchInputPlaceholder: 'Search options'
             });
 
-            var dateFormat = 'yy-mm-dd',
-                from = $('#dateFrom')
-                    .datepicker({
-                        defaultDate: '+1w',
-                        numberOfMonths: 2,
-                        dateFormat: "yy-mm-dd",
-                        dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                        monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                        firstDay: 1
-                    })
-                    .on('change', function () {
-                        to.datepicker('option', 'minDate', getDate(this));
-                    }),
-                to = $('#dateTo').datepicker({
-                    defaultDate: '+1w',
-                    numberOfMonths: 2,
-                    dateFormat: "yy-mm-dd",
-                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                    firstDay: 1
-                })
-                    .on('change', function () {
-                        from.datepicker('option', 'maxDate', getDate(this));
-                    });
-
-            $('#DocumentDate').datepicker({
+            $('#UpdateDocumentDate').datepicker({
                 dateFormat: "yy-mm-dd",
                 dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
             });
-            function getDate(element) {
-                var date;
-                try {
-                    date = $.datepicker.parseDate(dateFormat, element.value);
-                } catch (error) {
-                    date = null;
-                }
-
-                return date;
-
-            }
 
         });
 
+        $(function () {
+            $('.shiftbegintime').mask('00:00');
+            $('.hour').mask('00:00');
+            $('.hourfull').mask('00:00:00');
+            $('.shiftdate').mask('0000-00-00');
+            $('.money').mask("#.##0,00", { reverse: true });
+            $('.money4').mask("#.##0,0000", { reverse: true });
+        });
 
-
-
+        function DeleteCashSalaryPayment(id) {
+            window.location.href = "/Salary/DeleteCashSalaryPayment/" + id;
+            //$.ajax({
+            //    method: "GET",
+            //    url: "/Cash/DeleteCashSalaryPayment",
+            //    data: { id: id }
+            //}).done(function (d) {
+            //    $("#DeleteCashSalaryPayment").html(d);
+            //});
+        }
 
     </script>
     <script>

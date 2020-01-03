@@ -73,9 +73,9 @@
                     <tr>
                         <th>#</th>
                         <th>Tarih</th>
+                        <th>Belge No</th>
                         <th>Lokasyon</th>
                         <th>İşlem</th>
-                        <th>Belge No</th>
                         <th>Net Tahsilat</th>
                         <th>Toplam Tahsilat</th>
                         <th>Para Br.</th>
@@ -84,45 +84,43 @@
                         <th>Fiş Tarihi</th>
                         <th>Fiş Numarası</th>
                         <th>Döküman</th>
-                        <th></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
 
                     @foreach (var item in Model.CashRecorder)
                     {
-                        <tr style='@(item.IsActive == false ? "color: red" : "")'>
+                    <tr style='@(item.IsActive == false ? "color: red" : "")'>
 
-                            <td class="tx-sm-13 bold">@item.ID</td>
-                            <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
-                            <td class="tx-sm-13">@item.LocationFullName</td>
-                            <td class="tx-sm-13">@item.ActionTypeName</td>
-                            <td class="tx-sm-13">@item.DocumentNumber</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.NetAmount != null ? item.NetAmount.Value.ToString("N2") : "")</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.TotalAmount != null ? item.TotalAmount.Value.ToString("N2") : "")</td>
-                            <td class="tx-sm-13">@(item.Currency)</td>
-                            <td class="tx-sm-13">@item.RecorderFullName</td>
-                            <td class="tx-sm-13 text-right">@item.RecordDate</td>
-                            <td class="tx-sm-13">@($"{item.SlipDate.Value.ToShortDateString()} {item.SlipDate.Value.ToString("HH:mm:ss")}")</td>
-                            <td class="tx-sm-13">@item.SlipNumber</td>
-                            <td>
-                                @if (item.SlipFile != null)
-                                {
-                                    <a target="_blank" href="@(string.Format("../"+ item.SlipPath +"/{0}",item.SlipFile))">
-                                        <img class="img-fluid img-thumbnail thumb" src="@(string.Format("../"+ item.SlipPath +"/{0}",item.SlipFile))" alt="@item.SlipFile" width="64">
-                                    </a>
-                                    
-                                }
-
-
-                            </td>
-                            <td class="tx-sm-13 text-right"><a href="@("/CashRecorder/Detail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
-                            @if (item.IsActive == true)
+                        <td class="tx-sm-13 bold">@item.ID</td>
+                        <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                        <td class="tx-sm-13"><a href="@("/CashRecorder/Detail/" + @item.UID)">@item.DocumentNumber</a></td>
+                        <td class="tx-sm-13">@item.LocationFullName</td>
+                        <td class="tx-sm-13">@item.ActionTypeName</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.NetAmount != null ? item.NetAmount.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.TotalAmount != null ? item.TotalAmount.Value.ToString("N2") : "")</td>
+                        <td class="tx-sm-13">@(item.Currency)</td>
+                        <td class="tx-sm-13">@item.RecorderFullName</td>
+                        <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                        <td class="tx-sm-13">@($"{item.SlipDate.Value.ToShortDateString()} {item.SlipDate.Value.ToString("HH:mm:ss")}")</td>
+                        <td class="tx-sm-13">@item.SlipNumber</td>
+                        <td>
+                            @if (item.SlipFile != null)
                             {
-                                <td class="tx-sm-13 text-right"><a href="/CashRecorder/Index" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@item.TotalAmount tutarlı tahsilatı iptal etmek istediğine emin misin?')) DeleteCashRecorder(@item.ID)"><i data-feather="trash-2"></i></a></td>
+                                <a target="_blank" href="@(string.Format("../"+ item.SlipPath +"/{0}",item.SlipFile))">
+                                    <img class="img-fluid img-thumbnail thumb" src="@(string.Format("../"+ item.SlipPath +"/{0}",item.SlipFile))" alt="@item.SlipFile" width="64">
+                                </a>
+
                             }
-                        </tr>
+
+
+                        </td>
+                        @*<td class="tx-sm-13 text-right"><a href="@("/CashRecorder/Detail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
+                        @if (item.IsActive == true)
+                        {
+                            <td class="tx-sm-13 text-right"><a href="/CashRecorder/Index" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@item.TotalAmount tutarlı tahsilatı iptal etmek istediğine emin misin?')) DeleteCashRecorder(@item.ID)"><i data-feather="trash-2"></i></a></td>
+                        }*@
+                    </tr>
                     }
 
                 </tbody>
@@ -209,15 +207,15 @@
 
         });
 
-        function DeleteCashRecorder(id) {
-            $.ajax({
-                method: "GET",
-                url: "/CashRecorder/DeleteCashRecorder",
-                data: { id: id }
-            }).done(function (d) {
-                $("#DeleteCashRecorder").html(d);
-            });
-        }
+        //function DeleteCashRecorder(id) {
+        //    $.ajax({
+        //        method: "GET",
+        //        url: "/CashRecorder/DeleteCashRecorder",
+        //        data: { id: id }
+        //    }).done(function (d) {
+        //        $("#DeleteCashRecorder").html(d);
+        //    });
+        //}
 
 
 

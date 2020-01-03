@@ -219,7 +219,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeleteSalaryEarn(int? id)
+        public ActionResult DeleteSalaryEarn(string id)
         {
             Result<DocumentSalaryEarn> result = new Result<DocumentSalaryEarn>()
             {
@@ -233,14 +233,15 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteSalaryEarn(id, model.Authentication);
+                result = documentManager.DeleteSalaryEarn(Guid.Parse(id), model.Authentication);
             }
 
             Result<CashActions> messageresult = new Result<CashActions>();
             messageresult.Message = result.Message;
+            messageresult.IsSuccess = result.IsSuccess;
 
             TempData["result"] = messageresult;
-            return RedirectToAction("Index", "Salary");
+            return RedirectToAction("Detail", new { id = id });
 
         }
 

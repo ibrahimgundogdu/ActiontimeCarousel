@@ -73,18 +73,16 @@
                     <tr>
                         <th>#</th>
                         <th>Tarih</th>
+                        <th>Belge No</th>
                         <th>Lokasyon</th>
                         <th>İşlem</th>
                         <th>Bu Personele</th>
                         <th>Birim Fiyat</th>
                         <th>Saatlik Ücret</th>
-                        <th>Belge No</th>
                         <th>Tahsilat</th>
                         <th>Para Br.</th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
-                        <th></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -95,21 +93,21 @@
 
                         <td class="tx-sm-13 bold">@item.ID</td>
                         <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                        <td class="tx-sm-13"><a href="@("/Salary/Detail/" + @item.UID)">@item.DocumentNumber</a></td>
                         <td class="tx-sm-13">@item.LocationFullName</td>
                         <td class="tx-sm-13">@item.ActionTypeName</td>
                         <td class="tx-sm-13">@item.EmployeeFullName </td>
                         <td class="tx-sm-13">@(item.UnitPrice != null ? item.UnitPrice.Value.ToString("N2") : "")</td>
                         <td class="tx-sm-13">@(item.QuantityHour != null ? item.QuantityHour.Value.ToString("N2") : "")</td>
-                        <td class="tx-sm-13">@item.DocumentNumber</td>
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.TotalAmount != null ? item.TotalAmount.Value.ToString("N2") : "")</td>
                         <td class="tx-sm-13">@(item.Currency)</td>
                         <td class="tx-sm-13">@item.RecorderFullName</td>
                         <td class="tx-sm-13 text-right">@item.RecordDate</td>
-                        <td class="tx-sm-13 text-right"><a href="@("/Salary/Detail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
+                        @*<td class="tx-sm-13 text-right"><a href="@("/Salary/Detail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
                         @if (item.IsActive == true)
                         {
                             <td class="tx-sm-13 text-right"><a href="/Salary/Index" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.TotalAmount} tutarlı ücret hakediş iptal etmek istediğine emin misin?')"))) DeleteSalaryEarn(@item.ID)"><i data-feather="trash-2"></i></a></td>
-                        }
+                        }*@
 
                     </tr>
                     }
@@ -176,19 +174,6 @@
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
             });
-
-            var cleaveC = new Cleave('#DocumentDate', {
-                date: true,
-                delimiter: '-',
-                datePattern: ['Y', 'm', 'd'],
-
-            });
-            //var cleave = new Cleave('#Amount', {
-            //    numeral: true
-            //});
-            //var cleave2 = new Cleave('#Exchange', {
-            //    numeral: true
-            //});
             function getDate(element) {
                 var date;
                 try {
@@ -203,15 +188,15 @@
 
         });
 
-        function DeleteSalaryEarn(id) {
-            $.ajax({
-                method: "GET",
-                url: "/Salary/DeleteSalaryEarn",
-                data: { id: id }
-            }).done(function (d) {
-                $("#DeleteSalaryEarn").html(d);
-            });
-        }
+        //function DeleteSalaryEarn(id) {
+        //    $.ajax({
+        //        method: "GET",
+        //        url: "/Salary/DeleteSalaryEarn",
+        //        data: { id: id }
+        //    }).done(function (d) {
+        //        $("#DeleteSalaryEarn").html(d);
+        //    });
+        //}
 
         function SalaryEarn(EmployeeID) {
             $.ajax({
