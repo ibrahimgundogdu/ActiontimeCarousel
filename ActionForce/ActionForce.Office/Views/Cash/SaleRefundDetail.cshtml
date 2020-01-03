@@ -179,10 +179,17 @@
 
                                         <div class="form-group row mg-b-0">
                                             <div class="col-sm-3"></div>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-3">
                                                 @if (Model.SalesRefundDetail.IsActive == true)
                                                 {
-                                                    <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                    <button class="btn btn-primary btn-block">Bilet İade Güncelle</button>
+                                                }
+
+                                            </div>
+                                            <div class="col-sm-3">
+                                                @if (Model.SalesRefundDetail.IsActive == true)
+                                                {
+                                                    <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.SalesRefundDetail.Amount?.ToString()) tutarlı bilet satış iadesini iptal etmek istediğine emin misin?')? DeleteTicketSaleReturn('@Model.SalesRefundDetail.UID') : ''">Bilet İade İptal</button>
                                                 }
 
                                             </div>
@@ -276,7 +283,16 @@
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
 
-
+        function DeleteTicketSaleReturn(id) {
+            window.location.href = "/Cash/DeleteTicketSaleReturn/" + id;
+            //$.ajax({
+            //    method: "GET",
+            //    url: "/Cash/DeleteTicketSaleReturn",
+            //    data: { id: id }
+            //}).done(function (d) {
+            //    $("#DeleteTicketSaleReturn").html(d);
+            //});
+        }
     </script>
     <script>
 

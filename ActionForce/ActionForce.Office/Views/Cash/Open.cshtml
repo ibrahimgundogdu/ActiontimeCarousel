@@ -70,43 +70,41 @@
                     <tr>
                         <th>#</th>
                         <th>Tarih</th>
+                        <th>Belge No</th>
                         <th>Lokasyon</th>
                         <th>Kasa</th>
                         <th>İşlem</th>
-                        <th>Belge No</th>
                         <th>Tutar</th>
                         <th>Para Br.</th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
                         <th>Güncelleyen</th>
                         <th>Güncelleme Tarihi</th>
-                        <th></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
 
                     @foreach (var item in Model.CashOpenSlip)
                     {
-                    <tr>
+                    <tr style='@(item.IsActive == false ? "color: red" : "")'>
 
                         <td class="tx-sm-13 bold">@item.ID</td>
                         <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                        <td class="tx-sm-13"><a href="@("/Cash/OpenDetail/" + @item.UID)">@item.DocumentNumber</a></td>
                         <td class="tx-sm-13">@item.LocationFullName</td>
                         <td class="tx-sm-13">@item.CashName</td>
                         <td class="tx-sm-13">@item.ActionTypeName</td>
-                        <td class="tx-sm-13">@item.DocumentNumber</td>
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
                         <td class="tx-sm-13">@(item.Currency)</td>
                         <td class="tx-sm-13">@item.RecorderFullName</td>
                         <td class="tx-sm-13 text-right">@item.RecordDate</td>
                         <td class="tx-sm-13">@item.UpdaterFullName</td>
                         <td class="tx-sm-13 text-right">@item.UpdateDate</td>
-                        <td class="tx-sm-13 text-right"><a href="@("/Cash/OpenDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
-                        @if (item.IsActive == true)
-                        {
-                            <td class="tx-sm-13 text-right"><a href="/Cash/Open" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} kasa açılış fişini iptal etmek istediğine emin misin?')"))) DeleteCashOpen(@item.ID)"><i data-feather="trash-2"></i></a></td>
-                        }
+                        @*<td class="tx-sm-13 text-right"><a href="@("/Cash/OpenDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
+        @if (item.IsActive == true)
+        {
+            <td class="tx-sm-13 text-right"><a href="/Cash/Open" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} kasa açılış fişini iptal etmek istediğine emin misin?')"))) DeleteCashOpen(@item.ID)"><i data-feather="trash-2"></i></a></td>
+        }*@
 
                     </tr>
                     }
@@ -173,19 +171,6 @@
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
             });
-
-            var cleaveC = new Cleave('#DocumentDate', {
-                date: true,
-                delimiter: '-',
-                datePattern: ['Y', 'm', 'd'],
-
-            });
-            var cleave = new Cleave('#Amount', {
-                numeral: true
-            });
-            var cleave2 = new Cleave('#Exchange', {
-                numeral: true
-            });
             function getDate(element) {
                 var date;
                 try {
@@ -200,15 +185,15 @@
 
         });
 
-        function DeleteCashOpen(id) {
-            $.ajax({
-                method: "GET",
-                url: "/Cash/DeleteCashOpen",
-                data: { id: id }
-            }).done(function (d) {
-                $("#DeleteCashOpen").html(d);
-            });
-        }
+        //function DeleteCashOpen(id) {
+        //    $.ajax({
+        //        method: "GET",
+        //        url: "/Cash/DeleteCashOpen",
+        //        data: { id: id }
+        //    }).done(function (d) {
+        //        $("#DeleteCashOpen").html(d);
+        //    });
+        //}
 
         $(function () {
             'use strict'

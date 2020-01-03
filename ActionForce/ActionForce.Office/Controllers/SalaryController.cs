@@ -40,7 +40,7 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
             model.UnitPrice = Db.EmployeeSalary.ToList();
-            model.SalaryEarn = Db.VDocumentSalaryEarn.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.SalaryEarn = Db.VDocumentSalaryEarn.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
                 model.SalaryEarn = model.SalaryEarn.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -334,7 +334,7 @@ namespace ActionForce.Office.Controllers
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
             model.UnitPrice = Db.EmployeeSalary.ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
-            model.SalaryPayment = Db.VDocumentSalaryPayment.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.SalaryPayment = Db.VDocumentSalaryPayment.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             if (model.Filters.LocationID > 0)
             {
                 model.SalaryPayment = model.SalaryPayment.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -526,7 +526,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult DeleteSalaryPayment(int? id)
+        public ActionResult DeleteSalaryPayment(string id)
         {
             Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
             {
@@ -540,14 +540,15 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteSalaryPayment(id, model.Authentication);
+                result = documentManager.DeleteSalaryPayment(Guid.Parse(id), model.Authentication);
             }
 
             Result<CashActions> messageresult = new Result<CashActions>();
+            messageresult.IsSuccess = result.IsSuccess;
             messageresult.Message = result.Message;
 
             TempData["result"] = messageresult;
-            return RedirectToAction("SalaryPayment", "Salary");
+            return RedirectToAction("SalaryDetail", new { id = id });
 
         }
 

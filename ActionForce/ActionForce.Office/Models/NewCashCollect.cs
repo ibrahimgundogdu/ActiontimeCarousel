@@ -62,6 +62,7 @@ namespace ActionForce.Office
         public string Exchange { get; set; }
         public long? ReferanceID { get; set; }
         public string DocumentDate { get; set; }
+        public int? docDate { get; set; }
         public Guid UID { get; set; }
     }
 

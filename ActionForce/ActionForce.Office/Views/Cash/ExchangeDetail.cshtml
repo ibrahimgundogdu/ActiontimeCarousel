@@ -164,7 +164,6 @@
                                                 @if (Model.ExchangeDetail.IsActive == true)
                                                 {
                                                     <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.ExchangeDetail.Amount?.ToString()) tutarlı döviz satışı iptal etmek istediğine emin misin?')? DeleteCashExchange('@Model.ExchangeDetail.UID') : ''">Döviz Satış Sil</button>
-                                                    @*<a href="#" class="btn btn-danger btn-icon" onclick="confirm('@(Model.SaleDetail.Amount?.ToString()) tutarlı @(Model.SaleDetail.Quantity?.ToString()) adet bilet satışı iptal etmek istediğine emin misin?')? DeleteCashSale('@Model.SaleDetail.UID') : ''">Tahsilat Sil</a>*@
                                                 }
 
                                             </div>

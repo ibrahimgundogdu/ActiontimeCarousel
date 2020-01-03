@@ -67,11 +67,11 @@
                     <tr>
                         <th>#</th>
                         <th>Tarih</th>
+                        <th>Belge No</th>
                         <th>Lokasyon</th>
                         <th>Bu Kasadan</th>
                         <th>Bu Kasaya</th>
                         <th>İşlem</th>
-                        <th>Belge No</th>
                         <th>Döviz Tutar</th>
                         <th>Döviz Br.</th>
                         <th>Kur</th>
@@ -90,11 +90,11 @@
 
                         <td class="tx-sm-13 bold">@item.ID</td>
                         <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                        <td class="tx-sm-13"><a href="@("/Cash/ExchangeDetail/" + @item.UID)">@item.DocumentNumber</a></td>
                         <td class="tx-sm-13">@item.LocationFullName</td>
                         <td class="tx-sm-13">@item.FromCashName</td>
                         <td class="tx-sm-13">@item.ToCashName</td>
                         <td class="tx-sm-13">@item.ActionTypeName</td>
-                        <td class="tx-sm-13"><a href="@("/Cash/ExchangeDetail/" + @item.UID)">@item.DocumentNumber</a></td>
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
                         <td class="tx-sm-13">@(item.Currency)</td>
                         <td class="tx-sm-13">@(item.ExchangeRate?.ToString("N4"))</td>
@@ -115,10 +115,10 @@
 
                         </td>
                         @*<td class="tx-sm-13 text-right"><a href="@("/Cash/ExchangeDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
-                        @if (item.IsActive == true)
-                        {
-                            <td class="tx-sm-13 text-right"><a href="/Cash/Exchange" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} döviz satışı iptal etmek istediğine emin misin?')"))) DeleteCashExchange(@item.ID)"><i data-feather="trash-2"></i></a></td>
-                        }*@
+        @if (item.IsActive == true)
+        {
+            <td class="tx-sm-13 text-right"><a href="/Cash/Exchange" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} döviz satışı iptal etmek istediğine emin misin?')"))) DeleteCashExchange(@item.ID)"><i data-feather="trash-2"></i></a></td>
+        }*@
 
                     </tr>
                     }
@@ -184,19 +184,6 @@
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
             });
-
-            var cleaveC = new Cleave('#DocumentDate', {
-                date: true,
-                delimiter: '-',
-                datePattern: ['Y', 'm', 'd'],
-
-            });
-            //var cleave = new Cleave('#Amount', {
-            //    numeral: true
-            //});
-            //var cleave = new Cleave('#Exchange', {
-            //    numeral: true
-            //});
             function getDate(element) {
                 var date;
                 try {

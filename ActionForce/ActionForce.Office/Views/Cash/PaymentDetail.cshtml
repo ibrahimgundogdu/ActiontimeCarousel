@@ -161,10 +161,18 @@
 
                                         <div class="form-group row mg-b-0">
                                             <div class="col-sm-3"></div>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-3">
                                                 @if (Model.PaymentDetail.IsActive == true)
                                                 {
-                                                    <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                    <button class="btn btn-primary btn-block">Ödeme Güncelle</button>
+                                                }
+
+                                            </div>
+                                            <div class="col-sm-3">
+                                                @if (Model.PaymentDetail.IsActive == true)
+                                                {
+                                                    <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.PaymentDetail.Amount?.ToString()) tutarlı kasa ödemesini iptal etmek istediğine emin misin?')? DeleteCashPayment('@Model.PaymentDetail.UID') : ''">Ödeme Sil</button>
+                                                    
                                                 }
 
                                             </div>
@@ -257,7 +265,16 @@
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
 
-
+        function DeleteCashPayment(id) {
+            window.location.href = "/Cash/DeleteCashPayment/" + id;
+            //$.ajax({
+            //    method: "GET",
+            //    url: "/Cash/DeleteCashPayment",
+            //    data: { id: id }
+            //}).done(function (d) {
+            //    $("#DeleteCashPayment").html(d);
+            //});
+        }
 
     </script>
     <script>

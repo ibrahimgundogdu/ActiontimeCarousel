@@ -219,14 +219,14 @@
                                             <div class="col-sm-3">
                                                 @if (Model.TransferDetail.IsActive == true)
                                                 {
-                                                    <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                    <button class="btn btn-primary btn-block">Havale Eft Güncelle</button>
                                                 }
                                             </div>
                                             <div class="col-sm-3">
                                                 @if (Model.TransferDetail.IsActive == true)
                                                 {
-                                                    <a href="@("/Cash/TransferDetail/" + Model.TransferDetail.UID)" class="btn btn-danger btn-icon" onclick="if(confirm('@(Model.TransferDetail.Amount?.ToString("N2")) tutarlı havale eft iptal etmek istediğine emin misin?')) DeleteCashBankTransfer(@Model.TransferDetail.UID)">Havale / EFT Sil <i data-feather="trash-2"></i></a>
-                                                    
+                                                    <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.TransferDetail.Amount?.ToString()) tutarlı havale eft iptal etmek istediğine emin misin?')? DeleteCashBankTransfer('@Model.TransferDetail.UID') : ''">Havale Eft Sil</button>
+
                                                 }
 
                                             </div>
@@ -324,13 +324,14 @@
         });
 
         function DeleteCashBankTransfer(id) {
-            $.ajax({
-                method: "GET",
-                url: "/Cash/DeleteCashBankTransfer",
-                data: { id: id }
-            }).done(function (d) {
-                $("#DeleteCashBankTransfer").html(d);
-            });
+            window.location.href = "/Cash/DeleteCashBankTransfer/" + id;
+            //$.ajax({
+            //    method: "GET",
+            //    url: "/Cash/DeleteCashBankTransfer",
+            //    data: { id: id }
+            //}).done(function (d) {
+            //    $("#DeleteCashBankTransfer").html(d);
+            //});
         }
 
     </script>

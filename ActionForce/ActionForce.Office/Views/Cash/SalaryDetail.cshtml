@@ -193,10 +193,18 @@
 
                                         <div class="form-group row mg-b-0">
                                             <div class="col-sm-3"></div>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-3">
                                                 @if (Model.SalaryDetail.IsActive == true)
                                                 {
-                                                    <button class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                                    <button class="btn btn-primary btn-block">Maaş Avans Güncelle</button>
+                                                }
+
+                                            </div>
+                                            <div class="col-sm-3">
+                                                @if (Model.SalaryDetail.IsActive == true)
+                                                {
+                                                    <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.SalaryDetail.Amount?.ToString()) tutarlı maaş avans ödemesini iptal etmek istediğine emin misin?')? DeleteCashSalaryPayment('@Model.SalaryDetail.UID') : ''">Maaş Avans Sil</button>
+                                                    
                                                 }
 
                                             </div>
@@ -288,7 +296,16 @@
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
 
-
+        function DeleteCashSalaryPayment(id) {
+            window.location.href = "/Cash/DeleteCashSalaryPayment/" + id;
+            //$.ajax({
+            //    method: "GET",
+            //    url: "/Cash/DeleteCashSalaryPayment",
+            //    data: { id: id }
+            //}).done(function (d) {
+            //    $("#DeleteCashSalaryPayment").html(d);
+            //});
+        }
 
     </script>
     <script>
