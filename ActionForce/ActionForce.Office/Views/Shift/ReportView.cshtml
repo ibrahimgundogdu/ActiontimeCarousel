@@ -1,0 +1,78 @@
+﻿@model ShiftControlModel
+@{
+    Layout = null;
+}
+<table class="table table-primary table-hover table-striped mg-b-0" id="tableLocationEmployeeScheduleShift">
+    <thead>
+        <tr>
+            <th colspan="2">Lokasyon</th>
+            <th colspan="2" class="bd-l">Çalışan</th>
+
+
+            @foreach (var day in Model.WeekList.OrderBy(x => x.DateKey))
+            {
+                <th colspan="8" class="text-center bd-l">@($"{day.Day} {day.MonthNameTR} {day.DayNameTR}")</th>
+            }
+        </tr>
+        <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th class="bd-l">Ad Soyad</th>
+            <th>Adet</th>
+
+
+            @foreach (var day in Model.WeekList.OrderBy(x => x.DateKey))
+            {
+                <th colspan="2" class="bd-l bd-t text-center">Lokasyon Takvimi</th>
+                <th colspan="2" class="bd-l bd-t text-center">Lokasyon Mesaisi</th>
+
+                <th colspan="2" class="bd-l bd-t text-center">Çalışan Takvimi</th>
+                <th colspan="2" class="bd-l bd-t text-center">Çalışan Mesaisi</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var location in Model.Locations.OrderBy(x => x.SortBy).ToList())
+        {
+            List<int> employeids = Model.EmployeeSchedules.Where(x => x.LocationID == location.LocationID && x.ShiftDate >= Model.FirstWeekDay.DateKey && x.ShiftDate <= Model.LastWeekDay.DateKey).Select(x => x.EmployeeID.Value).Distinct().ToList();
+            employeids.AddRange(Model.EmployeeShifts.Where(x => x.LocationID == location.LocationID && x.ShiftDate >= Model.FirstWeekDay.DateKey && x.ShiftDate <= Model.LastWeekDay.DateKey && x.IsWorkTime == true).Select(x => x.EmployeeID.Value).Distinct().ToList());
+            employeids = employeids.Distinct().ToList();
+
+            var employees = Model.Employees.Where(x => employeids.Contains(x.EmployeeID)).ToList();
+
+            int counter = 1;
+
+            foreach (var emp in employees)
+            {
+
+                <tr>
+                    <td class="bg-indigo-light font-weight-bold">@location.SortBy</td>
+                    <td class="bg-indigo-light font-weight-bold" style="width:200px !important;">@($"{location.LocationName} {location.Description} {location.State}")</td>
+                    <td class="font-weight-bold  bd-l">@($"{emp.FullName}")</td>
+                    <td class="">@($"[{counter}/{employees.Count}]")</td>
+
+                    @foreach (var weekday in Model.WeekList.OrderBy(x => x.DateKey))
+                    {
+                        var locationschedule = Model.LocationSchedules.FirstOrDefault(x => x.LocationID == location.LocationID && x.ShiftDate == weekday.DateKey);
+                        var locationshift = Model.LocationShifts.FirstOrDefault(x => x.LocationID == location.LocationID && x.ShiftDate == weekday.DateKey);
+                        var employeeschedule = Model.EmployeeSchedules.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == emp.EmployeeID && x.ShiftDate == weekday.DateKey);
+                        var employeeshift = Model.EmployeeShifts.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == emp.EmployeeID && x.ShiftDate == weekday.DateKey);
+
+                        <td title="@($"{location.SortBy.Trim()} {location.LocationName} {location.Description} {location.State} {emp.FullName} {weekday.DateKey.ToShortDateString()} tarihli mesai takvimi")" class="text-center text-primary bg-indigo-light bd-l"> @(locationschedule?.ShiftDateStart != null ? locationschedule.ShiftDateStart.Value.ToShortDateString() : "") <b>@(locationschedule?.ShiftDateStart != null ? locationschedule.ShiftDateStart.Value.ToString("HH\\:mm") : "")</b></td>
+                        <td title="@($"{location.SortBy.Trim()} {location.LocationName} {location.Description} {location.State} {emp.FullName} {weekday.DateKey.ToShortDateString()} tarihli mesai takvimi")" class="text-center text-primary bg-indigo-light"> @(locationschedule?.ShiftdateEnd != null ? locationschedule.ShiftdateEnd.Value.ToShortDateString() : "") <b>@(locationschedule?.ShiftdateEnd != null ? locationschedule.ShiftdateEnd.Value.ToString("HH\\:mm") : "")</b></td>
+                        <td title="@($"{location.SortBy.Trim()} {location.LocationName} {location.Description} {location.State} {emp.FullName} {weekday.DateKey.ToShortDateString()} tarihli mesaisi")" class="text-center bg-indigo-light bd-l">@(locationshift?.ShiftDateStart != null ? locationshift.ShiftDateStart.Value.ToShortDateString() : "") <b>@(locationshift?.ShiftDateStart != null ? locationshift.ShiftDateStart.Value.ToString("HH\\:mm") : "")</b></td>
+                        <td title="@($"{location.SortBy.Trim()} {location.LocationName} {location.Description} {location.State} {emp.FullName} {weekday.DateKey.ToShortDateString()} tarihli mesaisi")" class="text-center bg-indigo-light">@(locationshift?.ShiftDateFinish != null ? locationshift.ShiftDateFinish.Value.ToShortDateString() : "") <b>@(locationshift?.ShiftDateFinish != null ? locationshift.ShiftDateFinish.Value.ToString("HH\\:mm") : "")</b></td>
+                        <td title="@($"{location.SortBy.Trim()} {location.LocationName} {location.Description} {location.State} {emp.FullName} {weekday.DateKey.ToShortDateString()} tarihli mesai takvimi")" class="text-center  text-primary  bd-l">@(employeeschedule?.ShiftDateStart != null ? employeeschedule.ShiftDateStart.Value.ToShortDateString() : "") <b>@(employeeschedule?.ShiftDateStart != null ? employeeschedule.ShiftDateStart.Value.ToString("HH\\:mm") : "")</b></td>
+                        <td title="@($"{location.SortBy.Trim()} {location.LocationName} {location.Description} {location.State} {emp.FullName} {weekday.DateKey.ToShortDateString()} tarihli mesai takvimi")" class="text-center  text-primary ">@(employeeschedule?.ShiftdateEnd != null ? employeeschedule.ShiftdateEnd.Value.ToShortDateString() : "") <b>@(employeeschedule?.ShiftdateEnd != null ? employeeschedule.ShiftdateEnd.Value.ToString("HH\\:mm") : "")</b></td>
+                        <td title="@($"{location.SortBy.Trim()} {location.LocationName} {location.Description} {location.State} {emp.FullName} {weekday.DateKey.ToShortDateString()} tarihli mesaisi")" class="text-center  bd-l">@(employeeshift?.ShiftDateStart != null ? employeeshift.ShiftDateStart.Value.ToShortDateString() : "") <b>@(employeeshift?.ShiftDateStart != null ? employeeshift.ShiftDateStart.Value.ToString("HH\\:mm") : "")</b></td>
+                        <td title="@($"{location.SortBy.Trim()} {location.LocationName} {location.Description} {location.State} {emp.FullName} {weekday.DateKey.ToShortDateString()} tarihli mesaisi")" class="text-center ">@(employeeshift?.ShiftDateEnd != null ? employeeshift.ShiftDateEnd.Value.ToShortDateString() : "") <b>@(employeeshift?.ShiftDateEnd != null ? employeeshift.ShiftDateEnd.Value.ToString("HH\\:mm") : "")</b></td>
+                    }
+                </tr>
+
+                counter++;
+            }
+
+
+        }
+    </tbody>
+</table>

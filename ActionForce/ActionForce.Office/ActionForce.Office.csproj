@@ -2551,6 +2551,8 @@
     <Content Include="Views\Action\_PartialSelectTLocationEmployee.cshtml" />
     <Content Include="Views\Action\_PartialSelectTLocationBank.cshtml" />
     <Content Include="Views\Action\_PartialSelectTLocationCash.cshtml" />
+    <Content Include="Views\Shift\Report.cshtml" />
+    <Content Include="Views\Shift\ReportView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

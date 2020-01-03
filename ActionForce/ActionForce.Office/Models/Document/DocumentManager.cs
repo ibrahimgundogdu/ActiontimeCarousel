@@ -79,7 +79,7 @@ namespace ActionForce.Office
                         Db.SaveChanges();
 
 
-      
+
 
                         // cari hesap işlemesi
                         OfficeHelper.AddCashAction(newCashColl.CashID, newCashColl.LocationID, null, newCashColl.ActionTypeID, newCashColl.Date, newCashColl.ActionTypeName, newCashColl.ID, newCashColl.Date, newCashColl.DocumentNumber, newCashColl.Description, 1, newCashColl.Amount, 0, newCashColl.Currency, null, null, newCashColl.RecordEmployeeID, newCashColl.RecordDate, newCashColl.UID.Value);
@@ -467,7 +467,7 @@ namespace ActionForce.Office
                             result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki {isCash.Quantity} adet bilet satış başarı ile iptal edildi";
 
                             OfficeHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "Sale", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                            
+
                         }
                         catch (Exception ex)
                         {
@@ -1992,7 +1992,7 @@ namespace ActionForce.Office
                             ResultID = isTransfer.ResultID,
                             SlipPath = isTransfer.SlipPath
 
-                    };
+                        };
 
                         var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == transfer.LocationID && x.Date == transfer.DocumentDate);
 
@@ -3682,7 +3682,7 @@ namespace ActionForce.Office
                         isRecord.CreditAmount = record.CreditAmount;
                         isRecord.ResultID = record.ResultID > 0 ? record.ResultID : self.ResultID;
                         isRecord.Date = record.DocumentDate;
-                        
+
 
                         if (isRecord.ResultID == null)
                         {
@@ -3808,7 +3808,7 @@ namespace ActionForce.Office
                         doctransfer.DocumentDate = transfer.DocumentDate;
                         doctransfer.Description = transfer.Description;
                         doctransfer.DocumentNumber = OfficeHelper.GetDocumentNumber(authentication.ActionEmployee.OurCompanyID.Value, "TR");
-                        doctransfer.ExchangeRate = transfer.Currency == "USD" ? exchange.USDA : transfer.Currency == "EUR" ? exchange.EURA : 1; 
+                        doctransfer.ExchangeRate = transfer.Currency == "USD" ? exchange.USDA : transfer.Currency == "EUR" ? exchange.EURA : 1;
                         doctransfer.ToBankAccountID = transfer.ToBankID;
                         doctransfer.IsActive = true;
                         doctransfer.OurCompanyID = authentication.ActionEmployee.OurCompanyID;
@@ -4048,5 +4048,300 @@ namespace ActionForce.Office
 
             return result;
         }
+
+
+        public Result<ActionRowResult> CheckResultBackward(Guid id, AuthenticationModel authentication, bool islocal)
+        {
+            Result<ActionRowResult> result = new Result<ActionRowResult>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var isResult = Db.DayResult.FirstOrDefault(x => x.UID == id);
+
+                if (isResult != null)
+                {
+
+                    var location = Db.Location.FirstOrDefault(x => x.LocationID == isResult.LocationID);
+                    var datelist = Db.DateList.FirstOrDefault(x => x.DateKey == isResult.Date);
+
+                    var action = Db.Action.FirstOrDefault(x => x.LocationID == isResult.LocationID && x.ActionDate == isResult.Date);
+                    var actionrow = Db.ActionRow.FirstOrDefault(x => x.LocationID == isResult.LocationID && x.Date == isResult.Date);
+                    var actionrowresult = Db.ActionRowResult.FirstOrDefault(x => x.LocationID == isResult.LocationID && x.ResultDate == isResult.Date);
+
+                    List<int> cashsales = new int[] { 10, 21, 24, 28 }.ToList();
+                    List<int> cashprocess = new int[] { 23, 27 }.ToList();
+                    List<int> cardsales = new int[] { 1, 3, 5 }.ToList();
+                    List<int> maas = new int[] { 3, 31 }.ToList();
+                    List<int> cashexpense = new int[] { 4, 29 }.ToList();
+                    List<int> cashexchange = new int[] { 25 }.ToList();
+                    List<int> bankeft = new int[] { 11, 30 }.ToList();
+
+                    var cashActions = Db.VCashActions.Where(x => x.LocationID == isResult.LocationID && x.ActionDate == isResult.Date && x.Currency == authentication.ActionEmployee.OurCompany.Currency).ToList();
+                    var bankActions = Db.VBankActions.Where(x => x.LocationID == isResult.LocationID && x.ActionDate == isResult.Date && x.Currency == authentication.ActionEmployee.OurCompany.Currency).ToList();
+                    var emplActions = Db.VEmployeeCashActions.Where(x => x.LocationID == isResult.LocationID && x.ProcessDate == isResult.Date && x.Currency == authentication.ActionEmployee.OurCompany.Currency).ToList();
+
+                    var cashtotal = cashActions.Where(x => cashsales.Contains(x.CashActionTypeID.Value)).Sum(x => x.Amount).Value;
+                    var credittotal = bankActions.Where(x => cardsales.Contains(x.BankActionTypeID.Value)).Sum(x => x.Amount).Value;
+                    var maastotal = cashActions.Where(x => maas.Contains(x.CashActionTypeID.Value)).Sum(x => x.Amount).Value;
+                    var hakedis = emplActions.Where(x => x.ActionTypeID == 32).Sum(x => x.Amount).Value;
+                    var expensetotal = cashActions.Where(x => cashexpense.Contains(x.CashActionTypeID.Value)).Sum(x => x.Amount).Value;
+
+                    var cashrecorder = Db.DocumentCashRecorderSlip.FirstOrDefault(x => x.LocationID == isResult.LocationID && x.Date == isResult.Date);
+                    var envelope = Db.DayResultDocuments.FirstOrDefault(x => x.LocationID == isResult.LocationID && x.Date == isResult.Date && x.ResultID == isResult.ID);
+
+
+                    try
+                    {
+                        if (action == null)
+                        {
+                            var newaction = new Entity.Action()
+                            {
+                                ActionDate = isResult.Date,
+                                ActionUID = Guid.NewGuid(),
+                                LocationID = isResult.LocationID,
+                                Metarials = 0,
+                                RecordDate = location.LocalDateTime,
+                                StateID = isResult.StateID,
+                                Week = datelist.WeekNumber,
+                                Year = datelist.WeekYear
+                            };
+                            Db.Action.Add(newaction);
+                            Db.SaveChanges();
+
+                            action = newaction;
+                        }
+
+
+                        if (actionrow == null)
+                        {
+                            var newactionrow = new Entity.ActionRow()
+                            {
+                                Date = isResult.Date,
+                                ActionRowUID = Guid.NewGuid(),
+                                LocationID = isResult.LocationID,
+                                ActionID = action.ActionID,
+                                StateID = isResult.StateID,
+                                Week = datelist.WeekNumber,
+                                Year = datelist.WeekYear,
+                                DateWMonth = $"{datelist.Day} {datelist.MonthName.Substring(0, 3)} {datelist.Year}",
+                                Day = datelist.Day
+                            };
+                            Db.ActionRow.Add(newactionrow);
+                            Db.SaveChanges();
+
+                            actionrow = newactionrow;
+                        }
+
+                        if (actionrowresult == null)
+                        {
+                            var newactionrowresult = new Entity.ActionRowResult()
+                            {
+                                ResultDate = isResult.Date,
+                                ActionRowID = actionrow.ID,
+                                LocationID = isResult.LocationID,
+                                ActionID = action.ActionID,
+                                StateID = isResult.StateID,
+                                StatusID = 1,
+                                EmployeeID = authentication.ActionEmployee.EmployeeID,
+                                Cash = cashtotal,
+                                Credit = credittotal,
+                                LaborPayed = hakedis,
+                                LaborPayedPayed = maastotal * -1,
+                                Expense = expensetotal * -1,
+                                CashIN = cashtotal - hakedis - (expensetotal * -1),
+                                ZTime = cashrecorder != null ? cashrecorder.SlipDate : null,
+                                ZNumber = cashrecorder != null ? cashrecorder.SlipNumber : null,
+                                ZNetTotal = cashrecorder != null ? cashrecorder.NetAmount : null,
+                                ZGeneralTotal = cashrecorder != null ? cashrecorder.TotalAmount : null,
+                                IsSendPackage = false,
+                                IsReceivePackage = false,
+                                EnvelopeFile = envelope != null ? envelope.FileName : null,
+                                IsMaster = true,
+                                NotOpened = false,
+                                AdminDescription = isResult.Description
+                            };
+
+                            Db.ActionRowResult.Add(newactionrowresult);
+                            Db.SaveChanges();
+
+                            actionrowresult = newactionrowresult;
+
+                            ActionRowDocument ardocument = new ActionRowDocument()
+                            {
+                                ActionID = action.ActionID,
+                                ActionRowID = actionrow.ID,
+                                Date = isResult.Date,
+                                DocumentTypeID = 1,
+                                LocationID = isResult.LocationID,
+                                EmployeeID = authentication.ActionEmployee.EmployeeID,
+                                FileName = envelope != null ? envelope.FileName : null,
+                                Description = "Envelope File",
+                                RecordDate = location.LocalDateTime
+                            };
+
+                            Db.ActionRowDocument.Add(ardocument);
+                            Db.SaveChanges();
+
+                            // dosyayı kopyala
+
+
+                           
+
+                            if (envelope != null && !string.IsNullOrEmpty(envelope.FileName) && !islocal)
+                            {
+                                try
+                                {
+                                    string fileName = envelope.FileName;
+                                    string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Envelope";
+                                    string targetPath = @"C:\inetpub\wwwroot\Office\Documents";
+                                    string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
+                                    string destFile = System.IO.Path.Combine(targetPath, fileName);
+                                    System.IO.File.Copy(sourceFile, destFile, true);
+                                }
+                                catch (Exception ex)
+                                {
+                                }
+                            }
+
+
+
+
+
+                            result.IsSuccess = true;
+                            result.Message = $"{isResult.Date.ToShortDateString()} tarihli zarf eski sisteme eklendi.";
+
+                            OfficeHelper.AddApplicationLog("Office", "ActionRowResult", "Insert", newactionrowresult.ResultID.ToString(), "Result", "Detail", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newactionrowresult);
+
+                            return result;
+                        }
+                        else
+                        {
+                            // 1 ocak 2020 den büyükse güncelle küçük ise güncelleme
+                            if (isResult.Date >= new DateTime(2020, 1, 1))
+                            {
+                                ActionRowResult self = new ActionRowResult()
+                                {
+                                    RecordDate = actionrowresult.RecordDate,
+                                    ActionID = actionrowresult.ActionID,
+                                    NotOpened = actionrowresult.NotOpened,
+                                    Longitude = actionrowresult.Longitude,
+                                    ResultID = actionrowresult.ResultID,
+                                    ActionRowID = actionrowresult.ActionRowID,
+                                    AdminDescription = actionrowresult.AdminDescription,
+                                    Cash = actionrowresult.Cash,
+                                    CashIN = actionrowresult.CashIN,
+                                    Credit = actionrowresult.Credit,
+                                    Currency = actionrowresult.Currency,
+                                    Description = actionrowresult.Description,
+                                    EmployeeID = actionrowresult.EmployeeID,
+                                    EnvelopeFile = actionrowresult.EnvelopeFile,
+                                    Expense = actionrowresult.Expense,
+                                    IsActive = actionrowresult.IsActive,
+                                    IsMaster = actionrowresult.IsMaster,
+                                    IsMobile = actionrowresult.IsMobile,
+                                    IsReceivePackage = actionrowresult.IsReceivePackage,
+                                    IsSendPackage = actionrowresult.IsSendPackage,
+                                    LaborPayed = actionrowresult.LaborPayed,
+                                    LaborPayedPayed = actionrowresult.LaborPayedPayed,
+                                    Latitude = actionrowresult.Latitude,
+                                    LocationID = actionrowresult.LocationID,
+                                    RecordEmployeeID = actionrowresult.RecordEmployeeID,
+                                    ResultDate = actionrowresult.ResultDate,
+                                    ResultState = actionrowresult.ResultState,
+                                    StateID = actionrowresult.StateID,
+                                    StatusID = actionrowresult.StatusID,
+                                    SubStatusID = actionrowresult.SubStatusID,
+                                    Total = actionrowresult.Total,
+                                    UpdateDate = actionrowresult.UpdateDate,
+                                    UpdateEmployeeID = actionrowresult.UpdateEmployeeID,
+                                    ZGeneralTotal = actionrowresult.ZGeneralTotal,
+                                    ZNetTotal = actionrowresult.ZNetTotal,
+                                    ZNumber = actionrowresult.ZNumber,
+                                    ZTime = actionrowresult.ZTime
+
+                                };
+
+
+                                actionrowresult.ResultDate = isResult.Date;
+                                actionrowresult.ActionRowID = actionrow.ID;
+                                actionrowresult.LocationID = isResult.LocationID;
+                                actionrowresult.ActionID = action.ActionID;
+                                actionrowresult.StateID = isResult.StateID;
+                                actionrowresult.StatusID = 1;
+                                actionrowresult.EmployeeID = authentication.ActionEmployee.EmployeeID;
+                                actionrowresult.Cash = cashtotal;
+                                actionrowresult.Credit = credittotal;
+                                actionrowresult.LaborPayed = hakedis;
+                                actionrowresult.LaborPayedPayed = maastotal * -1;
+                                actionrowresult.Expense = expensetotal * -1;
+
+                                actionrowresult.ZTime = cashrecorder != null ? cashrecorder.SlipDate : null;
+                                actionrowresult.ZNumber = cashrecorder != null ? cashrecorder.SlipNumber : null;
+                                actionrowresult.ZNetTotal = cashrecorder != null ? cashrecorder.NetAmount : null;
+                                actionrowresult.ZGeneralTotal = cashrecorder != null ? cashrecorder.TotalAmount : null;
+                                actionrowresult.IsSendPackage = false;
+                                actionrowresult.IsReceivePackage = false;
+                                actionrowresult.EnvelopeFile = envelope != null ? envelope.FileName : null;
+                                actionrowresult.IsMaster = true;
+                                actionrowresult.NotOpened = false;
+                                actionrowresult.AdminDescription = isResult.Description;
+
+                                Db.SaveChanges();
+
+                                result.IsSuccess = true;
+                                result.Message = $"{isResult.Date.ToShortDateString()} tarihli zarf eski sistemde güncellendi.";
+
+                                var isequal = OfficeHelper.PublicInstancePropertiesEqual<ActionRowResult>(self, actionrowresult, OfficeHelper.getIgnorelist());
+                                OfficeHelper.AddApplicationLog("Office", "ActionRowResult", "Update", actionrowresult.ResultID.ToString(), "Result", "Detail", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+
+                                if (envelope != null && !string.IsNullOrEmpty(envelope.FileName) && !islocal)
+                                {
+                                    try
+                                    {
+                                        string fileName = envelope.FileName;
+                                        string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Envelope";
+                                        string targetPath = @"C:\inetpub\wwwroot\Office\Documents";
+                                        string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
+                                        string destFile = System.IO.Path.Combine(targetPath, fileName);
+                                        System.IO.File.Copy(sourceFile, destFile, true);
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                result.Message = $"{isResult.Date.ToShortDateString()} tarihli zarf eski sisteme 1 Ocak 2020 tarihinden önce eklendiği için güncellenmedi.";
+                                OfficeHelper.AddApplicationLog("Office", "DailyResult", "Update", isResult.ID.ToString(), "Result", "Detail", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                            }
+
+
+                        }
+
+
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"{isResult.Date.ToShortDateString()} tarihli zarfta hata oluştu. {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "DailyResult", "Update", isResult.ID.ToString(), "Result", "Detail", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                    }
+                }
+
+
+            }
+
+            return result;
+        }
+
     }
 }

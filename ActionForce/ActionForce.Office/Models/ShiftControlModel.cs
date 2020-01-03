@@ -37,5 +37,13 @@ namespace ActionForce.Office
         public string CurrentDateCode { get; set; }
         public string NextDateCode { get; set; }
         public string PrevDateCode { get; set; }
+
+        public string WeekCode { get; set; }
+        public string NextWeekCode { get; set; }
+        public string PrevWeekCode { get; set; }
+
+        public List<DateList> WeekList { get; set; }
+        public DateList FirstWeekDay { get; set; }
+        public DateList LastWeekDay { get; set; }
     }
 }
