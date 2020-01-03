@@ -351,7 +351,31 @@ namespace ActionForce.Office.Controllers
             
         }
 
+        [AllowAnonymous]
+        public ActionResult TransferDetail(Guid id)
+        {
+            ActionControlModel model = new ActionControlModel();
 
+            if (TempData["result"] != null)
+            {
+                if (TempData["result"] != null)
+                {
+                    model.Result = TempData["result"] as Result<DocumentTransfer> ?? null;
+                }
+            }
+
+
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            List<int> locationids = model.LocationList.Select(z => z.LocationID).ToList();
+            model.CashList = Db.VCash.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.ID > 0).ToList();
+            model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.CurrencyList = Db.Currency.ToList();
+            model.CurrentTransfer = Db.VDocumentTransfer.FirstOrDefault(x => x.UID == id);
+
+
+            return View(model);
+        }
 
 
 

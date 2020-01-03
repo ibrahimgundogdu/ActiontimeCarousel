@@ -2553,6 +2553,7 @@
     <Content Include="Views\Action\_PartialSelectTLocationCash.cshtml" />
     <Content Include="Views\Shift\Report.cshtml" />
     <Content Include="Views\Shift\ReportView.cshtml" />
+    <Content Include="Views\Action\TransferDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
