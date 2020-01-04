@@ -43,6 +43,7 @@ namespace ActionForce.Office
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }
         public Location CurrentLocation { get; set; }
+        public Cash CurrentCash { get; set; }
         public DateList CurrentDate { get; set; }
         public Result<DayResult> Result { get; set; }
         public IEnumerable<TotalModel> DevirTotal { get; set; }

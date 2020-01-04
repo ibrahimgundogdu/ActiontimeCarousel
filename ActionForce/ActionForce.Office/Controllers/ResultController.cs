@@ -166,6 +166,8 @@ namespace ActionForce.Office.Controllers
                 var usdCash = OfficeHelper.GetCash(model.DayResult.LocationID, "USD");
                 var eurCash = OfficeHelper.GetCash(model.DayResult.LocationID, "EUR");
 
+                model.CurrentCash = OfficeHelper.GetCash(model.DayResult.LocationID, model.CurrentLocation.Currency);
+
                 List<TotalModel> devirtotals = new List<TotalModel>();
                 devirtotals.Add(new TotalModel()
                 {
@@ -1123,7 +1125,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult SetResultState(long? DayresultID, int? StateID, int? LocationID)
+        public ActionResult SetResultState(long? DayresultID, int? StateID, int? LocationID, string Description)
         {
             Result<DayResult> result = new Result<DayResult>()
             {
@@ -1168,6 +1170,7 @@ namespace ActionForce.Office.Controllers
                     };
 
                     dayresult.StateID = StateID.Value;
+                    dayresult.Description = Description;
 
                     if (StateID == 5)
                     {
