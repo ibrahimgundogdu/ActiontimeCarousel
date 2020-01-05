@@ -108,8 +108,6 @@ namespace ActionForce.Office.Controllers
                         result.Message += " Kullanıcı yetkiniz bulunmamaktadır. Sistem yöneticinize başvurunuz. ";
                         OfficeHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, false, $"{User.Username} kullanıcısı yetkiniz bulunmamaktadır. Sistem yöneticinize başvurunuz.", string.Empty, DateTime.UtcNow, User.FullName, OfficeHelper.GetIPAddress(), string.Empty,null);
                     }
-
-
                 }
             }
             else
@@ -120,8 +118,6 @@ namespace ActionForce.Office.Controllers
 
             TempData["result"] = result;
             return RedirectToAction("Index", "Login");
-
-
         }
 
         [AllowAnonymous]
