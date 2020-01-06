@@ -41,7 +41,17 @@
 
                     <div class="row row-xs">
                         <div class="col-lg-12">
-                            <div class="form-group row">
+
+                            <div class="form-group row mg-b-0">
+                                <label for="ActionTypeName" class="col-sm-3 col-form-label">İşlem Türü</label>
+                                <div class="col-sm-6">
+                                    <span id="ActionTypeName" name="ActionTypeName" class="tx-light tx-15">@(Model.CurrentTransfer?.ActionTypeName?.ToString())</span>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-5">
                                 <label for="DocumentNumber" class="col-sm-3 col-form-label">Doküman No</label>
                                 <div class="col-sm-6">
                                     <input id="DocumentNumber" name="DocumentNumber" type="text" class="form-control" autocomplete="off" placeholder="Doküman No" value="@(Model.CurrentTransfer.DocumentNumber)" required readonly>
@@ -49,6 +59,7 @@
                                 <div class="col-sm-3">
                                 </div>
                             </div>
+
                             <div class="form-group row">
                                 <label for="DocumentDate" class="col-sm-3 col-form-label">Tarih</label>
                                 <div class="col-sm-6">
@@ -57,6 +68,7 @@
                                 <div class="col-sm-3">
                                 </div>
                             </div>
+
                             <div class="form-group row mg-b-5 bg-gray-50">
                                 <label for="FromLocationID" class="col-sm-3 col-form-label">Lokasyon</label>
                                 <div class="col-sm-6">
@@ -70,6 +82,7 @@
                                 <div class="col-sm-3">
                                 </div>
                             </div>
+
                             <div class="form-group row mg-b-5 bg-gray-50">
                                 <label for="FromName" class="col-sm-3 col-form-label">Kaynak ( Çıkış )</label>
                                 <div class="col-sm-6">
@@ -87,6 +100,7 @@
                                     <a href="#modalFLocationCustomerSelect" data-toggle="modal" class="btn btn-primary" title="Müşteri" onclick="FLocationCustomerSelect()"><i class="ion ion-md-man"></i></a>
                                 </div>
                             </div>
+
                             <div class="form-group row mg-b-5 bg-gray-50">
                                 <label for="FromDate" class="col-sm-3 col-form-label">Çıkış Tarihi</label>
                                 <div class="col-sm-6">
@@ -95,6 +109,7 @@
                                 <div class="col-sm-3">
                                 </div>
                             </div>
+
                             <div class="form-group row bg-gray-50">
                                 <label for="FromRecEmpFullName" class="col-sm-3 col-form-label">Çıkış Yapan</label>
                                 <div class="col-sm-6">
@@ -104,7 +119,6 @@
                                 <div class="col-sm-3">
                                 </div>
                             </div>
-
 
                             <div class="form-group row mg-b-5 bg-gray-100">
                                 <label for="ToLocationID" class="col-sm-3 col-form-label">Lokasyon</label>
@@ -119,6 +133,7 @@
                                 <div class="col-sm-3">
                                 </div>
                             </div>
+
                             <div class="form-group row mg-b-5 bg-gray-100">
                                 <label for="ToName" class="col-sm-3 col-form-label">Hedef ( Giriş )</label>
                                 <div class="col-sm-6">
@@ -136,6 +151,7 @@
                                     <a href="#modalTLocationCustomerSelect" data-toggle="modal" class="btn btn-primary" title="Müşteri" onclick="TLocationCustomerSelect()"><i class="ion ion-md-man"></i></a>
                                 </div>
                             </div>
+
                             <div class="form-group row mg-b-5 bg-gray-100">
                                 <label for="ToDate" class="col-sm-3 col-form-label">Giriş Tarihi</label>
                                 <div class="col-sm-6">
@@ -144,6 +160,7 @@
                                 <div class="col-sm-3">
                                 </div>
                             </div>
+
                             <div class="form-group row bg-gray-100">
                                 <label for="ToRecEmpFullName" class="col-sm-3 col-form-label">Giriş Yapan</label>
                                 <div class="col-sm-6">
@@ -154,7 +171,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
+                            <div class="form-group row mg-b-5">
                                 <label for="Amount" class="col-sm-3 col-form-label">Tutar</label>
                                 <div class="col-sm-4">
                                     <input id="Amount" name="Amount" type="text" class="form-control money" autocomplete="off" placeholder="Tutar" required value="@(Model.CurrentTransfer.Amount?.ToString("N2"))">
@@ -171,22 +188,22 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
+                            <div class="form-group row mg-b-5">
                                 <label for="SystemAmount" class="col-sm-3 col-form-label">Sistem Tutarı, Döviz Kuru</label>
                                 <div class="col-sm-2">
-                                    <input id="SystemAmount" name="SystemAmount" type="text" class="form-control money" autocomplete="off" placeholder="Sistem Tutar" value="@(Model.CurrentTransfer.SystemAmount?.ToString("N2"))">
+                                    <input id="SystemAmount" name="SystemAmount" type="text" class="form-control money" autocomplete="off" placeholder="Sistem Tutar" value="@(Model.CurrentTransfer.SystemAmount?.ToString("N2"))" readonly>
                                 </div>
                                 <div class="col-sm-2">
-                                    <input id="SystemCurrency" name="SystemCurrency" type="text" class="form-control" autocomplete="off" placeholder="Sistem Birimi" value="@(Model.CurrentTransfer.SystemCurrency)">
+                                    <input id="SystemCurrency" name="SystemCurrency" type="text" class="form-control" autocomplete="off" placeholder="Sistem Birimi" value="@(Model.CurrentTransfer.SystemCurrency)" readonly>
                                 </div>
                                 <div class="col-sm-2">
-                                    <input id="ExchangeRate" name="ExchangeRate" type="text" class="form-control money" autocomplete="off" placeholder="Döviz Kuru" value="@(Model.CurrentTransfer.ExchangeRate?.ToString("N2"))">
+                                    <input id="ExchangeRate" name="ExchangeRate" type="text" class="form-control money" autocomplete="off" placeholder="Döviz Kuru" value="@(Model.CurrentTransfer.ExchangeRate?.ToString("N2"))" readonly>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
                             </div>
 
-                            <div class="form-group row">
+                            <div class="form-group row mg-b-5">
                                 <label for="CarrierEmployeeID" class="col-sm-3 col-form-label">Sorumlu Personel</label>
                                 <div class="col-sm-6">
                                     <select class="form-control" id="CarrierEmployeeID" name="CarrierEmployeeID" required>
@@ -199,6 +216,7 @@
                                 <div class="col-sm-3">
                                 </div>
                             </div>
+
                             <div class="form-group row">
                                 <label for="Description" class="col-sm-3 col-form-label">Açıklama</label>
                                 <div class="col-sm-6">
@@ -223,8 +241,22 @@
                             </div>
 
                             <div class="form-group row mg-b-0">
+                                <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+                                <div class="col-sm-6">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="IsActive" value="1" @(Model.CurrentTransfer.IsActive == true ? "checked" : "")>
+                                        <label class="custom-control-label" for="IsActive">Aktif</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-0">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-6">
+                                    <input id="ID" type="hidden" value="@(Model.CurrentTransfer.ID)" />
+                                    <input id="UID" type="hidden" value="@(Model.CurrentTransfer.UID)" />
                                     <button type="submit" class="btn btn-primary btn-block">Cari Virman Güncelle</button>
                                 </div>
                                 <div class="col-sm-3">
@@ -232,6 +264,45 @@
                             </div>
 
                         </div>
+                    </div>
+                }
+
+                <div class="row row-xs bg-gray-100 mg-b-0 mg-t-40">
+                    <div class="col-sm-3 pd-t-10 pd-b-10">
+                        <b>Kayıt Tarihçesi</b>
+                    </div>
+                    <div class="col-sm-3 pd-t-10">@(Html.Raw($"<b>Kayıt Yeri </b> : {Model.CurrentTransfer.Environment}")) </div>
+                    <div class="col-sm-3 pd-t-10">@(Html.Raw($"<b>Kaydeden </b> : {Model.CurrentTransfer.RecEmployeeName} {Model.CurrentTransfer.RecordDate} ")) </div>
+                    <div class="col-sm-3 pd-t-10">@(Model.CurrentTransfer.UpdateDate != null ? Html.Raw($"<b>Güncelleyen </b> : {Model.CurrentTransfer.UpdEmployeeName} {Model.CurrentTransfer.UpdateDate} ") : Html.Raw("")) </div>
+
+                </div>
+
+                @if (Model.LogList != null && Model.LogList.Count() > 0)
+                {
+                    <div class="row row-xs">
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Tarih</th>
+                                    <th>Kişi</th>
+                                    <th>İşlem</th>
+                                    <th>Açıklama</th>
+                                    <th>Başarılı?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.LogList.OrderBy(x => x.RecordDate))
+                                {
+                                    <tr>
+                                        <td>@(item.RecordDate)</td>
+                                        <td>@(item.RecordEmployee)</td>
+                                        <td>@(item.ProcessType)</td>
+                                        <td>@(item.ResultMessage)</td>
+                                        <td>@(item.IsSuccess)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 }
             </div>
@@ -248,6 +319,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="modalFLocationBankSelect" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">
@@ -257,6 +329,7 @@
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="modalFLocationEmployeeSelect" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
         <div class="modal-content">

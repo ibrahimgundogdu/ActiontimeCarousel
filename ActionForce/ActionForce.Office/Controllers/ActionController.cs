@@ -364,7 +364,6 @@ namespace ActionForce.Office.Controllers
                 }
             }
 
-
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             List<int> locationids = model.LocationList.Select(z => z.LocationID).ToList();
             model.CashList = Db.VCash.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.ID > 0).ToList();
@@ -373,6 +372,7 @@ namespace ActionForce.Office.Controllers
             model.CurrencyList = Db.Currency.ToList();
             model.CurrentTransfer = Db.VDocumentTransfer.FirstOrDefault(x => x.UID == id);
             model.TransferStatus = Db.DocumentTransferStatus.ToList();
+            model.LogList = Db.ApplicationLog.Where(x => x.Modul == "DocumentTransfer" && x.ProcessID == model.CurrentTransfer.ID.ToString()).ToList();
 
             return View(model);
         }

@@ -3841,12 +3841,12 @@ namespace ActionForce.Office
                         result.Message = "Cari Virman kaydı başarı ile eklendi";
 
                         // log atılır
-                        OfficeHelper.AddApplicationLog("Office", "Action", "Insert", doctransfer.ID.ToString(), "Action", "AddTransfer", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(flocation.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, doctransfer);
+                        OfficeHelper.AddApplicationLog("Office", "DocumentTransfer", "Insert", doctransfer.ID.ToString(), "Action", "AddTransfer", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(flocation.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, doctransfer);
                     }
                     catch (Exception ex)
                     {
                         result.Message = $"Cari Virman kaydı eklenemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "BankTransfer", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        OfficeHelper.AddApplicationLog("Office", "DocumentTransfer", "Insert", "-1", "Action", "AddTransfer", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
                 }
             }
