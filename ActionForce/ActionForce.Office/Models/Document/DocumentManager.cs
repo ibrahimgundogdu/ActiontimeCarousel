@@ -2533,7 +2533,7 @@ namespace ActionForce.Office
 
             using (ActionTimeEntities Db = new ActionTimeEntities())
             {
-                var isPayment = Db.DocumentSalaryPayment.FirstOrDefault();
+                var isPayment = Db.DocumentSalaryPayment.FirstOrDefault(x => x.UID == payment.UID);
 
                 if (isPayment != null)
                 {

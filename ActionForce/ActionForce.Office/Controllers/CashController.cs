@@ -2572,7 +2572,7 @@ namespace ActionForce.Office.Controllers
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
+
 
 
             }

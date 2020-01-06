@@ -496,6 +496,7 @@ namespace ActionForce.Office.Controllers
                     sale.UID = cashSalary.UID;
                     sale.CategoryID = cashSalary.CategoryID;
                     sale.ReferanceID = cashSalary.ReferanceID;
+                    sale.TimeZone = timezone;
                     if (newexchanges > 0)
                     {
                         sale.ExchangeRate = newexchanges;
