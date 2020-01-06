@@ -24,5 +24,6 @@ namespace ActionForce.Office
         public string TerminalID { get; set; }
         public long? ResultID { get; set; }
         public Guid? UID { get; set; }
+        public int? Quantity { get; set; }
     }
 }

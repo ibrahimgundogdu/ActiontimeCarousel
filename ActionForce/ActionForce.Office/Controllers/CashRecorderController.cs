@@ -167,7 +167,7 @@ namespace ActionForce.Office.Controllers
                     record.ResultID = resultID;
                     record.SlipFile = "";
                     record.SlipPath = "";
-
+                    record.EnvironmentID = 2;
                     if (documentFile != null && documentFile.ContentLength > 0)
                     {
                         string filename = Guid.NewGuid().ToString() + Path.GetExtension(documentFile.FileName);

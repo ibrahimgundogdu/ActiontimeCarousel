@@ -40,7 +40,7 @@
                 </div>
 
 
-                @using (Html.BeginForm("EditCashSalaryPayment", "Cash", FormMethod.Post))
+                @using (Html.BeginForm("EditSalaryPayment", "Cash", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
                     <div class="row row-xs">
@@ -103,6 +103,17 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Kategori</label>
+                                            <div class="col-sm-9">
+                                                <select class="form-control select2" name="CategoryID">
+                                                    @foreach (var item in Model.SalaryCategories)
+                                                    {
+                                                        <option value="@item.ID" @(Model.SalaryDetail.CategoryID == item.ID ? "selected" : "")>@($"{item.SortBy} ({item.CategoryName})")</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Tutar</label>
                                             <div class="col-sm-9">
                                                 <input name="Amount" type="text" class="form-control money" autocomplete="off" value="@(Model.SalaryDetail.Amount?.ToString("N2"))" placeholder="Tutar" required>
@@ -122,22 +133,11 @@
                                         <div class="form-group row">
                                             <label for="inputPassword3" class="col-sm-3 col-form-label">Hangi Kasadan</label>
                                             <div class="col-sm-9">
-                                                <select class="form-control select2" name="BankAccountID">
+                                                <select class="form-control" name="BankAccountID">
                                                     <option value="0" @(Model.SalaryDetail.FromCashID != null ? "selected" : "")>Kasa</option>
                                                     @foreach (var item in Model.BankAccountList)
                                                     {
                                                         <option value="@item.ID" @(Model.SalaryDetail.FromBankAccountID != null ? Model.SalaryDetail.FromBankAccountID == item.BankID ? "selected" : "" : "")>@($"{item.Bank.Name} ({item.AccountName})")</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Kategori</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control select2" name="CategoryID">
-                                                    @foreach (var item in Model.SalaryCategories)
-                                                    {
-                                                        <option value="@item.ID" @(Model.SalaryDetail.CategoryID == item.ID ? "selected" : "")>@($"{item.SortBy} ({item.CategoryName})")</option>
                                                     }
                                                 </select>
                                             </div>
@@ -166,13 +166,13 @@
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Tutarı</label>
                                             <div class="col-sm-3">
-                                                <span class="text-danger">@($"{Model.SalaryDetail.SystemAmount} {Model.SalaryDetail.SystemCurrency}")</span>
+                                                <span class="text-danger">@($"{Model.SalaryDetail.SystemAmount?.ToString("N4")} {Model.SalaryDetail.SystemCurrency}")</span>
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
                                             <div class="col-sm-9">
-                                                <input name="ReferanceID" type="text" class="form-control" autocomplete="off" value="@Model.SalaryDetail.ReferenceID" placeholder="Referans ID">
+                                                <input name="ReferanceID" type="text" class="form-control number" value="@Model.SalaryDetail.ReferenceID" autocomplete="off" placeholder="Referans ID">
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -204,7 +204,7 @@
                                                 @if (Model.SalaryDetail.IsActive == true)
                                                 {
                                                     <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.SalaryDetail.Amount?.ToString()) tutarlı maaş avans ödemesini iptal etmek istediğine emin misin?')? DeleteCashSalaryPayment('@Model.SalaryDetail.UID') : ''">Maaş Avans Sil</button>
-                                                    
+
                                                 }
 
                                             </div>

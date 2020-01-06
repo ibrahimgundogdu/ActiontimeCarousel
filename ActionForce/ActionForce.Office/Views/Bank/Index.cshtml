@@ -87,6 +87,7 @@
                         <th>Banka</th>
                         <th>İşlem</th>
                         <th>Bu Hesaptan</th>
+                        <th>Adet</th>
                         <th>Tahsilat</th>
                         <th>Para Br.</th>
                         <th>Kaydeden</th>
@@ -106,6 +107,7 @@
                         <td class="tx-sm-13">@item.BankAccountName</td>
                         <td class="tx-sm-13">@item.ActionTypeName</td>
                         <td class="tx-sm-13">@item.CustomerFullName</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Quantity != null ? item.Quantity.Value.ToString() : "")</td>
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
                         <td class="tx-sm-13">@(item.Currency)</td>
                         <td class="tx-sm-13">@item.RecorderFullName</td>

@@ -2555,6 +2555,7 @@ namespace ActionForce.Office.Controllers
                     sale.CategoryID = cashSalary.CategoryID;
                     sale.ReferanceID = cashSalary.ReferanceID;
                     sale.TimeZone = timezone;
+
                     if (newexchanges > 0)
                     {
                         sale.ExchangeRate = newexchanges;
@@ -2572,7 +2573,7 @@ namespace ActionForce.Office.Controllers
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
+
 
 
             }
