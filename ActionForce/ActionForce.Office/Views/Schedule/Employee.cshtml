@@ -99,12 +99,12 @@
 
 
 
-                                    @foreach (var employee in Model.EmployeeLocations)
+                                    @foreach (var employee in Model.Employees)
                                     {
                                         <tr>
-                                            <th scope="row">@employee.EmployeeID</th>
+                                            <th scope="row" class="@(employee.IsActive == true ? "":"tx-danger")"> @employee.EmployeeID</th>
 
-                                            <td><b>@(employee.Employee.FullName)</b></td>
+                                            <td><b>@(employee.FullName)</b></td>
                                             @foreach (var weekday in Model.WeekList.OrderBy(x => x.DateKey))
                                             {
                                                 var schedule = Model.EmployeeSchedule.FirstOrDefault(x => x.EmployeeID == employee.EmployeeID && x.ShiftDate == weekday.DateKey);

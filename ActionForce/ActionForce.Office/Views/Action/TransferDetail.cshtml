@@ -42,6 +42,14 @@
                     <div class="row row-xs">
                         <div class="col-lg-12">
                             <div class="form-group row">
+                                <label for="ActionTypeName" class="col-sm-3 col-form-label">İşlem Türü</label>
+                                <div class="col-sm-6">
+                                    <span id="ActionTypeName" name="ActionTypeName" class="form-control tx-light tx-15">@(Model.CurrentTransfer?.ActionTypeName?.ToString())</span>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="DocumentNumber" class="col-sm-3 col-form-label">Doküman No</label>
                                 <div class="col-sm-6">
                                     <input id="DocumentNumber" name="DocumentNumber" type="text" class="form-control" autocomplete="off" placeholder="Doküman No" value="@(Model.CurrentTransfer.DocumentNumber)" required readonly>
@@ -222,6 +230,39 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <label for="Environment" class="col-sm-3 col-form-label">Kayıt Yeri</label>
+                                <div class="col-sm-6">
+                                    <span id="Environment" name="Environment" class="form-control tx-light tx-15">@(Model.CurrentTransfer.Environment?.ToString())</span>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="RecordDate" class="col-sm-3 col-form-label">Kayıt Tarihi</label>
+                                <div class="col-sm-6">
+                                    <span id="RecordDate" name="RecordDate" class="form-control tx-light tx-15">@(Model.CurrentTransfer.RecordDate?.ToString())</span>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="RecEmployeeName" class="col-sm-3 col-form-label">Kaydeden</label>
+                                <div class="col-sm-6">
+                                    <span id="RecEmployeeName" name="RecEmployeeName" class="form-control tx-light tx-15">@(Model.CurrentTransfer.RecEmployeeName?.ToString())</span>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="RecordIP" class="col-sm-3 col-form-label">Kayıt IP</label>
+                                <div class="col-sm-6">
+                                    <span id="RecordIP" name="RecordIP" class="form-control tx-light tx-15">@(Model.CurrentTransfer.RecordIP?.ToString())</span>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
                             <div class="form-group row mg-b-0">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-6">
@@ -232,6 +273,42 @@
                             </div>
 
                         </div>
+                    </div>
+                }
+
+                <div class="form-group row bg-gray-100 mg-b-0 mg-t-40">
+                    <div class="col-sm-3  ">
+                        <h5 class="tx-spacing--1">Kayıt Tarihçesi</h5>
+                    </div>
+                    <div class="col-sm-9">@($"Kaydeden {Model.CurrentTransfer.RecEmployeeName} {Model.CurrentTransfer.RecordDate} ") </div>
+                   
+                </div>
+                @if (Model.LogList != null && Model.LogList.Count() > 0)
+                {
+                    <div class="row row-xs">
+                        <table class="table table-sm table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Tarih</th>
+                                    <th>Kişi</th>
+                                    <th>İşlem</th>
+                                    <th>Açıklama</th>
+                                    <th>Başarılı?</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.LogList.OrderBy(x => x.RecordDate))
+                                {
+                                    <tr>
+                                        <td>@(item.RecordDate)</td>
+                                        <td>@(item.RecordEmployee)</td>
+                                        <td>@(item.ProcessType)</td>
+                                        <td>@(item.ResultMessage)</td>
+                                        <td>@(item.IsSuccess)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
                     </div>
                 }
             </div>

@@ -383,6 +383,7 @@ namespace ActionForce.Office.Controllers
             employeeids.AddRange(employeeids2);
             employeeids = employeeids.Distinct().ToList();
 
+            model.Employees = Db.Employee.Where(x => employeeids.Contains(x.EmployeeID)).ToList();
             model.EmployeeLocations = Db.EmployeeLocation.Where(x => employeeids.Contains(x.EmployeeID) && x.LocationID == model.CurrentLocation.LocationID && x.IsActive == true && x.Employee.IsActive == true && x.Employee.Role.Stage > 0).ToList();
 
 

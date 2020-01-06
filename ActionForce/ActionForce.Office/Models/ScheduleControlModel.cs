@@ -14,6 +14,7 @@ namespace ActionForce.Office
 
         public IEnumerable<VSchedule> EmployeeSchedule { get; set; }
         public IEnumerable<EmployeeLocation> EmployeeLocations { get; set; }
+        public IEnumerable<Employee> Employees { get; set; }
         public IEnumerable<DateList> CurrentWeek { get; set; }
         public IEnumerable<DateList> NextWeek { get; set; }
         public DateList CurrentDate { get; set; }

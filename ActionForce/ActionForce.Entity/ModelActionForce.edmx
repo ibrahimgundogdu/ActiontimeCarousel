@@ -3889,6 +3889,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentTransfer' does not
           <Property Name="FromLocationID" Type="int" />
           <Property Name="ToLocationID" Type="int" />
           <Property Name="ToLocationFullName" Type="nvarchar" MaxLength="613" />
+          <Property Name="Environment" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5635,7 +5636,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentTransfer].[FromLocationFullName] AS [FromLocationFullName], 
     [VDocumentTransfer].[FromLocationID] AS [FromLocationID], 
     [VDocumentTransfer].[ToLocationID] AS [ToLocationID], 
-    [VDocumentTransfer].[ToLocationFullName] AS [ToLocationFullName]
+    [VDocumentTransfer].[ToLocationFullName] AS [ToLocationFullName], 
+    [VDocumentTransfer].[Environment] AS [Environment]
     FROM [dbo].[VDocumentTransfer] AS [VDocumentTransfer]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VEmployee" EntityType="Self.VEmployee" store:Type="Views" store:Schema="dbo">
@@ -10838,6 +10840,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="FromLocationID" Type="Int32" />
           <Property Name="ToLocationID" Type="Int32" />
           <Property Name="ToLocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="Environment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VCash">
           <Key>
@@ -15160,6 +15163,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentTransfer">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentTransfer">
               <MappingFragment StoreEntitySet="VDocumentTransfer">
+                <ScalarProperty Name="Environment" ColumnName="Environment" />
                 <ScalarProperty Name="ToLocationFullName" ColumnName="ToLocationFullName" />
                 <ScalarProperty Name="ToLocationID" ColumnName="ToLocationID" />
                 <ScalarProperty Name="FromLocationID" ColumnName="FromLocationID" />
