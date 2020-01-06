@@ -236,6 +236,8 @@ namespace ActionForce.Entity
         public virtual DbSet<VDocumentTransfer> VDocumentTransfer { get; set; }
         public virtual DbSet<VCash> VCash { get; set; }
         public virtual DbSet<DocumentTransferStatus> DocumentTransferStatus { get; set; }
+        public virtual DbSet<VEmployeeLocation> VEmployeeLocation { get; set; }
+        public virtual DbSet<VEmployeeLocationList> VEmployeeLocationList { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

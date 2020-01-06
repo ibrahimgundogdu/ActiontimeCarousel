@@ -84,7 +84,7 @@
                     <ul>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Shift">01 Lokasyon Çalışan Mesai</a></li>
                         @*<li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" && this.ViewContext.RouteData.Values["action"].ToString() == "LocationShift" ? "class=active" : "")><a href="/Shift/LocationShift">02 Lokasyon Mesaileri</a></li>
-        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" && this.ViewContext.RouteData.Values["action"].ToString() == "EmployeeShift" ? "class=active" : "")><a href="/Shift/EmployeeShift">03 Çalışan Mesaileri</a></li>*@
+                <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" && this.ViewContext.RouteData.Values["action"].ToString() == "EmployeeShift" ? "class=active" : "")><a href="/Shift/EmployeeShift">03 Çalışan Mesaileri</a></li>*@
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Shift" && this.ViewContext.RouteData.Values["action"].ToString() == "Report" ? "class=active" : "")><a href="/Shift/Report">02 Takvim Mesai Raporu</a></li>
 
                     </ul>
@@ -171,7 +171,12 @@
                 <li class="nav-label mg-t-10">Lokasyon</li>
                 <li class="nav-item"><a href="/Location" class="nav-link"><i data-feather="map-pin"></i> <span>Lokasyonlar</span></a></li>
                 <li class="nav-label mg-t-10">Çalışan</li>
-                <li class="nav-item"><a href="/Employee" class="nav-link"><i data-feather="users"></i> <span>Çalışanlar</span></a></li>
+                <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Employee" ? "show" : "")">
+                    <a href="/Employee" class="nav-link"><i data-feather="users"></i> <span>Çalışanlar</span></a>
+                    <ul>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Employee" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Employee">Çalışanlar</a></li>
+                    </ul>
+                </li>
             </ul>
 
         </div>

@@ -69,5 +69,6 @@ namespace ActionForce.Entity
         public Nullable<int> FromLocationID { get; set; }
         public Nullable<int> ToLocationID { get; set; }
         public string ToLocationFullName { get; set; }
+        public string Environment { get; set; }
     }
 }

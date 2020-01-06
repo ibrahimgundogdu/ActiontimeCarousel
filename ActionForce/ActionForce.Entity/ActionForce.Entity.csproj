@@ -678,6 +678,12 @@
     <Compile Include="VEmployeeCashActions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VEmployeeLocation.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VEmployeeLocationList.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VEmployeeSalary.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

@@ -1,0 +1,158 @@
+﻿@model EmployeeControlModel
+@{
+    ViewBag.Title = "Çalışanlar";
+}
+
+@section style{
+
+}
+
+
+
+<div class="row no-gutters">
+
+
+
+    <div class="col-md-4 mg-t-0 pd-r-0 pd-l-0 pd-t-0">
+        <div id="scrollEmployee" class="card-body pd-0  pos-relative bd ht-100v">
+
+            <div class="contact-list">
+
+                <div class="row pd-5">
+                    <div class="col-6">
+                        <div class="form-group mg-b-0 align-items-end">
+                            <div class="search-form">
+                                <input id="srcEmployeeName" type="search" class="form-control form-control-sm" placeholder="İsim Ara">
+                                <button id="srcEmployee" onclick="EmployeeSearch()" class="btn btn-sm" type="button"><i data-feather="search"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="btn-group btn-group-sm float-right" role="group">
+                            <button type="button" class="btn btn-light" onclick="EmployeeSearch('all');">Tümü</button>
+                            <button type="button" class="btn btn-primary" onclick="EmployeeSearch('act');">Aktifler</button>
+                            <button type="button" class="btn btn-secondary" onclick="EmployeeSearch('psv');">Pasifler</button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="table-responsive" id="EmployeeList">
+                    @{Html.RenderPartial("_PartialEmployeeList", Model);}
+                </div>
+            </div>
+
+
+        </div>
+
+    </div>
+    <div class="col-md-8 mg-t-0 pd-r-0 pd-l-0 pd-t-0">
+        <div class="df-example demo-forms pd-5">
+            <div class="card ht-100p" id="AddEmployee">
+
+            </div>
+        </div>
+        <div class="df-example demo-forms pd-5">
+            <div class="card ht-100p" id="AddLocation">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section scripts {
+
+
+    <script>
+        $(function () {
+            'use strict'
+            //$(".content").addClass("app-contact");
+
+
+            $('.shifttime').mask('00:00');
+            $('.shiftdate').mask('0000-00-00');
+
+
+            const scrollEmployee = new PerfectScrollbar('#scrollEmployee', {
+                suppressScrollX: true
+            });
+
+            $('#DateStart').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+        });
+
+        $(document).ready(function () {
+            $('#srcEmployeeName').keypress(function (e) {
+                if (e.keyCode == 13)
+                    UnitSearch();
+            });
+        });
+
+        function EmployeeSearch(active) {
+
+            var skey = $("#srcEmployeeName").val();
+
+            $.ajax({
+                method: "GET",
+                url: "/Employee/EmployeeSearch",
+                data: { key: skey, active: active }
+            }).done(function (d) {
+                $("#EmployeeList").html(d);
+            });
+        }
+
+        function EmployeeList(id) {
+            $.ajax({
+                method: "GET",
+                url: "/Employee/EmployeeList",
+                data: { id: id }
+            }).done(function (d) {
+                $("#AddEmployee").html(d);
+            });
+        }
+        function LocationList(id) {
+            $.ajax({
+                method: "GET",
+                url: "/Employee/LocationList",
+                data: { id: id }
+            }).done(function (d) {
+                $("#AddLocation").html(d);
+            });
+        }
+        //function DeleteEmployee(id) {
+        //    $.ajax({
+        //        method: "GET",
+        //        url: "/Employee/DeleteEmployee",
+        //        data: { id: id }
+        //    }).done(function (d) {
+        //        $("#EmployeeList").html(d);
+        //    });
+        //}
+    </script>
+
+
+
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}
+

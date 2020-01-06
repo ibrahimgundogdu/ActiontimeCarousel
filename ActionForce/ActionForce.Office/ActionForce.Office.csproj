@@ -2288,6 +2288,7 @@
     <Compile Include="Controllers\CashController.cs" />
     <Compile Include="Controllers\CashRecorderController.cs" />
     <Compile Include="Controllers\DefinitionController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FinanceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -2305,6 +2306,7 @@
     <Compile Include="Models\AuditTrail.cs" />
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\BankActionModel.cs" />
+    <Compile Include="Models\EmployeeControlModel.cs" />
     <Compile Include="Models\CashRecorderControlModel.cs" />
     <Compile Include="Models\BankControlModel.cs" />
     <Compile Include="Models\CashActionModel.cs" />
@@ -2554,6 +2556,11 @@
     <Content Include="Views\Shift\Report.cshtml" />
     <Content Include="Views\Shift\ReportView.cshtml" />
     <Content Include="Views\Action\TransferDetail.cshtml" />
+    <Content Include="Views\Employee\Index.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeList.cshtml" />
+    <Content Include="Views\Employee\_PartialAddEmployee.cshtml" />
+    <Content Include="Views\Employee\_PartialAddLocation.cshtml" />
+    <Content Include="Views\Employee\_PartialLocationList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

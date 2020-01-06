@@ -1,0 +1,130 @@
+﻿@model EmployeeControlModel
+@using (Ajax.BeginForm("AddEmployee", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "EmployeeList", InsertionMode = InsertionMode.Replace }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="card-header d-flex align-items-center justify-content-between">
+        <h6 class="mg-b-0">@(Model.CurrentEmployee?.FullName) <input id="EmployeeID" name="EmployeeID" value="@(Model.CurrentEmployee?.EmployeeID)" type="hidden" /></h6>
+    </div>
+    <div class="card-body pd-0">
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">İsim Soyisim</label>
+                <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="Employee İsim" required>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Email</label>
+                <input id="Email" name="Email" type="text" class="form-control" autocomplete="off" placeholder="E-Posta">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Mobile</label>
+                <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Mobil">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Mobil2</label>
+                <input id="Mobile2" name="Mobile2" type="text" class="form-control" autocomplete="off" placeholder="Mobil">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Whatsapp</label>
+                <input id="Whatsapp" name="Whatsapp" type="text" class="form-control" autocomplete="off" placeholder="Whatsapp">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Sms</label>
+                <input id="SmsNumber" name="SmsNumber" type="text" class="form-control" autocomplete="off" placeholder="Sms">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Kullanıcı</label>
+                <input id="Username" name="Username" type="text" class="form-control" autocomplete="off" placeholder="Kullanıcı Adı">
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Şifre</label>
+                <input id="Password" name="Password" type="text" class="form-control" autocomplete="off" placeholder="Şifre">
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Shift Type</label>
+                <select class="form-control select2" id="ShiftTypeID" name="ShiftTypeID">
+                    @foreach (var item in Model.ShiftTypeList)
+                    {
+                        <option value="@item.ID">@($"{item.SortBy} {item.TypeName}" )</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Durum</label>
+                <select class="form-control select2" id="StatusID" name="StatusID">
+                    @foreach (var item in Model.StatusList)
+                    {
+                        <option value="@item.ID">@($"{item.Code} {item.Name}" )</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Rol</label>
+                <select class="form-control select2" id="RoleID" name="RoleID">
+                    @foreach (var item in Model.RoleList)
+                    {
+                        <option value="@item.RoleID">@($"{item.RoleName}" )</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="inputEmail4">Rol Grup</label>
+                <select class="form-control select2" id="RoleGroupID" name="RoleGroupID">
+                    @foreach (var item in Model.RoleGroupList)
+                    {
+                        <option value="@item.ID">@($"{item.GroupName}" )</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="inputPassword4">Açıklama</label>
+                <textarea id="Description" name="Description" rows="4" class="form-control" placeholder="Açıklama"></textarea>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-2">
+                <label for="inputPassword4">&nbsp;</label>
+                <input id="AddEmployee" type="submit" class="btn btn-primary btn-block" autocomplete="off" value="Kaydet" />
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-center tx-13">
+    </div>
+}
+
+<script>
+        $(function () {
+            'use strict'
+
+            $('#DateStart').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+    });
+
+    $(function () {
+        $('.shiftbegintime').mask('00:00');
+        $('.hour').mask('00:00');
+        $('.hourfull').mask('00:00:00');
+        $('.shiftdate').mask('0000-00-00');
+        $('.quantity').mask("#.##0", { reverse: true });
+        $('.number').mask("##0", { reverse: true });
+        $('.money').mask("#.##0,00", { reverse: true });
+        $('.money4').mask("#.##0,0000", { reverse: true });
+    });
+</script>

@@ -1,0 +1,45 @@
+﻿@model EmployeeControlModel
+
+<div class="card-body pd-0">
+
+    <div class="contact-list">
+        <div class="table-responsive">
+            <table class="table table-primary table-hover table-striped mg-b-0">
+                <thead>
+                    <tr class="table-active">
+                        <th>#</th>
+                        <th>İsim</th>
+                        <th></th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var employee in Model.EmployeeList.OrderBy(x=> x.FullName).ToList())
+                    {
+                    <tr>
+                        <td>@(employee.EmployeeID)</td>
+                        <td scope="row" class="@(employee.IsActive == true ? "":"tx-danger")"><a href="#" onclick="EmployeeList(@employee.EmployeeID);"><b>@(employee.FullName)</b></a></td>
+                        <td class="tx-right font-weight-bold"><a href="#" class="text-danger" onclick="confirm('@employee.FullName employee silmek istediğine emin misin? Bu işlem geri alınamaz')? DeleteEmployee(@employee.EmployeeID) : false"><i class="fas fa-trash"></i></a></td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+</div>
+
+@if (Model.Result != null)
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
+}
