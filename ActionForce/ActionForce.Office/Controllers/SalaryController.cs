@@ -130,7 +130,9 @@ namespace ActionForce.Office.Controllers
                     earn.TimeZone = location.Timezone;
                     earn.OurCompanyID = location.OurCompanyID;
                     earn.CategoryID = cashSalary.CategoryID ?? (int?)null;
-
+                    earn.SystemQuantityHour = earn.QuantityHour;
+                    earn.SystemTotalAmount = earn.TotalAmount;
+                    earn.SystemUnitPrice = earn.UnitPrice;
 
                     DocumentManager documentManager = new DocumentManager();
                     result = documentManager.AddSalaryEarn(earn, model.Authentication);
@@ -196,6 +198,9 @@ namespace ActionForce.Office.Controllers
                     sale.QuantityHour = quantity;
                     sale.CategoryID = cashEarn.CategoryID;
 
+                    sale.SystemQuantityHour = sale.QuantityHour;
+                    sale.SystemTotalAmount = sale.TotalAmount;
+                    sale.SystemUnitPrice = sale.UnitPrice;
 
                     DocumentManager documentManager = new DocumentManager();
                     result = documentManager.EditSalaryEarn(sale, model.Authentication);

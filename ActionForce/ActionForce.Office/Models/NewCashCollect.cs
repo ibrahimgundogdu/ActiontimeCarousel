@@ -225,6 +225,9 @@ namespace ActionForce.Office
         public long? ReferanceID { get; set; }
         public int? CategoryID { get; set; }
         public Guid UID { get; set; }
+        public double? SystemUnitPrice { get; set; }
+        public double? SystemQuantityHour { get; set; }
+        public double? SystemTotalAmount { get; set; }
     }
     public class NewEmployeeSalary
     {

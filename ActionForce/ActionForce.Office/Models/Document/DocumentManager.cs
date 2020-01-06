@@ -2330,7 +2330,10 @@ namespace ActionForce.Office
                             UpdateEmployee = isEarn.UpdateEmployee,
                             UpdateIP = isEarn.UpdateIP,
                             CategoryID = isEarn.CategoryID,
-                            EnvironmentID = isEarn.EnvironmentID
+                            EnvironmentID = isEarn.EnvironmentID,
+                            SystemQuantityHour = isEarn.SystemQuantityHour,
+                            SystemTotalAmount = isEarn.SystemTotalAmount,
+                            SystemUnitPrice = isEarn.SystemUnitPrice
                         };
                         isEarn.ReferenceID = salary.ReferanceID;
                         isEarn.CategoryID = salary.CategoryID;
@@ -2342,6 +2345,9 @@ namespace ActionForce.Office
                         isEarn.UpdateDate = DateTime.UtcNow.AddHours(salary.TimeZone.Value);
                         isEarn.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
                         isEarn.UpdateIP = OfficeHelper.GetIPAddress();
+                        isEarn.SystemQuantityHour = salary.SystemQuantityHour;
+                        isEarn.SystemTotalAmount = salary.SystemTotalAmount;
+                        isEarn.SystemUnitPrice = salary.SystemUnitPrice;
 
                         Db.SaveChanges();
 
@@ -2930,7 +2936,6 @@ namespace ActionForce.Office
                         posCollection.ResultID = collection.ResultID;
 
 
-
                         Db.DocumentPosCollections.Add(posCollection);
                         Db.SaveChanges();
 
@@ -3001,7 +3006,8 @@ namespace ActionForce.Office
                             UpdateIP = isPos.UpdateIP,
                             BankAccountID = isPos.BankAccountID,
                             TerminalID = isPos.TerminalID,
-                            EnvironmentID = isPos.EnvironmentID
+                            EnvironmentID = isPos.EnvironmentID,
+                            Quantity = isPos.Quantity
                         };
                         isPos.ReferenceID = collection.ReferanceID;
                         isPos.LocationID = collection.LocationID;
@@ -3017,7 +3023,7 @@ namespace ActionForce.Office
                         isPos.UpdateIP = OfficeHelper.GetIPAddress();
                         isPos.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == collection.Currency ? collection.Amount : collection.Amount * collection.ExchangeRate;
                         isPos.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
-
+                        isPos.Quantity = collection.Quantity;
                         Db.SaveChanges();
 
                         var cashaction = Db.BankActions.FirstOrDefault(x => x.LocationID == locId && x.BankActionTypeID == isPos.ActionTypeID && x.ProcessID == isPos.ID);
@@ -3149,7 +3155,7 @@ namespace ActionForce.Office
                         posCollection.TerminalID = collection.TerminalID;
                         posCollection.EnvironmentID = 2;
                         posCollection.UID = Guid.NewGuid();
-
+                        posCollection.Quantity = collection.Quantity;
 
 
 
@@ -3223,8 +3229,10 @@ namespace ActionForce.Office
                             UpdateIP = isPos.UpdateIP,
                             FromBankAccountID = isPos.FromBankAccountID,
                             TerminalID = isPos.TerminalID,
-                            EnvironmentID = isPos.EnvironmentID
+                            EnvironmentID = isPos.EnvironmentID,
+                            Quantity = isPos.Quantity
                         };
+                        isPos.Quantity = collection.Quantity;
                         isPos.ReferenceID = collection.ReferanceID;
                         isPos.LocationID = collection.LocationID;
                         isPos.Date = collection.DocumentDate;
@@ -3371,7 +3379,7 @@ namespace ActionForce.Office
                         posCollection.TerminalID = collection.TerminalID;
                         posCollection.EnvironmentID = 2;
                         posCollection.UID = Guid.NewGuid();
-
+                        posCollection.Quantity = collection.Quantity;
 
 
                         Db.DocumentPosRefund.Add(posCollection);
@@ -3444,8 +3452,11 @@ namespace ActionForce.Office
                             UpdateIP = isPos.UpdateIP,
                             FromBankAccountID = isPos.FromBankAccountID,
                             TerminalID = isPos.TerminalID,
-                            EnvironmentID = isPos.EnvironmentID
+                            EnvironmentID = isPos.EnvironmentID,
+                            Quantity = isPos.Quantity
+
                         };
+                        isPos.Quantity = collection.Quantity;
                         isPos.ReferenceID = collection.ReferanceID;
                         isPos.LocationID = collection.LocationID;
                         isPos.Date = collection.DocumentDate;
@@ -3585,7 +3596,7 @@ namespace ActionForce.Office
                         cashRedord.RecordIP = OfficeHelper.GetIPAddress();
                         cashRedord.SlipDate = record.SlipDate;
                         cashRedord.SlipNumber = record.SlipNumber;
-                        cashRedord.EnvironmentID = 2;
+                        cashRedord.EnvironmentID = record.EnvironmentID;
                         cashRedord.UID = Guid.NewGuid();
                         cashRedord.ResultID = record.ResultID;
                         cashRedord.CashAmount = record.CashAmount;

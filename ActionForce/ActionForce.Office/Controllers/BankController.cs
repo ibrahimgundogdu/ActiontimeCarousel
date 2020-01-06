@@ -203,6 +203,9 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(posCollect.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = posCollect.Currency;
                 var docDate = DateTime.Now.Date;
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == posCollect.LocationID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 double? newexchanges = Convert.ToDouble(posCollect.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? exchanges = Convert.ToDouble(posCollect.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(posCollect.DocumentDate, out docDate))
@@ -225,6 +228,7 @@ namespace ActionForce.Office.Controllers
                     payment.UID = posCollect.UID;
                     payment.Quantity = quantity;
                     payment.ReferanceID = posCollect.ReferanceID;
+                    payment.TimeZone = timezone;
                     if (newexchanges > 0)
                     {
                         payment.ExchangeRate = newexchanges;
@@ -404,7 +408,7 @@ namespace ActionForce.Office.Controllers
                     pos.TimeZone = timezone;
                     pos.ReferanceID = posCollect.ReferanceID;
                     pos.TerminalID = posTerminal != null ? posTerminal.TerminalID?.ToString() : "";
-
+                    pos.Quantity = quantity;
                     DocumentManager documentManager = new DocumentManager();
                     result = documentManager.AddPosCancel(pos, model.Authentication);
                 }
@@ -470,7 +474,9 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(posCollect.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = posCollect.Currency;
                 var docDate = DateTime.Now.Date;
-
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == posCollect.LocationID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 double? newexchanges = Convert.ToDouble(posCollect.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? exchanges = Convert.ToDouble(posCollect.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(posCollect.DocumentDate, out docDate))
@@ -492,6 +498,8 @@ namespace ActionForce.Office.Controllers
                     payment.LocationID = posCollect.LocationID;
                     payment.UID = posCollect.UID;
                     payment.ReferanceID = posCollect.ReferanceID;
+                    payment.TimeZone = timezone;
+                    payment.Quantity = quantity;
                     if (newexchanges > 0)
                     {
                         payment.ExchangeRate = newexchanges;
@@ -669,7 +677,7 @@ namespace ActionForce.Office.Controllers
                     pos.TimeZone = timezone;
                     pos.ReferanceID = posCollect.ReferanceID;
                     pos.TerminalID = posTerminal != null ? posTerminal.TerminalID?.ToString() : "";
-
+                    pos.Quantity = quantity;
                     DocumentManager documentManager = new DocumentManager();
                     result = documentManager.AddPosRefund(pos, model.Authentication);
                 }
@@ -736,6 +744,9 @@ namespace ActionForce.Office.Controllers
                 var amount = Convert.ToDouble(posCollect.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = posCollect.Currency;
                 var docDate = DateTime.Now.Date;
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == posCollect.LocationID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 double? newexchanges = Convert.ToDouble(posCollect.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 double? exchanges = Convert.ToDouble(posCollect.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(posCollect.DocumentDate, out docDate))
@@ -758,7 +769,8 @@ namespace ActionForce.Office.Controllers
                     payment.LocationID = posCollect.LocationID;
                     payment.UID = posCollect.UID;
                     payment.ReferanceID = posCollect.ReferanceID;
-
+                    payment.TimeZone = timezone;
+                    payment.Quantity = quantity;
                     if (newexchanges > 0)
                     {
                         payment.ExchangeRate = newexchanges;
