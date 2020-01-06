@@ -72,6 +72,7 @@
                                             <th scope="col" style="width:10%;" class="text-center @(day.DateKey == Model.FirstWeekDay.DateKey ? "bd-l":day.DateKey == Model.LastWeekDay.DateKey ? "bd-r":"")">@($"{day.Day} {day.MonthNameTR} {day.DayNameTR}")</th>
                                         }
                                         <th scope="col" style="width:3%;" class="text-center"></th>
+                                        <th scope="col" style="width:3%;" class="text-center"></th>
                                     </tr>
                                     <tr class="bd-b">
                                         <td>@Model.CurrentLocation.SortBy</td>
@@ -90,6 +91,7 @@
                                             </td>
 
                                         }
+                                        <td scope="col" style="width:3%;" class="text-center">Saat</td>
                                         <td class="text-center bd-l "><a href="#modalLocationSchedule" data-toggle="modal" class="text-sm-center d-sm-inline outline-none text-white" onclick="AddLocationSchedule(@Model.CurrentLocation.LocationID, '@(Model.WeekCode)')"> <i data-feather="calendar"></i></a></td>
                                     </tr>
                                 </thead>
@@ -101,25 +103,29 @@
 
                                     @foreach (var employee in Model.Employees)
                                     {
-                                        <tr>
-                                            <th scope="row" class="@(employee.IsActive == true ? "":"tx-danger")"> @employee.EmployeeID</th>
+                                        var totalduration = 0;
 
-                                            <td><b>@(employee.FullName)</b></td>
-                                            @foreach (var weekday in Model.WeekList.OrderBy(x => x.DateKey))
-                                            {
-                                                var schedule = Model.EmployeeSchedule.FirstOrDefault(x => x.EmployeeID == employee.EmployeeID && x.ShiftDate == weekday.DateKey);
+                                    <tr>
+                                        <th scope="row" class="@(employee.IsActive == true ? "":"tx-danger")"> @employee.EmployeeID</th>
 
-                                                <td class="text-center @(weekday.DateKey == Model.FirstWeekDay.DateKey ? "bd-l":weekday.DateKey == Model.LastWeekDay.DateKey ? "bd-r":"")">
-                                                    @if (schedule != null)
-                                                    {
-                                                        @(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToShortDateString() : "") <b>@(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToString("HH\\:mm") : "")</b> <br />@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToShortDateString() : "") <b>@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToString("HH\\:mm") : "")</b>
+                                        <td><b>@(employee.FullName)</b></td>
+                                        @foreach (var weekday in Model.WeekList.OrderBy(x => x.DateKey))
+                                        {
+                                            var schedule = Model.EmployeeSchedule.FirstOrDefault(x => x.EmployeeID == employee.EmployeeID && x.ShiftDate == weekday.DateKey);
 
-                                                    }
-                                                </td>
+                                            <td class="text-center @(weekday.DateKey == Model.FirstWeekDay.DateKey ? "bd-l":weekday.DateKey == Model.LastWeekDay.DateKey ? "bd-r":"")">
+                                                @if (schedule != null)
+                                                {
+                                                    @(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToShortDateString() : "") <b>@(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToString("HH\\:mm") : "")</b> <br />@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToShortDateString() : "") <b>@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToString("HH\\:mm") : "")</b>
 
-                                            }
-                                            <td class="text-center bd-l"><a href="#modalEmployeeSchedule" data-toggle="modal" class="text-sm-center d-sm-inline outline-none" onclick="AddEmployeeSchedule(@Model.CurrentLocation.LocationID, @employee.EmployeeID, '@(Model.WeekCode)')"> <i data-feather="calendar"></i></a></td>
-                                        </tr>
+                                                }
+                                            </td>
+
+                                            totalduration += schedule != null && schedule.DurationMinute >0 ? (schedule.DurationMinute.Value / 60) : 0;
+                                        }
+                                        <td scope="col" style="width:3%;" class="text-center">@(totalduration)</td>
+                                        <td class="text-center bd-l"><a href="#modalEmployeeSchedule" data-toggle="modal" class="text-sm-center d-sm-inline outline-none" onclick="AddEmployeeSchedule(@Model.CurrentLocation.LocationID, @employee.EmployeeID, '@(Model.WeekCode)')"> <i data-feather="calendar"></i></a></td>
+                                    </tr>
                                     }
 
 

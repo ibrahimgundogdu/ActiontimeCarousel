@@ -3865,57 +3865,59 @@ namespace ActionForce.Office
 
             using (ActionTimeEntities Db = new ActionTimeEntities())
             {
-                var isTransfer = Db.DocumentTransfer.FirstOrDefault(x => x.UID == transfer.UID);
+                var isTransfer = Db.DocumentTransfer.FirstOrDefault(x => x.UID == transfer.UID && x.ID == transfer.ID);
 
                 if (isTransfer != null)
                 {
                     try
                     {
-                        //var cash = OfficeHelper.GetCash(transfer.LocationID, transfer.Currency);
-                        //var location = Db.Location.FirstOrDefault(x => x.LocationID == transfer.LocationID);
-                        //var exchange = OfficeHelper.GetExchange(transfer.DocumentDate.Value);
+                        var cash = OfficeHelper.GetCash(transfer.FromLocationID.Value, transfer.Currency);
+                        var location = Db.Location.FirstOrDefault(x => x.LocationID == transfer.FromLocationID);
+                        var exchange = OfficeHelper.GetExchange(transfer.DocumentDate);
 
-                        //var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 29); // masraf ödeme fişi
 
-                        //DocumentBankTransfer self = new DocumentBankTransfer()
-                        //{
-                        //    ActionTypeID = isTransfer.ActionTypeID,
-                        //    ActionTypeName = isTransfer.ActionTypeName,
-                        //    Amount = isTransfer.Amount,
-                        //    NetAmount = isTransfer.NetAmount,
-                        //    FromCashID = isTransfer.FromCashID,
-                        //    ToBankAccountID = isTransfer.ToBankAccountID,
-                        //    Currency = isTransfer.Currency,
-                        //    Date = isTransfer.Date,
-                        //    Description = isTransfer.Description,
-                        //    DocumentNumber = isTransfer.DocumentNumber,
-                        //    ExchangeRate = isTransfer.ExchangeRate,
-                        //    ID = isTransfer.ID,
-                        //    IsActive = isTransfer.IsActive,
-                        //    LocationID = isTransfer.LocationID,
-                        //    OurCompanyID = isTransfer.OurCompanyID,
-                        //    RecordDate = isTransfer.RecordDate,
-                        //    RecordEmployeeID = isTransfer.RecordEmployeeID,
-                        //    RecordIP = isTransfer.RecordIP,
-                        //    ReferenceID = isTransfer.ReferenceID,
-                        //    SystemAmount = isTransfer.SystemAmount,
-                        //    SystemCurrency = isTransfer.SystemCurrency,
-                        //    UpdateDate = isTransfer.UpdateDate,
-                        //    UpdateEmployee = isTransfer.UpdateEmployee,
-                        //    UpdateIP = isTransfer.UpdateIP,
-                        //    SlipNumber = isTransfer.SlipNumber,
-                        //    SlipDocument = isTransfer.SlipDocument,
-                        //    SlipDate = isTransfer.SlipDate,
-                        //    StatusID = isTransfer.StatusID,
-                        //    TrackingNumber = isTransfer.TrackingNumber,
-                        //    Commission = isTransfer.Commission,
-                        //    UID = isTransfer.UID,
-                        //    EnvironmentID = isTransfer.EnvironmentID,
-                        //    ReferenceCode = isTransfer.ReferenceCode,
-                        //    ResultID = isTransfer.ResultID,
-                        //    SlipPath = isTransfer.SlipPath
-
-                        //};
+                        DocumentTransfer self = new DocumentTransfer()
+                        {
+                            ActionTypeID = isTransfer.ActionTypeID,
+                            ActionTypeName = isTransfer.ActionTypeName,
+                            Amount = isTransfer.Amount,
+                            FromCashID = isTransfer.FromCashID,
+                            ToBankAccountID = isTransfer.ToBankAccountID,
+                            Currency = isTransfer.Currency,
+                            DocumentDate = isTransfer.DocumentDate,
+                            Description = isTransfer.Description,
+                            DocumentNumber = isTransfer.DocumentNumber,
+                            ExchangeRate = isTransfer.ExchangeRate,
+                            ID = isTransfer.ID,
+                            IsActive = isTransfer.IsActive,
+                            FromLocationID = isTransfer.FromLocationID,
+                            ToLocationID = isTransfer.ToLocationID,
+                            OurCompanyID = isTransfer.OurCompanyID,
+                            RecordDate = isTransfer.RecordDate,
+                            RecordEmployeeID = isTransfer.RecordEmployeeID,
+                            RecordIP = isTransfer.RecordIP,
+                            ReferenceID = isTransfer.ReferenceID,
+                            SystemAmount = isTransfer.SystemAmount,
+                            SystemCurrency = isTransfer.SystemCurrency,
+                            UpdateDate = isTransfer.UpdateDate,
+                            UpdateEmployeeID = isTransfer.UpdateEmployeeID,
+                            UpdateIP = isTransfer.UpdateIP,
+                            StatusID = isTransfer.StatusID,
+                            UID = isTransfer.UID,
+                            EnvironmentID = isTransfer.EnvironmentID,
+                            ResultID = isTransfer.ResultID,
+                            CarrierEmployeeID = isTransfer.CarrierEmployeeID,
+                            FromBankAccountID = isTransfer.FromBankAccountID,
+                            FromCustomerID = isTransfer.FromCustomerID,
+                            FromDate = isTransfer.FromDate,
+                            FromEmployeeID = isTransfer.FromEmployeeID,
+                            FromRecordEmployeeID = isTransfer.FromRecordEmployeeID,
+                            ToCashID = isTransfer.ToCashID,
+                            ToCustomerID = isTransfer.ToCustomerID,
+                            ToDate = isTransfer.ToDate,
+                            ToEmployeeID = isTransfer.ToEmployeeID,
+                            ToRecordEmployeeID = isTransfer.ToRecordEmployeeID
+                        };
 
                         //var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == transfer.LocationID && x.Date == transfer.DocumentDate);
 

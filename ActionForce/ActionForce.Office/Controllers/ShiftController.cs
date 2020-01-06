@@ -359,7 +359,7 @@ namespace ActionForce.Office.Controllers
             model.CurrentEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == empid);
 
             model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.ShiftDate == datekey.DateKey && x.LocationID == id && x.EmployeeID == empid);
-            model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.ShiftDate == datekey.DateKey && x.LocationID == id && x.EmployeeID == empid);
+            model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.ShiftDate == datekey.DateKey && x.LocationID == id && x.EmployeeID == empid && x.IsWorkTime == true);
 
             return PartialView("_PartialEditEmployeeShift", model);
         }

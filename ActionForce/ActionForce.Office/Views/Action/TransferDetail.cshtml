@@ -35,7 +35,7 @@
                 </div>
 
 
-                @using (Html.BeginForm("AddNewTransfer", "Action", FormMethod.Post))
+                @using (Html.BeginForm("EditTransfer", "Action", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
 
@@ -94,10 +94,10 @@
                                     <input id="FromName" name="FromName" type="text" class="form-control" autocomplete="off" placeholder="Kaynak" required readonly value="@($"{Model.CurrentTransfer.FromCashName}{Model.CurrentTransfer.FromBankAccountName}{Model.CurrentTransfer.FromEmpFullName}{Model.CurrentTransfer.FromCustFullName}")">
                                 </div>
                                 <div class="col-sm-3">
-                                    <a href="#modalFLocationCashSelect" data-toggle="modal" class="btn btn-info" title="Kasa" onclick="FLocationCashSelect()"><i class="ion ion-md-keypad"></i></a>
-                                    <a href="#modalFLocationBankSelect" data-toggle="modal" class="btn btn-warning" title="Banka" onclick="FLocationBankSelect()"><i class="ion ion-md-card"></i></a>
-                                    <a href="#modalFLocationEmployeeSelect" data-toggle="modal" class="btn btn-success" title="Personel" onclick="FLocationEmployeeSelect()"><i class="ion ion-md-person"></i></a>
-                                    <a href="#modalFLocationCustomerSelect" data-toggle="modal" class="btn btn-primary" title="Müşteri" onclick="FLocationCustomerSelect()"><i class="ion ion-md-man"></i></a>
+                                    <a href="#modalFLocationCashSelect" data-toggle="modal" class="btn btn-xs btn-info" title="Kasa" onclick="FLocationCashSelect()"><i class="ion ion-md-keypad"></i></a>
+                                    <a href="#modalFLocationBankSelect" data-toggle="modal" class="btn btn-xs btn-warning" title="Banka" onclick="FLocationBankSelect()"><i class="ion ion-md-card"></i></a>
+                                    <a href="#modalFLocationEmployeeSelect" data-toggle="modal" class="btn btn-xs btn-success" title="Personel" onclick="FLocationEmployeeSelect()"><i class="ion ion-md-person"></i></a>
+                                    <a href="#modalFLocationCustomerSelect" data-toggle="modal" class="btn btn-xs btn-primary" title="Müşteri" onclick="FLocationCustomerSelect()"><i class="ion ion-md-man"></i></a>
                                 </div>
                             </div>
 
@@ -114,7 +114,7 @@
                                 <label for="FromRecEmpFullName" class="col-sm-3 col-form-label">Çıkış Yapan</label>
                                 <div class="col-sm-6">
                                     <input id="FromRecordEmployeeID" name="FromRecordEmployeeID" type="hidden" value="@(Model.CurrentTransfer.FromRecordEmployeeID)" />
-                                    <input id="FromRecEmpFullName" name="FromRecEmpFullName" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Çıkış Yapan Kişi" value="@(Model.CurrentTransfer.FromRecEmpFullName)" readonly>
+                                    <input id="FromRecEmpFullName" name="FromRecEmpFullName" type="text" class="form-control" autocomplete="off" placeholder="Çıkış Yapan Kişi" value="@(Model.CurrentTransfer.FromRecEmpFullName)" readonly>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -145,10 +145,10 @@
                                     <input id="ToName" name="ToName" type="text" class="form-control" autocomplete="off" placeholder="Hedef" required readonly value="@($"{Model.CurrentTransfer.ToCashName}{Model.CurrentTransfer.ToBankAccountName}{Model.CurrentTransfer.ToEmpFullName}{Model.CurrentTransfer.ToCustFullName}")">
                                 </div>
                                 <div class="col-sm-3">
-                                    <a href="#modalTLocationCashSelect" data-toggle="modal" class="btn btn-info" title="Kasa" onclick="TLocationCashSelect()"><i class="ion ion-md-keypad"></i></a>
-                                    <a href="#modalTLocationBankSelect" data-toggle="modal" class="btn btn-warning" title="Banka" onclick="TLocationBankSelect()"><i class="ion ion-md-card"></i></a>
-                                    <a href="#modalTLocationEmployeeSelect" data-toggle="modal" class="btn btn-success" title="Personel" onclick="TLocationEmployeeSelect()"><i class="ion ion-md-person"></i></a>
-                                    <a href="#modalTLocationCustomerSelect" data-toggle="modal" class="btn btn-primary" title="Müşteri" onclick="TLocationCustomerSelect()"><i class="ion ion-md-man"></i></a>
+                                    <a href="#modalTLocationCashSelect" data-toggle="modal" class="btn btn-xs btn-info" title="Kasa" onclick="TLocationCashSelect()"><i class="ion ion-md-keypad"></i></a>
+                                    <a href="#modalTLocationBankSelect" data-toggle="modal" class="btn btn-xs btn-warning" title="Banka" onclick="TLocationBankSelect()"><i class="ion ion-md-card"></i></a>
+                                    <a href="#modalTLocationEmployeeSelect" data-toggle="modal" class="btn btn-xs btn-success" title="Personel" onclick="TLocationEmployeeSelect()"><i class="ion ion-md-person"></i></a>
+                                    <a href="#modalTLocationCustomerSelect" data-toggle="modal" class="btn btn-xs btn-primary" title="Müşteri" onclick="TLocationCustomerSelect()"><i class="ion ion-md-man"></i></a>
                                 </div>
                             </div>
 
@@ -165,7 +165,7 @@
                                 <label for="ToRecEmpFullName" class="col-sm-3 col-form-label">Giriş Yapan</label>
                                 <div class="col-sm-6">
                                     <input id="ToRecordEmployeeID" name="ToRecordEmployeeID" type="hidden" value="@(Model.CurrentTransfer.ToRecordEmployeeID)" />
-                                    <input id="ToRecEmpFullName" name="ToRecEmpFullName" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Giriş Yapan Kişi" value="@(Model.CurrentTransfer.ToRecEmpFullName)" readonly>
+                                    <input id="ToRecEmpFullName" name="ToRecEmpFullName" type="text" class="form-control" autocomplete="off" placeholder="Giriş Yapan Kişi" value="@(Model.CurrentTransfer.ToRecEmpFullName)" readonly>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>

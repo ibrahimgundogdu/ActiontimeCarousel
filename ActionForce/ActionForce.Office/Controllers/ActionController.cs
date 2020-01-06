@@ -377,11 +377,57 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult EditTransfer(DocumentTransfer transfer)
+        {
+            Result<DocumentTransfer> result = new Result<DocumentTransfer>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
 
+            ActionControlModel model = new ActionControlModel();
 
+            var amount = Convert.ToDouble(transfer.Amount?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+            var date = Convert.ToDateTime(transfer.DocumentDate);
 
+            if (transfer != null && amount > 0)
+            {
+                DocumentManager manager = new DocumentManager();
 
+                TransferModel transfermodel = new TransferModel();
 
+                transfermodel.Amount = amount;
+                transfermodel.CarrierEmployeeID = transfer.CarrierEmployeeID;
+                transfermodel.Currency = transfer.Currency;
+                transfermodel.Description = transfer.Description;
+                transfermodel.DocumentDate = date;
+                transfermodel.FromBankID = transfer.FromBankAccountID;
+                transfermodel.FromCashID = transfer.FromCashID;
+                transfermodel.FromCustID = transfer.FromCustomerID;
+                transfermodel.FromEmplID = transfer.FromEmployeeID;
+                transfermodel.FromLocationID = transfer.FromLocationID;
+                transfermodel.ToBankID = transfer.ToBankAccountID;
+                transfermodel.ToCashID = transfer.ToCashID;
+                transfermodel.ToCustID = transfer.ToCustomerID;
+                transfermodel.ToEmplID = transfer.ToEmployeeID;
+                transfermodel.ToLocationID = transfer.ToLocationID;
+                transfermodel.UID = transfer.UID.Value;
+                transfermodel.ID = transfer.ID;
+
+                result = manager.EditTransfer(transfermodel, model.Authentication);
+            }
+            else
+            {
+                result.Message = "Tutar 0 dan büyük olduğuna emin olun";
+            }
+
+            TempData["result"] = result;
+
+            return RedirectToAction("TransferDetail", new { id = transfer.UID });
+        }
 
         [HttpPost]
         [AllowAnonymous]

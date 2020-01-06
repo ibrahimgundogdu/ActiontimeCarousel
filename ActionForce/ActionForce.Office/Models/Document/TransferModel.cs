@@ -23,5 +23,7 @@ namespace ActionForce.Office
         public int? CarrierEmployeeID { get; set; }
         public string Description { get; set; }
         public Guid UID { get; set; }
+        public long ID { get; set; }
+
     }
 }
