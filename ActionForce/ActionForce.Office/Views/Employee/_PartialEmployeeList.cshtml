@@ -1,34 +1,28 @@
 ﻿@model EmployeeControlModel
 
-<div class="card-body pd-0">
+<table class="table table-sm table-primary table-hover table-striped">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>#</th>
+            <th>İsim Soyisim</th>
 
-    <div class="contact-list">
-        <div class="table-responsive">
-            <table class="table table-primary table-hover table-striped mg-b-0">
-                <thead>
-                    <tr class="table-active">
-                        <th>#</th>
-                        <th>İsim</th>
-                        <th></th>
+        </tr>
+    </thead>
+    <tbody>
 
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var employee in Model.EmployeeList.OrderBy(x=> x.FullName).ToList())
-                    {
-                    <tr>
-                        <td>@(employee.EmployeeID)</td>
-                        <td scope="row" class="@(employee.IsActive == true ? "":"tx-danger")"><a href="#" onclick="EmployeeList(@employee.EmployeeID);"><b>@(employee.FullName)</b></a></td>
-                        <td class="tx-right font-weight-bold"><a href="#" class="text-danger" onclick="confirm('@employee.FullName employee silmek istediğine emin misin? Bu işlem geri alınamaz')? DeleteEmployee(@employee.EmployeeID) : false"><i class="fas fa-trash"></i></a></td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-
-</div>
+        @foreach (var item in Model.EmployeeList)
+        {
+            <tr style='@(item.IsActive == false ? "color: red" : "")'>
+                <td><span class="@(item.IsActive == true ? "tx-success":"tx-danger")">&#8226;</span></td>
+                <td><img src="http://office.ufegrup.com/img/Employee/@item.FotoFile" class="img wd-40 ht-40 rounded-circle" alt=""></td>
+                <td class="tx-sm-13 bold">@item.EmployeeID</td>
+                <td class="tx-sm-13"><a href="@("/Employee/Detail/" + @item.EmployeeID)">@item.FullName</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @if (Model.Result != null)
 {

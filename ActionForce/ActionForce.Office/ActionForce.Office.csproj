@@ -2558,9 +2558,8 @@
     <Content Include="Views\Action\TransferDetail.cshtml" />
     <Content Include="Views\Employee\Index.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeList.cshtml" />
-    <Content Include="Views\Employee\_PartialAddEmployee.cshtml" />
-    <Content Include="Views\Employee\_PartialAddLocation.cshtml" />
-    <Content Include="Views\Employee\_PartialLocationList.cshtml" />
+    <Content Include="Views\Employee\AddEmployee.cshtml" />
+    <Content Include="Views\Employee\Detail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -7,95 +7,160 @@
 
 }
 
-
-
-<div class="row no-gutters">
-
-
-
-    <div class="col-md-4 mg-t-0 pd-r-0 pd-l-0 pd-t-0">
-        <div id="scrollEmployee" class="card-body pd-0  pos-relative bd ht-100v">
-
-            <div class="contact-list">
-
-                <div class="row pd-5">
-                    <div class="col-6">
-                        <div class="form-group mg-b-0 align-items-end">
-                            <div class="search-form">
-                                <input id="srcEmployeeName" type="search" class="form-control form-control-sm" placeholder="İsim Ara">
-                                <button id="srcEmployee" onclick="EmployeeSearch()" class="btn btn-sm" type="button"><i data-feather="search"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="btn-group btn-group-sm float-right" role="group">
-                            <button type="button" class="btn btn-light" onclick="EmployeeSearch('all');">Tümü</button>
-                            <button type="button" class="btn btn-primary" onclick="EmployeeSearch('act');">Aktifler</button>
-                            <button type="button" class="btn btn-secondary" onclick="EmployeeSearch('psv');">Pasifler</button>
-                        </div>
-                    </div>
-                </div>
-
-
-
-                <div class="table-responsive" id="EmployeeList">
-                    @{Html.RenderPartial("_PartialEmployeeList", Model);}
-                </div>
-            </div>
-
-
-        </div>
-
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">Çalışanlar</span>
     </div>
-    <div class="col-md-8 mg-t-0 pd-r-0 pd-l-0 pd-t-0">
-        <div class="df-example demo-forms pd-5">
-            <div class="card ht-100p" id="AddEmployee">
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div>
+<div class="content-body">
+    <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                    <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Çalışan İşlemleri</li>
+                </ol>
+            </nav>
+            <h4 class="mg-b-0 tx-spacing--1">Çalışanlar</h4>
+        </div>
+        <div class="d-none d-md-block">
+            <a href="/Employee/AddEmployee" class="btn btn-primary btn-uppercase"><i data-feather="plus-square"></i> &nbsp; Çalışan Ekle</a>
+        </div>
+    </div>
 
+
+    <div class="row pd-5">
+        <div class="col-3">
+            <div class="form-group mg-b-0 align-items-end">
+                <div class="search-form">
+                    <input id="srcEmployeeName" type="search" class="form-control form-control-sm" placeholder="İsim Ara">
+                    <button id="srcEmployee" onclick="EmployeeSearch()" class="btn btn-sm" type="button"><i data-feather="search"></i></button>
+                </div>
             </div>
         </div>
-        <div class="df-example demo-forms pd-5">
-            <div class="card ht-100p" id="AddLocation">
-
+        <div class="col-3">
+            <div class="form-group mg-b-0 align-items-end">
+                <div class="search-form">
+                    <select class="form-control select2" id="LocationID" name="LocationID" required>
+                        @foreach (var item in Model.LocationList)
+                        {
+                            <option value="@item.LocationID">@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                        }
+                    </select>
+                </div>
             </div>
         </div>
+        <div class="col-3">
+            <div class="form-group mg-b-0 align-items-end">
+                <div class="search-form">
+                    <select class="form-control select2" id="RoleID" name="RoleID" required>
+                        @foreach (var item in Model.RoleList)
+                        {
+                            <option value="@item.RoleID">@($"{item.RoleName}" )</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="btn-group btn-group-sm float-right" role="group">
+                <button type="button" class="btn btn-light" onclick="EmployeeSearch('all');">Tümü</button>
+                <button type="button" class="btn btn-primary" onclick="EmployeeSearch('act');">Aktifler</button>
+                <button type="button" class="btn btn-secondary" onclick="EmployeeSearch('psv');">Pasifler</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div>
+        <div class="table" id="EmployeeList">
+            @{Html.RenderPartial("_PartialEmployeeList", Model);}
+        </div>
+
+
+        <footer class="content-footer">
+            <div>
+                <span>&copy; @DateTime.Now.Year UFE Group LLC </span>
+            </div>
+
+        </footer>
+
     </div>
 </div>
 
 
-
 @section scripts {
-
 
     <script>
         $(function () {
-            'use strict'
-            //$(".content").addClass("app-contact");
 
-
-            $('.shifttime').mask('00:00');
-            $('.shiftdate').mask('0000-00-00');
-
-
-            const scrollEmployee = new PerfectScrollbar('#scrollEmployee', {
-                suppressScrollX: true
+            $('.select2').select2({
+                placeholder: 'Lokasyon Seçiminiz',
+                searchInputPlaceholder: 'Search options'
             });
 
-            $('#DateStart').datepicker({
+            var dateFormat = 'yy-mm-dd',
+                from = $('#dateFrom')
+                    .datepicker({
+                        defaultDate: '+1w',
+                        numberOfMonths: 2,
+                        dateFormat: "yy-mm-dd",
+                        dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                        monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                        firstDay: 1
+                    })
+                    .on('change', function () {
+                        to.datepicker('option', 'minDate', getDate(this));
+                    }),
+                to = $('#dateTo').datepicker({
+                    defaultDate: '+1w',
+                    numberOfMonths: 2,
+                    dateFormat: "yy-mm-dd",
+                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                    firstDay: 1
+                })
+                    .on('change', function () {
+                        from.datepicker('option', 'maxDate', getDate(this));
+                    });
+
+            $('#DocumentDate').datepicker({
                 dateFormat: "yy-mm-dd",
                 dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
             });
 
-        });
 
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+
+            }
+
+        });
         $(document).ready(function () {
             $('#srcEmployeeName').keypress(function (e) {
                 if (e.keyCode == 13)
-                    UnitSearch();
+                    EmployeeSearch();
             });
         });
-
+        $(document).ready(function () {
+            $('#srcEmployeeName').keypress(function (e) {
+                if (e.keyCode == 13)
+                    EmployeeSearch();
+            });
+        });
         function EmployeeSearch(active) {
 
             var skey = $("#srcEmployeeName").val();
@@ -108,39 +173,47 @@
                 $("#EmployeeList").html(d);
             });
         }
-
-        function EmployeeList(id) {
-            $.ajax({
-                method: "GET",
-                url: "/Employee/EmployeeList",
-                data: { id: id }
-            }).done(function (d) {
-                $("#AddEmployee").html(d);
-            });
-        }
-        function LocationList(id) {
-            $.ajax({
-                method: "GET",
-                url: "/Employee/LocationList",
-                data: { id: id }
-            }).done(function (d) {
-                $("#AddLocation").html(d);
-            });
-        }
-        //function DeleteEmployee(id) {
+        //function DeleteCashSale(id) {
         //    $.ajax({
         //        method: "GET",
-        //        url: "/Employee/DeleteEmployee",
+        //        url: "/Cash/DeleteCashSale",
         //        data: { id: id }
         //    }).done(function (d) {
-        //        $("#EmployeeList").html(d);
+        //        $("#DeleteCashSale").html(d);
         //    });
         //}
+
     </script>
+    <script>
+        $(function () {
+            'use strict'
+
+            $('.off-canvas-menu').on('click', function (e) {
+                e.preventDefault();
+                var target = $(this).attr('href');
+                $(target).addClass('show');
+            });
 
 
+            $('.off-canvas .close').on('click', function (e) {
+                e.preventDefault();
+                $(this).closest('.off-canvas').removeClass('show');
+            })
+
+            $(document).on('click touchstart', function (e) {
+                e.stopPropagation();
+
+                if (!$(e.target).closest('.off-canvas-menu').length) {
+                    var offCanvas = $(e.target).closest('.off-canvas').length;
+                    if (!offCanvas) {
+                        $('.off-canvas.show').addClass('show');
+                    }
+                }
+            });
 
 
+        });
+    </script>
     @if (Model.Result != null) //
     {
         <script type="text/javascript">
@@ -155,4 +228,3 @@
         </script>
     }
 }
-

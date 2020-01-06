@@ -12,34 +12,71 @@ namespace ActionForce.Office.Controllers
     {
         // GET: Employee
         [AllowAnonymous]
-        public ActionResult Index()
+        public ActionResult Index(int? locationId)
         {
             EmployeeControlModel model = new EmployeeControlModel();
 
-            if (TempData["result"] != null)
+            
+            if (TempData["filter"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.LocationID = locationId != null ? locationId : Db.Location.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).LocationID;
+                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateTime.Now.Date;
+                model.Filters = filterModel;
             }
 
-            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true);
             model.ShiftTypeList = Db.ShiftType.Where(x => x.IsActive == true).ToList();
             model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
             model.RoleList = Db.Role.Where(x => x.IsActive == true).ToList();
             model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
 
             return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult Filter(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("Index", "Employee");
         }
 
         [AllowAnonymous]
         public PartialViewResult EmployeeSearch(string key, string active) //
         {
             EmployeeControlModel model = new EmployeeControlModel();
-
-            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true);
             model.ShiftTypeList = Db.ShiftType.Where(x => x.IsActive == true).ToList();
             model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
             model.RoleList = Db.Role.Where(x => x.IsActive == true).ToList();
             model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
 
             if (!string.IsNullOrEmpty(key))
             {
