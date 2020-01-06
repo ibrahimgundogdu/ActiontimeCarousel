@@ -1,0 +1,39 @@
+﻿@model EmployeeControlModel
+
+<table class="table table-sm table-primary table-hover table-striped">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>#</th>
+            <th>İsim Soyisim</th>
+
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var item in Model.EmployeeList)
+        {
+            <tr style='@(item.IsActive == false ? "color: red" : "")'>
+                <td><span class="@(item.IsActive == true ? "tx-success":"tx-danger")">&#8226;</span></td>
+                <td><img src="http://office.ufegrup.com/img/Employee/@item.FotoFile" class="img wd-40 ht-40 rounded-circle" alt=""></td>
+                <td class="tx-sm-13 bold">@item.EmployeeID</td>
+                <td class="tx-sm-13"><a href="@("/Employee/Detail/" + @item.EmployeeID)">@item.FullName</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Result != null)
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
+}

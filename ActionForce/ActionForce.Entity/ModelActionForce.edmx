@@ -3977,6 +3977,95 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeCashActions' does 
           <Property Name="ActionDocumentNumber" Type="nvarchar" MaxLength="16" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeLocation' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VEmployeeLocation">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="BreakStatus" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="IdentityNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Title" Type="nvarchar" MaxLength="150" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="FullNameSearch" Type="nvarchar" MaxLength="4000" />
+          <Property Name="EMail" Type="nvarchar" MaxLength="150" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+          <Property Name="Mobile2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Whatsapp" Type="nvarchar" MaxLength="50" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="FotoFile" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="Stage" Type="int" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoleLevel" Type="int" />
+          <Property Name="IsMaster" Type="bit" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="IsTemp" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="LocalDate" Type="date" />
+          <Property Name="LocalDateTime" Type="datetime" />
+          <Property Name="ShiftDate" Type="date" />
+          <Property Name="ShiftDateStart" Type="datetime" />
+          <Property Name="ShiftDateEnd" Type="datetime" />
+          <Property Name="ShiftDuration" Type="time" Precision="0" />
+          <Property Name="BreakStart" Type="time" Precision="0" />
+          <Property Name="BreakEnd" Type="time" Precision="0" />
+          <Property Name="BreakDuration" Type="time" Precision="0" />
+          <Property Name="Status" Type="int" />
+          <Property Name="BreakStatus" Type="int" Nullable="false" />
+          <Property Name="LocationCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="LocationTypeID" Type="int" />
+          <Property Name="LocationTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LocationName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LocationNameSearch" Type="nvarchar" MaxLength="4000" />
+          <Property Name="LocationDescription" Type="nvarchar" MaxLength="500" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="Latitude" Type="nvarchar" MaxLength="20" />
+          <Property Name="Longitude" Type="nvarchar" MaxLength="20" />
+          <Property Name="Timezone" Type="int" />
+          <Property Name="LocationIsActive" Type="bit" />
+          <Property Name="SortBy" Type="char" MaxLength="10" />
+          <Property Name="EnforcedWarning" Type="ntext" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="20" />
+          <Property Name="PriceCatID" Type="int" />
+          <Property Name="Weight" Type="nvarchar" MaxLength="20" />
+          <Property Name="Distance" Type="nvarchar" MaxLength="20" />
+          <Property Name="DateKey" Type="date" />
+          <Property Name="LocationStatus" Type="int" />
+          <Property Name="IsDismissal" Type="bit" />
+          <Property Name="EmployeeUID" Type="uniqueidentifier" />
+          <Property Name="LocationUID" Type="uniqueidentifier" />
+          <Property Name="ERoleStage" Type="int" />
+          <Property Name="ERoleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ERoleLevel" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeLocationList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VEmployeeLocationList">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="OurCompanyID" />
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="LocationID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LocationName" Type="nvarchar" MaxLength="50" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeSalary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VEmployeeSalary">
           <Key>
@@ -4012,6 +4101,37 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeSalaryDist' does n
           <Property Name="ExtendMultiplyRate" Type="float" />
           <Property Name="FullNameSearch" Type="nvarchar" MaxLength="4000" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'db293_ActionTimeDb.dbo.VEmployeeShift' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="VEmployeeShift">
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="ShiftDate" Type="date" />
+          <Property Name="ShiftDuration" Type="time" Precision="0" />
+          <Property Name="EnvelopeFile" Type="varchar" MaxLength="50" />
+          <Property Name="EnvelopeFileURL" Type="varchar" MaxLength="86" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="LocationName" Type="nvarchar" MaxLength="602" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="10" />
+          <Property Name="Year" Type="int" />
+          <Property Name="Month" Type="int" />
+          <Property Name="Week" Type="int" />
+          <Property Name="Day" Type="int" />
+          <Property Name="DayOfYear" Type="int" />
+          <Property Name="MonthName" Type="nvarchar" MaxLength="50" />
+          <Property Name="DayName" Type="nvarchar" MaxLength="50" />
+          <Property Name="MonthNameTR" Type="nvarchar" MaxLength="50" />
+          <Property Name="DayNameTR" Type="nvarchar" MaxLength="50" />
+          <Property Name="Quarter" Type="int" />
+          <Property Name="WeekYear" Type="int" />
+          <Property Name="WeekNumber" Type="int" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="Total" Type="float" />
+          <Property Name="Cash" Type="float" />
+          <Property Name="Credit" Type="float" />
+        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VLocation">
@@ -5717,6 +5837,83 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeCashActions].[ActionDocumentNumber] AS [ActionDocumentNumber]
     FROM [dbo].[VEmployeeCashActions] AS [VEmployeeCashActions]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VEmployeeLocation" EntityType="Self.VEmployeeLocation" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VEmployeeLocation].[ID] AS [ID], 
+    [VEmployeeLocation].[EmployeeID] AS [EmployeeID], 
+    [VEmployeeLocation].[LocationID] AS [LocationID], 
+    [VEmployeeLocation].[IdentityNumber] AS [IdentityNumber], 
+    [VEmployeeLocation].[Title] AS [Title], 
+    [VEmployeeLocation].[FullName] AS [FullName], 
+    [VEmployeeLocation].[FullNameSearch] AS [FullNameSearch], 
+    [VEmployeeLocation].[EMail] AS [EMail], 
+    [VEmployeeLocation].[Mobile] AS [Mobile], 
+    [VEmployeeLocation].[Mobile2] AS [Mobile2], 
+    [VEmployeeLocation].[Whatsapp] AS [Whatsapp], 
+    [VEmployeeLocation].[Username] AS [Username], 
+    [VEmployeeLocation].[Password] AS [Password], 
+    [VEmployeeLocation].[FotoFile] AS [FotoFile], 
+    [VEmployeeLocation].[RoleID] AS [RoleID], 
+    [VEmployeeLocation].[Stage] AS [Stage], 
+    [VEmployeeLocation].[RoleName] AS [RoleName], 
+    [VEmployeeLocation].[RoleLevel] AS [RoleLevel], 
+    [VEmployeeLocation].[IsMaster] AS [IsMaster], 
+    [VEmployeeLocation].[OurCompanyID] AS [OurCompanyID], 
+    [VEmployeeLocation].[Description] AS [Description], 
+    [VEmployeeLocation].[IsTemp] AS [IsTemp], 
+    [VEmployeeLocation].[IsActive] AS [IsActive], 
+    [VEmployeeLocation].[LocalDate] AS [LocalDate], 
+    [VEmployeeLocation].[LocalDateTime] AS [LocalDateTime], 
+    [VEmployeeLocation].[ShiftDate] AS [ShiftDate], 
+    [VEmployeeLocation].[ShiftDateStart] AS [ShiftDateStart], 
+    [VEmployeeLocation].[ShiftDateEnd] AS [ShiftDateEnd], 
+    [VEmployeeLocation].[ShiftDuration] AS [ShiftDuration], 
+    [VEmployeeLocation].[BreakStart] AS [BreakStart], 
+    [VEmployeeLocation].[BreakEnd] AS [BreakEnd], 
+    [VEmployeeLocation].[BreakDuration] AS [BreakDuration], 
+    [VEmployeeLocation].[Status] AS [Status], 
+    [VEmployeeLocation].[BreakStatus] AS [BreakStatus], 
+    [VEmployeeLocation].[LocationCode] AS [LocationCode], 
+    [VEmployeeLocation].[LocationTypeID] AS [LocationTypeID], 
+    [VEmployeeLocation].[LocationTypeName] AS [LocationTypeName], 
+    [VEmployeeLocation].[LocationName] AS [LocationName], 
+    [VEmployeeLocation].[LocationNameSearch] AS [LocationNameSearch], 
+    [VEmployeeLocation].[LocationDescription] AS [LocationDescription], 
+    [VEmployeeLocation].[State] AS [State], 
+    [VEmployeeLocation].[Latitude] AS [Latitude], 
+    [VEmployeeLocation].[Longitude] AS [Longitude], 
+    [VEmployeeLocation].[Timezone] AS [Timezone], 
+    [VEmployeeLocation].[LocationIsActive] AS [LocationIsActive], 
+    [VEmployeeLocation].[SortBy] AS [SortBy], 
+    [VEmployeeLocation].[EnforcedWarning] AS [EnforcedWarning], 
+    [VEmployeeLocation].[Currency] AS [Currency], 
+    [VEmployeeLocation].[PriceCatID] AS [PriceCatID], 
+    [VEmployeeLocation].[Weight] AS [Weight], 
+    [VEmployeeLocation].[Distance] AS [Distance], 
+    [VEmployeeLocation].[DateKey] AS [DateKey], 
+    [VEmployeeLocation].[LocationStatus] AS [LocationStatus], 
+    [VEmployeeLocation].[IsDismissal] AS [IsDismissal], 
+    [VEmployeeLocation].[EmployeeUID] AS [EmployeeUID], 
+    [VEmployeeLocation].[LocationUID] AS [LocationUID], 
+    [VEmployeeLocation].[ERoleStage] AS [ERoleStage], 
+    [VEmployeeLocation].[ERoleName] AS [ERoleName], 
+    [VEmployeeLocation].[ERoleLevel] AS [ERoleLevel]
+    FROM [dbo].[VEmployeeLocation] AS [VEmployeeLocation]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VEmployeeLocationList" EntityType="Self.VEmployeeLocationList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VEmployeeLocationList].[ID] AS [ID], 
+    [VEmployeeLocationList].[OurCompanyID] AS [OurCompanyID], 
+    [VEmployeeLocationList].[EmployeeID] AS [EmployeeID], 
+    [VEmployeeLocationList].[LocationID] AS [LocationID], 
+    [VEmployeeLocationList].[FullName] AS [FullName], 
+    [VEmployeeLocationList].[RoleName] AS [RoleName], 
+    [VEmployeeLocationList].[LocationName] AS [LocationName], 
+    [VEmployeeLocationList].[TypeName] AS [TypeName], 
+    [VEmployeeLocationList].[State] AS [State], 
+    [VEmployeeLocationList].[Description] AS [Description]
+    FROM [dbo].[VEmployeeLocationList] AS [VEmployeeLocationList]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VEmployeeSalary" EntityType="Self.VEmployeeSalary" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VEmployeeSalary].[ID] AS [ID], 
@@ -6433,6 +6630,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VDocumentTransfer" EntityType="db293_ActionTimeDbModel.VDocumentTransfer" />
           <EntitySet Name="VCash" EntityType="db293_ActionTimeDbModel.VCash" />
           <EntitySet Name="DocumentTransferStatus" EntityType="db293_ActionTimeDbModel.DocumentTransferStatus" />
+          <EntitySet Name="VEmployeeLocation" EntityType="db293_ActionTimeDbModel.VEmployeeLocation" />
+          <EntitySet Name="VEmployeeLocationList" EntityType="db293_ActionTimeDbModel.VEmployeeLocationList" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -10869,6 +11068,91 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SortBy" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
+        <EntityType Name="VEmployeeLocation">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="BreakStatus" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="IdentityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FullNameSearch" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="EMail" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Whatsapp" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FotoFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="Stage" Type="Int32" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleLevel" Type="Int32" />
+          <Property Name="IsMaster" Type="Boolean" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsTemp" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="LocalDate" Type="DateTime" Precision="0" />
+          <Property Name="LocalDateTime" Type="DateTime" Precision="3" />
+          <Property Name="ShiftDate" Type="DateTime" Precision="0" />
+          <Property Name="ShiftDateStart" Type="DateTime" Precision="3" />
+          <Property Name="ShiftDateEnd" Type="DateTime" Precision="3" />
+          <Property Name="ShiftDuration" Type="Time" Precision="0" />
+          <Property Name="BreakStart" Type="Time" Precision="0" />
+          <Property Name="BreakEnd" Type="Time" Precision="0" />
+          <Property Name="BreakDuration" Type="Time" Precision="0" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="BreakStatus" Type="Int32" Nullable="false" />
+          <Property Name="LocationCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="LocationTypeID" Type="Int32" />
+          <Property Name="LocationTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LocationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LocationNameSearch" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="LocationDescription" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Longitude" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Timezone" Type="Int32" />
+          <Property Name="LocationIsActive" Type="Boolean" />
+          <Property Name="SortBy" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="EnforcedWarning" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Currency" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PriceCatID" Type="Int32" />
+          <Property Name="Weight" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Distance" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DateKey" Type="DateTime" Precision="0" />
+          <Property Name="LocationStatus" Type="Int32" />
+          <Property Name="IsDismissal" Type="Boolean" />
+          <Property Name="EmployeeUID" Type="Guid" />
+          <Property Name="LocationUID" Type="Guid" />
+          <Property Name="ERoleStage" Type="Int32" />
+          <Property Name="ERoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ERoleLevel" Type="Int32" />
+        </EntityType>
+        <EntityType Name="VEmployeeLocationList">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="OurCompanyID" />
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="LocationID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LocationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -15245,6 +15529,87 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="SortBy" ColumnName="SortBy" />
                 <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VEmployeeLocation">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeLocation">
+              <MappingFragment StoreEntitySet="VEmployeeLocation">
+                <ScalarProperty Name="ERoleLevel" ColumnName="ERoleLevel" />
+                <ScalarProperty Name="ERoleName" ColumnName="ERoleName" />
+                <ScalarProperty Name="ERoleStage" ColumnName="ERoleStage" />
+                <ScalarProperty Name="LocationUID" ColumnName="LocationUID" />
+                <ScalarProperty Name="EmployeeUID" ColumnName="EmployeeUID" />
+                <ScalarProperty Name="IsDismissal" ColumnName="IsDismissal" />
+                <ScalarProperty Name="LocationStatus" ColumnName="LocationStatus" />
+                <ScalarProperty Name="DateKey" ColumnName="DateKey" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="PriceCatID" ColumnName="PriceCatID" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="EnforcedWarning" ColumnName="EnforcedWarning" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="LocationIsActive" ColumnName="LocationIsActive" />
+                <ScalarProperty Name="Timezone" ColumnName="Timezone" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="LocationDescription" ColumnName="LocationDescription" />
+                <ScalarProperty Name="LocationNameSearch" ColumnName="LocationNameSearch" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="LocationTypeName" ColumnName="LocationTypeName" />
+                <ScalarProperty Name="LocationTypeID" ColumnName="LocationTypeID" />
+                <ScalarProperty Name="LocationCode" ColumnName="LocationCode" />
+                <ScalarProperty Name="BreakStatus" ColumnName="BreakStatus" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="BreakDuration" ColumnName="BreakDuration" />
+                <ScalarProperty Name="BreakEnd" ColumnName="BreakEnd" />
+                <ScalarProperty Name="BreakStart" ColumnName="BreakStart" />
+                <ScalarProperty Name="ShiftDuration" ColumnName="ShiftDuration" />
+                <ScalarProperty Name="ShiftDateEnd" ColumnName="ShiftDateEnd" />
+                <ScalarProperty Name="ShiftDateStart" ColumnName="ShiftDateStart" />
+                <ScalarProperty Name="ShiftDate" ColumnName="ShiftDate" />
+                <ScalarProperty Name="LocalDateTime" ColumnName="LocalDateTime" />
+                <ScalarProperty Name="LocalDate" ColumnName="LocalDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsTemp" ColumnName="IsTemp" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+                <ScalarProperty Name="RoleLevel" ColumnName="RoleLevel" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="Stage" ColumnName="Stage" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="FotoFile" ColumnName="FotoFile" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Whatsapp" ColumnName="Whatsapp" />
+                <ScalarProperty Name="Mobile2" ColumnName="Mobile2" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="FullNameSearch" ColumnName="FullNameSearch" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="IdentityNumber" ColumnName="IdentityNumber" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VEmployeeLocationList">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeLocationList">
+              <MappingFragment StoreEntitySet="VEmployeeLocationList">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
