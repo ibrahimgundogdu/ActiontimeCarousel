@@ -183,7 +183,7 @@
                                                                 <input type="text" id="N2AEUR" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "EUR")?.Amount?.ToString("N2"))">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="N2DEUR" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "EUR").Description)" />
+                                                                <input type="text" id="N2DEUR" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 2 && x.Currency == "EUR")?.Description)" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCashSale(@Model.CurrentDayResult.ID,'EUR'):false;">
@@ -197,7 +197,7 @@
                                                                 <input type="text" id="I5AEUR" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "EUR")?.Amount?.ToString("N2"))">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="I5DEUR" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "EUR").Description)" />
+                                                                <input type="text" id="I5DEUR" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 5 && x.Currency == "EUR")?.Description)" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCashSaleRefund(@Model.CurrentDayResult.ID,'EUR'):false;">

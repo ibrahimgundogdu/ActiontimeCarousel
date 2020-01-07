@@ -3919,32 +3919,9 @@ namespace ActionForce.Office
                             ToRecordEmployeeID = isTransfer.ToRecordEmployeeID
                         };
 
-                        //var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == transfer.LocationID && x.Date == transfer.DocumentDate);
+                        // önce mevcut kayıtlar silinir
 
 
-                        //isTransfer.ReferenceID = transfer.ReferanceID;
-                        //isTransfer.Commission = transfer.Commission;
-                        //isTransfer.Date = transfer.DocumentDate;
-                        //isTransfer.FromCashID = cash.ID;
-                        //isTransfer.SlipDate = transfer.SlipDate;
-                        //isTransfer.SlipNumber = transfer.SlipNumber;
-                        //isTransfer.ToBankAccountID = transfer.ToBankID ?? (int?)null;
-                        //isTransfer.Amount = transfer.Amount;
-                        //isTransfer.Description = transfer.Description;
-                        //isTransfer.ExchangeRate = transfer.ExchangeRate != null ? transfer.ExchangeRate : self.ExchangeRate;
-                        //isTransfer.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
-                        //isTransfer.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
-                        //isTransfer.UpdateIP = OfficeHelper.GetIPAddress();
-                        //isTransfer.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == transfer.Currency ? transfer.Amount : transfer.Amount * isTransfer.ExchangeRate;
-                        //isTransfer.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
-                        //isTransfer.StatusID = transfer.StatusID;
-                        //isTransfer.TrackingNumber = transfer.TrackingNumber;
-                        //isTransfer.ReferenceCode = transfer.ReferanceCode;
-                        //isTransfer.LocationID = transfer.LocationID;
-                        //isTransfer.Currency = transfer.Currency;
-                        //isTransfer.IsActive = transfer.IsActive;
-                        //isTransfer.SlipDocument = !string.IsNullOrEmpty(transfer.SlipDocument) ? transfer.SlipDocument : self.SlipDocument;
-                        //isTransfer.SlipPath = !string.IsNullOrEmpty(transfer.SlipPath) ? transfer.SlipPath : self.SlipPath;
 
 
 

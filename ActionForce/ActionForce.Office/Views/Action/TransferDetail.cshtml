@@ -197,7 +197,7 @@
                                     <input id="SystemCurrency" name="SystemCurrency" type="text" class="form-control" autocomplete="off" placeholder="Sistem Birimi" value="@(Model.CurrentTransfer.SystemCurrency)" readonly>
                                 </div>
                                 <div class="col-sm-2">
-                                    <input id="ExchangeRate" name="ExchangeRate" type="text" class="form-control money" autocomplete="off" placeholder="Döviz Kuru" value="@(Model.CurrentTransfer.ExchangeRate?.ToString("N2"))" readonly>
+                                    <input id="ExchangeRate" name="ExchangeRate" type="text" class="form-control money" autocomplete="off" placeholder="Döviz Kuru" value="@(Model.CurrentTransfer.ExchangeRate?.ToString("N2"))">
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -227,9 +227,9 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="CarrierEmployeeID" class="col-sm-3 col-form-label">Aşaması</label>
+                                <label for="StatusID" class="col-sm-3 col-form-label">Aşaması</label>
                                 <div class="col-sm-6">
-                                    <select class="form-control" id="CarrierEmployeeID" name="CarrierEmployeeID" required>
+                                    <select class="form-control" id="StatusID" name="StatusID" required>
                                         @foreach (var item in Model.TransferStatus.OrderBy(x => x.SortBy))
                                         {
                                             <option value="@item.ID" @(item.ID == Model.CurrentTransfer.StatusID ? "selected" : "")>@($"{item.StatusName.Trim()}" )</option>
@@ -244,7 +244,7 @@
                                 <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
                                 <div class="col-sm-6">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="IsActive" value="1" @(Model.CurrentTransfer.IsActive == true ? "checked" : "")>
+                                        <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" @(Model.CurrentTransfer.IsActive == true ? "checked" : "")>
                                         <label class="custom-control-label" for="IsActive">Aktif</label>
                                     </div>
                                 </div>
@@ -255,8 +255,8 @@
                             <div class="form-group row mg-b-0">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-6">
-                                    <input id="ID" type="hidden" value="@(Model.CurrentTransfer.ID)" />
-                                    <input id="UID" type="hidden" value="@(Model.CurrentTransfer.UID)" />
+                                    <input id="ID" name="ID" type="hidden" value="@(Model.CurrentTransfer.ID)" />
+                                    <input id="UID" name="UID" type="hidden" value="@(Model.CurrentTransfer.UID)" />
                                     <button type="submit" class="btn btn-primary btn-block">Cari Virman Güncelle</button>
                                 </div>
                                 <div class="col-sm-3">

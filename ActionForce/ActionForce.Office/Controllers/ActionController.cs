@@ -379,7 +379,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult EditTransfer(DocumentTransfer transfer)
+        public ActionResult EditTransfer(editTransfer transfer)
         {
             Result<DocumentTransfer> result = new Result<DocumentTransfer>()
             {
@@ -391,7 +391,14 @@ namespace ActionForce.Office.Controllers
             ActionControlModel model = new ActionControlModel();
 
             var amount = Convert.ToDouble(transfer.Amount?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+            var exchangerate = Convert.ToDouble(transfer.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
             var date = Convert.ToDateTime(transfer.DocumentDate);
+            bool isactive = false;
+
+            if (!string.IsNullOrEmpty(transfer.IsActive) && transfer.IsActive == "1")
+            {
+                isactive = true;
+            }
 
             if (transfer != null && amount > 0)
             {
@@ -404,18 +411,22 @@ namespace ActionForce.Office.Controllers
                 transfermodel.Currency = transfer.Currency;
                 transfermodel.Description = transfer.Description;
                 transfermodel.DocumentDate = date;
-                transfermodel.FromBankID = transfer.FromBankAccountID;
+                transfermodel.FromBankID = transfer.FromBankID;
                 transfermodel.FromCashID = transfer.FromCashID;
-                transfermodel.FromCustID = transfer.FromCustomerID;
-                transfermodel.FromEmplID = transfer.FromEmployeeID;
+                transfermodel.FromCustID = transfer.FromCustID;
+                transfermodel.FromEmplID = transfer.FromEmplID;
                 transfermodel.FromLocationID = transfer.FromLocationID;
-                transfermodel.ToBankID = transfer.ToBankAccountID;
+                transfermodel.ToBankID = transfer.ToBankID;
                 transfermodel.ToCashID = transfer.ToCashID;
-                transfermodel.ToCustID = transfer.ToCustomerID;
-                transfermodel.ToEmplID = transfer.ToEmployeeID;
+                transfermodel.ToCustID = transfer.ToCustID;
+                transfermodel.ToEmplID = transfer.ToEmplID;
                 transfermodel.ToLocationID = transfer.ToLocationID;
                 transfermodel.UID = transfer.UID.Value;
                 transfermodel.ID = transfer.ID;
+                transfermodel.ExchangeRate = exchangerate;
+                transfermodel.IsActive = isactive;
+                transfermodel.StatusID = transfer.StatusID.Value;
+
 
                 result = manager.EditTransfer(transfermodel, model.Authentication);
             }

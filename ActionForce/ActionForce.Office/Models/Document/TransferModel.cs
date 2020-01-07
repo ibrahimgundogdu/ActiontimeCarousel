@@ -25,5 +25,10 @@ namespace ActionForce.Office
         public Guid UID { get; set; }
         public long ID { get; set; }
 
+        // for edit
+        public double ExchangeRate { get; set; }
+        public int StatusID { get; set; }
+        public bool IsActive { get; set; }
+
     }
 }
