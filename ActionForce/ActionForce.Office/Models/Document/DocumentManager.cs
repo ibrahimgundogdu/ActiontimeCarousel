@@ -2356,6 +2356,7 @@ namespace ActionForce.Office
                         if (empaction != null)
                         {
                             empaction.Collection = isEarn.TotalAmount;
+                            empaction.Payment = 0;
                             empaction.Currency = isEarn.Currency;
                             empaction.ProcessDate = isEarn.Date;
                             empaction.UpdateDate = isEarn.UpdateDate;
@@ -2661,7 +2662,8 @@ namespace ActionForce.Office
                         if (empaction != null)
                         {
                             empaction.ProcessDate = isPayment.Date;
-                            empaction.Collection = isPayment.Amount;
+                            empaction.Collection = 0;
+                            empaction.Payment = isPayment.Amount;
                             empaction.Currency = isPayment.Currency;
                             empaction.EmployeeID = isPayment.ToEmployeeID;
                             empaction.UpdateDate = isPayment.UpdateDate;
