@@ -48,6 +48,10 @@ namespace ActionForce.Entity
         public Nullable<int> ShiftTypeID { get; set; }
         public Nullable<int> StatusID { get; set; }
         public Nullable<int> RoleGroupID { get; set; }
+        public string RecordIP { get; set; }
+        public Nullable<int> UpdateEmployeeID { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
+        public string UpdateIP { get; set; }
     
         public virtual Role Role { get; set; }
         public virtual RoleGroup RoleGroup { get; set; }

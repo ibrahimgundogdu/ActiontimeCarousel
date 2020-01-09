@@ -235,6 +235,8 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentTransferStatus" Width="1.5" PointX="49.375" PointY="13.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeLocation" Width="1.5" PointX="50.375" PointY="41.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeLocationList" Width="1.5" PointX="49.375" PointY="16.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerActions" Width="1.5" PointX="51.75" PointY="0.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.SetcardParameter" Width="1.5" PointX="0.75" PointY="51.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

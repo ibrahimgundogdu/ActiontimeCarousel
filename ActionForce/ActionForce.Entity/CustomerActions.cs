@@ -12,15 +12,19 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class EmployeeCashActions
+    public partial class CustomerActions
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
+        public Nullable<int> CustomerID { get; set; }
+        public Nullable<int> LocationID { get; set; }
         public Nullable<int> EmployeeID { get; set; }
         public Nullable<int> ActionTypeID { get; set; }
+        public Nullable<System.DateTime> ActionDate { get; set; }
         public string ProcessName { get; set; }
-        public Nullable<int> ProcessID { get; set; }
+        public Nullable<long> ProcessID { get; set; }
         public Nullable<System.DateTime> ProcessDate { get; set; }
-        public string ProcessDetail { get; set; }
+        public string DocumentNumber { get; set; }
+        public string Description { get; set; }
         public Nullable<short> Direction { get; set; }
         public Nullable<double> Collection { get; set; }
         public Nullable<double> Payment { get; set; }
@@ -32,10 +36,6 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
-        public Nullable<int> SalaryTypeID { get; set; }
-        public Nullable<int> LocationID { get; set; }
         public Nullable<System.Guid> ProcessUID { get; set; }
-        public string DocumentNumber { get; set; }
-        public Nullable<int> CategoryID { get; set; }
     }
 }

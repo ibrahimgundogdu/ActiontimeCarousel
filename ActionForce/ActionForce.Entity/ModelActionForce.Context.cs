@@ -238,6 +238,8 @@ namespace ActionForce.Entity
         public virtual DbSet<DocumentTransferStatus> DocumentTransferStatus { get; set; }
         public virtual DbSet<VEmployeeLocation> VEmployeeLocation { get; set; }
         public virtual DbSet<VEmployeeLocationList> VEmployeeLocationList { get; set; }
+        public virtual DbSet<CustomerActions> CustomerActions { get; set; }
+        public virtual DbSet<SetcardParameter> SetcardParameter { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -650,7 +652,7 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddCashAction", cashIDParameter, locationIDParameter, employeeIDParameter, cashActionTypeIDParameter, actionDateParameter, processNameParameter, processIDParameter, processDateParameter, documentNumberParameter, descriptionParameter, directionParameter, collectionParameter, paymentParameter, currencyParameter, latitudeParameter, longitudeParameter, recordEmployeeIDParameter, recordDateParameter, processUIDParameter);
         }
     
-        public virtual int AddEmployeeAction(Nullable<int> employeeID, Nullable<int> locationID, Nullable<int> actionTypeID, string processName, Nullable<long> processID, Nullable<System.DateTime> processDate, string processDetail, Nullable<short> direction, Nullable<double> collection, Nullable<double> payment, string currency, Nullable<double> latitude, Nullable<double> longitude, Nullable<int> salaryTypeID, Nullable<int> recordEmployeeID, Nullable<System.DateTime> recordDate, Nullable<System.Guid> processUID, string documentNumber)
+        public virtual int AddEmployeeAction(Nullable<int> employeeID, Nullable<int> locationID, Nullable<int> actionTypeID, string processName, Nullable<long> processID, Nullable<System.DateTime> processDate, string processDetail, Nullable<short> direction, Nullable<double> collection, Nullable<double> payment, string currency, Nullable<double> latitude, Nullable<double> longitude, Nullable<int> salaryTypeID, Nullable<int> recordEmployeeID, Nullable<System.DateTime> recordDate, Nullable<System.Guid> processUID, string documentNumber, Nullable<int> salaryCategoryID)
         {
             var employeeIDParameter = employeeID.HasValue ?
                 new ObjectParameter("EmployeeID", employeeID) :
@@ -724,7 +726,11 @@ namespace ActionForce.Entity
                 new ObjectParameter("DocumentNumber", documentNumber) :
                 new ObjectParameter("DocumentNumber", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddEmployeeAction", employeeIDParameter, locationIDParameter, actionTypeIDParameter, processNameParameter, processIDParameter, processDateParameter, processDetailParameter, directionParameter, collectionParameter, paymentParameter, currencyParameter, latitudeParameter, longitudeParameter, salaryTypeIDParameter, recordEmployeeIDParameter, recordDateParameter, processUIDParameter, documentNumberParameter);
+            var salaryCategoryIDParameter = salaryCategoryID.HasValue ?
+                new ObjectParameter("SalaryCategoryID", salaryCategoryID) :
+                new ObjectParameter("SalaryCategoryID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddEmployeeAction", employeeIDParameter, locationIDParameter, actionTypeIDParameter, processNameParameter, processIDParameter, processDateParameter, processDetailParameter, directionParameter, collectionParameter, paymentParameter, currencyParameter, latitudeParameter, longitudeParameter, salaryTypeIDParameter, recordEmployeeIDParameter, recordDateParameter, processUIDParameter, documentNumberParameter, salaryCategoryIDParameter);
         }
     }
 }
