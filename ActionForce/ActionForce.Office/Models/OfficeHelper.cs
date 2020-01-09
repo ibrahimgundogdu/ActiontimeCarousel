@@ -287,6 +287,14 @@ namespace ActionForce.Office
             }
         }
 
+        public static void AddCustomerAction(int? CustomerID, int? LocationID, int? EmployeeID, int? ActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? RecordEmployeeID, DateTime? RecordDate, Guid ProcessUID)
+        {
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                db.AddCustomerAction(CustomerID, LocationID, EmployeeID, ActionTypeID, ActionDate, ProcessName, ProcessID, ProcessDate, DocumentNumber, Description, Direction, Collection, Payment, Currency, Latitude, Longitude, RecordEmployeeID, RecordDate, ProcessUID);
+            }
+        }
+
         public static void UpdateCashAction(int? CashID, int? LocationID, int? EmployeeID, int? CashActionTypeID, DateTime? ActionDate, string ProcessName, long? ProcessID, DateTime? ProcessDate, string DocumentNumber, string Description, short? Direction, double? Collection, double? Payment, string Currency, double? Latitude, double? Longitude, int? RecordEmployeeID, DateTime? RecordDate, int? UpdateEmployeeID, DateTime? UpdateDate)
         {
             using (ActionTimeEntities db = new ActionTimeEntities())
@@ -1588,7 +1596,7 @@ namespace ActionForce.Office
                                     }
                                     else
                                     {
-                                        OfficeHelper.AddEmployeeAction(existssalaryearn.EmployeeID, existssalaryearn.LocationID, existssalaryearn.ActionTypeID, existssalaryearn.ActionTypeName, existssalaryearn.ID, existssalaryearn.Date, existssalaryearn.Description, 1, existssalaryearn.TotalAmount, 0, existssalaryearn.Currency, null, null, null, existssalaryearn.RecordEmployeeID, existssalaryearn.RecordDate, existssalaryearn.UID.Value, existssalaryearn.DocumentNumber,3);
+                                        OfficeHelper.AddEmployeeAction(existssalaryearn.EmployeeID, existssalaryearn.LocationID, existssalaryearn.ActionTypeID, existssalaryearn.ActionTypeName, existssalaryearn.ID, existssalaryearn.Date, existssalaryearn.Description, 1, existssalaryearn.TotalAmount, 0, existssalaryearn.Currency, null, null, null, existssalaryearn.RecordEmployeeID, existssalaryearn.RecordDate, existssalaryearn.UID.Value, existssalaryearn.DocumentNumber, 3);
                                     }
 
 
