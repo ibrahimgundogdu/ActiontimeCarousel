@@ -18,8 +18,11 @@ namespace ActionForce.Entity
         public Nullable<int> EmployeeID { get; set; }
         public Nullable<int> LocationID { get; set; }
         public Nullable<int> PermitTypeID { get; set; }
+        public Nullable<bool> IsPaidTo { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
         public Nullable<System.DateTime> DateBegin { get; set; }
         public Nullable<System.DateTime> DateEnd { get; set; }
+        public Nullable<int> MinuteDuration { get; set; }
         public string Description { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<int> RecordEmployeeID { get; set; }

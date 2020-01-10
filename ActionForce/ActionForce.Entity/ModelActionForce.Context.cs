@@ -66,7 +66,6 @@ namespace ActionForce.Entity
         public virtual DbSet<EmployeeDismissalStage> EmployeeDismissalStage { get; set; }
         public virtual DbSet<EmployeeLocation> EmployeeLocation { get; set; }
         public virtual DbSet<EmployeePeriods> EmployeePeriods { get; set; }
-        public virtual DbSet<EmployeePermit> EmployeePermit { get; set; }
         public virtual DbSet<EmployeeSalary> EmployeeSalary { get; set; }
         public virtual DbSet<EmployeeShift> EmployeeShift { get; set; }
         public virtual DbSet<EmployeeShiftSet> EmployeeShiftSet { get; set; }
@@ -100,8 +99,6 @@ namespace ActionForce.Entity
         public virtual DbSet<PerformanceCriteria> PerformanceCriteria { get; set; }
         public virtual DbSet<PerformanceX> PerformanceX { get; set; }
         public virtual DbSet<Permission> Permission { get; set; }
-        public virtual DbSet<PermitStatus> PermitStatus { get; set; }
-        public virtual DbSet<PermitType> PermitType { get; set; }
         public virtual DbSet<PrePaidCampaign> PrePaidCampaign { get; set; }
         public virtual DbSet<PrePaidCampaignPrices> PrePaidCampaignPrices { get; set; }
         public virtual DbSet<Product> Product { get; set; }
@@ -244,6 +241,9 @@ namespace ActionForce.Entity
         public virtual DbSet<EmployeeSequence> EmployeeSequence { get; set; }
         public virtual DbSet<EmployeeShiftType> EmployeeShiftType { get; set; }
         public virtual DbSet<EmployeeStatus> EmployeeStatus { get; set; }
+        public virtual DbSet<EmployeePermit> EmployeePermit { get; set; }
+        public virtual DbSet<PermitStatus> PermitStatus { get; set; }
+        public virtual DbSet<PermitType> PermitType { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

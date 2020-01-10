@@ -44,7 +44,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeDismissalStage" Width="1.5" PointX="23.75" PointY="10.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeLocation" Width="1.5" PointX="10.5" PointY="6.5" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeePeriods" Width="1.5" PointX="2.75" PointY="25.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeePermit" Width="1.5" PointX="24.75" PointY="16.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeSalary" Width="1.5" PointX="24.75" PointY="21.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeShift" Width="1.5" PointX="22.75" PointY="25.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeShiftSet" Width="1.5" PointX="24.75" PointY="24.75" />
@@ -78,8 +77,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PerformanceCriteria" Width="1.5" PointX="29.75" PointY="7.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PerformanceX" Width="1.5" PointX="10.75" PointY="30.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Permission" Width="1.5" PointX="6" PointY="0.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.PermitStatus" Width="1.5" PointX="29.75" PointY="11.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.PermitType" Width="1.5" PointX="12.75" PointY="30.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PrePaidCampaign" Width="1.5" PointX="15" PointY="2" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PrePaidCampaignPrices" Width="1.5" PointX="17.25" PointY="3" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Product" Width="1.5" PointX="14.75" PointY="30.75" />
@@ -241,6 +238,9 @@
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_Employee_RoleGroup" />
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_EmployeeLocation_Employee" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeStatus" Width="1.5" PointX="5.375" PointY="51.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeePermit" Width="1.5" PointX="7.375" PointY="51.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.PermitStatus" Width="1.5" PointX="9.375" PointY="51.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.PermitType" Width="1.5" PointX="51.375" PointY="13.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

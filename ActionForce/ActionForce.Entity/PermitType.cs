@@ -15,7 +15,9 @@ namespace ActionForce.Entity
     public partial class PermitType
     {
         public int ID { get; set; }
-        public string TypeName { get; set; }
+        public string TypeCode { get; set; }
+        public string PermitTypeName { get; set; }
+        public Nullable<bool> IsPaidTo { get; set; }
         public string SortBy { get; set; }
         public Nullable<bool> IsActive { get; set; }
     }

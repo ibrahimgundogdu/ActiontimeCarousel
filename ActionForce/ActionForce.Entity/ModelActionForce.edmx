@@ -1113,6 +1113,10 @@
           <Property Name="SystemUnitPrice" Type="float" />
           <Property Name="SystemQuantityHour" Type="float" />
           <Property Name="SystemTotalAmount" Type="float" />
+          <Property Name="QuantityHourSalary" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="TotalAmountSalary" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="QuantityHourFood" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="TotalAmountFoot" Type="float" />
         </EntityType>
         <EntityType Name="DocumentSalaryPayment">
           <Key>
@@ -1459,8 +1463,11 @@
           <Property Name="EmployeeID" Type="int" />
           <Property Name="LocationID" Type="int" />
           <Property Name="PermitTypeID" Type="int" />
+          <Property Name="IsPaidTo" Type="bit" />
+          <Property Name="Date" Type="date" />
           <Property Name="DateBegin" Type="datetime" />
           <Property Name="DateEnd" Type="datetime" />
+          <Property Name="MinuteDuration" Type="int" StoreGeneratedPattern="Computed" />
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
           <Property Name="Status" Type="int" />
           <Property Name="RecordEmployeeID" Type="int" />
@@ -2135,7 +2142,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="TypeCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="PermitTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsPaidTo" Type="bit" />
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
@@ -2410,8 +2419,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="Year" Type="int" />
           <Property Name="OurCompanyID" Type="int" />
           <Property Name="Amount" Type="float" />
-          <Property Name="EarnHour" Type="int" />
-          <Property Name="TotalHour" Type="int" />
+          <Property Name="EarnHour" Type="float" />
+          <Property Name="TotalHour" Type="float" />
+          <Property Name="UnitAmount" Type="float" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="Setcards">
           <Key>
@@ -6338,7 +6348,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="EmployeeDismissalStage" EntityType="db293_ActionTimeDbModel.EmployeeDismissalStage" />
           <EntitySet Name="EmployeeLocation" EntityType="db293_ActionTimeDbModel.EmployeeLocation" />
           <EntitySet Name="EmployeePeriods" EntityType="db293_ActionTimeDbModel.EmployeePeriods" />
-          <EntitySet Name="EmployeePermit" EntityType="db293_ActionTimeDbModel.EmployeePermit" />
           <EntitySet Name="EmployeeSalary" EntityType="db293_ActionTimeDbModel.EmployeeSalary" />
           <EntitySet Name="EmployeeShift" EntityType="db293_ActionTimeDbModel.EmployeeShift" />
           <EntitySet Name="EmployeeShiftSet" EntityType="db293_ActionTimeDbModel.EmployeeShiftSet" />
@@ -6372,8 +6381,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="PerformanceCriteria" EntityType="db293_ActionTimeDbModel.PerformanceCriteria" />
           <EntitySet Name="PerformanceX" EntityType="db293_ActionTimeDbModel.PerformanceX" />
           <EntitySet Name="Permission" EntityType="db293_ActionTimeDbModel.Permission" />
-          <EntitySet Name="PermitStatus" EntityType="db293_ActionTimeDbModel.PermitStatus" />
-          <EntitySet Name="PermitType" EntityType="db293_ActionTimeDbModel.PermitType" />
           <EntitySet Name="PrePaidCampaign" EntityType="db293_ActionTimeDbModel.PrePaidCampaign" />
           <EntitySet Name="PrePaidCampaignPrices" EntityType="db293_ActionTimeDbModel.PrePaidCampaignPrices" />
           <EntitySet Name="Product" EntityType="db293_ActionTimeDbModel.Product" />
@@ -6744,6 +6751,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <End Role="EmployeeLocation" EntitySet="EmployeeLocation" />
           </AssociationSet>
           <EntitySet Name="EmployeeStatus" EntityType="db293_ActionTimeDbModel.EmployeeStatus" />
+          <EntitySet Name="EmployeePermit" EntityType="db293_ActionTimeDbModel.EmployeePermit" />
+          <EntitySet Name="PermitStatus" EntityType="db293_ActionTimeDbModel.PermitStatus" />
+          <EntitySet Name="PermitType" EntityType="db293_ActionTimeDbModel.PermitType" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -7375,24 +7385,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecordDate" Type="DateTime" Precision="0" />
           <Property Name="RecordedEmployeeID" Type="Int32" />
         </EntityType>
-        <EntityType Name="EmployeePermit">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EmployeeID" Type="Int32" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="PermitTypeID" Type="Int32" />
-          <Property Name="DateBegin" Type="DateTime" Precision="3" />
-          <Property Name="DateEnd" Type="DateTime" Precision="3" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateEmployeeID" Type="Int32" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
         <EntityType Name="EmployeeSalary">
           <Key>
             <PropertyRef Name="ID" />
@@ -7857,24 +7849,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Controller" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="RoleGroupPermissions" Relationship="db293_ActionTimeDbModel.FK_RoleGroupPermissions_Permission" FromRole="Permission" ToRole="RoleGroupPermissions" />
-        </EntityType>
-        <EntityType Name="PermitStatus">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="PermitType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         <EntityType Name="PrePaidCampaign">
           <Key>
@@ -9353,6 +9327,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SystemQuantityHour" Type="Double" />
           <Property Name="SystemTotalAmount" Type="Double" />
           <Property Name="CategoryID" Type="Int32" />
+          <Property Name="QuantityHourSalary" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="TotalAmountSalary" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="QuantityHourFood" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="TotalAmountFoot" Type="Double" />
         </EntityType>
         <EntityType Name="VDocumentCashCollections">
           <Key>
@@ -11177,6 +11155,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Amount" Type="Double" />
           <Property Name="EarnHour" Type="Int32" />
           <Property Name="TotalHour" Type="Int32" />
+          <Property Name="UnitAmount" Type="Double" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="CustomerActions">
           <Key>
@@ -11350,6 +11329,47 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="EmployeePermit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="PermitTypeID" Type="Int32" />
+          <Property Name="IsPaidTo" Type="Boolean" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="DateBegin" Type="DateTime" Precision="3" />
+          <Property Name="DateEnd" Type="DateTime" Precision="3" />
+          <Property Name="MinuteDuration" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="PermitStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="PermitType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PermitTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsPaidTo" Type="Boolean" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         </Schema>
@@ -12015,25 +12035,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="EmployeePermit">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeePermit">
-              <MappingFragment StoreEntitySet="EmployeePermit">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
-                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
-                <ScalarProperty Name="PermitTypeID" ColumnName="PermitTypeID" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="EmployeeSalary">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeeSalary">
               <MappingFragment StoreEntitySet="EmployeeSalary">
@@ -12525,26 +12526,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="Controller" ColumnName="Controller" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Module" ColumnName="Module" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PermitStatus">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PermitStatus">
-              <MappingFragment StoreEntitySet="PermitStatus">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
-                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="PermitType">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PermitType">
-              <MappingFragment StoreEntitySet="PermitType">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
-                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -13876,6 +13857,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentSalaryEarn">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentSalaryEarn">
               <MappingFragment StoreEntitySet="DocumentSalaryEarn">
+                <ScalarProperty Name="TotalAmountFoot" ColumnName="TotalAmountFoot" />
+                <ScalarProperty Name="QuantityHourFood" ColumnName="QuantityHourFood" />
+                <ScalarProperty Name="TotalAmountSalary" ColumnName="TotalAmountSalary" />
+                <ScalarProperty Name="QuantityHourSalary" ColumnName="QuantityHourSalary" />
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="SystemTotalAmount" ColumnName="SystemTotalAmount" />
                 <ScalarProperty Name="SystemQuantityHour" ColumnName="SystemQuantityHour" />
@@ -15752,6 +15737,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="SetcardParameter">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SetcardParameter">
               <MappingFragment StoreEntitySet="SetcardParameter">
+                <ScalarProperty Name="UnitAmount" ColumnName="UnitAmount" />
                 <ScalarProperty Name="TotalHour" ColumnName="TotalHour" />
                 <ScalarProperty Name="EarnHour" ColumnName="EarnHour" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
@@ -15903,6 +15889,50 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeePermit">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeePermit">
+              <MappingFragment StoreEntitySet="EmployeePermit">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="MinuteDuration" ColumnName="MinuteDuration" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="IsPaidTo" ColumnName="IsPaidTo" />
+                <ScalarProperty Name="PermitTypeID" ColumnName="PermitTypeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PermitStatus">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PermitStatus">
+              <MappingFragment StoreEntitySet="PermitStatus">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PermitType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PermitType">
+              <MappingFragment StoreEntitySet="PermitType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="IsPaidTo" ColumnName="IsPaidTo" />
+                <ScalarProperty Name="PermitTypeName" ColumnName="PermitTypeName" />
+                <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
