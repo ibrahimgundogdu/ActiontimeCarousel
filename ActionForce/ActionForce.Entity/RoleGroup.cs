@@ -17,8 +17,8 @@ namespace ActionForce.Entity
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public RoleGroup()
         {
-            this.Employee = new HashSet<Employee>();
             this.RoleGroupPermissions = new HashSet<RoleGroupPermissions>();
+            this.Employee = new HashSet<Employee>();
         }
     
         public int ID { get; set; }
@@ -29,10 +29,10 @@ namespace ActionForce.Entity
         public Nullable<bool> IsManage { get; set; }
         public Nullable<bool> IsOperate { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Employee> Employee { get; set; }
         public virtual RoleLevel RoleLevel1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RoleGroupPermissions> RoleGroupPermissions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Employee> Employee { get; set; }
     }
 }

@@ -755,6 +755,16 @@
           <Property Name="Category" Type="nvarchar" MaxLength="40" />
           <Property Name="ItemName" Type="nvarchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentID" Type="int" />
+          <Property Name="DepartmentName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="4" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="DocumentBankTransfer">
           <Key>
             <PropertyRef Name="ID" />
@@ -1338,6 +1348,20 @@
           <Property Name="UpdateEmployeeID" Type="int" />
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="DepartmentID" Type="int" />
+          <Property Name="AreaCategoryID" Type="int" />
+          <Property Name="SalaryCategoryID" Type="int" />
+          <Property Name="SequenceID" Type="int" />
+          <Property Name="PositionID" Type="int" />
+        </EntityType>
+        <EntityType Name="EmployeeAreaCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AreaName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="4" />
+          <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="EmployeeCashActions">
           <Key>
@@ -1445,6 +1469,15 @@
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="EmployeePositions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PositionName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="4" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="EmployeeSalary">
           <Key>
             <PropertyRef Name="ID" />
@@ -1457,6 +1490,25 @@
           <Property Name="Money" Type="nvarchar" MaxLength="4" />
           <Property Name="HourlyExtend" Type="float" />
           <Property Name="ExtendMultiplyRate" Type="float" />
+        </EntityType>
+        <EntityType Name="EmployeeSalaryCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SalaryCategoryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="4" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="EmployeeSequence">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Sequence" Type="int" />
+          <Property Name="Code" Type="nvarchar" MaxLength="10" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="EmployeeShift">
           <Key>
@@ -1555,7 +1607,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeShiftX' does not ha
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Sequence" Type="int" />
           <Property Name="Code" Type="nvarchar" MaxLength="10" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="IsActive" Type="bit" />
@@ -2392,15 +2443,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
-        </EntityType>
-        <EntityType Name="ShiftType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
-          <Property Name="SortBy" Type="char" MaxLength="4" />
-          <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="SMSNumber">
           <Key>
@@ -4792,6 +4834,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DayResultDocuments" EntityType="Self.DayResultDocuments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DayResultItemList" EntityType="Self.DayResultItemList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DayResultItems" EntityType="Self.DayResultItems" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentBankTransfer" EntityType="Self.DocumentBankTransfer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentCashCollections" EntityType="Self.DocumentCashCollections" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentCashExpense" EntityType="Self.DocumentCashExpense" Schema="dbo" store:Type="Tables" />
@@ -4811,13 +4854,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DocumentTransferStatus" EntityType="Self.DocumentTransferStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentType" EntityType="Self.DocumentType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeAreaCategory" EntityType="Self.EmployeeAreaCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeCashActions" EntityType="Self.EmployeeCashActions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeDismissal" EntityType="Self.EmployeeDismissal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeDismissalStage" EntityType="Self.EmployeeDismissalStage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeLocation" EntityType="Self.EmployeeLocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeePeriods" EntityType="Self.EmployeePeriods" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeePermit" EntityType="Self.EmployeePermit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeePositions" EntityType="Self.EmployeePositions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeSalary" EntityType="Self.EmployeeSalary" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeSalaryCategory" EntityType="Self.EmployeeSalaryCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeSequence" EntityType="Self.EmployeeSequence" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeShift" EntityType="Self.EmployeeShift" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeShiftSet" EntityType="Self.EmployeeShiftSet" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeShiftType" EntityType="Self.EmployeeShiftType" Schema="dbo" store:Type="Tables" />
@@ -4887,7 +4934,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Setcards" EntityType="Self.Setcards" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SetcardSubscription" EntityType="Self.SetcardSubscription" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SetcardSubscriptionType" EntityType="Self.SetcardSubscriptionType" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ShiftType" EntityType="Self.ShiftType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SMSNumber" EntityType="Self.SMSNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Stats" EntityType="Self.Stats" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StatsOptions" EntityType="Self.StatsOptions" Schema="dbo" store:Type="Tables" />
@@ -6287,7 +6333,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DateList" EntityType="db293_ActionTimeDbModel.DateList" />
           <EntitySet Name="DocumentNumber" EntityType="db293_ActionTimeDbModel.DocumentNumber" />
           <EntitySet Name="DocumentType" EntityType="db293_ActionTimeDbModel.DocumentType" />
-          <EntitySet Name="Employee" EntityType="db293_ActionTimeDbModel.Employee" />
           <EntitySet Name="EmployeeCashActions" EntityType="db293_ActionTimeDbModel.EmployeeCashActions" />
           <EntitySet Name="EmployeeDismissal" EntityType="db293_ActionTimeDbModel.EmployeeDismissal" />
           <EntitySet Name="EmployeeDismissalStage" EntityType="db293_ActionTimeDbModel.EmployeeDismissalStage" />
@@ -6297,8 +6342,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="EmployeeSalary" EntityType="db293_ActionTimeDbModel.EmployeeSalary" />
           <EntitySet Name="EmployeeShift" EntityType="db293_ActionTimeDbModel.EmployeeShift" />
           <EntitySet Name="EmployeeShiftSet" EntityType="db293_ActionTimeDbModel.EmployeeShiftSet" />
-          <EntitySet Name="EmployeeShiftType" EntityType="db293_ActionTimeDbModel.EmployeeShiftType" />
-          <EntitySet Name="EmployeeStatus" EntityType="db293_ActionTimeDbModel.EmployeeStatus" />
           <EntitySet Name="Inspection" EntityType="db293_ActionTimeDbModel.Inspection" />
           <EntitySet Name="InspectionCategory" EntityType="db293_ActionTimeDbModel.InspectionCategory" />
           <EntitySet Name="InspectionItem" EntityType="db293_ActionTimeDbModel.InspectionItem" />
@@ -6352,7 +6395,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="SaleChannel" EntityType="db293_ActionTimeDbModel.SaleChannel" />
           <EntitySet Name="Serials" EntityType="db293_ActionTimeDbModel.Serials" />
           <EntitySet Name="SerialsHistory" EntityType="db293_ActionTimeDbModel.SerialsHistory" />
-          <EntitySet Name="ShiftType" EntityType="db293_ActionTimeDbModel.ShiftType" />
           <EntitySet Name="SMSNumber" EntityType="db293_ActionTimeDbModel.SMSNumber" />
           <EntitySet Name="Stats" EntityType="db293_ActionTimeDbModel.Stats" />
           <EntitySet Name="StatsOptions" EntityType="db293_ActionTimeDbModel.StatsOptions" />
@@ -6413,18 +6455,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <AssociationSet Name="FK_BankAccount_BankAccount" Association="db293_ActionTimeDbModel.FK_BankAccount_BankAccount">
             <End Role="Bank" EntitySet="Bank" />
             <End Role="BankAccount" EntitySet="BankAccount" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Employee_Role" Association="db293_ActionTimeDbModel.FK_Employee_Role">
-            <End Role="Role" EntitySet="Role" />
-            <End Role="Employee" EntitySet="Employee" />
-          </AssociationSet>
-          <AssociationSet Name="FK_Employee_RoleGroup" Association="db293_ActionTimeDbModel.FK_Employee_RoleGroup">
-            <End Role="RoleGroup" EntitySet="RoleGroup" />
-            <End Role="Employee" EntitySet="Employee" />
-          </AssociationSet>
-          <AssociationSet Name="FK_EmployeeLocation_Employee" Association="db293_ActionTimeDbModel.FK_EmployeeLocation_Employee">
-            <End Role="Employee" EntitySet="Employee" />
-            <End Role="EmployeeLocation" EntitySet="EmployeeLocation" />
           </AssociationSet>
           <AssociationSet Name="FK_EmployeeLocation_Role" Association="db293_ActionTimeDbModel.FK_EmployeeLocation_Role">
             <End Role="Role" EntitySet="Role" />
@@ -6694,6 +6724,26 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
             <Parameter Name="ProcessUID" Mode="In" Type="Guid" />
           </FunctionImport>
+          <EntitySet Name="Department" EntityType="db293_ActionTimeDbModel.Department" />
+          <EntitySet Name="Employee" EntityType="db293_ActionTimeDbModel.Employee" />
+          <EntitySet Name="EmployeeAreaCategory" EntityType="db293_ActionTimeDbModel.EmployeeAreaCategory" />
+          <EntitySet Name="EmployeePositions" EntityType="db293_ActionTimeDbModel.EmployeePositions" />
+          <EntitySet Name="EmployeeSalaryCategory" EntityType="db293_ActionTimeDbModel.EmployeeSalaryCategory" />
+          <EntitySet Name="EmployeeSequence" EntityType="db293_ActionTimeDbModel.EmployeeSequence" />
+          <EntitySet Name="EmployeeShiftType" EntityType="db293_ActionTimeDbModel.EmployeeShiftType" />
+          <AssociationSet Name="FK_Employee_Role" Association="db293_ActionTimeDbModel.FK_Employee_Role">
+            <End Role="Role" EntitySet="Role" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Employee_RoleGroup" Association="db293_ActionTimeDbModel.FK_Employee_RoleGroup">
+            <End Role="RoleGroup" EntitySet="RoleGroup" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
+          <AssociationSet Name="FK_EmployeeLocation_Employee" Association="db293_ActionTimeDbModel.FK_EmployeeLocation_Employee">
+            <End Role="Employee" EntitySet="Employee" />
+            <End Role="EmployeeLocation" EntitySet="EmployeeLocation" />
+          </AssociationSet>
+          <EntitySet Name="EmployeeStatus" EntityType="db293_ActionTimeDbModel.EmployeeStatus" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -7235,46 +7285,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsActive" Type="Boolean" />
           <NavigationProperty Name="ActionRowDocument" Relationship="db293_ActionTimeDbModel.FK_ActionRowDocument_DocumentType" FromRole="DocumentType" ToRole="ActionRowDocument" />
         </EntityType>
-        <EntityType Name="Employee">
-          <Key>
-            <PropertyRef Name="EmployeeID" />
-          </Key>
-          <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="IdentityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="FullNameSearch" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="EMail" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SmsNumber" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="Mobile2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Whatsapp" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="FotoFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="RoleID" Type="Int32" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="IsTemp" Type="Boolean" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="IsDismissal" Type="Boolean" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="DateStart" Type="DateTime" Precision="3" />
-          <Property Name="DateEnd" Type="DateTime" Precision="3" />
-          <Property Name="DismissDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeUID" Type="Guid" />
-          <Property Name="ShiftTypeID" Type="Int32" />
-          <Property Name="StatusID" Type="Int32" />
-          <Property Name="RoleGroupID" Type="Int32" />
-          <NavigationProperty Name="Role" Relationship="db293_ActionTimeDbModel.FK_Employee_Role" FromRole="Employee" ToRole="Role" />
-          <NavigationProperty Name="RoleGroup" Relationship="db293_ActionTimeDbModel.FK_Employee_RoleGroup" FromRole="Employee" ToRole="RoleGroup" />
-          <NavigationProperty Name="EmployeeLocation" Relationship="db293_ActionTimeDbModel.FK_EmployeeLocation_Employee" FromRole="Employee" ToRole="EmployeeLocation" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateEmployeeID" Type="Int32" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="EmployeeCashActions">
           <Key>
             <PropertyRef Name="ID" />
@@ -7349,8 +7359,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RoleID" Type="Int32" />
           <Property Name="IsMaster" Type="Boolean" />
           <Property Name="IsActive" Type="Boolean" />
-          <NavigationProperty Name="Employee" Relationship="db293_ActionTimeDbModel.FK_EmployeeLocation_Employee" FromRole="EmployeeLocation" ToRole="Employee" />
           <NavigationProperty Name="Role" Relationship="db293_ActionTimeDbModel.FK_EmployeeLocation_Role" FromRole="EmployeeLocation" ToRole="Role" />
+          <NavigationProperty Name="Employee" Relationship="db293_ActionTimeDbModel.FK_EmployeeLocation_Employee" FromRole="EmployeeLocation" ToRole="Employee" />
         </EntityType>
         <EntityType Name="EmployeePeriods">
           <Key>
@@ -7444,25 +7454,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ShiftStart" Type="Time" Precision="0" />
           <Property Name="ShiftEnd" Type="Time" Precision="0" />
           <Property Name="Duration" Type="String" MaxLength="17" FixedLength="false" Unicode="false" annotation:StoreGeneratedPattern="Computed" />
-        </EntityType>
-        <EntityType Name="EmployeeShiftType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="EmployeeStatus">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Sequence" Type="Int32" />
-          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         <EntityType Name="Inspection">
           <Key>
@@ -8059,8 +8050,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="RoleLevel" Type="Int32" />
           <Property Name="IsActive" Type="Boolean" />
-          <NavigationProperty Name="Employee" Relationship="db293_ActionTimeDbModel.FK_Employee_Role" FromRole="Role" ToRole="Employee" />
           <NavigationProperty Name="EmployeeLocation" Relationship="db293_ActionTimeDbModel.FK_EmployeeLocation_Role" FromRole="Role" ToRole="EmployeeLocation" />
+          <NavigationProperty Name="Employee" Relationship="db293_ActionTimeDbModel.FK_Employee_Role" FromRole="Role" ToRole="Employee" />
         </EntityType>
         <EntityType Name="RoleGroup">
           <Key>
@@ -8073,9 +8064,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="IsManage" Type="Boolean" />
           <Property Name="IsOperate" Type="Boolean" />
-          <NavigationProperty Name="Employee" Relationship="db293_ActionTimeDbModel.FK_Employee_RoleGroup" FromRole="RoleGroup" ToRole="Employee" />
           <NavigationProperty Name="RoleLevel1" Relationship="db293_ActionTimeDbModel.FK_RoleGroup_RoleLevel" FromRole="RoleGroup" ToRole="RoleLevel" />
           <NavigationProperty Name="RoleGroupPermissions" Relationship="db293_ActionTimeDbModel.FK_RoleGroupPermissions_RoleGroup" FromRole="RoleGroup" ToRole="RoleGroupPermissions" />
+          <NavigationProperty Name="Employee" Relationship="db293_ActionTimeDbModel.FK_Employee_RoleGroup" FromRole="RoleGroup" ToRole="Employee" />
         </EntityType>
         <EntityType Name="RoleGroupMembers">
           <Key>
@@ -8139,15 +8130,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="DeviceID" Type="Int32" />
           <Property Name="DateBegin" Type="DateTime" Precision="3" />
           <Property Name="DateEnd" Type="DateTime" Precision="3" />
-        </EntityType>
-        <EntityType Name="ShiftType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         <EntityType Name="SMSNumber">
           <Key>
@@ -8967,42 +8949,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </Principal>
             <Dependent Role="BankAccount">
               <PropertyRef Name="BankID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Employee_Role">
-          <End Type="db293_ActionTimeDbModel.Role" Role="Role" Multiplicity="0..1" />
-          <End Type="db293_ActionTimeDbModel.Employee" Role="Employee" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Role">
-              <PropertyRef Name="RoleID" />
-            </Principal>
-            <Dependent Role="Employee">
-              <PropertyRef Name="RoleID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_Employee_RoleGroup">
-          <End Type="db293_ActionTimeDbModel.RoleGroup" Role="RoleGroup" Multiplicity="0..1" />
-          <End Type="db293_ActionTimeDbModel.Employee" Role="Employee" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="RoleGroup">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Employee">
-              <PropertyRef Name="RoleGroupID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_EmployeeLocation_Employee">
-          <End Type="db293_ActionTimeDbModel.Employee" Role="Employee" Multiplicity="1" />
-          <End Type="db293_ActionTimeDbModel.EmployeeLocation" Role="EmployeeLocation" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Employee">
-              <PropertyRef Name="EmployeeID" />
-            </Principal>
-            <Dependent Role="EmployeeLocation">
-              <PropertyRef Name="EmployeeID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -11260,6 +11206,152 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="ProcessUID" Type="Guid" />
         </EntityType>
+        <EntityType Name="Department">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ParentID" Type="Int32" />
+          <Property Name="DepartmentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Employee">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdentityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FullNameSearch" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="EMail" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SmsNumber" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Mobile2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Whatsapp" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FotoFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsTemp" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsDismissal" Type="Boolean" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="DateStart" Type="DateTime" Precision="3" />
+          <Property Name="DateEnd" Type="DateTime" Precision="3" />
+          <Property Name="DismissDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeUID" Type="Guid" />
+          <Property Name="ShiftTypeID" Type="Int32" />
+          <Property Name="StatusID" Type="Int32" />
+          <Property Name="RoleGroupID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DepartmentID" Type="Int32" />
+          <Property Name="AreaCategoryID" Type="Int32" />
+          <Property Name="SalaryCategoryID" Type="Int32" />
+          <Property Name="SequenceID" Type="Int32" />
+          <Property Name="PositionID" Type="Int32" />
+          <NavigationProperty Name="Role" Relationship="db293_ActionTimeDbModel.FK_Employee_Role" FromRole="Employee" ToRole="Role" />
+          <NavigationProperty Name="RoleGroup" Relationship="db293_ActionTimeDbModel.FK_Employee_RoleGroup" FromRole="Employee" ToRole="RoleGroup" />
+          <NavigationProperty Name="EmployeeLocation" Relationship="db293_ActionTimeDbModel.FK_EmployeeLocation_Employee" FromRole="Employee" ToRole="EmployeeLocation" />
+        </EntityType>
+        <EntityType Name="EmployeeAreaCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AreaName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="EmployeePositions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PositionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="EmployeeSalaryCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SalaryCategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="EmployeeSequence">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Sequence" Type="Int32" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="EmployeeShiftType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <Association Name="FK_Employee_Role">
+          <End Type="db293_ActionTimeDbModel.Role" Role="Role" Multiplicity="0..1" />
+          <End Type="db293_ActionTimeDbModel.Employee" Role="Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Role">
+              <PropertyRef Name="RoleID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Employee_RoleGroup">
+          <End Type="db293_ActionTimeDbModel.RoleGroup" Role="RoleGroup" Multiplicity="0..1" />
+          <End Type="db293_ActionTimeDbModel.Employee" Role="Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RoleGroup">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="RoleGroupID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_EmployeeLocation_Employee">
+          <End Type="db293_ActionTimeDbModel.Employee" Role="Employee" Multiplicity="1" />
+          <End Type="db293_ActionTimeDbModel.EmployeeLocation" Role="EmployeeLocation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Employee">
+              <PropertyRef Name="EmployeeID" />
+            </Principal>
+            <Dependent Role="EmployeeLocation">
+              <PropertyRef Name="EmployeeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="EmployeeStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -11830,44 +11922,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Employee">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Employee">
-              <MappingFragment StoreEntitySet="Employee">
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RoleGroupID" ColumnName="RoleGroupID" />
-                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
-                <ScalarProperty Name="ShiftTypeID" ColumnName="ShiftTypeID" />
-                <ScalarProperty Name="EmployeeUID" ColumnName="EmployeeUID" />
-                <ScalarProperty Name="DismissDescription" ColumnName="DismissDescription" />
-                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
-                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="IsDismissal" ColumnName="IsDismissal" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="IsTemp" ColumnName="IsTemp" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
-                <ScalarProperty Name="FotoFile" ColumnName="FotoFile" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="Username" ColumnName="Username" />
-                <ScalarProperty Name="Whatsapp" ColumnName="Whatsapp" />
-                <ScalarProperty Name="Mobile2" ColumnName="Mobile2" />
-                <ScalarProperty Name="SmsNumber" ColumnName="SmsNumber" />
-                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
-                <ScalarProperty Name="EMail" ColumnName="EMail" />
-                <ScalarProperty Name="FullNameSearch" ColumnName="FullNameSearch" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="Title" ColumnName="Title" />
-                <ScalarProperty Name="IdentityNumber" ColumnName="IdentityNumber" />
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="EmployeeCashActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeeCashActions">
               <MappingFragment StoreEntitySet="EmployeeCashActions">
@@ -12041,27 +12095,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="ShiftDate" ColumnName="ShiftDate" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="EmployeeShiftType">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeeShiftType">
-              <MappingFragment StoreEntitySet="EmployeeShiftType">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
-                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="EmployeeStatus">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeeStatus">
-              <MappingFragment StoreEntitySet="EmployeeStatus">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="Sequence" ColumnName="Sequence" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -12774,16 +12807,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
                 <ScalarProperty Name="DeviceID" ColumnName="DeviceID" />
                 <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ShiftType">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ShiftType">
-              <MappingFragment StoreEntitySet="ShiftType">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
-                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -15769,6 +15792,121 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddCustomerAction" FunctionName="db293_ActionTimeDbModel.Store.AddCustomerAction" />
+          <EntitySetMapping Name="Department">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Department">
+              <MappingFragment StoreEntitySet="Department">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Employee">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Employee">
+              <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="SequenceID" ColumnName="SequenceID" />
+                <ScalarProperty Name="SalaryCategoryID" ColumnName="SalaryCategoryID" />
+                <ScalarProperty Name="AreaCategoryID" ColumnName="AreaCategoryID" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RoleGroupID" ColumnName="RoleGroupID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="ShiftTypeID" ColumnName="ShiftTypeID" />
+                <ScalarProperty Name="EmployeeUID" ColumnName="EmployeeUID" />
+                <ScalarProperty Name="DismissDescription" ColumnName="DismissDescription" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="IsDismissal" ColumnName="IsDismissal" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsTemp" ColumnName="IsTemp" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="FotoFile" ColumnName="FotoFile" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Whatsapp" ColumnName="Whatsapp" />
+                <ScalarProperty Name="Mobile2" ColumnName="Mobile2" />
+                <ScalarProperty Name="SmsNumber" ColumnName="SmsNumber" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="FullNameSearch" ColumnName="FullNameSearch" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="IdentityNumber" ColumnName="IdentityNumber" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeAreaCategory">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeeAreaCategory">
+              <MappingFragment StoreEntitySet="EmployeeAreaCategory">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="AreaName" ColumnName="AreaName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeePositions">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeePositions">
+              <MappingFragment StoreEntitySet="EmployeePositions">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeSalaryCategory">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeeSalaryCategory">
+              <MappingFragment StoreEntitySet="EmployeeSalaryCategory">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="SalaryCategoryName" ColumnName="SalaryCategoryName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeSequence">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeeSequence">
+              <MappingFragment StoreEntitySet="EmployeeSequence">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Sequence" ColumnName="Sequence" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeShiftType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeeShiftType">
+              <MappingFragment StoreEntitySet="EmployeeShiftType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeStatus">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeeStatus">
+              <MappingFragment StoreEntitySet="EmployeeStatus">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

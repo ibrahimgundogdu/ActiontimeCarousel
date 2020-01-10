@@ -61,7 +61,6 @@ namespace ActionForce.Entity
         public virtual DbSet<DateList> DateList { get; set; }
         public virtual DbSet<DocumentNumber> DocumentNumber { get; set; }
         public virtual DbSet<DocumentType> DocumentType { get; set; }
-        public virtual DbSet<Employee> Employee { get; set; }
         public virtual DbSet<EmployeeCashActions> EmployeeCashActions { get; set; }
         public virtual DbSet<EmployeeDismissal> EmployeeDismissal { get; set; }
         public virtual DbSet<EmployeeDismissalStage> EmployeeDismissalStage { get; set; }
@@ -71,8 +70,6 @@ namespace ActionForce.Entity
         public virtual DbSet<EmployeeSalary> EmployeeSalary { get; set; }
         public virtual DbSet<EmployeeShift> EmployeeShift { get; set; }
         public virtual DbSet<EmployeeShiftSet> EmployeeShiftSet { get; set; }
-        public virtual DbSet<EmployeeShiftType> EmployeeShiftType { get; set; }
-        public virtual DbSet<EmployeeStatus> EmployeeStatus { get; set; }
         public virtual DbSet<Inspection> Inspection { get; set; }
         public virtual DbSet<InspectionCategory> InspectionCategory { get; set; }
         public virtual DbSet<InspectionItem> InspectionItem { get; set; }
@@ -126,7 +123,6 @@ namespace ActionForce.Entity
         public virtual DbSet<SaleChannel> SaleChannel { get; set; }
         public virtual DbSet<Serials> Serials { get; set; }
         public virtual DbSet<SerialsHistory> SerialsHistory { get; set; }
-        public virtual DbSet<ShiftType> ShiftType { get; set; }
         public virtual DbSet<SMSNumber> SMSNumber { get; set; }
         public virtual DbSet<Stats> Stats { get; set; }
         public virtual DbSet<StatsOptions> StatsOptions { get; set; }
@@ -240,6 +236,14 @@ namespace ActionForce.Entity
         public virtual DbSet<VEmployeeLocationList> VEmployeeLocationList { get; set; }
         public virtual DbSet<SetcardParameter> SetcardParameter { get; set; }
         public virtual DbSet<CustomerActions> CustomerActions { get; set; }
+        public virtual DbSet<Department> Department { get; set; }
+        public virtual DbSet<Employee> Employee { get; set; }
+        public virtual DbSet<EmployeeAreaCategory> EmployeeAreaCategory { get; set; }
+        public virtual DbSet<EmployeePositions> EmployeePositions { get; set; }
+        public virtual DbSet<EmployeeSalaryCategory> EmployeeSalaryCategory { get; set; }
+        public virtual DbSet<EmployeeSequence> EmployeeSequence { get; set; }
+        public virtual DbSet<EmployeeShiftType> EmployeeShiftType { get; set; }
+        public virtual DbSet<EmployeeStatus> EmployeeStatus { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

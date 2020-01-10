@@ -12,11 +12,12 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class ShiftType
+    public partial class EmployeeSequence
     {
         public int ID { get; set; }
-        public string TypeName { get; set; }
-        public string SortBy { get; set; }
+        public Nullable<int> Sequence { get; set; }
+        public string Code { get; set; }
+        public string Name { get; set; }
         public Nullable<bool> IsActive { get; set; }
     }
 }

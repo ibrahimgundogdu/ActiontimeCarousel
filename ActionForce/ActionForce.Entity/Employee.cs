@@ -52,6 +52,11 @@ namespace ActionForce.Entity
         public Nullable<int> UpdateEmployeeID { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public string UpdateIP { get; set; }
+        public Nullable<int> DepartmentID { get; set; }
+        public Nullable<int> AreaCategoryID { get; set; }
+        public Nullable<int> SalaryCategoryID { get; set; }
+        public Nullable<int> SequenceID { get; set; }
+        public Nullable<int> PositionID { get; set; }
     
         public virtual Role Role { get; set; }
         public virtual RoleGroup RoleGroup { get; set; }
