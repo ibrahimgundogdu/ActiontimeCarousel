@@ -1091,6 +1091,8 @@ namespace ActionForce.Office.Controllers
             model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
             model.CashActions = Db.VCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date).ToList();
             model.BankActions = Db.VBankActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date).ToList();
+            model.CurrentCash = OfficeHelper.GetCash(model.DayResult.LocationID, location.Currency);
+
 
             var trlCash = OfficeHelper.GetCash(model.DayResult.LocationID, "TRL");
             var usdCash = OfficeHelper.GetCash(model.DayResult.LocationID, "USD");

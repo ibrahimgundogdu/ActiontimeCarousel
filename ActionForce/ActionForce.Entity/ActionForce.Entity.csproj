@@ -167,6 +167,9 @@
     <Compile Include="Customer.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="CustomerActions.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="DateList.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -487,6 +490,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="SerialsHistory.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SetcardParameter.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="Setcards.cs">

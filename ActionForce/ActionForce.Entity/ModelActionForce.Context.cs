@@ -238,6 +238,8 @@ namespace ActionForce.Entity
         public virtual DbSet<DocumentTransferStatus> DocumentTransferStatus { get; set; }
         public virtual DbSet<VEmployeeLocation> VEmployeeLocation { get; set; }
         public virtual DbSet<VEmployeeLocationList> VEmployeeLocationList { get; set; }
+        public virtual DbSet<SetcardParameter> SetcardParameter { get; set; }
+        public virtual DbSet<CustomerActions> CustomerActions { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -650,7 +652,7 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddCashAction", cashIDParameter, locationIDParameter, employeeIDParameter, cashActionTypeIDParameter, actionDateParameter, processNameParameter, processIDParameter, processDateParameter, documentNumberParameter, descriptionParameter, directionParameter, collectionParameter, paymentParameter, currencyParameter, latitudeParameter, longitudeParameter, recordEmployeeIDParameter, recordDateParameter, processUIDParameter);
         }
     
-        public virtual int AddEmployeeAction(Nullable<int> employeeID, Nullable<int> locationID, Nullable<int> actionTypeID, string processName, Nullable<long> processID, Nullable<System.DateTime> processDate, string processDetail, Nullable<short> direction, Nullable<double> collection, Nullable<double> payment, string currency, Nullable<double> latitude, Nullable<double> longitude, Nullable<int> salaryTypeID, Nullable<int> recordEmployeeID, Nullable<System.DateTime> recordDate, Nullable<System.Guid> processUID, string documentNumber)
+        public virtual int AddEmployeeAction(Nullable<int> employeeID, Nullable<int> locationID, Nullable<int> actionTypeID, string processName, Nullable<long> processID, Nullable<System.DateTime> processDate, string processDetail, Nullable<short> direction, Nullable<double> collection, Nullable<double> payment, string currency, Nullable<double> latitude, Nullable<double> longitude, Nullable<int> salaryTypeID, Nullable<int> recordEmployeeID, Nullable<System.DateTime> recordDate, Nullable<System.Guid> processUID, string documentNumber, Nullable<int> salaryCategoryID)
         {
             var employeeIDParameter = employeeID.HasValue ?
                 new ObjectParameter("EmployeeID", employeeID) :
@@ -724,7 +726,92 @@ namespace ActionForce.Entity
                 new ObjectParameter("DocumentNumber", documentNumber) :
                 new ObjectParameter("DocumentNumber", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddEmployeeAction", employeeIDParameter, locationIDParameter, actionTypeIDParameter, processNameParameter, processIDParameter, processDateParameter, processDetailParameter, directionParameter, collectionParameter, paymentParameter, currencyParameter, latitudeParameter, longitudeParameter, salaryTypeIDParameter, recordEmployeeIDParameter, recordDateParameter, processUIDParameter, documentNumberParameter);
+            var salaryCategoryIDParameter = salaryCategoryID.HasValue ?
+                new ObjectParameter("SalaryCategoryID", salaryCategoryID) :
+                new ObjectParameter("SalaryCategoryID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddEmployeeAction", employeeIDParameter, locationIDParameter, actionTypeIDParameter, processNameParameter, processIDParameter, processDateParameter, processDetailParameter, directionParameter, collectionParameter, paymentParameter, currencyParameter, latitudeParameter, longitudeParameter, salaryTypeIDParameter, recordEmployeeIDParameter, recordDateParameter, processUIDParameter, documentNumberParameter, salaryCategoryIDParameter);
+        }
+    
+        public virtual int AddCustomerAction(Nullable<int> customerID, Nullable<int> locationID, Nullable<int> employeeID, Nullable<int> actionTypeID, Nullable<System.DateTime> actionDate, string processName, Nullable<long> processID, Nullable<System.DateTime> processDate, string documentNumber, string description, Nullable<short> direction, Nullable<double> collection, Nullable<double> payment, string currency, Nullable<double> latitude, Nullable<double> longitude, Nullable<int> recordEmployeeID, Nullable<System.DateTime> recordDate, Nullable<System.Guid> processUID)
+        {
+            var customerIDParameter = customerID.HasValue ?
+                new ObjectParameter("CustomerID", customerID) :
+                new ObjectParameter("CustomerID", typeof(int));
+    
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            var actionTypeIDParameter = actionTypeID.HasValue ?
+                new ObjectParameter("ActionTypeID", actionTypeID) :
+                new ObjectParameter("ActionTypeID", typeof(int));
+    
+            var actionDateParameter = actionDate.HasValue ?
+                new ObjectParameter("ActionDate", actionDate) :
+                new ObjectParameter("ActionDate", typeof(System.DateTime));
+    
+            var processNameParameter = processName != null ?
+                new ObjectParameter("ProcessName", processName) :
+                new ObjectParameter("ProcessName", typeof(string));
+    
+            var processIDParameter = processID.HasValue ?
+                new ObjectParameter("ProcessID", processID) :
+                new ObjectParameter("ProcessID", typeof(long));
+    
+            var processDateParameter = processDate.HasValue ?
+                new ObjectParameter("ProcessDate", processDate) :
+                new ObjectParameter("ProcessDate", typeof(System.DateTime));
+    
+            var documentNumberParameter = documentNumber != null ?
+                new ObjectParameter("DocumentNumber", documentNumber) :
+                new ObjectParameter("DocumentNumber", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var directionParameter = direction.HasValue ?
+                new ObjectParameter("Direction", direction) :
+                new ObjectParameter("Direction", typeof(short));
+    
+            var collectionParameter = collection.HasValue ?
+                new ObjectParameter("Collection", collection) :
+                new ObjectParameter("Collection", typeof(double));
+    
+            var paymentParameter = payment.HasValue ?
+                new ObjectParameter("Payment", payment) :
+                new ObjectParameter("Payment", typeof(double));
+    
+            var currencyParameter = currency != null ?
+                new ObjectParameter("Currency", currency) :
+                new ObjectParameter("Currency", typeof(string));
+    
+            var latitudeParameter = latitude.HasValue ?
+                new ObjectParameter("Latitude", latitude) :
+                new ObjectParameter("Latitude", typeof(double));
+    
+            var longitudeParameter = longitude.HasValue ?
+                new ObjectParameter("Longitude", longitude) :
+                new ObjectParameter("Longitude", typeof(double));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordDateParameter = recordDate.HasValue ?
+                new ObjectParameter("RecordDate", recordDate) :
+                new ObjectParameter("RecordDate", typeof(System.DateTime));
+    
+            var processUIDParameter = processUID.HasValue ?
+                new ObjectParameter("ProcessUID", processUID) :
+                new ObjectParameter("ProcessUID", typeof(System.Guid));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddCustomerAction", customerIDParameter, locationIDParameter, employeeIDParameter, actionTypeIDParameter, actionDateParameter, processNameParameter, processIDParameter, processDateParameter, documentNumberParameter, descriptionParameter, directionParameter, collectionParameter, paymentParameter, currencyParameter, latitudeParameter, longitudeParameter, recordEmployeeIDParameter, recordDateParameter, processUIDParameter);
         }
     }
 }
