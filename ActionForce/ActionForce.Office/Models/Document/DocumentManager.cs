@@ -1218,7 +1218,7 @@ namespace ActionForce.Office
                         if (cashaction != null)
                         {
                             cashaction.LocationID = isPayment.LocationID;
-                            cashaction.Collection = isPayment.Amount;
+                            cashaction.Payment = isPayment.Amount;
                             cashaction.CashID = cash.ID;
                             cashaction.Currency = payment.Currency;
                             cashaction.ActionDate = payment.DocumentDate;
