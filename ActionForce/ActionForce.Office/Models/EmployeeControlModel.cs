@@ -15,7 +15,7 @@ namespace ActionForce.Office
         public Employee CurrentEmployee { get; set; }
         public Employee Employee { get; set; }
 
-        public IEnumerable<ShiftType> ShiftTypeList { get; set; }
+        public IEnumerable<EmployeeShiftType> ShiftTypeList { get; set; }
         public IEnumerable<EmployeeStatus> StatusList { get; set; }
         public IEnumerable<Role> RoleList { get; set; }
         public IEnumerable<RoleGroup> RoleGroupList { get; set; }

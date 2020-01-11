@@ -4342,5 +4342,95 @@ namespace ActionForce.Office
             return result;
         }
 
+
+        public Result<DocumentEmployeePermit> AddEmployeePermit(EmployeePermit permit, AuthenticationModel authentication)
+        {
+            Result<DocumentEmployeePermit> result = new Result<DocumentEmployeePermit>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            if (permit != null && authentication != null)
+            {
+                using (ActionTimeEntities Db = new ActionTimeEntities())
+                {
+                    try
+                    {
+                        var location = Db.Location.FirstOrDefault(x => x.LocationID == permit.LocationID);
+                        var permittype = Db.PermitType.FirstOrDefault(x => x.ID == permit.PermitTypeID);
+                        string prefix = location.OurCompanyID == 1 ? "PRM" : "IZN";
+                        var locationstats = Db.LocationStats.FirstOrDefault(x => x.LocationID == permit.LocationID && x.StatsID == 2 && x.OptionID == 3);
+
+                        var empunits = Db.EmployeeSalary.Where(x => x.EmployeeID == permit.EmployeeID && x.DateStart <= permit.Date && x.Hourly > 0).OrderByDescending(x => x.DateStart).FirstOrDefault();
+
+                        double unithour = empunits?.Hourly ?? 0;
+
+
+                        if (location.OurCompanyID == 1 && locationstats != null)
+                        {
+                            unithour = unithour + 1;
+                        }
+
+
+                        DocumentEmployeePermit employeePermit = new DocumentEmployeePermit();
+
+                        employeePermit.ActionTypeID = permit.ActinTypeID;
+                        employeePermit.ActionTypeName = permit.ActionTypeName;
+                        employeePermit.Currency = authentication.ActionEmployee.OurCompany.Currency;
+                        employeePermit.Date = permit.Date;
+                        employeePermit.DateBegin = permit.DateBegin;
+                        employeePermit.DateEnd = permit.DateEnd;
+                        employeePermit.Description = permit.Description;
+                        employeePermit.DocumentNumber = OfficeHelper.GetDocumentNumber(location.OurCompanyID, prefix);
+                        employeePermit.EmployeeID = permit.EmployeeID;
+                        employeePermit.EnvironmentID = permit.EnvironmentID;
+                        employeePermit.IsActive = permit.IsActive;
+                        employeePermit.IsPaidTo = permittype.IsPaidTo;
+                        employeePermit.LocationID = permit.LocationID;
+                        double minuteDuration = (int)(permit.DateEnd - permit.DateBegin).TotalMinutes; // tabloda computed alan
+                        employeePermit.OurCompanyID = location.OurCompanyID;
+                        employeePermit.PermitTypeID = permit.PermitTypeID;
+                        employeePermit.QuantityHour = (double)(minuteDuration / (double)60);
+                        employeePermit.RecordDate = location.LocalDateTime;
+                        employeePermit.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        employeePermit.RecordIP = OfficeHelper.GetIPAddress();
+                        employeePermit.ReferenceID = permit.ReferanceID ?? null;
+                        employeePermit.ResultID = permit.ResultID ?? null;
+                        employeePermit.ReturnWorkDate = permit.ReturnWorkDate;
+                        employeePermit.StatusID = permit.StatusID;
+                        employeePermit.UID = permit.UID;
+                        employeePermit.UnitPrice = unithour;
+                        employeePermit.TotalAmount = employeePermit.IsPaidTo == false ? (employeePermit.UnitPrice * employeePermit.QuantityHour) : 0;
+
+                        Db.DocumentEmployeePermit.Add(employeePermit);
+                        Db.SaveChanges();
+
+                        // eğer status 1 ise ve izin ücretsiz kesintili ise carisine kesinti işlenir.
+                        if (employeePermit.StatusID == 1 && employeePermit.IsPaidTo == false && employeePermit.TotalAmount > 0)
+                        {
+                            OfficeHelper.AddEmployeeAction(employeePermit.EmployeeID, employeePermit.LocationID, employeePermit.ActionTypeID, employeePermit.ActionTypeName, employeePermit.ID, employeePermit.Date, employeePermit.Description, 1, 0, employeePermit.TotalAmount, employeePermit.Currency, null, null, 3, employeePermit.RecordEmployeeID, employeePermit.RecordDate, employeePermit.UID.Value, employeePermit.DocumentNumber, 16);
+                        }
+
+                        result.IsSuccess = true;
+                        result.Message = "Çalışan izini başarı ile eklendi";
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Permit", "Insert", employeePermit.ID.ToString(), "Salary", "Permit", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, employeePermit);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"Çalışan izini eklenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Permit", "Insert", "-1", "Salary", "Permit", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(permit.TimeZone), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, permit);
+                    }
+
+                }
+            }
+
+            return result;
+        }
+
     }
 }

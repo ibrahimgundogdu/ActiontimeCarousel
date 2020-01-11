@@ -298,4 +298,20 @@ namespace ActionForce.Office
         public string SlipFile { get; set; }
         public Guid UID { get; set; }
     }
+
+    public class NewPermit
+    {
+        public string Date { get; set; }
+        public int LocationID { get; set; }
+        public int EmployeeID { get; set; }
+        public int PermitTypeID { get; set; }
+        public string DateBegin { get; set; }
+        public string DateBeginHour { get; set; }
+        public string DateEnd { get; set; }
+        public string DateEndHour { get; set; }
+        public string ReturnWorkDate { get; set; }
+        public string Description { get; set; }
+        public int StatusID { get; set; }
+        
+    }
 }

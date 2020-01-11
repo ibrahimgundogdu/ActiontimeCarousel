@@ -238,9 +238,11 @@
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_Employee_RoleGroup" />
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_EmployeeLocation_Employee" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeStatus" Width="1.5" PointX="5.375" PointY="51.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeePermit" Width="1.5" PointX="7.375" PointY="51.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PermitStatus" Width="1.5" PointX="9.375" PointY="51.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PermitType" Width="1.5" PointX="51.375" PointY="13.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentEmployeePermit" Width="1.5" PointX="15.375" PointY="51.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentEmployeePermit" Width="1.5" PointX="51.375" PointY="16.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.SalaryType" Width="1.5" PointX="51.375" PointY="26.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

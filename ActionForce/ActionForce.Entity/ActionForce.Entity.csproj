@@ -206,6 +206,9 @@
     <Compile Include="DocumentCashRecorderSlip.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="DocumentEmployeePermit.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="DocumentNumber.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -261,9 +264,6 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="EmployeePeriods.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EmployeePermit.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="EmployeePositions.cs">
@@ -495,6 +495,9 @@
     <Compile Include="SalaryCategory.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="SalaryType.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="SaleChannel.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -661,6 +664,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VDocumentCashRecorderSlip.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VDocumentEmployeePermit.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VDocumentPosCancel.cs">

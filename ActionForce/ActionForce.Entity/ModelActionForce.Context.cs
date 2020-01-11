@@ -241,9 +241,11 @@ namespace ActionForce.Entity
         public virtual DbSet<EmployeeSequence> EmployeeSequence { get; set; }
         public virtual DbSet<EmployeeShiftType> EmployeeShiftType { get; set; }
         public virtual DbSet<EmployeeStatus> EmployeeStatus { get; set; }
-        public virtual DbSet<EmployeePermit> EmployeePermit { get; set; }
         public virtual DbSet<PermitStatus> PermitStatus { get; set; }
         public virtual DbSet<PermitType> PermitType { get; set; }
+        public virtual DbSet<DocumentEmployeePermit> DocumentEmployeePermit { get; set; }
+        public virtual DbSet<VDocumentEmployeePermit> VDocumentEmployeePermit { get; set; }
+        public virtual DbSet<SalaryType> SalaryType { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

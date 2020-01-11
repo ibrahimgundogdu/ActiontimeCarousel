@@ -970,6 +970,42 @@
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="SlipNumber" Type="nvarchar" MaxLength="20" />
         </EntityType>
+        <EntityType Name="DocumentEmployeePermit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="PermitTypeID" Type="int" />
+          <Property Name="IsPaidTo" Type="bit" />
+          <Property Name="Date" Type="date" />
+          <Property Name="DateBegin" Type="datetime" />
+          <Property Name="DateEnd" Type="datetime" />
+          <Property Name="ReturnWorkDate" Type="date" />
+          <Property Name="MinuteDuration" Type="int" StoreGeneratedPattern="Computed" />
+          <Property Name="UnitPrice" Type="float" />
+          <Property Name="QuantityHour" Type="float" />
+          <Property Name="TotalAmount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="ReferenceID" Type="bigint" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
+          <Property Name="ActionTypeID" Type="int" />
+          <Property Name="StatusID" Type="int" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
+        </EntityType>
         <EntityType Name="DocumentNumber">
           <Key>
             <PropertyRef Name="ID" />
@@ -1454,27 +1490,6 @@
           <Property Name="Description" Type="ntext" />
           <Property Name="RecordDate" Type="date" />
           <Property Name="RecordedEmployeeID" Type="int" />
-        </EntityType>
-        <EntityType Name="EmployeePermit">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="EmployeeID" Type="int" />
-          <Property Name="LocationID" Type="int" />
-          <Property Name="PermitTypeID" Type="int" />
-          <Property Name="IsPaidTo" Type="bit" />
-          <Property Name="Date" Type="date" />
-          <Property Name="DateBegin" Type="datetime" />
-          <Property Name="DateEnd" Type="datetime" />
-          <Property Name="MinuteDuration" Type="int" StoreGeneratedPattern="Computed" />
-          <Property Name="Description" Type="nvarchar" MaxLength="500" />
-          <Property Name="Status" Type="int" />
-          <Property Name="RecordEmployeeID" Type="int" />
-          <Property Name="RecordDate" Type="datetime" />
-          <Property Name="UpdateEmployeeID" Type="int" />
-          <Property Name="UpdateDate" Type="datetime" />
-          <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="EmployeePositions">
           <Key>
@@ -2383,6 +2398,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ParentID" Type="int" />
           <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
           <Property Name="SortBy" Type="char" MaxLength="4" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="SalaryType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SalaryTypeName" Type="nvarchar" MaxLength="40" />
+          <Property Name="SortBy" Type="char" MaxLength="2" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="SaleChannel">
@@ -3593,6 +3617,53 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentCashRecorderSlip' 
           <Property Name="ResultID" Type="bigint" />
           <Property Name="CashAmount" Type="float" />
           <Property Name="CreditAmount" Type="float" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentEmployeePermit' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VDocumentEmployeePermit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="PermitTypeID" Type="int" />
+          <Property Name="IsPaidTo" Type="bit" />
+          <Property Name="Date" Type="date" />
+          <Property Name="DateBegin" Type="datetime" />
+          <Property Name="DateEnd" Type="datetime" />
+          <Property Name="MinuteDuration" Type="int" />
+          <Property Name="UnitPrice" Type="float" />
+          <Property Name="QuantityHour" Type="float" />
+          <Property Name="TotalAmount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="ReferenceID" Type="bigint" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
+          <Property Name="ActionTypeID" Type="int" />
+          <Property Name="StatusID" Type="int" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="EmployeeFullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="RecorderEmployeeFullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="SortBy" Type="char" MaxLength="10" />
+          <Property Name="LocationName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Expr1" Type="nvarchar" MaxLength="500" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
+          <Property Name="TypeCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="PermitTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ReturnWorkDate" Type="date" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPosCancel' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4851,6 +4922,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DocumentCashOpen" EntityType="Self.DocumentCashOpen" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentCashPayments" EntityType="Self.DocumentCashPayments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentCashRecorderSlip" EntityType="Self.DocumentCashRecorderSlip" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentEmployeePermit" EntityType="Self.DocumentEmployeePermit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentNumber" EntityType="Self.DocumentNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentPosCancel" EntityType="Self.DocumentPosCancel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentPosCollections" EntityType="Self.DocumentPosCollections" Schema="dbo" store:Type="Tables" />
@@ -4870,7 +4942,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="EmployeeDismissalStage" EntityType="Self.EmployeeDismissalStage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeLocation" EntityType="Self.EmployeeLocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeePeriods" EntityType="Self.EmployeePeriods" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="EmployeePermit" EntityType="Self.EmployeePermit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeePositions" EntityType="Self.EmployeePositions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeSalary" EntityType="Self.EmployeeSalary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeSalaryCategory" EntityType="Self.EmployeeSalaryCategory" Schema="dbo" store:Type="Tables" />
@@ -4937,6 +5008,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="RoleGroupPermissions" EntityType="Self.RoleGroupPermissions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleLevel" EntityType="Self.RoleLevel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SalaryCategory" EntityType="Self.SalaryCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalaryType" EntityType="Self.SalaryType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SaleChannel" EntityType="Self.SaleChannel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Serials" EntityType="Self.Serials" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SerialsHistory" EntityType="Self.SerialsHistory" Schema="dbo" store:Type="Tables" />
@@ -5486,6 +5558,50 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentCashRecorderSlip].[CashAmount] AS [CashAmount], 
     [VDocumentCashRecorderSlip].[CreditAmount] AS [CreditAmount]
     FROM [dbo].[VDocumentCashRecorderSlip] AS [VDocumentCashRecorderSlip]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VDocumentEmployeePermit" EntityType="Self.VDocumentEmployeePermit" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VDocumentEmployeePermit].[ID] AS [ID], 
+    [VDocumentEmployeePermit].[DocumentNumber] AS [DocumentNumber], 
+    [VDocumentEmployeePermit].[OurCompanyID] AS [OurCompanyID], 
+    [VDocumentEmployeePermit].[EmployeeID] AS [EmployeeID], 
+    [VDocumentEmployeePermit].[LocationID] AS [LocationID], 
+    [VDocumentEmployeePermit].[PermitTypeID] AS [PermitTypeID], 
+    [VDocumentEmployeePermit].[IsPaidTo] AS [IsPaidTo], 
+    [VDocumentEmployeePermit].[Date] AS [Date], 
+    [VDocumentEmployeePermit].[DateBegin] AS [DateBegin], 
+    [VDocumentEmployeePermit].[DateEnd] AS [DateEnd], 
+    [VDocumentEmployeePermit].[MinuteDuration] AS [MinuteDuration], 
+    [VDocumentEmployeePermit].[UnitPrice] AS [UnitPrice], 
+    [VDocumentEmployeePermit].[QuantityHour] AS [QuantityHour], 
+    [VDocumentEmployeePermit].[TotalAmount] AS [TotalAmount], 
+    [VDocumentEmployeePermit].[Currency] AS [Currency], 
+    [VDocumentEmployeePermit].[Description] AS [Description], 
+    [VDocumentEmployeePermit].[ReferenceID] AS [ReferenceID], 
+    [VDocumentEmployeePermit].[ActionTypeName] AS [ActionTypeName], 
+    [VDocumentEmployeePermit].[ActionTypeID] AS [ActionTypeID], 
+    [VDocumentEmployeePermit].[StatusID] AS [StatusID], 
+    [VDocumentEmployeePermit].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VDocumentEmployeePermit].[RecordDate] AS [RecordDate], 
+    [VDocumentEmployeePermit].[RecordIP] AS [RecordIP], 
+    [VDocumentEmployeePermit].[UpdateEmployeeID] AS [UpdateEmployeeID], 
+    [VDocumentEmployeePermit].[UpdateDate] AS [UpdateDate], 
+    [VDocumentEmployeePermit].[UpdateIP] AS [UpdateIP], 
+    [VDocumentEmployeePermit].[IsActive] AS [IsActive], 
+    [VDocumentEmployeePermit].[ResultID] AS [ResultID], 
+    [VDocumentEmployeePermit].[EnvironmentID] AS [EnvironmentID], 
+    [VDocumentEmployeePermit].[UID] AS [UID], 
+    [VDocumentEmployeePermit].[EmployeeFullName] AS [EmployeeFullName], 
+    [VDocumentEmployeePermit].[RecorderEmployeeFullName] AS [RecorderEmployeeFullName], 
+    [VDocumentEmployeePermit].[SortBy] AS [SortBy], 
+    [VDocumentEmployeePermit].[LocationName] AS [LocationName], 
+    [VDocumentEmployeePermit].[Expr1] AS [Expr1], 
+    [VDocumentEmployeePermit].[State] AS [State], 
+    [VDocumentEmployeePermit].[StatusName] AS [StatusName], 
+    [VDocumentEmployeePermit].[TypeCode] AS [TypeCode], 
+    [VDocumentEmployeePermit].[PermitTypeName] AS [PermitTypeName], 
+    [VDocumentEmployeePermit].[ReturnWorkDate] AS [ReturnWorkDate]
+    FROM [dbo].[VDocumentEmployeePermit] AS [VDocumentEmployeePermit]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentPosCancel" EntityType="Self.VDocumentPosCancel" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -6751,9 +6867,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <End Role="EmployeeLocation" EntitySet="EmployeeLocation" />
           </AssociationSet>
           <EntitySet Name="EmployeeStatus" EntityType="db293_ActionTimeDbModel.EmployeeStatus" />
-          <EntitySet Name="EmployeePermit" EntityType="db293_ActionTimeDbModel.EmployeePermit" />
           <EntitySet Name="PermitStatus" EntityType="db293_ActionTimeDbModel.PermitStatus" />
           <EntitySet Name="PermitType" EntityType="db293_ActionTimeDbModel.PermitType" />
+          <EntitySet Name="DocumentEmployeePermit" EntityType="db293_ActionTimeDbModel.DocumentEmployeePermit" />
+          <EntitySet Name="VDocumentEmployeePermit" EntityType="db293_ActionTimeDbModel.VDocumentEmployeePermit" />
+          <EntitySet Name="SalaryType" EntityType="db293_ActionTimeDbModel.SalaryType" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -11331,27 +11449,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
-        <EntityType Name="EmployeePermit">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="EmployeeID" Type="Int32" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="PermitTypeID" Type="Int32" />
-          <Property Name="IsPaidTo" Type="Boolean" />
-          <Property Name="Date" Type="DateTime" Precision="0" />
-          <Property Name="DateBegin" Type="DateTime" Precision="3" />
-          <Property Name="DateEnd" Type="DateTime" Precision="3" />
-          <Property Name="MinuteDuration" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Status" Type="Int32" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateEmployeeID" Type="Int32" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
         <EntityType Name="PermitStatus">
           <Key>
             <PropertyRef Name="ID" />
@@ -11370,6 +11467,96 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="PermitTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsPaidTo" Type="Boolean" />
           <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="DocumentEmployeePermit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="PermitTypeID" Type="Int32" />
+          <Property Name="IsPaidTo" Type="Boolean" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="DateBegin" Type="DateTime" Precision="3" />
+          <Property Name="DateEnd" Type="DateTime" Precision="3" />
+          <Property Name="ReturnWorkDate" Type="DateTime" Precision="0" />
+          <Property Name="MinuteDuration" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="UnitPrice" Type="Double" />
+          <Property Name="QuantityHour" Type="Double" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ReferenceID" Type="Int64" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="StatusID" Type="Int32" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
+        </EntityType>
+        <EntityType Name="VDocumentEmployeePermit">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="PermitTypeID" Type="Int32" />
+          <Property Name="IsPaidTo" Type="Boolean" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="DateBegin" Type="DateTime" Precision="3" />
+          <Property Name="DateEnd" Type="DateTime" Precision="3" />
+          <Property Name="MinuteDuration" Type="Int32" />
+          <Property Name="UnitPrice" Type="Double" />
+          <Property Name="QuantityHour" Type="Double" />
+          <Property Name="TotalAmount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ReferenceID" Type="Int64" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="StatusID" Type="Int32" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="EmployeeFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RecorderEmployeeFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="LocationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Expr1" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PermitTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ReturnWorkDate" Type="DateTime" Precision="0" />
+        </EntityType>
+        <EntityType Name="SalaryType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SalaryTypeName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         </Schema>
@@ -15893,28 +16080,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="EmployeePermit">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeePermit">
-              <MappingFragment StoreEntitySet="EmployeePermit">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="MinuteDuration" ColumnName="MinuteDuration" />
-                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
-                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="IsPaidTo" ColumnName="IsPaidTo" />
-                <ScalarProperty Name="PermitTypeID" ColumnName="PermitTypeID" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="PermitStatus">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PermitStatus">
               <MappingFragment StoreEntitySet="PermitStatus">
@@ -15933,6 +16098,99 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="IsPaidTo" ColumnName="IsPaidTo" />
                 <ScalarProperty Name="PermitTypeName" ColumnName="PermitTypeName" />
                 <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DocumentEmployeePermit">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentEmployeePermit">
+              <MappingFragment StoreEntitySet="DocumentEmployeePermit">
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="QuantityHour" ColumnName="QuantityHour" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="MinuteDuration" ColumnName="MinuteDuration" />
+                <ScalarProperty Name="ReturnWorkDate" ColumnName="ReturnWorkDate" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="IsPaidTo" ColumnName="IsPaidTo" />
+                <ScalarProperty Name="PermitTypeID" ColumnName="PermitTypeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VDocumentEmployeePermit">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentEmployeePermit">
+              <MappingFragment StoreEntitySet="VDocumentEmployeePermit">
+                <ScalarProperty Name="ReturnWorkDate" ColumnName="ReturnWorkDate" />
+                <ScalarProperty Name="PermitTypeName" ColumnName="PermitTypeName" />
+                <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Expr1" ColumnName="Expr1" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="RecorderEmployeeFullName" ColumnName="RecorderEmployeeFullName" />
+                <ScalarProperty Name="EmployeeFullName" ColumnName="EmployeeFullName" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="QuantityHour" ColumnName="QuantityHour" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="MinuteDuration" ColumnName="MinuteDuration" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="IsPaidTo" ColumnName="IsPaidTo" />
+                <ScalarProperty Name="PermitTypeID" ColumnName="PermitTypeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalaryType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SalaryType">
+              <MappingFragment StoreEntitySet="SalaryType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="SalaryTypeName" ColumnName="SalaryTypeName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

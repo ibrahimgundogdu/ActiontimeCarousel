@@ -1,0 +1,235 @@
+﻿@model SalaryControlModel
+@{
+    ViewBag.Title = "Çalışan İzin İşlemleri";
+}
+
+@section style{
+    <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
+}
+
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">Çalışan İzin Ekleme</span>
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div>
+<div class="content-body">
+    <div class="pd-x-0 tx-13">
+        <div class="media d-block d-lg-flex">
+            <div class="media-body  mg-t-40 mg-lg-t-0">
+                <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                    <div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                                <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Çalışan İzin İşlemleri</li>
+                            </ol>
+                        </nav>
+                        <h4 class="mg-b-0 tx-spacing--1">Yeni İzin</h4>
+                    </div>
+                    <div class="d-none d-md-block">
+                        <a href="/Salary/Permit" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; İzin Listesi</a>
+                    </div>
+                </div>
+
+
+                @using (Html.BeginForm("AddNewPermit", "Salary", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="row row-xs">
+                        <div class="col-lg-12">
+                            <div class="form-group row">
+                                <label for="Date" class="col-sm-3 col-form-label">Belge Tarihi</label>
+                                <div class="col-sm-6">
+                                    <input id="Date" name="Date" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row mg-b-5 bg-gray-50">
+                                <label for="LocationID" class="col-sm-3 col-form-label">Lokasyon</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="LocationID" name="LocationID" required>
+                                        @foreach (var item in Model.LocationList.OrderBy(x => x.SortBy))
+                                        {
+                                            <option value="@item.LocationID">@($"{item.SortBy.Trim()} {item.LocationName} {item.Description} {item.State}" )</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row bg-gray-50">
+                                <label for="EmployeeID" class="col-sm-3 col-form-label">Çalışan</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control select2" id="EmployeeID" name="EmployeeID" required>
+                                        @foreach (var item in Model.EmployeeList.OrderBy(x => x.FullName))
+                                        {
+                                            <option value="@item.EmployeeID">@($"{item.FullName} ({item.IsActive})" )</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row bg-gray-100">
+                                <label for="PermitTypeID" class="col-sm-3 col-form-label">İzin Türü</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="PermitTypeID" name="PermitTypeID" required>
+                                        @foreach (var item in Model.PermitTypes.Where(x => x.IsActive == true).OrderBy(x => x.SortBy))
+                                        {
+                                            <option value="@item.ID">@($"{item.TypeCode.Trim()} - {item.PermitTypeName.Trim()} ({(item.IsPaidTo == true ? "Ücretli (Ücreti Ödenir)" : "Ücretsiz (Ücreti Kesilir)")})" )</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row  mg-b-5">
+                                <label for="DateBegin" class="col-sm-3 col-form-label">İzin Başlangıç Tarihi</label>
+                                <div class="col-sm-3">
+                                    <input id="DateBegin" name="DateBegin" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input id="DateBeginHour" name="DateBeginHour" type="text" class="form-control hourfull" autocomplete="off" placeholder="Saat" value="10:00:00" required>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row  mg-b-5">
+                                <label for="DateEnd" class="col-sm-3 col-form-label">İzin Bitiş Tarihi</label>
+                                <div class="col-sm-3">
+                                    <input id="DateEnd" name="DateEnd" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input id="DateEndHour" name="DateEndHour" type="text" class="form-control hourfull" autocomplete="off" placeholder="Saat" value="20:00:00" required>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="ReturnWorkDate" class="col-sm-3 col-form-label">İşe Başlangıç Tarihi</label>
+                                <div class="col-sm-3">
+                                    <input id="ReturnWorkDate" name="ReturnWorkDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"))" required>
+                                </div>
+                                <div class="col-sm-3"> </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="Description" class="col-sm-3 col-form-label">Açıklama</label>
+                                <div class="col-sm-6">
+                                    <textarea id="Description" name="Description" rows="5" cols="20" class="form-control" style="width:100% !important;"></textarea>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row mg-b-5 bg-gray-50">
+                                <label for="StatusID" class="col-sm-3 col-form-label">Durum</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="StatusID" name="StatusID" required>
+                                        @foreach (var item in Model.PermitStatus.OrderBy(x => x.SortBy))
+                                        {
+                                            <option value="@item.ID">@($"{item.StatusName}" )</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row mg-b-0">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-primary btn-block">İzin Ekle</button>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section canvasmenu {
+
+}
+
+@section scripts {
+    <script src="~/assets/js/ActionForceScript.js"></script>
+    <script>
+        $(function () {
+            'use strict'
+            $('.select2').select2({
+                placeholder: 'Çalışan Seçiminiz',
+                searchInputPlaceholder: 'Search options'
+            });
+            $('#Date').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+            $('#DateBegin').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+            $('#DateEnd').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+            $('#ReturnWorkDate').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+        });
+        $(function () {
+            $('.shiftbegintime').mask('00:00');
+            $('.hour').mask('00:00');
+            $('.hourfull').mask('00:00:00');
+            $('.shiftdate').mask('0000-00-00');
+            $('.fulldate').mask('0000-00-00 00:00:00');
+            $('.money').mask("#.##0,00", { reverse: true });
+            $('.quantity').mask("##0", { reverse: true });
+            $('.money4').mask("#.##0,0000", { reverse: true });
+        });
+
+
+    </script>
+
+    @if (Model.InfoResult != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.InfoResult.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}
+

@@ -142,7 +142,7 @@ namespace ActionForce.Office.Controllers
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
+
 
             }
 
@@ -211,7 +211,7 @@ namespace ActionForce.Office.Controllers
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
 
-                
+
 
             }
 
@@ -305,7 +305,7 @@ namespace ActionForce.Office.Controllers
             {
                 dd = "0";
             }
-            
+
             return dd;
 
         }
@@ -442,8 +442,8 @@ namespace ActionForce.Office.Controllers
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-                
+
+
 
             }
 
@@ -519,8 +519,8 @@ namespace ActionForce.Office.Controllers
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-                
+
+
 
             }
 
@@ -963,5 +963,220 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Current", "Salary");
         }
 
+        [AllowAnonymous]
+        public ActionResult Permit(int? employeeID)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result<CashActions> ?? null;
+            }
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateTime.Now.Date;
+                model.Filters = filterModel;
+            }
+
+            if (employeeID != null && employeeID > 0)
+            {
+                model.Filters.EmployeeID = employeeID;
+            }
+
+            model.Permits = Db.VDocumentEmployeePermit.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderByDescending(x => x.RecordDate).ToList();
+
+            if (model.Filters.DateBegin != null && model.Filters.DateEnd != null)
+            {
+                model.Permits = model.Permits.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd).OrderByDescending(x => x.RecordDate).ToList();
+            }
+
+            if (model.Filters.EmployeeID != null)
+            {
+                model.Permits = model.Permits.Where(x => x.EmployeeID == model.Filters.EmployeeID).OrderByDescending(x => x.RecordDate).ToList();
+            }
+
+            if (model.Filters.TypeID != null)
+            {
+                model.Permits = model.Permits.Where(x => x.PermitTypeID == model.Filters.TypeID).OrderByDescending(x => x.RecordDate).ToList();
+            }
+
+            model.PermitTypes = Db.PermitType.Where(x => x.IsActive == true);
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult PermitFilter(int? employeeID, int? permitType, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.EmployeeID = employeeID;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+            model.TypeID = permitType;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("Permit", "Salary");
+        }
+
+        [AllowAnonymous]
+        public ActionResult AddPermit()
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.InfoResult = TempData["result"] as Result ?? null;
+            }
+
+            model.PermitTypes = Db.PermitType.Where(x => x.IsActive == true);
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
+            model.PermitStatus = Db.PermitStatus.Where(x => x.ID >= 0 && x.IsActive == true).ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddNewPermit(NewPermit permit)
+        {
+            Result<DocumentEmployeePermit> result = new Result<DocumentEmployeePermit>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (permit != null)
+            {
+                var cashactType = Db.CashActionType.FirstOrDefault(x => x.ID == 36);
+                //var permitType = Db.PermitType.FirstOrDefault(x => x.ID == permit.PermitTypeID);
+                //var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == permit.EmployeeID);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == permit.LocationID);
+                //var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                //var status = Db.PermitStatus.FirstOrDefault(x => x.ID == permit.StatusID);
+                //var currency = location.Currency;
+                var docDate = DateTime.Now.Date;
+                var returnWorkDate = DateTime.Now.AddDays(1).Date;
+
+                if (DateTime.TryParse(permit.Date, out docDate))
+                {
+                    docDate = Convert.ToDateTime(permit.Date).Date;
+                }
+
+                if (DateTime.TryParse(permit.ReturnWorkDate, out returnWorkDate))
+                {
+                    returnWorkDate = Convert.ToDateTime(permit.ReturnWorkDate).Date;
+                }
+
+                DateTime? beginDatetime = null;
+                if (!string.IsNullOrEmpty(permit.DateBegin) && !string.IsNullOrEmpty(permit.DateBeginHour))
+                {
+                    DateTime slipDate = Convert.ToDateTime(permit.DateBegin).Date;
+                    beginDatetime = slipDate.Add(Convert.ToDateTime(permit.DateBeginHour).TimeOfDay);
+                }
+
+                DateTime? endDatetime = null;
+                if (!string.IsNullOrEmpty(permit.DateEnd) && !string.IsNullOrEmpty(permit.DateEndHour))
+                {
+                    DateTime slipDate = Convert.ToDateTime(permit.DateEnd).Date;
+                    endDatetime = slipDate.Add(Convert.ToDateTime(permit.DateEndHour).TimeOfDay);
+                }
+
+                //var cash = OfficeHelper.GetCash(permit.LocationID, location.Currency);
+                // tahsilat eklenir.
+
+                if (beginDatetime != null && endDatetime != null && location != null)
+                {
+                    EmployeePermit permitdoc = new EmployeePermit();
+
+                    permitdoc.ActinTypeID = cashactType.ID;
+                    permitdoc.ActionTypeName = cashactType.Name;
+                    permitdoc.Date = docDate;
+                    permitdoc.DateBegin = beginDatetime.Value;
+                    permitdoc.DateEnd = endDatetime.Value;
+                    permitdoc.Description = permit.Description;
+                    permitdoc.EmployeeID = permit.EmployeeID;
+                    permitdoc.EnvironmentID = 2;
+                    permitdoc.IsActive = true;
+                    permitdoc.LocationID = location.LocationID;
+                    permitdoc.OurCompanyID = location.OurCompanyID;
+                    permitdoc.PermitTypeID = permit.PermitTypeID;
+                    permitdoc.ReturnWorkDate = returnWorkDate;
+                    permitdoc.StatusID = permit.StatusID;
+                    permitdoc.TimeZone = location.Timezone.Value;
+                    permitdoc.UID = Guid.NewGuid();
+
+
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.AddEmployeePermit(permitdoc, model.Authentication);
+
+                    TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+                    if (result.IsSuccess == true)
+                    {
+                        return RedirectToAction("PermitDetail", "Salary", new { id = permitdoc.UID });
+                    }
+                    else
+                    {
+                        return RedirectToAction("AddPermit", "Salary");
+                    }
+                }
+                else
+                {
+                    result.Message = $"İzin başlangıç veya bitiş tarihlerinin her ikisi de dolu olmalıdır. Çalışan ve lokasyon seçilmelidir.";
+                }
+            }
+            else
+            {
+                result.Message = $"Form bilgileri gelmedi.";
+            }
+
+            TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+            return RedirectToAction("AddPermit", "Salary");
+        }
+
+        [AllowAnonymous]
+        public ActionResult PermitDetail(Guid id)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.InfoResult = TempData["result"] as Result ?? null;
+            }
+
+           
+
+            model.Permit = Db.VDocumentEmployeePermit.FirstOrDefault(x => x.UID == id);
+            model.PermitTypes = Db.PermitType.Where(x => x.IsActive == true);
+            model.PermitStatus = Db.PermitStatus.Where(x => x.ID >= 0 && x.IsActive == true).ToList();
+
+            return View(model);
+        }
     }
 }

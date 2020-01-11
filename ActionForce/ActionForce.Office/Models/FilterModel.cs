@@ -10,6 +10,7 @@ namespace ActionForce.Office
         public int? LocationID { get; set; }
         public int? EmployeeID { get; set; }
         public int? BankAccountID { get; set; }
+        public int? TypeID { get; set; }
         public DateTime? DateBegin { get; set; }
         public DateTime? DateEnd { get; set; }
     }
