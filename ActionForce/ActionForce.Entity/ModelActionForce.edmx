@@ -3664,6 +3664,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentEmployeePermit' do
           <Property Name="TypeCode" Type="nvarchar" MaxLength="20" />
           <Property Name="PermitTypeName" Type="nvarchar" MaxLength="50" />
           <Property Name="ReturnWorkDate" Type="date" />
+          <Property Name="EnvironmentName" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdaterEmployeeFullName" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPosCancel' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5600,7 +5602,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentEmployeePermit].[StatusName] AS [StatusName], 
     [VDocumentEmployeePermit].[TypeCode] AS [TypeCode], 
     [VDocumentEmployeePermit].[PermitTypeName] AS [PermitTypeName], 
-    [VDocumentEmployeePermit].[ReturnWorkDate] AS [ReturnWorkDate]
+    [VDocumentEmployeePermit].[ReturnWorkDate] AS [ReturnWorkDate], 
+    [VDocumentEmployeePermit].[EnvironmentName] AS [EnvironmentName], 
+    [VDocumentEmployeePermit].[UpdaterEmployeeFullName] AS [UpdaterEmployeeFullName]
     FROM [dbo].[VDocumentEmployeePermit] AS [VDocumentEmployeePermit]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentPosCancel" EntityType="Self.VDocumentPosCancel" store:Type="Views" store:Schema="dbo">
@@ -11549,6 +11553,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TypeCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="PermitTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ReturnWorkDate" Type="DateTime" Precision="0" />
+          <Property Name="EnvironmentName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdaterEmployeeFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SalaryType">
           <Key>
@@ -16142,6 +16148,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentEmployeePermit">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentEmployeePermit">
               <MappingFragment StoreEntitySet="VDocumentEmployeePermit">
+                <ScalarProperty Name="UpdaterEmployeeFullName" ColumnName="UpdaterEmployeeFullName" />
+                <ScalarProperty Name="EnvironmentName" ColumnName="EnvironmentName" />
                 <ScalarProperty Name="ReturnWorkDate" ColumnName="ReturnWorkDate" />
                 <ScalarProperty Name="PermitTypeName" ColumnName="PermitTypeName" />
                 <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />

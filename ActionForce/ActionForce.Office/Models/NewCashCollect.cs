@@ -314,4 +314,24 @@ namespace ActionForce.Office
         public int StatusID { get; set; }
         
     }
+
+    public class EditPermit
+    {
+        public int ActionTypeID { get; set; }
+        public string Date { get; set; }
+        public int LocationID { get; set; }
+        public int EmployeeID { get; set; }
+        public int PermitTypeID { get; set; }
+        public string DateBegin { get; set; }
+        public string DateBeginHour { get; set; }
+        public string DateEnd { get; set; }
+        public string DateEndHour { get; set; }
+        public string ReturnWorkDate { get; set; }
+        public string Description { get; set; }
+        public int StatusID { get; set; }
+        public Guid UID { get; set; }
+        public long ID { get; set; }
+        public string IsActive { get; set; }
+
+    }
 }

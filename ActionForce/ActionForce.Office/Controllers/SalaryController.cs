@@ -991,7 +991,7 @@ namespace ActionForce.Office.Controllers
                 model.Filters.EmployeeID = employeeID;
             }
 
-            model.Permits = Db.VDocumentEmployeePermit.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderByDescending(x => x.RecordDate).ToList();
+            model.Permits = Db.VDocumentEmployeePermit.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.RecordDate).ToList();
 
             if (model.Filters.DateBegin != null && model.Filters.DateEnd != null)
             {
@@ -1170,13 +1170,130 @@ namespace ActionForce.Office.Controllers
                 model.InfoResult = TempData["result"] as Result ?? null;
             }
 
-           
-
-            model.Permit = Db.VDocumentEmployeePermit.FirstOrDefault(x => x.UID == id);
+            model.CurrentPermit = Db.VDocumentEmployeePermit.FirstOrDefault(x => x.UID == id);
             model.PermitTypes = Db.PermitType.Where(x => x.IsActive == true);
-            model.PermitStatus = Db.PermitStatus.Where(x => x.ID >= 0 && x.IsActive == true).ToList();
+            model.PermitStatus = Db.PermitStatus.Where(x => x.IsActive == true).ToList();
+            model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Permit" && x.ProcessID == model.CurrentPermit.ID.ToString()).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
 
             return View(model);
         }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult EditPermit(EditPermit permit)
+        {
+            Result<DocumentEmployeePermit> result = new Result<DocumentEmployeePermit>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (permit != null)
+            {
+                var cashactType = Db.CashActionType.FirstOrDefault(x => x.ID == permit.ActionTypeID);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == permit.LocationID);
+                var docDate = DateTime.Now.Date;
+                var returnWorkDate = DateTime.Now.AddDays(1).Date;
+                bool isActive = !string.IsNullOrEmpty(permit.IsActive) && permit.IsActive == "1" ? true : false;
+
+                if (DateTime.TryParse(permit.Date, out docDate))
+                {
+                    docDate = Convert.ToDateTime(permit.Date).Date;
+                }
+
+                if (DateTime.TryParse(permit.ReturnWorkDate, out returnWorkDate))
+                {
+                    returnWorkDate = Convert.ToDateTime(permit.ReturnWorkDate).Date;
+                }
+
+                DateTime? beginDatetime = null;
+                if (!string.IsNullOrEmpty(permit.DateBegin) && !string.IsNullOrEmpty(permit.DateBeginHour))
+                {
+                    DateTime slipDate = Convert.ToDateTime(permit.DateBegin).Date;
+                    beginDatetime = slipDate.Add(Convert.ToDateTime(permit.DateBeginHour).TimeOfDay);
+                }
+
+                DateTime? endDatetime = null;
+                if (!string.IsNullOrEmpty(permit.DateEnd) && !string.IsNullOrEmpty(permit.DateEndHour))
+                {
+                    DateTime slipDate = Convert.ToDateTime(permit.DateEnd).Date;
+                    endDatetime = slipDate.Add(Convert.ToDateTime(permit.DateEndHour).TimeOfDay);
+                }
+
+                // tahsilat eklenir.
+
+                if (beginDatetime != null && endDatetime != null && location != null && endDatetime > beginDatetime)
+                {
+                    EmployeePermit permitdoc = new EmployeePermit();
+
+                    permitdoc.ActinTypeID = cashactType.ID;
+                    permitdoc.ActionTypeName = cashactType.Name;
+                    permitdoc.Date = docDate;
+                    permitdoc.DateBegin = beginDatetime.Value;
+                    permitdoc.DateEnd = endDatetime.Value;
+                    permitdoc.Description = permit.Description;
+                    permitdoc.EmployeeID = permit.EmployeeID;
+                    permitdoc.IsActive = isActive;
+                    permitdoc.LocationID = location.LocationID;
+                    permitdoc.OurCompanyID = location.OurCompanyID;
+                    permitdoc.PermitTypeID = permit.PermitTypeID;
+                    permitdoc.ReturnWorkDate = returnWorkDate;
+                    permitdoc.StatusID = permit.StatusID;
+                    permitdoc.TimeZone = location.Timezone.Value;
+                    permitdoc.UID = permit.UID;
+                    permitdoc.ID = permit.ID;
+
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.EditEmployeePermit(permitdoc, model.Authentication);
+
+                    TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+                    if (result.IsSuccess == true)
+                    {
+                        return RedirectToAction("PermitDetail", "Salary", new { id = permitdoc.UID });
+                    }
+                    else
+                    {
+                        return RedirectToAction("AddPermit", "Salary");
+                    }
+                }
+                else
+                {
+                    if (endDatetime <= beginDatetime)
+                    {
+                        result.Message += $"İzin bitiş tarihi başlangış tarihden küçük olmamalıdır";
+                    }
+
+                    if (beginDatetime == null)
+                    {
+                        result.Message += $"İzin başlangıç tarihi boş olmamalıdır";
+                    }
+
+                    if (endDatetime == null)
+                    {
+                        result.Message += $"İzin bitiş tarihi boş olmamalıdır";
+                    }
+
+                    if (permit.LocationID <= 0 || permit.EmployeeID <= 0)
+                    {
+                        result.Message += $"Çalışan ve lokasyon mutlaka seçilmelidir.";
+                    }
+                }
+            }
+            else
+            {
+                result.Message = $"Form bilgileri gelmedi.";
+            }
+
+            TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+            return RedirectToAction("AddPermit", "Salary");
+        }
+
+
     }
 }

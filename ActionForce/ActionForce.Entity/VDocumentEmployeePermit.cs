@@ -54,5 +54,7 @@ namespace ActionForce.Entity
         public string TypeCode { get; set; }
         public string PermitTypeName { get; set; }
         public Nullable<System.DateTime> ReturnWorkDate { get; set; }
+        public string EnvironmentName { get; set; }
+        public string UpdaterEmployeeFullName { get; set; }
     }
 }

@@ -33,13 +33,13 @@ namespace ActionForce.Office
         public VLocation CurrentLocation { get; set; }
         public Result<CashActions> Result { get; set; }
         public Result InfoResult { get; set; }
-
+        public IEnumerable<ApplicationLog> LogList { get; set; }
 
         public VDocumentSalaryEarn Detail { get; set; }
         public VDocumentSalaryPayment SalaryDetail { get; set; }
         public IEnumerable<ApplicationLog> History { get; set; }
         public EmployeeSalary EmployeeHour { get; set; }
-        public VDocumentEmployeePermit Permit { get; set; }
+        public VDocumentEmployeePermit CurrentPermit { get; set; }
 
         public IEnumerable<TotalModel> HeaderTotals { get; set; }
         public IEnumerable<TotalModel> MiddleTotals { get; set; }

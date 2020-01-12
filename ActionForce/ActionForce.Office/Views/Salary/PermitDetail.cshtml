@@ -1,6 +1,6 @@
-﻿@model ActionControlModel
+﻿@model SalaryControlModel
 @{
-    ViewBag.Title = "Cari Virman İşlemleri";
+    ViewBag.Title = "Çalışan İzin İşlemleri";
 }
 
 @section style{
@@ -9,7 +9,7 @@
 
 <div class="content-header">
     <div class="content-search">
-        <span class="tx-20">Cari Virman Detayı</span>
+        <span class="tx-20">Çalışan İzin Detayı</span>
     </div>
     <nav class="nav">
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
@@ -24,18 +24,18 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                                 <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Cari Virman İşlemleri</li>
+                                <li class="breadcrumb-item active" aria-current="page">Çalışan İzin İşlemleri</li>
                             </ol>
                         </nav>
-                        <h4 class="mg-b-0 tx-spacing--1">Virman Detayı</h4>
+                        <h4 class="mg-b-0 tx-spacing--1">İzin Detayı</h4>
                     </div>
                     <div class="d-none d-md-block">
-                        <a href="/Action/Transfers" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; Virman Listesi</a>
+                        <a href="/Salary/Permit" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; İzin Listesi</a>
                     </div>
                 </div>
 
 
-                @using (Html.BeginForm("EditTransfer", "Action", FormMethod.Post))
+                @using (Html.BeginForm("EditPermit", "Salary", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
 
@@ -45,7 +45,7 @@
                             <div class="form-group row mg-b-0">
                                 <label for="ActionTypeName" class="col-sm-3 col-form-label">İşlem Türü</label>
                                 <div class="col-sm-6">
-                                    <span id="ActionTypeName" name="ActionTypeName" class="tx-light tx-15">@(Model.CurrentTransfer?.ActionTypeName?.ToString())</span>
+                                    <span id="ActionTypeName" name="ActionTypeName" class="tx-light tx-15">@(Model.CurrentPermit?.ActionTypeName?.ToString())</span>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -54,7 +54,7 @@
                             <div class="form-group row mg-b-5">
                                 <label for="DocumentNumber" class="col-sm-3 col-form-label">Doküman No</label>
                                 <div class="col-sm-6">
-                                    <input id="DocumentNumber" name="DocumentNumber" type="text" class="form-control" autocomplete="off" placeholder="Doküman No" value="@(Model.CurrentTransfer.DocumentNumber)" required readonly>
+                                    <input id="DocumentNumber" name="DocumentNumber" type="text" class="form-control" autocomplete="off" placeholder="Doküman No" value="@(Model.CurrentPermit.DocumentNumber)" required readonly>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -63,124 +63,47 @@
                             <div class="form-group row">
                                 <label for="DocumentDate" class="col-sm-3 col-form-label">Tarih</label>
                                 <div class="col-sm-6">
-                                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.CurrentTransfer.DocumentDate?.ToString("yyyy-MM-dd"))" required>
+                                    <input id="Date" name="Date" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.CurrentPermit.Date?.ToString("yyyy-MM-dd"))" required>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
                             </div>
 
                             <div class="form-group row mg-b-5 bg-gray-50">
-                                <label for="FromLocationID" class="col-sm-3 col-form-label">Lokasyon</label>
+                                <label for="LocationID" class="col-sm-3 col-form-label">Lokasyon</label>
                                 <div class="col-sm-6">
-                                    <select class="form-control" id="FromLocationID" name="FromLocationID" required>
+                                    <select class="form-control" id="LocationID" name="LocationID" required>
                                         @foreach (var item in Model.LocationList.OrderBy(x => x.SortBy))
                                         {
-                                            <option value="@item.LocationID" @(item.LocationID == Model.CurrentTransfer.FromLocationID ? "selected" : "")>@($"{item.SortBy.Trim()} {item.LocationName} {item.State} {item.Description}" )</option>
+                                            <option value="@item.LocationID" @(item.LocationID == Model.CurrentPermit.LocationID ? "selected" : "")>@($"{item.SortBy.Trim()} {item.LocationName} {item.Description} {item.State}" )</option>
                                         }
                                     </select>
-                                </div>
-                                <div class="col-sm-3">
-                                </div>
-                            </div>
-
-                            <div class="form-group row mg-b-5 bg-gray-50">
-                                <label for="FromName" class="col-sm-3 col-form-label">Kaynak ( Çıkış )</label>
-                                <div class="col-sm-6">
-                                    <input id="FromCashID" name="FromCashID" type="hidden" value="@(Model.CurrentTransfer.FromCashID)" />
-                                    <input id="FromBankID" name="FromBankID" type="hidden" value="@(Model.CurrentTransfer.FromBankAccountID)" />
-                                    <input id="FromEmplID" name="FromEmplID" type="hidden" value="@(Model.CurrentTransfer.FromEmployeeID)" />
-                                    <input id="FromCustID" name="FromCustID" type="hidden" value="@(Model.CurrentTransfer.FromCustomerID)" />
-
-                                    <input id="FromName" name="FromName" type="text" class="form-control" autocomplete="off" placeholder="Kaynak" required readonly value="@($"{Model.CurrentTransfer.FromCashName}{Model.CurrentTransfer.FromBankAccountName}{Model.CurrentTransfer.FromEmpFullName}{Model.CurrentTransfer.FromCustFullName}")">
-                                </div>
-                                <div class="col-sm-3">
-                                    <a href="#modalFLocationCashSelect" data-toggle="modal" class="btn btn-xs btn-info" title="Kasa" onclick="FLocationCashSelect()"><i class="ion ion-md-keypad"></i></a>
-                                    <a href="#modalFLocationBankSelect" data-toggle="modal" class="btn btn-xs btn-warning" title="Banka" onclick="FLocationBankSelect()"><i class="ion ion-md-card"></i></a>
-                                    <a href="#modalFLocationEmployeeSelect" data-toggle="modal" class="btn btn-xs btn-success" title="Personel" onclick="FLocationEmployeeSelect()"><i class="ion ion-md-person"></i></a>
-                                    <a href="#modalFLocationCustomerSelect" data-toggle="modal" class="btn btn-xs btn-primary" title="Müşteri" onclick="FLocationCustomerSelect()"><i class="ion ion-md-man"></i></a>
-                                </div>
-                            </div>
-
-                            <div class="form-group row mg-b-5 bg-gray-50">
-                                <label for="FromDate" class="col-sm-3 col-form-label">Çıkış Tarihi</label>
-                                <div class="col-sm-6">
-                                    <input id="FromDate" name="FromDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Çıkış Tarihi" value="@(Model.CurrentTransfer.FromDate?.ToString("yyyy-MM-dd"))" readonly>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
                             </div>
 
                             <div class="form-group row bg-gray-50">
-                                <label for="FromRecEmpFullName" class="col-sm-3 col-form-label">Çıkış Yapan</label>
+                                <label for="EmployeeID" class="col-sm-3 col-form-label">Çalışan</label>
                                 <div class="col-sm-6">
-                                    <input id="FromRecordEmployeeID" name="FromRecordEmployeeID" type="hidden" value="@(Model.CurrentTransfer.FromRecordEmployeeID)" />
-                                    <input id="FromRecEmpFullName" name="FromRecEmpFullName" type="text" class="form-control" autocomplete="off" placeholder="Çıkış Yapan Kişi" value="@(Model.CurrentTransfer.FromRecEmpFullName)" readonly>
-                                </div>
-                                <div class="col-sm-3">
-                                </div>
-                            </div>
-
-                            <div class="form-group row mg-b-5 bg-gray-100">
-                                <label for="ToLocationID" class="col-sm-3 col-form-label">Lokasyon</label>
-                                <div class="col-sm-6">
-                                    <select class="form-control" id="ToLocationID" name="ToLocationID" required>
-                                        @foreach (var item in Model.LocationList.OrderBy(x => x.SortBy))
+                                    <select class="form-control select2" id="EmployeeID" name="EmployeeID" required>
+                                        @foreach (var item in Model.EmployeeList.OrderBy(x => x.FullName))
                                         {
-                                            <option value="@item.LocationID" @(item.LocationID == Model.CurrentTransfer.ToLocationID ? "selected" : "")>@($"{item.SortBy.Trim()} {item.LocationName} {item.State} {item.Description}" )</option>
+                                            <option value="@item.EmployeeID" @(item.EmployeeID == Model.CurrentPermit.EmployeeID ? "selected" : "")>@($"{item.FullName} ({item.IsActive})" )</option>
                                         }
                                     </select>
-                                </div>
-                                <div class="col-sm-3">
-                                </div>
-                            </div>
-
-                            <div class="form-group row mg-b-5 bg-gray-100">
-                                <label for="ToName" class="col-sm-3 col-form-label">Hedef ( Giriş )</label>
-                                <div class="col-sm-6">
-                                    <input id="ToCashID" name="ToCashID" type="hidden" value="@(Model.CurrentTransfer.ToCashID)" />
-                                    <input id="ToBankID" name="ToBankID" type="hidden" value="@(Model.CurrentTransfer.ToBankAccountID)" />
-                                    <input id="ToEmplID" name="ToEmplID" type="hidden" value="@(Model.CurrentTransfer.ToEmployeeID)" />
-                                    <input id="ToCustID" name="ToCustID" type="hidden" value="@(Model.CurrentTransfer.ToCustomerID)" />
-
-                                    <input id="ToName" name="ToName" type="text" class="form-control" autocomplete="off" placeholder="Hedef" required readonly value="@($"{Model.CurrentTransfer.ToCashName}{Model.CurrentTransfer.ToBankAccountName}{Model.CurrentTransfer.ToEmpFullName}{Model.CurrentTransfer.ToCustFullName}")">
-                                </div>
-                                <div class="col-sm-3">
-                                    <a href="#modalTLocationCashSelect" data-toggle="modal" class="btn btn-xs btn-info" title="Kasa" onclick="TLocationCashSelect()"><i class="ion ion-md-keypad"></i></a>
-                                    <a href="#modalTLocationBankSelect" data-toggle="modal" class="btn btn-xs btn-warning" title="Banka" onclick="TLocationBankSelect()"><i class="ion ion-md-card"></i></a>
-                                    <a href="#modalTLocationEmployeeSelect" data-toggle="modal" class="btn btn-xs btn-success" title="Personel" onclick="TLocationEmployeeSelect()"><i class="ion ion-md-person"></i></a>
-                                    <a href="#modalTLocationCustomerSelect" data-toggle="modal" class="btn btn-xs btn-primary" title="Müşteri" onclick="TLocationCustomerSelect()"><i class="ion ion-md-man"></i></a>
-                                </div>
-                            </div>
-
-                            <div class="form-group row mg-b-5 bg-gray-100">
-                                <label for="ToDate" class="col-sm-3 col-form-label">Giriş Tarihi</label>
-                                <div class="col-sm-6">
-                                    <input id="ToDate" name="ToDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Giriş Tarihi" value="@(Model.CurrentTransfer.ToDate?.ToString("yyyy-MM-dd"))" readonly>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
                             </div>
 
                             <div class="form-group row bg-gray-100">
-                                <label for="ToRecEmpFullName" class="col-sm-3 col-form-label">Giriş Yapan</label>
+                                <label for="PermitTypeID" class="col-sm-3 col-form-label">İzin Türü</label>
                                 <div class="col-sm-6">
-                                    <input id="ToRecordEmployeeID" name="ToRecordEmployeeID" type="hidden" value="@(Model.CurrentTransfer.ToRecordEmployeeID)" />
-                                    <input id="ToRecEmpFullName" name="ToRecEmpFullName" type="text" class="form-control" autocomplete="off" placeholder="Giriş Yapan Kişi" value="@(Model.CurrentTransfer.ToRecEmpFullName)" readonly>
-                                </div>
-                                <div class="col-sm-3">
-                                </div>
-                            </div>
-
-                            <div class="form-group row mg-b-5">
-                                <label for="Amount" class="col-sm-3 col-form-label">Tutar</label>
-                                <div class="col-sm-4">
-                                    <input id="Amount" name="Amount" type="text" class="form-control money" autocomplete="off" placeholder="Tutar" required value="@(Model.CurrentTransfer.Amount?.ToString("N2"))">
-                                </div>
-                                <div class="col-sm-2">
-                                    <select class="form-control" name="Currency" required>
-                                        @foreach (var item in Model.CurrencyList)
+                                    <select class="form-control" id="PermitTypeID" name="PermitTypeID" required>
+                                        @foreach (var item in Model.PermitTypes.Where(x => x.IsActive == true).OrderBy(x => x.SortBy))
                                         {
-                                            <option value="@item.Code" @(Model.CurrentTransfer.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
+                                            <option value="@item.ID" @(item.ID == Model.CurrentPermit.PermitTypeID ? "selected" : "")>@($"{item.TypeCode.Trim()} - {item.PermitTypeName.Trim()} ({(item.IsPaidTo == true ? "Ücretli (Ücreti Ödenir)" : "Ücretsiz (Ücreti Kesilir)")})" )</option>
                                         }
                                     </select>
                                 </div>
@@ -188,51 +111,111 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row mg-b-5">
-                                <label for="SystemAmount" class="col-sm-3 col-form-label">Sistem Tutarı, Döviz Kuru</label>
-                                <div class="col-sm-2">
-                                    <input id="SystemAmount" name="SystemAmount" type="text" class="form-control money" autocomplete="off" placeholder="Sistem Tutar" value="@(Model.CurrentTransfer.SystemAmount?.ToString("N2"))" readonly>
+                            <div class="form-group row  mg-b-5">
+                                <label for="DateBegin" class="col-sm-3 col-form-label">İzin Başlangıç Tarihi</label>
+                                <div class="col-sm-3">
+                                    <input id="DateBegin" name="DateBegin" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.CurrentPermit.DateBegin?.Date.ToString("yyyy-MM-dd"))" required>
                                 </div>
-                                <div class="col-sm-2">
-                                    <input id="SystemCurrency" name="SystemCurrency" type="text" class="form-control" autocomplete="off" placeholder="Sistem Birimi" value="@(Model.CurrentTransfer.SystemCurrency)" readonly>
-                                </div>
-                                <div class="col-sm-2">
-                                    <input id="ExchangeRate" name="ExchangeRate" type="text" class="form-control money" autocomplete="off" placeholder="Döviz Kuru" value="@(Model.CurrentTransfer.ExchangeRate?.ToString("N2"))">
+                                <div class="col-sm-3">
+                                    <input id="DateBeginHour" name="DateBeginHour" type="text" class="form-control hourfull" autocomplete="off" placeholder="Saat" value="@(Model.CurrentPermit.DateBegin?.ToString("HH\\:mm\\:ss"))" required>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
                             </div>
 
-                            <div class="form-group row mg-b-5">
-                                <label for="CarrierEmployeeID" class="col-sm-3 col-form-label">Sorumlu Personel</label>
-                                <div class="col-sm-6">
-                                    <select class="form-control" id="CarrierEmployeeID" name="CarrierEmployeeID" required>
-                                        @foreach (var item in Model.EmployeeList.Where(x => x.IsActive == true).OrderBy(x => x.FullName))
-                                        {
-                                            <option value="@item.EmployeeID" @(item.EmployeeID == Model.CurrentTransfer.CarrierEmployeeID ? "selected" : "")>@($"{item.FullName.Trim()} ({item.IsActive})" )</option>
-                                        }
-                                    </select>
+                            <div class="form-group row  mg-b-5">
+                                <label for="DateEnd" class="col-sm-3 col-form-label">İzin Bitiş Tarihi</label>
+                                <div class="col-sm-3">
+                                    <input id="DateEnd" name="DateEnd" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.CurrentPermit.DateEnd?.Date.ToString("yyyy-MM-dd"))" required>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input id="DateEndHour" name="DateEndHour" type="text" class="form-control hourfull" autocomplete="off" placeholder="Saat" value="@(Model.CurrentPermit.DateEnd?.ToString("HH\\:mm\\:ss"))" required>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
                             </div>
+
+                            <div class="form-group row">
+                                <label for="ReturnWorkDate" class="col-sm-3 col-form-label">İşe Başlangıç Tarihi</label>
+                                <div class="col-sm-3">
+                                    <input id="ReturnWorkDate" name="ReturnWorkDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.CurrentPermit.ReturnWorkDate?.Date.ToString("yyyy-MM-dd"))" required>
+                                </div>
+                                <div class="col-sm-3"> </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+
+
+                            <div class="form-group row mg-b-5">
+                                <label for="UnitPrice" class="col-sm-3 col-form-label">Saat Ücreti</label>
+                                <div class="col-sm-3">
+                                    <input id="UnitPrice" name="UnitPrice" type="text" class="form-control money text-right" autocomplete="off" placeholder="Saat Ücreti" value="@(Model.CurrentPermit.UnitPrice?.ToString("N2"))" readonly>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input id="Currency" name="Currency" type="text" class="form-control" autocomplete="off" placeholder="Para" value="@(Model.CurrentPermit.Currency)" readonly>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row mg-b-5">
+                                <label for="MinuteDuration" class="col-sm-3 col-form-label">İzinli Olduğu Süre (Dk)</label>
+                                <div class="col-sm-3">
+                                    <input id="MinuteDuration" name="MinuteDuration" type="text" class="form-control money text-right" autocomplete="off" placeholder="İzinli Olduğu Süre" value="@(Model.CurrentPermit.MinuteDuration?.ToString("N2"))" readonly>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input id="MinuteDurationdk" name="MinuteDurationdk" type="text" class="form-control" autocomplete="off" placeholder="Para" value="Dakika" readonly>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row mg-b-5">
+                                <label for="QuantityHour" class="col-sm-3 col-form-label">Kesinti Uygulanacak Saat</label>
+                                <div class="col-sm-3">
+                                    <input id="QuantityHour" name="QuantityHour" type="text" class="form-control money text-right" autocomplete="off" placeholder="Kesinti Uygulanacak Saat" value="@(Model.CurrentPermit.QuantityHour?.ToString("N2"))" readonly>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input id="Currency" name="Currency" type="text" class="form-control" autocomplete="off" placeholder="Saat" value="Saat" readonly>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="TotalAmount" class="col-sm-3 col-form-label">Kesinti Uygulanacak Tutar</label>
+                                <div class="col-sm-3">
+                                    <input id="TotalAmount" name="TotalAmount" type="text" class="form-control money text-right" autocomplete="off" placeholder="İzin Kesinti Tutarı" value="@(Model.CurrentPermit.TotalAmount?.ToString("N2"))" readonly>
+                                </div>
+                                <div class="col-sm-3">
+                                    <input id="Currency" name="Currency" type="text" class="form-control" autocomplete="off" placeholder="Para" value="@(Model.CurrentPermit.Currency)" readonly>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+
+
+
+
+
+
 
                             <div class="form-group row">
                                 <label for="Description" class="col-sm-3 col-form-label">Açıklama</label>
                                 <div class="col-sm-6">
-                                    <textarea id="Description" name="Description" rows="5" cols="20" class="form-control" style="width:100% !important;">@(Model.CurrentTransfer.Description)</textarea>
+                                    <textarea id="Description" name="Description" rows="5" cols="20" class="form-control" style="width:100% !important;">@(Model.CurrentPermit.Description)</textarea>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
                             </div>
 
-                            <div class="form-group row">
+                            <div class="form-group row bg-gray-50">
                                 <label for="StatusID" class="col-sm-3 col-form-label">Aşaması</label>
                                 <div class="col-sm-6">
                                     <select class="form-control" id="StatusID" name="StatusID" required>
-                                        @foreach (var item in Model.TransferStatus.OrderBy(x => x.SortBy))
+                                        @foreach (var item in Model.PermitStatus.OrderBy(x => x.SortBy))
                                         {
-                                            <option value="@item.ID" @(item.ID == Model.CurrentTransfer.StatusID ? "selected" : "")>@($"{item.StatusName.Trim()}" )</option>
+                                            <option value="@item.ID" @(item.ID == Model.CurrentPermit.StatusID ? "selected" : "") @(item.ID == 2 ? "style=color:red;" : "")>@($"{item.StatusName}" )</option>
                                         }
                                     </select>
                                 </div>
@@ -244,7 +227,7 @@
                                 <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
                                 <div class="col-sm-6">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" @(Model.CurrentTransfer.IsActive == true ? "checked" : "")>
+                                        <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" @(Model.CurrentPermit.IsActive == true ? "checked" : "")>
                                         <label class="custom-control-label" for="IsActive">Aktif</label>
                                     </div>
                                 </div>
@@ -255,9 +238,11 @@
                             <div class="form-group row mg-b-0">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-6">
-                                    <input id="ID" name="ID" type="hidden" value="@(Model.CurrentTransfer.ID)" />
-                                    <input id="UID" name="UID" type="hidden" value="@(Model.CurrentTransfer.UID)" />
-                                    <button type="submit" class="btn btn-primary btn-block">Cari Virman Güncelle</button>
+                                    <input id="ID" name="ID" type="hidden" value="@(Model.CurrentPermit.ID)" />
+                                    <input id="UID" name="UID" type="hidden" value="@(Model.CurrentPermit.UID)" />
+                                    <input id="ActionTypeID" name="ActionTypeID" type="hidden" value="@(Model.CurrentPermit.ActionTypeID)" />
+
+                                    <button type="submit" class="btn btn-primary btn-block">Çalışan İznini Güncelle</button>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -271,9 +256,9 @@
                     <div class="col-sm-3 pd-t-10 pd-b-10">
                         <b>Kayıt Tarihçesi</b>
                     </div>
-                    <div class="col-sm-3 pd-t-10">@(Html.Raw($"<b>Kayıt Yeri </b> : {Model.CurrentTransfer.Environment}")) </div>
-                    <div class="col-sm-3 pd-t-10">@(Html.Raw($"<b>Kaydeden </b> : {Model.CurrentTransfer.RecEmployeeName} {Model.CurrentTransfer.RecordDate} ")) </div>
-                    <div class="col-sm-3 pd-t-10">@(Model.CurrentTransfer.UpdateDate != null ? Html.Raw($"<b>Güncelleyen </b> : {Model.CurrentTransfer.UpdEmployeeName} {Model.CurrentTransfer.UpdateDate} ") : Html.Raw("")) </div>
+                    <div class="col-sm-3 pd-t-10">@(Html.Raw($"<b>Kayıt Yeri </b> : {Model.CurrentPermit.EnvironmentName}")) </div>
+                    <div class="col-sm-3 pd-t-10">@(Html.Raw($"<b>Kaydeden </b> : {Model.CurrentPermit.RecorderEmployeeFullName} {Model.CurrentPermit.RecordDate} ")) </div>
+                    <div class="col-sm-3 pd-t-10">@(Model.CurrentPermit.UpdateDate != null ? Html.Raw($"<b>Güncelleyen </b> : {Model.CurrentPermit.UpdaterEmployeeFullName} {Model.CurrentPermit.UpdateDate} ") : Html.Raw("")) </div>
 
                 </div>
 
@@ -411,28 +396,28 @@
                 placeholder: 'Lokasyon Seçiminiz',
                 searchInputPlaceholder: 'Search options'
             });
-            $('#DocumentDate').datepicker({
+            $('#Date').datepicker({
                 dateFormat: "yy-mm-dd",
                 dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
             });
 
-            $('#UpdateDocumentDate').datepicker({
+            $('#DateBegin').datepicker({
                 dateFormat: "yy-mm-dd",
                 dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
             });
 
-            $('#SlipDate').datepicker({
+            $('#DateEnd').datepicker({
                 dateFormat: "yy-mm-dd",
                 dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
             });
 
-            $('#UpdateSlipDate').datepicker({
+            $('#ReturnWorkDate').datepicker({
                 dateFormat: "yy-mm-dd",
                 dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
@@ -452,12 +437,12 @@
 
     </script>
 
-    @if (Model.Result != null) //
+    @if (Model.InfoResult != null) //
     {
         <script type="text/javascript">
         $.toast({
             heading: 'Information',
-            text: '@Model.Result.Message ',
+            text: '@Model.InfoResult.Message ',
             showHideTransition: 'slide',
             icon: 'info',
             hideAfter: 5000,

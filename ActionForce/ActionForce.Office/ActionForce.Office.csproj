@@ -2563,6 +2563,7 @@
     <Content Include="Views\Employee\Detail.cshtml" />
     <Content Include="Views\Salary\Permit.cshtml" />
     <Content Include="Views\Salary\AddPermit.cshtml" />
+    <Content Include="Views\Salary\PermitDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

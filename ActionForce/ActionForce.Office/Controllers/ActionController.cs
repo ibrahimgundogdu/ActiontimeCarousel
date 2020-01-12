@@ -372,7 +372,7 @@ namespace ActionForce.Office.Controllers
             model.CurrencyList = Db.Currency.ToList();
             model.CurrentTransfer = Db.VDocumentTransfer.FirstOrDefault(x => x.UID == id);
             model.TransferStatus = Db.DocumentTransferStatus.ToList();
-            model.LogList = Db.ApplicationLog.Where(x => x.Modul == "DocumentTransfer" && x.ProcessID == model.CurrentTransfer.ID.ToString()).ToList();
+            model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Transfer" && x.ProcessID == model.CurrentTransfer.ID.ToString()).ToList();
 
             return View(model);
         }
