@@ -35,7 +35,8 @@
                         <h4 class="mg-b-0 tx-spacing--1">Maaş Avans Ödemesi Detayı</h4>
                     </div>
                     <div class="d-none d-md-block">
-                        @{Html.RenderPartial("_PartialAddCashMenu");}
+                        @*@{Html.RenderPartial("_PartialAddCashMenu");}*@
+                        <a href="/Cash/SalaryPayment" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; Ödeme Listesi</a>
                     </div>
                 </div>
 
@@ -43,7 +44,178 @@
                 @using (Html.BeginForm("EditSalaryPayment", "Cash", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
+
+
                     <div class="row row-xs">
+                        <div class="col-lg-12">
+
+
+                            <div class="form-group row">
+                                <label for="ActionTypeName" class="col-sm-3 col-form-label">Belge Türü</label>
+                                <div class="col-sm-6">
+                                    <input id="UID" name="UID" type="hidden" value="@(Model.SalaryDetail.UID)" />
+                                    <input id="ID" name="ID" type="hidden" value="@(Model.SalaryDetail.ID)" />
+                                    <input id="ActionTypeName" name="ActionTypeName" type="text" class="form-control" autocomplete="off" value="@(Model.SalaryDetail.ActionTypeName)" readonly>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="DocumentNumber" class="col-sm-3 col-form-label">Belge No</label>
+                                <div class="col-sm-6">
+                                    <input id="DocumentNumber" name="DocumentNumber" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.SalaryDetail.DocumentNumber)" required>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="DocumentDate" class="col-sm-3 col-form-label">Belge Tarihi</label>
+                                <div class="col-sm-6">
+                                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.SalaryDetail.Date?.ToString("yyyy-MM-dd"))" required>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-5 bg-gray-50">
+                                <label for="LocationID" class="col-sm-3 col-form-label">Hangi Lokasyondan</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="LocationID" name="LocationID" required>
+                                        @foreach (var item in Model.LocationList.OrderBy(x => x.SortBy))
+                                        {
+                                            <option value="@item.LocationID" @(item.LocationID == Model.SalaryDetail.LocationID ? "selected" : "")>@($"{item.SortBy.Trim()} {item.LocationName} {item.Description} {item.State}" )</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-5 bg-gray-50">
+                                <label for="CashName" class="col-sm-3 col-form-label">Hangi Noktadan</label>
+                                <div class="col-sm-6">
+                                    <input id="CashName" name="CashName" type="text" class="form-control" autocomplete="off" value="@($"{Model.SalaryDetail.CashName}{Model.SalaryDetail.BankAccountName}")" readonly>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row bg-gray-50">
+                                <label for="EmployeeID" class="col-sm-3 col-form-label">Hangi Çalışana</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control select2" id="EmployeeID" name="EmployeeID" required>
+                                        @foreach (var item in Model.EmployeeList.OrderBy(x => x.FullName))
+                                        {
+                                            <option value="@item.EmployeeID" @(item.EmployeeID == Model.SalaryDetail.ToEmployeeID ? "selected" : "")>@($"{item.FullName} ({item.IsActive})" )</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-5 bg-gray-100">
+                                <label for="SalaryTypeID" class="col-sm-3 col-form-label">Maaş mı? / Avans mı?</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="SalaryTypeID" name="SalaryTypeID" required>
+                                        @foreach (var item in Model.SalaryTypes.Where(x => x.IsActive == true).OrderBy(x => x.SortBy))
+                                        {
+                                            <option value="@item.ID" @(item.ID == Model.SalaryDetail.SalaryTypeID ? "selected" : "")>@($"{item.SalaryTypeName}" )</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-5 bg-gray-100">
+                                <label for="CategoryID" class="col-sm-3 col-form-label">İşlem Kategorisi</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="CategoryID" name="CategoryID" required>
+                                        @foreach (var item in Model.SalaryCategories.Where(x => x.IsActive == true).OrderBy(x => x.SortBy))
+                                        {
+                                            <option value="@item.ID" @(item.ID == Model.SalaryDetail.CategoryID ? "selected" : "")>@($"{item.CategoryName}" )</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label for="Amount" class="col-sm-3 col-form-label">Ödenen Tutar</label>
+                                <div class="col-sm-4">
+                                    <input id="Amount" name="Amount" type="text" class="form-control font-weight-bold tx-15 money" autocomplete="off" min="0" placeholder="Tutar" value="@(Model.SalaryDetail.Amount?.ToString("N2"))" required>
+                                </div>
+                                <div class="col-sm-2">
+                                    <select class="form-control" id="Currency" name="Currency" required>
+                                        @foreach (var item in Model.CurrencyList)
+                                        {
+                                            <option value="@item.Code" @(item.Code == Model.SalaryDetail.Currency ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="ExchangeRate" class="col-sm-3 col-form-label">Sistem Tutarı</label>
+                                <div class="col-sm-2">
+                                    <input id="ExchangeRate" name="ExchangeRate" type="text" class="form-control money4" autocomplete="off" min="0" placeholder="Kur" value="@(Model.SalaryDetail.ExchangeRate?.ToString("N4"))" required>
+                                </div>
+                                <div class="col-sm-2">
+                                    <input id="SystemAmount" name="SystemAmount" type="text" class="form-control money" autocomplete="off" min="0" placeholder="Tutar" value="@(Model.SalaryDetail.SystemAmount?.ToString("N2"))" readonly>
+                                </div>
+                                <div class="col-sm-2">
+                                    <select class="form-control" id="SystemCurrency" name="SystemCurrency" readonly>
+                                        @foreach (var item in Model.CurrencyList)
+                                        {
+                                            <option value="@item.Code" @(item.Code == Model.SalaryDetail.SystemCurrency ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="Description" class="col-sm-3 col-form-label">Açıklama</label>
+                                <div class="col-sm-6">
+                                    <textarea id="Description" name="Description" rows="5" cols="20" class="form-control" style="width:100% !important;">@(Model.SalaryDetail.Description)</textarea>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-0">
+                                <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+                                <div class="col-sm-6">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" @(Model.SalaryDetail.IsActive == true ? "checked" : "")>
+                                        <label class="custom-control-label" for="IsActive">Aktif</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-0">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-primary btn-block">Nakit Ödeme Güncelle</button>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    @*<div class="row row-xs">
                         <div class="col-lg-6">
                             <div class="card mg-b-20 mg-lg-b-25">
                                 <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
@@ -256,7 +428,8 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>*@
+
 
                 }
             </div>
@@ -265,7 +438,7 @@
 </div>
 
 @section canvasmenu {
-    @{Html.RenderPartial("_PartialDocumentForms", Model);}
+    @*@{Html.RenderPartial("_PartialDocumentForms", Model);}*@
 }
 
 @section scripts {

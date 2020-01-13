@@ -1749,7 +1749,7 @@ namespace ActionForce.Office
                 using (ActionTimeEntities db = new ActionTimeEntities())
                 {
                     var employeeschedule = db.Schedule.FirstOrDefault(x => x.EmployeeID == employeeid && x.LocationID == locationid && x.ShiftDate == date);
-                    var employeeshift = db.EmployeeShift.FirstOrDefault(x => x.EmployeeID == employeeid && x.LocationID == locationid && x.ShiftDate == date);
+                    var employeeshift = db.EmployeeShift.FirstOrDefault(x => x.EmployeeID == employeeid && x.LocationID == locationid && x.ShiftDate == date && x.IsWorkTime == true);
 
                     if (employeeschedule != null )
                     {

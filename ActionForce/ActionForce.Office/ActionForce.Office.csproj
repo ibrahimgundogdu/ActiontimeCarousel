@@ -2564,6 +2564,7 @@
     <Content Include="Views\Salary\Permit.cshtml" />
     <Content Include="Views\Salary\AddPermit.cshtml" />
     <Content Include="Views\Salary\PermitDetail.cshtml" />
+    <Content Include="Views\Cash\NewSalaryPayment.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

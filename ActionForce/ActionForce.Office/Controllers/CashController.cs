@@ -20,7 +20,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
             if (TempData["filter"] != null)
@@ -88,11 +88,10 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddCashCollection(NewCashCollect cashCollect)
         {
-            Result<DocumentCashCollections> result = new Result<DocumentCashCollections>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
 
             CashControlModel model = new CashControlModel();
@@ -129,21 +128,21 @@ namespace ActionForce.Office.Controllers
                     collection.LocationID = cashCollect.LocationID;
                     collection.ReferanceID = cashCollect.ReferanceID;
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.AddCashCollection(collection, model.Authentication);
-                    
-                    
+                    var addresult = documentManager.AddCashCollection(collection, model.Authentication);
+
+                    result.Message = addresult.Message;
+                    result.IsSuccess = addresult.IsSuccess;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-            }
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
 
-            TempData["result"] = messageresult;
+            }
+
+
+            TempData["result"] = result;
 
             return RedirectToAction("Index", "Cash");
         }
@@ -152,14 +151,13 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditCashCollection(NewCashCollect cashCollect)
         {
-            Result<DocumentCashCollections> result = new Result<DocumentCashCollections>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (cashCollect != null)
             {
@@ -198,22 +196,24 @@ namespace ActionForce.Office.Controllers
                     {
                         collection.ExchangeRate = exchanges;
                     }
-                    
+
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.EditCashCollection(collection, model.Authentication);
+                    var editresult = documentManager.EditCashCollection(collection, model.Authentication);
+
+                    result.IsSuccess = editresult.IsSuccess;
+                    result.Message = editresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
+
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
 
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
+
             return RedirectToAction("CashDetail", new { id = cashCollect.UID });
 
         }
@@ -221,28 +221,26 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult DeleteCashCollection(string id)
         {
-            Result<DocumentCashCollections> result = new Result<DocumentCashCollections>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteCashCollection(Guid.Parse(id), model.Authentication);
+                var delresult = documentManager.DeleteCashCollection(Guid.Parse(id), model.Authentication);
+
+                result.IsSuccess = delresult.IsSuccess;
+                result.Message = delresult.Message;
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.IsSuccess = result.IsSuccess;
-            messageresult.Message = result.Message;
+            TempData["result"] = result;
 
-            TempData["result"] = messageresult;
             return RedirectToAction("CashDetail", new { id = id });
-
         }
 
         [AllowAnonymous]
@@ -252,7 +250,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
             model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
@@ -280,7 +278,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
             if (TempData["filter"] != null)
@@ -347,12 +345,12 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddCashSale(NewCashSale cashSale)
         {
-            Result<DocumentTicketSales> result = new Result<DocumentTicketSales>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
+
             CashControlModel model = new CashControlModel();
 
             if (cashSale != null)
@@ -394,21 +392,19 @@ namespace ActionForce.Office.Controllers
                     sale.ReferanceID = cashSale.ReferanceID;
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.AddCashSale(sale, model.Authentication);
+                    var addresult = documentManager.AddCashSale(sale, model.Authentication);
+
+                    result.IsSuccess = addresult.IsSuccess;
+                    result.Message = addresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-                
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
 
             return RedirectToAction("Sale", "Cash");
         }
@@ -417,14 +413,13 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditCashSale(NewCashSale cashSale)
         {
-            Result<DocumentTicketSales> result = new Result<DocumentTicketSales>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (cashSale != null)
             {
@@ -469,21 +464,19 @@ namespace ActionForce.Office.Controllers
                     }
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.EditCashSale(sale, model.Authentication);
+                    var editresult = documentManager.EditCashSale(sale, model.Authentication);
+
+                    result.IsSuccess = editresult.IsSuccess;
+                    result.Message = editresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("SaleDetail", new { id = cashSale.UID });
 
         }
@@ -491,27 +484,25 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult DeleteCashSale(string id)
         {
-            Result<DocumentTicketSales> result = new Result<DocumentTicketSales>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteCashSale(Guid.Parse(id), model.Authentication);
+                var delresult = documentManager.DeleteCashSale(Guid.Parse(id), model.Authentication);
+
+                result.IsSuccess = delresult.IsSuccess;
+                result.Message = delresult.Message;
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.IsSuccess = result.IsSuccess;
-            messageresult.Message = result.Message;
+            TempData["result"] = result;
 
-            TempData["result"] = messageresult;
-            //return View(model);
             return RedirectToAction("SaleDetail", new { id = id });
 
         }
@@ -523,7 +514,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
             model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
@@ -551,7 +542,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
             if (TempData["filter"] != null)
@@ -619,12 +610,12 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddCashExchange(NewCashExchange cashSale, HttpPostedFileBase documentFile)
         {
-            Result<DocumentSaleExchange> result = new Result<DocumentSaleExchange>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
+
             CashControlModel model = new CashControlModel();
 
             if (cashSale != null)
@@ -643,9 +634,9 @@ namespace ActionForce.Office.Controllers
                 }
                 var casho = OfficeHelper.GetCash(cashSale.LocationID, currencyo);
                 var cashi = OfficeHelper.GetCash(cashSale.LocationID, currencyi);
-                
+
                 string path = Server.MapPath("/");
-                
+
 
                 var exchange = OfficeHelper.GetExchange(docDate);
                 var exchangerate = Convert.ToDouble(cashSale.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
@@ -695,22 +686,19 @@ namespace ActionForce.Office.Controllers
                     }
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.AddSaleExchange(sale, model.Authentication);
+                    var addresult = documentManager.AddSaleExchange(sale, model.Authentication);
+
+                    result.IsSuccess = addresult.IsSuccess;
+                    result.Message = addresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-
-                
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
 
             return RedirectToAction("Exchange", "Cash");
         }
@@ -719,18 +707,16 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditCashExchange(NewCashExchange cashCollect, HttpPostedFileBase documentFile)
         {
-            Result<DocumentSaleExchange> result = new Result<DocumentSaleExchange>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (cashCollect != null)
             {
-                
                 var amount = Convert.ToDouble(cashCollect.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
@@ -787,23 +773,21 @@ namespace ActionForce.Office.Controllers
                     }
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.EditSaleExchange(sale, model.Authentication);
+                    var editresult = documentManager.EditSaleExchange(sale, model.Authentication);
+
+                    result.IsSuccess = editresult.IsSuccess;
+                    result.Message = editresult.Message;
+
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-
-                
-
-
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
+            TempData["result"] = result;
 
-            TempData["result"] = messageresult;
             return RedirectToAction("ExchangeDetail", new { id = cashCollect.UID });
 
         }
@@ -811,28 +795,26 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult DeleteCashExchange(string id)
         {
-            Result<DocumentSaleExchange> result = new Result<DocumentSaleExchange>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteSaleExchange(Guid.Parse(id), model.Authentication);
+                var delresult = documentManager.DeleteSaleExchange(Guid.Parse(id), model.Authentication);
+
+                result.IsSuccess = delresult.IsSuccess;
+                result.Message = delresult.Message;
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.IsSuccess = result.IsSuccess;
-            messageresult.Message = result.Message;
+            TempData["result"] = result;
 
-            TempData["result"] = messageresult;
             return RedirectToAction("ExchangeDetail", new { id = id });
-            //return RedirectToAction("Exchange", "Cash");
 
         }
 
@@ -843,7 +825,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
             model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
@@ -871,7 +853,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
             if (TempData["filter"] != null)
@@ -936,19 +918,16 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddCashOpen(NewCashOpen cashOpen)
         {
-            Result<DocumentCashOpen> result = new Result<DocumentCashOpen>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null,
-                resultType = ResultType.Information
+                Message = string.Empty
             };
 
             CashControlModel model = new CashControlModel();
 
             if (cashOpen != null)
             {
-
 
                 var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashOpen.ActinTypeID);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashOpen.LocationID);
@@ -980,22 +959,19 @@ namespace ActionForce.Office.Controllers
                     open.ReferanceID = cashOpen.ReferanceID;
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.AddCashOpen(open, model.Authentication);
+                    var addresult = documentManager.AddCashOpen(open, model.Authentication);
+
+                    result.IsSuccess = addresult.IsSuccess;
+                    result.Message = addresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-
-                
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
 
             return RedirectToAction("Open", "Cash");
         }
@@ -1004,18 +980,17 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditCashOpen(NewCashOpen cashOpen)
         {
-            Result<DocumentCashOpen> result = new Result<DocumentCashOpen>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (cashOpen != null)
             {
-                
+
                 var amount = Convert.ToDouble(cashOpen.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var currency = cashOpen.Currency;
                 double? newexchanges = Convert.ToDouble(cashOpen.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
@@ -1053,22 +1028,20 @@ namespace ActionForce.Office.Controllers
                     }
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.EditCashOpen(sale, model.Authentication);
+                    var editresult = documentManager.EditCashOpen(sale, model.Authentication);
+
+                    result.IsSuccess = editresult.IsSuccess;
+                    result.Message = editresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-
             }
 
+            TempData["result"] = result;
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
             return RedirectToAction("OpenDetail", new { id = cashOpen.UID });
 
         }
@@ -1076,26 +1049,24 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult DeleteCashOpen(string id)
         {
-            Result<DocumentCashOpen> result = new Result<DocumentCashOpen>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteCashOpen(Guid.Parse(id), model.Authentication);
+                var delresult = documentManager.DeleteCashOpen(Guid.Parse(id), model.Authentication);
+
+                result.IsSuccess = delresult.IsSuccess;
+                result.Message = delresult.Message;
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.IsSuccess = result.IsSuccess;
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("OpenDetail", new { id = id });
 
         }
@@ -1107,7 +1078,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
             model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
@@ -1135,7 +1106,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
             if (TempData["filter"] != null)
@@ -1202,12 +1173,12 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddCashPayment(NewCashPayments cashPayment)
         {
-            Result<DocumentCashPayments> result = new Result<DocumentCashPayments>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
+
             CashControlModel model = new CashControlModel();
 
             if (cashPayment != null)
@@ -1222,7 +1193,7 @@ namespace ActionForce.Office.Controllers
                 var currency = cashPayment.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-                
+
 
                 if (DateTime.TryParse(cashPayment.DocumentDate, out docDate))
                 {
@@ -1253,23 +1224,19 @@ namespace ActionForce.Office.Controllers
                     payment.ReferanceID = cashPayment.ReferanceID;
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.AddCashPayment(payment, model.Authentication);
+                    var addresult = documentManager.AddCashPayment(payment, model.Authentication);
+
+                    result.IsSuccess = addresult.IsSuccess;
+                    result.Message = addresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-
-                
-
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
 
             return RedirectToAction("CashPayment", "Cash");
         }
@@ -1278,11 +1245,10 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditCashPayment(NewCashPayments cashPayment)
         {
-            Result<DocumentCashPayments> result = new Result<DocumentCashPayments>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
             CashControlModel model = new CashControlModel();
 
@@ -1329,47 +1295,43 @@ namespace ActionForce.Office.Controllers
                     }
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.EditCashPayment(payment, model.Authentication);
+                    var editresult = documentManager.EditCashPayment(payment, model.Authentication);
+
+                    result.IsSuccess = editresult.IsSuccess;
+                    result.Message = editresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("PaymentDetail", new { id = cashPayment.UID });
-
         }
 
         [AllowAnonymous]
         public ActionResult DeleteCashPayment(string id)
         {
-            Result<DocumentCashPayments> result = new Result<DocumentCashPayments>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteCashPayment(Guid.Parse(id), model.Authentication);
+                var delresult = documentManager.DeleteCashPayment(Guid.Parse(id), model.Authentication);
+
+                result.IsSuccess = delresult.IsSuccess;
+                result.Message = delresult.Message;
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.IsSuccess = result.IsSuccess;
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("PaymentDetail", new { id = id });
 
         }
@@ -1381,7 +1343,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
             model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
@@ -1409,7 +1371,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
             if (TempData["filter"] != null)
@@ -1476,12 +1438,12 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddTicketSaleReturn(NewTicketSaleReturn cashSaleReturn)
         {
-            Result<DocumentTicketSaleReturns> result = new Result<DocumentTicketSaleReturns>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
+
             CashControlModel model = new CashControlModel();
 
             if (cashSaleReturn != null)
@@ -1499,7 +1461,7 @@ namespace ActionForce.Office.Controllers
                     docDate = Convert.ToDateTime(cashSaleReturn.DocumentDate).Date;
                 }
                 var cash = OfficeHelper.GetCash(cashSaleReturn.LocationID, cashSaleReturn.Currency);
-                
+
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 var exchange = OfficeHelper.GetExchange(docDate);
 
@@ -1524,22 +1486,19 @@ namespace ActionForce.Office.Controllers
                     sale.ReferanceID = cashSaleReturn.ReferanceID;
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.AddCashSaleReturn(sale, model.Authentication);
+                    var addresult = documentManager.AddCashSaleReturn(sale, model.Authentication);
+
+                    result.IsSuccess = addresult.IsSuccess;
+                    result.Message = addresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-
-                
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
 
             return RedirectToAction("SaleReturn", "Cash");
         }
@@ -1548,14 +1507,13 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditTicketSaleReturn(NewTicketSaleReturn cashSale)
         {
-            Result<DocumentTicketSaleReturns> result = new Result<DocumentTicketSaleReturns>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (cashSale != null)
             {
@@ -1601,21 +1559,20 @@ namespace ActionForce.Office.Controllers
                     }
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.EditCashSaleReturn(sale, model.Authentication);
+                    var editresult = documentManager.EditCashSaleReturn(sale, model.Authentication);
+
+                    result.IsSuccess = editresult.IsSuccess;
+                    result.Message = editresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
 
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("SaleRefundDetail", new { id = cashSale.UID });
 
         }
@@ -1623,27 +1580,24 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult DeleteTicketSaleReturn(string id)
         {
-            Result<DocumentTicketSaleReturns> result = new Result<DocumentTicketSaleReturns>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteCashSaleReturn(Guid.Parse(id), model.Authentication);
+                var delresult = documentManager.DeleteCashSaleReturn(Guid.Parse(id), model.Authentication);
+
+                result.IsSuccess = delresult.IsSuccess;
+                result.Message = delresult.Message;
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.IsSuccess = result.IsSuccess;
-
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("SaleRefundDetail", new { id = id });
 
         }
@@ -1655,7 +1609,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
             model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
@@ -1683,7 +1637,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
             if (TempData["filter"] != null)
@@ -1751,12 +1705,12 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddCashExpense(NewCashExpense cashExpense, HttpPostedFileBase documentFile)
         {
-            Result<DocumentCashExpense> result = new Result<DocumentCashExpense>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
+
             CashControlModel model = new CashControlModel();
 
             if (cashExpense != null)
@@ -1786,7 +1740,7 @@ namespace ActionForce.Office.Controllers
                 TimeSpan? time = Convert.ToDateTime(cashExpense.SlipTime).TimeOfDay;
                 DateTime? slipdatetime = slipDate.Add(time.Value);
                 var cash = OfficeHelper.GetCash(cashExpense.LocationID, cashExpense.Currency);
-                
+
 
                 var exchange = OfficeHelper.GetExchange(docDate);
 
@@ -1834,22 +1788,19 @@ namespace ActionForce.Office.Controllers
 
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.AddCashExpense(expense, model.Authentication);
+                    var addresult = documentManager.AddCashExpense(expense, model.Authentication);
+
+                    result.IsSuccess = addresult.IsSuccess;
+                    result.Message = addresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-                
-
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
 
             return RedirectToAction("Expense", "Cash");
         }
@@ -1858,14 +1809,13 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditCashExpense(NewCashExpense cashExpense, HttpPostedFileBase documentFile)
         {
-            Result<DocumentCashExpense> result = new Result<DocumentCashExpense>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (cashExpense != null)
             {
@@ -1939,49 +1889,44 @@ namespace ActionForce.Office.Controllers
                     }
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.EditCashExpense(sale, model.Authentication);
+                    var editresult = documentManager.EditCashExpense(sale, model.Authentication);
+
+                    result.IsSuccess = editresult.IsSuccess;
+                    result.Message = editresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("ExpenseDetail", new { id = cashExpense.UID });
-
         }
 
         [AllowAnonymous]
         public ActionResult DeleteCashExpense(string id)
         {
-            Result<DocumentCashExpense> result = new Result<DocumentCashExpense>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteCashExpense(Guid.Parse(id), model.Authentication);
+                var delresult = documentManager.DeleteCashExpense(Guid.Parse(id), model.Authentication);
+
+                result.IsSuccess = delresult.IsSuccess;
+                result.Message = delresult.Message;
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("ExpenseDetail", new { id = id });
-
         }
 
         [AllowAnonymous]
@@ -1991,7 +1936,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
             model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
@@ -2019,7 +1964,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
             if (TempData["filter"] != null)
@@ -2087,12 +2032,12 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddCashBankTransfer(NewCashBankTransfer cashTransfer, HttpPostedFileBase documentFile)
         {
-            Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
+
             CashControlModel model = new CashControlModel();
 
             if (cashTransfer != null)
@@ -2170,23 +2115,19 @@ namespace ActionForce.Office.Controllers
                     }
 
 
-                    result = documentManager.AddBankTransfer(bankTransfer, model.Authentication);
+                    var addresult = documentManager.AddBankTransfer(bankTransfer, model.Authentication);
+
+                    result.IsSuccess = addresult.IsSuccess;
+                    result.Message = addresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-
-                
-
-
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
 
             return RedirectToAction("BankTransfer", "Cash");
         }
@@ -2195,12 +2136,12 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditCashBankTransfer(NewCashBankTransfer cashTransfer, HttpPostedFileBase documentFile)
         {
-            Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
+
             CashControlModel model = new CashControlModel();
 
             if (cashTransfer != null)
@@ -2208,7 +2149,7 @@ namespace ActionForce.Office.Controllers
                 var fromPrefix = cashTransfer.FromID.Substring(0, 1);
                 var fromID = Convert.ToInt32(cashTransfer.FromID.Substring(1, cashTransfer.FromID.Length - 1));
                 var amount = Convert.ToDouble(cashTransfer.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var commision = !string.IsNullOrEmpty(cashTransfer.Commission) ? Convert.ToDouble(cashTransfer.Commission.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture): 0;
+                var commision = !string.IsNullOrEmpty(cashTransfer.Commission) ? Convert.ToDouble(cashTransfer.Commission.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture) : 0;
                 var currency = cashTransfer.Currency;
                 bool? isActive = !string.IsNullOrEmpty(cashTransfer.IsActive) ? true : false;
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashTransfer.LocationID);
@@ -2230,7 +2171,7 @@ namespace ActionForce.Office.Controllers
                 {
                     slipDate = Convert.ToDateTime(cashTransfer.SlipDate).Date;
                 }
-                
+
                 TimeSpan? time = Convert.ToDateTime(cashTransfer.SlipTime).TimeOfDay;
                 DateTime? slipdatetime = slipDate.Add(time.Value);
 
@@ -2283,20 +2224,19 @@ namespace ActionForce.Office.Controllers
                     }
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.EditBankTransfer(banktransfer, model.Authentication);
+                    var editresult = documentManager.EditBankTransfer(banktransfer, model.Authentication);
+
+                    result.IsSuccess = editresult.IsSuccess;
+                    result.Message = editresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-
             }
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
 
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("TransferDetail", new { id = cashTransfer.UID });
 
         }
@@ -2304,28 +2244,25 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult DeleteCashBankTransfer(string id)
         {
-            Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteCashBankTransfer(Guid.Parse(id), model.Authentication);
+                var delresult = documentManager.DeleteCashBankTransfer(Guid.Parse(id), model.Authentication);
+
+                result.IsSuccess = delresult.IsSuccess;
+                result.Message = delresult.Message;
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.IsSuccess = result.IsSuccess;
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("TransferDetail", new { id = id });
-
         }
 
         [AllowAnonymous]
@@ -2335,7 +2272,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
             model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
@@ -2360,6 +2297,9 @@ namespace ActionForce.Office.Controllers
 
 
 
+
+
+
         [AllowAnonymous]
         public ActionResult SalaryPayment(int? locationId)
         {
@@ -2367,7 +2307,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
             if (TempData["filter"] != null)
@@ -2390,6 +2330,55 @@ namespace ActionForce.Office.Controllers
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+
+            model.SalaryPayment = Db.VDocumentSalaryPayment.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            if (model.Filters.LocationID > 0)
+            {
+                model.SalaryPayment = model.SalaryPayment.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+
+            }
+
+
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult NewSalaryPayment()
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateTime.Now.Date;
+                model.Filters = filterModel;
+            }
+
+
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
+            model.SalaryTypes = Db.SalaryType.Where(x => x.IsActive == true).ToList();
+            model.BankAccountList = Db.BankAccount.ToList();
+            model.PayMethodList = Db.PayMethod.ToList();
+            model.StatusList = Db.BankTransferStatus.ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID ).OrderBy(x => x.FullName).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.SalaryPayment = Db.VDocumentSalaryPayment.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -2435,13 +2424,13 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddCashSalaryPayment(NewCashSalaryPayment cashSalary)
         {
-            
-            Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
+
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
+
             CashControlModel model = new CashControlModel();
 
             if (cashSalary != null)
@@ -2455,7 +2444,7 @@ namespace ActionForce.Office.Controllers
                 var currency = cashSalary.Currency;
                 var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-                
+
 
                 if (DateTime.TryParse(cashSalary.DocumentDate, out docDate))
                 {
@@ -2489,21 +2478,89 @@ namespace ActionForce.Office.Controllers
                     payment.CategoryID = cashSalary.CategoryID ?? (int?)null;
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.AddSalaryPayment(payment, model.Authentication);
+                    var addresult = documentManager.AddSalaryPayment(payment, model.Authentication);
+
+
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
 
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
+            TempData["result"] = result;
 
-            TempData["result"] = messageresult;
+            return RedirectToAction("SalaryPayment", "Cash");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddCashSalaryPayment(CashSalaryPayment cashsalary)
+        {
+
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            CashControlModel model = new CashControlModel();
+
+            if (cashsalary != null)
+            {
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 31);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashsalary.LocationID);
+                var amount = Convert.ToDouble(cashsalary.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                int timezone = location.Timezone.Value;
+
+                var docDate = DateTime.Now.Date;
+                if (DateTime.TryParse(cashsalary.DocumentDate, out docDate))
+                {
+                    docDate = Convert.ToDateTime(cashsalary.DocumentDate).Date;
+                }
+
+                var exchange = OfficeHelper.GetExchange(docDate);
+
+                var cash = OfficeHelper.GetCash(cashsalary.LocationID, cashsalary.Currency);
+
+                if (amount > 0)
+                {
+                    SalaryPayment payment = new SalaryPayment();
+
+                    payment.ActinTypeID = actType.ID;
+                    payment.ActionTypeName = actType.Name;
+                    payment.Currency = cashsalary.Currency;
+                    payment.Description = cashsalary.Description;
+                    payment.DocumentDate = docDate;
+                    payment.EmployeeID = cashsalary.EmployeeID;
+                    payment.EnvironmentID = 2;
+                    payment.LocationID = location.LocationID;
+                    payment.Amount = amount;
+                    payment.UID = Guid.NewGuid();
+                    payment.TimeZone = timezone;
+                    payment.OurCompanyID = location.OurCompanyID;
+                    payment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA.Value : payment.Currency == "EUR" ? exchange.EURA.Value : 1;
+                    payment.FromBankID = (int?)null;
+                    payment.FromCashID = cash.ID;
+                    payment.SalaryTypeID = cashsalary.SalaryTypeID;
+                    payment.CategoryID = cashsalary.CategoryID;
+
+                    DocumentManager documentManager = new DocumentManager();
+                    var addresult = documentManager.AddSalaryPayment(payment, model.Authentication);
+
+                    result.IsSuccess = addresult.IsSuccess;
+                    result.Message = addresult.Message;
+                }
+                else
+                {
+                    result.IsSuccess = false;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                }
+            }
+
+            TempData["result"] = result;
 
             return RedirectToAction("SalaryPayment", "Cash");
         }
@@ -2512,14 +2569,13 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditSalaryPayment(NewCashSalaryPayment cashSalary)
         {
-            Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            SalaryControlModel model = new SalaryControlModel();
 
+            SalaryControlModel model = new SalaryControlModel();
 
             if (cashSalary != null)
             {
@@ -2555,6 +2611,7 @@ namespace ActionForce.Office.Controllers
                     sale.CategoryID = cashSalary.CategoryID;
                     sale.ReferanceID = cashSalary.ReferanceID;
                     sale.TimeZone = timezone;
+                    sale.FromCashID = cashSalary.CashID;
 
                     if (newexchanges > 0)
                     {
@@ -2566,7 +2623,10 @@ namespace ActionForce.Office.Controllers
                     }
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.EditSalaryPayment(sale, model.Authentication);
+                    var editresult = documentManager.EditSalaryPayment(sale, model.Authentication);
+
+                    result.IsSuccess = editresult.IsSuccess;
+                    result.Message = editresult.Message;
                 }
                 else
                 {
@@ -2574,14 +2634,9 @@ namespace ActionForce.Office.Controllers
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
 
-
-
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("SalaryDetail", new { id = cashSalary.UID });
 
         }
@@ -2589,26 +2644,25 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult DeleteSalaryPayment(string id)
         {
-            Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
+
             CashControlModel model = new CashControlModel();
 
 
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteSalaryPayment(Guid.Parse(id), model.Authentication);
+                var delresult = documentManager.DeleteSalaryPayment(Guid.Parse(id), model.Authentication);
+
+                result.IsSuccess = delresult.IsSuccess;
+                result.Message = delresult.Message;
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.IsSuccess = result.IsSuccess;
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("SalaryDetail", new { id = id });
         }
 
@@ -2619,16 +2673,18 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
             model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
+            model.SalaryTypes = Db.SalaryType.Where(x => x.IsActive == true).ToList();
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.StatusList = Db.BankTransferStatus.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
 
             model.SalaryDetail = Db.VDocumentSalaryPayment.FirstOrDefault(x => x.UID == id);
             var ll = new string[] { "Cash", "Salary" };

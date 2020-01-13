@@ -49,5 +49,9 @@ namespace ActionForce.Entity
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<int> CategoryID { get; set; }
         public string CategoryName { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
+        public Nullable<long> ResultID { get; set; }
+        public Nullable<int> SalaryTypeID { get; set; }
+        public string SalaryTypeName { get; set; }
     }
 }

@@ -333,6 +333,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+
             model.BankAccountList = Db.BankAccount.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
@@ -341,10 +342,10 @@ namespace ActionForce.Office.Controllers
             model.UnitPrice = Db.EmployeeSalary.ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.SalaryPayment = Db.VDocumentSalaryPayment.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+
             if (model.Filters.LocationID > 0)
             {
                 model.SalaryPayment = model.SalaryPayment.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-
             }
 
             model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();

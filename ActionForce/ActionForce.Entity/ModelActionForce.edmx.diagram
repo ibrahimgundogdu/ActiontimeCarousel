@@ -153,7 +153,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentCashExpense" Width="1.5" PointX="39.375" PointY="21.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentCashPayments" Width="1.5" PointX="39.375" PointY="28.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentPosCollections" Width="1.5" PointX="31.375" PointY="39.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentSalaryPayment" Width="1.5" PointX="33.375" PointY="39.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentSaleExchange" Width="1.5" PointX="39.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentTicketSaleReturns" Width="1.5" PointX="40.375" PointY="0.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentTicketSales" Width="1.5" PointX="5.375" PointY="40.75" />
@@ -175,7 +174,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentTicketSaleReturn" Width="1.5" PointX="43.375" PointY="6.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Environment" Width="1.5" PointX="41.375" PointY="42.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentCashExpense" Width="1.5" PointX="43.375" PointY="26.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentSalaryPayment" Width="1.5" PointX="35.375" PointY="43.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ExpenseType" Width="1.5" PointX="44.375" PointY="3.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Schedule" Width="1.5" PointX="11.375" PointY="45.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosCollection" Width="1.5" PointX="25.375" PointY="45.75" />
@@ -243,6 +241,8 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentEmployeePermit" Width="1.5" PointX="15.375" PointY="51.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentEmployeePermit" Width="1.5" PointX="51.375" PointY="16.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SalaryType" Width="1.5" PointX="51.375" PointY="26.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentSalaryPayment" Width="1.5" PointX="33.375" PointY="39.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentSalaryPayment" Width="1.5" PointX="33.375" PointY="47.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

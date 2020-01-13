@@ -1183,6 +1183,7 @@
           <Property Name="ActionTypeID" Type="int" />
           <Property Name="CategoryID" Type="int" />
           <Property Name="SalaryType" Type="int" />
+          <Property Name="SalaryTypeID" Type="int" />
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
@@ -3873,6 +3874,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSalaryPayment' doe
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="CategoryID" Type="int" />
           <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="SalaryTypeID" Type="int" />
+          <Property Name="SalaryTypeName" Type="nvarchar" MaxLength="40" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSaleExchange' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5796,7 +5801,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentSalaryPayment].[SalaryType] AS [SalaryType], 
     [VDocumentSalaryPayment].[UID] AS [UID], 
     [VDocumentSalaryPayment].[CategoryID] AS [CategoryID], 
-    [VDocumentSalaryPayment].[CategoryName] AS [CategoryName]
+    [VDocumentSalaryPayment].[CategoryName] AS [CategoryName], 
+    [VDocumentSalaryPayment].[EnvironmentID] AS [EnvironmentID], 
+    [VDocumentSalaryPayment].[ResultID] AS [ResultID], 
+    [VDocumentSalaryPayment].[SalaryTypeID] AS [SalaryTypeID], 
+    [VDocumentSalaryPayment].[SalaryTypeName] AS [SalaryTypeName]
     FROM [dbo].[VDocumentSalaryPayment] AS [VDocumentSalaryPayment]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentSaleExchange" EntityType="Self.VDocumentSaleExchange" store:Type="Views" store:Schema="dbo">
@@ -6619,7 +6628,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DocumentCashExpense" EntityType="db293_ActionTimeDbModel.DocumentCashExpense" />
           <EntitySet Name="DocumentCashPayments" EntityType="db293_ActionTimeDbModel.DocumentCashPayments" />
           <EntitySet Name="DocumentPosCollections" EntityType="db293_ActionTimeDbModel.DocumentPosCollections" />
-          <EntitySet Name="DocumentSalaryPayment" EntityType="db293_ActionTimeDbModel.DocumentSalaryPayment" />
           <EntitySet Name="DocumentSaleExchange" EntityType="db293_ActionTimeDbModel.DocumentSaleExchange" />
           <EntitySet Name="DocumentTicketSaleReturns" EntityType="db293_ActionTimeDbModel.DocumentTicketSaleReturns" />
           <EntitySet Name="DocumentTicketSales" EntityType="db293_ActionTimeDbModel.DocumentTicketSales" />
@@ -6651,7 +6659,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VDocumentTicketSaleReturn" EntityType="db293_ActionTimeDbModel.VDocumentTicketSaleReturn" />
           <EntitySet Name="Environment" EntityType="db293_ActionTimeDbModel.Environment" />
           <EntitySet Name="VDocumentCashExpense" EntityType="db293_ActionTimeDbModel.VDocumentCashExpense" />
-          <EntitySet Name="VDocumentSalaryPayment" EntityType="db293_ActionTimeDbModel.VDocumentSalaryPayment" />
           <FunctionImport Name="GetPersonList" ReturnType="Collection(db293_ActionTimeDbModel.GetPersonList_Result)">
           <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -6876,6 +6883,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DocumentEmployeePermit" EntityType="db293_ActionTimeDbModel.DocumentEmployeePermit" />
           <EntitySet Name="VDocumentEmployeePermit" EntityType="db293_ActionTimeDbModel.VDocumentEmployeePermit" />
           <EntitySet Name="SalaryType" EntityType="db293_ActionTimeDbModel.SalaryType" />
+          <EntitySet Name="DocumentSalaryPayment" EntityType="db293_ActionTimeDbModel.DocumentSalaryPayment" />
+          <EntitySet Name="VDocumentSalaryPayment" EntityType="db293_ActionTimeDbModel.VDocumentSalaryPayment" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -9281,40 +9290,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UID" Type="Guid" />
           <Property Name="Quantity" Type="Int32" />
         </EntityType>
-        <EntityType Name="DocumentSalaryPayment">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
-          <Property Name="ToEmployeeID" Type="Int32" />
-          <Property Name="Amount" Type="Double" />
-          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="Date" Type="DateTime" Precision="0" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateEmployee" Type="Int32" />
-          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="FromCashID" Type="Int32" />
-          <Property Name="FromBankAccountID" Type="Int32" />
-          <Property Name="ExchangeRate" Type="Double" />
-          <Property Name="SystemAmount" Type="Double" />
-          <Property Name="SystemCurrency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="ReferenceID" Type="Int64" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
-          <Property Name="ActionTypeID" Type="Int32" />
-          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ResultID" Type="Int64" />
-          <Property Name="EnvironmentID" Type="Int32" />
-          <Property Name="SalaryType" Type="Int32" />
-          <Property Name="UID" Type="Guid" />
-          <Property Name="CategoryID" Type="Int32" />
-        </EntityType>
         <EntityType Name="DocumentSaleExchange">
           <Key>
             <PropertyRef Name="ID" />
@@ -9955,46 +9930,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ExpenseTypeID" Type="Int32" />
           <Property Name="ExpenseTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SlipPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="VDocumentSalaryPayment">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" />
-          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
-          <Property Name="ToEmployeeID" Type="Int32" />
-          <Property Name="FromBankAccountID" Type="Int32" />
-          <Property Name="Amount" Type="Double" />
-          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="Date" Type="DateTime" Precision="0" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateEmployee" Type="Int32" />
-          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="FromCashID" Type="Int32" />
-          <Property Name="ExchangeRate" Type="Double" />
-          <Property Name="SystemAmount" Type="Double" />
-          <Property Name="SystemCurrency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="ReferenceID" Type="Int64" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
-          <Property Name="ActionTypeID" Type="Int32" />
-          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="EmployeeFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="BankAccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ActionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CashName" Type="String" MaxLength="62" FixedLength="false" Unicode="true" />
-          <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
-          <Property Name="SalaryType" Type="Int32" />
-          <Property Name="UID" Type="Guid" />
-          <Property Name="CategoryID" Type="Int32" />
-          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <ComplexType Name="GetPersonList_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
@@ -11564,6 +11499,85 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SalaryTypeName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="SortBy" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="DocumentSalaryPayment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="ToEmployeeID" Type="Int32" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FromCashID" Type="Int32" />
+          <Property Name="FromBankAccountID" Type="Int32" />
+          <Property Name="ExchangeRate" Type="Double" />
+          <Property Name="SystemAmount" Type="Double" />
+          <Property Name="SystemCurrency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="ReferenceID" Type="Int64" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="SalaryType" Type="Int32" />
+          <Property Name="SalaryTypeID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
+        </EntityType>
+        <EntityType Name="VDocumentSalaryPayment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="ToEmployeeID" Type="Int32" />
+          <Property Name="FromBankAccountID" Type="Int32" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FromCashID" Type="Int32" />
+          <Property Name="ExchangeRate" Type="Double" />
+          <Property Name="SystemAmount" Type="Double" />
+          <Property Name="SystemCurrency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="ReferenceID" Type="Int64" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="BankAccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ActionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CashName" Type="String" MaxLength="62" FixedLength="false" Unicode="true" />
+          <Property Name="RecorderFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="UpdaterFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="SalaryType" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="SalaryTypeID" Type="Int32" />
+          <Property Name="SalaryTypeName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -13907,41 +13921,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="DocumentSalaryPayment">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentSalaryPayment">
-              <MappingFragment StoreEntitySet="DocumentSalaryPayment">
-                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
-                <ScalarProperty Name="UID" ColumnName="UID" />
-                <ScalarProperty Name="SalaryType" ColumnName="SalaryType" />
-                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
-                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
-                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="SystemCurrency" ColumnName="SystemCurrency" />
-                <ScalarProperty Name="SystemAmount" ColumnName="SystemAmount" />
-                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
-                <ScalarProperty Name="FromBankAccountID" ColumnName="FromBankAccountID" />
-                <ScalarProperty Name="FromCashID" ColumnName="FromCashID" />
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="ToEmployeeID" ColumnName="ToEmployeeID" />
-                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="DocumentSaleExchange">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentSaleExchange">
               <MappingFragment StoreEntitySet="DocumentSaleExchange">
@@ -14605,47 +14584,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
                 <ScalarProperty Name="ToBankAccountID" ColumnName="ToBankAccountID" />
                 <ScalarProperty Name="ToCustomerID" ColumnName="ToCustomerID" />
-                <ScalarProperty Name="ToEmployeeID" ColumnName="ToEmployeeID" />
-                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="VDocumentSalaryPayment">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentSalaryPayment">
-              <MappingFragment StoreEntitySet="VDocumentSalaryPayment">
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
-                <ScalarProperty Name="UID" ColumnName="UID" />
-                <ScalarProperty Name="SalaryType" ColumnName="SalaryType" />
-                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
-                <ScalarProperty Name="UpdaterFullName" ColumnName="UpdaterFullName" />
-                <ScalarProperty Name="RecorderFullName" ColumnName="RecorderFullName" />
-                <ScalarProperty Name="CashName" ColumnName="CashName" />
-                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
-                <ScalarProperty Name="BankAccountName" ColumnName="BankAccountName" />
-                <ScalarProperty Name="EmployeeFullName" ColumnName="EmployeeFullName" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
-                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="SystemCurrency" ColumnName="SystemCurrency" />
-                <ScalarProperty Name="SystemAmount" ColumnName="SystemAmount" />
-                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
-                <ScalarProperty Name="FromCashID" ColumnName="FromCashID" />
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="FromBankAccountID" ColumnName="FromBankAccountID" />
                 <ScalarProperty Name="ToEmployeeID" ColumnName="ToEmployeeID" />
                 <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -16199,6 +16137,87 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="SortBy" ColumnName="SortBy" />
                 <ScalarProperty Name="SalaryTypeName" ColumnName="SalaryTypeName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DocumentSalaryPayment">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentSalaryPayment">
+              <MappingFragment StoreEntitySet="DocumentSalaryPayment">
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="SalaryTypeID" ColumnName="SalaryTypeID" />
+                <ScalarProperty Name="SalaryType" ColumnName="SalaryType" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="SystemCurrency" ColumnName="SystemCurrency" />
+                <ScalarProperty Name="SystemAmount" ColumnName="SystemAmount" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="FromBankAccountID" ColumnName="FromBankAccountID" />
+                <ScalarProperty Name="FromCashID" ColumnName="FromCashID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="ToEmployeeID" ColumnName="ToEmployeeID" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VDocumentSalaryPayment">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentSalaryPayment">
+              <MappingFragment StoreEntitySet="VDocumentSalaryPayment">
+                <ScalarProperty Name="SalaryTypeName" ColumnName="SalaryTypeName" />
+                <ScalarProperty Name="SalaryTypeID" ColumnName="SalaryTypeID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="SalaryType" ColumnName="SalaryType" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="UpdaterFullName" ColumnName="UpdaterFullName" />
+                <ScalarProperty Name="RecorderFullName" ColumnName="RecorderFullName" />
+                <ScalarProperty Name="CashName" ColumnName="CashName" />
+                <ScalarProperty Name="ActionName" ColumnName="ActionName" />
+                <ScalarProperty Name="BankAccountName" ColumnName="BankAccountName" />
+                <ScalarProperty Name="EmployeeFullName" ColumnName="EmployeeFullName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="SystemCurrency" ColumnName="SystemCurrency" />
+                <ScalarProperty Name="SystemAmount" ColumnName="SystemAmount" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="FromCashID" ColumnName="FromCashID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="FromBankAccountID" ColumnName="FromBankAccountID" />
+                <ScalarProperty Name="ToEmployeeID" ColumnName="ToEmployeeID" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

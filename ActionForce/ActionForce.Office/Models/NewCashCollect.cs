@@ -160,6 +160,20 @@ namespace ActionForce.Office
         public int? CategoryID { get; set; }
         public Guid UID { get; set; }
     }
+
+    public class CashSalaryPayment
+    {
+        public int EmployeeID { get; set; }
+        public int LocationID { get; set; }
+        public string Amount { get; set; }
+        public string Currency { get; set; }
+        public string DocumentDate { get; set; }
+        public string Description { get; set; }
+        public int SalaryTypeID { get; set; }
+        public int CategoryID { get; set; }
+    }
+
+
     public class NewPosCollect
     {
         public int ActinTypeID { get; set; }
