@@ -19,11 +19,12 @@ namespace ActionForce.Office
         public IEnumerable<PermitStatus> PermitStatus { get; set; }
 
         public IEnumerable<SalaryCategory> SalaryCategories { get; set; }
+        public IEnumerable<SalaryType> SalaryTypes { get; set; }
         public IEnumerable<Cash> CashList { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
         public IEnumerable<FromAccountModel> FromList { get; set; }
         public IEnumerable<Currency> CurrencyList { get; set; }
-        public IEnumerable<BankAccount> BankAccountList { get; set; }
+        public IEnumerable<VBankAccount> BankAccountList { get; set; }
         public IEnumerable<VEmployeeSalary> UnitSalaryList { get; set; }
         public IEnumerable<VEmployeeSalaryDist> UnitSalaryDistList { get; set; }
         public VEmployeeSalary UnitSalary { get; set; }
@@ -31,7 +32,7 @@ namespace ActionForce.Office
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }
         public VLocation CurrentLocation { get; set; }
-        public Result<CashActions> Result { get; set; }
+        public Result Result { get; set; }
         public Result InfoResult { get; set; }
         public IEnumerable<ApplicationLog> LogList { get; set; }
 

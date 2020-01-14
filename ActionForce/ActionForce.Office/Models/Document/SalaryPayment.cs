@@ -26,5 +26,8 @@ namespace ActionForce.Office
         public int? TimeZone { get; set; }
         public int? CategoryID { get; set; }
         public Guid UID { get; set; }
+        public long ID { get; set; }
+        public bool IsActive { get; set; }
+        public string Controller { get; set; }
     }
 }

@@ -36,7 +36,8 @@
                     </div>
                     <div class="d-none d-md-block">
                         @*@{Html.RenderPartial("_PartialAddCashMenu");}*@
-                        <a href="/Cash/SalaryPayment" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; Ödeme Listesi</a>
+                        <a href="/Cash/NewSalaryPayment" class="btn btn-primary btn-uppercase"><i data-feather="plus-square"></i> &nbsp; Kasadan Maaş Ödeme Ekle</a>
+                        <a href="/Cash/SalaryPayment" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; Kasadan Maaş Ödeme Listesi</a>
                     </div>
                 </div>
 
@@ -79,7 +80,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row mg-b-5 bg-gray-50">
+                            <div class="form-group row bg-gray-50">
                                 <label for="LocationID" class="col-sm-3 col-form-label">Hangi Lokasyondan</label>
                                 <div class="col-sm-6">
                                     <select class="form-control" id="LocationID" name="LocationID" required>
@@ -93,7 +94,7 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row mg-b-5 bg-gray-50">
+                            <div class="form-group row bg-gray-50">
                                 <label for="CashName" class="col-sm-3 col-form-label">Hangi Noktadan</label>
                                 <div class="col-sm-6">
                                     <input id="CashName" name="CashName" type="text" class="form-control" autocomplete="off" value="@($"{Model.SalaryDetail.CashName}{Model.SalaryDetail.BankAccountName}")" readonly>
@@ -105,7 +106,7 @@
                             <div class="form-group row bg-gray-50">
                                 <label for="EmployeeID" class="col-sm-3 col-form-label">Hangi Çalışana</label>
                                 <div class="col-sm-6">
-                                    <select class="form-control select2" id="EmployeeID" name="EmployeeID" required>
+                                    <select class="form-control select2 w-100" id="EmployeeID" name="EmployeeID" required>
                                         @foreach (var item in Model.EmployeeList.OrderBy(x => x.FullName))
                                         {
                                             <option value="@item.EmployeeID" @(item.EmployeeID == Model.SalaryDetail.ToEmployeeID ? "selected" : "")>@($"{item.FullName} ({item.IsActive})" )</option>
@@ -116,11 +117,11 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row mg-b-5 bg-gray-100">
+                            <div class="form-group row bg-gray-100">
                                 <label for="SalaryTypeID" class="col-sm-3 col-form-label">Maaş mı? / Avans mı?</label>
                                 <div class="col-sm-6">
                                     <select class="form-control" id="SalaryTypeID" name="SalaryTypeID" required>
-                                        @foreach (var item in Model.SalaryTypes.Where(x => x.IsActive == true).OrderBy(x => x.SortBy))
+                                        @foreach (var item in Model.SalaryTypes.OrderBy(x => x.SortBy))
                                         {
                                             <option value="@item.ID" @(item.ID == Model.SalaryDetail.SalaryTypeID ? "selected" : "")>@($"{item.SalaryTypeName}" )</option>
                                         }

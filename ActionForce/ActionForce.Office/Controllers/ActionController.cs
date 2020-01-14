@@ -273,10 +273,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                if (TempData["result"] != null)
-                {
-                    model.Result = TempData["result"] as Result<DocumentTransfer> ?? null;
-                }
+                model.Result = TempData["result"] as Result<DocumentTransfer> ?? null;
             }
 
 
@@ -342,11 +339,11 @@ namespace ActionForce.Office.Controllers
 
             if (result.IsSuccess == true)
             {
-                return RedirectToAction("Transfer", new { id = uid });
+                return RedirectToAction("TransferDetail","Action", new { id = uid });
             }
             else
             {
-                return RedirectToAction("AddTransfer");
+                return RedirectToAction("AddTransfer", "Action");
             }
             
         }

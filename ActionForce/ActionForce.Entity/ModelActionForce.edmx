@@ -4845,6 +4845,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <Function Name="GetToList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
         </Function>
+        <Function Name="RemoveAllAccountActions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProcessID" Type="bigint" Mode="In" />
+          <Parameter Name="ProcessUID" Type="uniqueidentifier" Mode="In" />
+        </Function>
         <Function Name="SetLocationSchedules" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
@@ -6885,6 +6889,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="SalaryType" EntityType="db293_ActionTimeDbModel.SalaryType" />
           <EntitySet Name="DocumentSalaryPayment" EntityType="db293_ActionTimeDbModel.DocumentSalaryPayment" />
           <EntitySet Name="VDocumentSalaryPayment" EntityType="db293_ActionTimeDbModel.VDocumentSalaryPayment" />
+          <FunctionImport Name="RemoveAllAccountActions">
+            <Parameter Name="ProcessID" Mode="In" Type="Int64" />
+            <Parameter Name="ProcessUID" Mode="In" Type="Guid" />
+          </FunctionImport>
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -16222,6 +16230,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="RemoveAllAccountActions" FunctionName="db293_ActionTimeDbModel.Store.RemoveAllAccountActions" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

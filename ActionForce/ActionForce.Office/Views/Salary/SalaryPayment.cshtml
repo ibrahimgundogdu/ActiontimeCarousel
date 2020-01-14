@@ -27,14 +27,10 @@
             <h4 class="mg-b-0 tx-spacing--1">Maaş Avans Ödemesi</h4>
         </div>
         <div class="d-none d-md-block">
-            @{Html.RenderPartial("_PartialAddSalaryMenu");}
+            <a href="/Salary/NewSalaryPayment" class="btn btn-primary btn-uppercase"><i data-feather="plus-square"></i> &nbsp; Maaş Avans Ödemesi Ekle</a>
         </div>
     </div>
-    <!--<div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right">
-             any content goes here
-        form
-    </div>-->
-
+   
 
 
 
@@ -80,8 +76,8 @@
                         <th>Kasa</th>
                         <th>İşlem</th>
                         <th>Bu Personele</th>
-                        <th>Tahsilat</th>
-                        <th>Para Br.</th>
+                        <th>Ödeme</th>
+                        <th></th>
                         <th>Kaydeden</th>
                         <th>Kayıt Tarihi</th>
                     </tr>
@@ -90,29 +86,21 @@
 
                     @foreach (var item in Model.SalaryPayment)
                     {
-                    <tr style='@(item.IsActive == false ? "color: red" : "")'>
-
-                        <td class="tx-sm-13 bold">@item.ID</td>
-                        <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
-                        <td class="tx-sm-13"><a href="@("/Salary/SalaryDetail/" + @item.UID)">@item.DocumentNumber</a></td>
-                        <td class="tx-sm-13">@item.LocationFullName</td>
-                        <td class="tx-sm-13">@(item.CategoryName)</td>
-                        <td class="tx-sm-13">@(item.SalaryType == 2 ? "Avans Ödemesi" : "Maaş Ödemesi")</td>
-                        <td class="tx-sm-13">@(item.FromCashID != null ? item.CashName : item.BankAccountName)</td>
-                        @*<td class="tx-sm-13">@(item.FromCashID != null ? item.FromCashID : item.FromBankAccountID) </td>*@
-                        <td class="tx-sm-13">@item.ActionTypeName</td>
-                        <td class="tx-sm-13">@item.EmployeeFullName </td>
-                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
-                        <td class="tx-sm-13">@(item.Currency)</td>
-                        <td class="tx-sm-13">@item.RecorderFullName</td>
-                        <td class="tx-sm-13 text-right">@item.RecordDate</td>
-                        @*<td class="tx-sm-13 text-right"><a href="@("/Salary/SalaryDetail/" + @item.UID)" class="btn btn-xs btn-primary btn-icon"><i data-feather="edit"></i></a></td>
-                        @if (item.IsActive == true)
-                        {
-                            <td class="tx-sm-13 text-right"><a href="/Salary/SalaryPayment" class="btn btn-xs btn-danger btn-icon" onclick="if(confirm('@(Html.Raw($"{item.Amount} tutarlı maaş ödemesi iptal etmek istediğine emin misin?')"))) DeleteSalaryPayment(@item.ID)"><i data-feather="trash-2"></i></a></td>
-                        }*@
-
-                    </tr>
+                        <tr style='@(item.IsActive == false ? "color: red" : "")'>
+                            <td class="tx-sm-13 bold">@item.ID</td>
+                            <td class="tx-sm-13">@item.Date.Value.ToShortDateString()</td>
+                            <td class="tx-sm-13"><a href="@("/Salary/SalaryDetail/" + @item.UID)">@item.DocumentNumber</a></td>
+                            <td class="tx-sm-13">@item.LocationFullName</td>
+                            <td class="tx-sm-13">@(item.CategoryName)</td>
+                            <td class="tx-sm-13">@(item.SalaryType == 2 ? "Avans Ödemesi" : "Maaş Ödemesi")</td>
+                            <td class="tx-sm-13">@(item.FromCashID != null ? item.CashName : item.BankAccountName)</td>
+                            <td class="tx-sm-13">@item.ActionTypeName</td>
+                            <td class="tx-sm-13">@item.EmployeeFullName </td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
+                            <td class="tx-sm-13">@(item.Currency)</td>
+                            <td class="tx-sm-13">@item.RecorderFullName</td>
+                            <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                        </tr>
                     }
 
                 </tbody>
@@ -132,12 +120,10 @@
 
 
 @section canvasmenu {
-    @{Html.RenderPartial("_PartialDocumentForms", Model);}
+    @*@{Html.RenderPartial("_PartialDocumentForms", Model);}*@
 }
 
 @section scripts {
-    <script src="/lib/cleave.js/cleave.min.js"></script>
-
     <script>
         $(function () {
 
@@ -177,7 +163,7 @@
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
             });
-            
+
             function getDate(element) {
                 var date;
                 try {
@@ -192,17 +178,7 @@
 
         });
 
-        //function DeleteSalaryPayment(id) {
-        //    $.ajax({
-        //        method: "GET",
-        //        url: "/Salary/DeleteSalaryPayment",
-        //        data: { id: id }
-        //    }).done(function (d) {
-        //        $("#DeleteSalaryPayment").html(d);
-        //    });
-        //}
-
-
+      
 
         $(function () {
             'use strict'

@@ -819,5 +819,18 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddCustomerAction", customerIDParameter, locationIDParameter, employeeIDParameter, actionTypeIDParameter, actionDateParameter, processNameParameter, processIDParameter, processDateParameter, documentNumberParameter, descriptionParameter, directionParameter, collectionParameter, paymentParameter, currencyParameter, latitudeParameter, longitudeParameter, recordEmployeeIDParameter, recordDateParameter, processUIDParameter);
         }
+    
+        public virtual int RemoveAllAccountActions(Nullable<long> processID, Nullable<System.Guid> processUID)
+        {
+            var processIDParameter = processID.HasValue ?
+                new ObjectParameter("ProcessID", processID) :
+                new ObjectParameter("ProcessID", typeof(long));
+    
+            var processUIDParameter = processUID.HasValue ?
+                new ObjectParameter("ProcessUID", processUID) :
+                new ObjectParameter("ProcessUID", typeof(System.Guid));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemoveAllAccountActions", processIDParameter, processUIDParameter);
+        }
     }
 }

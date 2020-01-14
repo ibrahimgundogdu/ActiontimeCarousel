@@ -2487,7 +2487,7 @@ namespace ActionForce.Office
                             salaryPayment.RecordIP = OfficeHelper.GetIPAddress();
                             salaryPayment.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == salaryPayment.Currency ? salaryPayment.Amount : salaryPayment.Amount * salaryPayment.ExchangeRate;
                             salaryPayment.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
-                            salaryPayment.SalaryType = payment.SalaryTypeID;
+                            salaryPayment.SalaryTypeID = payment.SalaryTypeID;
                             salaryPayment.UID = payment.UID;
                             salaryPayment.EnvironmentID = payment.EnvironmentID;
                             salaryPayment.ReferenceID = payment.ReferanceID;
@@ -2534,32 +2534,23 @@ namespace ActionForce.Office
             return result;
         }
 
-        public Result<DocumentSalaryPayment> EditSalaryPayment(SalaryPayment payment, AuthenticationModel authentication)
+        public Result EditSalaryPayment(SalaryPayment payment, AuthenticationModel authentication)
         {
-            Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
 
             using (ActionTimeEntities Db = new ActionTimeEntities())
             {
-                var isPayment = Db.DocumentSalaryPayment.FirstOrDefault(x => x.UID == payment.UID);
+                var isPayment = Db.DocumentSalaryPayment.FirstOrDefault(x => x.UID == payment.UID && x.ID == payment.ID);
 
                 if (isPayment != null)
                 {
                     try
                     {
-                        var cash = OfficeHelper.GetCash(payment.LocationID, payment.Currency);
                         var location = Db.Location.FirstOrDefault(x => x.LocationID == payment.LocationID);
-                        var locId = payment.LocationID;
-                        var exchange = OfficeHelper.GetExchange(payment.DocumentDate.Value);
-
-                        var isKasa = isPayment.FromCashID != null ? Convert.ToInt32(isPayment.FromCashID) : (int?)null;
-                        var isBank = isPayment.FromBankAccountID != null ? isPayment.FromBankAccountID : (int?)null;
-
-                        var isEmp = isPayment.ToEmployeeID;
 
                         DocumentSalaryPayment self = new DocumentSalaryPayment()
                         {
@@ -2584,115 +2575,67 @@ namespace ActionForce.Office
                             ReferenceID = isPayment.ReferenceID,
                             SystemAmount = isPayment.SystemAmount,
                             SystemCurrency = isPayment.SystemCurrency,
-                            SalaryType = isPayment.SalaryType,
                             UpdateDate = isPayment.UpdateDate,
                             UpdateEmployee = isPayment.UpdateEmployee,
                             UpdateIP = isPayment.UpdateIP,
                             CategoryID = isPayment.CategoryID,
-                            EnvironmentID = isPayment.EnvironmentID
+                            EnvironmentID = isPayment.EnvironmentID,
+                            ResultID = isPayment.ResultID,
+                            SalaryTypeID = isPayment.SalaryTypeID,
+                            UID = isPayment.UID
                         };
-                        isPayment.ReferenceID = payment.ReferanceID;
+
                         isPayment.CategoryID = payment.CategoryID;
                         isPayment.LocationID = payment.LocationID;
                         isPayment.Currency = payment.Currency;
                         isPayment.Date = payment.DocumentDate;
-                        isPayment.ToEmployeeID = (int?)payment.EmployeeID ?? (int?)null;
+                        isPayment.ToEmployeeID = payment.EmployeeID;
                         isPayment.Amount = payment.Amount;
-                        isPayment.FromCashID = cash.ID;
+                        isPayment.FromCashID = payment.FromCashID;
                         isPayment.Description = payment.Description;
                         isPayment.ExchangeRate = payment.ExchangeRate != null ? payment.ExchangeRate : self.ExchangeRate;
-                        isPayment.FromBankAccountID = payment.FromBankID ?? (int?)null;
-                        isPayment.SalaryType = payment.SalaryTypeID;
+                        isPayment.FromBankAccountID = payment.FromBankID;
+                        isPayment.SalaryTypeID = payment.SalaryTypeID;
                         isPayment.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
                         isPayment.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
                         isPayment.UpdateIP = OfficeHelper.GetIPAddress();
                         isPayment.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == payment.Currency ? payment.Amount : payment.Amount * isPayment.ExchangeRate;
                         isPayment.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+                        isPayment.IsActive = payment.IsActive;
 
                         Db.SaveChanges();
 
-                        if (isKasa != null && payment.FromBankID == 0)
+                        // cari hesap kayıtları silinir.
+                        Db.RemoveAllAccountActions(payment.ID, payment.UID);
+
+                        // hareketler eklenir
+
+                        if (payment.FromCashID > 0)
                         {
-                            var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == locId && x.EmployeeID == isEmp && x.CashActionTypeID == isPayment.ActionTypeID && x.ProcessID == isPayment.ID);
-
-                            if (cashaction != null)
-                            {
-                                cashaction.Payment = isPayment.Amount;
-                                cashaction.Currency = isPayment.Currency;
-                                cashaction.CashID = (int?)isPayment.FromBankAccountID == 0 ? cash.ID : (int?)null;
-                                cashaction.ActionDate = isPayment.Date;
-                                cashaction.ProcessDate = isPayment.Date;
-                                cashaction.EmployeeID = isPayment.ToEmployeeID;
-                                cashaction.UpdateDate = isPayment.UpdateDate;
-                                cashaction.UpdateEmployeeID = isPayment.UpdateEmployee;
-
-                                Db.SaveChanges();
-
-                            }
-                        }
-                        else if (isBank != null && payment.FromBankID > 0)
-                        {
-                            var bankaction = Db.BankActions.FirstOrDefault(x => x.BankAccountID == isBank && x.LocationID == locId && x.EmployeeID == isEmp && x.BankActionTypeID == isPayment.ActionTypeID && x.ProcessID == isPayment.ID);
-
-                            if (bankaction != null)
-                            {
-                                bankaction.Payment = isPayment.Amount;
-                                bankaction.Currency = isPayment.Currency;
-                                bankaction.BankAccountID = (int?)isPayment.FromBankAccountID > 0 ? isPayment.FromBankAccountID : (int?)null;
-                                bankaction.ActionDate = isPayment.Date;
-                                bankaction.ProcessDate = isPayment.Date;
-                                bankaction.EmployeeID = isPayment.ToEmployeeID;
-                                bankaction.UpdateDate = isPayment.UpdateDate;
-                                bankaction.UpdateEmployeeID = isPayment.UpdateEmployee;
-
-                                Db.SaveChanges();
-
-                            }
-                        }
-                        else if (isKasa != null && payment.FromBankID != 0)
-                        {
-                            OfficeHelper.AddCashAction(isPayment.FromCashID, isPayment.LocationID, isPayment.ToEmployeeID, isPayment.ActionTypeID, isPayment.Date, isPayment.ActionTypeName, isPayment.ID, isPayment.Date, isPayment.DocumentNumber, isPayment.Description, -1, 0, isPayment.Amount, isPayment.Currency, null, null, isPayment.RecordEmployeeID, isPayment.RecordDate, isPayment.UID.Value);
-                            OfficeHelper.AddBankAction(isPayment.LocationID, null, isPayment.FromBankAccountID, isPayment.ToEmployeeID, isPayment.ActionTypeID, isPayment.Date, isPayment.ActionTypeName, isPayment.ID, isPayment.Date, isPayment.DocumentNumber, isPayment.Description, -1, 0, -1 * isPayment.Amount, isPayment.Currency, null, null, isPayment.RecordEmployeeID, isPayment.RecordDate, isPayment.UID.Value);
-
-                        }
-                        else if (isBank != null && payment.FromBankID == 0)
-                        {
-                            OfficeHelper.AddCashAction(isPayment.FromCashID, isPayment.LocationID, isPayment.ToEmployeeID, isPayment.ActionTypeID, isPayment.Date, isPayment.ActionTypeName, isPayment.ID, isPayment.Date, isPayment.DocumentNumber, isPayment.Description, -1, 0, -1 * isPayment.Amount, isPayment.Currency, null, null, isPayment.RecordEmployeeID, isPayment.RecordDate, isPayment.UID.Value);
-                            OfficeHelper.AddBankAction(isPayment.LocationID, null, isPayment.FromBankAccountID, isPayment.ToEmployeeID, isPayment.ActionTypeID, isPayment.Date, isPayment.ActionTypeName, isPayment.ID, isPayment.Date, isPayment.DocumentNumber, isPayment.Description, -1, 0, isPayment.Amount, isPayment.Currency, null, null, isPayment.RecordEmployeeID, isPayment.RecordDate, isPayment.UID.Value);
+                            OfficeHelper.AddCashAction(isPayment.FromCashID, isPayment.LocationID, isPayment.ToEmployeeID, isPayment.ActionTypeID, isPayment.Date, isPayment.ActionTypeName, isPayment.ID, isPayment.Date, isPayment.DocumentNumber, isPayment.Description, -1, 0, isPayment.Amount, isPayment.Currency, null, null, isPayment.UpdateEmployee, isPayment.UpdateDate, isPayment.UID.Value);
                         }
 
-
-                        var empaction = Db.EmployeeCashActions.FirstOrDefault(x => x.EmployeeID == isEmp && x.ActionTypeID == isPayment.ActionTypeID && x.ProcessID == isPayment.ID);
-
-                        if (empaction != null)
+                        if (payment.FromBankID > 0)
                         {
-                            empaction.ProcessDate = isPayment.Date;
-                            empaction.Collection = 0;
-                            empaction.Payment = isPayment.Amount;
-                            empaction.Currency = isPayment.Currency;
-                            empaction.EmployeeID = isPayment.ToEmployeeID;
-                            empaction.UpdateDate = isPayment.UpdateDate;
-                            empaction.UpdateEmployeeID = isPayment.UpdateEmployee;
-
-                            Db.SaveChanges();
-
+                            var bankactiontype = Db.BankActionType.FirstOrDefault(x => x.ID == 8);
+                            OfficeHelper.AddBankAction(isPayment.LocationID, isPayment.ToEmployeeID, isPayment.FromBankAccountID, null, bankactiontype.ID, isPayment.Date, bankactiontype.Name, isPayment.ID, isPayment.Date, isPayment.DocumentNumber, isPayment.Description, -1, 0, isPayment.Amount, isPayment.Currency, null, null, isPayment.UpdateEmployee, isPayment.UpdateDate, isPayment.UID.Value);
                         }
+
+                        OfficeHelper.AddEmployeeAction(isPayment.ToEmployeeID, isPayment.LocationID, isPayment.ActionTypeID, isPayment.ActionTypeName, isPayment.ID, isPayment.Date, isPayment.Description, 1, 0, isPayment.Amount, isPayment.Currency, null, null, isPayment.SalaryTypeID, isPayment.UpdateEmployee, isPayment.UpdateDate, isPayment.UID.Value, isPayment.DocumentNumber, isPayment.CategoryID.Value);
 
                         result.IsSuccess = true;
                         result.Message = "Maaş Avans ödemesi başarı ile güncellendi";
 
 
                         var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentSalaryPayment>(self, isPayment, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Salary", "Update", isPayment.ID.ToString(), "Salary", "SalaryPayment", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(payment.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        OfficeHelper.AddApplicationLog("Office", "DocumentSalaryPayment", "Update", isPayment.ID.ToString(), payment.Controller, "SalaryPayment", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(payment.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
                     catch (Exception ex)
                     {
                         result.Message = $"Maaş Avans güncellenemdi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Salary", "Update", "-1", "Salary", "SalaryPayment", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(payment.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        OfficeHelper.AddApplicationLog("Office", "DocumentSalaryPayment", "Update", "-1", payment.Controller, "SalaryPayment", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(payment.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
                 }
-
-
             }
 
             return result;
@@ -2712,43 +2655,31 @@ namespace ActionForce.Office
                 using (ActionTimeEntities Db = new ActionTimeEntities())
                 {
                     var isCash = Db.DocumentSalaryPayment.FirstOrDefault(x => x.UID == id);
+                    var location = Db.Location.FirstOrDefault(x => x.LocationID == isCash.LocationID);
                     if (isCash != null)
                     {
                         try
                         {
-                            var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
-
                             isCash.IsActive = false;
-                            isCash.UpdateDate = DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3));
+                            isCash.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
                             isCash.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
                             isCash.UpdateIP = OfficeHelper.GetIPAddress();
 
                             Db.SaveChanges();
 
-                            if (isCash.FromBankAccountID > 0)
-                            {
-                                OfficeHelper.AddBankAction(isCash.LocationID, isCash.ToEmployeeID, isCash.FromBankAccountID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
-                            }
-                            else
-                            {
-                                OfficeHelper.AddCashAction(isCash.FromCashID, isCash.LocationID, isCash.ToEmployeeID, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
-                            }
-
-                            //maaş hesap işlemi
-                            OfficeHelper.AddEmployeeAction(isCash.ToEmployeeID, isCash.LocationID, isCash.ActionTypeID, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.Description, 1, 0, -1 * isCash.Amount, isCash.Currency, null, null, isCash.SalaryType, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value, isCash.DocumentNumber, 8);
+                            Db.RemoveAllAccountActions(isCash.ID, isCash.UID);
 
                             result.IsSuccess = true;
                             result.Message = "Maaş Avans ödemesi başarı ile iptal edildi";
 
                             // log atılır
-                            OfficeHelper.AddApplicationLog("Office", "Salary", "Remove", isCash.ID.ToString(), "Salary", "SalaryPayment", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isCash);
-
+                            OfficeHelper.AddApplicationLog("Office", "DocumentSalaryPayment", "Remove", isCash.ID.ToString(), "Salary", "SalaryPayment", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isCash);
                         }
                         catch (Exception ex)
                         {
 
                             result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki maaş avans ödemesi iptal edilemedi : {ex.Message}";
-                            OfficeHelper.AddApplicationLog("Office", "Salary", "Remove", "-1", "Salary", "SalaryPayment", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                            OfficeHelper.AddApplicationLog("Office", "DocumentSalaryPayment", "Remove", "-1", "Salary", "SalaryPayment", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                         }
                     }
                 }

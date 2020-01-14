@@ -161,6 +161,24 @@ namespace ActionForce.Office
         public Guid UID { get; set; }
     }
 
+    public class EditCashSalaryPayment
+    {
+        public Guid UID { get; set; }
+        public long ID { get; set; }
+        public string DocumentDate { get; set; }
+        public int LocationID { get; set; }
+        public int EmployeeID { get; set; }
+        public int SalaryTypeID { get; set; }
+        public int CategoryID { get; set; }
+        public int ActionTypeID { get; set; }
+        public string Amount { get; set; }
+        public string Currency { get; set; }
+        public string ExchangeRate { get; set; }
+        public string Description { get; set; }
+        public string IsActive { get; set; }
+        public int FromBankID { get; set; }
+    }
+
     public class CashSalaryPayment
     {
         public int EmployeeID { get; set; }
@@ -171,6 +189,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public int SalaryTypeID { get; set; }
         public int CategoryID { get; set; }
+        public int FromBankID { get; set; }
     }
 
 

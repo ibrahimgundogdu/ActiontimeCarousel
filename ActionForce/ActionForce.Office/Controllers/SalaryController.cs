@@ -18,7 +18,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
             if (TempData["filter"] != null)
@@ -33,7 +33,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            model.BankAccountList = Db.BankAccount.ToList();
+            model.BankAccountList = Db.VBankAccount.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 1 && x.IsActive == true).ToList();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
@@ -81,12 +81,12 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddSalaryEarn(NewSalaryEarn cashSalary)
         {
-            Result<DocumentSalaryEarn> result = new Result<DocumentSalaryEarn>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
+
             SalaryControlModel model = new SalaryControlModel();
 
             if (cashSalary != null)
@@ -135,7 +135,11 @@ namespace ActionForce.Office.Controllers
                     earn.SystemUnitPrice = earn.UnitPrice;
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.AddSalaryEarn(earn, model.Authentication);
+                    var addresult = documentManager.AddSalaryEarn(earn, model.Authentication);
+
+                    result.IsSuccess = addresult.IsSuccess;
+                    result.Message = addresult.Message;
+
                 }
                 else
                 {
@@ -143,13 +147,9 @@ namespace ActionForce.Office.Controllers
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
 
-
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
 
             return RedirectToAction("Index", "Salary");
         }
@@ -158,14 +158,13 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditSalaryEarn(NewSalaryEarn cashEarn)
         {
-            Result<DocumentSalaryEarn> result = new Result<DocumentSalaryEarn>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            SalaryControlModel model = new SalaryControlModel();
 
+            SalaryControlModel model = new SalaryControlModel();
 
             if (cashEarn != null)
             {
@@ -203,22 +202,19 @@ namespace ActionForce.Office.Controllers
                     sale.SystemUnitPrice = sale.UnitPrice;
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.EditSalaryEarn(sale, model.Authentication);
+                    var editresult = documentManager.EditSalaryEarn(sale, model.Authentication);
+
+                    result.IsSuccess = editresult.IsSuccess;
+                    result.Message = editresult.Message;
                 }
                 else
                 {
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-
-
-
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("Detail", new { id = cashEarn.UID });
 
         }
@@ -226,26 +222,24 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult DeleteSalaryEarn(string id)
         {
-            Result<DocumentSalaryEarn> result = new Result<DocumentSalaryEarn>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            CashControlModel model = new CashControlModel();
 
+            CashControlModel model = new CashControlModel();
 
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteSalaryEarn(Guid.Parse(id), model.Authentication);
+                var delresult = documentManager.DeleteSalaryEarn(Guid.Parse(id), model.Authentication);
+
+                result.IsSuccess = delresult.IsSuccess;
+                result.Message = delresult.Message;
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-            messageresult.IsSuccess = result.IsSuccess;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("Detail", new { id = id });
 
         }
@@ -257,23 +251,11 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 1 && x.IsActive == true).ToList();
-            model.BankAccountList = Db.BankAccount.ToList();
+            model.BankAccountList = Db.VBankAccount.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -318,7 +300,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
             if (TempData["filter"] != null)
@@ -334,7 +316,7 @@ namespace ActionForce.Office.Controllers
                 model.Filters = filterModel;
             }
 
-            model.BankAccountList = Db.BankAccount.ToList();
+            model.BankAccountList = Db.VBankAccount.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -379,37 +361,71 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("SalaryPayment", "Salary");
         }
 
-        [HttpPost]
         [AllowAnonymous]
-        public ActionResult AddSalaryPayment(NewCashSalaryPayment cashSalary)
+        public ActionResult NewSalaryPayment()
         {
-            Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
-            {
-                IsSuccess = false,
-                Message = string.Empty,
-                Data = null
-            };
             SalaryControlModel model = new SalaryControlModel();
 
-            if (cashSalary != null)
+            if (TempData["result"] != null)
             {
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSalary.ActinTypeID);
-                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSalary.LocationID);
-                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var fromPrefix = cashSalary.FromID.Substring(0, 1);
-                var fromID = Convert.ToInt32(cashSalary.FromID.Substring(1, cashSalary.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashSalary.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var currency = cashSalary.Currency;
-                var docDate = DateTime.Now.Date;
-                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-                var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+                model.Result = TempData["result"] as Result ?? null;
+            }
 
-                if (DateTime.TryParse(cashSalary.DocumentDate, out docDate))
+            model.BankAccountList = Db.VBankAccount.Where(x=> x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 1 && x.IsActive == true).ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
+            model.SalaryTypes = Db.SalaryType.Where(x => x.IsActive == true).ToList();
+            
+            return View(model);
+
+
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddSalaryPayment(CashSalaryPayment cashsalary)
+        {
+
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            CashControlModel model = new CashControlModel();
+
+            if (cashsalary != null)
+            {
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 31);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashsalary.LocationID);
+                var amount = Convert.ToDouble(cashsalary.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                int timezone = location.Timezone.Value;
+                int? frombankID = null;
+                int? fromcashID = null;
+
+                if (cashsalary.FromBankID > 0)
                 {
-                    docDate = Convert.ToDateTime(cashSalary.DocumentDate).Date;
+                    frombankID = cashsalary.FromBankID;
                 }
-                var cash = OfficeHelper.GetCash(cashSalary.LocationID, cashSalary.Currency);
-                // tahsilat eklenir.
+                else
+                {
+                    var cash = OfficeHelper.GetCash(cashsalary.LocationID, cashsalary.Currency);
+                    fromcashID = cash.ID;
+                }
+
+                var docDate = DateTime.Now.Date;
+                if (DateTime.TryParse(cashsalary.DocumentDate, out docDate))
+                {
+                    docDate = Convert.ToDateTime(cashsalary.DocumentDate).Date;
+                }
+                
+
+                var exchange = OfficeHelper.GetExchange(docDate);
+
+                
 
                 if (amount > 0)
                 {
@@ -417,103 +433,184 @@ namespace ActionForce.Office.Controllers
 
                     payment.ActinTypeID = actType.ID;
                     payment.ActionTypeName = actType.Name;
-                    payment.Currency = cashSalary.Currency;
-                    payment.Description = cashSalary.Description;
+                    payment.Currency = cashsalary.Currency;
+                    payment.Description = cashsalary.Description;
                     payment.DocumentDate = docDate;
-                    payment.EmployeeID = fromPrefix == "E" ? fromID : (int)0; ;
+                    payment.EmployeeID = cashsalary.EmployeeID;
                     payment.EnvironmentID = 2;
                     payment.LocationID = location.LocationID;
                     payment.Amount = amount;
                     payment.UID = Guid.NewGuid();
-                    payment.TimeZone = location.Timezone;
+                    payment.TimeZone = timezone;
                     payment.OurCompanyID = location.OurCompanyID;
                     payment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA.Value : payment.Currency == "EUR" ? exchange.EURA.Value : 1;
-                    payment.FromBankID = (int?)cashSalary.BankAccountID > 0 ? cashSalary.BankAccountID : (int?)null;
-                    payment.FromCashID = (int?)cashSalary.BankAccountID == 0 ? cash.ID : (int?)null;
-                    payment.SalaryTypeID = cashSalary.SalaryType;
-                    payment.TimeZone = location.Timezone;
-                    payment.ReferanceID = cashSalary.ReferanceID;
-                    payment.CategoryID = cashSalary.CategoryID ?? (int?)null;
+                    payment.FromBankID = frombankID;
+                    payment.FromCashID = fromcashID;
+                    payment.SalaryTypeID = cashsalary.SalaryTypeID;
+                    payment.CategoryID = cashsalary.CategoryID;
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.AddSalaryPayment(payment, model.Authentication);
+                    var addresult = documentManager.AddSalaryPayment(payment, model.Authentication);
+
+                    result.IsSuccess = addresult.IsSuccess;
+                    result.Message = addresult.Message;
                 }
                 else
                 {
-                    result.IsSuccess = true;
+                    result.IsSuccess = false;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-
-
-
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
 
             return RedirectToAction("SalaryPayment", "Salary");
+
+            //Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
+            //{
+            //    IsSuccess = false,
+            //    Message = string.Empty,
+            //    Data = null
+            //};
+            //SalaryControlModel model = new SalaryControlModel();
+
+            //if (cashSalary != null)
+            //{
+            //    var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSalary.ActinTypeID);
+            //    var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSalary.LocationID);
+            //    var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+            //    var fromPrefix = cashSalary.FromID.Substring(0, 1);
+            //    var fromID = Convert.ToInt32(cashSalary.FromID.Substring(1, cashSalary.FromID.Length - 1));
+            //    var amount = Convert.ToDouble(cashSalary.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+            //    var currency = cashSalary.Currency;
+            //    var docDate = DateTime.Now.Date;
+            //    int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
+            //    var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
+
+            //    if (DateTime.TryParse(cashSalary.DocumentDate, out docDate))
+            //    {
+            //        docDate = Convert.ToDateTime(cashSalary.DocumentDate).Date;
+            //    }
+            //    var cash = OfficeHelper.GetCash(cashSalary.LocationID, cashSalary.Currency);
+            //    // tahsilat eklenir.
+
+            //    if (amount > 0)
+            //    {
+            //        SalaryPayment payment = new SalaryPayment();
+
+            //        payment.ActinTypeID = actType.ID;
+            //        payment.ActionTypeName = actType.Name;
+            //        payment.Currency = cashSalary.Currency;
+            //        payment.Description = cashSalary.Description;
+            //        payment.DocumentDate = docDate;
+            //        payment.EmployeeID = fromPrefix == "E" ? fromID : (int)0; ;
+            //        payment.EnvironmentID = 2;
+            //        payment.LocationID = location.LocationID;
+            //        payment.Amount = amount;
+            //        payment.UID = Guid.NewGuid();
+            //        payment.TimeZone = location.Timezone;
+            //        payment.OurCompanyID = location.OurCompanyID;
+            //        payment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA.Value : payment.Currency == "EUR" ? exchange.EURA.Value : 1;
+            //        payment.FromBankID = (int?)cashSalary.BankAccountID > 0 ? cashSalary.BankAccountID : (int?)null;
+            //        payment.FromCashID = (int?)cashSalary.BankAccountID == 0 ? cash.ID : (int?)null;
+            //        payment.SalaryTypeID = cashSalary.SalaryType;
+            //        payment.TimeZone = location.Timezone;
+            //        payment.ReferanceID = cashSalary.ReferanceID;
+            //        payment.CategoryID = cashSalary.CategoryID ?? (int?)null;
+
+            //        DocumentManager documentManager = new DocumentManager();
+            //        result = documentManager.AddSalaryPayment(payment, model.Authentication);
+            //    }
+            //    else
+            //    {
+            //        result.IsSuccess = true;
+            //        result.Message = $"Tutar 0'dan büyük olmalıdır.";
+            //    }
+
+
+
+            //}
+
+            //Result<CashActions> messageresult = new Result<CashActions>();
+            //messageresult.Message = result.Message;
+
+            //TempData["result"] = messageresult;
+
+            //return RedirectToAction("SalaryPayment", "Salary");
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult EditSalaryPayment(NewCashSalaryPayment cashSalary)
+        public ActionResult EditSalaryPayment(EditCashSalaryPayment cashSalary)
         {
-            Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
-            SalaryControlModel model = new SalaryControlModel();
 
+            SalaryControlModel model = new SalaryControlModel();
 
             if (cashSalary != null)
             {
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSalary.ActinTypeID);
-                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSalary.LocationID);
-                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var fromPrefix = cashSalary.FromID.Substring(0, 1);
-                var fromID = Convert.ToInt32(cashSalary.FromID.Substring(1, cashSalary.FromID.Length - 1));
                 var amount = Convert.ToDouble(cashSalary.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var currency = cashSalary.Currency;
-                var docDate = DateTime.Now.Date;
-                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
+                double? newexchanges = Convert.ToDouble(cashSalary.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSalary.LocationID);
+                int timezone = location.Timezone != null ? location.Timezone.Value : location.Timezone.Value;
+                bool isactive = !string.IsNullOrEmpty(cashSalary.IsActive) && cashSalary.IsActive == "1" ? true : false;
 
+                var docDate = DateTime.Now.Date;
                 if (DateTime.TryParse(cashSalary.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashSalary.DocumentDate).Date;
                 }
-                double? newexchanges = Convert.ToDouble(cashSalary.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                double? exchanges = Convert.ToDouble(cashSalary.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
+                int? frombankID = null;
+                int? fromcashID = null;
+
+                if (cashSalary.FromBankID > 0)
+                {
+                    frombankID = cashSalary.FromBankID;
+                }
+                else
+                {
+                    var cash = OfficeHelper.GetCash(cashSalary.LocationID, cashSalary.Currency);
+                    fromcashID = cash.ID;
+                }
+
 
                 if (amount > 0)
                 {
-                    SalaryPayment sale = new SalaryPayment();
-                    sale.LocationID = cashSalary.ActinTypeID;
-                    sale.Currency = cashSalary.Currency;
-                    sale.DocumentDate = docDate;
-                    sale.EmployeeID = fromPrefix == "E" ? fromID : (int)0;
-                    sale.Amount = amount;
-                    sale.Description = cashSalary.Description;
-                    sale.FromBankID = cashSalary.BankAccountID;
-                    sale.SalaryTypeID = cashSalary.SalaryType;
-                    sale.UID = cashSalary.UID;
-                    sale.CategoryID = cashSalary.CategoryID;
-                    sale.ReferanceID = cashSalary.ReferanceID;
-                    sale.TimeZone = timezone;
+                    SalaryPayment salarypay = new SalaryPayment();
+
+                    salarypay.LocationID = cashSalary.LocationID;
+                    salarypay.Currency = cashSalary.Currency;
+                    salarypay.DocumentDate = docDate;
+                    salarypay.EmployeeID = cashSalary.EmployeeID;
+                    salarypay.Amount = amount;
+                    salarypay.Description = cashSalary.Description;
+                    salarypay.SalaryTypeID = cashSalary.SalaryTypeID;
+                    salarypay.UID = cashSalary.UID;
+                    salarypay.CategoryID = cashSalary.CategoryID;
+                    salarypay.TimeZone = timezone;
+                    salarypay.ID = cashSalary.ID;
+                    salarypay.ExchangeRate = newexchanges;
+                    salarypay.FromBankID = frombankID;
+                    salarypay.FromCashID = fromcashID;
+                    salarypay.IsActive = isactive;
+                    salarypay.Controller = "Cash";
+
+
                     if (newexchanges > 0)
                     {
-                        sale.ExchangeRate = newexchanges;
-                    }
-                    else
-                    {
-                        sale.ExchangeRate = exchanges;
+                        salarypay.ExchangeRate = newexchanges;
                     }
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.EditSalaryPayment(sale, model.Authentication);
+                    var editresult = documentManager.EditSalaryPayment(salarypay, model.Authentication);
+
+                    result.IsSuccess = editresult.IsSuccess;
+                    result.Message = editresult.Message;
                 }
                 else
                 {
@@ -521,26 +618,94 @@ namespace ActionForce.Office.Controllers
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
 
-
-
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("SalaryDetail", new { id = cashSalary.UID });
+
+            //Result result = new Result()
+            //{
+            //    IsSuccess = false,
+            //    Message = string.Empty
+            //};
+
+            //SalaryControlModel model = new SalaryControlModel();
+
+            //if (cashSalary != null)
+            //{
+            //    var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSalary.ActinTypeID);
+            //    var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSalary.LocationID);
+            //    var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+            //    var fromPrefix = cashSalary.FromID.Substring(0, 1);
+            //    var fromID = Convert.ToInt32(cashSalary.FromID.Substring(1, cashSalary.FromID.Length - 1));
+            //    var amount = Convert.ToDouble(cashSalary.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+            //    var currency = cashSalary.Currency;
+            //    var docDate = DateTime.Now.Date;
+            //    int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
+
+            //    if (DateTime.TryParse(cashSalary.DocumentDate, out docDate))
+            //    {
+            //        docDate = Convert.ToDateTime(cashSalary.DocumentDate).Date;
+            //    }
+            //    double? newexchanges = Convert.ToDouble(cashSalary.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+            //    double? exchanges = Convert.ToDouble(cashSalary.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
+            //    if (amount > 0)
+            //    {
+            //        SalaryPayment sale = new SalaryPayment();
+            //        sale.LocationID = cashSalary.ActinTypeID;
+            //        sale.Currency = cashSalary.Currency;
+            //        sale.DocumentDate = docDate;
+            //        sale.EmployeeID = fromPrefix == "E" ? fromID : (int)0;
+            //        sale.Amount = amount;
+            //        sale.Description = cashSalary.Description;
+            //        sale.FromBankID = cashSalary.BankAccountID;
+            //        sale.SalaryTypeID = cashSalary.SalaryType;
+            //        sale.UID = cashSalary.UID;
+            //        sale.CategoryID = cashSalary.CategoryID;
+            //        sale.ReferanceID = cashSalary.ReferanceID;
+            //        sale.TimeZone = timezone;
+            //        if (newexchanges > 0)
+            //        {
+            //            sale.ExchangeRate = newexchanges;
+            //        }
+            //        else
+            //        {
+            //            sale.ExchangeRate = exchanges;
+            //        }
+
+            //        DocumentManager documentManager = new DocumentManager();
+            //        var editresult = documentManager.EditSalaryPayment(sale, model.Authentication);
+
+            //        result.IsSuccess = editresult.IsSuccess;
+            //        result.Message = editresult.Message;
+
+            //    }
+            //    else
+            //    {
+            //        result.IsSuccess = true;
+            //        result.Message = $"Tutar 0'dan büyük olmalıdır.";
+            //    }
+
+
+
+            //}
+
+            //Result<CashActions> messageresult = new Result<CashActions>();
+            //messageresult.Message = result.Message;
+
+            //TempData["result"] = messageresult;
+            //return RedirectToAction("SalaryDetail", new { id = cashSalary.UID });
 
         }
 
         [AllowAnonymous]
         public ActionResult DeleteSalaryPayment(string id)
         {
-            Result<DocumentSalaryPayment> result = new Result<DocumentSalaryPayment>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
             CashControlModel model = new CashControlModel();
 
@@ -548,14 +713,13 @@ namespace ActionForce.Office.Controllers
             if (id != null)
             {
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.DeleteSalaryPayment(Guid.Parse(id), model.Authentication);
+                var delresult = documentManager.DeleteSalaryPayment(Guid.Parse(id), model.Authentication);
+
+                result.IsSuccess = delresult.IsSuccess;
+                result.Message = delresult.Message;
             }
 
-            Result<CashActions> messageresult = new Result<CashActions>();
-            messageresult.IsSuccess = result.IsSuccess;
-            messageresult.Message = result.Message;
-
-            TempData["result"] = messageresult;
+            TempData["result"] = result;
             return RedirectToAction("SalaryDetail", new { id = id });
 
         }
@@ -567,32 +731,18 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
+            model.SalaryTypes = Db.SalaryType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
-            model.BankAccountList = Db.BankAccount.ToList();
+            model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 1 && x.IsActive == true).ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
-            model.UnitPrice = Db.EmployeeSalary.ToList();
             model.SalaryDetail = Db.VDocumentSalaryPayment.FirstOrDefault(x => x.UID == id);
-            model.History = Db.ApplicationLog.Where(x => x.Controller == "Salary" && x.Action == "SalaryPayment" && x.Environment == "Office" && x.ProcessID == model.SalaryDetail.ID.ToString()).ToList();
+            //model.History = Db.ApplicationLog.Where(x => x.Controller == "Salary" && x.Action == "SalaryPayment" && x.Environment == "Office" && x.ProcessID == model.SalaryDetail.ID.ToString()).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
 
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
 
             return View(model);
         }
@@ -605,7 +755,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
             model.UnitSalaryDistList = Db.VEmployeeSalaryDist.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.FullName).ToList();
@@ -646,11 +796,10 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public PartialViewResult SaveSalaryUnit(NewEmployeeSalary empSalary)
         {
-            Result<CashActions> result = new Result<CashActions>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
 
             SalaryControlModel model = new SalaryControlModel();
@@ -723,13 +872,14 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public PartialViewResult DeleteSalaryUnit(int? id)
         {
-            Result<CashActions> result = new Result<CashActions>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
+
             SalaryControlModel model = new SalaryControlModel();
+
             int? empID = 0;
 
             if (id != null)
@@ -971,7 +1121,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["result"] != null)
             {
-                model.Result = TempData["result"] as Result<CashActions> ?? null;
+                model.Result = TempData["result"] as Result ?? null;
             }
 
             if (TempData["filter"] != null)
@@ -1064,23 +1214,18 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult AddNewPermit(NewPermit permit)
         {
-            Result<DocumentEmployeePermit> result = new Result<DocumentEmployeePermit>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
+
             SalaryControlModel model = new SalaryControlModel();
 
             if (permit != null)
             {
                 var cashactType = Db.CashActionType.FirstOrDefault(x => x.ID == 36);
-                //var permitType = Db.PermitType.FirstOrDefault(x => x.ID == permit.PermitTypeID);
-                //var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == permit.EmployeeID);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == permit.LocationID);
-                //var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                //var status = Db.PermitStatus.FirstOrDefault(x => x.ID == permit.StatusID);
-                //var currency = location.Currency;
                 var docDate = DateTime.Now.Date;
                 var returnWorkDate = DateTime.Now.AddDays(1).Date;
 
@@ -1134,7 +1279,7 @@ namespace ActionForce.Office.Controllers
 
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.AddEmployeePermit(permitdoc, model.Authentication);
+                    var addresult = documentManager.AddEmployeePermit(permitdoc, model.Authentication);
 
                     TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
 
@@ -1186,12 +1331,12 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditPermit(EditPermit permit)
         {
-            Result<DocumentEmployeePermit> result = new Result<DocumentEmployeePermit>()
+            Result result = new Result()
             {
                 IsSuccess = false,
-                Message = string.Empty,
-                Data = null
+                Message = string.Empty
             };
+
             SalaryControlModel model = new SalaryControlModel();
 
             if (permit != null)
@@ -1250,9 +1395,10 @@ namespace ActionForce.Office.Controllers
                     permitdoc.ID = permit.ID;
 
                     DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.EditEmployeePermit(permitdoc, model.Authentication);
+                    var editresult = documentManager.EditEmployeePermit(permitdoc, model.Authentication);
 
-                    TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+                    TempData["result"] = new Result() { IsSuccess = editresult.IsSuccess, Message = editresult.Message };
 
                     if (result.IsSuccess == true)
                     {
