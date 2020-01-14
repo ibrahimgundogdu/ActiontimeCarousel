@@ -1,0 +1,221 @@
+﻿@model CashControlModel
+@{
+    ViewBag.Title = "Kasadan Maaş / Avans Ödeme İşlemleri";
+}
+
+@section style{
+    <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
+}
+
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">Kasadan Maaş / Avans Ödeme İşlemleri</span>
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div>
+<div class="content-body">
+    <div class="pd-x-0 tx-13">
+        <div class="media d-block d-lg-flex">
+            <div class="media-body  mg-t-40 mg-lg-t-0">
+                <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                    <div>
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                                <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                                <li class="breadcrumb-item active" aria-current="page">Kasadan Maaş / Avans Ödeme İşlemleri</li>
+                            </ol>
+                        </nav>
+                        <h4 class="mg-b-0 tx-spacing--1">Yeni Ödeme</h4>
+                    </div>
+                    <div class="d-none d-md-block">
+                        <a href="/Cash/SalaryPayment" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; Kasadan Maaş Ödeme Listesi</a>
+                    </div>
+                </div>
+
+
+                @using (Html.BeginForm("AddCashSalaryPayment", "Cash", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="row row-xs">
+                        <div class="col-lg-12">
+                            <div class="form-group row">
+                                <label for="DocumentDate" class="col-sm-3 col-form-label">Belge Tarihi</label>
+                                <div class="col-sm-6">
+                                    <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-5 bg-gray-50">
+                                <label for="LocationID" class="col-sm-3 col-form-label">Hangi Lokasyondan</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="LocationID" name="LocationID" required>
+                                        @foreach (var item in Model.LocationList.OrderBy(x => x.SortBy))
+                                        {
+                                            <option value="@item.LocationID">@($"{item.SortBy.Trim()} {item.LocationName} {item.Description} {item.State}" )</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row bg-gray-50">
+                                <label for="EmployeeID" class="col-sm-3 col-form-label">Hangi Çalışana</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control select2" id="EmployeeID" name="EmployeeID" required>
+                                        @foreach (var item in Model.EmployeeList.OrderBy(x => x.FullName))
+                                        {
+                                            <option value="@item.EmployeeID">@($"{item.FullName} ({item.IsActive})" )</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-5 bg-gray-100">
+                                <label for="SalaryTypeID" class="col-sm-3 col-form-label">Maaş mı? / Avans mı?</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="SalaryTypeID" name="SalaryTypeID" required>
+                                        @foreach (var item in Model.SalaryTypes.Where(x => x.IsActive == true).OrderBy(x => x.SortBy))
+                                        {
+                                            <option value="@item.ID">@($"{item.SalaryTypeName}" )</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-5 bg-gray-100">
+                                <label for="CategoryID" class="col-sm-3 col-form-label">İşlem Kategorisi</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" id="CategoryID" name="CategoryID" required>
+                                        @foreach (var item in Model.SalaryCategories.Where(x => x.IsActive == true).OrderBy(x => x.SortBy))
+                                        {
+                                            <option value="@item.ID">@($"{item.CategoryName}" )</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="Amount" class="col-sm-3 col-form-label">Ödenen Tutar</label>
+                                <div class="col-sm-4">
+                                    <input id="Amount" name="Amount" type="text" class="form-control money" autocomplete="off" min="0" placeholder="Tutar" required>
+                                </div>
+                                <div class="col-sm-2">
+                                    <select class="form-control" id="Currency" name="Currency" required>
+                                        @foreach (var item in Model.CurrencyList)
+                                        {
+                                            <option value="@item.Code" @(item.Code == Model.Authentication.ActionEmployee.OurCompany.Currency ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="Description" class="col-sm-3 col-form-label">Açıklama</label>
+                                <div class="col-sm-6">
+                                    <textarea id="Description" name="Description" rows="5" cols="20" class="form-control" style="width:100% !important;"></textarea>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-0">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-primary btn-block">Nakit Ödeme Ekle</button>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section canvasmenu {
+
+}
+
+@section scripts {
+    <script src="~/assets/js/ActionForceScript.js"></script>
+    <script>
+        $(function () {
+            'use strict'
+            $('.select2').select2({
+                placeholder: 'Çalışan Seçiminiz',
+                searchInputPlaceholder: 'Search options'
+            });
+            $('#DocumentDate').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+            $('#DateBegin').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+            $('#DateEnd').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+            $('#ReturnWorkDate').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+        });
+        $(function () {
+            $('.shiftbegintime').mask('00:00');
+            $('.hour').mask('00:00');
+            $('.hourfull').mask('00:00:00');
+            $('.shiftdate').mask('0000-00-00');
+            $('.fulldate').mask('0000-00-00 00:00:00');
+            $('.money').mask("#.##0,00", { reverse: true });
+            $('.quantity').mask("##0", { reverse: true });
+            $('.money4').mask("#.##0,0000", { reverse: true });
+        });
+
+
+    </script>
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}
+

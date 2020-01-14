@@ -1738,5 +1738,46 @@ namespace ActionForce.Office
             return issuccess;
         }
 
+        public static double CalculatePermitDuration(DateTime datestart, DateTime dateend, int employeeid,  int locationid)
+        {
+            double minuteDuration = 0;
+
+            if (employeeid > 0 && locationid>0 && datestart != null && dateend != null)
+            {
+                DateTime date = datestart.Date;
+
+                using (ActionTimeEntities db = new ActionTimeEntities())
+                {
+                    var employeeschedule = db.Schedule.FirstOrDefault(x => x.EmployeeID == employeeid && x.LocationID == locationid && x.ShiftDate == date);
+                    var employeeshift = db.EmployeeShift.FirstOrDefault(x => x.EmployeeID == employeeid && x.LocationID == locationid && x.ShiftDate == date && x.IsWorkTime == true);
+
+                    if (employeeschedule != null )
+                    {
+                        DateTime _startdate = employeeschedule.ShiftDateStart.Value;
+                        DateTime _endate = employeeschedule.ShiftdateEnd.Value;
+
+                        if (employeeshift != null)
+                        {
+                            if (employeeshift.ShiftDateStart != null && employeeshift.ShiftDateStart > employeeschedule.ShiftDateStart)
+                            {
+                                _startdate = employeeshift.ShiftDateStart.Value;
+                            }
+
+                            if (employeeshift.ShiftDateEnd != null && employeeshift.ShiftDateEnd < employeeschedule.ShiftdateEnd)
+                            {
+                                _endate = employeeshift.ShiftDateEnd.Value;
+                            }
+                        }
+
+                        datestart = datestart >= _startdate ? datestart : _startdate;
+                        dateend = dateend <= _endate ? dateend : _endate;
+
+                        minuteDuration = (int)(dateend - datestart).TotalMinutes;
+                    }
+                }
+            }
+
+            return minuteDuration;
+        }
     }
 }

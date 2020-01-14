@@ -21,6 +21,7 @@ namespace ActionForce.Office
 
         public IEnumerable<Cash> CashList { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
+        public IEnumerable<Employee> EmployeeList { get; set; }
         public IEnumerable<FromAccountModel> FromList { get; set; }
         public IEnumerable<FromAccountModel> ToList { get; set; }
         public IEnumerable<FromAccountModel> ToPersonList { get; set; }
@@ -29,12 +30,13 @@ namespace ActionForce.Office
         public IEnumerable<BankTransferStatus> StatusList { get; set; }
         public IEnumerable<BankAccount> BankAccountList { get; set; }
         public IEnumerable<SalaryCategory> SalaryCategories { get; set; }
+        public IEnumerable<SalaryType> SalaryTypes { get; set; }
         public IEnumerable<ExpenseType> ExpenseTypeList { get; set; }
 
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }
         public VLocation CurrentLocation { get; set; }
-        public Result<CashActions> Result { get; set; }
+        public Result Result { get; set; }
 
         public VDocumentCashCollections CashDetail { get; set; }
         public VDocumentTicketSales SaleDetail { get; set; }

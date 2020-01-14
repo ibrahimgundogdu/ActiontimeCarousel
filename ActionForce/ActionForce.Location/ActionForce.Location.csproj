@@ -1,0 +1,771 @@
+﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{DF3C5D88-8AA4-4C0D-927D-FD54D92D3AB5}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ActionForce.Location</RootNamespace>
+    <AssemblyName>ActionForce.Location</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.4\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.4\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.4\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.4\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.4\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.4\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="assets\css\bootstrap.css" />
+    <Content Include="assets\css\rtl.css" />
+    <Content Include="assets\css\site.min.css" />
+    <Content Include="assets\css\style.css" />
+    <Content Include="assets\css\theme.css" />
+    <Content Include="assets\img\login.png" />
+    <Content Include="assets\js\ajax.js" />
+    <Content Include="assets\js\app\calendar.js" />
+    <Content Include="assets\js\app\chat.js" />
+    <Content Include="assets\js\app\invoice.js" />
+    <Content Include="assets\js\app\mail.js" />
+    <Content Include="assets\js\app\search.js" />
+    <Content Include="assets\js\app\user.js" />
+    <Content Include="assets\js\jstore.js" />
+    <Content Include="assets\js\lazyload.config.js" />
+    <Content Include="assets\js\lazyload.js" />
+    <Content Include="assets\js\plugin.js" />
+    <Content Include="assets\js\plugins\apexcharts.js" />
+    <Content Include="assets\js\plugins\bootstrap-table.js" />
+    <Content Include="assets\js\plugins\chartist.js" />
+    <Content Include="assets\js\plugins\chartjs.js" />
+    <Content Include="assets\js\plugins\datatable.js" />
+    <Content Include="assets\js\plugins\feathericon.js" />
+    <Content Include="assets\js\plugins\fullscreen.js" />
+    <Content Include="assets\js\plugins\jqvmap.js" />
+    <Content Include="assets\js\plugins\musicapp.js" />
+    <Content Include="assets\js\plugins\notie.js" />
+    <Content Include="assets\js\plugins\plyr.js" />
+    <Content Include="assets\js\plugins\select2.js" />
+    <Content Include="assets\js\plugins\sort.js" />
+    <Content Include="assets\js\plugins\stellar.js" />
+    <Content Include="assets\js\plugins\tableExport.min.js" />
+    <Content Include="assets\js\plugins\typeahead.js" />
+    <Content Include="assets\js\site.min.js" />
+    <Content Include="assets\js\theme.js" />
+    <Content Include="assets\js\utils.js" />
+    <Content Include="Global.asax" />
+    <Content Include="libs\apexcharts\dist\apexcharts.amd.js" />
+    <Content Include="libs\apexcharts\dist\apexcharts.common.js" />
+    <Content Include="libs\apexcharts\dist\apexcharts.esm.js" />
+    <Content Include="libs\apexcharts\dist\apexcharts.js" />
+    <Content Include="libs\apexcharts\dist\apexcharts.min.js" />
+    <Content Include="libs\bootstrap-datepicker\dist\css\bootstrap-datepicker.min.css" />
+    <Content Include="libs\bootstrap-datepicker\dist\js\bootstrap-datepicker.min.js" />
+    <Content Include="libs\bootstrap-table\dist\bootstrap-table.min.css" />
+    <Content Include="libs\bootstrap-table\dist\bootstrap-table.min.js" />
+    <Content Include="libs\bootstrap-table\dist\extensions\export\bootstrap-table-export.js" />
+    <Content Include="libs\bootstrap-table\dist\extensions\export\bootstrap-table-export.min.js" />
+    <Content Include="libs\bootstrap-table\dist\extensions\mobile\bootstrap-table-mobile.js" />
+    <Content Include="libs\bootstrap-table\dist\extensions\mobile\bootstrap-table-mobile.min.js" />
+    <Content Include="libs\bootstrap\dist\css\bootstrap.min.css" />
+    <Content Include="libs\bootstrap\dist\js\bootstrap.min.js" />
+    <Content Include="libs\chart.js\dist\chart.ext.js" />
+    <Content Include="libs\chart.js\dist\Chart.min.js" />
+    <Content Include="libs\chartist-plugin-tooltips\dist\chartist-plugin-tooltip.min.js" />
+    <Content Include="libs\chartist\dist\chartist.ext.js" />
+    <Content Include="libs\chartist\dist\chartist.min.css" />
+    <Content Include="libs\chartist\dist\chartist.min.js" />
+    <Content Include="libs\datatables.net-bs4\css\dataTables.bootstrap4.css" />
+    <Content Include="libs\datatables.net-bs4\css\dataTables.bootstrap4.min.css" />
+    <Content Include="libs\datatables.net-bs4\js\dataTables.bootstrap4.js" />
+    <Content Include="libs\datatables.net-bs4\js\dataTables.bootstrap4.min.js" />
+    <Content Include="libs\datatables\media\js\jquery.dataTables.min.js" />
+    <Content Include="libs\daterangepicker\daterangepicker.css" />
+    <Content Include="libs\daterangepicker\daterangepicker.js" />
+    <Content Include="libs\dropzone\dist\min\basic.min.css" />
+    <Content Include="libs\dropzone\dist\min\dropzone-amd-module.min.js" />
+    <Content Include="libs\dropzone\dist\min\dropzone.min.css" />
+    <Content Include="libs\dropzone\dist\min\dropzone.min.js" />
+    <Content Include="libs\easy-pie-chart\dist\jquery.easypiechart.min.js" />
+    <Content Include="libs\feather-icons\dist\feather.min.js" />
+    <Content Include="libs\font-awesome\css\font-awesome.css" />
+    <Content Include="libs\font-awesome\css\font-awesome.min.css" />
+    <Content Include="libs\font-awesome\fonts\fontawesome-webfont.svg" />
+    <Content Include="libs\fullcalendar\dist\fullcalendar.css" />
+    <Content Include="libs\fullcalendar\dist\fullcalendar.js" />
+    <Content Include="libs\fullcalendar\dist\fullcalendar.min.css" />
+    <Content Include="libs\fullcalendar\dist\fullcalendar.min.js" />
+    <Content Include="libs\fullcalendar\dist\fullcalendar.print.css" />
+    <Content Include="libs\fullcalendar\dist\fullcalendar.print.min.css" />
+    <Content Include="libs\fullcalendar\dist\gcal.js" />
+    <Content Include="libs\fullcalendar\dist\gcal.min.js" />
+    <Content Include="libs\fullcalendar\dist\locale-all.js" />
+    <Content Include="libs\fullcalendar\dist\locale\af.js" />
+    <Content Include="libs\fullcalendar\dist\locale\ar-dz.js" />
+    <Content Include="libs\fullcalendar\dist\locale\ar-kw.js" />
+    <Content Include="libs\fullcalendar\dist\locale\ar-ly.js" />
+    <Content Include="libs\fullcalendar\dist\locale\ar-ma.js" />
+    <Content Include="libs\fullcalendar\dist\locale\ar-sa.js" />
+    <Content Include="libs\fullcalendar\dist\locale\ar-tn.js" />
+    <Content Include="libs\fullcalendar\dist\locale\ar.js" />
+    <Content Include="libs\fullcalendar\dist\locale\bg.js" />
+    <Content Include="libs\fullcalendar\dist\locale\ca.js" />
+    <Content Include="libs\fullcalendar\dist\locale\cs.js" />
+    <Content Include="libs\fullcalendar\dist\locale\da.js" />
+    <Content Include="libs\fullcalendar\dist\locale\de-at.js" />
+    <Content Include="libs\fullcalendar\dist\locale\de-ch.js" />
+    <Content Include="libs\fullcalendar\dist\locale\de.js" />
+    <Content Include="libs\fullcalendar\dist\locale\el.js" />
+    <Content Include="libs\fullcalendar\dist\locale\en-au.js" />
+    <Content Include="libs\fullcalendar\dist\locale\en-ca.js" />
+    <Content Include="libs\fullcalendar\dist\locale\en-gb.js" />
+    <Content Include="libs\fullcalendar\dist\locale\en-ie.js" />
+    <Content Include="libs\fullcalendar\dist\locale\en-nz.js" />
+    <Content Include="libs\fullcalendar\dist\locale\es-do.js" />
+    <Content Include="libs\fullcalendar\dist\locale\es.js" />
+    <Content Include="libs\fullcalendar\dist\locale\et.js" />
+    <Content Include="libs\fullcalendar\dist\locale\eu.js" />
+    <Content Include="libs\fullcalendar\dist\locale\fa.js" />
+    <Content Include="libs\fullcalendar\dist\locale\fi.js" />
+    <Content Include="libs\fullcalendar\dist\locale\fr-ca.js" />
+    <Content Include="libs\fullcalendar\dist\locale\fr-ch.js" />
+    <Content Include="libs\fullcalendar\dist\locale\fr.js" />
+    <Content Include="libs\fullcalendar\dist\locale\gl.js" />
+    <Content Include="libs\fullcalendar\dist\locale\he.js" />
+    <Content Include="libs\fullcalendar\dist\locale\hi.js" />
+    <Content Include="libs\fullcalendar\dist\locale\hr.js" />
+    <Content Include="libs\fullcalendar\dist\locale\hu.js" />
+    <Content Include="libs\fullcalendar\dist\locale\id.js" />
+    <Content Include="libs\fullcalendar\dist\locale\is.js" />
+    <Content Include="libs\fullcalendar\dist\locale\it.js" />
+    <Content Include="libs\fullcalendar\dist\locale\ja.js" />
+    <Content Include="libs\fullcalendar\dist\locale\kk.js" />
+    <Content Include="libs\fullcalendar\dist\locale\ko.js" />
+    <Content Include="libs\fullcalendar\dist\locale\lb.js" />
+    <Content Include="libs\fullcalendar\dist\locale\lt.js" />
+    <Content Include="libs\fullcalendar\dist\locale\lv.js" />
+    <Content Include="libs\fullcalendar\dist\locale\mk.js" />
+    <Content Include="libs\fullcalendar\dist\locale\ms-my.js" />
+    <Content Include="libs\fullcalendar\dist\locale\ms.js" />
+    <Content Include="libs\fullcalendar\dist\locale\nb.js" />
+    <Content Include="libs\fullcalendar\dist\locale\nl-be.js" />
+    <Content Include="libs\fullcalendar\dist\locale\nl.js" />
+    <Content Include="libs\fullcalendar\dist\locale\nn.js" />
+    <Content Include="libs\fullcalendar\dist\locale\pl.js" />
+    <Content Include="libs\fullcalendar\dist\locale\pt-br.js" />
+    <Content Include="libs\fullcalendar\dist\locale\pt.js" />
+    <Content Include="libs\fullcalendar\dist\locale\ro.js" />
+    <Content Include="libs\fullcalendar\dist\locale\ru.js" />
+    <Content Include="libs\fullcalendar\dist\locale\sk.js" />
+    <Content Include="libs\fullcalendar\dist\locale\sl.js" />
+    <Content Include="libs\fullcalendar\dist\locale\sr-cyrl.js" />
+    <Content Include="libs\fullcalendar\dist\locale\sr.js" />
+    <Content Include="libs\fullcalendar\dist\locale\sv.js" />
+    <Content Include="libs\fullcalendar\dist\locale\th.js" />
+    <Content Include="libs\fullcalendar\dist\locale\tr.js" />
+    <Content Include="libs\fullcalendar\dist\locale\uk.js" />
+    <Content Include="libs\fullcalendar\dist\locale\vi.js" />
+    <Content Include="libs\fullcalendar\dist\locale\zh-cn.js" />
+    <Content Include="libs\fullcalendar\dist\locale\zh-tw.js" />
+    <Content Include="libs\html5sortable\dist\html.sortable.min.js" />
+    <Content Include="libs\ionicons\dist\css\ionicons.min.css" />
+    <Content Include="libs\ionicons\dist\fonts\ionicons.svg" />
+    <Content Include="libs\jquery-countto\jquery.countTo.js" />
+    <Content Include="libs\jquery-fullscreen-plugin\jquery.fullscreen-min.js" />
+    <Content Include="libs\jquery.stellar\jquery.stellar.js" />
+    <Content Include="libs\jquery.stellar\jquery.stellar.min.js" />
+    <Content Include="libs\jquery.stellar\jquery.stellar.src.js" />
+    <Content Include="libs\jquery\dist\jquery.min.js" />
+    <Content Include="libs\jquery\dist\jquery.slim.min.js" />
+    <Content Include="libs\jqvmap\dist\jquery.vmap.js" />
+    <Content Include="libs\jqvmap\dist\jqvmap.min.css" />
+    <Content Include="libs\jqvmap\dist\maps\jquery.vmap.france.js" />
+    <Content Include="libs\jqvmap\dist\maps\jquery.vmap.usa.js" />
+    <Content Include="libs\jqvmap\dist\maps\jquery.vmap.world.js" />
+    <Content Include="libs\jscroll\dist\jquery.jscroll.min.js" />
+    <Content Include="libs\list.js\dist\list.js" />
+    <Content Include="libs\list.js\dist\list.min.js" />
+    <Content Include="libs\masonry-layout\dist\masonry.pkgd.min.js" />
+    <Content Include="libs\moment\min\locales.js" />
+    <Content Include="libs\moment\min\locales.min.js" />
+    <Content Include="libs\moment\min\moment-with-locales.js" />
+    <Content Include="libs\moment\min\moment-with-locales.min.js" />
+    <Content Include="libs\moment\min\moment.min.js" />
+    <Content Include="libs\node-waves\dist\waves.css" />
+    <Content Include="libs\node-waves\dist\waves.js" />
+    <Content Include="libs\node-waves\dist\waves.min.css" />
+    <Content Include="libs\node-waves\dist\waves.min.js" />
+    <Content Include="libs\notie\dist\notie.min.js" />
+    <Content Include="libs\owl.carousel\dist\assets\ajax-loader.gif" />
+    <Content Include="libs\owl.carousel\dist\assets\owl.carousel.css" />
+    <Content Include="libs\owl.carousel\dist\assets\owl.carousel.min.css" />
+    <Content Include="libs\owl.carousel\dist\assets\owl.theme.default.css" />
+    <Content Include="libs\owl.carousel\dist\assets\owl.theme.default.min.css" />
+    <Content Include="libs\owl.carousel\dist\assets\owl.theme.green.css" />
+    <Content Include="libs\owl.carousel\dist\assets\owl.theme.green.min.css" />
+    <Content Include="libs\owl.carousel\dist\assets\owl.video.play.png" />
+    <Content Include="libs\owl.carousel\dist\owl.carousel.js" />
+    <Content Include="libs\owl.carousel\dist\owl.carousel.min.js" />
+    <Content Include="libs\pace-progress\pace.min.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\al.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\ar.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\bg.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\ca.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\cs.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\cs.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\da.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\de.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\de.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\el.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\el.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\en.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\en.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\es.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\et.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\eu.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\fa.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\fi.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\fi.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\fr.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\fr.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\he.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\he.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\hr.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\hr.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\hu.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\hu.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\id.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\id.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\it.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\it.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\ja.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\ja.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\ko.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\lt.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\lt.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\lv.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\lv.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\ms.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\ms.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\nl.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\nl.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\no.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\pl.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\pt-br.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\pt-pt.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\ro.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\ro.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\ru.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\ru.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\sk.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\sk.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\sl.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\sl.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\sq.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\sr.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\sr.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\sv.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\sv.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\th.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\tr.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\ua.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\ua.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\uk.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\uk.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\zh_cn.extra.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\zh_cn.js" />
+    <Content Include="libs\parsleyjs\dist\i18n\zh_tw.js" />
+    <Content Include="libs\parsleyjs\dist\parsley.js" />
+    <Content Include="libs\parsleyjs\dist\parsley.min.js" />
+    <Content Include="libs\peity\jquery.peity.min.js" />
+    <Content Include="libs\pjax\pjax.js" />
+    <Content Include="libs\pjax\pjax.min.js" />
+    <Content Include="libs\plyrist\src\plyrist-line.svg" />
+    <Content Include="libs\plyrist\src\plyrist.css" />
+    <Content Include="libs\plyrist\src\plyrist.js" />
+    <Content Include="libs\plyrist\src\plyrist.svg" />
+    <Content Include="libs\plyr\dist\blank.mp4" />
+    <Content Include="libs\plyr\dist\plyr.css" />
+    <Content Include="libs\plyr\dist\plyr.js" />
+    <Content Include="libs\plyr\dist\plyr.min.js" />
+    <Content Include="libs\plyr\dist\plyr.polyfilled.js" />
+    <Content Include="libs\plyr\dist\plyr.polyfilled.min.js" />
+    <Content Include="libs\plyr\dist\plyr.svg" />
+    <Content Include="libs\popper.js\dist\umd\popper.min.js" />
+    <Content Include="libs\screenfull\dist\screenfull.js" />
+    <Content Include="libs\scrollreveal\dist\scrollreveal.min.js" />
+    <Content Include="libs\select2\dist\css\select2.css" />
+    <Content Include="libs\select2\dist\css\select2.min.css" />
+    <Content Include="libs\select2\dist\js\i18n\ar.js" />
+    <Content Include="libs\select2\dist\js\i18n\az.js" />
+    <Content Include="libs\select2\dist\js\i18n\bg.js" />
+    <Content Include="libs\select2\dist\js\i18n\build.txt" />
+    <Content Include="libs\select2\dist\js\i18n\ca.js" />
+    <Content Include="libs\select2\dist\js\i18n\cs.js" />
+    <Content Include="libs\select2\dist\js\i18n\da.js" />
+    <Content Include="libs\select2\dist\js\i18n\de.js" />
+    <Content Include="libs\select2\dist\js\i18n\el.js" />
+    <Content Include="libs\select2\dist\js\i18n\en.js" />
+    <Content Include="libs\select2\dist\js\i18n\es.js" />
+    <Content Include="libs\select2\dist\js\i18n\et.js" />
+    <Content Include="libs\select2\dist\js\i18n\eu.js" />
+    <Content Include="libs\select2\dist\js\i18n\fa.js" />
+    <Content Include="libs\select2\dist\js\i18n\fi.js" />
+    <Content Include="libs\select2\dist\js\i18n\fr.js" />
+    <Content Include="libs\select2\dist\js\i18n\gl.js" />
+    <Content Include="libs\select2\dist\js\i18n\he.js" />
+    <Content Include="libs\select2\dist\js\i18n\hi.js" />
+    <Content Include="libs\select2\dist\js\i18n\hr.js" />
+    <Content Include="libs\select2\dist\js\i18n\hu.js" />
+    <Content Include="libs\select2\dist\js\i18n\id.js" />
+    <Content Include="libs\select2\dist\js\i18n\is.js" />
+    <Content Include="libs\select2\dist\js\i18n\it.js" />
+    <Content Include="libs\select2\dist\js\i18n\ja.js" />
+    <Content Include="libs\select2\dist\js\i18n\km.js" />
+    <Content Include="libs\select2\dist\js\i18n\ko.js" />
+    <Content Include="libs\select2\dist\js\i18n\lt.js" />
+    <Content Include="libs\select2\dist\js\i18n\lv.js" />
+    <Content Include="libs\select2\dist\js\i18n\mk.js" />
+    <Content Include="libs\select2\dist\js\i18n\ms.js" />
+    <Content Include="libs\select2\dist\js\i18n\nb.js" />
+    <Content Include="libs\select2\dist\js\i18n\nl.js" />
+    <Content Include="libs\select2\dist\js\i18n\pl.js" />
+    <Content Include="libs\select2\dist\js\i18n\pt-BR.js" />
+    <Content Include="libs\select2\dist\js\i18n\pt.js" />
+    <Content Include="libs\select2\dist\js\i18n\ro.js" />
+    <Content Include="libs\select2\dist\js\i18n\ru.js" />
+    <Content Include="libs\select2\dist\js\i18n\sk.js" />
+    <Content Include="libs\select2\dist\js\i18n\sr-Cyrl.js" />
+    <Content Include="libs\select2\dist\js\i18n\sr.js" />
+    <Content Include="libs\select2\dist\js\i18n\sv.js" />
+    <Content Include="libs\select2\dist\js\i18n\th.js" />
+    <Content Include="libs\select2\dist\js\i18n\tr.js" />
+    <Content Include="libs\select2\dist\js\i18n\uk.js" />
+    <Content Include="libs\select2\dist\js\i18n\vi.js" />
+    <Content Include="libs\select2\dist\js\i18n\zh-CN.js" />
+    <Content Include="libs\select2\dist\js\i18n\zh-TW.js" />
+    <Content Include="libs\select2\dist\js\select2.full.js" />
+    <Content Include="libs\select2\dist\js\select2.full.min.js" />
+    <Content Include="libs\select2\dist\js\select2.js" />
+    <Content Include="libs\select2\dist\js\select2.min.js" />
+    <Content Include="libs\slick-carousel\slick\slick-theme.css" />
+    <Content Include="libs\slick-carousel\slick\slick.css" />
+    <Content Include="libs\slick-carousel\slick\slick.min.js" />
+    <Content Include="libs\sticky-kit\dist\sticky-kit.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-ar-AR.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-ar-AR.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-bg-BG.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-bg-BG.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-ca-ES.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-ca-ES.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-cs-CZ.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-cs-CZ.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-da-DK.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-da-DK.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-de-DE.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-de-DE.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-el-GR.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-el-GR.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-es-ES.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-es-ES.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-es-EU.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-es-EU.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-fa-IR.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-fa-IR.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-fi-FI.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-fi-FI.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-fr-FR.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-fr-FR.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-gl-ES.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-gl-ES.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-he-IL.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-he-IL.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-hr-HR.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-hr-HR.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-hu-HU.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-hu-HU.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-id-ID.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-id-ID.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-it-IT.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-it-IT.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-ja-JP.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-ja-JP.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-ko-KR.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-ko-KR.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-lt-LT.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-lt-LT.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-lt-LV.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-lt-LV.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-mn-MN.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-mn-MN.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-nb-NO.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-nb-NO.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-nl-NL.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-nl-NL.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-pl-PL.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-pl-PL.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-pt-BR.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-pt-BR.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-pt-PT.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-pt-PT.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-ro-RO.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-ro-RO.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-ru-RU.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-ru-RU.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-sk-SK.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-sk-SK.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-sl-SI.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-sl-SI.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-sr-RS-Latin.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-sr-RS-Latin.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-sr-RS.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-sr-RS.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-sv-SE.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-sv-SE.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-ta-IN.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-ta-IN.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-th-TH.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-th-TH.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-tr-TR.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-tr-TR.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-uk-UA.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-uk-UA.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-vi-VN.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-vi-VN.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-zh-CN.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-zh-CN.min.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-zh-TW.js" />
+    <Content Include="libs\summernote\dist\lang\summernote-zh-TW.min.js" />
+    <Content Include="libs\summernote\dist\summernote-bs4.css" />
+    <Content Include="libs\summernote\dist\summernote-bs4.js" />
+    <Content Include="libs\summernote\dist\summernote-bs4.min.js" />
+    <Content Include="libs\summernote\dist\summernote-lite.css" />
+    <Content Include="libs\summernote\dist\summernote-lite.js" />
+    <Content Include="libs\summernote\dist\summernote.css" />
+    <Content Include="libs\summernote\dist\summernote.js" />
+    <Content Include="libs\summernote\dist\summernote.min.js" />
+    <Content Include="libs\twitter-bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
+    <Content Include="libs\typeahead.js\dist\typeahead.bundle.min.js" />
+    <Content Include="libs\wavesurfer.js\dist\wavesurfer.min.js" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="assets\api\dropzone" />
+    <Content Include="assets\api\fullcalendar.json" />
+    <Content Include="assets\api\menu.json" />
+    <Content Include="assets\api\music.json" />
+    <Content Include="assets\scss\bootstrap.scss" />
+    <Content Include="assets\scss\rtl.scss" />
+    <Content Include="assets\scss\theme.scss" />
+    <Content Include="assets\scss\_bs.alert.scss" />
+    <Content Include="assets\scss\_bs.badge.scss" />
+    <Content Include="assets\scss\_bs.base.scss" />
+    <Content Include="assets\scss\_bs.button.scss" />
+    <Content Include="assets\scss\_bs.card.scss" />
+    <Content Include="assets\scss\_bs.carousel.scss" />
+    <Content Include="assets\scss\_bs.dropdown.scss" />
+    <Content Include="assets\scss\_bs.form.scss" />
+    <Content Include="assets\scss\_bs.list-group.scss" />
+    <Content Include="assets\scss\_bs.modal.animation.scss" />
+    <Content Include="assets\scss\_bs.modal.scss" />
+    <Content Include="assets\scss\_bs.nav.scss" />
+    <Content Include="assets\scss\_bs.navbar.scss" />
+    <Content Include="assets\scss\_bs.pagination.scss" />
+    <Content Include="assets\scss\_bs.popover.scss" />
+    <Content Include="assets\scss\_bs.progress.scss" />
+    <Content Include="assets\scss\_bs.row.scss" />
+    <Content Include="assets\scss\_bs.scss" />
+    <Content Include="assets\scss\_bs.table.scss" />
+    <Content Include="assets\scss\_md.check.scss" />
+    <Content Include="assets\scss\_md.color.scss" />
+    <Content Include="assets\scss\_md.input.scss" />
+    <Content Include="assets\scss\_md.scss" />
+    <Content Include="assets\scss\_md.switch.scss" />
+    <Content Include="assets\scss\_ui.animate.scss" />
+    <Content Include="assets\scss\_ui.aside.scss" />
+    <Content Include="assets\scss\_ui.avatar.scss" />
+    <Content Include="assets\scss\_ui.chat.scss" />
+    <Content Include="assets\scss\_ui.check.scss" />
+    <Content Include="assets\scss\_ui.color.dark.scss" />
+    <Content Include="assets\scss\_ui.color.scss" />
+    <Content Include="assets\scss\_ui.layout.scss" />
+    <Content Include="assets\scss\_ui.list.scss" />
+    <Content Include="assets\scss\_ui.loading.scss" />
+    <Content Include="assets\scss\_ui.media.scss" />
+    <Content Include="assets\scss\_ui.nav.folded.scss" />
+    <Content Include="assets\scss\_ui.nav.scss" />
+    <Content Include="assets\scss\_ui.page.scss" />
+    <Content Include="assets\scss\_ui.plugin.scss" />
+    <Content Include="assets\scss\_ui.scss" />
+    <Content Include="assets\scss\_ui.switch.scss" />
+    <Content Include="assets\scss\_ui.timeline.scss" />
+    <Content Include="assets\scss\_util.base.scss" />
+    <Content Include="assets\scss\_util.border.scss" />
+    <Content Include="assets\scss\_util.hover.scss" />
+    <Content Include="assets\scss\_util.radius.scss" />
+    <Content Include="assets\scss\_util.scroll.scss" />
+    <Content Include="assets\scss\_util.size.scss" />
+    <Content Include="assets\scss\_util.text.scss" />
+    <Content Include="assets\scss\_utils.scss" />
+    <Content Include="assets\scss\_variables.scss" />
+    <Content Include="libs\apexcharts\dist\locales\de.json" />
+    <Content Include="libs\apexcharts\dist\locales\el.json" />
+    <Content Include="libs\apexcharts\dist\locales\en.json" />
+    <Content Include="libs\apexcharts\dist\locales\es.json" />
+    <Content Include="libs\apexcharts\dist\locales\fr.json" />
+    <Content Include="libs\apexcharts\dist\locales\hi.json" />
+    <Content Include="libs\apexcharts\dist\locales\hy.json" />
+    <Content Include="libs\apexcharts\dist\locales\id.json" />
+    <Content Include="libs\apexcharts\dist\locales\it.json" />
+    <Content Include="libs\apexcharts\dist\locales\pt-br.json" />
+    <Content Include="libs\apexcharts\dist\locales\ru.json" />
+    <Content Include="libs\apexcharts\dist\locales\tr.json" />
+    <Content Include="libs\apexcharts\dist\locales\ua.json" />
+    <Content Include="libs\bootstrap\scss\bootstrap-grid.scss" />
+    <Content Include="libs\bootstrap\scss\bootstrap-reboot.scss" />
+    <Content Include="libs\bootstrap\scss\bootstrap.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_alert.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_background-variant.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_badge.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_border-radius.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_box-shadow.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_breakpoints.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_buttons.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_caret.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_clearfix.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_deprecate.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_float.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_forms.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_gradients.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_grid-framework.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_grid.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_hover.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_image.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_list-group.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_lists.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_nav-divider.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_navbar-align.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_pagination.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_reset-text.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_resize.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_screen-reader.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_size.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_table-row.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_text-emphasis.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_text-hide.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_text-truncate.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_transition.scss" />
+    <Content Include="libs\bootstrap\scss\mixins\_visibility.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_align.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_background.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_borders.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_clearfix.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_display.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_embed.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_flex.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_float.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_overflow.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_position.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_screenreaders.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_shadows.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_sizing.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_spacing.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_stretched-link.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_text.scss" />
+    <Content Include="libs\bootstrap\scss\utilities\_visibility.scss" />
+    <Content Include="libs\bootstrap\scss\vendor\_rfs.scss" />
+    <Content Include="libs\bootstrap\scss\_alert.scss" />
+    <Content Include="libs\bootstrap\scss\_badge.scss" />
+    <Content Include="libs\bootstrap\scss\_breadcrumb.scss" />
+    <Content Include="libs\bootstrap\scss\_button-group.scss" />
+    <Content Include="libs\bootstrap\scss\_buttons.scss" />
+    <Content Include="libs\bootstrap\scss\_card.scss" />
+    <Content Include="libs\bootstrap\scss\_carousel.scss" />
+    <Content Include="libs\bootstrap\scss\_close.scss" />
+    <Content Include="libs\bootstrap\scss\_code.scss" />
+    <Content Include="libs\bootstrap\scss\_custom-forms.scss" />
+    <Content Include="libs\bootstrap\scss\_dropdown.scss" />
+    <Content Include="libs\bootstrap\scss\_forms.scss" />
+    <Content Include="libs\bootstrap\scss\_functions.scss" />
+    <Content Include="libs\bootstrap\scss\_grid.scss" />
+    <Content Include="libs\bootstrap\scss\_images.scss" />
+    <Content Include="libs\bootstrap\scss\_input-group.scss" />
+    <Content Include="libs\bootstrap\scss\_jumbotron.scss" />
+    <Content Include="libs\bootstrap\scss\_list-group.scss" />
+    <Content Include="libs\bootstrap\scss\_media.scss" />
+    <Content Include="libs\bootstrap\scss\_mixins.scss" />
+    <Content Include="libs\bootstrap\scss\_modal.scss" />
+    <Content Include="libs\bootstrap\scss\_nav.scss" />
+    <Content Include="libs\bootstrap\scss\_navbar.scss" />
+    <Content Include="libs\bootstrap\scss\_pagination.scss" />
+    <Content Include="libs\bootstrap\scss\_popover.scss" />
+    <Content Include="libs\bootstrap\scss\_print.scss" />
+    <Content Include="libs\bootstrap\scss\_progress.scss" />
+    <Content Include="libs\bootstrap\scss\_reboot.scss" />
+    <Content Include="libs\bootstrap\scss\_root.scss" />
+    <Content Include="libs\bootstrap\scss\_spinners.scss" />
+    <Content Include="libs\bootstrap\scss\_tables.scss" />
+    <Content Include="libs\bootstrap\scss\_toasts.scss" />
+    <Content Include="libs\bootstrap\scss\_tooltip.scss" />
+    <Content Include="libs\bootstrap\scss\_transitions.scss" />
+    <Content Include="libs\bootstrap\scss\_type.scss" />
+    <Content Include="libs\bootstrap\scss\_utilities.scss" />
+    <Content Include="libs\bootstrap\scss\_variables.scss" />
+    <Content Include="libs\font-awesome\css\font-awesome.css.map" />
+    <Content Include="libs\font-awesome\fonts\fontawesome-webfont.eot" />
+    <Content Include="libs\font-awesome\fonts\fontawesome-webfont.ttf" />
+    <Content Include="libs\font-awesome\fonts\fontawesome-webfont.woff" />
+    <Content Include="libs\font-awesome\fonts\fontawesome-webfont.woff2" />
+    <Content Include="libs\font-awesome\fonts\FontAwesome.otf" />
+    <Content Include="libs\ionicons\dist\fonts\ionicons.eot" />
+    <Content Include="libs\ionicons\dist\fonts\ionicons.ttf" />
+    <Content Include="libs\ionicons\dist\fonts\ionicons.woff" />
+    <Content Include="libs\ionicons\dist\fonts\ionicons.woff2" />
+    <Content Include="libs\node-waves\dist\waves.min.js.map" />
+    <Content Include="libs\owl.carousel\dist\LICENSE" />
+    <Content Include="libs\owl.carousel\dist\README.md" />
+    <Content Include="libs\parsleyjs\dist\parsley.js.map" />
+    <Content Include="libs\parsleyjs\dist\parsley.min.js.map" />
+    <Content Include="libs\plyrist\src\plyrist.scss" />
+    <Content Include="libs\plyr\dist\plyr.js.map" />
+    <Content Include="libs\plyr\dist\plyr.min.js.map" />
+    <Content Include="libs\plyr\dist\plyr.polyfilled.js.map" />
+    <Content Include="libs\plyr\dist\plyr.polyfilled.min.js.map" />
+    <Content Include="libs\summernote\dist\font\summernote.eot" />
+    <Content Include="libs\summernote\dist\font\summernote.ttf" />
+    <Content Include="libs\summernote\dist\font\summernote.woff" />
+    <Content Include="libs\summernote\dist\summernote-0.8.8-dist.zip" />
+    <Content Include="libs\wavesurfer.js\LICENSE" />
+    <None Include="packages.config" />
+    <Content Include="Views\Login\Index.cshtml" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+    <Folder Include="libs\plyrist\dist\" />
+    <Folder Include="Models\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>56109</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:56109/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

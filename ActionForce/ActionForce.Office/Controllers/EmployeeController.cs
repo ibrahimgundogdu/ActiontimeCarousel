@@ -32,7 +32,7 @@ namespace ActionForce.Office.Controllers
             }
 
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true);
-            model.ShiftTypeList = Db.ShiftType.Where(x => x.IsActive == true).ToList();
+            model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
             model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
             model.RoleList = Db.Role.Where(x => x.IsActive == true).ToList();
             model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true).ToList();
@@ -73,7 +73,7 @@ namespace ActionForce.Office.Controllers
         {
             EmployeeControlModel model = new EmployeeControlModel();
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true);
-            model.ShiftTypeList = Db.ShiftType.Where(x => x.IsActive == true).ToList();
+            model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
             model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
             model.RoleList = Db.Role.Where(x => x.IsActive == true).ToList();
             model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true).ToList();
@@ -116,7 +116,7 @@ namespace ActionForce.Office.Controllers
             EmployeeControlModel model = new EmployeeControlModel();
 
             model.CurrentEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == id);
-            model.ShiftTypeList = Db.ShiftType.Where(x => x.IsActive == true).ToList();
+            model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
             model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
             model.RoleList = Db.Role.Where(x => x.IsActive == true).ToList();
             model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true).ToList();

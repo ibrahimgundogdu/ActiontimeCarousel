@@ -20,5 +20,6 @@ namespace ActionForce.Entity
         public Nullable<double> Amount { get; set; }
         public Nullable<int> EarnHour { get; set; }
         public Nullable<int> TotalHour { get; set; }
+        public Nullable<double> UnitAmount { get; set; }
     }
 }

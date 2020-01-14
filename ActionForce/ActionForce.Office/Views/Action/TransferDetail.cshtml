@@ -285,8 +285,12 @@
                                 <tr>
                                     <th>Tarih</th>
                                     <th>Kişi</th>
+                                    <th>Ortam</th>
                                     <th>İşlem</th>
                                     <th>Açıklama</th>
+                                    <th>Alan</th>
+                                    <th>Önceki</th>
+                                    <th>Yeni</th>
                                     <th>Başarılı?</th>
                                 </tr>
                             </thead>
@@ -296,8 +300,12 @@
                                     <tr>
                                         <td>@(item.RecordDate)</td>
                                         <td>@(item.RecordEmployee)</td>
+                                        <td>@(item.Environment)</td>
                                         <td>@(item.ProcessType)</td>
                                         <td>@(item.ResultMessage)</td>
+                                        <td>@(item.FieldName)</td>
+                                        <td>@(item.OldValue)</td>
+                                        <td>@(item.NewValue)</td>
                                         <td>@(item.IsSuccess)</td>
                                     </tr>
                                 }

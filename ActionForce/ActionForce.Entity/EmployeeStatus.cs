@@ -15,7 +15,6 @@ namespace ActionForce.Entity
     public partial class EmployeeStatus
     {
         public int ID { get; set; }
-        public Nullable<int> Sequence { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public Nullable<bool> IsActive { get; set; }

@@ -21,7 +21,7 @@ namespace ActionForce.Entity
         public Nullable<bool> IsMaster { get; set; }
         public Nullable<bool> IsActive { get; set; }
     
-        public virtual Employee Employee { get; set; }
         public virtual Role Role { get; set; }
+        public virtual Employee Employee { get; set; }
     }
 }

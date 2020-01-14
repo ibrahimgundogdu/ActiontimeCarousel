@@ -37,11 +37,12 @@ namespace ActionForce.Entity
         public Nullable<bool> IsActive { get; set; }
         public string ActionTypeName { get; set; }
         public Nullable<int> ActionTypeID { get; set; }
+        public Nullable<int> CategoryID { get; set; }
+        public Nullable<int> SalaryType { get; set; }
+        public Nullable<int> SalaryTypeID { get; set; }
         public string Description { get; set; }
         public Nullable<long> ResultID { get; set; }
         public Nullable<int> EnvironmentID { get; set; }
-        public Nullable<int> SalaryType { get; set; }
         public Nullable<System.Guid> UID { get; set; }
-        public Nullable<int> CategoryID { get; set; }
     }
 }
