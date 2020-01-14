@@ -4541,5 +4541,53 @@ namespace ActionForce.Office
             return result;
         }
 
+
+
+
+        public Result<Employee> AddEmployee(Employees employee, AuthenticationModel authentication)
+        {
+            Result<Employee> result = new Result<Employee>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            if (employee != null && authentication != null)
+            {
+                using (ActionTimeEntities Db = new ActionTimeEntities())
+                {
+                    try
+                    {
+                        Employee emp = new Employee();
+
+                        emp.FullName = employee.FullName;
+                        emp.IdentityNumber = employee.Tc;
+                        emp.EMail = employee.EMail;
+                        emp.Mobile = employee.Mobile;
+
+                        Db.Employee.Add(emp);
+                        Db.SaveChanges();
+
+                        
+
+                        result.IsSuccess = true;
+                        result.Message = "Çalışan başarı ile eklendi";
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Permit", "Insert", emp.EmployeeID.ToString(), "Employee", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, emp);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"Çalışan izini eklenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Index", "Insert", "-1", "Employee", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, employee);
+                    }
+
+                }
+            }
+
+            return result;
+        }
+
     }
 }
