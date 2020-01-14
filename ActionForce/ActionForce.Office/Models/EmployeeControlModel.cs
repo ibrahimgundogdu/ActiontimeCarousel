@@ -8,22 +8,20 @@ namespace ActionForce.Office
 {
     public class EmployeeControlModel : LayoutControlModel
     {
-        public IEnumerable<Employee> EmployeeList { get; set; }
-        public IEnumerable<VEmployeeLocation> employeeLocations { get; set; }
-        public IEnumerable<VEmployeeLocationList> employeeLocationLists { get; set; }
+        public IEnumerable<VEmployeeList> EmployeeList { get; set; }
+        public IEnumerable<VEmployee> VEmployee { get; set; }
 
         public Employee CurrentEmployee { get; set; }
-        public Employee Employee { get; set; }
+        public VEmployeeList Employee { get; set; }
 
         public IEnumerable<EmployeeShiftType> ShiftTypeList { get; set; }
         public IEnumerable<EmployeeStatus> StatusList { get; set; }
         public IEnumerable<Role> RoleList { get; set; }
         public IEnumerable<RoleGroup> RoleGroupList { get; set; }
-
         public IEnumerable<Location> LocationList { get; set; }
+        public IEnumerable<Department> DepartmentList { get; set; }
+        public IEnumerable<EmployeePositions> PositionList { get; set; }
         public IEnumerable<FromAccountModel> FromList { get; set; }
-        public IEnumerable<Currency> CurrencyList { get; set; }
-        public IEnumerable<BankAccount> BankAccountList { get; set; }
 
         
 

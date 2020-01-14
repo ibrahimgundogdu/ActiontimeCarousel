@@ -12,7 +12,7 @@ namespace ActionForce.Office.Controllers
     {
         // GET: Employee
         [AllowAnonymous]
-        public ActionResult Index(int? locationId)
+        public ActionResult Index(int? employeeID)
         {
             EmployeeControlModel model = new EmployeeControlModel();
 
@@ -24,119 +24,121 @@ namespace ActionForce.Office.Controllers
             else
             {
                 FilterModel filterModel = new FilterModel();
-
-                filterModel.LocationID = locationId != null ? locationId : Db.Location.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).LocationID;
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+            model.VEmployee = Db.VEmployee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
+            model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
+            model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true).ToList();
+            model.EmployeeList = Db.VEmployeeList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
 
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true);
-            model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
-            model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
-            model.RoleList = Db.Role.Where(x => x.IsActive == true).ToList();
-            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true).ToList();
-            model.employeeLocationLists = Db.VEmployeeLocationList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
-            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult Filter(int? locationId, DateTime? beginDate, DateTime? endDate)
-        {
-            FilterModel model = new FilterModel();
-
-            model.LocationID = locationId;
-            model.DateBegin = beginDate;
-            model.DateEnd = endDate;
-
-            if (beginDate == null)
+            if (model.Filters.EmployeeID != null)
             {
-                DateTime begin = DateTime.Now.AddMonths(-1).Date;
-                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+                model.EmployeeList = Db.VEmployeeList.Where(x => x.EmployeeID == model.Filters.EmployeeID).OrderBy(x => x.FullName).ToList();
+            }
+            if (model.Filters.DepartmentID != null)
+            {
+                model.EmployeeList = Db.VEmployeeList.Where(x => x.DepartmentID == model.Filters.DepartmentID).OrderBy(x => x.FullName).ToList();
             }
 
-            if (endDate == null)
+            if (model.Filters.PositionID != null)
             {
-                model.DateEnd = DateTime.Now.Date;
+                model.EmployeeList = Db.VEmployeeList.Where(x => x.PositionID == model.Filters.PositionID).OrderBy(x => x.FullName).ToList();
             }
-
-            TempData["filter"] = model;
-
-            return RedirectToAction("Index", "Employee");
-        }
-
-        [AllowAnonymous]
-        public PartialViewResult EmployeeSearch(string key, string active, string loc, string rol) //
-        {
-            EmployeeControlModel model = new EmployeeControlModel();
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true);
-            model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
-            model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
-            model.RoleList = Db.Role.Where(x => x.IsActive == true).ToList();
-            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true).ToList();
-            model.employeeLocationLists = Db.VEmployeeLocationList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
-            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
-
-            if (!string.IsNullOrEmpty(key))
+            
+            if (!string.IsNullOrEmpty(model.Filters.IsActive))
             {
-                key = key.ToUpper().Replace("İ", "I").Replace("Ü", "U").Replace("Ğ", "G").Replace("Ş", "S").Replace("Ç", "C").Replace("Ö", "O");
-                model.EmployeeList = model.EmployeeList.Where(x => x.FullNameSearch.Contains(key)).ToList();
-            }
-            if (!string.IsNullOrEmpty(loc))
-            {
-                model.employeeLocationLists = model.employeeLocationLists.Where(x => x.LocationID.ToString().Contains(loc)).ToList();
-            }
-            if (!string.IsNullOrEmpty(rol))
-            {
-                model.EmployeeList = model.EmployeeList.Where(x => x.RoleID.ToString().Contains(rol)).ToList();
-            }
-            if (!string.IsNullOrEmpty(active))
-            {
-                if (active == "act")
+                if (model.Filters.IsActive == "act")
                 {
                     model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == true).ToList();
                 }
-                else if (active == "psv")
+                else if (model.Filters.IsActive == "psv")
                 {
                     model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == false).ToList();
                 }
 
             }
 
-
-            return PartialView("_PartialEmployeeList", model);
+            return View(model);
         }
 
+        [HttpPost]
         [AllowAnonymous]
-        public PartialViewResult EmployeeList(int? id)
+        public ActionResult EmployeeFilter(int? locationId, int? positionId, int? departmentId, int? employeeID)
         {
-            EmployeeControlModel model = new EmployeeControlModel();
+            FilterModel model = new FilterModel();
 
-            model.CurrentEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == id);
-            model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
-            model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
-            model.RoleList = Db.Role.Where(x => x.IsActive == true).ToList();
-            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true).ToList();
-            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.EmployeeID == id).ToList();
-            model.Employee = model.EmployeeList.FirstOrDefault();
+            model.LocationID = locationId;
+            model.EmployeeID = employeeID;
+            model.DepartmentID = departmentId;
+            model.PositionID = positionId;
+            TempData["filter"] = model;
 
-            return PartialView("_PartialAddEmployee", model);
+            return RedirectToAction("Index", "Employee");
+        }
+        
+        [AllowAnonymous]
+        public ActionResult EmployeeSearch(string active)
+        {
+            FilterModel model = new FilterModel();
+            model.IsActive = active;
+            TempData["filter"] = model;
+
+            return RedirectToAction("Index", "Employee");
         }
 
+        [HttpPost]
         [AllowAnonymous]
-        public PartialViewResult LocationList(int? id)
+        public ActionResult AddNewEmployee(NewEmployee employee)
         {
+            Result<Employee> result = new Result<Employee>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
             EmployeeControlModel model = new EmployeeControlModel();
 
-            model.CurrentEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == id);
+            if (employee != null)
+            {
+                var emp = Db.Employee.FirstOrDefault(x => x.FullName == employee.FullName || x.IdentityNumber == employee.Tc || x.EMail == employee.EMail || x.Mobile == employee.Mobile);
 
-            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.EmployeeID == id).ToList();
-            model.Employee = model.EmployeeList.FirstOrDefault();
+                if (emp == null)
+                {
+                    Employees empdoc = new Employees();
 
-            return PartialView("_PartialAddLocation", model);
+                    empdoc.FullName = employee.FullName;
+                    empdoc.Tc = employee.Tc;
+                    empdoc.EMail = employee.EMail;
+                    empdoc.Mobile = employee.Mobile;
+
+
+                    DocumentManager documentManager = new DocumentManager();
+                    result = documentManager.AddEmployee(empdoc, model.Authentication);
+
+                    TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+                    if (result.IsSuccess == true)
+                    {
+                        return RedirectToAction("Detail", "Employee", new { id = empdoc.EmployeeID });
+                    }
+                    else
+                    {
+                        return RedirectToAction("AddEmployee", "Employee");
+                    }
+                }
+                else
+                {
+                    result.Message = $"Çalışan mevcut.";
+                }
+            }
+            else
+            {
+                result.Message = $"Form bilgileri gelmedi.";
+            }
+
+            TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+            return RedirectToAction("AddEmployee", "Employee");
         }
     }
 }

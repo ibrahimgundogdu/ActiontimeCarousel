@@ -348,4 +348,11 @@ namespace ActionForce.Office
         public string IsActive { get; set; }
 
     }
+    public class NewEmployee
+    {
+        public string FullName { get; set; }
+        public string Tc { get; set; }
+        public string EMail { get; set; }
+        public string Mobile { get; set; }
+    }
 }

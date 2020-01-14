@@ -2306,6 +2306,7 @@
     <Compile Include="Models\AuditTrail.cs" />
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\BankActionModel.cs" />
+    <Compile Include="Models\Document\Employees.cs" />
     <Compile Include="Models\Document\EmployeePermit.cs" />
     <Compile Include="Models\EmployeeControlModel.cs" />
     <Compile Include="Models\CashRecorderControlModel.cs" />
@@ -2558,13 +2559,12 @@
     <Content Include="Views\Shift\ReportView.cshtml" />
     <Content Include="Views\Action\TransferDetail.cshtml" />
     <Content Include="Views\Employee\Index.cshtml" />
-    <Content Include="Views\Employee\_PartialEmployeeList.cshtml" />
-    <Content Include="Views\Employee\AddEmployee.cshtml" />
     <Content Include="Views\Employee\Detail.cshtml" />
     <Content Include="Views\Salary\Permit.cshtml" />
     <Content Include="Views\Salary\AddPermit.cshtml" />
     <Content Include="Views\Salary\PermitDetail.cshtml" />
     <Content Include="Views\Cash\NewSalaryPayment.cshtml" />
+    <Content Include="Views\Employee\AddEmployee.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
