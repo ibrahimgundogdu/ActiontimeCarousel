@@ -44,7 +44,7 @@
         <div class="col-3">
             <div class="form-group mg-b-0 align-items-end">
                 <div class="search-form">
-                    <select class="form-control select2" id="LocationID" name="LocationID" required>
+                    <select class="form-control select2" id="LocationID" onchange="EmployeeSearch(this.value)" name="LocationID" required>
                         @foreach (var item in Model.LocationList)
                         {
                             <option value="@item.LocationID">@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
@@ -56,7 +56,7 @@
         <div class="col-3">
             <div class="form-group mg-b-0 align-items-end">
                 <div class="search-form">
-                    <select class="form-control select2" id="RoleID" name="RoleID" required>
+                    <select class="form-control select2" id="RoleID" name="RoleID" onchange="EmployeeSearch(this.value)" required>
                         @foreach (var item in Model.RoleList)
                         {
                             <option value="@item.RoleID">@($"{item.RoleName}" )</option>
@@ -154,21 +154,23 @@
                 if (e.keyCode == 13)
                     EmployeeSearch();
             });
-        });
-        $(document).ready(function () {
-            $('#srcEmployeeName').keypress(function (e) {
-                if (e.keyCode == 13)
+            $('#LocationID').change(function (e) {
                     EmployeeSearch();
+            });
+            $('#RoleID').change(function (e) {
+                EmployeeSearch();
             });
         });
         function EmployeeSearch(active) {
 
             var skey = $("#srcEmployeeName").val();
+            var sloc = $("#LocationID").val();
+            var srol = $("#RoleID").val();
 
             $.ajax({
                 method: "GET",
                 url: "/Employee/EmployeeSearch",
-                data: { key: skey, active: active }
+                data: { key: skey, active: active, loc: sloc, rol: srol }
             }).done(function (d) {
                 $("#EmployeeList").html(d);
             });

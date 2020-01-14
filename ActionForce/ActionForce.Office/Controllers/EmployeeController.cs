@@ -36,6 +36,7 @@ namespace ActionForce.Office.Controllers
             model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
             model.RoleList = Db.Role.Where(x => x.IsActive == true).ToList();
             model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true).ToList();
+            model.employeeLocationLists = Db.VEmployeeLocationList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
             model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
 
             return View(model);
@@ -68,7 +69,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public PartialViewResult EmployeeSearch(string key, string active) //
+        public PartialViewResult EmployeeSearch(string key, string active, string loc, string rol) //
         {
             EmployeeControlModel model = new EmployeeControlModel();
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true);
@@ -76,6 +77,7 @@ namespace ActionForce.Office.Controllers
             model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
             model.RoleList = Db.Role.Where(x => x.IsActive == true).ToList();
             model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true).ToList();
+            model.employeeLocationLists = Db.VEmployeeLocationList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
             model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
 
             if (!string.IsNullOrEmpty(key))
@@ -83,7 +85,14 @@ namespace ActionForce.Office.Controllers
                 key = key.ToUpper().Replace("İ", "I").Replace("Ü", "U").Replace("Ğ", "G").Replace("Ş", "S").Replace("Ç", "C").Replace("Ö", "O");
                 model.EmployeeList = model.EmployeeList.Where(x => x.FullNameSearch.Contains(key)).ToList();
             }
-
+            if (!string.IsNullOrEmpty(loc))
+            {
+                model.employeeLocationLists = model.employeeLocationLists.Where(x => x.LocationID.ToString().Contains(loc)).ToList();
+            }
+            if (!string.IsNullOrEmpty(rol))
+            {
+                model.EmployeeList = model.EmployeeList.Where(x => x.RoleID.ToString().Contains(rol)).ToList();
+            }
             if (!string.IsNullOrEmpty(active))
             {
                 if (active == "act")
