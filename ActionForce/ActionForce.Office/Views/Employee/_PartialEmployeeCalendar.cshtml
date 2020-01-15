@@ -1,0 +1,166 @@
+﻿@model EmployeeControlModel
+
+<div class="profile-update-option bg-white ht-50 bd d-flex justify-content-end mg-b-20 mg-lg-b-20 rounded">
+    <div class="d-flex align-items-center pd-x-5 mg-r-auto">
+
+    </div>
+    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+        <a href="#" id="EmployeeScheduleDate" class="link-03" title="Tarih Seç">
+            <i class="fa fa-calendar"></i>
+            <input type="hidden" id="DatePicker" />
+            <div></div>
+        </a>
+        <input id="EmployeeID" type="hidden" value="@Model.EmpList.EmployeeID" />
+        <input id="WeekCode" type="hidden" value="@Model.WeekCode" />
+    </div>
+    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+        <a href="/Employee/Detail?week=@(Model.PrevWeekCode)&id=@(Model.EmpList.EmployeeID)" class="link-03" title="Bir Önceki Hafta"><i class="fa fa-arrow-left"></i></a>
+    </div>
+    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+        <a href="/Employee/Detail?date=@(DateTime.Now.ToString("yyyy-MM-dd"))&id=@(Model.EmpList.EmployeeID)" class="link-03" title="Bu Hafta"><i class="fa fa-bullseye"></i></a>
+    </div>
+    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+        <a href="/Employee/Detail?week=@(Model.NextWeekCode)&id=@(Model.EmpList.EmployeeID)" class="link-03" title="Bir Sonraki Hafta"><i class="fa fa-arrow-right"></i></a>
+    </div>
+
+</div>
+
+
+
+<div class="card mg-b-20 mg-lg-b-25">
+    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.WeekCode). Hafta</h6>
+        <nav class="nav">
+            <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.FirstWeekDay.DateKey.ToLongDateString())</span> <i data-feather="more-horizontal"></i> @(Model.LastWeekDay.DateKey.ToLongDateString())</a>
+        </nav>
+    </div><!-- card-header -->
+    <div class="card-body pd-0">
+        <div class="table-responsive">
+            <table class="table table-primary table-hover table-striped mg-b-0">
+                <thead>
+                    <tr class="table-active">
+                        <th scope="col" style="width:3%;">#</th>
+                        <th scope="col">Çalışan</th>
+                        @foreach (var day in Model.WeekList.OrderBy(x => x.DateKey))
+                        {
+                            <th scope="col" style="width:10%;" class="text-center @(day.DateKey == Model.FirstWeekDay.DateKey ? "bd-l":day.DateKey == Model.LastWeekDay.DateKey ? "bd-r":"")">@($"{day.Day} {day.MonthNameTR} {day.DayNameTR}")</th>
+                        }
+                        <th scope="col" style="width:3%;" class="text-center"></th>
+                        <th scope="col" style="width:3%;" class="text-center"></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <th scope="row" class="@(Model.EmpList.IsActive == true ? "":"tx-danger")"> @Model.EmpList.EmployeeID</th>
+
+                        <td><b>@(Model.EmpList.FullName)</b></td>
+                        @foreach (var weekday in Model.WeekList.OrderBy(x => x.DateKey))
+                        {
+                            var schedule = Model.EmpSchedule.FirstOrDefault(x => x.EmployeeID == Model.EmpList.EmployeeID && x.ShiftDate == weekday.DateKey);
+
+                            <td class="text-center @(weekday.DateKey == Model.FirstWeekDay.DateKey ? "bd-l":weekday.DateKey == Model.LastWeekDay.DateKey ? "bd-r":"")">
+                                @if (schedule != null)
+                                {
+                                    @(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToShortDateString() : "") <b>@(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToString("HH\\:mm") : "")</b> <br />@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToShortDateString() : "") <b>@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToString("HH\\:mm") : "")</b>
+
+                                }
+                            </td>
+
+                        }
+                        <td scope="col" style="width:3%;" class="text-center"></td>
+                        <td class="text-center bd-l"><a href="#modalEmployeeSchedule" data-toggle="modal" class="text-sm-center d-sm-inline outline-none"> <i class="fa fa-calendar"></i></a></td>
+                    </tr>
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
+        <nav class="nav nav-with-icon tx-13">
+
+        </nav>
+    </div><!-- card-footer -->
+</div>
+
+<div class="modal fade" id="modalEmployeeSchedule" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body pd-20 pd-sm-40" id="AddEmployeeSchedule">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+
+    <script>
+        $(function () {
+            'use strict'
+            $("body").addClass("page-profile");
+
+            $('#DatePicker').datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1,
+                onSelect: function (dateText, inst) {
+
+                    var employeeid = $("#EmployeeID").val();
+                    var parameters = dateText + "&id=" + employeeid;
+                    window.location.href = "/Employee/Detail?date=" + parameters;
+                },
+                beforeShow: function (event, ui) {
+                    var $link = $("#EmployeeScheduleDate");
+                    ui.dpDiv.offset({
+                        top: $link.offset().top + 10,
+                        left: $link.offset().left + 10
+                    });
+                }
+            });
+
+            $("#EmployeeScheduleDate").click(function () {
+                $("#DatePicker").datepicker("show");
+            });
+
+            $('.shifttime').mask('00:00');
+            $('.shiftdate').mask('0000-00-00');
+
+        });
+
+        function AddEmployeeSchedule(employeeid, weekcode) {
+            $.ajax({
+                method: "GET",
+                url: "/Employee/AddEmployeeSchedule",
+                data: { empid: employeeid, week: weekcode }
+            }).done(function (d) {
+                $("#AddEmployeeSchedule").html(d);
+            });
+        }
+
+    </script>
+
+
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}

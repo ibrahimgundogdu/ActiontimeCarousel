@@ -9571,8 +9571,8 @@ textarea.form-control {
     box-shadow: 0 0 0 2.5px #fff; }
 
 .avatar-xxl {
-  width: 100px;
-  height: 100px; }
+  width: 215px;
+  height: 215px; }
   .avatar-xxl .avatar-initial {
     font-size: 45px; }
   .avatar-xxl.avatar-offline::after, .avatar-xxl.avatar-online::after {

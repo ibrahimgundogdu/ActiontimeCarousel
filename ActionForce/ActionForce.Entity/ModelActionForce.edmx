@@ -4152,6 +4152,55 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeCashActions' does 
           <Property Name="ActionDocumentNumber" Type="nvarchar" MaxLength="16" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VEmployeeList">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="FullNameSearch" Type="nvarchar" MaxLength="4000" />
+          <Property Name="EMail" Type="nvarchar" MaxLength="150" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+          <Property Name="FotoFile" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="IsTemp" Type="bit" />
+          <Property Name="IsDismissal" Type="bit" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="ShiftTypeID" Type="int" />
+          <Property Name="StatusID" Type="int" />
+          <Property Name="RoleGroupID" Type="int" />
+          <Property Name="DepartmentID" Type="int" />
+          <Property Name="AreaCategoryID" Type="int" />
+          <Property Name="SalaryCategoryID" Type="int" />
+          <Property Name="SequenceID" Type="int" />
+          <Property Name="PositionID" Type="int" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Code" Type="nvarchar" MaxLength="10" />
+          <Property Name="Stage" Type="int" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoleLevel" Type="int" />
+          <Property Name="RecordFullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="SequenceCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="SequenceName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PositionName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PositionSortBy" Type="char" MaxLength="4" />
+          <Property Name="AreaName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AreaSortBy" Type="char" MaxLength="4" />
+          <Property Name="DepartmentName" Type="nvarchar" MaxLength="50" />
+          <Property Name="DeperManSortBy" Type="char" MaxLength="4" />
+          <Property Name="SalaryCategoryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SalarySortBy" Type="char" MaxLength="4" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ShiftSortBy" Type="char" MaxLength="4" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="StatusCode" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeLocation' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VEmployeeLocation">
           <Key>
@@ -6064,6 +6113,52 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeCashActions].[ActionDocumentNumber] AS [ActionDocumentNumber]
     FROM [dbo].[VEmployeeCashActions] AS [VEmployeeCashActions]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VEmployeeList" EntityType="Self.VEmployeeList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VEmployeeList].[EmployeeID] AS [EmployeeID], 
+    [VEmployeeList].[FullName] AS [FullName], 
+    [VEmployeeList].[FullNameSearch] AS [FullNameSearch], 
+    [VEmployeeList].[EMail] AS [EMail], 
+    [VEmployeeList].[Mobile] AS [Mobile], 
+    [VEmployeeList].[FotoFile] AS [FotoFile], 
+    [VEmployeeList].[RoleID] AS [RoleID], 
+    [VEmployeeList].[OurCompanyID] AS [OurCompanyID], 
+    [VEmployeeList].[Description] AS [Description], 
+    [VEmployeeList].[IsActive] AS [IsActive], 
+    [VEmployeeList].[IsTemp] AS [IsTemp], 
+    [VEmployeeList].[IsDismissal] AS [IsDismissal], 
+    [VEmployeeList].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VEmployeeList].[RecordDate] AS [RecordDate], 
+    [VEmployeeList].[ShiftTypeID] AS [ShiftTypeID], 
+    [VEmployeeList].[StatusID] AS [StatusID], 
+    [VEmployeeList].[RoleGroupID] AS [RoleGroupID], 
+    [VEmployeeList].[DepartmentID] AS [DepartmentID], 
+    [VEmployeeList].[AreaCategoryID] AS [AreaCategoryID], 
+    [VEmployeeList].[SalaryCategoryID] AS [SalaryCategoryID], 
+    [VEmployeeList].[SequenceID] AS [SequenceID], 
+    [VEmployeeList].[PositionID] AS [PositionID], 
+    [VEmployeeList].[CompanyName] AS [CompanyName], 
+    [VEmployeeList].[Code] AS [Code], 
+    [VEmployeeList].[Stage] AS [Stage], 
+    [VEmployeeList].[RoleName] AS [RoleName], 
+    [VEmployeeList].[RoleLevel] AS [RoleLevel], 
+    [VEmployeeList].[RecordFullName] AS [RecordFullName], 
+    [VEmployeeList].[SequenceCode] AS [SequenceCode], 
+    [VEmployeeList].[SequenceName] AS [SequenceName], 
+    [VEmployeeList].[PositionName] AS [PositionName], 
+    [VEmployeeList].[PositionSortBy] AS [PositionSortBy], 
+    [VEmployeeList].[AreaName] AS [AreaName], 
+    [VEmployeeList].[AreaSortBy] AS [AreaSortBy], 
+    [VEmployeeList].[DepartmentName] AS [DepartmentName], 
+    [VEmployeeList].[DeperManSortBy] AS [DeperManSortBy], 
+    [VEmployeeList].[SalaryCategoryName] AS [SalaryCategoryName], 
+    [VEmployeeList].[SalarySortBy] AS [SalarySortBy], 
+    [VEmployeeList].[TypeName] AS [TypeName], 
+    [VEmployeeList].[ShiftSortBy] AS [ShiftSortBy], 
+    [VEmployeeList].[Name] AS [Name], 
+    [VEmployeeList].[StatusCode] AS [StatusCode]
+    FROM [dbo].[VEmployeeList] AS [VEmployeeList]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VEmployeeLocation" EntityType="Self.VEmployeeLocation" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VEmployeeLocation].[ID] AS [ID], 
@@ -6893,6 +6988,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="ProcessID" Mode="In" Type="Int64" />
             <Parameter Name="ProcessUID" Mode="In" Type="Guid" />
           </FunctionImport>
+          <EntitySet Name="VEmployeeList" EntityType="db293_ActionTimeDbModel.VEmployeeList" />
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -11587,6 +11683,53 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SalaryTypeID" Type="Int32" />
           <Property Name="SalaryTypeName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="VEmployeeList">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FullNameSearch" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="EMail" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FotoFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsTemp" Type="Boolean" />
+          <Property Name="IsDismissal" Type="Boolean" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="ShiftTypeID" Type="Int32" />
+          <Property Name="StatusID" Type="Int32" />
+          <Property Name="RoleGroupID" Type="Int32" />
+          <Property Name="DepartmentID" Type="Int32" />
+          <Property Name="AreaCategoryID" Type="Int32" />
+          <Property Name="SalaryCategoryID" Type="Int32" />
+          <Property Name="SequenceID" Type="Int32" />
+          <Property Name="PositionID" Type="Int32" />
+          <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Stage" Type="Int32" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleLevel" Type="Int32" />
+          <Property Name="RecordFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="SequenceCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="SequenceName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PositionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PositionSortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="AreaName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AreaSortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="DepartmentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DeperManSortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="SalaryCategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SalarySortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShiftSortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StatusCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -16231,6 +16374,54 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="RemoveAllAccountActions" FunctionName="db293_ActionTimeDbModel.Store.RemoveAllAccountActions" />
+          <EntitySetMapping Name="VEmployeeList">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeList">
+              <MappingFragment StoreEntitySet="VEmployeeList">
+                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ShiftSortBy" ColumnName="ShiftSortBy" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="SalarySortBy" ColumnName="SalarySortBy" />
+                <ScalarProperty Name="SalaryCategoryName" ColumnName="SalaryCategoryName" />
+                <ScalarProperty Name="DeperManSortBy" ColumnName="DeperManSortBy" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="AreaSortBy" ColumnName="AreaSortBy" />
+                <ScalarProperty Name="AreaName" ColumnName="AreaName" />
+                <ScalarProperty Name="PositionSortBy" ColumnName="PositionSortBy" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="SequenceName" ColumnName="SequenceName" />
+                <ScalarProperty Name="SequenceCode" ColumnName="SequenceCode" />
+                <ScalarProperty Name="RecordFullName" ColumnName="RecordFullName" />
+                <ScalarProperty Name="RoleLevel" ColumnName="RoleLevel" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+                <ScalarProperty Name="Stage" ColumnName="Stage" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="SequenceID" ColumnName="SequenceID" />
+                <ScalarProperty Name="SalaryCategoryID" ColumnName="SalaryCategoryID" />
+                <ScalarProperty Name="AreaCategoryID" ColumnName="AreaCategoryID" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="RoleGroupID" ColumnName="RoleGroupID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="ShiftTypeID" ColumnName="ShiftTypeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="IsDismissal" ColumnName="IsDismissal" />
+                <ScalarProperty Name="IsTemp" ColumnName="IsTemp" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="FotoFile" ColumnName="FotoFile" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="FullNameSearch" ColumnName="FullNameSearch" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

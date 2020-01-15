@@ -300,7 +300,7 @@
     background-color: #e5e9f2; }
     @media (min-width: 576px) {
       .demo-animate-list .nav-link {
-        width: 150px; } }
+        width: 100%; } }
     .demo-animate-list .nav-link:hover {
       background-color: #c0ccda;
       color: inherit; }
