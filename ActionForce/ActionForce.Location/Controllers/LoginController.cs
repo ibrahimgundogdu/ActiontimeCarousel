@@ -1,17 +1,127 @@
-﻿using System;
+﻿using ActionForce.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace ActionForce.Location.Controllers
 {
     public class LoginController : Controller
     {
-        // GET: Login
+        [AllowAnonymous]
         public ActionResult Index()
         {
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public ActionResult Login(string Username, string Password)
+        {
+            ActionTimeEntities db = new ActionTimeEntities();
+
+            string passMD5 = LocationHelper.makeMD5(Password).ToUpper();
+            var date = DateTime.Now.Date;
+
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            var User = db.Employee.FirstOrDefault(x => x.Username == Username && x.Password.ToUpper() == passMD5);
+
+            if (User != null)
+            {
+                var ourCompany = db.OurCompany.FirstOrDefault(x => x.CompanyID == User.OurCompanyID);
+                var roleGroup = db.RoleGroup.FirstOrDefault(x => x.ID == User.RoleGroupID);
+
+
+                if (roleGroup != null && roleGroup.RoleLevel1.LevelNumber >= 1 && User.IsTemp == false && User.IsActive == true && (User.IsDismissal == false || User.IsDismissal == null))
+                {
+
+                    var authModel = new AuthenticationModel()
+                    {
+                        CurrentUser = new LocationUser()
+                        {
+                            CurrentEmployee = new LocationEmployee() {
+                                EmployeeID = User.EmployeeID,
+                                EMail = User.EMail,
+                                FullName = User.FullName,
+                                FotoFile = User.FotoFile,
+                                Mobile = User.Mobile,
+                                Title = User.Title,
+                                Token = User.EmployeeUID
+                            },
+                            CurrentLocation = new LocationInfo() { },
+                            CurrentOurCompany = new LocationOurCompany() {
+                                ID = ourCompany.CompanyID,
+                                Code = ourCompany.Code,
+                                Culture = ourCompany.Culture,
+                                Currency = ourCompany.Currency,
+                                Name = ourCompany.CompanyName,
+                                TimeZone = ourCompany.TimeZone.Value
+                            },
+                            CurrentRoleGroup = new LocationRoleGroup() {
+                                ID = roleGroup.ID,
+                                RoleLevel = roleGroup.RoleLevel.Value,
+                                GroupName = roleGroup.GroupName
+                            }
+                        },
+                        Culture = ourCompany.Culture
+                    };
+
+                    result.IsSuccess = true;
+                    result.Message = "Giriş Başarılı";
+
+                    LocationHelper.AddApplicationLog("Location", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, true, $"{User.Username} başarılı bir giriş yaptı.", string.Empty, DateTime.UtcNow, User.FullName, LocationHelper.GetIPAddress(), string.Empty, authModel);
+
+                    var userData = Newtonsoft.Json.JsonConvert.SerializeObject(authModel);
+                    var ticket = new FormsAuthenticationTicket(2, User.Username, DateTime.Now, DateTime.Now.AddMinutes(1440), false, userData, FormsAuthentication.FormsCookiePath);
+                    string hash = FormsAuthentication.Encrypt(ticket);
+                    var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, hash);
+
+                    if (ticket.IsPersistent)
+                    {
+                        cookie.Expires = ticket.Expiration;
+                    }
+                    Response.Cookies.Add(cookie);
+                    //ChangeCulture(ourCompany.Culture);
+
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    if (User.IsActive == false)
+                    {
+                        result.Message += " Kullanıcı Pasif Durumdadır. ";
+                        LocationHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, false, $"{User.Username} kullanıcısı pasif durumdadır.", string.Empty, DateTime.UtcNow, User.FullName, LocationHelper.GetIPAddress(), string.Empty, null);
+                    }
+
+                    if (User.IsDismissal == true)
+                    {
+                        result.Message += " Kullanıcı kilitli durumdadır. Sistem yöneticinize başvurunuz. ";
+                        LocationHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, false, $"{User.Username} kullanıcısı kilitli durumdadır. Sistem yöneticinize başvurunuz.", string.Empty, DateTime.UtcNow, User.FullName, LocationHelper.GetIPAddress(), string.Empty, null);
+                    }
+
+                    if (roleGroup.RoleLevel1.LevelNumber < 3)
+                    {
+                        result.Message += " Kullanıcı yetkiniz bulunmamaktadır. Sistem yöneticinize başvurunuz. ";
+                        LocationHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, false, $"{User.Username} kullanıcısı yetkiniz bulunmamaktadır. Sistem yöneticinize başvurunuz.", string.Empty, DateTime.UtcNow, User.FullName, LocationHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+            }
+            else
+            {
+                result.Message = " Kullanıcı geçersizdir. ";
+                LocationHelper.AddApplicationLog("Office", "Login", "Select", string.Empty, "Login", "Login", null, false, $"{Username} kullanıcısı bulunmamaktadır. Sistem yöneticinize başvurunuz.", string.Empty, DateTime.UtcNow, Username, LocationHelper.GetIPAddress(), string.Empty, null);
+            }
+
+            TempData["result"] = result;
+            return RedirectToAction("Index", "Login");
         }
     }
 }

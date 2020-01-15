@@ -5,7 +5,7 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.Security;
 
-namespace ActionForce.Office
+namespace ActionForce.Location
 {
     public class LayoutControlModel
     {
@@ -18,5 +18,5 @@ namespace ActionForce.Office
                 Authentication = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthenticationModel>(identity.Ticket.UserData);
             }
         }
-}
+    }
 }
