@@ -10,9 +10,23 @@ namespace ActionForce.Office
     {
         public IEnumerable<VEmployeeList> EmployeeList { get; set; }
         public IEnumerable<VEmployee> VEmployee { get; set; }
+        public IEnumerable<EmployeeLocation> EmployeeLocations { get; set; }
+
+        public IEnumerable<EmployeeShift> EmployeeShifts { get; set; }
+        public EmployeeShift EmployeeShift { get; set; }
+        public IEnumerable<EmployeeShift> EmployeeBreaks { get; set; }
+        public EmployeeShift EmployeeBreak { get; set; }
+        public IEnumerable<Schedule> EmployeeSchedules { get; set; }
+        public Schedule EmployeeSchedule { get; set; }
 
         public Employee CurrentEmployee { get; set; }
-        public VEmployeeList Employee { get; set; }
+        public VEmployeeList EmpList { get; set; }
+
+
+        public string TodayDateCode { get; set; }
+        public string CurrentDateCode { get; set; }
+        public string NextDateCode { get; set; }
+        public string PrevDateCode { get; set; }
 
         public IEnumerable<EmployeeShiftType> ShiftTypeList { get; set; }
         public IEnumerable<EmployeeStatus> StatusList { get; set; }
@@ -22,14 +36,25 @@ namespace ActionForce.Office
         public IEnumerable<Department> DepartmentList { get; set; }
         public IEnumerable<EmployeePositions> PositionList { get; set; }
         public IEnumerable<FromAccountModel> FromList { get; set; }
-
         
+        public Result Result { get; set; }
 
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }
-        public VLocation CurrentLocation { get; set; }
-        public Result<CashActions> Result { get; set; }
+        public VEmployeeLocation CurrentLocation { get; set; }
         public IEnumerable<ApplicationLog> History { get; set; }
+
+        public DateList CurrentDate { get; set; }
+
+        public IEnumerable<VLocationSchedule> VLocationSchedule { get; set; }
+        public IEnumerable<VSchedule> EmpSchedule { get; set; }
+        public IEnumerable<DateList> WeekList { get; set; }
+        public DateList FirstWeekDay { get; set; }
+        public DateList LastWeekDay { get; set; }
+
+        public string WeekCode { get; set; }
+        public string NextWeekCode { get; set; }
+        public string PrevWeekCode { get; set; }
 
     }
 }

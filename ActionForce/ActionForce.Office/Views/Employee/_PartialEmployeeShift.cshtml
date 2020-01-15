@@ -1,0 +1,119 @@
+﻿@model EmployeeControlModel
+
+<div class="profile-update-option bg-white ht-50 bd d-flex justify-content-end mg-b-20 mg-lg-b-20 rounded">
+    <div class="d-flex align-items-center pd-x-5 mg-r-auto">
+
+    </div>
+    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+        <a href="#" id="EmployeeScheduleDate" class="link-03" title="Tarih Seç">
+            <i class="fa fa-calendar"></i>
+            <input type="hidden" id="DatePicker" />
+            <div></div>
+        </a>
+        <input id="EmployeeID" type="hidden" value="@Model.EmpList.EmployeeID" />
+        <input id="WeekCode" type="hidden" value="@Model.WeekCode" />
+    </div>
+    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+        <a href="/Employee/Detail?week=@(Model.PrevWeekCode)&id=@(Model.EmpList.EmployeeID)" class="link-03" title="Bir Önceki Hafta"><i class="fa fa-arrow-left"></i></a>
+    </div>
+    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+        <a href="/Employee/Detail?date=@(DateTime.Now.ToString("yyyy-MM-dd"))&id=@(Model.EmpList.EmployeeID)" class="link-03" title="Bu Hafta"><i class="fa fa-bullseye"></i></a>
+    </div>
+    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
+        <a href="/Employee/Detail?week=@(Model.NextWeekCode)&id=@(Model.EmpList.EmployeeID)" class="link-03" title="Bir Sonraki Hafta"><i class="fa fa-arrow-right"></i></a>
+    </div>
+
+</div>
+
+
+
+<div class="card mg-b-20 mg-lg-b-25">
+    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.EmployeeBreak != null ? Html.Raw("Molada") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute == null ? Html.Raw("Mesaide") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute != null ? Html.Raw("Mesaisi Bitti") : Html.Raw("") )</h6>
+        <nav class="nav">
+            <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CurrentDate.DateKey.ToLongDateString())</span></a>
+        </nav>
+    </div><!-- card-header -->
+    <div class="card-body pd-0">
+        <div class="table-responsive">
+            <table class="table table-sm table-hover">
+                <thead>
+                    <tr>
+                        <th class="text-center bd-l">Çalışan</th>
+                    </tr>
+                    <tr>
+                        <th class="bd-l">Liste</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+
+                        
+                        <td class="tx-sm-13 bd-l i-l" style="padding:7px !important;">
+
+                            <table class="table table-hover pd-0 mg-0">
+                                <tbody>
+
+                                    <tr class="@(Model.EmployeeShift.DurationMinute == null ? "table-info":"table-warning")" id="@($"EmployeeStatus_{Model.EmpList.EmployeeID}_2")">
+                                        <td class="wd-300 tx-sm-13 font-weight-bold">@Model.EmpList.FullName</td>
+                                        <td class="wd-150 text-center @(Model.EmployeeShift.DurationMinute == null ? "bg-info":"bg-warning")" style="padding:2px !important;">@(Model.EmployeeSchedule?.ShiftDateStart?.ToString("HH\\:mm")) @(Model.EmployeeSchedule.ShiftdateEnd != null ? " - " + Model.EmployeeSchedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
+                                        <td class="wd-150 text-center" style="padding:4px !important;">
+                                            <a href="#modalEmployeeShift" data-toggle="modal" class="link-01" onclick="EditEmployeeShift(@Model.EmpList.EmployeeID,'@Model.CurrentDateCode')">
+                                                @(Model.EmployeeShift?.ShiftDateStart?.ToString("HH\\:mm")) @(Model.EmployeeShift?.ShiftDateEnd != null ? " - " + Model.EmployeeShift?.ShiftDateEnd?.ToString("HH\\:mm") : "")
+                                            </a>
+                                        </td>
+                                        <td class="wd-20 text-center">
+                                            @if (Model.EmployeeShift == null)
+                                            {
+                                                <a href='#' class="text-warning font-weight-bold" title="Mesai Başlat" onclick="StartEmployeeShift(@Model.EmpList.EmployeeID,2)"> <i class="ion ion-md-finger-print tx-sm-24"></i></a>
+                                            }
+                                            else if (Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute == null)
+                                            {
+                                                <a href='#' class="text-info font-weight-bold" title="Mesai Bitir" onclick="FinishEmployeeShift(@Model.EmpList.EmployeeID,2)"> <i class="ion ion-md-finger-print tx-sm-24"></i> </a>
+
+                                            }
+                                            else
+                                            {
+                                                <a href='#' title="Mesai Bitmiş" class="text-dark"><i class="ion ion-md-glasses tx-sm-24"></i></a>
+                                            }
+
+                                        </td>
+                                        <td class="bd-l wd-150">
+                                            <a href="#modalEmployeeBreak" data-toggle="modal" class="link-01" onclick="EditEmployeeBreak(@Model.EmpList.EmployeeID,'@Model.CurrentDateCode')">
+                                                @(Model.EmployeeBreaks.Count()) | @(Model.EmployeeBreaks.Sum(x => x.BreakDurationMinute)) | @(Model.EmployeeBreaks.Average(x => x.BreakDurationMinute)?.ToString("N2"))
+                                            </a>
+                                        </td>
+                                        <td class="wd-20 text-center">
+
+                                            @if (Model.EmployeeBreak == null)
+                                            {
+                                                <a href='#' class="text-info font-weight-bold" title="Mola Başlat" onclick='StartEmployeeBreak(@Model.EmpList.EmployeeID,2)'> <i class='ion ion-md-timer tx-sm-24'></i></a>
+                                            }
+                                            else if (Model.EmployeeBreak != null && Model.EmployeeBreak.DurationMinute == null)
+                                            {
+                                                <a href='#' class="text-warning font-weight-bold" title="Mola Bitir" onclick='FinishEmployeeBreak(@Model.EmpList.EmployeeID,2)'> <i class='ion ion-md-timer tx-sm-24'></i></a>
+                                            }
+                                            else
+                                            {
+                                                <a href='#' title="Mola Bitmiş" class="text-dark"><i class="ion ion-md-bicycle tx-sm-24"></i></a>
+                                            }
+                                        </td>
+                                        <td class="tx-sm-24 text-right">@(Model.EmployeeBreak != null ? Html.Raw("<i class='ion ion-md-cafe'></i>") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute == null ? Html.Raw("<i class='ion ion-md-stopwatch'></i>") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute != null ? Html.Raw("<i class='ion ion-md-cloud-outline'></i>") : Html.Raw("") )</td>
+                                    </tr>
+                                    
+                                </tbody>
+                            </table>
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
+    </div><!-- card-footer -->
+</div>
