@@ -10,6 +10,7 @@ namespace ActionForce.Location
     public class LayoutControlModel
     {
         public AuthenticationModel Authentication { get; set; }
+        public Result Result { get; set; }
 
         public LayoutControlModel()
         {
