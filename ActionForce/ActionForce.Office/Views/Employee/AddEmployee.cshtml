@@ -34,18 +34,45 @@
                     </div>
                 </div>
 
-
-                @using (Html.BeginForm("AddNewEmployee", "Employee", FormMethod.Post))
+                <ul class="steps mg-b-20">
+                    <li class="step-item active">
+                        <a href="" class="step-link">
+                            <span class="step-number">1</span>
+                            <span class="step-title">Ön Kayıt</span>
+                        </a>
+                    </li>
+                    <li class="step-item">
+                        <a href="" class="step-link">
+                            <span class="step-number">2</span>
+                            <span class="step-title">Genel Kayıt</span>
+                        </a>
+                    </li>
+                </ul>
+                <div id="employeeStatus">
+                    @if (Model.Result != null)
                     {
-                        @Html.AntiForgeryToken()
+                        if (Model.Result.Message != "")
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                <span>@Model.Result.Message</span>
+                            </div>
+                        }
+                    }
 
+                </div>
+                @using (Html.BeginForm("AddNewEmployee", "Employee", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+
+                    if (Model.EmpList?.EmployeeID > 0)
+                    {
                         <div class="row row-xs">
                             <div class="col-lg-12">
 
                                 <div class="form-group row mg-b-5 bg-gray-50">
                                     <label for="Tc" class="col-sm-3 col-form-label">Tc Kimlik</label>
                                     <div class="col-sm-3">
-                                        <input id="Tc" name="Tc" type="text" class="form-control" autocomplete="off" placeholder="Tc Kimlik No" required>
+                                        <input id="Tc" name="Tc" type="text" class="form-control" autocomplete="off" placeholder="Tc Kimlik No">
                                     </div>
                                     <div class="col-sm-3"> </div>
                                     <div class="col-sm-3">
@@ -63,7 +90,7 @@
                                 <div class="form-group row mg-b-5 bg-gray-50">
                                     <label for="Tc" class="col-sm-3 col-form-label">Email</label>
                                     <div class="col-sm-3">
-                                        <input id="EMail" name="EMail" type="text" class="form-control" autocomplete="off" placeholder="E-Posta Adresi" required>
+                                        <input id="EMail" name="EMail" type="text" class="form-control" autocomplete="off" placeholder="E-Posta Adresi">
                                     </div>
                                     <div class="col-sm-3"> </div>
                                     <div class="col-sm-3">
@@ -72,15 +99,52 @@
                                 <div class="form-group row mg-b-5 bg-gray-50">
                                     <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
                                     <div class="col-sm-3">
-                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon" required>
+                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon">
                                     </div>
                                     <div class="col-sm-3"> </div>
                                     <div class="col-sm-3">
                                     </div>
                                 </div>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
+                                    <div class="col-sm-3">
+                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon">
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
+                                    <div class="col-sm-3">
+                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon">
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
+                                    <div class="col-sm-3">
+                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon">
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
+                                    <div class="col-sm-3">
+                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon">
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+
                                 <div class="form-group row mg-b-0">
                                     <div class="col-sm-3"></div>
-                                    <div class="col-sm-6">
+                                    <div class="col-sm-3">
                                         <button type="submit" class="btn btn-primary btn-block">Employee Ekle</button>
                                     </div>
                                     <div class="col-sm-3">
@@ -90,6 +154,62 @@
                             </div>
                         </div>
                     }
+                    else
+                    {
+                        <div class="row row-xs">
+                            <div class="col-lg-12">
+
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="Tc" class="col-sm-3 col-form-label">Tc Kimlik</label>
+                                    <div class="col-sm-3">
+                                        <input id="Tc" name="Tc" type="text" class="form-control" autocomplete="off" placeholder="Tc Kimlik No">
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="Tc" class="col-sm-3 col-form-label">Ad Soyad</label>
+                                    <div class="col-sm-3">
+                                        <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="Ad Soyad" required>
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="Tc" class="col-sm-3 col-form-label">Email</label>
+                                    <div class="col-sm-3">
+                                        <input id="EMail" name="EMail" type="text" class="form-control" autocomplete="off" placeholder="E-Posta Adresi">
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
+                                    <div class="col-sm-3">
+                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon">
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row mg-b-0">
+                                    <div class="col-sm-3"></div>
+                                    <div class="col-sm-3">
+                                        <button type="submit" class="btn btn-primary btn-block">Employee Ekle</button>
+                                    </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    }
+
+                }
             </div>
         </div>
     </div>

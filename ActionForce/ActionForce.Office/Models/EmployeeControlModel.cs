@@ -9,6 +9,26 @@ namespace ActionForce.Office
     public class EmployeeControlModel : LayoutControlModel
     {
         public IEnumerable<VEmployeeList> EmployeeList { get; set; }
+        public VEmployeeList EmpList { get; set; }
+
+
+        public IEnumerable<OurCompany> OurList { get; set; }
+        public IEnumerable<RoleGroup> RoleGroupList { get; set; }
+        public IEnumerable<EmployeeAreaCategory> AreaCategoryList { get; set; }
+        public IEnumerable<Department> DepartmentList { get; set; }
+        public IEnumerable<EmployeePositions> PositionList { get; set; }
+        public IEnumerable<EmployeeStatus> StatusList { get; set; }
+        public IEnumerable<EmployeeShiftType> ShiftTypeList { get; set; }
+        public IEnumerable<EmployeeSalaryCategory> SalaryCategoryList { get; set; }
+        public IEnumerable<EmployeeSequence> SequenceList { get; set; }
+
+        public Result Result { get; set; }
+
+        public FilterModel Filters { get; set; }
+        public IEnumerable<ApplicationLog> LogList { get; set; }
+
+
+
         public IEnumerable<VEmployee> VEmployee { get; set; }
         public IEnumerable<EmployeeLocation> EmployeeLocations { get; set; }
 
@@ -20,7 +40,6 @@ namespace ActionForce.Office
         public Schedule EmployeeSchedule { get; set; }
 
         public Employee CurrentEmployee { get; set; }
-        public VEmployeeList EmpList { get; set; }
 
 
         public string TodayDateCode { get; set; }
@@ -28,21 +47,13 @@ namespace ActionForce.Office
         public string NextDateCode { get; set; }
         public string PrevDateCode { get; set; }
 
-        public IEnumerable<EmployeeShiftType> ShiftTypeList { get; set; }
-        public IEnumerable<EmployeeStatus> StatusList { get; set; }
-        public IEnumerable<Role> RoleList { get; set; }
-        public IEnumerable<RoleGroup> RoleGroupList { get; set; }
+        
         public IEnumerable<Location> LocationList { get; set; }
-        public IEnumerable<Department> DepartmentList { get; set; }
-        public IEnumerable<EmployeePositions> PositionList { get; set; }
         public IEnumerable<FromAccountModel> FromList { get; set; }
         
-        public Result Result { get; set; }
-
-        public FilterModel Filters { get; set; }
+        
         public OurCompany CurrentCompany { get; set; }
         public VEmployeeLocation CurrentLocation { get; set; }
-        public IEnumerable<ApplicationLog> History { get; set; }
 
         public DateList CurrentDate { get; set; }
 

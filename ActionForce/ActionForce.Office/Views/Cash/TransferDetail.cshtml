@@ -222,14 +222,14 @@
                                                     <button class="btn btn-primary btn-block">Havale Eft Güncelle</button>
                                                 }
                                             </div>
-                                            <div class="col-sm-3">
+                                            @*<div class="col-sm-3">
                                                 @if (Model.TransferDetail.IsActive == true)
                                                 {
                                                     <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.TransferDetail.Amount?.ToString()) tutarlı havale eft iptal etmek istediğine emin misin?')? DeleteCashBankTransfer('@Model.TransferDetail.UID') : ''">Havale Eft Sil</button>
 
                                                 }
 
-                                            </div>
+                                            </div>*@
                                         </div>
                                     </form>
                                 </div>

@@ -40,13 +40,14 @@
                             <a href="#" class="nav-link">Check Liste</a>
                             <a href="#" class="nav-link">Çalışma Dönemleri</a>
                             <a href="#" class="nav-link">Ücret Tanımlamaları</a>
+                            <a href="#" onclick="EmployeeUpdate(@Model.EmpList.EmployeeID);" class="nav-link">Güncelle</a>
                         </nav>
                     </div>
                 </div>
             </div>
 
             <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10" id="employeeList">
-                
+                @{Html.RenderPartial("_PartialEmployeeDetail", Model);}
             </div>
 
 
@@ -117,6 +118,15 @@
 
         });
 
+        function EmployeeUpdate(id) {
+            $.ajax({
+                method: "GET",
+                url: "/Employee/EmployeeUpdate",
+                data: { id: id }
+            }).done(function (d) {
+                $("#employeeList").html(d);
+            });
+        }
         function EmployeeCalendar(id) {
             $.ajax({
                 method: "GET",
