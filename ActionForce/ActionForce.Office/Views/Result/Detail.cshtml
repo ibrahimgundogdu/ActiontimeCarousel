@@ -289,10 +289,10 @@
                                                             <input type="text" id="S10CSQ" class="form-control font-weight-bold text-right tx-orange" autocomplete="off" placeholder="0" value="1">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" id="S10CSA" class="form-control money font-weight-bold text-right tx-orange" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 10 && x.Currency == defaultCurrency)?.Amount?.ToString("N2"))">
+                                                            <input type="text" id="S10CSA" class="form-control money font-weight-bold text-right tx-orange" autocomplete="off" min="0" placeholder="0,00">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" id="S10CSD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 10 && x.Currency == defaultCurrency)?.Description)" />
+                                                            <input type="text" id="S10CSD" class="form-control" autocomplete="off" placeholder=""/>
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCardSale(@Model.CurrentDayResult.ID,'@(defaultCurrency)'):false;">
@@ -303,10 +303,10 @@
                                                             <input type="text" id="R11CRQ" class="form-control font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0" value="1">
                                                         </td>
                                                         <td class="text-right" style="width:100px; padding:1px !important;">
-                                                            <input type="text" id="R11CRA" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 11 && x.Currency == defaultCurrency)?.Amount?.ToString("N2"))">
+                                                            <input type="text" id="R11CRA" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" id="R11CRD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 11 && x.Currency == defaultCurrency)?.Description)" />
+                                                            <input type="text" id="R11CRD" class="form-control" autocomplete="off" placeholder=""/>
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCardRefund(@Model.CurrentDayResult.ID,'@(defaultCurrency)'):false;">
@@ -358,10 +358,10 @@
                                                         <tr>
                                                             <td>USD ($)</td>
                                                             <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="T1USD" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD")?.Amount.Value.ToString("N2"))">
+                                                                <input type="text" id="T1USD" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T1DUSD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD")?.Description)" />
+                                                                <input type="text" id="T1DUSD" class="form-control" autocomplete="off" placeholder=""/>
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCollect(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD")?.ID),'USD'):false;">
@@ -369,10 +369,10 @@
                                                                 </a>
                                                             </td>
                                                             <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="T4USD" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD")?.Amount?.ToString("N2"))">
+                                                                <input type="text" id="T4USD" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T4DUSD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD")?.Description)" />
+                                                                <input type="text" id="T4DUSD" class="form-control" autocomplete="off" placeholder=""/>
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddPayment(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD")?.ID),'USD'):false;">
@@ -386,10 +386,10 @@
                                                         <tr>
                                                             <td style="width:100px;"><strong>TRL (₺)</strong></td>
                                                             <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="T1TRL" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00" value="0,00)">
+                                                                <input type="text" id="T1TRL" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T1DTRL" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "TRL")?.Description)" />
+                                                                <input type="text" id="T1DTRL" class="form-control" autocomplete="off" placeholder=""/>
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCollect(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "TRL")?.ID),'TRL'):false;">
@@ -397,10 +397,10 @@
                                                                 </a>
                                                             </td>
                                                             <td class="bd-l  text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="T4TRL" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "TRL").Amount?.ToString("N2"))">
+                                                                <input type="text" id="T4TRL" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T4DTRL" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "TRL")?.Description)" />
+                                                                <input type="text" id="T4DTRL" class="form-control" autocomplete="off" placeholder=""/>
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddPayment(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "TRL")?.ID),'TRL'):false;">
@@ -411,10 +411,10 @@
                                                         <tr>
                                                             <td>USD ($)</td>
                                                             <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="T1USD" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD")?.Amount?.ToString("N2"))">
+                                                                <input type="text" id="T1USD" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T1DUSD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD")?.Description)" />
+                                                                <input type="text" id="T1DUSD" class="form-control" autocomplete="off" placeholder=""/>
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCollect(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD")?.ID),'USD'):false;">
@@ -422,10 +422,10 @@
                                                                 </a>
                                                             </td>
                                                             <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="T4USD" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD")?.Amount?.ToString("N2"))">
+                                                                <input type="text" id="T4USD" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T4DUSD" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD")?.Description)" />
+                                                                <input type="text" id="T4DUSD" class="form-control" autocomplete="off" placeholder=""/>
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddPayment(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD")?.ID),'USD'):false;">
@@ -437,10 +437,10 @@
 
                                                             <td>EUR (€)</td>
                                                             <td class="bd-l text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="T1EUR" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "EUR")?.Amount?.ToString("N2"))">
+                                                                <input type="text" id="T1EUR" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T1DEUR" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "EUR")?.Description)" />
+                                                                <input type="text" id="T1DEUR" class="form-control" autocomplete="off" placeholder=""/>
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCollect(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "EUR")?.ID),'EUR'):false;">
@@ -448,10 +448,10 @@
                                                                 </a>
                                                             </td>
                                                             <td class="bd-l" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="T4EUR" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "EUR").Amount?.ToString("N2"))">
+                                                                <input type="text" id="T4EUR" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T4DEUR" class="form-control" autocomplete="off" placeholder="" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "EUR")?.Description)" />
+                                                                <input type="text" id="T4DEUR" class="form-control" autocomplete="off" placeholder=""/>
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddPayment(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "EUR")?.ID),'EUR'):false;">
@@ -512,10 +512,10 @@
                                                                 <input type="text" id="SlipDateEUR" class="form-control font-weight-bold shiftdate" value="@(Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="SlipTimeEUR" class="form-control font-weight-bold hourfull" value="@(Model.CurrentDayResult.Date.ToString("HH\\:mm\\:ss") )">
+                                                                <input type="text" id="SlipTimeEUR" class="form-control font-weight-bold hourfull" placeholder="00:00:00">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E3AEUR" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Amount?.ToString("N2"))">
+                                                                <input type="text" id="E3AEUR" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
                                                                 <input type="text" id="E3EEUR" class="form-control money4 font-weight-bold text-right" autocomplete="off" min="0" placeholder="0,0000" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Exchange?.ToString("N4"))">
@@ -530,7 +530,7 @@
                                                                 <input id="E3FEUR" class="form-control" type="file" />
                                                             </td>
                                                             <td class="bd-l  text-right" style="padding:1px !important;">
-                                                                <input type="text" id="E3DEUR" class="form-control" autocomplete="off" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Description)">
+                                                                <input type="text" id="E3DEUR" class="form-control" autocomplete="off">
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddExchange(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.ID),'EUR'):false;">
@@ -550,10 +550,10 @@
                                                                 <input type="text" id="SlipDateUSD" class="form-control font-weight-bold shiftdate" value="@(Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="SlipTimeUSD" class="form-control font-weight-bold hourfull" value="@(Model.CurrentDayResult.Date.ToString("HH\\:mm\\:ss") )">
+                                                                <input type="text" id="SlipTimeUSD" class="form-control font-weight-bold hourfull" placeholder="00:00:00">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E3AUSD" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Amount?.ToString("N2"))">
+                                                                <input type="text" id="E3AUSD" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
                                                                 <input type="text" id="E3EUSD" class="form-control money4 font-weight-bold text-right" autocomplete="off" min="0" placeholder="0,0000" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Exchange?.ToString("N4"))">
@@ -568,7 +568,7 @@
                                                                 <input id="E3FUSD" class="form-control" type="file" />
                                                             </td>
                                                             <td class="bd-l  text-right" style="padding:1px !important;">
-                                                                <input type="text" id="E3DUSD" class="form-control" autocomplete="off" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.Description)">
+                                                                <input type="text" id="E3DUSD" class="form-control" autocomplete="off">
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddExchange(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "USD")?.ID),'USD'):false;">
@@ -587,10 +587,10 @@
                                                                 <input type="text" id="SlipDateEUR" class="form-control font-weight-bold shiftdate" value="@(Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="SlipTimeEUR" class="form-control font-weight-bold hourfull" value="@(Model.CurrentDayResult.Date.ToString("HH\\:mm\\:ss") )">
+                                                                <input type="text" id="SlipTimeEUR" class="form-control font-weight-bold hourfull" placeholder="00:00:00">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E3AEUR" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Amount?.ToString("N2"))">
+                                                                <input type="text" id="E3AEUR" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
                                                                 <input type="text" id="E3EEUR" class="form-control money4 font-weight-bold text-right" autocomplete="off" min="0" placeholder="0,0000" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Exchange?.ToString("N4"))">
@@ -605,7 +605,7 @@
                                                                 <input id="E3FEUR" class="form-control" type="file" />
                                                             </td>
                                                             <td class="bd-l  text-right" style="padding:1px !important;">
-                                                                <input type="text" id="E3DEUR" class="form-control" autocomplete="off" value="@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.Description)">
+                                                                <input type="text" id="E3DEUR" class="form-control" autocomplete="off">
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddExchange(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 3 && x.Currency == "EUR")?.ID),'EUR'):false;">
@@ -672,7 +672,7 @@
                                                                 </select>
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E6TRLA@(item.ID)" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
+                                                                <input type="text" id="E6TRLA@(item.ID)" class="form-control money font-weight-bold text-right" min="0" placeholder="0,00">
                                                             </td>
 
 
@@ -680,7 +680,7 @@
                                                                 <input type="text" id="E6TRLC@(item.ID)" class="form-control" value="@(item.Currency)" readonly />
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E6TRLN@(item.ID)" class="form-control font-weight-bold" value="@(item.SlipNumber)">
+                                                                <input type="text" id="E6TRLN@(item.ID)" class="form-control font-weight-bold">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
                                                                 <input type="text" id="SlipDate@(item.ID)" class="form-control font-weight-bold shiftdate" value="@(item.SlipDate != null ? item.SlipDate?.ToString("yyyy-MM-dd") :Model.CurrentDayResult.Date.ToString("yyyy-MM-dd") )">
@@ -692,7 +692,7 @@
                                                                 <input id="E7TRLF@(item.ID)" class="form-control" type="file" />
                                                             </td>
                                                             <td class="bd-l  text-right" style="padding:1px !important;">
-                                                                <input type="text" id="E6TRLDE@(item.ID)" class="form-control" value="@(item.Description)">
+                                                                <input type="text" id="E6TRLDE@(item.ID)" class="form-control">
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddExpense(@Model.CurrentDayResult.ID,@item.ID):false;">
@@ -759,10 +759,10 @@
                                                             </td>
 
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E7TRLA@(item.ID)" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00" value="@(item.Amount?.ToString("N2"))">
+                                                                <input type="text" id="E7TRLA@(item.ID)" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00" required>
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E7TRLCO@(item.ID)" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00" value="0,00">
+                                                                <input type="text" id="E7TRLCO@(item.ID)" class="form-control money font-weight-bold text-right tx-info" autocomplete="off" min="0" placeholder="0,00" required>
                                                             </td>
 
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
@@ -778,7 +778,7 @@
                                                                 <input id="E7TRLF@(item.ID)" class="form-control" type="file" />
                                                             </td>
                                                             <td class="text-right" style="padding:1px !important;">
-                                                                <input type="text" id="E7TRLDE@(item.ID)" class="form-control" autocomplete="off" value="@(item.Description)">
+                                                                <input type="text" id="E7TRLDE@(item.ID)" class="form-control" autocomplete="off">
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddBankTransfer(@Model.CurrentDayResult.ID,@item.ID):false;">
@@ -867,10 +867,10 @@
                                                                 </a>
                                                             </td>
                                                             <td class="bd-l" style="width:120px; padding:1px !important;">
-                                                                <input type="text" id="S9PAMOUNT@(emp)" class="form-control money text-right font-weight-bold text-danger" autocomplete="off" placeholder="0,00" value="@(payment.Amount?.ToString("N2"))" />
+                                                                <input type="text" id="S9PAMOUNT@(emp)" class="form-control money text-right font-weight-bold text-danger" autocomplete="off" placeholder="0,00" />
                                                             </td>
                                                             <td class="" style="padding:1px !important;">
-                                                                <input type="text" id="S9PDESC@(emp)" class="form-control" autocomplete="off" placeholder="" value="@(payment.Description)" />
+                                                                <input type="text" id="S9PDESC@(emp)" class="form-control" autocomplete="off" placeholder="" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddSalaryPayment(@Model.CurrentDayResult.ID, @payment.ID, @emp):false;">
@@ -933,22 +933,22 @@
                                                                 <input type="text" id="E13TRLT" name="E13TRLT" class="form-control hourfull font-weight-bold" autocomplete="off" value="@(cr.SlipDate != null ? cr.SlipDate.Value.TimeOfDay.ToString() : Model.CurrentDayResult.Date.TimeOfDay.ToString())">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E13TRLNA" name="E13TRLNA" class="form-control money font-weight-bold text-right" onkeyup="SumCashRecorder()" autocomplete="off" min="0" placeholder="0,00" value="0,00">
+                                                                <input type="text" id="E13TRLNA" name="E13TRLNA" class="form-control money font-weight-bold text-right" onkeyup="SumCashRecorder()" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E13TRLKA" name="E13TRLKA" class="form-control money font-weight-bold text-right" onkeyup="SumCashRecorder()" autocomplete="off" min="0" placeholder="0,00" value="0,00">
+                                                                <input type="text" id="E13TRLKA" name="E13TRLKA" class="form-control money font-weight-bold text-right" onkeyup="SumCashRecorder()" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td class="text-right" style="width:100px; padding:1px !important;">
-                                                                <input type="text" id="E13TRLA" name="E13TRLA" class="form-control money font-weight-bold text-right" autocomplete="off" min="0" placeholder="0,00" value="@(cr.Amount?.ToString("N2"))">
+                                                                <input type="text" id="E13TRLA" name="E13TRLA" class="form-control money font-weight-bold text-right" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td class="text-right" style="width:140px; padding:1px !important;">
-                                                                <input type="text" id="E13TRLTA" name="E13TRLTA" class="form-control money font-weight-bold text-right" autocomplete="off" min="0" placeholder="0,00" value="@(cr.SlipTotalAmount?.ToString("N2"))">
+                                                                <input type="text" id="E13TRLTA" name="E13TRLTA" class="form-control money font-weight-bold text-right" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="width:200px; padding:1px !important;">
                                                                 <input id="E13TRLF" name="E13TRLF" class="form-control" type="file" />
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="E13TRLDE" name="E13TRLDE" class="form-control" autocomplete="off" value="@(cr.Description)">
+                                                                <input type="text" id="E13TRLDE" name="E13TRLDE" class="form-control" autocomplete="off">
                                                             </td>
 
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
@@ -972,8 +972,7 @@
                                         <div class="card-header d-flex align-items-center justify-content-between">
                                             <h6 class="mg-b-0">Dosyalar </h6>
                                             <div class="d-flex tx-18">
-                                                @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
+                                               
                                             </div>
                                         </div>
                                         <div class="table-responsive">

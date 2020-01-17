@@ -134,6 +134,13 @@
     <Content Include="assets\js\site.min.js" />
     <Content Include="assets\js\theme.js" />
     <Content Include="assets\js\utils.js" />
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="libs\apexcharts\dist\apexcharts.amd.js" />
     <Content Include="libs\apexcharts\dist\apexcharts.common.js" />
@@ -528,17 +535,28 @@
     <Content Include="libs\twitter-bootstrap-wizard\jquery.bootstrap.wizard.min.js" />
     <Content Include="libs\typeahead.js\dist\typeahead.bundle.min.js" />
     <Content Include="libs\wavesurfer.js\dist\wavesurfer.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\LogoutController.cs" />
     <Compile Include="Filters\ActionLocationAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AuthenticationModel.cs" />
+    <Compile Include="Models\ControlModels\DefaultControlModel.cs" />
     <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\LayoutControlModel.cs" />
     <Compile Include="Models\LocationHelper.cs" />
@@ -734,10 +752,19 @@
     <Content Include="libs\summernote\dist\font\summernote.woff" />
     <Content Include="libs\summernote\dist\summernote-0.8.8-dist.zip" />
     <Content Include="libs\wavesurfer.js\LICENSE" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="packages.config" />
     <Content Include="Views\Login\Index.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Error\Unauthorized.cshtml" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Default\Index.cshtml" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Shared\_PartialPageHeader.cshtml" />
+    <Content Include="Views\Shared\_PartialAsideNavbar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -748,6 +775,8 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="libs\plyrist\dist\" />
+    <Folder Include="Views\Base\" />
+    <Folder Include="Views\Logout\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ActionForce.Entity\ActionForce.Entity.csproj">

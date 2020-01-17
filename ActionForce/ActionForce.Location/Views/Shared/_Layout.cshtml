@@ -1,0 +1,58 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Ufe Grup | @ViewBag.Title</title>
+    <meta name="description" content="UFE Group LLC Location App" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <!-- build:css /assets/css/site.min.css -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="/assets/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="/assets/css/style.css" type="text/css" />
+
+    @RenderSection("style", false)
+    @RenderSection("scriptheader", false)
+
+</head>
+<body class="layout-row">
+    <div id="aside" class="page-sidenav no-shrink bg-light nav-dropdown fade folded" aria-hidden="true">
+        <div class="sidenav h-100 modal-dialog bg-light">
+            @{ Html.RenderPartial("_PartialAsideNavbar");}
+        </div>
+    </div>
+    <div id="main" class="layout-column flex">
+        <div id="header" class="page-header ">
+            @{ Html.RenderPartial("_PartialPageHeader");}
+        </div>
+        <div id="content" class="flex ">
+            @RenderBody()
+        </div>
+        <div id="footer" class="page-footer hide">
+            <div class="d-flex p-3">
+                <span class="text-sm text-muted flex">&copy; Copyright. @DateTime.Now.Year UFE Group LLC</span>
+                <div class="text-sm text-muted">Version 1.1.1</div>
+            </div>
+        </div>
+    </div>
+    <!-- build:js /assets/js/site.min.js -->
+    <script src="/libs/jquery/dist/jquery.min.js"></script>
+    <script src="/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/libs/pjax/pjax.min.js"></script>
+
+    <script src="/assets/js/ajax.js"></script>
+    <script src="/assets/js/lazyload.config.js"></script>
+    <script src="/assets/js/lazyload.js"></script>
+    <script src="/assets/js/plugin.js"></script>
+
+    <script src="/libs/scrollreveal/dist/scrollreveal.min.js"></script>
+    <script src="/libs/feather-icons/dist/feather.min.js"></script>
+
+    <script src="/assets/js/plugins/feathericon.js"></script>
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/utils.js"></script>
+
+    @RenderSection("scripts", false)
+
+</body>
+</html>

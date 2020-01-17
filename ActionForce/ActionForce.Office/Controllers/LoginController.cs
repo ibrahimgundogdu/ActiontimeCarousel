@@ -91,6 +91,12 @@ namespace ActionForce.Office.Controllers
                 }
                 else
                 {
+                    if (User.RoleGroupID == null || User.RoleGroupID <= 0)
+                    {
+                        result.Message += " Kullanıcıya Rol Grubu Tanımı Yapılmamıştır. ";
+                        OfficeHelper.AddApplicationLog("Office", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, false, $"{User.Username} kullanıcısına rol grubu tanımı yapılmamıştır.", string.Empty, DateTime.UtcNow, User.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+
                     if (User.IsActive == false)
                     {
                         result.Message += " Kullanıcı Pasif Durumdadır. ";
