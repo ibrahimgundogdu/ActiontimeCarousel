@@ -833,5 +833,31 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemoveAllAccountActions", processIDParameter, processUIDParameter);
         }
+    
+        public virtual ObjectResult<GetLocationCurrentSchedule_Result> GetLocationCurrentSchedule(Nullable<int> locationID, Nullable<System.DateTime> date)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationCurrentSchedule_Result>("GetLocationCurrentSchedule", locationIDParameter, dateParameter);
+        }
+    
+        public virtual ObjectResult<GetLocationCurrentShift_Result> GetLocationCurrentShift(Nullable<int> locationID, Nullable<System.DateTime> date)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationCurrentShift_Result>("GetLocationCurrentShift", locationIDParameter, dateParameter);
+        }
     }
 }

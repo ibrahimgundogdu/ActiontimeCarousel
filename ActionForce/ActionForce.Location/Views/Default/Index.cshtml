@@ -5,3 +5,20 @@
 
 <h2>@(Model.Authentication.CurrentUser.CurrentEmployee.FullName)</h2>
 
+
+
+@section scripts {
+    @if (Model.Result != null) //
+    {
+        <script>
+            $(function () {
+                notie.setOptions({
+                    alertTime: 5
+                })
+                notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
+                noticed = true;
+            });
+        </script>
+    }
+   
+}

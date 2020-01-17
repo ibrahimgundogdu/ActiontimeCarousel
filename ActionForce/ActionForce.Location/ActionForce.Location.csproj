@@ -99,6 +99,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="assets\css\bootstrap.css" />
+    <Content Include="assets\css\notie.css" />
     <Content Include="assets\css\rtl.css" />
     <Content Include="assets\css\site.min.css" />
     <Content Include="assets\css\style.css" />
@@ -549,6 +550,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LogoutController.cs" />
     <Compile Include="Filters\ActionLocationAuthorizeAttribute.cs" />
@@ -557,9 +559,14 @@
     </Compile>
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\ControlModels\DefaultControlModel.cs" />
+    <Compile Include="Models\ControlModels\LocationControlModel.cs" />
     <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\LayoutControlModel.cs" />
     <Compile Include="Models\LocationHelper.cs" />
+    <Compile Include="Models\LocationModels\LocationStatus.cs" />
+    <Compile Include="Models\LocationModels\mLocation.cs" />
+    <Compile Include="Models\LocationModels\mLocationSchedule.cs" />
+    <Compile Include="Models\LocationModels\mLocationShift.cs" />
     <Compile Include="Models\LocationUser.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -765,6 +772,7 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Shared\_PartialPageHeader.cshtml" />
     <Content Include="Views\Shared\_PartialAsideNavbar.cshtml" />
+    <Content Include="Views\Location\SetCurrentLocation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

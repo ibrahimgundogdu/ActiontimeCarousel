@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
@@ -38,16 +39,32 @@ namespace ActionForce.Location.Controllers
             {
                 var ourCompany = db.OurCompany.FirstOrDefault(x => x.CompanyID == User.OurCompanyID);
                 var roleGroup = db.RoleGroup.FirstOrDefault(x => x.ID == User.RoleGroupID);
+                Entity.Location location = null;
 
 
                 if (roleGroup != null && roleGroup.RoleLevel1.LevelNumber >= 1 && User.IsTemp == false && User.IsActive == true && (User.IsDismissal == false || User.IsDismissal == null))
                 {
+                    var currentlocation = db.EmployeeLocation.Where(x => x.EmployeeID == User.EmployeeID && x.IsActive == true).ToList();
+                    if (currentlocation != null && currentlocation.Count > 0)
+                    {
+                        int? locationid = currentlocation.FirstOrDefault(x => x.IsMaster == true)?.LocationID;
+                        if (locationid > 0)
+                        {
+                            location = db.Location.FirstOrDefault(x => x.LocationID == locationid);
+                        }
+                        else
+                        {
+                            locationid = currentlocation.FirstOrDefault()?.LocationID;
+                            location = db.Location.FirstOrDefault(x => x.LocationID == locationid);
+                        }
+                    }
 
                     var authModel = new AuthenticationModel()
                     {
                         CurrentUser = new LocationUser()
                         {
-                            CurrentEmployee = new LocationEmployee() {
+                            CurrentEmployee = new LocationEmployee()
+                            {
                                 EmployeeID = User.EmployeeID,
                                 EMail = User.EMail,
                                 FullName = User.FullName,
@@ -56,8 +73,20 @@ namespace ActionForce.Location.Controllers
                                 Title = User.Title,
                                 Token = User.EmployeeUID
                             },
-                            CurrentLocation = new LocationInfo() { },
-                            CurrentOurCompany = new LocationOurCompany() {
+                            CurrentLocation = new LocationInfo() {
+                                Currency = location.Currency,
+                                FullName = $"{location.SortBy.Trim()} {location.LocationName} {location.Description} {location.State}",
+                                ID = location.LocationID,
+                                IsActive = location.IsActive.Value,
+                                OurCompanyID = location.OurCompanyID,
+                                Latitude = location.Latitude,
+                                Longitude = location.Longitude,
+                                SortBy = location.SortBy,
+                                TimeZone = location.Timezone ?? 3,
+                                UID = location.LocationUID
+                            },
+                            CurrentOurCompany = new LocationOurCompany()
+                            {
                                 ID = ourCompany.CompanyID,
                                 Code = ourCompany.Code,
                                 Culture = ourCompany.Culture,
@@ -65,7 +94,8 @@ namespace ActionForce.Location.Controllers
                                 Name = ourCompany.CompanyName,
                                 TimeZone = ourCompany.TimeZone.Value
                             },
-                            CurrentRoleGroup = new LocationRoleGroup() {
+                            CurrentRoleGroup = new LocationRoleGroup()
+                            {
                                 ID = roleGroup.ID,
                                 RoleLevel = roleGroup.RoleLevel.Value,
                                 GroupName = roleGroup.GroupName
@@ -73,6 +103,8 @@ namespace ActionForce.Location.Controllers
                         },
                         Culture = ourCompany.Culture
                     };
+
+
 
                     result.IsSuccess = true;
                     result.Message = "Giriş Başarılı";
@@ -92,7 +124,15 @@ namespace ActionForce.Location.Controllers
                     Response.Cookies.Add(cookie);
                     ChangeCulture(ourCompany.Culture);
 
-                    return RedirectToAction("Index", "Default");
+                    if (authModel.CurrentUser.CurrentLocation != null && authModel.CurrentUser.CurrentLocation.ID >0)
+                    {
+                        return RedirectToAction("Index", "Default");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Location", "Login");
+                    }
+                    
                 }
                 else
                 {
@@ -146,6 +186,22 @@ namespace ActionForce.Location.Controllers
             Response.SetCookie(languageCookie);
 
             //Response.Redirect(Request.UrlReferrer.ToString());
+        }
+
+        [AllowAnonymous]
+        public ActionResult Location()
+        {
+            if (this.HttpContext.User != null && this.HttpContext.User is GenericPrincipal principal && principal.Identity is FormsIdentity identity)
+            {
+                AuthenticationModel Authentication = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthenticationModel>(identity.Ticket.UserData);
+
+
+
+            }
+
+
+
+            return View();
         }
     }
 }
