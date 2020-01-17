@@ -38,8 +38,6 @@ namespace ActionForce.Entity
         public Nullable<int> PositionID { get; set; }
         public string CompanyName { get; set; }
         public string Code { get; set; }
-        public Nullable<int> Stage { get; set; }
-        public string RoleName { get; set; }
         public Nullable<int> RoleLevel { get; set; }
         public string RecordFullName { get; set; }
         public string SequenceCode { get; set; }
@@ -56,5 +54,23 @@ namespace ActionForce.Entity
         public string ShiftSortBy { get; set; }
         public string Name { get; set; }
         public string StatusCode { get; set; }
+        public string UpdateFullName { get; set; }
+        public Nullable<int> UpdateEmployeeID { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
+        public string IdentityNumber { get; set; }
+        public string Title { get; set; }
+        public string SmsNumber { get; set; }
+        public string Mobile2 { get; set; }
+        public string Whatsapp { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public Nullable<System.DateTime> DateStart { get; set; }
+        public Nullable<System.DateTime> DateEnd { get; set; }
+        public string DismissDescription { get; set; }
+        public Nullable<System.Guid> EmployeeUID { get; set; }
+        public string RecordIP { get; set; }
+        public string UpdateIP { get; set; }
+        public string GroupCode { get; set; }
+        public string GroupName { get; set; }
     }
 }

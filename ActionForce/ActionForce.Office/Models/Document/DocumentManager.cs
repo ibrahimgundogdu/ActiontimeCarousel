@@ -4575,16 +4575,65 @@ namespace ActionForce.Office
                         result.Message = "Çalışan başarı ile eklendi";
 
                         // log atılır
-                        OfficeHelper.AddApplicationLog("Office", "Permit", "Insert", emp.EmployeeID.ToString(), "Employee", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, emp);
+                        OfficeHelper.AddApplicationLog("Office", "Employee", "Insert", emp.EmployeeID.ToString(), "Employee", "AddEmployee", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, emp);
                     }
                     catch (Exception ex)
                     {
                         result.Message = $"Çalışan izini eklenemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Index", "Insert", "-1", "Employee", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, employee);
+                        OfficeHelper.AddApplicationLog("Office", "Employee", "Insert", "-1", "Employee", "AddEmployee", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, employee);
                     }
 
                 }
             }
+
+            return result;
+        }
+
+        public Result<Employee> EditEmployee(Employees employee, AuthenticationModel authentication)
+        {
+            Result<Employee> result = new Result<Employee>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var isEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == employee.EmployeeID);
+                if (employee != null && authentication != null && isEmployee != null)
+                {
+                    try
+                    {
+                        Employee self = new Employee()
+                        {
+                            EmployeeID = employee.EmployeeID,
+                            FullName = employee.FullName,
+                            IdentityNumber = employee.Tc,
+                            EMail = employee.EMail,
+                            Mobile = employee.Mobile
+                        };
+                        isEmployee.FullName = employee.FullName;
+                        isEmployee.EMail = employee.EMail;
+                        isEmployee.Mobile = employee.Mobile;
+                        isEmployee.IdentityNumber = employee.Tc;
+
+                        Db.SaveChanges();
+
+                        result.IsSuccess = true;
+                        result.Message = $"{isEmployee.EmployeeID} nolu Çalışan başarı ile güncellendi";
+
+                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<Employee>(self, isEmployee, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "Employee", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"Çalışan güncellenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "Employee", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, employee);
+                    }
+                }
+            }
+            
 
             return result;
         }

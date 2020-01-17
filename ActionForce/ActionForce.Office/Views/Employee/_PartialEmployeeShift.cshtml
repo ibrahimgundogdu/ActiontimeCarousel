@@ -59,7 +59,7 @@
                                         <td class="wd-300 tx-sm-13 font-weight-bold">@Model.EmpList.FullName</td>
                                         <td class="wd-150 text-center @(Model.EmployeeShift.DurationMinute == null ? "bg-info":"bg-warning")" style="padding:2px !important;">@(Model.EmployeeSchedule?.ShiftDateStart?.ToString("HH\\:mm")) @(Model.EmployeeSchedule.ShiftdateEnd != null ? " - " + Model.EmployeeSchedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
                                         <td class="wd-150 text-center" style="padding:4px !important;">
-                                            <a href="#modalEmployeeShift" data-toggle="modal" class="link-01" onclick="EditEmployeeShift(@Model.EmpList.EmployeeID,'@Model.CurrentDateCode')">
+                                            <a href="#" class="link-01">
                                                 @(Model.EmployeeShift?.ShiftDateStart?.ToString("HH\\:mm")) @(Model.EmployeeShift?.ShiftDateEnd != null ? " - " + Model.EmployeeShift?.ShiftDateEnd?.ToString("HH\\:mm") : "")
                                             </a>
                                         </td>
@@ -80,7 +80,7 @@
 
                                         </td>
                                         <td class="bd-l wd-150">
-                                            <a href="#modalEmployeeBreak" data-toggle="modal" class="link-01" onclick="EditEmployeeBreak(@Model.EmpList.EmployeeID,'@Model.CurrentDateCode')">
+                                            <a href="#" data-toggle="modal" class="link-01">
                                                 @(Model.EmployeeBreaks.Count()) | @(Model.EmployeeBreaks.Sum(x => x.BreakDurationMinute)) | @(Model.EmployeeBreaks.Average(x => x.BreakDurationMinute)?.ToString("N2"))
                                             </a>
                                         </td>

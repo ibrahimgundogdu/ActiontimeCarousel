@@ -12,7 +12,7 @@ namespace ActionForce.Office
         public string EMail { get; set; }
         public string Mobile { get; set; }
         
-        public long EmployeeID { get; set; }
+        public int EmployeeID { get; set; }
         public bool IsActive { get; set; }
     }
 

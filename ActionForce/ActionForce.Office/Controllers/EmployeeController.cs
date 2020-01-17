@@ -109,6 +109,100 @@ namespace ActionForce.Office.Controllers
         }
 
 
+        [AllowAnonymous]
+        public ActionResult AddEmployee(int? employeeID)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
+
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+                model.Filters = filterModel;
+            }
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
+
+
+            model.OurList = Db.OurCompany.ToList();
+            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
+            model.AreaCategoryList = Db.EmployeeAreaCategory.Where(x => x.IsActive == true).ToList();
+            model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
+            model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true).ToList();
+            model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
+            model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
+            model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
+            model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
+
+            model.EmpList = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == employeeID);
+
+
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public PartialViewResult EmployeeDetail(int? id)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            var _date = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+            
+
+
+            model.EmpList = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == id);
+            model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Employee" && x.ProcessID == model.EmpList.EmployeeID.ToString()).ToList();
+            TempData["Model"] = model;
+
+            return PartialView("_PartialEmployeeDetail", model);
+        }
+
+        [AllowAnonymous]
+        public PartialViewResult EmployeeUpdate(int? id)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            var _date = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
+            
+
+            model.OurList = Db.OurCompany.ToList();
+            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
+            model.AreaCategoryList = Db.EmployeeAreaCategory.Where(x => x.IsActive == true).ToList();
+            model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
+            model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true).ToList();
+            model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
+            model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
+            model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
+            model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
+
+            model.EmpList = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == id);
+            model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Employee" && x.ProcessID == model.EmpList.EmployeeID.ToString()).ToList();
+            TempData["Model"] = model;
+
+            return PartialView("_PartialEmployeeUpdate", model);
+        }
 
         [AllowAnonymous]
         public PartialViewResult EmployeeCalendar(int? id)
@@ -212,7 +306,6 @@ namespace ActionForce.Office.Controllers
 
 
 
-
         public PartialViewResult AddEmployeeSchedule(int empid, string week)
         {
 
@@ -249,166 +342,7 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialAddEmployeeSchedule", model);
         }
-
-        [HttpPost]
-        public ActionResult AddUpdateEmployeeSchedule(EmployeeScheduleEdit[] schedulelist)
-        {
-            Result<Schedule> result = new Result<Schedule>()
-            {
-                IsSuccess = false,
-                Message = string.Empty,
-                Data = null
-            };
-
-            EmployeeControlModel model = new EmployeeControlModel();
-
-            string weekcode = "";
-            int? locationID = 0;
-
-            foreach (var item in schedulelist)
-            {
-                weekcode = item.weekCode;
-                locationID = item.locationID;
-
-                if (item.scheduleID > 0)
-                {
-                    DateTime? startdate = Convert.ToDateTime(item.ShiftBeginDate);
-                    TimeSpan? starttime = Convert.ToDateTime(item.ShiftBeginTime + ":00").TimeOfDay;
-                    DateTime? startdatetime = startdate.Value.Add(starttime.Value);
-
-                    DateTime? enddate = Convert.ToDateTime(item.ShiftEndDate);
-                    TimeSpan? endtime = Convert.ToDateTime(item.ShiftEndTime + ":00").TimeOfDay;
-                    DateTime? enddatetime = enddate.Value.Add(endtime.Value);
-
-                    var empschedule = Db.Schedule.FirstOrDefault(x => x.Id == item.scheduleID);
-
-                    if (!string.IsNullOrEmpty(item.isActive))
-                    {
-                        Schedule self = new Schedule()
-                        {
-                            Day = empschedule.Day,
-                            DayName = empschedule.DayName,
-                            DurationMinute = empschedule.DurationMinute,
-                            Id = empschedule.Id,
-                            LocationID = empschedule.LocationID,
-                            Month = empschedule.Month,
-                            RecordDate = empschedule.RecordDate,
-                            RecordEmployee = empschedule.RecordEmployee,
-                            RecordIP = empschedule.RecordIP,
-                            ShiftDate = empschedule.ShiftDate,
-                            ShiftdateEnd = empschedule.ShiftdateEnd,
-                            ShiftDateStart = empschedule.ShiftDateStart,
-                            StatusID = empschedule.StatusID,
-                            UpdateDate = empschedule.UpdateDate,
-                            UpdateEmployee = empschedule.UpdateEmployee,
-                            UpdateIP = empschedule.UpdateIP,
-                            Week = empschedule.Week,
-                            Year = empschedule.Year,
-                            EmployeeID = empschedule.EmployeeID,
-                            ShiftEnd = empschedule.ShiftEnd,
-                            ShiftStart = empschedule.ShiftStart
-                        };
-
-                        empschedule.ShiftDateStart = startdatetime;
-                        empschedule.ShiftdateEnd = enddatetime;
-                        empschedule.ShiftStart = starttime;
-                        empschedule.ShiftEnd = endtime;
-                        empschedule.UpdateDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
-                        empschedule.UpdateEmployee = model.Authentication.ActionEmployee.EmployeeID;
-                        empschedule.UpdateIP = OfficeHelper.GetIPAddress();
-
-                        Db.SaveChanges();
-
-                        result.IsSuccess = true;
-                        result.Message += $"{empschedule.EmployeeID} ID li çalışanın {empschedule.LocationID} ID li lokasyonda {empschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi güncellendi.";
-
-                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<Schedule>(self, empschedule, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Schedule", "Update", empschedule.Id.ToString(), "Schedule", "AddUpdateEmployeeSchedule", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-                    }
-                    else
-                    {
-                        result.IsSuccess = true;
-                        result.Message += $"{empschedule.EmployeeID} ID li çalışanın {empschedule.LocationID} ID li lokasyonda {empschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi silindi.";
-
-                        OfficeHelper.AddApplicationLog("Office", "Schedule", "Delete", empschedule.Id.ToString(), "Schedule", "AddUpdateEmployeeSchedule", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, empschedule);
-
-
-                        Db.Schedule.Remove(empschedule);
-                        Db.SaveChanges();
-
-
-
-                    }
-                }
-                else
-                {
-
-
-                    if (!string.IsNullOrEmpty(item.isActive))
-                    {
-                        try
-                        {
-
-
-                            DateTime? _dateKey = Convert.ToDateTime(item.dateKey);
-
-                            DateTime? startdate = Convert.ToDateTime(item.ShiftBeginDate);
-                            TimeSpan? starttime = Convert.ToDateTime(item.ShiftBeginTime + ":00").TimeOfDay;
-                            DateTime? startdatetime = startdate.Value.Add(starttime.Value);
-
-                            DateTime? enddate = Convert.ToDateTime(item.ShiftEndDate);
-                            TimeSpan? endtime = Convert.ToDateTime(item.ShiftEndTime + ":00").TimeOfDay;
-                            DateTime? enddatetime = enddate.Value.Add(endtime.Value);
-
-                            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _dateKey);
-
-                            Schedule locschedule = new Schedule();
-
-                            locschedule.Day = datekey.Day;
-                            locschedule.DayName = datekey.DayNameTR;
-                            locschedule.LocationID = item.locationID;
-                            locschedule.EmployeeID = item.employeeID;
-                            locschedule.Month = datekey.Month;
-                            locschedule.ShiftDate = _dateKey;
-                            locschedule.StatusID = 2;
-                            locschedule.Week = datekey.WeekNumber;
-                            locschedule.Year = datekey.WeekYear;
-
-                            locschedule.ShiftStart = starttime;
-                            locschedule.ShiftEnd = endtime;
-
-                            locschedule.ShiftDateStart = startdatetime;
-                            locschedule.ShiftdateEnd = enddatetime;
-                            locschedule.RecordDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
-                            locschedule.RecordEmployee = model.Authentication.ActionEmployee.EmployeeID;
-                            locschedule.RecordIP = OfficeHelper.GetIPAddress();
-
-                            Db.Schedule.Add(locschedule);
-                            Db.SaveChanges();
-
-                            result.IsSuccess = true;
-                            result.Message += $"{locschedule.EmployeeID} ID li çalışanın {locschedule.LocationID} ID li lokasyonda {locschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi eklendi.";
-
-                            OfficeHelper.AddApplicationLog("Office", "Schedule", "Insert", locschedule.Id.ToString(), "Schedule", "AddUpdateEmployeeSchedule", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, locschedule);
-
-                        }
-                        catch (Exception ex)
-                        {
-                            result.Message += $"{item.employeeID} ID li çalışanın {item.locationID} ID li lokasyonda {item.dateKey} tarihli takvimi eklenemedi : " + ex.Message;
-                            OfficeHelper.AddApplicationLog("Office", "Schedule", "Insert", "0", "Schedule", "AddUpdateEmployeeSchedule", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-                        }
-                    }
-
-
-                }
-            }
-
-            TempData["result"] = result;
-
-            return RedirectToAction("Detail", "Employee", new { week = weekcode });
-        }
+        
 
 
 
@@ -424,11 +358,12 @@ namespace ActionForce.Office.Controllers
                 Message = string.Empty,
                 Data = null
             };
+            
             EmployeeControlModel model = new EmployeeControlModel();
 
             if (employee != null)
             {
-                var emp = Db.Employee.FirstOrDefault(x => x.FullName == employee.FullName || x.IdentityNumber == employee.Tc || x.EMail == employee.EMail || x.Mobile == employee.Mobile);
+                var emp = Db.Employee.FirstOrDefault(x => employee.FullName.Contains(x.FullName) || employee.Tc.Contains(x.IdentityNumber) || employee.EMail.Contains(x.EMail) || employee.Mobile.Contains(x.Mobile));
 
                 if (emp == null)
                 {
@@ -443,20 +378,26 @@ namespace ActionForce.Office.Controllers
                     DocumentManager documentManager = new DocumentManager();
                     result = documentManager.AddEmployee(empdoc, model.Authentication);
 
-                    TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+                    model.EmpList.EmployeeID = (int)empdoc.EmployeeID;
 
-                    if (result.IsSuccess == true)
-                    {
-                        return RedirectToAction("Detail", "Employee", new { id = empdoc.EmployeeID });
-                    }
-                    else
-                    {
-                        return RedirectToAction("AddEmployee", "Employee");
-                    }
+                    //TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+                    //if (result.IsSuccess == true)
+                    //{
+                    //    return RedirectToAction("Detail", "Employee", new { id = empdoc.EmployeeID });
+                    //}
+                    //else
+                    //{
+                    //    return RedirectToAction("AddEmployee", "Employee");
+                    //}
                 }
                 else
                 {
-                    result.Message = $"Çalışan mevcut.";
+                    
+
+                    result.Message = $"{emp.IdentityNumber}  {emp.FullName}  {emp.EMail}  {emp.Mobile} bunumu demek istedin.";
+                    result.IsSuccess = true;
+                    TempData["result"] = result;
                 }
             }
             else
@@ -466,6 +407,7 @@ namespace ActionForce.Office.Controllers
 
             TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
             return RedirectToAction("AddEmployee", "Employee");
+            //return View(model);
         }
 
         [HttpPost]

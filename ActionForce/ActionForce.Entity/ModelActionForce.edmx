@@ -4181,8 +4181,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeList' does not hav
           <Property Name="PositionID" Type="int" />
           <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
           <Property Name="Code" Type="nvarchar" MaxLength="10" />
-          <Property Name="Stage" Type="int" />
-          <Property Name="RoleName" Type="nvarchar" MaxLength="50" />
           <Property Name="RoleLevel" Type="int" />
           <Property Name="RecordFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="SequenceCode" Type="nvarchar" MaxLength="10" />
@@ -4199,6 +4197,24 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeList' does not hav
           <Property Name="ShiftSortBy" Type="char" MaxLength="4" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="StatusCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="UpdateFullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="IdentityNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Title" Type="nvarchar" MaxLength="150" />
+          <Property Name="SmsNumber" Type="nvarchar" MaxLength="4000" />
+          <Property Name="Mobile2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Whatsapp" Type="nvarchar" MaxLength="50" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateStart" Type="datetime" />
+          <Property Name="DateEnd" Type="datetime" />
+          <Property Name="DismissDescription" Type="nvarchar(max)" />
+          <Property Name="EmployeeUID" Type="uniqueidentifier" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="GroupCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="GroupName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeLocation' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6139,8 +6155,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeList].[PositionID] AS [PositionID], 
     [VEmployeeList].[CompanyName] AS [CompanyName], 
     [VEmployeeList].[Code] AS [Code], 
-    [VEmployeeList].[Stage] AS [Stage], 
-    [VEmployeeList].[RoleName] AS [RoleName], 
     [VEmployeeList].[RoleLevel] AS [RoleLevel], 
     [VEmployeeList].[RecordFullName] AS [RecordFullName], 
     [VEmployeeList].[SequenceCode] AS [SequenceCode], 
@@ -6156,7 +6170,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeList].[TypeName] AS [TypeName], 
     [VEmployeeList].[ShiftSortBy] AS [ShiftSortBy], 
     [VEmployeeList].[Name] AS [Name], 
-    [VEmployeeList].[StatusCode] AS [StatusCode]
+    [VEmployeeList].[StatusCode] AS [StatusCode], 
+    [VEmployeeList].[UpdateFullName] AS [UpdateFullName], 
+    [VEmployeeList].[UpdateEmployeeID] AS [UpdateEmployeeID], 
+    [VEmployeeList].[UpdateDate] AS [UpdateDate], 
+    [VEmployeeList].[IdentityNumber] AS [IdentityNumber], 
+    [VEmployeeList].[Title] AS [Title], 
+    [VEmployeeList].[SmsNumber] AS [SmsNumber], 
+    [VEmployeeList].[Mobile2] AS [Mobile2], 
+    [VEmployeeList].[Whatsapp] AS [Whatsapp], 
+    [VEmployeeList].[Username] AS [Username], 
+    [VEmployeeList].[Password] AS [Password], 
+    [VEmployeeList].[DateStart] AS [DateStart], 
+    [VEmployeeList].[DateEnd] AS [DateEnd], 
+    [VEmployeeList].[DismissDescription] AS [DismissDescription], 
+    [VEmployeeList].[EmployeeUID] AS [EmployeeUID], 
+    [VEmployeeList].[RecordIP] AS [RecordIP], 
+    [VEmployeeList].[UpdateIP] AS [UpdateIP], 
+    [VEmployeeList].[GroupCode] AS [GroupCode], 
+    [VEmployeeList].[GroupName] AS [GroupName]
     FROM [dbo].[VEmployeeList] AS [VEmployeeList]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VEmployeeLocation" EntityType="Self.VEmployeeLocation" store:Type="Views" store:Schema="dbo">
@@ -11711,8 +11743,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="PositionID" Type="Int32" />
           <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Stage" Type="Int32" />
-          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="RoleLevel" Type="Int32" />
           <Property Name="RecordFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="SequenceCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
@@ -11729,6 +11759,24 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ShiftSortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="StatusCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="IdentityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="SmsNumber" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Whatsapp" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateStart" Type="DateTime" Precision="3" />
+          <Property Name="DateEnd" Type="DateTime" Precision="3" />
+          <Property Name="DismissDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeUID" Type="Guid" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="GroupCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="GroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -16377,6 +16425,24 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VEmployeeList">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeList">
               <MappingFragment StoreEntitySet="VEmployeeList">
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="GroupCode" ColumnName="GroupCode" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="EmployeeUID" ColumnName="EmployeeUID" />
+                <ScalarProperty Name="DismissDescription" ColumnName="DismissDescription" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Whatsapp" ColumnName="Whatsapp" />
+                <ScalarProperty Name="Mobile2" ColumnName="Mobile2" />
+                <ScalarProperty Name="SmsNumber" ColumnName="SmsNumber" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="IdentityNumber" ColumnName="IdentityNumber" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="UpdateFullName" ColumnName="UpdateFullName" />
                 <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="ShiftSortBy" ColumnName="ShiftSortBy" />
@@ -16393,8 +16459,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="SequenceCode" ColumnName="SequenceCode" />
                 <ScalarProperty Name="RecordFullName" ColumnName="RecordFullName" />
                 <ScalarProperty Name="RoleLevel" ColumnName="RoleLevel" />
-                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
-                <ScalarProperty Name="Stage" ColumnName="Stage" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
                 <ScalarProperty Name="PositionID" ColumnName="PositionID" />

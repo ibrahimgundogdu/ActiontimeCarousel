@@ -37,7 +37,7 @@
                     @{ int index = 0;}
                     @foreach (var day in Model.WeekList.OrderBy(x => x.DateKey))
                     {
-                        var schedule = Model.EmployeeSchedule.FirstOrDefault(x => x.EmployeeID == Model.CurrentEmployee.EmployeeID && x.ShiftDate == day.DateKey);
+                        var schedule = Model.EmployeeSchedules.FirstOrDefault(x => x.EmployeeID == Model.CurrentEmployee.EmployeeID && x.ShiftDate == day.DateKey);
 
                         <tr>
                             <th scope="row">
