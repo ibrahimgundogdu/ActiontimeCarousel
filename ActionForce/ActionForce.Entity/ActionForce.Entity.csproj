@@ -308,6 +308,9 @@
     <Compile Include="GetFromList_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetLocationAll_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="GetLocationCurrentSchedule_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

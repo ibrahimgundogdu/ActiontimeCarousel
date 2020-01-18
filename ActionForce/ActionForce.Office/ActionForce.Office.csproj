@@ -2295,6 +2295,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\FinanceController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LogoutController.cs" />
     <Compile Include="Controllers\ResultController.cs" />
@@ -2333,6 +2334,7 @@
     <Compile Include="Models\Document\SalaryPayment.cs" />
     <Compile Include="Models\Document\TransferModel.cs" />
     <Compile Include="Models\EmployeeShiftModel.cs" />
+    <Compile Include="Models\LocationControlModel.cs" />
     <Compile Include="Models\newTransfer.cs" />
     <Compile Include="Models\SalaryControlModel.cs" />
     <Compile Include="Models\CashControlModel.cs" />
@@ -2575,6 +2577,7 @@
     <Content Include="Views\Employee\_PartialEmployeeDetail.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeUpdate.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeStatus.cshtml" />
+    <Content Include="Views\Location\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

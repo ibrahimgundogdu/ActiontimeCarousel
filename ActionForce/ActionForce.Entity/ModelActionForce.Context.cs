@@ -859,5 +859,14 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationCurrentShift_Result>("GetLocationCurrentShift", locationIDParameter, dateParameter);
         }
+    
+        public virtual ObjectResult<GetLocationAll_Result> GetLocationAll(Nullable<int> ourCompanyID)
+        {
+            var ourCompanyIDParameter = ourCompanyID.HasValue ?
+                new ObjectParameter("OurCompanyID", ourCompanyID) :
+                new ObjectParameter("OurCompanyID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationAll_Result>("GetLocationAll", ourCompanyIDParameter);
+        }
     }
 }
