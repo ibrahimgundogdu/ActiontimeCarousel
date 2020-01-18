@@ -3,9 +3,159 @@
     ViewBag.Title = "Index";
 }
 
-<h2>@(Model.Authentication.CurrentUser.CurrentEmployee.FullName)</h2>
 
+<div class="d-flex flex fixed-content">
 
+    <div class="d-flex flex" id="content-body">
+        <div class="d-flex flex-column flex" data-plugin="user">
+            <div class="p-3">
+                <div class="toolbar">
+                    <a href="app.user.html" class="btn btn-sm btn-white">
+                        <i data-feather="arrow-left"></i>
+                    </a>
+                    <button class="btn btn-sm no-bg ml-auto">
+                        <i data-feather="edit-2"></i>
+                    </button>
+                    <button data-toggle="modal" data-target="#content-aside" data-modal class="btn btn-sm btn-white d-md-none">
+                        <i data-feather="menu"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="scroll-y mx-3 mb-3 card">
+
+                <div class="row no-gutters">
+                    <div class="col-md-7 b-r">
+                        <div class="p-4">
+                            <h6>Biletler</h6>
+                            <div class="list list-row box-shadow my-4 bg-dark r">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-5">
+                        <div class="p-4">
+                            <h6>Sepet</h6>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 d-sm-flex no-shrink b-t">
+                    <div>
+                        <h2 class="text-primary">20,00 ₺</h2>
+                        <small class="d-block text-fade">Toplam Tutar</small>
+                    </div>
+                    <div class="px-sm-4 my-3 my-sm-0 flex">
+                        <h2 class="text-danger">10,00 ₺</h2>
+                        <small class="d-block text-fade">İndirim</small>
+
+                    </div>
+                    <div>
+                        <a href="#" class="btn btn-icon btn-rounded">
+                            <i data-feather="mail"></i>
+                        </a>
+                        <a href="#" class="btn btn-icon btn-rounded">
+                            <i data-feather="more-vertical"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="fade aside aside-sm" id="content-aside">
+        <div class="modal-dialog d-flex flex-column w-md bg-body" id="user-nav">
+            <div class="navbar">
+                <span class="text-md mx-2">Groups</span>
+                <div class="dropdown dropright">
+                    <button data-toggle="dropdown" class="btn btn-sm btn-icon no-bg no-shadow">
+                        <i data-feather="plus"></i>
+                    </button>
+                    <div class="dropdown-menu w-lg">
+                        <div class="p-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm" id="newField" placeholder="Group name" required>
+                                <span class="input-group-append">
+                                    <button class="btn btn-white no-shadow btn-sm" type="button" id="newBtn">
+                                        <i data-feather="check"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="scrollable hover">
+                <div class="sidenav p-2">
+                    <nav class="nav-active-text-primary" data-nav>
+                        <ul class="nav">
+                            <li>
+                                <a href="app.user.html#all">
+                                    <span class="nav-text">All</span>
+                                    <span class="nav-badge">
+                                        <b class="badge badge-sm badge-pill gd-danger">15</b>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app.user.html#company">
+                                    <span class="nav-text">Company</span>
+                                    <span class="nav-badge">
+                                        <b class="badge badge-sm badge-pill gd-info">3</b>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app.user.html#personal">
+                                    <span class="nav-text">Personal</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app.user.html#team">
+                                    <span class="nav-text">Team</span>
+                                </a>
+                            </li>
+                            <li class="nav-header hidden-folded mt-2">
+                                <span class="d-block pt-1 text-sm text-muted">Tags</span>
+                            </li>
+                            <li>
+                                <a href="app.user.html#client">
+                                    <span class="mx-2">
+                                        <b class="badge badge-circle sm text-primary"></b>
+                                    </span>
+                                    <span class="nav-text">Clients</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app.user.html#supplier">
+                                    <span class="mx-2">
+                                        <b class="badge badge-circle sm text-info"></b>
+                                    </span>
+                                    <span class="nav-text">Suppliers</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app.user.html#competitor">
+                                    <span class="mx-2">
+                                        <b class="badge badge-circle sm text-success"></b>
+                                    </span>
+                                    <span class="nav-text">Competitors</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="app.user.html#corp">
+                                    <span class="mx-2">
+                                        <b class="badge badge-circle sm text-warning"></b>
+                                    </span>
+                                    <span class="nav-text">Corps</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <!-- / -->
+        </div>
+    </div>
+</div>
 
 @section scripts {
     @if (Model.Result != null) //

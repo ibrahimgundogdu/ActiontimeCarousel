@@ -259,9 +259,10 @@ namespace ActionForce.Office.Controllers
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+            
             model.UnitPrice = Db.EmployeeSalary.ToList();
             model.Detail = Db.VDocumentSalaryEarn.FirstOrDefault(x => x.UID == id);
+            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Detail.LocationID);
             model.History = Db.ApplicationLog.Where(x => x.Controller == "Salary" && x.Action == "Index" && x.Environment == "Office" && x.ProcessID == model.Detail.ID.ToString()).ToList();
 
             model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();

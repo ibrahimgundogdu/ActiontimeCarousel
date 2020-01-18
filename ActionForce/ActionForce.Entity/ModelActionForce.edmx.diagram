@@ -196,7 +196,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosRefund" Width="1.5" PointX="19.375" PointY="45.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDayResultItemList" Width="1.5" PointX="41.375" PointY="45.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentSalaryEarn" Width="1.5" PointX="45.375" PointY="27.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VBankAccount" Width="1.5" PointX="47.375" PointY="9.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeSalary" Width="1.5" PointX="21.375" PointY="46.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeSalaryDist" Width="1.5" PointX="15.375" PointY="47.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CashRecorders" Width="1.5" PointX="47.375" PointY="18.75" />
@@ -244,6 +243,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentSalaryPayment" Width="1.5" PointX="33.375" PointY="39.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentSalaryPayment" Width="1.5" PointX="33.375" PointY="47.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeList" Width="1.5" PointX="52.375" PointY="29.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VBankAccount" Width="1.5" PointX="35.375" PointY="43.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

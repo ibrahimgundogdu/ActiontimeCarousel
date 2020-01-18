@@ -35,9 +35,9 @@
 
                     <div class="p-3 p-md-5">
                         <div class="mb-3 text-center">
-                            <img src="@($"http://office.ufegrup.com/img/Employee/{Model.Authentication.CurrentUser.CurrentEmployee.FotoFile}")" class="w-72 circle">
+                            <img src="@($"http://office.ufegrup.com/img/Employee/{Model.Authentication.CurrentEmployee.FotoFile}")" class="w-72 circle">
                         </div>
-                        <h5 class="text-center">Sn. @(Model.Authentication.CurrentUser.CurrentEmployee.FullName)</h5>
+                        <h5 class="text-center">Sn. @(Model.Authentication.CurrentEmployee.FullName)</h5>
                         <p class="text-center">
                             <small class="text-muted">Lütfen Geçerli Lokasyon Seçiniz</small>
                         </p>
@@ -79,7 +79,7 @@
                                             @(location.SortBy)
                                         </td>
                                         <td>
-                                            <a href="/Location/InitCurrentLocation/@(location.UID?.ToString())" class="item-title text-color">@($"{location.LocationName}" )</a>
+                                            <a href="/Location/InitSelectedLocation/@(location.UID?.ToString())" class="item-title text-color">@($"{location.LocationName}" )</a>
                                         </td>
                                         <td>
                                             @(location.TypeName)
@@ -95,7 +95,7 @@
                                             @(location.Shift)
                                         </td>*@
                                         <td class="text-right">
-                                            <a href="/Location/InitCurrentLocation/@(location.UID?.ToString())" class="text-white btn btn-primary">
+                                            <a href="/Location/InitSelectedLocation/@(location.UID?.ToString())" class="text-white btn btn-primary">
                                                 <i data-feather="more-vertical"></i>
                                             </a>
                                         </td>

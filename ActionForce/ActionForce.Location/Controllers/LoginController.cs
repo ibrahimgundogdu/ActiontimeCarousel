@@ -39,6 +39,7 @@ namespace ActionForce.Location.Controllers
             {
                 var ourCompany = db.OurCompany.FirstOrDefault(x => x.CompanyID == User.OurCompanyID);
                 var roleGroup = db.RoleGroup.FirstOrDefault(x => x.ID == User.RoleGroupID);
+                var position = db.EmployeePositions.FirstOrDefault(x => x.ID == User.PositionID);
                 Entity.Location location = null;
 
 
@@ -61,45 +62,45 @@ namespace ActionForce.Location.Controllers
 
                     var authModel = new AuthenticationModel()
                     {
-                        CurrentUser = new LocationUser()
+
+                        CurrentEmployee = new LocationEmployee()
                         {
-                            CurrentEmployee = new LocationEmployee()
-                            {
-                                EmployeeID = User.EmployeeID,
-                                EMail = User.EMail,
-                                FullName = User.FullName,
-                                FotoFile = User.FotoFile,
-                                Mobile = User.Mobile,
-                                Title = User.Title,
-                                Token = User.EmployeeUID
-                            },
-                            CurrentLocation = new LocationInfo() {
-                                Currency = location.Currency,
-                                FullName = $"{location.SortBy.Trim()} {location.LocationName} {location.Description} {location.State}",
-                                ID = location.LocationID,
-                                IsActive = location.IsActive.Value,
-                                OurCompanyID = location.OurCompanyID,
-                                Latitude = location.Latitude,
-                                Longitude = location.Longitude,
-                                SortBy = location.SortBy,
-                                TimeZone = location.Timezone ?? 3,
-                                UID = location.LocationUID
-                            },
-                            CurrentOurCompany = new LocationOurCompany()
-                            {
-                                ID = ourCompany.CompanyID,
-                                Code = ourCompany.Code,
-                                Culture = ourCompany.Culture,
-                                Currency = ourCompany.Currency,
-                                Name = ourCompany.CompanyName,
-                                TimeZone = ourCompany.TimeZone.Value
-                            },
-                            CurrentRoleGroup = new LocationRoleGroup()
-                            {
-                                ID = roleGroup.ID,
-                                RoleLevel = roleGroup.RoleLevel.Value,
-                                GroupName = roleGroup.GroupName
-                            }
+                            EmployeeID = User.EmployeeID,
+                            //EMail = User.EMail,
+                            FullName = User.FullName,
+                            Username = User.Username,
+                            FotoFile = User.FotoFile,
+                            //Mobile = User.Mobile,
+                            Position = position != null ? position.PositionName : User.Title,
+                            Token = User.EmployeeUID
+                        },
+                        CurrentLocation = new LocationInfo()
+                        {
+                            //Currency = location.Currency,
+                            FullName = $"{location.SortBy.Trim()} {location.LocationName} {location.Description} {location.State}",
+                            ID = location.LocationID,
+                            //IsActive = location.IsActive.Value,
+                            //OurCompanyID = location.OurCompanyID,
+                            //Latitude = location.Latitude,
+                            //Longitude = location.Longitude,
+                            //SortBy = location.SortBy,
+                            //TimeZone = location.Timezone ?? 3,
+                            UID = location.LocationUID
+                        },
+                        CurrentOurCompany = new LocationOurCompany()
+                        {
+                            ID = ourCompany.CompanyID,
+                            Code = ourCompany.Code,
+                            Culture = ourCompany.Culture,
+                            Currency = ourCompany.Currency,
+                            Name = ourCompany.CompanyName,
+                            TimeZone = ourCompany.TimeZone.Value
+                        },
+                        CurrentRoleGroup = new LocationRoleGroup()
+                        {
+                            ID = roleGroup.ID,
+                            RoleLevel = roleGroup.RoleLevel.Value,
+                            GroupName = roleGroup.GroupName
                         },
                         Culture = ourCompany.Culture
                     };
@@ -115,7 +116,7 @@ namespace ActionForce.Location.Controllers
                     var ticket = new FormsAuthenticationTicket(2, User.Username, DateTime.Now, DateTime.Now.AddMinutes(1440), true, userData, FormsAuthentication.FormsCookiePath);
                     string hash = FormsAuthentication.Encrypt(ticket);
                     var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, hash);
-                    cookie.SameSite = SameSiteMode.Lax;
+                    //cookie.SameSite = SameSiteMode.Lax;
 
                     if (ticket.IsPersistent)
                     {
@@ -124,15 +125,15 @@ namespace ActionForce.Location.Controllers
                     Response.Cookies.Add(cookie);
                     ChangeCulture(ourCompany.Culture);
 
-                    if (authModel.CurrentUser.CurrentLocation != null && authModel.CurrentUser.CurrentLocation.ID >0)
+                    if (authModel.CurrentLocation != null && authModel.CurrentLocation.ID > 0)
                     {
                         return RedirectToAction("Index", "Default");
                     }
                     else
                     {
-                        return RedirectToAction("Location", "Login");
+                        return RedirectToAction("SetCurrentLocation", "Location");
                     }
-                    
+
                 }
                 else
                 {
@@ -188,20 +189,6 @@ namespace ActionForce.Location.Controllers
             //Response.Redirect(Request.UrlReferrer.ToString());
         }
 
-        [AllowAnonymous]
-        public ActionResult Location()
-        {
-            if (this.HttpContext.User != null && this.HttpContext.User is GenericPrincipal principal && principal.Identity is FormsIdentity identity)
-            {
-                AuthenticationModel Authentication = Newtonsoft.Json.JsonConvert.DeserializeObject<AuthenticationModel>(identity.Ticket.UserData);
 
-
-
-            }
-
-
-
-            return View();
-        }
     }
 }
