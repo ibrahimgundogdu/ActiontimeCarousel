@@ -28,15 +28,14 @@
             <div class="scroll-y mx-3 mb-3 card">
 
                 <div class="row no-gutters">
-                    <div class="col-md-6 b-r bg-body">
+                    <div class="col-md-6 b-r bg-light--lt">
                         <div class="p-2">
-                            <h6>Biletler</h6>
                             <div class="row row-xs">
                                 <div class="col-sm-6">
-                                    <div class="card mb-2">
-                                        <div class="media media-2x1 gd-primary">
+                                    <div class="card shadow-sm mb-3">
+                                        <div class="media media-21x9 gd-primary">
                                             <a href="#" class="media-content" style="background-image:url()">
-                                                <h4 class="text-fade text-white">3 Dk</h4>
+                                                <h3 class="text-fade text-white">3 Dk</h3>
                                             </a>
                                         </div>
                                         <div class="p-2 text-center">
@@ -45,10 +44,10 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="card mb-2">
-                                        <div class="media media-2x1 gd-primary">
+                                    <div class="card shadow-sm mb-3">
+                                        <div class="media media-21x9 gd-primary">
                                             <a class="media-content" style="background-image:url()">
-                                                <h4 class="text-fade text-white">5 Dk</h4>
+                                                <h3 class="text-fade text-white">5 Dk</h3>
                                             </a>
                                         </div>
                                         <div class="p-2 text-center">
@@ -57,10 +56,10 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
-                                    <div class="card mb-2">
-                                        <div class="media media-2x1 gd-primary">
+                                    <div class="card shadow-sm mb-3">
+                                        <div class="media media-21x9 gd-primary">
                                             <a class="media-content" style="background-image:url()">
-                                                <strong class="text-fade">7 Dk</strong>
+                                                <h3 class="text-fade text-white">7 Dk</h3>
                                             </a>
                                         </div>
                                         <div class="p-2 text-center">
@@ -70,10 +69,10 @@
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <div class="card mb-2">
-                                        <div class="media media-2x1 gd-warning">
+                                    <div class="card shadow-sm mb-3">
+                                        <div class="media media-21x9 gd-warning">
                                             <a class="media-content" style="background-image:url()">
-                                                <strong class="text-fade">3 Dk</strong>
+                                                <h3 class="text-fade text-white">3 Dk</h3>
                                             </a>
                                         </div>
                                         <div class="p-2 text-center">
@@ -83,10 +82,23 @@
                                 </div>
 
                                 <div class="col-sm-6">
-                                    <div class="card mb-2">
-                                        <div class="media media-2x1 gd-danger">
+                                    <div class="card shadow-sm mb-3">
+                                        <div class="media media-21x9 gd-danger">
                                             <a class="media-content" style="background-image:url()">
-                                                <strong class="text-fade">3 Dk</strong>
+                                                <h3 class="text-fade text-white">3 Dk</h3>
+                                            </a>
+                                        </div>
+                                        <div class="p-2 text-center">
+                                            <h5 class="card-title mb-0">20,00 ₺</h5>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="card shadow-sm mb-3">
+                                        <div class="media media-21x9 gd-info">
+                                            <a class="media-content" style="background-image:url()">
+                                                <h3 class="text-fade text-white">3 Dk</h3>
                                             </a>
                                         </div>
                                         <div class="p-2 text-center">
@@ -97,7 +109,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 bg-body">
+                    <div class="col-md-6 bg-light">
                         <div class="p-2">
                             <h6>Sepet</h6>
                             <div class="table-responsive">
@@ -308,42 +320,76 @@
                     <nav class="nav-active-text-primary" data-nav>
                         <ul class="nav">
                             <li>
-                                <a href="app.user.html#all">
-                                    <span class="nav-text">All</span>
-                                    <span class="nav-badge">
-                                        <b class="badge badge-sm badge-pill gd-danger">15</b>
-                                    </span>
-                                </a>
+                                <div class="input-group mb-3 shadow-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width:80px;">
+                                            <span class="text-muted text-sm h-1x font-weight-100">Tutar</span>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control font-weight-bold text-right p-2 text-md" aria-label="Amount (to the nearest dollar)" value="25,00">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">₺</span>
+                                    </div>
+                                </div>
                             </li>
                             <li>
-                                <a href="app.user.html#company">
-                                    <span class="nav-text">Company</span>
-                                    <span class="nav-badge">
-                                        <b class="badge badge-sm badge-pill gd-info">3</b>
-                                    </span>
-                                </a>
+                                <div class="input-group mb-3 shadow-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width:80px;">
+                                            <span class="text-muted text-sm h-1x font-weight-100">İskonto</span>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control font-weight-bold text-right p-2 text-md" aria-label="Amount (to the nearest dollar)" value="25,00">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">₺</span>
+                                    </div>
+                                </div>
                             </li>
                             <li>
-                                <a href="app.user.html#personal">
-                                    <span class="nav-text">Personal</span>
-                                </a>
+                                <div class="input-group mb-3 shadow-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width:80px;">
+                                            <span class="text-muted text-sm h-1x font-weight-100">Toplam</span>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control font-weight-bold text-right p-2 text-md" aria-label="Amount (to the nearest dollar)" value="25,00">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">₺</span>
+                                    </div>
+                                </div>
                             </li>
                             <li>
-                                <a href="app.user.html#team">
-                                    <span class="nav-text">Team</span>
-                                </a>
+                                <div class="input-group mb-3 shadow-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width:80px;">
+                                            <span class="text-muted text-sm h-1x font-weight-100">KDV</span>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control font-weight-bold text-right p-2 text-md" aria-label="Amount (to the nearest dollar)" value="25,00">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">₺</span>
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="input-group mb-3 shadow-sm">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" style="width:80px;">
+                                            <span class="text-muted text-sm h-1x font-weight-100">
+                                                Bakiye
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <input type="text" class="form-control font-weight-bold text-right p-2 text-md" aria-label="Amount (to the nearest dollar)" value="25,00">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text">₺</span>
+                                    </div>
+                                </div>
                             </li>
                             <li class="nav-header hidden-folded mt-2">
-                                <span class="d-block pt-1 text-sm text-muted">Tags</span>
+                                <span class="d-block pt-1 text-sm text-muted" style="width:100px;">Müşteri</span>
                             </li>
-                            <li>
-                                <a href="app.user.html#client">
-                                    <span class="mx-2">
-                                        <b class="badge badge-circle sm text-primary"></b>
-                                    </span>
-                                    <span class="nav-text">Clients</span>
-                                </a>
-                            </li>
+
                             <li>
                                 <a href="app.user.html#supplier">
                                     <span class="mx-2">
