@@ -8,8 +8,8 @@
         </svg>
         <span class="hidden-folded d-inline l-s-n-1x d-lg-none">UFE</span>
     </a>
-    <div class="collapse navbar-collapse order-2 order-lg-1" id="navbarToggler">
-        @(Model.Authentication.CurrentLocation.FullName)
+    <div class=" navbar-collapse order-2 order-lg-1" id="navbarToggler">
+     @(DateTime.Now.ToLongDateString())  &nbsp;&nbsp; <span class="font-weight-bold">@(Model.Authentication.CurrentLocation.FullName.ToUpper())</span>
     </div>
     <ul class="nav navbar-menu order-1 order-lg-2">
         <li class="nav-item d-none d-sm-block">

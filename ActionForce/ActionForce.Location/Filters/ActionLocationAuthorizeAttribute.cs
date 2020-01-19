@@ -23,7 +23,6 @@ namespace ActionForce.Location
                     return roleGroupPermissions.Any(x => x.Permission.Controller == controller && x.Permission.Action == action && x.IsNavigate == true);
                 }
             }
-            //not authenticated
             return false;
         }
 

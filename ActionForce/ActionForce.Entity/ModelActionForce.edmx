@@ -7042,6 +7042,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImport Name="GetLocationAll" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationAll_Result)">
             <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
           </FunctionImport>
+         
           </EntityContainer>
         <EntityType Name="Action">
           <Key>
@@ -11792,6 +11793,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="GroupCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="GroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <ComplexType Name="GetLocationAll_Result">
+          <Property Type="Int32" Name="LocationID" Nullable="false" />
+          <Property Type="String" Name="LocationCode" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="LocationName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LocationNameSearch" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Latitude" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Longitude" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="Timezone" Nullable="true" />
+          <Property Type="String" Name="MapURL" Nullable="true" MaxLength="1000" />
+          <Property Type="Boolean" Name="IsHaveOperator" Nullable="true" />
+          <Property Type="String" Name="IP" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="SortBy" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="String" Name="TypeName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Currency" Nullable="true" MaxLength="20" />
+          <Property Type="Guid" Name="LocationUID" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -16500,6 +16520,29 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetLocationAll" FunctionName="db293_ActionTimeDbModel.Store.GetLocationAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetLocationAll_Result">
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="LocationCode" ColumnName="LocationCode" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="LocationNameSearch" ColumnName="LocationNameSearch" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Timezone" ColumnName="Timezone" />
+                <ScalarProperty Name="MapURL" ColumnName="MapURL" />
+                <ScalarProperty Name="IsHaveOperator" ColumnName="IsHaveOperator" />
+                <ScalarProperty Name="IP" ColumnName="IP" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="LocationUID" ColumnName="LocationUID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

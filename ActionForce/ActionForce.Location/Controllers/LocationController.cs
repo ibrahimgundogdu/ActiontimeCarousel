@@ -140,7 +140,7 @@ namespace ActionForce.Location.Controllers
                     Authentication.CurrentLocation = new LocationInfo()
                     {
                         //Currency = location.Currency,
-                        FullName = $"{location.SortBy.Trim()} {location.LocationName} {location.Description} {location.State}",
+                        FullName = $"{location.LocationName} {location.Description} {location.State}",
                         ID = location.LocationID,
                         //IsActive = location.IsActive.Value,
                         //OurCompanyID = location.OurCompanyID,

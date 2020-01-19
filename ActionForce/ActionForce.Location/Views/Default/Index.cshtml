@@ -10,14 +10,18 @@
         <div class="d-flex flex-column flex" data-plugin="user">
             <div class="p-3">
                 <div class="toolbar">
-                    <a href="app.user.html" class="btn btn-sm btn-white">
-                        <i data-feather="arrow-left"></i>
+                    <a href="app.user.html" class="btn btn-md btn-white">
+                        <i data-feather="list"></i>
                     </a>
-                    <button class="btn btn-sm no-bg ml-auto">
-                        <i data-feather="edit-2"></i>
-                    </button>
-                    <button data-toggle="modal" data-target="#content-aside" data-modal class="btn btn-sm btn-white d-md-none">
-                        <i data-feather="menu"></i>
+                    <a href="#" class="btn btn-md btn-white">
+                        Sipariş No &nbsp;  <span class="font-weight-bold">293877</span>
+                    </a>
+                    
+                    @*<button class="btn btn-md ml-auto">
+                            <i data-feather="edit-2"></i>
+                        </button>*@
+                    <button data-toggle="modal" data-target="#content-aside" data-modal class="btn btn-md ml-auto btn-white">
+                        <i data-feather="download"></i> &nbsp; Bilet Ekle
                     </button>
                 </div>
             </div>
@@ -28,14 +32,14 @@
                         <div class="p-4">
                             <h6>Biletler</h6>
                             <div class="list list-row box-shadow my-4 bg-dark r">
-                                
+
                             </div>
                         </div>
                     </div>
                     <div class="col-md-5">
                         <div class="p-4">
                             <h6>Sepet</h6>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -64,7 +68,7 @@
     <div class="fade aside aside-sm" id="content-aside">
         <div class="modal-dialog d-flex flex-column w-md bg-body" id="user-nav">
             <div class="navbar">
-                <span class="text-md mx-2">Groups</span>
+                <span class="text-md mx-2">Satış</span>
                 <div class="dropdown dropright">
                     <button data-toggle="dropdown" class="btn btn-sm btn-icon no-bg no-shadow">
                         <i data-feather="plus"></i>
@@ -170,5 +174,5 @@
             });
         </script>
     }
-   
+
 }
