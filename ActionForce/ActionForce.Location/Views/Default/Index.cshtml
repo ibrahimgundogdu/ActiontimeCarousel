@@ -14,32 +14,248 @@
                         <i data-feather="list"></i>
                     </a>
                     <a href="#" class="btn btn-md btn-white">
-                        Sipariş No &nbsp;  <span class="font-weight-bold">293877</span>
+                        Sipariş No &nbsp;&nbsp;&nbsp;  <span class="font-weight-bold">293877</span>
                     </a>
                     
                     @*<button class="btn btn-md ml-auto">
                             <i data-feather="edit-2"></i>
                         </button>*@
                     <button data-toggle="modal" data-target="#content-aside" data-modal class="btn btn-md ml-auto btn-white">
-                        <i data-feather="download"></i> &nbsp; Bilet Ekle
+                        <i data-feather="download"></i> &nbsp;&nbsp;&nbsp; Bilet Ekle
                     </button>
                 </div>
             </div>
             <div class="scroll-y mx-3 mb-3 card">
 
                 <div class="row no-gutters">
-                    <div class="col-md-7 b-r">
-                        <div class="p-4">
+                    <div class="col-md-6 b-r bg-body">
+                        <div class="p-2">
                             <h6>Biletler</h6>
-                            <div class="list list-row box-shadow my-4 bg-dark r">
+                            <div class="row row-xs">
+                                <div class="col-sm-6">
+                                    <div class="card mb-2">
+                                        <div class="media media-2x1 gd-primary">
+                                            <a href="#" class="media-content" style="background-image:url()">
+                                                <h4 class="text-fade text-white">3 Dk</h4>
+                                            </a>
+                                        </div>
+                                        <div class="p-2 text-center">
+                                            <h5 class="card-title mb-0">20,00 ₺</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="card mb-2">
+                                        <div class="media media-2x1 gd-primary">
+                                            <a class="media-content" style="background-image:url()">
+                                                <h4 class="text-fade text-white">5 Dk</h4>
+                                            </a>
+                                        </div>
+                                        <div class="p-2 text-center">
+                                            <h5 class="card-title mb-0">30,00 ₺</h5>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="card mb-2">
+                                        <div class="media media-2x1 gd-primary">
+                                            <a class="media-content" style="background-image:url()">
+                                                <strong class="text-fade">7 Dk</strong>
+                                            </a>
+                                        </div>
+                                        <div class="p-2 text-center">
+                                            <h5 class="card-title mb-0">40,00 ₺</h5>
+                                        </div>
+                                    </div>
+                                </div>
 
+                                <div class="col-sm-6">
+                                    <div class="card mb-2">
+                                        <div class="media media-2x1 gd-warning">
+                                            <a class="media-content" style="background-image:url()">
+                                                <strong class="text-fade">3 Dk</strong>
+                                            </a>
+                                        </div>
+                                        <div class="p-2 text-center">
+                                            <h5 class="card-title mb-0">20,00 ₺</h5>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="card mb-2">
+                                        <div class="media media-2x1 gd-danger">
+                                            <a class="media-content" style="background-image:url()">
+                                                <strong class="text-fade">3 Dk</strong>
+                                            </a>
+                                        </div>
+                                        <div class="p-2 text-center">
+                                            <h5 class="card-title mb-0">20,00 ₺</h5>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-5">
-                        <div class="p-4">
+                    <div class="col-md-6 bg-body">
+                        <div class="p-2">
                             <h6>Sepet</h6>
+                            <div class="table-responsive">
+                                <table class="table table-theme table-row v-middle">
+                                    
+                                    <tbody>
+                                        <tr class=" v-middle" data-id="15">
+                                           
+                                            <td class="flex">
+                                                <a href="#" class="item-title text-color font-weight-bold">1</a>
+                                                <div class="item-except text-muted text-sm h-1x font-weight-100">Normal Bilet</div>
+                                            </td>
+                                            <td>
+                                                <span class="item-amount d-none d-sm-block text-sm ">3 Dk</span>
+                                            </td>
+                                            <td>
+                                                <span class="item-amount d-none d-sm-block text-sm">
+                                                    20,00 ₺
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="item-action dropdown b-l text-center">
+                                                    <a href="#" data-toggle="dropdown" class="text-muted"><i data-feather="more-vertical"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right bg-black" role="menu">
+                                                        <a class="dropdown-item" href="#">See detail</a>
+                                                        <a class="dropdown-item download">Download</a>
+                                                        <a class="dropdown-item edit">Edit</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item trash">Delete item</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class=" v-middle" data-id="15">
 
+                                            <td class="flex">
+                                                <a href="#" class="item-title text-color font-weight-bold">2</a>
+                                                <div class="item-except text-muted text-sm h-1x font-weight-100">Normal Bilet</div>
+                                            </td>
+                                            <td>
+                                                <span class="item-amount d-none d-sm-block text-sm ">
+                                                    5 Dk
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="item-amount d-none d-sm-block text-sm">
+                                                    30,00 ₺
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="item-action dropdown b-l text-center">
+                                                    <a href="#" data-toggle="dropdown" class="text-muted"><i data-feather="more-vertical"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right bg-black" role="menu">
+                                                        <a class="dropdown-item" href="#">See detail</a>
+                                                        <a class="dropdown-item download">Download</a>
+                                                        <a class="dropdown-item edit">Edit</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item trash">Delete item</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class=" v-middle" data-id="15">
+
+                                            <td class="flex">
+                                                <a href="#" class="item-title text-color font-weight-bold">3</a>
+                                                <div class="item-except text-muted text-sm h-1x font-weight-100">
+                                                    Normal Bilet
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="item-amount d-none d-sm-block text-sm ">
+                                                    7 Dk
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="item-amount d-none d-sm-block text-sm">
+                                                    40,00 ₺
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="item-action dropdown b-l text-center">
+                                                    <a href="#" data-toggle="dropdown" class="text-muted"><i data-feather="more-vertical"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right bg-black" role="menu">
+                                                        <a class="dropdown-item" href="#">See detail</a>
+                                                        <a class="dropdown-item download">Download</a>
+                                                        <a class="dropdown-item edit">Edit</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item trash">Delete item</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class=" v-middle" data-id="15">
+
+                                            <td class="flex">
+                                                <a href="#" class="item-title text-color font-weight-bold">1</a>
+                                                <div class="item-except text-muted text-sm text-warning h-1x font-weight-100">
+                                                    Promosyon Bilet
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="item-amount d-none d-sm-block text-sm ">
+                                                    12 Dk
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="item-amount d-none d-sm-block text-sm">
+                                                    50,00 ₺
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="item-action dropdown b-l text-center">
+                                                    <a href="#" data-toggle="dropdown" class="text-muted"><i data-feather="more-vertical"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right bg-black" role="menu">
+                                                        <a class="dropdown-item" href="#">See detail</a>
+                                                        <a class="dropdown-item download">Download</a>
+                                                        <a class="dropdown-item edit">Edit</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item trash">Delete item</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr class=" v-middle" data-id="15">
+
+                                            <td class="flex">
+                                                <a href="#" class="item-title text-color font-weight-bold">1</a>
+                                                <div class="item-except text-muted text-sm text-danger h-1x font-weight-100">
+                                                    Aile Boyu Bilet
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="item-amount d-none d-sm-block text-sm ">
+                                                    10 Dk
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <span class="item-amount d-none d-sm-block text-sm">
+                                                    40,00 ₺
+                                                </span>
+                                            </td>
+                                            <td>
+                                                <div class="item-action dropdown b-l text-center">
+                                                    <a href="#" data-toggle="dropdown" class="text-muted"><i data-feather="more-vertical"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right bg-black" role="menu">
+                                                        <a class="dropdown-item" href="#">See detail</a>
+                                                        <a class="dropdown-item download">Download</a>
+                                                        <a class="dropdown-item edit">Edit</a>
+                                                        <div class="dropdown-divider"></div>
+                                                        <a class="dropdown-item trash">Delete item</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

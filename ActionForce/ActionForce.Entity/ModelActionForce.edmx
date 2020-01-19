@@ -7040,8 +7040,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="VEmployeeList" EntityType="db293_ActionTimeDbModel.VEmployeeList" />
           <FunctionImport Name="GetLocationAll" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationAll_Result)">
-            <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
+          <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="VBankAccount" EntityType="db293_ActionTimeDbModel.VBankAccount" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -11812,6 +11813,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Type="String" Name="Currency" Nullable="true" MaxLength="20" />
           <Property Type="Guid" Name="LocationUID" Nullable="true" />
         </ComplexType>
+        <EntityType Name="VBankAccount">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="BankID" Type="Int32" />
+          <Property Name="AccountTypeID" Type="Int32" />
+          <Property Name="BranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BranchCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RoutingNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="AccountNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="IBAN" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="IsMaster" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -16543,6 +16565,28 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="VBankAccount">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VBankAccount">
+              <MappingFragment StoreEntitySet="VBankAccount">
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+                <ScalarProperty Name="IBAN" ColumnName="IBAN" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="AccountNumber" ColumnName="AccountNumber" />
+                <ScalarProperty Name="RoutingNumber" ColumnName="RoutingNumber" />
+                <ScalarProperty Name="BranchCode" ColumnName="BranchCode" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="AccountTypeID" ColumnName="AccountTypeID" />
+                <ScalarProperty Name="BankID" ColumnName="BankID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

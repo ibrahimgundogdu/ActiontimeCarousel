@@ -630,6 +630,9 @@
     <Compile Include="TrampolineType.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VBankAccount.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VBankActions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
