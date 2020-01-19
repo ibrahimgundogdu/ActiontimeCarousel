@@ -2578,6 +2578,7 @@
     <Content Include="Views\Employee\_PartialEmployeeUpdate.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeStatus.cshtml" />
     <Content Include="Views\Location\Index.cshtml" />
+    <Content Include="Views\Location\_PartialLocationList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
