@@ -22,198 +22,78 @@
             </nav>
         </div>
     </div>
-
     <div class="row">
         <div class="col-9">
             @using (Html.BeginForm("LocationFilter", "Location", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
-            <div class="form-row align-items-end">
-                <div class="form-group col-md-4 d-flex align-items-end">
-                    <select class="form-control" id="stateID" name="State">
-                        <option value="" label="Şehir Seçiniz"></option>
-                        @foreach (var item in Model.StateList)
-                        {
-                            <option value="@item")>@Html.Raw($"<strong>{item}</strong>")</option>
-                        }
-                    </select>
+                <div class="form-row align-items-end">
+                    <div class="form-group col-md-4 d-flex align-items-end">
+                        <input id="locationName" name="LocationName" type="text" class="form-control" autocomplete="off" placeholder="Lokasyon Adı" value="@(Model.FilterModel?.LocationName?? "")">
+                    </div>
+                    <div class="form-group col-md-2 d-flex align-items-end">
+                        <select class="form-control" id="stateID" name="State">
+                            <option value="" label="Şehir Seçiniz"></option>
+                            @foreach (var item in Model.StateList)
+                            {
+                                <option value="@item" @(Model.FilterModel != null ? (Model.FilterModel?.State == item ? "selected" : "") : "")>@Html.Raw($"<strong>{item}</strong>")</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-md-2 d-flex align-items-end">
+                        <select class="form-control" id="typeID" name="TypeName">
+                            <option value="" label="Tür Seçiniz"></option>
+                            @foreach (var item in Model.TypeList)
+                            {
+                                <option value="@item" @(Model.FilterModel != null ? (Model.FilterModel?.TypeName == item ? "selected" : "") : "")>@Html.Raw($"<strong>{item}</strong>")</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-group col-md-1 d-flex align-items-end ">
+                        <button class="btn btn-primary" type="submit" id="btnsearch">Ara</button>
+                    </div>
                 </div>
-                <div class="form-group col-md-4 d-flex align-items-end">
-                    <select class="form-control" id="typeID" name="TypeName">
-                        <option value="" label="Tür Seçiniz"></option>
-                        @foreach (var item in Model.TypeList)
-                        {
-                            <option value="@item" )>@Html.Raw($"<strong>{item}</strong>")</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group col-md-1 d-flex align-items-end ">
-                    <button class="btn btn-primary" type="submit" id="btnsearch">Ara</button>
-                </div>
-            </div>
-
             }
         </div>
-
-
         <div class="col-3">
             <div class="btn-group btn-group-sm float-right" role="group">
-                <button type="button" class="btn btn-light" onclick="LocationSearch('all');">Tümü</button>
-                <button type="button" class="btn btn-primary" onclick="LocationSearch('act');">Aktifler</button>
-                <button type="button" class="btn btn-secondary" onclick="LocationSearch('psv');">Pasifler</button>
+                <button type="button" class="btn btn-light" onclick="LocationSearch('-1');">Tümü</button>
+                <button type="button" class="btn btn-primary" onclick="LocationSearch('1');">Aktifler</button>
+                <button type="button" class="btn btn-secondary" onclick="LocationSearch('0');">Pasifler</button>
             </div>
         </div>
     </div>
-
     <div>
-        <div class="table">
-            <table class="table table-sm table-hover">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>No</th>
-                        <th>Adı</th>
-                        <th>Şehir</th>
-                        <th>Türü</th>
-                        <th class="text-center">Para Birimi</th>
-                        <th class="text-center">Time Zone</th>
-                        <th class="text-center">Aktif mi?</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    @foreach (var item in Model.LocationList)
-                    {
-                        <tr style='@(item.IsActive == false ? "color: red" : "")'>
-                            <td><span class="@(item.IsActive == true ? "tx-success":"tx-danger")">&#8226;</span></td>
-                            <td class="tx-sm-13 bold">@item.SortBy</td>
-                            <td class="tx-sm-13"><a href="@("/Location/Detail/" + @item.LocationUID)">@($"{item.LocationName} {item.Description}")</a></td>
-                            <td class="tx-sm-13">@item.State</td>
-                            <td class="tx-sm-13">@item.TypeName</td>
-                            <td class="tx-sm-13 text-center">@item.Currency</td>
-                            <td class="tx-sm-13 text-center">@item.Timezone</td>
-                            <td class="tx-sm-13 text-center">
-                                @Html.Raw(item.IsActive.Value == true ? "<i class='ion ion-md-checkmark-circle text-success'></i>" : "<i class='ion ion-md-close-circle'></i>")
-                            </td>
-                        </tr>
-                    }
-
-                </tbody>
-            </table>
+        <div class="table" id="LocationList">
+            @Html.Partial("_PartialLocationList",Model)
         </div>
     </div>
-
 </div>
-    @section scripts {
-        <script>
-            $(function () {
+@section scripts {
+    <script>
+        function LocationSearch(active) {
 
-                $('.select2').select2({
-                    placeholder: 'Lokasyon Seçiniz',
-                    searchInputPlaceholder: 'Search options'
-                });
+            var data = new FormData();
 
-                var dateFormat = 'yy-mm-dd',
-                    from = $('#dateFrom')
-                        .datepicker({
-                            defaultDate: '+1w',
-                            numberOfMonths: 2,
-                            dateFormat: "yy-mm-dd",
-                            dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                            monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                            firstDay: 1
-                        })
-                        .on('change', function () {
-                            to.datepicker('option', 'minDate', getDate(this));
-                        }),
-                    to = $('#dateTo').datepicker({
-                        defaultDate: '+1w',
-                        numberOfMonths: 2,
-                        dateFormat: "yy-mm-dd",
-                        dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                        monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                        firstDay: 1
-                    })
-                        .on('change', function () {
-                            from.datepicker('option', 'maxDate', getDate(this));
-                        });
+            data.append('LocationName', $("#locationName").val());
+            data.append('State', $("#stateID").val());
+            data.append('TypeName', $("#typeID").val());
+            data.append('IsActive', active);
 
-                $('#DocumentDate').datepicker({
-                    dateFormat: "yy-mm-dd",
-                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                    firstDay: 1
-                });
-                function getDate(element) {
-                    var date;
-                    try {
-                        date = $.datepicker.parseDate(dateFormat, element.value);
-                    } catch (error) {
-                        date = null;
-                    }
-
-                    return date;
-
-                }
-
+            $.ajax({
+                url: '@Url.Action("LocationSearch","Location")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (res) {
+                $('#LocationList').html(res);
             });
-
-            function EmployeeSearch(active) {
-
-                $.ajax({
-                    method: "GET",
-                    url: "/Employee/EmployeeSearch",
-                    data: { active: active }
-                }).done(function (d) {
-                    $('table tbody').html(d);
-                    window.location.href = "/Employee/";
-                });
-            }
-
-        </script>
-        <script>
-            $(function () {
-                'use strict'
-
-                $('.off-canvas-menu').on('click', function (e) {
-                    e.preventDefault();
-                    var target = $(this).attr('href');
-                    $(target).addClass('show');
-                });
-
-
-                $('.off-canvas .close').on('click', function (e) {
-                    e.preventDefault();
-                    $(this).closest('.off-canvas').removeClass('show');
-                })
-
-                $(document).on('click touchstart', function (e) {
-                    e.stopPropagation();
-
-                    if (!$(e.target).closest('.off-canvas-menu').length) {
-                        var offCanvas = $(e.target).closest('.off-canvas').length;
-                        if (!offCanvas) {
-                            $('.off-canvas.show').addClass('show');
-                        }
-                    }
-                });
-
-
-            });
-        </script>
-        @if (Model.Result != null) //
-        {
-            <script type="text/javascript">
-        $.toast({
-            heading: 'Information',
-            text: '@Model.Result.Message ',
-            showHideTransition: 'slide',
-            icon: 'info',
-            hideAfter: 5000,
-            position: 'bottom-right',
-        });
-            </script>
         }
-    }
+    </script>
+}
+
 
 
