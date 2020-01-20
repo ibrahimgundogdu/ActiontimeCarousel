@@ -12,10 +12,9 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class EmployeePeriods
+    public partial class LocationPeriods
     {
         public int ID { get; set; }
-        public Nullable<int> EmployeeID { get; set; }
         public Nullable<int> LocationID { get; set; }
         public Nullable<System.DateTime> ContractStartDate { get; set; }
         public Nullable<System.DateTime> ContractFinishDate { get; set; }
