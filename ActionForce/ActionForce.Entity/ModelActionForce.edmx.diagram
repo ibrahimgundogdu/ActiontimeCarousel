@@ -43,7 +43,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeDismissal" Width="1.5" PointX="8.75" PointY="24.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeDismissalStage" Width="1.5" PointX="23.75" PointY="10.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeLocation" Width="1.5" PointX="10.5" PointY="6.5" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeePeriods" Width="1.5" PointX="2.75" PointY="25.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeSalary" Width="1.5" PointX="24.75" PointY="21.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeShift" Width="1.5" PointX="22.75" PointY="25.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeShiftSet" Width="1.5" PointX="24.75" PointY="24.75" />
@@ -244,6 +243,10 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentSalaryPayment" Width="1.5" PointX="33.375" PointY="47.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeList" Width="1.5" PointX="52.375" PointY="29.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VBankAccount" Width="1.5" PointX="35.375" PointY="43.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.IdentityType" Width="1.5" PointX="47.375" PointY="9.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationPeriods" Width="1.5" PointX="52.375" PointY="42.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeePeriods" Width="1.5" PointX="52.375" PointY="46.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Revenue" Width="1.5" PointX="52.375" PointY="51.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
