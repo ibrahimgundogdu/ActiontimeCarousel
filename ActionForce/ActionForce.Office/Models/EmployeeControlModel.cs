@@ -23,10 +23,19 @@ namespace ActionForce.Office
         public IEnumerable<EmployeeSequence> SequenceList { get; set; }
 
         public Result Result { get; set; }
-
         public FilterModel Filters { get; set; }
         public IEnumerable<ApplicationLog> LogList { get; set; }
 
+        public Guid? UID { get; set; }
+        public List<string> IdentityNumbers { get; set; }
+        public List<string> FullNames { get; set; }
+        public List<string> EMails { get; set; }
+        public List<string> Mobiles { get; set; }
+
+        public string IdentityNumber { get; set; }
+        public string FullName { get; set; }
+        public string EMail { get; set; }
+        public string Mobile { get; set; }
 
 
         public IEnumerable<VEmployee> VEmployee { get; set; }
@@ -39,8 +48,8 @@ namespace ActionForce.Office
         public IEnumerable<Schedule> EmployeeSchedules { get; set; }
         public Schedule EmployeeSchedule { get; set; }
 
-        public Employee CurrentEmployee { get; set; }
 
+        public Employee CurrentEmployee { get; set; }
 
         public string TodayDateCode { get; set; }
         public string CurrentDateCode { get; set; }
