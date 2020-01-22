@@ -15,20 +15,13 @@ namespace ActionForce.Entity
     public partial class Revenue
     {
         public long ID { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
+        public Nullable<int> WeekYear { get; set; }
+        public Nullable<int> WeekNumber { get; set; }
         public Nullable<int> LocationID { get; set; }
-        public Nullable<double> Cash { get; set; }
-        public Nullable<double> Credit { get; set; }
         public string Currency { get; set; }
-        public Nullable<double> Total { get; set; }
-        public Nullable<double> Labor { get; set; }
-        public Nullable<double> Expense { get; set; }
-        public Nullable<double> CashIn { get; set; }
-        public Nullable<double> Rent { get; set; }
-        public Nullable<double> CommissionRate { get; set; }
-        public Nullable<double> CreditCommission { get; set; }
-        public Nullable<double> InsuranceRate { get; set; }
-        public Nullable<double> Insurance { get; set; }
+        public Nullable<double> TotalCash { get; set; }
+        public Nullable<double> TotalCredit { get; set; }
+        public Nullable<double> GrossTotal { get; set; }
         public Nullable<double> Net { get; set; }
         public Nullable<double> Operator { get; set; }
         public Nullable<double> ActionTime { get; set; }
@@ -36,5 +29,11 @@ namespace ActionForce.Entity
         public Nullable<int> ComputedType { get; set; }
         public Nullable<double> ComputedRate { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
+        public Nullable<double> TotalLabor { get; set; }
+        public Nullable<double> TotalExpense { get; set; }
+        public Nullable<double> TotalCashIn { get; set; }
+        public Nullable<double> TotalRent { get; set; }
+        public Nullable<double> TotalCreditCommission { get; set; }
+        public Nullable<double> TotalInsurance { get; set; }
     }
 }
