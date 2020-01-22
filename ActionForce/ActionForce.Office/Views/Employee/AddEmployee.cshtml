@@ -34,182 +34,72 @@
                     </div>
                 </div>
 
-                <ul class="steps mg-b-20">
-                    <li class="step-item active">
-                        <a href="" class="step-link">
-                            <span class="step-number">1</span>
-                            <span class="step-title">Ön Kayıt</span>
-                        </a>
-                    </li>
-                    <li class="step-item">
-                        <a href="" class="step-link">
-                            <span class="step-number">2</span>
-                            <span class="step-title">Genel Kayıt</span>
-                        </a>
-                    </li>
-                </ul>
                 <div id="employeeStatus">
-                    @if (Model.Result != null)
-                    {
-                        if (Model.Result.Message != "")
-                        {
-                            <div class="alert alert-danger" role="alert">
-                                <span>@Model.Result.Message</span>
+                    <section>
+                        <div class="row row-xs">
+                            <div class="col-lg-12">
+
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <div class="col-sm-3">
+                                        <select class="form-control" id="Identity" name="Identity" required>
+                                            <option value="0"></option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input id="IdentityNumberx" name="IdentityNumber" type="text" maxlength="11" class="form-control quantity" autocomplete="off" placeholder="Tc Kimlik No">
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="Tc" class="col-sm-3 col-form-label">Ad Soyad</label>
+                                    <div class="col-sm-3">
+                                        <input id="FullNamex" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="Ad Soyad" required>
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="Tc" class="col-sm-3 col-form-label">Email</label>
+                                    <div class="col-sm-3">
+                                        <input id="EMailx" name="EMail" type="email" class="form-control" autocomplete="off" placeholder="E-Posta Adresi">
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
+                                    <div class="col-sm-3">
+                                        <input id="Mobilex" name="Mobile" type="tel" class="form-control phone" autocomplete="off" placeholder="Telefon">
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row mg-b-0">
+                                    <div class="col-sm-3"></div>
+                                    <div class="col-sm-3">
+                                        <button type="submit" onclick="EmployeeStatus()" class="btn btn-primary btn-block">Employee Ekle</button>
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+
                             </div>
-                        }
-                    }
+                        </div>
+                    </section>
+                    <section></section>
+                    
 
                 </div>
-                @using (Html.BeginForm("AddNewEmployee", "Employee", FormMethod.Post))
-                {
-                    @Html.AntiForgeryToken()
 
-                    if (Model.EmpList?.EmployeeID > 0)
-                    {
-                        <div class="row row-xs">
-                            <div class="col-lg-12">
 
-                                <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Tc" class="col-sm-3 col-form-label">Tc Kimlik</label>
-                                    <div class="col-sm-3">
-                                        <input id="Tc" name="Tc" type="text" class="form-control" autocomplete="off" placeholder="Tc Kimlik No">
-                                    </div>
-                                    <div class="col-sm-3"> </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
-                                <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Tc" class="col-sm-3 col-form-label">Ad Soyad</label>
-                                    <div class="col-sm-3">
-                                        <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="Ad Soyad" required>
-                                    </div>
-                                    <div class="col-sm-3"> </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
-                                <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Tc" class="col-sm-3 col-form-label">Email</label>
-                                    <div class="col-sm-3">
-                                        <input id="EMail" name="EMail" type="text" class="form-control" autocomplete="off" placeholder="E-Posta Adresi">
-                                    </div>
-                                    <div class="col-sm-3"> </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
-                                <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
-                                    <div class="col-sm-3">
-                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon">
-                                    </div>
-                                    <div class="col-sm-3"> </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
-                                <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
-                                    <div class="col-sm-3">
-                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon">
-                                    </div>
-                                    <div class="col-sm-3"> </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
-                                <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
-                                    <div class="col-sm-3">
-                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon">
-                                    </div>
-                                    <div class="col-sm-3"> </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
-                                <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
-                                    <div class="col-sm-3">
-                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon">
-                                    </div>
-                                    <div class="col-sm-3"> </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
-                                <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
-                                    <div class="col-sm-3">
-                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon">
-                                    </div>
-                                    <div class="col-sm-3"> </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
 
-                                <div class="form-group row mg-b-0">
-                                    <div class="col-sm-3"></div>
-                                    <div class="col-sm-3">
-                                        <button type="submit" class="btn btn-primary btn-block">Employee Ekle</button>
-                                    </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="row row-xs">
-                            <div class="col-lg-12">
-
-                                <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Tc" class="col-sm-3 col-form-label">Tc Kimlik</label>
-                                    <div class="col-sm-3">
-                                        <input id="Tc" name="Tc" type="text" class="form-control" autocomplete="off" placeholder="Tc Kimlik No">
-                                    </div>
-                                    <div class="col-sm-3"> </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
-                                <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Tc" class="col-sm-3 col-form-label">Ad Soyad</label>
-                                    <div class="col-sm-3">
-                                        <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="Ad Soyad" required>
-                                    </div>
-                                    <div class="col-sm-3"> </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
-                                <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Tc" class="col-sm-3 col-form-label">Email</label>
-                                    <div class="col-sm-3">
-                                        <input id="EMail" name="EMail" type="text" class="form-control" autocomplete="off" placeholder="E-Posta Adresi">
-                                    </div>
-                                    <div class="col-sm-3"> </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
-                                <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
-                                    <div class="col-sm-3">
-                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon">
-                                    </div>
-                                    <div class="col-sm-3"> </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
-
-                                <div class="form-group row mg-b-0">
-                                    <div class="col-sm-3"></div>
-                                    <div class="col-sm-3">
-                                        <button type="submit" class="btn btn-primary btn-block">Employee Ekle</button>
-                                    </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    }
-
-                }
             </div>
         </div>
     </div>
@@ -221,7 +111,54 @@
 }
 
 @section scripts {
-    <script src="~/assets/js/ActionForceScript.js"></script>
+    <script src="~/lib/jquery-steps/build/jquery.steps.min.js"></script>
+    <script>
+        $(function () {
+            'use strict'
+
+            $('#employeeStatus').steps({
+                headerTag: 'h3',
+                bodyTag: 'section',
+                autoFocus: true,
+                titleTemplate: '<span class="number">#index#</span> <span class="title">#title#</span>',
+                onStepChanging: function (event, currentIndex, newIndex) {
+                    if (currentIndex < newIndex) {
+                        if (currentIndex === 0) {
+                            var fidentity = $('#IdentityNumberx').parsley();
+                            var fname = $('#FullNamex').parsley();
+                            var fmail = $('#EMailx').parsley();
+                            var fmobil = $('#Mobilex').parsley();
+
+                            if (fidentity.isValid() && fname.isValid() && fmail.isValid() && fmobil.isValid()) {
+                                $.ajax({
+                                    method: "GET",
+                                    url: "/Employee/EmployeeStatus",
+                                    data: { identy: sidenty, name: sname, mail: smail, mobil: sphone }
+                                }).done(function (d) {
+                                    $("#employeeStatus").html(d);
+                                });
+                                return true;
+                            } else {
+                                fidentity.validate();
+                                fname.validate();
+                                fmail.validate();
+                                fmobil.validate();
+                            }
+                        }
+                        
+                        if (currentIndex === 1) {
+                            var email = $('#email').parsley();
+                            if (email.isValid()) {
+                                return true;
+                            } else { email.validate(); }
+                        }
+                        
+                    } else { return true; }
+                }
+            });
+
+        });
+    </script>
     <script>
         $(function () {
             'use strict'
@@ -239,9 +176,22 @@
             $('.money').mask("#.##0,00", { reverse: true });
             $('.quantity').mask("##0", { reverse: true });
             $('.money4').mask("#.##0,0000", { reverse: true });
+            $('.phone').mask('(000) 000 00 00');
         });
 
-
+        //function EmployeeStatus() {
+        //    var sidenty = $("#IdentityNumberx").val();
+        //    var sname = $("#FullNamex").val();
+        //    var smail = $("#EMailx").val();
+        //    var sphone = $("#Mobilex").val();
+        //    $.ajax({
+        //        method: "GET",
+        //        url: "/Employee/EmployeeStatus",
+        //        data: { identy: sidenty, name: sname, mail: smail, mobil: sphone }
+        //    }).done(function (d) {
+        //        $("#employeeStatus").html(d);
+        //    });
+        //}
     </script>
 
     @if (Model.Result != null) //

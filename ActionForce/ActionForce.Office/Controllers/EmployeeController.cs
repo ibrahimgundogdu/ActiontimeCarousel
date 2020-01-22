@@ -1,6 +1,7 @@
 ﻿using ActionForce.Entity;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.SqlServer;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -298,11 +299,7 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialEmployeeShift", model);
         }
-
-
-
-
-
+        
 
 
 
@@ -343,14 +340,10 @@ namespace ActionForce.Office.Controllers
             return PartialView("_PartialAddEmployeeSchedule", model);
         }
         
-
-
-
         
-
-        [HttpPost]
+        
         [AllowAnonymous]
-        public ActionResult AddNewEmployee(NewEmployee employee)
+        public PartialViewResult EmployeeStatus(string identy, string name, string mail, string mobil)
         {
             Result<Employee> result = new Result<Employee>()
             {
@@ -361,58 +354,73 @@ namespace ActionForce.Office.Controllers
             
             EmployeeControlModel model = new EmployeeControlModel();
 
-            if (employee != null)
+            var _identy = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + identy + "%", x.IdentityNumber) > 0).ToList();
+            var _name = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + name + "%", x.FullName) > 0).ToList();
+            var _mail = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + mail + "%", x.EMail) > 0).ToList();
+            var _phone = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + mobil + "%", x.Mobile) > 0).ToList();
+
+            List<string> empIden = _identy.Select(x => x.IdentityNumber).ToList();
+            List<string> empFull = _name.Select(x => x.FullName).ToList();
+            List<string> empMail = _mail.Select(x => x.EMail).ToList();
+            List<string> empMobil = _phone.Select(x => x.Mobile).ToList();
+
+            if (_identy != null)
             {
-                var emp = Db.Employee.FirstOrDefault(x => employee.FullName.Contains(x.FullName) || employee.Tc.Contains(x.IdentityNumber) || employee.EMail.Contains(x.EMail) || employee.Mobile.Contains(x.Mobile));
+                model.IdentityNumbers = empIden;
+            }
+            if (_name != null)
+            {
 
-                if (emp == null)
-                {
-                    Employees empdoc = new Employees();
+                model.FullNames = empFull;
+            }
+            if (_mail != null)
+            {
 
-                    empdoc.FullName = employee.FullName;
-                    empdoc.Tc = employee.Tc;
-                    empdoc.EMail = employee.EMail;
-                    empdoc.Mobile = employee.Mobile;
+                model.EMails = empMail;
+            }
+            if (_phone != null)
+            {
 
-
-                    DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.AddEmployee(empdoc, model.Authentication);
-
-                    model.EmpList.EmployeeID = (int)empdoc.EmployeeID;
-
-                    //TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
-
-                    //if (result.IsSuccess == true)
-                    //{
-                    //    return RedirectToAction("Detail", "Employee", new { id = empdoc.EmployeeID });
-                    //}
-                    //else
-                    //{
-                    //    return RedirectToAction("AddEmployee", "Employee");
-                    //}
-                }
-                else
-                {
-                    
-
-                    result.Message = $"{emp.IdentityNumber}  {emp.FullName}  {emp.EMail}  {emp.Mobile} bunumu demek istedin.";
-                    result.IsSuccess = true;
-                    TempData["result"] = result;
-                }
+                model.Mobiles = empMobil;
+            }
+            
+            if (_identy == null || _name == null || _mail == null || _phone == null)
+            {
+                model.IdentityNumber = identy;
+                model.FullName = name;
+                model.EMail = mail;
+                model.Mobile = mobil;
+                return PartialView("_PartialEmployeeAddNew", model);
             }
             else
             {
-                result.Message = $"Form bilgileri gelmedi.";
+                model.UID = Guid.NewGuid();
+                
+                return PartialView("_PartialEmployeeAddStatus", model);
             }
+            
+        }
 
-            TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
-            return RedirectToAction("AddEmployee", "Employee");
-            //return View(model);
+        [AllowAnonymous]
+        public PartialViewResult EmployeeList(string key)
+        {
+            Result<Employee> result = new Result<Employee>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+
+            
+            return PartialView("_PartialEmployeeAddNew", model);
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult EditEmployee(NewEmployee employee)
+        public ActionResult EditEmployee(NewEmployee employee, HttpPostedFileBase FotoFile)
         {
             Result<Employee> result = new Result<Employee>()
             {
@@ -424,35 +432,53 @@ namespace ActionForce.Office.Controllers
 
             if (employee != null)
             {
-                var emp = Db.Employee.FirstOrDefault(x => x.FullName == employee.FullName || x.IdentityNumber == employee.Tc || x.EMail == employee.EMail || x.Mobile == employee.Mobile);
+                Employees empdoc = new Employees();
 
-                if (emp == null)
+                empdoc.AreaCategoryID = employee.AreaCategoryID;
+                empdoc.DepartmentID = employee.DepartmentID;
+                empdoc.Description = employee.Description;
+                empdoc.Mobile2 = employee.Mobile2;
+                empdoc.PositionID = employee.PositionID;
+                empdoc.RoleGroupID = employee.RoleGroupID;
+                empdoc.SalaryCategoryID = employee.SalaryCategoryID;
+                empdoc.SequenceID = employee.SequenceID;
+                empdoc.ShiftTypeID = employee.ShiftTypeID;
+                empdoc.StatusID = employee.StatusID;
+                empdoc.Whatsapp = employee.Whatsapp;
+                empdoc.Username = employee.Username;
+                empdoc.OurCompanyID = employee.OurCompanyID;
+                if (!string.IsNullOrEmpty(employee.Password))
                 {
-                    Employees empdoc = new Employees();
+                    empdoc.Password = OfficeHelper.makeMD5(employee.Password);
+                }
+                if (FotoFile != null && FotoFile.ContentLength > 0)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(FotoFile.FileName);
+                    empdoc.FotoFile = filename;
+                    string path = "/Document/Employee";
 
-                    empdoc.FullName = employee.FullName;
-                    empdoc.Tc = employee.Tc;
-                    empdoc.EMail = employee.EMail;
-                    empdoc.Mobile = employee.Mobile;
-
-
-                    DocumentManager documentManager = new DocumentManager();
-                    result = documentManager.AddEmployee(empdoc, model.Authentication);
-
-                    TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
-
-                    if (result.IsSuccess == true)
+                    try
                     {
-                        return RedirectToAction("Detail", "Employee", new { id = empdoc.EmployeeID });
+                        FotoFile.SaveAs(Path.Combine(Server.MapPath(path), filename));
                     }
-                    else
+                    catch (Exception)
                     {
-                        return RedirectToAction("AddEmployee", "Employee");
                     }
+                }
+
+                DocumentManager documentManager = new DocumentManager();
+                result = documentManager.EditEmployee(empdoc, model.Authentication);
+
+                
+                TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+                if (result.IsSuccess == true)
+                {
+                    return RedirectToAction("Detail", "Employee", new { id = empdoc.EmployeeID });
                 }
                 else
                 {
-                    result.Message = $"Çalışan mevcut.";
+                    return RedirectToAction("AddEmployee", "Employee");
                 }
             }
             else

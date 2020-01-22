@@ -1,0 +1,268 @@
+﻿@model EmployeeControlModel
+
+@using (Html.BeginForm("EditEmployee", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <div class="row row-xs">
+        <div class="col-lg-12">
+            <div class="form-group row mg-b-5 bg-gray-50">
+                <label for="Tc" class="col-sm-3 col-form-label">Tc Kimlik</label>
+                <div class="col-sm-3">
+                    <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" value="@(Model.IdentityNumber)" readonly autocomplete="off" placeholder="Tc Kimlik No">
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5 bg-gray-50">
+                <label for="Tc" class="col-sm-3 col-form-label">Ad Soyad</label>
+                <div class="col-sm-3">
+                    <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" value="@(Model.FullName)" readonly placeholder="Ad Soyad" required>
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5 bg-gray-50">
+                <label for="Tc" class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-3">
+                    <input id="EMail" name="EMail" type="text" class="form-control" autocomplete="off" value="@(Model.EMail)" readonly placeholder="E-Posta Adresi">
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5 bg-gray-50">
+                <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
+                <div class="col-sm-3">
+                    <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" value="@(Model.Mobile)" readonly placeholder="Telefon">
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Title" class="col-sm-3 col-form-label">Başlık</label>
+                <div class="col-sm-3">
+                    <input id="Title" name="Title" type="text" class="form-control" autocomplete="off" placeholder="Title">
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="Mobile" class="col-sm-3 col-form-label">Telefon2</label>
+                <div class="col-sm-3">
+                    <input id="Mobile2" name="Mobile2" type="text" class="form-control" autocomplete="off" placeholder="Telefon">
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Whatsapp" class="col-sm-3 col-form-label">Whatsapp</label>
+                <div class="col-sm-3">
+                    <input id="Whatsapp" name="Whatsapp" type="text" class="form-control" autocomplete="off" placeholder="Whatsapp">
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="Username" class="col-sm-3 col-form-label">Kullanıcı Adı</label>
+                <div class="col-sm-3">
+                    <input id="Username" name="Username" type="text" class="form-control" autocomplete="off" placeholder="Kullanıcı Adı">
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="Password" class="col-sm-3 col-form-label">Şifre</label>
+                <div class="col-sm-3">
+                    <input id="Password" name="Password" type="text" class="form-control" autocomplete="off" placeholder="Şifre">
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row bg-gray-50">
+                <label for="OurCompanyID" class="col-sm-3 col-form-label">Ülke</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="OurCompanyID" name="OurCompanyID" required>
+                        @foreach (var item in Model.OurList)
+                        {
+                            <option value="@item.CompanyID">@($"{item.CompanyName}")</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+
+
+
+            <div class="form-group row bg-gray-50">
+                <label for="RoleGroupID" class="col-sm-3 col-form-label">Rol Grup</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="RoleGroupID" name="RoleGroupID" required>
+                        @foreach (var item in Model.RoleGroupList.OrderBy(x => x.RoleLevel))
+                        {
+                            <option value="@item.ID">@($"{item.GroupCode} {item.GroupName}")</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+
+
+            <div class="form-group row mg-b-5 bg-gray-50">
+                <label for="AreaCategoryID" class="col-sm-3 col-form-label">Alan</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="AreaCategoryID" name="AreaCategoryID" required>
+                        @foreach (var item in Model.AreaCategoryList.OrderBy(x => x.SortBy))
+                        {
+                            <option value="@item.ID">@($"{item.SortBy} {item.AreaName}")</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5 bg-gray-50">
+                <label for="DepartmentID" class="col-sm-3 col-form-label">Departman</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="DepartmentID" name="DepartmentID" required>
+                        @foreach (var item in Model.DepartmentList.OrderBy(x => x.SortBy))
+                        {
+                            <option value="@item.ID">@($"{item.SortBy} {item.DepartmentName}")</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5 bg-gray-50">
+                <label for="PositionID" class="col-sm-3 col-form-label">Pozisyon</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="PositionID" name="PositionID" required>
+                        @foreach (var item in Model.PositionList.OrderBy(x => x.SortBy))
+                        {
+                            <option value="@item.ID">@($"{item.SortBy} {item.PositionName}")</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5 bg-gray-50">
+                <label for="StatusID" class="col-sm-3 col-form-label">Durum</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="StatusID" name="StatusID" required>
+                        @foreach (var item in Model.StatusList)
+                        {
+                            <option value="@item.ID">@($"{item.Code} {item.Name}")</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5 bg-gray-50">
+                <label for="ShiftTypeID" class="col-sm-3 col-form-label">Çalışma Türü</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="ShiftTypeID" name="ShiftTypeID" required>
+                        @foreach (var item in Model.ShiftTypeList)
+                        {
+                            <option value="@item.ID">@($"{item.SortBy} {item.TypeName}")</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5 bg-gray-50">
+                <label for="SalaryCategoryID" class="col-sm-3 col-form-label">Kategori</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="SalaryCategoryID" name="SalaryCategoryID" required>
+                        @foreach (var item in Model.SalaryCategoryList)
+                        {
+                            <option value="@item.ID">@($"{item.SortBy} {item.SalaryCategoryName}")</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row bg-gray-50">
+                <label for="SequenceID" class="col-sm-3 col-form-label">Oryantasyon Seviyesi</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="SequenceID" name="SequenceID" required>
+                        @foreach (var item in Model.SequenceList)
+                        {
+                            <option value="@item.ID">@($"{item.Code} {item.Name}")</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label for="FotoFile" class="col-sm-3 col-form-label">Resim</label>
+                <div class="col-sm-3">
+                    <input type="file" name="FotoFile" style="width: 100%;" class="form-control" />
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="Description" class="col-sm-3 col-form-label">Açıklama</label>
+                <div class="col-sm-3">
+                    <textarea id="Description" name="Description" rows="5" cols="20" class="form-control" style="width:100% !important;"></textarea>
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+
+            <div class="form-group row mg-b-0">
+                <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+                <div class="col-sm-3">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" checked>
+                        <label class="custom-control-label" for="IsActive">Aktif</label>
+                    </div>
+                </div>
+                <div class="col-sm-3"> <label for="IsTemp" class="col-form-label">IsTemp?</label></div>
+                <div class="col-sm-3">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="IsTemp" name="IsTemp" value="0">
+                        <label class="custom-control-label" for="IsTemp">IsTemp</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row mg-b-0">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-3">
+                    <button type="submit" class="btn btn-primary btn-block">Employee Ekle</button>
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+
+        </div>
+    </div>
+}

@@ -1,0 +1,58 @@
+﻿@model EmployeeControlModel
+
+<ul class="list-group">
+    @if (Model.IdentityNumbers != null)
+    {
+        foreach (var item in Model.IdentityNumbers.ToList())
+        {
+            <li class="list-group-item d-flex"><span class="flex-fill">Tc Kimlik</span><span class="flex-fill">@(item)</span><span class="flex-fill"></span><span class="flex-fill"><a href="#" onclick="EmployeeList(@(item))" class="btn btn-xs btn-danger"><i class="fa fa-link"></i></a></span></li>
+        }
+    }
+    else
+    {
+        foreach (var item in Model.FullNames.ToList())
+        {
+            <li class="list-group-item d-flex"><span class="flex-fill">Ad Soyad</span><span class="flex-fill">@(item)</span><span class="flex-fill"></span><span class="flex-fill"><a href="#" onclick="EmployeeList(@(item))" class="btn btn-xs btn-danger"><i class="fa fa-link"></i></a></span></li>
+        }
+        foreach (var item in Model.EMails.ToList())
+        {
+            <li class="list-group-item d-flex"><span class="flex-fill">E-Posta</span><span class="flex-fill">@(item)</span><span class="flex-fill"></span><span class="flex-fill"><a href="#" onclick="EmployeeList(@(item))" class="btn btn-xs btn-danger"><i class="fa fa-link"></i></a></span></li>
+        }
+        foreach (var item in Model.Mobiles.ToList())
+        {
+            <li class="list-group-item d-flex"><span class="flex-fill">Mobil</span><span class="flex-fill">@(item)</span><span class="flex-fill"></span><span class="flex-fill"><a href="#" onclick="EmployeeList(@(item))" class="btn btn-xs btn-danger"><i class="fa fa-link"></i></a></span></li>
+        }
+    }
+
+
+</ul>
+
+
+@section scripts {
+    <script>
+        
+        function EmployeeList(key) {
+            $.ajax({
+                method: "GET",
+                url: "/Employee/EmployeeList",
+                data: { key: key }
+            }).done(function (d) {
+                $("#employeeStatus").html(d);
+            });
+        }
+    </script>
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}
