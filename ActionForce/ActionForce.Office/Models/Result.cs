@@ -18,6 +18,12 @@ namespace ActionForce.Office
         public bool IsSuccess { get; set; }
         public string Message { get; set; }
         public ResultType resultType { get; set; }
+
+        public Result()
+        {
+            IsSuccess = false;
+            Message = string.Empty;
+        }
     }
 
     public enum ResultType

@@ -12,7 +12,7 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class Revenue
+    public partial class VRevenue
     {
         public long ID { get; set; }
         public Nullable<int> WeekYear { get; set; }
@@ -35,5 +35,7 @@ namespace ActionForce.Entity
         public Nullable<double> TotalRent { get; set; }
         public Nullable<double> TotalCreditCommission { get; set; }
         public Nullable<double> TotalInsurance { get; set; }
+        public string SortBy { get; set; }
+        public string LocationFullName { get; set; }
     }
 }

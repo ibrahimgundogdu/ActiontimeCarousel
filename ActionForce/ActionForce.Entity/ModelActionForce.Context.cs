@@ -247,9 +247,13 @@ namespace ActionForce.Entity
         public virtual DbSet<VEmployeeList> VEmployeeList { get; set; }
         public virtual DbSet<VBankAccount> VBankAccount { get; set; }
         public virtual DbSet<IdentityType> IdentityType { get; set; }
-        public virtual DbSet<LocationPeriods> LocationPeriods { get; set; }
         public virtual DbSet<EmployeePeriods> EmployeePeriods { get; set; }
+        public virtual DbSet<LocationPeriods> LocationPeriods { get; set; }
         public virtual DbSet<Revenue> Revenue { get; set; }
+        public virtual DbSet<RevenueLines> RevenueLines { get; set; }
+        public virtual DbSet<RevenueParameter> RevenueParameter { get; set; }
+        public virtual DbSet<VRevenue> VRevenue { get; set; }
+        public virtual DbSet<VRevenueLines> VRevenueLines { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -870,6 +874,23 @@ namespace ActionForce.Entity
                 new ObjectParameter("OurCompanyID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationAll_Result>("GetLocationAll", ourCompanyIDParameter);
+        }
+    
+        public virtual int ComputeLocationWeekRevenue(Nullable<int> week, Nullable<int> year, Nullable<int> locationID)
+        {
+            var weekParameter = week.HasValue ?
+                new ObjectParameter("Week", week) :
+                new ObjectParameter("Week", typeof(int));
+    
+            var yearParameter = year.HasValue ?
+                new ObjectParameter("Year", year) :
+                new ObjectParameter("Year", typeof(int));
+    
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ComputeLocationWeekRevenue", weekParameter, yearParameter, locationIDParameter);
         }
     }
 }

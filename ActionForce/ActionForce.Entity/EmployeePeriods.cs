@@ -16,9 +16,10 @@ namespace ActionForce.Entity
     {
         public int ID { get; set; }
         public Nullable<int> EmployeeID { get; set; }
-        public Nullable<int> LocationID { get; set; }
+        public Nullable<int> OurCompanyID { get; set; }
         public Nullable<System.DateTime> ContractStartDate { get; set; }
         public Nullable<System.DateTime> ContractFinishDate { get; set; }
+        public System.DateTime FinalFinishDate { get; set; }
         public string Description { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<int> RecordedEmployeeID { get; set; }
