@@ -1,12 +1,23 @@
 ﻿@model EmployeeControlModel
 
-@using (Html.BeginForm("EditEmployee", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("AddNewEmployee", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     <div class="row row-xs">
         <div class="col-lg-12">
+            <div class="form-group row">
+                <label for="Title" class="col-sm-3 col-form-label">Başlık</label>
+                <div class="col-sm-3">
+                    
+                    <input id="Title" name="Title" type="text" class="form-control" autocomplete="off" placeholder="Title">
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
             <div class="form-group row mg-b-5 bg-gray-50">
                 <label for="Tc" class="col-sm-3 col-form-label">Tc Kimlik</label>
                 <div class="col-sm-3">
+                    
                     <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" value="@(Model.IdentityNumber)" readonly autocomplete="off" placeholder="Tc Kimlik No">
                 </div>
                 <div class="col-sm-3"> </div>
@@ -35,15 +46,6 @@
                 <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
                 <div class="col-sm-3">
                     <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" value="@(Model.Mobile)" readonly placeholder="Telefon">
-                </div>
-                <div class="col-sm-3"> </div>
-                <div class="col-sm-3">
-                </div>
-            </div>
-            <div class="form-group row">
-                <label for="Title" class="col-sm-3 col-form-label">Başlık</label>
-                <div class="col-sm-3">
-                    <input id="Title" name="Title" type="text" class="form-control" autocomplete="off" placeholder="Title">
                 </div>
                 <div class="col-sm-3"> </div>
                 <div class="col-sm-3">
@@ -239,17 +241,17 @@
 
             <div class="form-group row mg-b-0">
                 <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
-                <div class="col-sm-3">
+                <div class="col-sm-1">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" checked>
-                        <label class="custom-control-label" for="IsActive">Aktif</label>
+                        <label class="custom-control-label" for="IsActive">Aktif?</label>
                     </div>
                 </div>
-                <div class="col-sm-3"> <label for="IsTemp" class="col-form-label">IsTemp?</label></div>
-                <div class="col-sm-3">
+                <label for="IsActive" class="col-sm-1 col-form-label">Temp mi?</label>
+                <div class="col-sm-1">
                     <div class="custom-control custom-checkbox">
                         <input type="checkbox" class="custom-control-input" id="IsTemp" name="IsTemp" value="0">
-                        <label class="custom-control-label" for="IsTemp">IsTemp</label>
+                        <label class="custom-control-label" for="IsTemp">IsTemp?</label>
                     </div>
                 </div>
             </div>

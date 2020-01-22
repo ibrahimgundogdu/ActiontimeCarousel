@@ -339,8 +339,7 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialAddEmployeeSchedule", model);
         }
-        
-        
+
         
         [AllowAnonymous]
         public PartialViewResult EmployeeStatus(string identy, string name, string mail, string mobil)
@@ -354,55 +353,82 @@ namespace ActionForce.Office.Controllers
             
             EmployeeControlModel model = new EmployeeControlModel();
 
-            var _identy = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + identy + "%", x.IdentityNumber) > 0).ToList();
-            var _name = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + name + "%", x.FullName) > 0).ToList();
-            var _mail = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + mail + "%", x.EMail) > 0).ToList();
-            var _phone = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + mobil + "%", x.Mobile) > 0).ToList();
+            var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
 
-            List<string> empIden = _identy.Select(x => x.IdentityNumber).ToList();
-            List<string> empFull = _name.Select(x => x.FullName).ToList();
-            List<string> empMail = _mail.Select(x => x.EMail).ToList();
-            List<string> empMobil = _phone.Select(x => x.Mobile).ToList();
 
-            if (_identy != null)
+            model.OurList = Db.OurCompany.ToList();
+            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
+            model.AreaCategoryList = Db.EmployeeAreaCategory.Where(x => x.IsActive == true).ToList();
+            model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
+            model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true).ToList();
+            model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
+            model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
+            model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
+            model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
+
+
+
+            model.IdentityNumber = identy;
+            model.FullName = name;
+            model.EMail = mail;
+            model.Mobile = mobil;
+
+           
+
+            if (identy != "")
             {
-                model.IdentityNumbers = empIden;
+                var idnt = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + identy + "%", x.IdentityNumber) > 0).ToList();
+                List<string> _identy = idnt.Select(x => x.IdentityNumber).ToList();
+                model.IdentityNumbers = _identy;
             }
-            if (_name != null)
+            if (name != "")
+            {
+                var nm = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + name + "%", x.FullName) > 0).ToList();
+                List<string> _name = nm.Select(x => x.FullName).ToList();
+                model.FullNames = _name;
+                //model.FullName = name;
+                //model.EmployeeList = Db.VEmployeeList.Where(x => SqlFunctions.PatIndex("%" + name + "%", x.FullName) > 0).ToList();
+                //model.FullNames = model.EmployeeList.Select(x => x.FullName).ToList();
+            }
+            if (mail != "")
+            {
+                var ml = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + mail + "%", x.EMail) > 0).ToList();
+                List<string> _mail = ml.Select(x => x.EMail).ToList();
+                model.EMails = _mail;
+                //model.EMail = mail;
+                //model.EmployeeList = Db.VEmployeeList.Where(x => SqlFunctions.PatIndex("%" + mail + "%", x.EMail) > 0).ToList();
+                //model.EMails = model.EmployeeList.Select(x => x.EMail).ToList();
+            }
+            if (mobil != "")
+            {
+                var mb = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + mobil + "%", x.Mobile) > 0).ToList();
+                List<string> _mobil = mb.Select(x => x.Mobile).ToList();
+                model.Mobiles = _mobil;
+                //model.Mobile = mobil;
+                //model.EmployeeList = Db.VEmployeeList.Where(x => SqlFunctions.PatIndex("%" + mobil + "%", x.Mobile) > 0).ToList();
+                //model.Mobiles = model.EmployeeList.Select(x => x.Mobile).ToList();
+            }
+
+            model.EmployeeList = Db.VEmployeeList.ToList();
+
+            if (model.IdentityNumbers?.Count() > 0 || model.FullNames?.Count() > 0 || model.EMails?.Count() > 0 || model.Mobiles?.Count() > 0) 
             {
 
-                model.FullNames = empFull;
-            }
-            if (_mail != null)
-            {
+                model.UID = Guid.NewGuid();
 
-                model.EMails = empMail;
-            }
-            if (_phone != null)
-            {
-
-                model.Mobiles = empMobil;
-            }
-            
-            if (_identy == null || _name == null || _mail == null || _phone == null)
-            {
-                model.IdentityNumber = identy;
-                model.FullName = name;
-                model.EMail = mail;
-                model.Mobile = mobil;
-                return PartialView("_PartialEmployeeAddNew", model);
+                return PartialView("_PartialEmployeeAddStatus", model);
             }
             else
             {
-                model.UID = Guid.NewGuid();
                 
-                return PartialView("_PartialEmployeeAddStatus", model);
+
+                return PartialView("_PartialEmployeeAddNew", model);
             }
             
         }
-
+        
         [AllowAnonymous]
-        public PartialViewResult EmployeeList(string key)
+        public PartialViewResult EmployeeList(string identy, string name, string mail, string mobil)
         {
             Result<Employee> result = new Result<Employee>()
             {
@@ -413,10 +439,99 @@ namespace ActionForce.Office.Controllers
 
             EmployeeControlModel model = new EmployeeControlModel();
 
+            var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
 
-            
+
+            model.OurList = Db.OurCompany.ToList();
+            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
+            model.AreaCategoryList = Db.EmployeeAreaCategory.Where(x => x.IsActive == true).ToList();
+            model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
+            model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true).ToList();
+            model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
+            model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
+            model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
+            model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
+
+            model.IdentityNumber = identy;
+            model.FullName = name;
+            model.EMail = mail;
+            model.Mobile = mobil;
+
             return PartialView("_PartialEmployeeAddNew", model);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddNewEmployee(NewEmployee employee, HttpPostedFileBase FotoFile)
+        {
+            Result<Employee> result = new Result<Employee>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (employee != null)
+            {
+                Employees empdoc = new Employees();
+
+                empdoc.AreaCategoryID = employee.AreaCategoryID;
+                empdoc.DepartmentID = employee.DepartmentID;
+                empdoc.Description = employee.Description;
+                empdoc.Mobile2 = employee.Mobile2;
+                empdoc.PositionID = employee.PositionID;
+                empdoc.RoleGroupID = employee.RoleGroupID;
+                empdoc.SalaryCategoryID = employee.SalaryCategoryID;
+                empdoc.SequenceID = employee.SequenceID;
+                empdoc.ShiftTypeID = employee.ShiftTypeID;
+                empdoc.StatusID = employee.StatusID;
+                empdoc.Whatsapp = employee.Whatsapp;
+                empdoc.Username = employee.Username;
+                empdoc.OurCompanyID = employee.OurCompanyID;
+                if (!string.IsNullOrEmpty(employee.Password))
+                {
+                    empdoc.Password = OfficeHelper.makeMD5(employee.Password);
+                }
+                if (FotoFile != null && FotoFile.ContentLength > 0)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(FotoFile.FileName);
+                    empdoc.FotoFile = filename;
+                    string path = "/Document/Employee";
+
+                    try
+                    {
+                        FotoFile.SaveAs(Path.Combine(Server.MapPath(path), filename));
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+
+                DocumentManager documentManager = new DocumentManager();
+                result = documentManager.AddEmployee(empdoc, model.Authentication);
+
+
+                TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+                if (result.IsSuccess == true)
+                {
+                    return RedirectToAction("Detail", "Employee", new { id = empdoc.EmployeeID });
+                }
+                else
+                {
+                    return RedirectToAction("AddEmployee", "Employee");
+                }
+            }
+            else
+            {
+                result.Message = $"Form bilgileri gelmedi.";
+            }
+
+            TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+            return RedirectToAction("AddEmployee", "Employee");
+        }
+
 
         [HttpPost]
         [AllowAnonymous]
@@ -467,7 +582,7 @@ namespace ActionForce.Office.Controllers
                 }
 
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.EditEmployee(empdoc, model.Authentication);
+                result = documentManager.AddEmployee(empdoc, model.Authentication);
 
                 
                 TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
