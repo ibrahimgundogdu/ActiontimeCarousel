@@ -16,10 +16,6 @@
                     <a href="#" class="btn btn-md btn-white">
                         Sipariş No &nbsp;&nbsp;&nbsp;  <span class="font-weight-bold">293877</span>
                     </a>
-                    
-                    @*<button class="btn btn-md ml-auto">
-                            <i data-feather="edit-2"></i>
-                        </button>*@
                     <button data-toggle="modal" data-target="#content-aside" data-modal class="btn btn-md ml-auto btn-white">
                         <i data-feather="download"></i> &nbsp;&nbsp;&nbsp; Bilet Ekle
                     </button>
@@ -130,8 +126,8 @@
                     </div>
                     <div class="col-md-6 bg-light">
                         <div class="p-2">
-                            <h6>Sepet</h6>
-
+                            <span class="text-md"> Sepet</span>
+                            <span class="mr-2 float-right"><i data-feather="shopping-cart"></i></span>
                             <div class="table-responsive">
                                 <table class="table table-theme table-row v-middle">
                                     
@@ -291,7 +287,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="p-4 d-sm-flex no-shrink b-t">
+                @*<div class="p-4 d-sm-flex no-shrink b-t">
                     <div>
                         <h2 class="text-primary">20,00 ₺</h2>
                         <small class="d-block text-fade">Toplam Tutar</small>
@@ -309,7 +305,7 @@
                             <i data-feather="more-vertical"></i>
                         </a>
                     </div>
-                </div>
+                </div>*@
             </div>
         </div>
     </div>
@@ -319,123 +315,99 @@
                 <span class="text-md mx-2">  Satış</span>
                 <div class="dropdown dropright">
                     <button data-toggle="dropdown" class="btn btn-sm btn-icon no-bg no-shadow">
-                        <i data-feather="shopping-cart"></i>
+                        ₺
                     </button>
-                    <div class="dropdown-menu w-lg">
-                        <div class="p-3">
-                            <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" id="newField" placeholder="Group name" required>
-                                <span class="input-group-append">
-                                    <button class="btn btn-white no-shadow btn-sm" type="button" id="newBtn">
-                                        <i data-feather="check"></i>
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
             <div class="scrollable hover">
                 <div class="sidenav p-2">
-                    <nav class="nav-active-text-primary" data-nav>
-                        <ul class="nav">
-                            <li>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" style="width:80px;">
-                                            <span class="text-muted text-sm h-1x font-weight-100">Tutar</span>
-                                        </span>
-                                    </div>
-                                    <span class="font-weight-bold text-right p-2 text-md">125,00</span>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">₺</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" style="width:80px;">
-                                            <span class="text-muted text-sm h-1x font-weight-100">İskonto</span>
-                                        </span>
-                                    </div>
-                                    <input type="text" class="form-control font-weight-bold text-right p-2 text-md" aria-label="Amount (to the nearest dollar)" value="25,00">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">₺</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" style="width:80px;">
-                                            <span class="text-muted text-sm h-1x font-weight-100">Toplam</span>
-                                        </span>
-                                    </div>
-                                    <input type="text" class="form-control font-weight-bold text-right p-2 text-md" aria-label="Amount (to the nearest dollar)" value="100,00">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">₺</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" style="width:80px;">
-                                            <span class="text-muted text-sm h-1x font-weight-100">KDV</span>
-                                        </span>
-                                    </div>
-                                    <input type="text" class="form-control font-weight-bold text-right p-2 text-md" aria-label="Amount (to the nearest dollar)" value="18,00">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">₺</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="input-group mb-3">
-                                    <div class="input-group-prepend">
-                                        <span class="input-group-text" style="width:80px;">
-                                            <span class="text-muted text-sm h-1x font-weight-100">
-                                                Bakiye
-                                            </span>
-                                        </span>
-                                    </div>
-                                    <input type="text" class="form-control font-weight-bold text-right p-2 text-md" aria-label="Amount (to the nearest dollar)" value="118,00">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">₺</span>
-                                    </div>
-                                </div>
-                            </li>
-                            <li class="nav-header hidden-folded mt-2">
-                                <span class="d-block pt-1 text-sm text-muted" style="width:100px;">Müşteri</span>
-                            </li>
+                    <div class="table-responsive">
+                        <table class="table v-middle">
 
-                            <li>
-                                <a href="app.user.html#supplier">
-                                    <span class="mx-2">
-                                        <b class="badge badge-circle sm text-info"></b>
-                                    </span>
-                                    <span class="nav-text">Suppliers</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="app.user.html#competitor">
-                                    <span class="mx-2">
-                                        <b class="badge badge-circle sm text-success"></b>
-                                    </span>
-                                    <span class="nav-text">Competitors</span>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="app.user.html#corp">
-                                    <span class="mx-2">
-                                        <b class="badge badge-circle sm text-warning"></b>
-                                    </span>
-                                    <span class="nav-text">Corps</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
+                            <tbody>
+                                <tr class="v-middle">
+                                    <td class="flex">
+                                        <span class="item-amount text-sm ">Tutar</span>
+                                    </td>
+                                    <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
+                                        <span class="item-amount d-none d-sm-block text-sm float-right">
+                                            20,00
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class=" v-middle" data-id="15">
+                                    <td class="flex">
+                                        <span class="item-amount text-sm ">İskonto</span>
+                                    </td>
+                                    <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
+                                        <span class="item-amount d-none d-sm-block text-sm float-right">
+                                            20,00
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class=" v-middle" data-id="15">
+                                    <td class="flex">
+                                        <span class="item-amount text-sm ">Ara Toplam</span>
+                                    </td>
+                                    <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
+                                        <span class="item-amount d-none d-sm-block text-sm float-right">
+                                            20,00
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class="v-middle" data-id="15">
+                                    <td class="flex">
+                                        <span class="item-amount text-sm ">KDV (18)</span>
+                                    </td>
+                                    <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
+                                        <span class="item-amount d-none d-sm-block text-sm float-right">
+                                            20,00
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr class=" v-middle shadow-sm" data-id="15">
+                                    <td class="flex">
+                                        <span class="item-amount text-md text-primary ">Bakiye</span>
+                                    </td>
+                                    <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
+                                        <span class="item-amount d-none d-sm-block text-md font-weight-bold text-dark float-right">
+                                            20,00
+                                        </span>
+                                    </td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="">
+                        <div class="form-group row">
+                            <label class="col-sm-8 col-form-label" for="usingnow">Hemen Kullanılacak</label>
+                            <div class="col-sm-4">
+                                <label class="ui-switch ui-switch-lg dark mt-1 mr-2">
+                                    <input type="checkbox" value="1" id="usingnow" name="usingnow" checked>
+                                    <i></i>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="mb-1">
+                            <input type="text" class="form-control" placeholder="Adı Soyadı" required>
+                        </div>
+                        <div class="mb-1">
+                            <input type="text" class="form-control" placeholder="Cep Telefonu">
+                        </div>
+                        <div class="mb-1">
+                            <input type="text" class="form-control" placeholder="Kimlik Numarası">
+                        </div>
+                        <div class="mb-1">
+                            <input type="text" class="form-control" placeholder="Detay" required>
+                        </div>
+
+
+                        <div class="mt-2 mb-1">
+                            <button class="btn btn-dark btn-block btn-md">Satışı Kaydet</button>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- / -->
