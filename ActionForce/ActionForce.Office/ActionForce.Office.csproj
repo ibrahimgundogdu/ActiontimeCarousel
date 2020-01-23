@@ -2339,6 +2339,7 @@
     <Compile Include="Models\Document\SalaryPayment.cs" />
     <Compile Include="Models\Document\TransferModel.cs" />
     <Compile Include="Models\EmployeeShiftModel.cs" />
+    <Compile Include="Models\WizardModel.cs" />
     <Compile Include="Models\LocationControlModel.cs" />
     <Compile Include="Models\newTransfer.cs" />
     <Compile Include="Models\SalaryControlModel.cs" />

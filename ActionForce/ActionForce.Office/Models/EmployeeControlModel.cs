@@ -22,20 +22,10 @@ namespace ActionForce.Office
         public IEnumerable<EmployeeSalaryCategory> SalaryCategoryList { get; set; }
         public IEnumerable<EmployeeSequence> SequenceList { get; set; }
 
+        public WizardModel Wizard { get; set; }
         public Result Result { get; set; }
         public FilterModel Filters { get; set; }
         public IEnumerable<ApplicationLog> LogList { get; set; }
-
-        public Guid? UID { get; set; }
-        public List<string> IdentityNumbers { get; set; }
-        public List<string> FullNames { get; set; }
-        public List<string> EMails { get; set; }
-        public List<string> Mobiles { get; set; }
-
-        public string IdentityNumber { get; set; }
-        public string FullName { get; set; }
-        public string EMail { get; set; }
-        public string Mobile { get; set; }
 
 
         public IEnumerable<VEmployee> VEmployee { get; set; }

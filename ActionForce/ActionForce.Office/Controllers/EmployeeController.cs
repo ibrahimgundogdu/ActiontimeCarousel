@@ -115,19 +115,16 @@ namespace ActionForce.Office.Controllers
         {
             EmployeeControlModel model = new EmployeeControlModel();
 
-
-            if (TempData["filter"] != null)
+            
+            if (TempData["wizard"] != null)
             {
-                model.Filters = TempData["filter"] as FilterModel;
+                model.Wizard = TempData["wizard"] as WizardModel;
             }
             else
             {
-                FilterModel filterModel = new FilterModel();
-                model.Filters = filterModel;
-            }
-            if (TempData["result"] != null)
-            {
-                model.Result = TempData["result"] as Result ?? null;
+                WizardModel wizardModel = new WizardModel();
+                
+                model.Wizard = wizardModel;
             }
 
             var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
@@ -145,7 +142,7 @@ namespace ActionForce.Office.Controllers
 
             model.EmpList = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == employeeID);
 
-
+            
 
             return View(model);
         }
@@ -340,104 +337,98 @@ namespace ActionForce.Office.Controllers
             return PartialView("_PartialAddEmployeeSchedule", model);
         }
 
+
+
+
+
         
         [AllowAnonymous]
-        public PartialViewResult EmployeeStatus(string identy, string name, string mail, string mobil)
+        public PartialViewResult EmployeeStatus(string IdentityNumber, string FullName, string EMail, string Mobile)
         {
-            Result<Employee> result = new Result<Employee>()
-            {
-                IsSuccess = false,
-                Message = string.Empty,
-                Data = null
-            };
-            
             EmployeeControlModel model = new EmployeeControlModel();
 
-            var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
-
-
-            model.OurList = Db.OurCompany.ToList();
-            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
-            model.AreaCategoryList = Db.EmployeeAreaCategory.Where(x => x.IsActive == true).ToList();
-            model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
-            model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true).ToList();
-            model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
-            model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
-            model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
-            model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
-
-
-
-            model.IdentityNumber = identy;
-            model.FullName = name;
-            model.EMail = mail;
-            model.Mobile = mobil;
-
-           
-
-            if (identy != "")
+            if (TempData["wizard"] != null)
             {
-                var idnt = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + identy + "%", x.IdentityNumber) > 0).ToList();
+                model.Wizard = TempData["wizard"] as WizardModel;
+            }
+            else
+            {
+                WizardModel wizardModel = new WizardModel();
+
+                wizardModel.IdentityNumber = IdentityNumber;
+                wizardModel.FullName = FullName;
+                wizardModel.EMail = EMail;
+                wizardModel.Mobile = Mobile;
+
+                model.Wizard = wizardModel;
+            }
+
+            if (model.Wizard.IdentityNumber != "")
+            {
+                var idnt = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + IdentityNumber + "%", x.IdentityNumber) > 0).ToList();
                 List<string> _identy = idnt.Select(x => x.IdentityNumber).ToList();
-                model.IdentityNumbers = _identy;
+                model.Wizard.IdentityNumbers = _identy;
             }
-            if (name != "")
+            if (model.Wizard.FullName != "")
             {
-                var nm = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + name + "%", x.FullName) > 0).ToList();
-                List<string> _name = nm.Select(x => x.FullName).ToList();
-                model.FullNames = _name;
-                //model.FullName = name;
-                //model.EmployeeList = Db.VEmployeeList.Where(x => SqlFunctions.PatIndex("%" + name + "%", x.FullName) > 0).ToList();
-                //model.FullNames = model.EmployeeList.Select(x => x.FullName).ToList();
+                var idnt = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + FullName + "%", x.FullName) > 0).ToList();
+                List<string> _identy = idnt.Select(x => x.FullName).ToList();
+                model.Wizard.FullNames = _identy;
             }
-            if (mail != "")
+            if (model.Wizard.EMail != "")
             {
-                var ml = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + mail + "%", x.EMail) > 0).ToList();
-                List<string> _mail = ml.Select(x => x.EMail).ToList();
-                model.EMails = _mail;
-                //model.EMail = mail;
-                //model.EmployeeList = Db.VEmployeeList.Where(x => SqlFunctions.PatIndex("%" + mail + "%", x.EMail) > 0).ToList();
-                //model.EMails = model.EmployeeList.Select(x => x.EMail).ToList();
+                var idnt = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + EMail + "%", x.EMail) > 0).ToList();
+                List<string> _identy = idnt.Select(x => x.EMail).ToList();
+                model.Wizard.EMails = _identy;
             }
-            if (mobil != "")
+            if (model.Wizard.Mobile != "")
             {
-                var mb = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + mobil + "%", x.Mobile) > 0).ToList();
-                List<string> _mobil = mb.Select(x => x.Mobile).ToList();
-                model.Mobiles = _mobil;
-                //model.Mobile = mobil;
-                //model.EmployeeList = Db.VEmployeeList.Where(x => SqlFunctions.PatIndex("%" + mobil + "%", x.Mobile) > 0).ToList();
-                //model.Mobiles = model.EmployeeList.Select(x => x.Mobile).ToList();
+                var idnt = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + Mobile + "%", x.Mobile) > 0).ToList();
+                List<string> _identy = idnt.Select(x => x.Mobile).ToList();
+                model.Wizard.Mobiles = _identy;
             }
-
             model.EmployeeList = Db.VEmployeeList.ToList();
+            
 
-            if (model.IdentityNumbers?.Count() > 0 || model.FullNames?.Count() > 0 || model.EMails?.Count() > 0 || model.Mobiles?.Count() > 0) 
+            TempData["Model"] = model;
+
+            if (model.Wizard.IdentityNumbers?.Count() > 0 || model.Wizard.FullNames?.Count() > 0 || model.Wizard.EMails?.Count() > 0 || model.Wizard.Mobiles?.Count() > 0)
             {
-
-                model.UID = Guid.NewGuid();
-
+                
                 return PartialView("_PartialEmployeeAddStatus", model);
             }
             else
             {
                 
-
                 return PartialView("_PartialEmployeeAddNew", model);
             }
             
+
         }
+
+
+        
         
         [AllowAnonymous]
-        public PartialViewResult EmployeeList(string identy, string name, string mail, string mobil)
+        public PartialViewResult EmployeeList(string IdentityNumber, string FullName, string EMail, string Mobile)
         {
-            Result<Employee> result = new Result<Employee>()
-            {
-                IsSuccess = false,
-                Message = string.Empty,
-                Data = null
-            };
-
             EmployeeControlModel model = new EmployeeControlModel();
+
+
+            if (TempData["wizard"] != null)
+            {
+                model.Wizard = TempData["wizard"] as WizardModel;
+            }
+            else
+            {
+                WizardModel wizardModel = new WizardModel();
+                wizardModel.IdentityNumber = IdentityNumber;
+                wizardModel.FullName = FullName;
+                wizardModel.EMail = EMail;
+                wizardModel.Mobile = Mobile;
+
+                model.Wizard = wizardModel;
+            }
 
             var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
 
@@ -452,10 +443,9 @@ namespace ActionForce.Office.Controllers
             model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
             model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
 
-            model.IdentityNumber = identy;
-            model.FullName = name;
-            model.EMail = mail;
-            model.Mobile = mobil;
+            model.EmployeeList = Db.VEmployeeList.ToList();
+
+            TempData["Model"] = model;
 
             return PartialView("_PartialEmployeeAddNew", model);
         }

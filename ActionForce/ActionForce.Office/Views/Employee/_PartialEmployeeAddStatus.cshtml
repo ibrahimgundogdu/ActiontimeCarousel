@@ -1,92 +1,152 @@
 ﻿@model EmployeeControlModel
 
-<ul class="list-group wd-md-50p">
-    @if (Model.IdentityNumbers?.Count() > 0)
-    {
-        foreach (var item in Model.IdentityNumbers.ToList())
+
+@if (Model.Wizard.IdentityNumbers?.Count() > 0)
+{
+    <ul class="list-group wd-md-100p mg-b-20">
+        <li class="list-group-item d-flex align-items-center active">
+            Tc Kimlik Numarası
+        </li>
+        @foreach (var item in Model.Wizard.IdentityNumbers.ToList())
         {
             var ls = Model.EmployeeList.FirstOrDefault(x => x.IdentityNumber == item);
+
             <li class="list-group-item d-flex align-items-center">
-                <img src="http://office.ufegrup.com/img/Employee/@(ls.FotoFile)" class="wd-30 rounded-circle mg-r-15" alt="">
-                <div>
-                    <span class="col-sm-3">@(ls.IdentityNumber)</span>
-                    <span class="col-sm-3">@(ls.FullName)</span>
-                    <span class="col-sm-3">@(ls.EMail)</span>
-                    <span class="col-sm-2">@(ls.Mobile)</span>
-                    <span class="col-sm-1"><a href="@("/Employee/Detail/" + ls.EmployeeID)" class="btn btn-xs btn-danger"><i class="fa fa-link"></i></a></span>
+                <div class="col-lg-3">
+                    <span>@(ls.IdentityNumber)</span>
+                </div>
+                <div class="col-lg-3">
+                    <span>@(ls.FullName)</span>
+                </div>
+                <div class="col-lg-3">
+                    <span>@(ls.EMail)</span>
+                </div>
+                <div class="col-lg-2">
+                    <span>@(ls.Mobile)</span>
+                </div>
+                <div class="col-lg-1">
+                    <span><a href="@("/Employee/Detail/" + ls.EmployeeID)" class="btn btn-xs btn-danger"><i class="fa fa-link"></i></a></span>
                 </div>
 
             </li>
         }
-    }
-    else
+    </ul>
+}
+else
+{
+    if (Model.Wizard.FullNames?.Count() > 0)
     {
-        if (Model.FullNames != null)
-        {
-            foreach (var item in Model.FullNames.ToList())
+        <ul class="list-group wd-md-100p mg-b-20">
+            <li class="list-group-item d-flex align-items-center active">
+                İsim Soyisim
+            </li>
+            @foreach (var item in Model.Wizard.FullNames.ToList())
             {
                 var ls = Model.EmployeeList.FirstOrDefault(x => x.FullName == item);
+
                 <li class="list-group-item d-flex align-items-center">
-                    <img src="http://office.ufegrup.com/img/Employee/@(ls.FotoFile)" class="wd-30 rounded-circle mg-r-15" alt="">
-                    <div>
-                        <span class="wd-20">@(ls.IdentityNumber)</span>
-                        <span class="wd-20">@(ls.FullName)</span>
-                        <span class="wd-20">@(ls.EMail)</span>
-                        <span class="wd-20">@(ls.Mobile)</span>
-                        <span class="wd-20"><a href="@("/Employee/Detail/" + ls.EmployeeID)" class="btn btn-xs btn-danger"><i class="fa fa-link"></i></a></span>
+                    <div class="col-lg-3">
+                        <span>@(ls.IdentityNumber)</span>
+                    </div>
+                    <div class="col-lg-3">
+                        <span>@(ls.FullName)</span>
+                    </div>
+                    <div class="col-lg-3">
+                        <span>@(ls.EMail)</span>
+                    </div>
+                    <div class="col-lg-2">
+                        <span>@(ls.Mobile)</span>
+                    </div>
+                    <div class="col-lg-1">
+                        <span><a href="@("/Employee/Detail/" + ls.EmployeeID)" class="btn btn-xs btn-danger"><i class="fa fa-link"></i></a></span>
                     </div>
 
                 </li>
             }
-        }
-        if (Model.EMails != null)
-        {
-            foreach (var item in Model.EMails.ToList())
+        </ul>
+    }
+    if (Model.Wizard.EMails?.Count() > 0)
+    {
+        <ul class="list-group wd-md-100p mg-b-20">
+            <li class="list-group-item d-flex align-items-center active">
+                E-Posta
+            </li>
+            @foreach (var item in Model.Wizard.EMails.ToList())
             {
                 var ls = Model.EmployeeList.FirstOrDefault(x => x.EMail == item);
+
                 <li class="list-group-item d-flex align-items-center">
-                    <img src="http://office.ufegrup.com/img/Employee/@(ls.FotoFile)" class="wd-30 rounded-circle mg-r-15" alt="">
-                    <div>
-                        <span class="col-sm-3">@(ls.IdentityNumber)</span>
-                        <span class="col-sm-3">@(ls.FullName)</span>
-                        <span class="col-sm-3">@(ls.EMail)</span>
-                        <span class="col-sm-2">@(ls.Mobile)</span>
-                        <span class="col-sm-1"><a href="@("/Employee/Detail/" + ls.EmployeeID)" class="btn btn-xs btn-danger"><i class="fa fa-link"></i></a></span>
+                    <div class="col-lg-3">
+                        <span>@(ls.IdentityNumber)</span>
+                    </div>
+                    <div class="col-lg-3">
+                        <span>@(ls.FullName)</span>
+                    </div>
+                    <div class="col-lg-3">
+                        <span>@(ls.EMail)</span>
+                    </div>
+                    <div class="col-lg-2">
+                        <span>@(ls.Mobile)</span>
+                    </div>
+                    <div class="col-lg-1">
+                        <span><a href="@("/Employee/Detail/" + ls.EmployeeID)" class="btn btn-xs btn-danger"><i class="fa fa-link"></i></a></span>
                     </div>
 
                 </li>
             }
-        }
-        if (Model.Mobiles != null)
-        {
-            foreach (var item in Model.Mobiles.ToList())
+        </ul>
+    }
+    if (Model.Wizard.Mobiles?.Count() > 0)
+    {
+        <ul class="list-group wd-md-100p mg-b-20">
+            <li class="list-group-item d-flex align-items-center active">
+                Mobil
+            </li>
+            @foreach (var item in Model.Wizard.Mobiles.ToList())
             {
                 var ls = Model.EmployeeList.FirstOrDefault(x => x.Mobile == item);
+
                 <li class="list-group-item d-flex align-items-center">
-                    <img src="http://office.ufegrup.com/img/Employee/@(ls.FotoFile)" class="wd-30 rounded-circle mg-r-15" alt="">
-                    <div>
-                        <span class="col-sm-3">@(ls.IdentityNumber)</span>
-                        <span class="col-sm-3">@(ls.FullName)</span>
-                        <span class="col-sm-3">@(ls.EMail)</span>
-                        <span class="col-sm-2">@(ls.Mobile)</span>
-                        <span class="col-sm-1"><a href="@("/Employee/Detail/" + ls.EmployeeID)" class="btn btn-xs btn-danger"><i class="fa fa-link"></i></a></span>
+                    <div class="col-lg-3">
+                        <span>@(ls.IdentityNumber)</span>
+                    </div>
+                    <div class="col-lg-3">
+                        <span>@(ls.FullName)</span>
+                    </div>
+                    <div class="col-lg-3">
+                        <span>@(ls.EMail)</span>
+                    </div>
+                    <div class="col-lg-2">
+                        <span>@(ls.Mobile)</span>
+                    </div>
+                    <div class="col-lg-1">
+                        <span><a href="@("/Employee/Detail/" + ls.EmployeeID)" class="btn btn-xs btn-danger"><i class="fa fa-link"></i></a></span>
                     </div>
 
                 </li>
             }
-        }
-
-
-
+        </ul>
     }
 
+
+
+}
+<ul class="list-group wd-md-100p">
     <li class="list-group-item d-flex align-items-center">
-        <div>
-            <span class="col-sm-3"> </span>
-            <span class="col-sm-3"> </span>
-            <span class="col-sm-3"> </span>
-            <span class="col-sm-2"><a href="#" onclick="EmployeeList('@Model.IdentityNumber', '@Model.FullName', '@Model.EMail', '@Model.Mobile')" class="btn btn-xs btn-secondary">Bunlar Değil</a></span>
-            <span class="col-sm-1"> </span>
+        <div class="col-lg-3">
+            <span> </span>
+        </div>
+        <div class="col-lg-3">
+            <span> </span>
+        </div>
+        <div class="col-lg-3">
+            <span> </span>
+        </div>
+        <div class="col-lg-2">
+            
+        </div>
+        <div class="col-lg-1">
+            <a href="#" onclick="EmployeeList('@Model.Wizard.IdentityNumber', '@Model.Wizard.FullName', '@Model.Wizard.EMail', '@Model.Wizard.Mobile')" class="btn btn-xs btn-secondary">Bunlar Değil</a>
         </div>
 
     </li>

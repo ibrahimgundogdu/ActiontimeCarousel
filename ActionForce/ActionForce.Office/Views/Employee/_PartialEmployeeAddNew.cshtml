@@ -18,7 +18,7 @@
                 <label for="Tc" class="col-sm-3 col-form-label">Tc Kimlik</label>
                 <div class="col-sm-3">
                     
-                    <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" value="@(Model.IdentityNumber)" readonly autocomplete="off" placeholder="Tc Kimlik No">
+                    <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" value="@(Model.Wizard.IdentityNumber)" @(Model.Wizard.IdentityNumber != "" ? "readonly" : "") autocomplete="off" placeholder="Tc Kimlik No">
                 </div>
                 <div class="col-sm-3"> </div>
                 <div class="col-sm-3">
@@ -27,7 +27,7 @@
             <div class="form-group row mg-b-5 bg-gray-50">
                 <label for="Tc" class="col-sm-3 col-form-label">Ad Soyad</label>
                 <div class="col-sm-3">
-                    <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" value="@(Model.FullName)" readonly placeholder="Ad Soyad" required>
+                    <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" value="@(Model.Wizard.FullName)" @(Model.Wizard.FullName != "" ? "readonly" : "") placeholder="Ad Soyad" required>
                 </div>
                 <div class="col-sm-3"> </div>
                 <div class="col-sm-3">
@@ -36,7 +36,7 @@
             <div class="form-group row mg-b-5 bg-gray-50">
                 <label for="Tc" class="col-sm-3 col-form-label">Email</label>
                 <div class="col-sm-3">
-                    <input id="EMail" name="EMail" type="text" class="form-control" autocomplete="off" value="@(Model.EMail)" readonly placeholder="E-Posta Adresi">
+                    <input id="EMail" name="EMail" type="text" class="form-control" autocomplete="off" value="@(Model.Wizard.EMail)" @(Model.Wizard.EMail != "" ? "readonly" : "") placeholder="E-Posta Adresi">
                 </div>
                 <div class="col-sm-3"> </div>
                 <div class="col-sm-3">
@@ -45,7 +45,7 @@
             <div class="form-group row mg-b-5 bg-gray-50">
                 <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
                 <div class="col-sm-3">
-                    <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" value="@(Model.Mobile)" readonly placeholder="Telefon">
+                    <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" value="@(Model.Wizard.Mobile)" @(Model.Wizard.Mobile != "" ? "readonly" : "") placeholder="Telefon">
                 </div>
                 <div class="col-sm-3"> </div>
                 <div class="col-sm-3">
