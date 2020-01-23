@@ -4569,6 +4569,25 @@ namespace ActionForce.Office
                         emp.RecordDate = DateTime.Now;
                         emp.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
                         emp.RecordIP = OfficeHelper.GetIPAddress();
+                        emp.AreaCategoryID = employee.AreaCategoryID;
+                        emp.DepartmentID = employee.DepartmentID;
+                        emp.Description = employee.Description;
+                        emp.EmployeeUID = Guid.NewGuid();
+                        emp.IsActive = true;
+                        emp.IsTemp = false;
+                        emp.Mobile2 = employee.Mobile2;
+                        emp.Username = employee.Username;
+                        emp.Password = employee.Password;
+                        emp.PositionID = employee.PositionID;
+                        emp.RoleGroupID = employee.RoleGroupID;
+                        emp.SalaryCategoryID = employee.SalaryCategoryID;
+                        emp.SequenceID = employee.SequenceID;
+                        emp.ShiftTypeID = employee.ShiftTypeID;
+                        emp.StatusID = employee.StatusID;
+                        emp.Title = employee.Title;
+                        emp.Whatsapp = employee.Whatsapp;
+                        emp.OurCompanyID = employee.OurCompanyID;
+
                         Db.Employee.Add(emp);
                         Db.SaveChanges();
 
@@ -4616,14 +4635,29 @@ namespace ActionForce.Office
                             Mobile = isEmployee.Mobile,
                             RecordDate = isEmployee.RecordDate,
                             RecordEmployeeID = isEmployee.RecordEmployeeID,
-                            RecordIP = isEmployee.RecordIP
-                        };
+                            RecordIP = isEmployee.RecordIP,
+                            AreaCategoryID = employee.AreaCategoryID,
+                            DepartmentID = isEmployee.DepartmentID,
+                            Description = isEmployee.Description,
+                            EmployeeUID = isEmployee.EmployeeUID,
+                            IsActive = isEmployee.IsActive,
+                            IsTemp = isEmployee.IsTemp,
+                            Mobile2 = isEmployee.Mobile2,
+                            Username = isEmployee.Username,
+                            Password = isEmployee.Password,
+                            PositionID = isEmployee.PositionID,
+                            RoleGroupID = isEmployee.RoleGroupID,
+                            SalaryCategoryID = isEmployee.SalaryCategoryID,
+                            SequenceID = isEmployee.SequenceID,
+                            ShiftTypeID = isEmployee.ShiftTypeID,
+                            StatusID = isEmployee.StatusID,
+                            Title = isEmployee.Title = employee.Title,
+                            Whatsapp = isEmployee.Whatsapp,
+                            OurCompanyID = isEmployee.OurCompanyID
+                    };
                         isEmployee.AreaCategoryID = employee.AreaCategoryID;
                         isEmployee.DepartmentID = employee.DepartmentID;
                         isEmployee.Description = employee.Description;
-                        isEmployee.EmployeeUID = Guid.NewGuid();
-                        isEmployee.IsActive = true;
-                        isEmployee.IsTemp = false;
                         isEmployee.Mobile2 = employee.Mobile2;
                         isEmployee.Username = employee.Username;
                         isEmployee.Password = employee.Password;
@@ -4643,13 +4677,13 @@ namespace ActionForce.Office
                         result.Message = $"{isEmployee.EmployeeID} nolu Çalışan başarı ile Eklendi";
 
                         var isequal = OfficeHelper.PublicInstancePropertiesEqual<Employee>(self, isEmployee, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "AddEmployee", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "Detail", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
                     catch (Exception ex)
                     {
 
                         result.Message = $"Çalışan güncellenemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "AddEmployee", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, employee);
+                        OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "Detail", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, employee);
                     }
                 }
             }

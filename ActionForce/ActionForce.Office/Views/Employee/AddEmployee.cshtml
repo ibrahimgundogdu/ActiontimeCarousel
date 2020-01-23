@@ -33,71 +33,71 @@
                         <a href="/Employee/" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; Çalışan Listesi</a>
                     </div>
                 </div>
-
                 <div id="employeeStatus">
                     <div class="row row-xs">
-                        <div class="col-lg-12">
+                            <div class="col-lg-12">
 
-                            <div class="form-group row mg-b-5 bg-gray-50">
-                                <div class="col-sm-3">
-                                    <select class="form-control" id="Identity" name="Identity" required>
-                                        <option value="0">Tc Kimlik</option>
-                                        <option value="1">Identity</option>
-                                        <option value="2">Social Security</option>
-                                    </select>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <div class="col-sm-3">
+                                        <select class="form-control" id="Identity" name="Identity" required>
+                                            <option value="0">Tc Kimlik</option>
+                                            <option value="1">Identity</option>
+                                            <option value="2">Social Security</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input id="IdentityNumberx" name="IdentityNumber" type="text" maxlength="11" class="form-control quantity" autocomplete="off" placeholder="Tc Kimlik No">
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
                                 </div>
-                                <div class="col-sm-3">
-                                    <input id="IdentityNumberx" name="IdentityNumber" type="text" maxlength="11" class="form-control quantity" autocomplete="off" placeholder="Tc Kimlik No">
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="Tc" class="col-sm-3 col-form-label">Ad Soyad</label>
+                                    <div class="col-sm-3">
+                                        <input id="FullNamex" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="Ad Soyad" required>
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
                                 </div>
-                                <div class="col-sm-3"> </div>
-                                <div class="col-sm-3">
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="Tc" class="col-sm-3 col-form-label">Email</label>
+                                    <div class="col-sm-3">
+                                        <input id="EMailx" name="EMail" type="email" class="form-control" autocomplete="off" placeholder="E-Posta Adresi">
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group row mg-b-5 bg-gray-50">
-                                <label for="Tc" class="col-sm-3 col-form-label">Ad Soyad</label>
-                                <div class="col-sm-3">
-                                    <input id="FullNamex" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="Ad Soyad" required>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
+                                    <div class="col-sm-3">
+                                        <input id="Mobilex" name="Mobile" type="tel" class="form-control phone" autocomplete="off" placeholder="Telefon">
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
                                 </div>
-                                <div class="col-sm-3"> </div>
-                                <div class="col-sm-3">
-                                </div>
-                            </div>
-                            <div class="form-group row mg-b-5 bg-gray-50">
-                                <label for="Tc" class="col-sm-3 col-form-label">Email</label>
-                                <div class="col-sm-3">
-                                    <input id="EMailx" name="EMail" type="email" class="form-control" autocomplete="off" placeholder="E-Posta Adresi">
-                                </div>
-                                <div class="col-sm-3"> </div>
-                                <div class="col-sm-3">
-                                </div>
-                            </div>
-                            <div class="form-group row mg-b-5 bg-gray-50">
-                                <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
-                                <div class="col-sm-3">
-                                    <input id="Mobilex" name="Mobile" type="tel" class="form-control phone" autocomplete="off" placeholder="Telefon">
-                                </div>
-                                <div class="col-sm-3"> </div>
-                                <div class="col-sm-3">
-                                </div>
-                            </div>
 
-                            <div class="form-group row mg-b-0">
-                                <div class="col-sm-3"></div>
-                                <div class="col-sm-3">
-                                    <button type="submit" onclick="EmployeeStatus()" class="btn btn-primary btn-block">Employee Ekle</button>
+                                <div class="form-group row mg-b-0">
+                                    <div class="col-sm-3"></div>
+                                    <div class="col-sm-3">
+                                        <button type="submit" onclick="EmployeeStatus()" class="btn btn-primary btn-block">Employee Ekle</button>
+                                    </div>
+                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
                                 </div>
-                                <div class="col-sm-3"> </div>
-                                <div class="col-sm-3">
-                                </div>
-                            </div>
 
+                            </div>
                         </div>
-                    </div>
-                    
                 </div>
+                    
 
+
+                </div>
             </div>
-        </div>
     </div>
 </div>
 
@@ -107,54 +107,6 @@
 }
 
 @section scripts {
-    <script src="~/lib/jquery-steps/build/jquery.steps.min.js"></script>
-    @*<script>
-        $(function () {
-            'use strict'
-
-            $('#employeeStatus').steps({
-                headerTag: 'h3',
-                bodyTag: 'section',
-                autoFocus: true,
-                titleTemplate: '<span class="number">#index#</span> <span class="title">#title#</span>',
-                onStepChanging: function (event, currentIndex, newIndex) {
-                    if (currentIndex < newIndex) {
-                        if (currentIndex === 0) {
-                            var fidentity = $('#IdentityNumberx').parsley();
-                            var fname = $('#FullNamex').parsley();
-                            var fmail = $('#EMailx').parsley();
-                            var fmobil = $('#Mobilex').parsley();
-
-                            if (fidentity.isValid() && fname.isValid() && fmail.isValid() && fmobil.isValid()) {
-                                //$.ajax({
-                                //    method: "GET",
-                                //    url: "/Employee/EmployeeStatus",
-                                //    data: { identy: sidenty, name: sname, mail: smail, mobil: sphone }
-                                //}).done(function (d) {
-                                //    $("#employeeStatus").html(d);
-                                //});
-                                return true;
-                            } else {
-                                fidentity.validate();
-                                fname.validate();
-                                fmail.validate();
-                                fmobil.validate();
-                            }
-                        }
-                        
-                        if (currentIndex === 1) {
-                            var email = $('#email').parsley();
-                            if (email.isValid()) {
-                                return true;
-                            } else { email.validate(); }
-                        }
-                        
-                    } else { return true; }
-                }
-            });
-
-        });
-    </script>*@
     <script>
         $(function () {
             'use strict'
@@ -184,16 +136,16 @@
             $.ajax({
                 method: "GET",
                 url: "/Employee/EmployeeStatus",
-                data: { identy: sidenty, name: sname, mail: smail, mobil: sphone }
+                data: { IdentityNumber: sidenty, FullName: sname, EMail: smail, Mobile: sphone }
             }).done(function (d) {
                 $("#employeeStatus").html(d);
             });
         }
-        function EmployeeList(sidenty, sname, smail, sphone) {
+        function EmployeeList(IdentityNumber, FullName, EMail, Mobile) {
             $.ajax({
                 method: "GET",
                 url: "/Employee/EmployeeList",
-                data: { identy: sidenty, name: sname, mail: smail, mobil: sphone }
+                data: { IdentityNumber: IdentityNumber, FullName: FullName, EMail: EMail, Mobile: Mobile }
             }).done(function (d) {
                 $("#employeeStatus").html(d);
             });
