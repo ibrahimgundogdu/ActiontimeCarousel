@@ -177,6 +177,18 @@
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Employee" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Employee">Çalışanlar</a></li>
                     </ul>
                 </li>
+                @if (Model.Authentication.ActionEmployee.RoleGroup.RoleLevel >= 6)
+                {
+                    <li class="nav-label mg-t-10">Yönetim</li>
+
+                    <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" ? "show" : "")">
+                        <a href="/Revenue" class="nav-link"><i data-feather="briefcase"></i> <span>Hasılat</span></a>
+                        <ul>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Revenue">Hasılat Raporu</a></li>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" && this.ViewContext.RouteData.Values["action"].ToString() == "Parameters" ? "class=active" : "")><a href="/Revenue/Parameters">Parametreler</a></li>
+                        </ul>
+                    </li>
+                }
             </ul>
 
         </div>
@@ -226,7 +238,7 @@
                 window.location.href = url;
             });
         });
-        
+
         $(function () {
             $('.shiftbegintime').mask('00:00');
             $('.hour').mask('00:00');

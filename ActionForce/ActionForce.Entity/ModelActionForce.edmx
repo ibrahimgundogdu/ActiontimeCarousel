@@ -3161,8 +3161,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="TotalExpense" Type="float" />
           <Property Name="TotalCashIn" Type="float" />
           <Property Name="TotalRent" Type="float" />
+          <Property Name="RentMonthly" Type="float" />
           <Property Name="TotalCreditCommission" Type="float" />
           <Property Name="TotalInsurance" Type="float" />
+          <Property Name="InsuranceMonthly" Type="float" />
         </EntityType>
         <EntityType Name="RevenueLines">
           <Key>
@@ -4600,6 +4602,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VRevenue' does not have a p
         <EntityType Name="VRevenue">
           <Key>
             <PropertyRef Name="ID" />
+            <PropertyRef Name="OurCompanyID" />
           </Key>
           <Property Name="ID" Type="bigint" Nullable="false" />
           <Property Name="WeekYear" Type="int" />
@@ -4624,6 +4627,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VRevenue' does not have a p
           <Property Name="TotalInsurance" Type="float" />
           <Property Name="SortBy" Type="varchar" MaxLength="10" />
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="OurCompanyID" Type="int" Nullable="false" />
+          <Property Name="RentMonthly" Type="float" />
+          <Property Name="InsuranceMonthly" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VRevenueLines' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6633,7 +6639,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VRevenue].[TotalCreditCommission] AS [TotalCreditCommission], 
     [VRevenue].[TotalInsurance] AS [TotalInsurance], 
     [VRevenue].[SortBy] AS [SortBy], 
-    [VRevenue].[LocationFullName] AS [LocationFullName]
+    [VRevenue].[LocationFullName] AS [LocationFullName], 
+    [VRevenue].[OurCompanyID] AS [OurCompanyID], 
+    [VRevenue].[RentMonthly] AS [RentMonthly], 
+    [VRevenue].[InsuranceMonthly] AS [InsuranceMonthly]
     FROM [dbo].[VRevenue] AS [VRevenue]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VRevenueLines" EntityType="Self.VRevenueLines" store:Type="Views" store:Schema="dbo">
@@ -12116,6 +12125,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TotalRent" Type="Double" />
           <Property Name="TotalCreditCommission" Type="Double" />
           <Property Name="TotalInsurance" Type="Double" />
+          <Property Name="RentMonthly" Type="Double" />
+          <Property Name="InsuranceMonthly" Type="Double" />
         </EntityType>
         <EntityType Name="RevenueLines">
           <Key>
@@ -12154,6 +12165,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <EntityType Name="VRevenue">
           <Key>
             <PropertyRef Name="ID" />
+            <PropertyRef Name="OurCompanyID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" />
           <Property Name="WeekYear" Type="Int32" />
@@ -12178,6 +12190,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TotalInsurance" Type="Double" />
           <Property Name="SortBy" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
           <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="RentMonthly" Type="Double" />
+          <Property Name="InsuranceMonthly" Type="Double" />
         </EntityType>
         <EntityType Name="VRevenueLines">
           <Key>
@@ -16996,6 +17011,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="Revenue">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Revenue">
               <MappingFragment StoreEntitySet="Revenue">
+                <ScalarProperty Name="InsuranceMonthly" ColumnName="InsuranceMonthly" />
+                <ScalarProperty Name="RentMonthly" ColumnName="RentMonthly" />
                 <ScalarProperty Name="TotalInsurance" ColumnName="TotalInsurance" />
                 <ScalarProperty Name="TotalCreditCommission" ColumnName="TotalCreditCommission" />
                 <ScalarProperty Name="TotalRent" ColumnName="TotalRent" />
@@ -17060,6 +17077,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VRevenue">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VRevenue">
               <MappingFragment StoreEntitySet="VRevenue">
+                <ScalarProperty Name="InsuranceMonthly" ColumnName="InsuranceMonthly" />
+                <ScalarProperty Name="RentMonthly" ColumnName="RentMonthly" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
                 <ScalarProperty Name="SortBy" ColumnName="SortBy" />
                 <ScalarProperty Name="TotalInsurance" ColumnName="TotalInsurance" />

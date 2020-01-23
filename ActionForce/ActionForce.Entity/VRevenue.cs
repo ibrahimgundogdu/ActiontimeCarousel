@@ -37,5 +37,8 @@ namespace ActionForce.Entity
         public Nullable<double> TotalInsurance { get; set; }
         public string SortBy { get; set; }
         public string LocationFullName { get; set; }
+        public int OurCompanyID { get; set; }
+        public Nullable<double> RentMonthly { get; set; }
+        public Nullable<double> InsuranceMonthly { get; set; }
     }
 }

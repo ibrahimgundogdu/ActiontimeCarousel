@@ -26,4 +26,10 @@ namespace ActionForce.Office
         public DateList NextWeek { get; set; }
         public DateList PrevWeek { get; set; }
     }
+
+    public class RevenueDetailModel
+    {
+        public VRevenue Revenue { get; set; }
+        public IEnumerable<VRevenueLines> RevenueLines { get; set; }
+    }
 }

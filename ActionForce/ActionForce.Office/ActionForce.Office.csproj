@@ -2588,6 +2588,7 @@
     <Content Include="Views\Employee\_PartialEmployeeAddNew.cshtml" />
     <Content Include="Views\Revenue\Index.cshtml" />
     <Content Include="Views\Revenue\Compute.cshtml" />
+    <Content Include="Views\Revenue\_PartialRevenueDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

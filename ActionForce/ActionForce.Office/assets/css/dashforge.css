@@ -9966,6 +9966,13 @@ textarea.form-control {
   .link-03:hover, .link-03:focus {
     color: #1b2e4b; }
 
+.link-04 {
+    color: #fff;
+}
+.link-04:hover, .link-04:focus {
+        color: #ffc107;
+    }
+
 .hover-primary:hover, .hover-primary:focus {
   color: #0168fa; }
 

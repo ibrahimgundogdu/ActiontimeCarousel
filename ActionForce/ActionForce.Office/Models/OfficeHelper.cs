@@ -1738,11 +1738,11 @@ namespace ActionForce.Office
             return issuccess;
         }
 
-        public static double CalculatePermitDuration(DateTime datestart, DateTime dateend, int employeeid,  int locationid)
+        public static double CalculatePermitDuration(DateTime datestart, DateTime dateend, int employeeid, int locationid)
         {
             double minuteDuration = 0;
 
-            if (employeeid > 0 && locationid>0 && datestart != null && dateend != null)
+            if (employeeid > 0 && locationid > 0 && datestart != null && dateend != null)
             {
                 DateTime date = datestart.Date;
 
@@ -1751,7 +1751,7 @@ namespace ActionForce.Office
                     var employeeschedule = db.Schedule.FirstOrDefault(x => x.EmployeeID == employeeid && x.LocationID == locationid && x.ShiftDate == date);
                     var employeeshift = db.EmployeeShift.FirstOrDefault(x => x.EmployeeID == employeeid && x.LocationID == locationid && x.ShiftDate == date && x.IsWorkTime == true);
 
-                    if (employeeschedule != null )
+                    if (employeeschedule != null)
                     {
                         DateTime _startdate = employeeschedule.ShiftDateStart.Value;
                         DateTime _endate = employeeschedule.ShiftdateEnd.Value;
@@ -1778,6 +1778,34 @@ namespace ActionForce.Office
             }
 
             return minuteDuration;
+        }
+
+        public static void Compute(int? WeekYear, int? WeekNumber, int? LocationID)
+        {
+            RevenueControlModel model = new RevenueControlModel();
+
+            model.WeekYear = WeekYear ?? 0;
+            model.WeekNumber = WeekNumber ?? 0;
+
+            if (WeekYear > 0 && WeekNumber > 0)
+            {
+                using (ActionTimeEntities db = new ActionTimeEntities())
+                {
+                    if (LocationID > 0)
+                    {
+                        var res = db.ComputeLocationWeekRevenue(model.WeekNumber, model.WeekYear, LocationID);
+                    }
+                    else
+                    {
+                        model.Locations = db.Location.ToList();
+
+                        foreach (var location in model.Locations)
+                        {
+                            var res = db.ComputeLocationWeekRevenue(model.WeekNumber, model.WeekYear, location.LocationID);
+                        }
+                    }
+                }
+            }
         }
     }
 }
