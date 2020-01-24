@@ -14,7 +14,7 @@
         <input id="WeekCode" type="hidden" value="@Model.WeekCode" />
     </div>
     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-        <a href="/Employee/Detail?week=@(Model.PrevWeekCode)&id=@(Model.EmpList.EmployeeID)" onclick="lastWeek()" class="link-03" title="Bir Önceki Hafta"><i class="fa fa-arrow-left"></i></a>
+        <a href="/Employee/Detail?week=@(Model.PrevWeekCode)&id=@(Model.EmpList.EmployeeID)" class="link-03" title="Bir Önceki Hafta"><i class="fa fa-arrow-left"></i></a>
     </div>
     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
         <a href="/Employee/Detail?date=@(DateTime.Now.ToString("yyyy-MM-dd"))&id=@(Model.EmpList.EmployeeID)" class="link-03" title="Bu Hafta"><i class="fa fa-bullseye"></i></a>

@@ -14,13 +14,13 @@
         <input id="WeekCode" type="hidden" value="@Model.WeekCode" />
     </div>
     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-        <a href="/Employee/Detail?week=@(Model.PrevWeekCode)&id=@(Model.EmpList.EmployeeID)" class="link-03" title="Bir Önceki Hafta"><i class="fa fa-arrow-left"></i></a>
+        <a href="#" onclick="EmployeeShift(@Model.EmpList.EmployeeID, '@Model.PrevWeekCode')" class="link-03" title="Bir Önceki Hafta"><i class="fa fa-arrow-left"></i></a>
     </div>
     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-        <a href="/Employee/Detail?date=@(DateTime.Now.ToString("yyyy-MM-dd"))&id=@(Model.EmpList.EmployeeID)" class="link-03" title="Bu Hafta"><i class="fa fa-bullseye"></i></a>
+        <a href="#" onclick="EmployeeShift(@Model.EmpList.EmployeeID,'')" class="link-03" title="Bu Hafta"><i class="fa fa-bullseye"></i></a>
     </div>
     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-        <a href="/Employee/Detail?week=@(Model.NextWeekCode)&id=@(Model.EmpList.EmployeeID)" onclick="nextShift()" class="link-03" title="Bir Sonraki Hafta"><i class="fa fa-arrow-right"></i></a>
+        <a href="#" onclick="EmployeeShift(@Model.EmpList.EmployeeID, '@Model.NextWeekCode')" class="link-03" title="Bir Sonraki Hafta"><i class="fa fa-arrow-right"></i></a>
     </div>
 
 </div>
@@ -49,59 +49,62 @@
 
                     <tr>
 
-                        
+
                         <td class="tx-sm-13 bd-l i-l" style="padding:7px !important;">
 
                             <table class="table table-hover pd-0 mg-0">
                                 <tbody>
-                                    @foreach (var item in Model.EmployeeShifts.OrderByDescending(x => x.ShiftDate))
+                                    @foreach (var item in Model.EmployeeSchedules.OrderByDescending(x => x.ShiftDate))
                                     {
                                         var employeeschedule = Model.EmployeeSchedules.FirstOrDefault(x => x.EmployeeID == item.EmployeeID && x.ShiftDate == item.ShiftDate);
+                                        var employeeshift = Model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
                                         var employees = Model.EmployeeList.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
                                         var employeebreak = Model.EmployeeBreaks.Where(x => x.EmployeeID == item.EmployeeID && x.ShiftDate == item.ShiftDate && x.BreakDurationMinute > 0).ToList();
                                         var employeebreakcurrent = Model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == item.EmployeeID && x.BreakDurationMinute == null);
                                         var location = Model.LocationList.FirstOrDefault(x => x.LocationID == item.LocationID);
 
-                                    <tr class="@(item != null && item.DurationMinute == null ? "table-info":"table-warning")">
-                                        <td class="wd-300 tx-sm-13 font-weight-bold">@employees.FullName</td>
-                                        <td class="wd-300 tx-sm-13 font-weight-bold">@location.LocationName @location.Description @location.State</td>
-                                        <td class="wd-150 text-center @(item != null && item.DurationMinute == null ? "bg-info":"bg-warning")" style="padding:2px !important;">@(employeeschedule != null ? employeeschedule?.ShiftDate?.ToString("dd.MM.yyyy") : "")</td>
-                                        <td class="wd-150 text-center @(item != null && item.DurationMinute == null ? "bg-info":"bg-warning")" style="padding:2px !important;">@(employeeschedule != null ? employeeschedule?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeschedule?.ShiftdateEnd != null ? " - " + employeeschedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
-                                        <td class="wd-150 text-center" style="padding:4px !important;">@(item != null ? item?.ShiftDateStart?.ToString("HH\\:mm") : "") @(item?.ShiftDateEnd != null ? " - " + item?.ShiftDateEnd?.ToString("HH\\:mm") : "")</td>
-                                        <td class="wd-20 text-center">
-                                            @if (item == null)
-                                            {
-                                                <a href='#' class="text-warning font-weight-bold"> <i class="ion ion-md-finger-print tx-sm-24"></i></a>
-                                            }
-                                            else if (item != null && item.DurationMinute == null)
-                                            {
-                                                <a href='#' class="text-info font-weight-bold"> <i class="ion ion-md-finger-print tx-sm-24"></i> </a>
 
-                                            }
-                                            else
-                                            {
-                                                <a href='#' class="text-dark"><i class="ion ion-md-glasses tx-sm-24"></i></a>
-                                            }
+                                        <tr class="@(employeeshift != null && employeeshift.DurationMinute == null ? "table-info":"table-warning")" id="@($"EmployeeStatus_{location.LocationID}_{item.EmployeeID}_2")">
+                                            <td class="wd-300 tx-sm-13 font-weight-bold">@employees.FullName</td>
+                                            <td class="wd-300 tx-sm-13 font-weight-bold">@location.LocationName @location.Description @location.State</td>
+                                            <td class="wd-150 text-center @(employeeshift != null && employeeshift.DurationMinute == null ? "bg-info":"bg-warning")" style="padding:2px !important;">@(employeeschedule != null ? employeeschedule?.ShiftDateStart?.ToString("dd.MM.yyyy") : "")</td>
+                                            <td class="wd-150 text-center @(employeeshift != null && employeeshift.DurationMinute == null ? "bg-info":"bg-warning")" style="padding:2px !important;">@(employeeschedule != null ? employeeschedule?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeschedule?.ShiftdateEnd != null ? " - " + employeeschedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
+                                            <td class="wd-150 text-center" style="padding:4px !important;">@(employeeshift != null ? employeeshift?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeshift?.ShiftDateEnd != null ? " - " + employeeshift?.ShiftDateEnd?.ToString("HH\\:mm") : "")</td>
+                                            <td class="wd-20 text-center">
+                                                @if (employeeshift == null)
+                                                {
+                                                    <a href='#' class="text-warning font-weight-bold"> <i class="ion ion-md-finger-print tx-sm-24"></i></a>
+                                                }
+                                                else if (employeeshift != null && employeeshift.DurationMinute == null)
+                                                {
+                                                    <a href='#' class="text-info font-weight-bold"> <i class="ion ion-md-finger-print tx-sm-24"></i> </a>
 
-                                        </td>
-                                        <td class="bd-l wd-150">@(employeebreak.Count()) | @(employeebreak.Sum(x => x.BreakDurationMinute)) | @(employeebreak.Average(x => x.BreakDurationMinute)?.ToString("N2"))</td>
-                                        <td class="wd-20 text-center">
+                                                }
+                                                else
+                                                {
+                                                    <a href='#' class="text-dark"><i class="ion ion-md-glasses tx-sm-24"></i></a>
+                                                }
 
-                                            @if (employeebreakcurrent == null)
-                                            {
-                                                <a href='#' class="text-info font-weight-bold"> <i class='ion ion-md-timer tx-sm-24'></i></a>
-                                            }
-                                            else if (employeebreakcurrent != null && employeebreakcurrent.DurationMinute == null)
-                                            {
-                                                <a href='#' class="text-warning font-weight-bold"> <i class='ion ion-md-timer tx-sm-24'></i></a>
-                                            }
-                                            else
-                                            {
-                                                <a href='#' class="text-dark"><i class="ion ion-md-bicycle tx-sm-24"></i></a>
-                                            }
-                                        </td>
-                                        <td class="tx-sm-24 text-right">@(employeebreakcurrent != null ? Html.Raw("<i class='ion ion-md-cafe'></i>") : item != null && item.DurationMinute == null ? Html.Raw("<i class='ion ion-md-stopwatch'></i>") : item != null && item.DurationMinute != null ? Html.Raw("<i class='ion ion-md-cloud-outline'></i>") : Html.Raw("") )</td>
-                                    </tr>
+                                            </td>
+                                            <td class="bd-l wd-150">@(employeebreak.Count()) | @(employeebreak.Sum(x => x.BreakDurationMinute)) | @(employeebreak.Average(x => x.BreakDurationMinute)?.ToString("N2"))</td>
+                                            <td class="wd-20 text-center">
+
+                                                @if (employeebreakcurrent == null)
+                                                {
+                                                    <a href='#' class="text-info font-weight-bold"> <i class='ion ion-md-timer tx-sm-24'></i></a>
+                                                }
+                                                else if (employeebreakcurrent != null && employeebreakcurrent.DurationMinute == null)
+                                                {
+                                                    <a href='#' class="text-warning font-weight-bold"> <i class='ion ion-md-timer tx-sm-24'></i></a>
+                                                }
+                                                else
+                                                {
+                                                    <a href='#' class="text-dark"><i class="ion ion-md-bicycle tx-sm-24"></i></a>
+                                                }
+                                            </td>
+                                            <td class="tx-sm-24 text-right">@(employeebreakcurrent != null ? Html.Raw("<i class='ion ion-md-cafe'></i>") : employeeshift != null && employeeshift.DurationMinute == null ? Html.Raw("<i class='ion ion-md-stopwatch'></i>") : employeeshift != null && employeeshift.DurationMinute != null ? Html.Raw("<i class='ion ion-md-cloud-outline'></i>") : Html.Raw("") )</td>
+                                        </tr>
+
                                     }
 
 
@@ -120,3 +123,4 @@
     <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
     </div><!-- card-footer -->
 </div>
+

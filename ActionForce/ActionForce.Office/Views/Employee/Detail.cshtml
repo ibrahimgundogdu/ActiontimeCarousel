@@ -136,15 +136,20 @@
                 $("#employeeList").html(d);
             });
         }
-        function EmployeeShift(id) {
+        function EmployeeShift(id, week) {
+
+            console.log(id);
+            console.log(week);
+
             $.ajax({
                 method: "GET",
                 url: "/Employee/EmployeeShift",
-                data: { id: id }
+                data: { id: id, week: week }
             }).done(function (d) {
                 $("#employeeList").html(d);
             });
         }
+        
     </script>
     <script>
         $(function () {
