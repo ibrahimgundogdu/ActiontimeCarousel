@@ -20,7 +20,7 @@
         <a href="/Employee/Detail?date=@(DateTime.Now.ToString("yyyy-MM-dd"))&id=@(Model.EmpList.EmployeeID)" class="link-03" title="Bu Hafta"><i class="fa fa-bullseye"></i></a>
     </div>
     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-        <a href="/Employee/Detail?week=@(Model.NextWeekCode)&id=@(Model.EmpList.EmployeeID)" class="link-03" title="Bir Sonraki Hafta"><i class="fa fa-arrow-right"></i></a>
+        <a href="/Employee/Detail?week=@(Model.NextWeekCode)&id=@(Model.EmpList.EmployeeID)" onclick="nextShift()" class="link-03" title="Bir Sonraki Hafta"><i class="fa fa-arrow-right"></i></a>
     </div>
 
 </div>
@@ -54,54 +54,57 @@
 
                             <table class="table table-hover pd-0 mg-0">
                                 <tbody>
+                                    @foreach (var item in Model.EmployeeShifts.OrderByDescending(x => x.ShiftDate))
+                                    {
+                                        var employeeschedule = Model.EmployeeSchedules.FirstOrDefault(x => x.EmployeeID == item.EmployeeID && x.ShiftDate == item.ShiftDate);
+                                        var employees = Model.EmployeeList.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+                                        var employeebreak = Model.EmployeeBreaks.Where(x => x.EmployeeID == item.EmployeeID && x.ShiftDate == item.ShiftDate && x.BreakDurationMinute > 0).ToList();
+                                        var employeebreakcurrent = Model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == item.EmployeeID && x.BreakDurationMinute == null);
+                                        var location = Model.LocationList.FirstOrDefault(x => x.LocationID == item.LocationID);
 
-                                    <tr class="@(Model.EmployeeShift.DurationMinute == null ? "table-info":"table-warning")" id="@($"EmployeeStatus_{Model.EmpList.EmployeeID}_2")">
-                                        <td class="wd-300 tx-sm-13 font-weight-bold">@Model.EmpList.FullName</td>
-                                        <td class="wd-150 text-center @(Model.EmployeeShift.DurationMinute == null ? "bg-info":"bg-warning")" style="padding:2px !important;">@(Model.EmployeeSchedule?.ShiftDateStart?.ToString("HH\\:mm")) @(Model.EmployeeSchedule.ShiftdateEnd != null ? " - " + Model.EmployeeSchedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
-                                        <td class="wd-150 text-center" style="padding:4px !important;">
-                                            <a href="#" class="link-01">
-                                                @(Model.EmployeeShift?.ShiftDateStart?.ToString("HH\\:mm")) @(Model.EmployeeShift?.ShiftDateEnd != null ? " - " + Model.EmployeeShift?.ShiftDateEnd?.ToString("HH\\:mm") : "")
-                                            </a>
-                                        </td>
+                                    <tr class="@(item != null && item.DurationMinute == null ? "table-info":"table-warning")">
+                                        <td class="wd-300 tx-sm-13 font-weight-bold">@employees.FullName</td>
+                                        <td class="wd-300 tx-sm-13 font-weight-bold">@location.LocationName @location.Description @location.State</td>
+                                        <td class="wd-150 text-center @(item != null && item.DurationMinute == null ? "bg-info":"bg-warning")" style="padding:2px !important;">@(employeeschedule != null ? employeeschedule?.ShiftDate?.ToString("dd.MM.yyyy") : "")</td>
+                                        <td class="wd-150 text-center @(item != null && item.DurationMinute == null ? "bg-info":"bg-warning")" style="padding:2px !important;">@(employeeschedule != null ? employeeschedule?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeschedule?.ShiftdateEnd != null ? " - " + employeeschedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
+                                        <td class="wd-150 text-center" style="padding:4px !important;">@(item != null ? item?.ShiftDateStart?.ToString("HH\\:mm") : "") @(item?.ShiftDateEnd != null ? " - " + item?.ShiftDateEnd?.ToString("HH\\:mm") : "")</td>
                                         <td class="wd-20 text-center">
-                                            @if (Model.EmployeeShift == null)
+                                            @if (item == null)
                                             {
-                                                <a href='#' class="text-warning font-weight-bold" title="Mesai Başlat" onclick="StartEmployeeShift(@Model.EmpList.EmployeeID,2)"> <i class="ion ion-md-finger-print tx-sm-24"></i></a>
+                                                <a href='#' class="text-warning font-weight-bold"> <i class="ion ion-md-finger-print tx-sm-24"></i></a>
                                             }
-                                            else if (Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute == null)
+                                            else if (item != null && item.DurationMinute == null)
                                             {
-                                                <a href='#' class="text-info font-weight-bold" title="Mesai Bitir" onclick="FinishEmployeeShift(@Model.EmpList.EmployeeID,2)"> <i class="ion ion-md-finger-print tx-sm-24"></i> </a>
+                                                <a href='#' class="text-info font-weight-bold"> <i class="ion ion-md-finger-print tx-sm-24"></i> </a>
 
                                             }
                                             else
                                             {
-                                                <a href='#' title="Mesai Bitmiş" class="text-dark"><i class="ion ion-md-glasses tx-sm-24"></i></a>
+                                                <a href='#' class="text-dark"><i class="ion ion-md-glasses tx-sm-24"></i></a>
                                             }
 
                                         </td>
-                                        <td class="bd-l wd-150">
-                                            <a href="#" data-toggle="modal" class="link-01">
-                                                @(Model.EmployeeBreaks.Count()) | @(Model.EmployeeBreaks.Sum(x => x.BreakDurationMinute)) | @(Model.EmployeeBreaks.Average(x => x.BreakDurationMinute)?.ToString("N2"))
-                                            </a>
-                                        </td>
+                                        <td class="bd-l wd-150">@(employeebreak.Count()) | @(employeebreak.Sum(x => x.BreakDurationMinute)) | @(employeebreak.Average(x => x.BreakDurationMinute)?.ToString("N2"))</td>
                                         <td class="wd-20 text-center">
 
-                                            @if (Model.EmployeeBreak == null)
+                                            @if (employeebreakcurrent == null)
                                             {
-                                                <a href='#' class="text-info font-weight-bold" title="Mola Başlat" onclick='StartEmployeeBreak(@Model.EmpList.EmployeeID,2)'> <i class='ion ion-md-timer tx-sm-24'></i></a>
+                                                <a href='#' class="text-info font-weight-bold"> <i class='ion ion-md-timer tx-sm-24'></i></a>
                                             }
-                                            else if (Model.EmployeeBreak != null && Model.EmployeeBreak.DurationMinute == null)
+                                            else if (employeebreakcurrent != null && employeebreakcurrent.DurationMinute == null)
                                             {
-                                                <a href='#' class="text-warning font-weight-bold" title="Mola Bitir" onclick='FinishEmployeeBreak(@Model.EmpList.EmployeeID,2)'> <i class='ion ion-md-timer tx-sm-24'></i></a>
+                                                <a href='#' class="text-warning font-weight-bold"> <i class='ion ion-md-timer tx-sm-24'></i></a>
                                             }
                                             else
                                             {
-                                                <a href='#' title="Mola Bitmiş" class="text-dark"><i class="ion ion-md-bicycle tx-sm-24"></i></a>
+                                                <a href='#' class="text-dark"><i class="ion ion-md-bicycle tx-sm-24"></i></a>
                                             }
                                         </td>
-                                        <td class="tx-sm-24 text-right">@(Model.EmployeeBreak != null ? Html.Raw("<i class='ion ion-md-cafe'></i>") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute == null ? Html.Raw("<i class='ion ion-md-stopwatch'></i>") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute != null ? Html.Raw("<i class='ion ion-md-cloud-outline'></i>") : Html.Raw("") )</td>
+                                        <td class="tx-sm-24 text-right">@(employeebreakcurrent != null ? Html.Raw("<i class='ion ion-md-cafe'></i>") : item != null && item.DurationMinute == null ? Html.Raw("<i class='ion ion-md-stopwatch'></i>") : item != null && item.DurationMinute != null ? Html.Raw("<i class='ion ion-md-cloud-outline'></i>") : Html.Raw("") )</td>
                                     </tr>
-                                    
+                                    }
+
+
                                 </tbody>
                             </table>
 

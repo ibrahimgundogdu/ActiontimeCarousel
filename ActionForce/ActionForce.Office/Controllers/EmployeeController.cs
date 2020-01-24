@@ -267,30 +267,48 @@ namespace ActionForce.Office.Controllers
             var _date = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
             var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
 
-           
-
-            var refresh = Db.SetShiftDates();
-
             model.CurrentDate = datekey;
-            model.TodayDateCode = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date.ToString("yyyy-MM-dd");
-            model.CurrentDateCode = _date.ToString("yyyy-MM-dd");
-            model.PrevDateCode = _date.AddDays(-1).Date.ToString("yyyy-MM-dd");
-            model.NextDateCode = _date.AddDays(1).Date.ToString("yyyy-MM-dd");
 
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.EmployeeList = Db.VEmployeeList.Where(x => x.EmployeeID == id).ToList();
+            model.EmpList = model.EmployeeList.FirstOrDefault(x => x.EmployeeID == id);
+
+            model.EmployeeSchedules = Db.VSchedule.Where(x => x.EmployeeID == id).ToList();
 
 
-            model.EmpList = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == id);
+            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == id && x.IsWorkTime == true).ToList();
 
-            model.EmployeeSchedules = Db.Schedule.Where(x => x.EmployeeID == id && x.ShiftDate == model.CurrentDate.DateKey).ToList();
-            model.EmployeeSchedule = model.EmployeeSchedules.FirstOrDefault(x => x.EmployeeID == id);
-
-            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.ShiftDate == model.CurrentDate.DateKey && x.IsWorkTime == true).ToList();
-            model.EmployeeBreaks = Db.EmployeeShift.Where(x => x.ShiftDate == model.CurrentDate.DateKey && x.IsBreakTime == true).ToList();
-
-            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == id);
+            model.EmployeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true).ToList();
             model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == id && x.BreakDurationMinute > 0).ToList();
+            model.LocationList = Db.Location.ToList();
+            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == id);
             model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == id && x.BreakDurationMinute == null);
+            //var _date = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            //var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+
+
+            //var refresh = Db.SetShiftDates();
+
+            //model.CurrentDate = datekey;
+            //model.TodayDateCode = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date.ToString("yyyy-MM-dd");
+            //model.CurrentDateCode = _date.ToString("yyyy-MM-dd");
+            //model.PrevDateCode = _date.AddDays(-1).Date.ToString("yyyy-MM-dd");
+            //model.NextDateCode = _date.AddDays(1).Date.ToString("yyyy-MM-dd");
+
+            //model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+
+
+            //model.EmpList = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == id);
+
+            //model.EmployeeSchedules = Db.Schedule.Where(x => x.EmployeeID == id && x.ShiftDate == model.CurrentDate.DateKey).ToList();
+            //model.EmployeeSchedule = model.EmployeeSchedules.FirstOrDefault(x => x.EmployeeID == id);
+
+            //model.EmployeeShifts = Db.EmployeeShift.Where(x => x.ShiftDate == model.CurrentDate.DateKey && x.IsWorkTime == true).ToList();
+            //model.EmployeeBreaks = Db.EmployeeShift.Where(x => x.ShiftDate == model.CurrentDate.DateKey && x.IsBreakTime == true).ToList();
+
+            //model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == id);
+            //model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == id && x.BreakDurationMinute > 0).ToList();
+            //model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == id && x.BreakDurationMinute == null);
 
             TempData["Model"] = model;
 

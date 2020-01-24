@@ -27,15 +27,24 @@ namespace ActionForce.Office
         public FilterModel Filters { get; set; }
         public IEnumerable<ApplicationLog> LogList { get; set; }
 
+        public IEnumerable<EmployeeShift> EmployeeShifts { get; set; }
+        public IEnumerable<VSchedule> EmployeeSchedules { get; set; }
+        public IEnumerable<EmployeeShift> EmployeeBreaks { get; set; }
+        public IEnumerable<Location> LocationList { get; set; }
+        public IEnumerable<EmployeeLocation> EmployeeLocations { get; set; }
+        public DateList CurrentDate { get; set; }
+
+        public VEmployeeLocation CurrentLocation { get; set; }
+
+
+
 
         public IEnumerable<VEmployee> VEmployee { get; set; }
-        public IEnumerable<EmployeeLocation> EmployeeLocations { get; set; }
 
-        public IEnumerable<EmployeeShift> EmployeeShifts { get; set; }
+        
         public EmployeeShift EmployeeShift { get; set; }
-        public IEnumerable<EmployeeShift> EmployeeBreaks { get; set; }
         public EmployeeShift EmployeeBreak { get; set; }
-        public IEnumerable<Schedule> EmployeeSchedules { get; set; }
+        
         public Schedule EmployeeSchedule { get; set; }
 
 
@@ -47,14 +56,14 @@ namespace ActionForce.Office
         public string PrevDateCode { get; set; }
 
         
-        public IEnumerable<Location> LocationList { get; set; }
+        
         public IEnumerable<FromAccountModel> FromList { get; set; }
         
         
         public OurCompany CurrentCompany { get; set; }
-        public VEmployeeLocation CurrentLocation { get; set; }
+        
 
-        public DateList CurrentDate { get; set; }
+        
 
         public IEnumerable<VLocationSchedule> VLocationSchedule { get; set; }
         public IEnumerable<VSchedule> EmpSchedule { get; set; }
