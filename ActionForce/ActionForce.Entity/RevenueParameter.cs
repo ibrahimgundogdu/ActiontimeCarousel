@@ -20,5 +20,6 @@ namespace ActionForce.Entity
         public bool IsCash { get; set; }
         public bool IsCredit { get; set; }
         public bool IsRent { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
     }
 }

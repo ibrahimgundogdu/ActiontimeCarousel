@@ -2590,6 +2590,8 @@
     <Content Include="Views\Revenue\Index.cshtml" />
     <Content Include="Views\Revenue\Compute.cshtml" />
     <Content Include="Views\Revenue\_PartialRevenueDetail.cshtml" />
+    <Content Include="Views\Location\Detail.cshtml" />
+    <Content Include="Views\Location\_PartialLocationDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

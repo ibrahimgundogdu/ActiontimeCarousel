@@ -15,6 +15,7 @@ namespace ActionForce.Office
         public List<string> StateList { get; set; }
         public List<string> TypeList { get; set; }
         public LocationFilterModel FilterModel { get; set; }
+        public List<ApplicationLog> LogList { get; set; }
     }
 
     public class LocationFilterModel

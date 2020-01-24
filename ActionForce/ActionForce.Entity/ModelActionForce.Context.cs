@@ -892,5 +892,18 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ComputeLocationWeekRevenue", weekParameter, yearParameter, locationIDParameter);
         }
+    
+        public virtual ObjectResult<GetLocationByUID_Result> GetLocationByUID(Nullable<int> ourCompanyID, Nullable<System.Guid> locationUID)
+        {
+            var ourCompanyIDParameter = ourCompanyID.HasValue ?
+                new ObjectParameter("OurCompanyID", ourCompanyID) :
+                new ObjectParameter("OurCompanyID", typeof(int));
+    
+            var locationUIDParameter = locationUID.HasValue ?
+                new ObjectParameter("LocationUID", locationUID) :
+                new ObjectParameter("LocationUID", typeof(System.Guid));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationByUID_Result>("GetLocationByUID", ourCompanyIDParameter, locationUIDParameter);
+        }
     }
 }
