@@ -1,0 +1,52 @@
+﻿@model LocationControlModel
+@{
+    ViewBag.Title = "Lokasyon Düzenleme ";
+}
+@section style{
+    <link href="/lib/animate.css/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/dashforge.demo.css">
+    <link rel="stylesheet" href="/assets/css/dashforge.css">
+    <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
+}
+<div class="content-header">
+    <div class="content-search col-lg">
+        <span class="tx-20"> @(Model.LocationModel != null ? Model.LocationModel.LocationName + " " + Model.LocationModel.TypeName : "") - Lokasyon Güncelleme</span>
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div>
+<div class="content-body">
+    <div class="pd-x-0 tx-13">
+        <div class="media d-block d-lg-flex">
+            <div class="profile-sidebar profile-sidebar-two pd-lg-r-15">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg mg-t-20 mg-sm-t-0">
+                        <nav class="nav flex-column demo-animate-list">
+                            <a href="#" class="nav-link">Cari Hesap</a>
+                            <a href="#" class="nav-link">Hedefler</a>
+                            <a href="#" class="nav-link">Çalışanlar</a>
+                            <a href="#" class="nav-link">Sözleşmeler</a>
+                            <a href="#" class="nav-link">Periyotlar</a>
+                            <a href="#" class="nav-link">Pos Cihazları</a>
+                            <a href="#" class="nav-link">Çalışma Dönemleri</a>
+                            <a href="#" class="nav-link">Schedule (Takvim)</a>
+                            <a href="#" class="nav-link">Shift (Mesai)</a>
+                            <a href="#" class="nav-link">Stats</a>
+                            <a href="#" class="nav-link">Animals/Trambolines</a>
+                            <a href="#" class="nav-link">Satışlar</a>
+                            <a href="#" class="nav-link">Yazar Kasalar</a>
+                            <a href="#" class="nav-link">Gün Sonları</a>
+                            <a href="#" class="nav-link">Depolar</a>
+                            <a href="#" class="nav-link">AVM</a>
+                            <a href="/Location/Edit/@(Model.LocationModel.LocationUID)" class="nav-link">Güncelle</a>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
+                @{Html.RenderPartial("_PartialLocationEdit", Model);}
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,7 +11,7 @@ namespace ActionForce.Entity
 {
     using System;
     
-    public partial class GetLocationByUID_Result
+    public partial class GetLocationAll_Result1
     {
         public int LocationID { get; set; }
         public string LocationCode { get; set; }

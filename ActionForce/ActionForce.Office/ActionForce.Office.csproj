@@ -2309,7 +2309,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ActionControlModel.cs" />
+    <Compile Include="Models\ControlModels\ActionControlModel.cs" />
     <Compile Include="Models\ActionEmployee.cs" />
     <Compile Include="Models\AuditTrail.cs" />
     <Compile Include="Models\AuthenticationModel.cs" />
@@ -2317,14 +2317,15 @@
     <Compile Include="Models\ControlModels\RevenueControlModel.cs" />
     <Compile Include="Models\Document\EmployeePermit.cs" />
     <Compile Include="Models\Document\Employees.cs" />
-    <Compile Include="Models\EmployeeControlModel.cs" />
-    <Compile Include="Models\CashRecorderControlModel.cs" />
-    <Compile Include="Models\BankControlModel.cs" />
+    <Compile Include="Models\ControlModels\EmployeeControlModel.cs" />
+    <Compile Include="Models\ControlModels\CashRecorderControlModel.cs" />
+    <Compile Include="Models\ControlModels\BankControlModel.cs" />
     <Compile Include="Models\CashActionModel.cs" />
     <Compile Include="Models\CashCollection.cs" />
-    <Compile Include="Models\DefinitionControlModel.cs" />
+    <Compile Include="Models\ControlModels\DefinitionControlModel.cs" />
     <Compile Include="Models\Document\BankTransfer.cs" />
     <Compile Include="Models\Document\CashRecorder.cs" />
+    <Compile Include="Models\Document\LocationManager.cs" />
     <Compile Include="Models\Document\PosCancel.cs" />
     <Compile Include="Models\Document\PosRefund.cs" />
     <Compile Include="Models\Document\PosCollection.cs" />
@@ -2340,23 +2341,23 @@
     <Compile Include="Models\Document\TransferModel.cs" />
     <Compile Include="Models\EmployeeShiftModel.cs" />
     <Compile Include="Models\WizardModel.cs" />
-    <Compile Include="Models\LocationControlModel.cs" />
+    <Compile Include="Models\ControlModels\LocationControlModel.cs" />
     <Compile Include="Models\newTransfer.cs" />
-    <Compile Include="Models\SalaryControlModel.cs" />
-    <Compile Include="Models\CashControlModel.cs" />
+    <Compile Include="Models\ControlModels\SalaryControlModel.cs" />
+    <Compile Include="Models\ControlModels\CashControlModel.cs" />
     <Compile Include="Models\FilterModel.cs" />
-    <Compile Include="Models\FinanceControlModel.cs" />
+    <Compile Include="Models\ControlModels\FinanceControlModel.cs" />
     <Compile Include="Models\FromAccountModel.cs" />
-    <Compile Include="Models\HomeControlModel.cs" />
-    <Compile Include="Models\LayoutControlModel.cs" />
+    <Compile Include="Models\ControlModels\HomeControlModel.cs" />
+    <Compile Include="Models\ControlModels\LayoutControlModel.cs" />
     <Compile Include="Models\LocationScheduleEdit.cs" />
     <Compile Include="Models\NewCashCollect.cs" />
     <Compile Include="Models\OfficeHelper.cs" />
     <Compile Include="Models\Result.cs" />
-    <Compile Include="Models\ResultControlModel.cs" />
-    <Compile Include="Models\ScheduleControlModel.cs" />
+    <Compile Include="Models\ControlModels\ResultControlModel.cs" />
+    <Compile Include="Models\ControlModels\ScheduleControlModel.cs" />
     <Compile Include="Models\ScheduleItem.cs" />
-    <Compile Include="Models\ShiftControlModel.cs" />
+    <Compile Include="Models\ControlModels\ShiftControlModel.cs" />
     <Compile Include="Models\DocumentPrefix.cs" />
     <Compile Include="Models\TotalModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -2593,6 +2594,10 @@
     <Content Include="Views\Revenue\Parameters.cshtml" />
     <Content Include="Views\Revenue\_PartialLocationParameterDetail.cshtml" />
     <Content Include="Views\Revenue\_PartialRevenueParameterDetail.cshtml" />
+    <Content Include="Views\Location\Detail.cshtml" />
+    <Content Include="Views\Location\_PartialLocationDetail.cshtml" />
+    <Content Include="Views\Location\Edit.cshtml" />
+    <Content Include="Views\Location\_PartialLocationEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

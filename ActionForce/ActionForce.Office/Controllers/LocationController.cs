@@ -14,7 +14,7 @@ namespace ActionForce.Office.Controllers
         {
             LocationControlModel model = new LocationControlModel();
 
-            model.LocationList = Db.GetLocationAll(model.Authentication.ActionEmployee.OurCompanyID).Select(x => new LocationModel()
+            model.LocationList = Db.GetLocationAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).Select(x => new LocationModel()
             {
                 Currency = x.Currency,
                 Description = x.Description,
@@ -76,7 +76,7 @@ namespace ActionForce.Office.Controllers
         {
             LocationControlModel model = new LocationControlModel();
 
-            model.LocationList = Db.GetLocationAll(model.Authentication.ActionEmployee.OurCompanyID).Select(x => new LocationModel()
+            model.LocationList = Db.GetLocationAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).Select(x => new LocationModel()
             {
                 Currency = x.Currency,
                 Description = x.Description,
@@ -124,31 +124,16 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Detail(Guid? id)
+        public ActionResult Detail(Guid id)
         {
             LocationControlModel model = new LocationControlModel();
 
-            #region Filter
-            if (TempData["LocationFilter"] != null)
+            if (id == Guid.Empty)
             {
-                model.FilterModel = TempData["LocationFilter"] as LocationFilterModel;
-
-                if (!String.IsNullOrEmpty(model.FilterModel.LocationName))
-                {
-                    model.LocationList = model.LocationList.Where(x => x.LocationNameSearch.Contains(model.FilterModel.LocationName.ToUpper())).OrderBy(x => x.SortBy).ToList();
-                }
-                if (!String.IsNullOrEmpty(model.FilterModel.State))
-                {
-                    model.LocationList = model.LocationList.Where(x => x.State == model.FilterModel.State).OrderBy(x => x.SortBy).ToList();
-                }
-                if (!String.IsNullOrEmpty(model.FilterModel.TypeName))
-                {
-                    model.LocationList = model.LocationList.Where(x => x.TypeName == model.FilterModel.TypeName).OrderBy(x => x.SortBy).ToList();
-                }
+                return RedirectToAction("Index");
             }
-            #endregion
 
-            model.LocationModel = Db.GetLocationByUID(model.Authentication.ActionEmployee.OurCompanyID, id).Select(x => new LocationModel()
+            model.LocationModel = Db.GetLocationAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).Select(x => new LocationModel()
             {
                 Currency = x.Currency,
                 Description = x.Description,
@@ -168,8 +153,44 @@ namespace ActionForce.Office.Controllers
                 TypeName = x.TypeName,
                 Timezone = x.Timezone
             }).FirstOrDefault();
-            model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.Authentication.ActionEmployee.EmployeeID.ToString()).ToList();
+            model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
+            model.EmployeeLocationList = Db.VEmployeeLocation.Where(x => x.LocationUID == id).ToList();
 
+            return View(model);
+        }
+
+        [AllowAnonymous] /* Sonrasında kaldırılacak yetkiye bağlanacak. [Permision] Tablosu ve [RoleGroupPermissions]*/
+        public ActionResult Edit(Guid id)
+        {
+            LocationControlModel model = new LocationControlModel();
+
+            if (id == Guid.Empty)
+            {
+                return RedirectToAction("Index");
+            }
+
+            model.LocationModel = Db.GetLocationAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).Select(x => new LocationModel()
+            {
+                Currency = x.Currency,
+                Description = x.Description,
+                IP = x.IP,
+                IsActive = x.IsActive,
+                IsHaveOperator = x.IsHaveOperator,
+                Latitude = x.Latitude,
+                LocationCode = x.LocationCode,
+                LocationID = x.LocationID,
+                LocationName = x.LocationName,
+                LocationNameSearch = x.LocationNameSearch,
+                LocationUID = x.LocationUID,
+                Longitude = x.Longitude,
+                MapURL = x.MapURL,
+                SortBy = x.SortBy,
+                State = x.State,
+                TypeName = x.TypeName,
+                Timezone = x.Timezone
+            }).FirstOrDefault();
+            model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
+            
             return View(model);
         }
     }
