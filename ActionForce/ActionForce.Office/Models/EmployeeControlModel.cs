@@ -27,15 +27,35 @@ namespace ActionForce.Office
         public FilterModel Filters { get; set; }
         public IEnumerable<ApplicationLog> LogList { get; set; }
 
+        public IEnumerable<EmployeeShift> EmployeeShifts { get; set; }
+        public IEnumerable<Schedule> EmployeeSchedules { get; set; }
+        public IEnumerable<EmployeeShift> EmployeeBreaks { get; set; }
+        public IEnumerable<Location> LocationList { get; set; }
+        public IEnumerable<EmployeeLocation> EmployeeLocations { get; set; }
+        public DateList CurrentDate { get; set; }
+
+        public List<DateList> WeekList { get; set; }
+
+        public string WeekCode { get; set; }
+        public string NextWeekCode { get; set; }
+        public string PrevWeekCode { get; set; }
+        public string TodayWeekCode { get; set; }
+
+
+        public DateList FirstWeekDay { get; set; }
+        public DateList LastWeekDay { get; set; }
+
+        public VEmployeeLocation CurrentLocation { get; set; }
+
+
+
 
         public IEnumerable<VEmployee> VEmployee { get; set; }
-        public IEnumerable<EmployeeLocation> EmployeeLocations { get; set; }
 
-        public IEnumerable<EmployeeShift> EmployeeShifts { get; set; }
+        
         public EmployeeShift EmployeeShift { get; set; }
-        public IEnumerable<EmployeeShift> EmployeeBreaks { get; set; }
         public EmployeeShift EmployeeBreak { get; set; }
-        public IEnumerable<Schedule> EmployeeSchedules { get; set; }
+        
         public Schedule EmployeeSchedule { get; set; }
 
 
@@ -47,24 +67,19 @@ namespace ActionForce.Office
         public string PrevDateCode { get; set; }
 
         
-        public IEnumerable<Location> LocationList { get; set; }
+        
         public IEnumerable<FromAccountModel> FromList { get; set; }
         
         
         public OurCompany CurrentCompany { get; set; }
-        public VEmployeeLocation CurrentLocation { get; set; }
+        
 
-        public DateList CurrentDate { get; set; }
+        
 
         public IEnumerable<VLocationSchedule> VLocationSchedule { get; set; }
         public IEnumerable<VSchedule> EmpSchedule { get; set; }
-        public IEnumerable<DateList> WeekList { get; set; }
-        public DateList FirstWeekDay { get; set; }
-        public DateList LastWeekDay { get; set; }
 
-        public string WeekCode { get; set; }
-        public string NextWeekCode { get; set; }
-        public string PrevWeekCode { get; set; }
+        
 
     }
 }

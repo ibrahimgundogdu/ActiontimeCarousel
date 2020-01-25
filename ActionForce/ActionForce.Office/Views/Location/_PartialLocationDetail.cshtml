@@ -1,0 +1,160 @@
+﻿@model LocationControlModel
+
+<div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+    <div>
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Lokasyon Detay</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+
+<div class="row row-xs">
+    <div class="col-lg-12">
+        <div class="form-group row">
+            <label for="locationCode" class="col-sm-3 col-form-label">Lokasyon Kodu</label>
+            <div class="col-sm-6">
+                <span id="locationCode" name="LocationCode" class="tx-light tx-15">@(Model.LocationModel.LocationCode)</span>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+        <div class="form-group row mg-b-5">
+            <label for="locationName" class="col-sm-3 col-form-label">Adı</label>
+            <div class="col-sm-6">
+                <span id="locationName" name="LocationName" class="tx-light tx-15">@(Model.LocationModel.LocationName)</span>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="description" class="col-sm-3 col-form-label">Türü</label>
+            <div class="col-sm-6">
+                <span id="description" name="Description" class="tx-light tx-15">@(Model.LocationModel.Description)</span>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+        <div class="form-group row mg-b-5">
+            <label for="state" class="col-sm-3 col-form-label">Şehir</label>
+            <div class="col-sm-6">
+                <span id="state" name="State" class="tx-light tx-15">@(Model.LocationModel.State)</span>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+        <div class="form-group row mg-b-5">
+            <label for="latitude" class="col-sm-3 col-form-label">Enlem</label>
+            <div class="col-sm-6">
+                <span id="latitude" name="Latitude" class="tx-light tx-15">@(Model.LocationModel.Latitude)</span>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+        <div class="form-group row mg-b-5">
+            <label for="longitude" class="col-sm-3 col-form-label">Boylam</label>
+            <div class="col-sm-6">
+                <span id="longitude" name="Longitude" class="tx-light tx-15">@(Model.LocationModel.Longitude)</span>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+        <div class="form-group row mg-b-5">
+            <label for="iP" class="col-sm-3 col-form-label">IP</label>
+            <div class="col-sm-6">
+                <span id="iP" name="IP" class="tx-light tx-15">@(Model.LocationModel.IP)</span>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+        <div class="form-group row mg-b-5">
+            <label for="timezone" class="col-sm-3 col-form-label">Time Zone</label>
+            <div class="col-sm-6">
+                <span id="timezone" name="Timezone" class="tx-light tx-15">@(Model.LocationModel.Timezone)</span>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+        <div class="form-group row mg-b-5">
+            <label for="currency" class="col-sm-3 col-form-label">Para Birimi</label>
+            <div class="col-sm-6">
+                <span id="currency" name="Currency" class="tx-light tx-15">@(Model.LocationModel.Currency)</span>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+        <div class="form-group row mg-b-5">
+            <label for="sortBy" class="col-sm-3 col-form-label">No</label>
+            <div class="col-sm-6">
+                <span id="sortBy" name="SortBy" class="tx-light tx-15">@(Model.LocationModel.SortBy)</span>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="isHaveOperator" class="col-sm-3 col-form-label">Operatör var mı?</label>
+            <div class="col-sm-6">
+                <span id="isHaveOperator" name="IsHaveOperator" class="tx-light tx-15">@Html.Raw(Model.LocationModel.IsHaveOperator.Value == true ? "<i class='ion ion-md-checkmark-circle text-success'></i>" : "<i class='ion ion-md-close-circle text-danger'></i>")</span>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+        <div class="form-group row">
+            <label for="isActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+            <div class="col-sm-6">
+                <span id="isActive" name="IsActive" class="tx-light tx-15"> @Html.Raw(Model.LocationModel.IsActive.Value == true ? "<i class='ion ion-md-checkmark-circle text-success'></i>" : "<i class='ion ion-md-close-circle'></i>")</span>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row row-xs bg-gray-100 mg-b-0 mg-t-40">
+    <div class="col-sm-3 pd-t-10 pd-b-10">
+        <b>Kayıt Tarihçesi</b>
+    </div>
+
+    @*<div class="col-sm-3 pd-t-10">@(Html.Raw($"<b>Kaydeden </b> : {Model.EmpList.RecordFullName} {Model.EmpList.RecordDate} ")) </div>
+    <div class="col-sm-3 pd-t-10">@(Model.EmpList.UpdateDate != null ? Html.Raw($"<b>Güncelleyen </b> : {Model.EmpList.UpdateFullName} {Model.EmpList.UpdateDate} ") : Html.Raw("")) </div>*@
+
+</div>
+
+@if (Model.LogList != null && Model.LogList.Count() > 0)
+{
+    <div class="row row-xs">
+        <table class="table table-sm table-bordered">
+            <thead>
+                <tr>
+                    <th>Tarih</th>
+                    <th>Kişi</th>
+                    <th>Ortam</th>
+                    <th>İşlem</th>
+                    <th>Açıklama</th>
+                    <th>Alan</th>
+                    <th>Önceki</th>
+                    <th>Yeni</th>
+                    <th>Başarılı?</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.LogList.OrderBy(x => x.RecordDate))
+                {
+                    <tr>
+                        <td>@(item.RecordDate)</td>
+                        <td>@(item.RecordEmployee)</td>
+                        <td>@(item.Environment)</td>
+                        <td>@(item.ProcessType)</td>
+                        <td>@(item.ResultMessage)</td>
+                        <td>@(item.FieldName)</td>
+                        <td>@(item.OldValue)</td>
+                        <td>@(item.NewValue)</td>
+                        <td>@(item.IsSuccess)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

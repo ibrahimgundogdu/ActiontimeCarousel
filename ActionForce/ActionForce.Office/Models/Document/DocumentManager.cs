@@ -1454,7 +1454,7 @@ namespace ActionForce.Office
                         if (cashaction != null)
                         {
                             cashaction.LocationID = isCash.LocationID;
-                            cashaction.Collection = isCash.Amount;
+                            cashaction.Payment = isCash.Amount;
                             cashaction.CashID = cash.ID;
                             cashaction.Currency = sale.Currency;
                             cashaction.ActionDate = sale.DocumentDate;
@@ -4626,6 +4626,7 @@ namespace ActionForce.Office
                 {
                     try
                     {
+                        var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == isEmployee.OurCompanyID);
                         Employee self = new Employee()
                         {
                             EmployeeID = isEmployee.EmployeeID,
@@ -4670,6 +4671,9 @@ namespace ActionForce.Office
                         isEmployee.Title = employee.Title;
                         isEmployee.Whatsapp = employee.Whatsapp;
                         isEmployee.OurCompanyID = employee.OurCompanyID;
+                        isEmployee.UpdateDate = DateTime.UtcNow.AddHours(ourcompany.TimeZone.Value);
+                        isEmployee.UpdateEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        isEmployee.UpdateIP = OfficeHelper.GetIPAddress();
 
                         Db.SaveChanges();
 
