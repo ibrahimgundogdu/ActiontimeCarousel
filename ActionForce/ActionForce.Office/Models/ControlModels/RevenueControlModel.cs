@@ -25,11 +25,31 @@ namespace ActionForce.Office
 
         public DateList NextWeek { get; set; }
         public DateList PrevWeek { get; set; }
+
+        public IEnumerable<LocationParam> LocationParameters { get; set; }
+        public IEnumerable<LocationParamCalculate> LocationParamCalculate { get; set; }
+        public IEnumerable<RevenueParameter> RevenueParameters { get; set; }
+        public IEnumerable<ActionType> ParameterTypes { get; set; }
+
     }
 
     public class RevenueDetailModel
     {
         public VRevenue Revenue { get; set; }
         public IEnumerable<VRevenueLines> RevenueLines { get; set; }
+
+    }
+
+    public class LocationParameterDetailModel : LayoutControlModel
+    {
+        public Location Location { get; set; }
+        public IEnumerable<LocationParam> LocationParameters { get; set; }
+        public IEnumerable<LocationParamCalculate> LocationParamCalculate { get; set; }
+    }
+
+    public class RevenueParameterDetailModel : LayoutControlModel
+    {
+        public Location Location { get; set; }
+        public IEnumerable<RevenueParameter> RevenueParameters { get; set; }
     }
 }

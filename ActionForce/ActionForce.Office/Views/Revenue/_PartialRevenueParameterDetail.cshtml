@@ -1,0 +1,63 @@
+﻿@model RevenueParameterDetailModel
+<table class="table table-warning table-bordered table-hover table-sm tx-13 tx-nowrap mg-b-0">
+    <thead>
+        <tr class="tx-10 tx-spacing-1 tx-black tx-uppercase">
+            <th class="wd-5p">#</th>
+            <th class="wd-30p">Hasılat Parametresi</th>
+            <th class="wd-10p">Nakit</th>
+            <th class="wd-10p">Kredi</th>
+            <th class="wd-10p">Kira</th>
+            <th class="wd-15p">Başlama Tarihi</th>
+            <th class="wd-15p">Güncelleme</th>
+            <th class="wd-5p"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var param in Model.RevenueParameters)
+        {
+            <tr class="table-warning active">
+                <td class="wd-5p"> @(param.ID)</td>
+                <td class="tx-medium wd-30p" style="padding:2px !important;">
+                    Hasılat Parametresi
+                </td>
+                <td class="wd-10p" style="padding:2px !important;">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="cashCheck_@(param.ID)" value="1" @(param.IsCash == true ? "checked":"") onchange="EditRevenueParameter(@(param.ID),@(param.LocationID))">
+                        <label class="custom-control-label" for="cashCheck_@(param.ID)">Nakit</label>
+                    </div>
+                </td>
+                <td class="wd-10p" style="padding:2px !important;">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="creditCheck_@(param.ID)" value="1" @(param.IsCredit == true ? "checked":"") onchange="EditRevenueParameter(@(param.ID),@(param.LocationID))">
+                        <label class="custom-control-label" for="creditCheck_@(param.ID)">Kredi</label>
+                    </div>
+                </td>
+                <td class="wd-10p" style="padding:2px !important;">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="rentCheck_@(param.ID)" value="1" @(param.IsRent == true ? "checked":"") onchange="EditRevenueParameter(@(param.ID),@(param.LocationID))">
+                        <label class="custom-control-label" for="rentCheck_@(param.ID)">Kira</label>
+                    </div>
+                </td>
+                <td class="wd-15p" style="padding:2px !important;">
+                    <input type="text" id="DateRevenue_@(param.ID)" class="form-control form-control-sm datepicker" placeholder="Başlangıç Tarihi" value="@(param.DateBegin.ToString("yyyy-MM-dd"))" onchange="EditRevenueParameter(@(param.ID),@(param.LocationID))">
+                </td>
+                <td class="wd-15p" style="padding:2px !important;">
+                    @( param.UpdateDate ?? param.RecordDate)
+                </td>
+                <td class="wd-5p text-center" style="padding:2px !important;">
+                    <button type="button" class="btn btn-icon btn-xs"  onclick="confirm('Bu Parametreyi Silmek İstediğinize Emin misiniz?') ? DeleteRevenueParameter(@(param.ID),@(param.LocationID)) : ''">
+                        <i class="tx-danger" data-feather="trash"></i> &nbsp;
+                    </button>
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+</table>
+<script>
+    $(function () {
+        feather.replace();
+    });
+
+</script>

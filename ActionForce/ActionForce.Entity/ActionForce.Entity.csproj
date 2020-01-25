@@ -365,6 +365,9 @@
     <Compile Include="LocationParam.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="LocationParamCalculate.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="LocationPeriods.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

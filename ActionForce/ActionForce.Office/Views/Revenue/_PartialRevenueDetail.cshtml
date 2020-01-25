@@ -16,6 +16,7 @@
             <th>Commission Rate</th>
             <th>Credit Commission</th>
             <th>Insurance</th>
+            <th>OpDebt</th>
             <th>Update Date</th>
 
         </tr>
@@ -38,6 +39,7 @@
             <td>@(line.CommissionRate)</td>
             <td>@(line.CreditCommission?.ToString("N2"))</td>
             <td>@(line.Insurance?.ToString("N2"))</td>
+            <td>@(line.OpDebt?.ToString("N2"))</td>
             <td>@(Model.Revenue.UpdateDate)</td>
 
         </tr>
@@ -59,6 +61,7 @@
             <td>@(Model.RevenueLines?.FirstOrDefault()?.CommissionRate?.ToString("N4"))</td>
             <td>@(Model.RevenueLines?.Sum(x => x.CreditCommission)?.ToString("N2"))</td>
             <td>@(Model.RevenueLines?.Sum(x => x.Insurance)?.ToString("N2"))</td>
+            <td>@(Model.RevenueLines?.Sum(x => x.OpDebt)?.ToString("N2"))</td>
             <td></td>
 
         </tr>
@@ -158,6 +161,15 @@
             <td class="text-right"></td>
             <td class="text-right">@(Model.Revenue.InsuranceMonthly?.ToString("N2"))</td>
             <td class="text-right">@((Model.Revenue.InsuranceMonthly * 12)?.ToString("N2"))</td>
+            <th class="text-center">@(Model.Revenue.Currency)</th>
+        </tr>
+        <tr>
+            <th>OpDebt</th>
+            <td class="text-right">@(Model.Revenue.OpDept?.ToString("N2"))</td>
+            <td class="text-right"></td>
+            <td class="text-right"></td>
+            <td class="text-right">@(Model.Revenue.OpDeptMonthly?.ToString("N2"))</td>
+            <td class="text-right">@((Model.Revenue.OpDeptMonthly * 12)?.ToString("N2"))</td>
             <th class="text-center">@(Model.Revenue.Currency)</th>
         </tr>
     </tbody>

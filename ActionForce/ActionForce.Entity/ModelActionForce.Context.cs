@@ -254,6 +254,7 @@ namespace ActionForce.Entity
         public virtual DbSet<RevenueParameter> RevenueParameter { get; set; }
         public virtual DbSet<VRevenue> VRevenue { get; set; }
         public virtual DbSet<VRevenueLines> VRevenueLines { get; set; }
+        public virtual DbSet<LocationParamCalculate> LocationParamCalculate { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

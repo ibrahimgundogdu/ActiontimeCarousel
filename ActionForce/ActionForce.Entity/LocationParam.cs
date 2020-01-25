@@ -24,5 +24,11 @@ namespace ActionForce.Entity
         public Nullable<double> Rate { get; set; }
         public string Money { get; set; }
         public Nullable<int> Calculate { get; set; }
+        public Nullable<int> RecordEmployeeID { get; set; }
+        public Nullable<System.DateTime> RecordDate { get; set; }
+        public string RecordIP { get; set; }
+        public Nullable<int> UpdateEmployeeID { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
+        public string UpdateIP { get; set; }
     }
 }

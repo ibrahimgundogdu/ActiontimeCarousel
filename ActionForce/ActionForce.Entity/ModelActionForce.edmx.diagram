@@ -251,6 +251,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.RevenueParameter" Width="1.5" PointX="0.75" PointY="25.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VRevenue" Width="1.5" PointX="53.375" PointY="6.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VRevenueLines" Width="1.5" PointX="11.375" PointY="53.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationParamCalculate" Width="1.5" PointX="53.375" PointY="13.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

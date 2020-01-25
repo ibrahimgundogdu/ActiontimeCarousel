@@ -34,5 +34,7 @@ namespace ActionForce.Entity
         public Nullable<double> Insurance { get; set; }
         public string DayNameTR { get; set; }
         public Nullable<System.DateTime> DateKey { get; set; }
+        public Nullable<double> RentRate { get; set; }
+        public Nullable<double> OpDebt { get; set; }
     }
 }

@@ -20,5 +20,11 @@ namespace ActionForce.Entity
         public bool IsCash { get; set; }
         public bool IsCredit { get; set; }
         public bool IsRent { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
+        public Nullable<System.DateTime> RecordDate { get; set; }
+        public string RecordIP { get; set; }
+        public Nullable<int> RecordEmployeeID { get; set; }
+        public string UpdateIP { get; set; }
+        public Nullable<int> UpdateEmployeeID { get; set; }
     }
 }
