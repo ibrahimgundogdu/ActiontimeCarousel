@@ -34,5 +34,10 @@ namespace ActionForce.Entity
         public Nullable<double> Insurance { get; set; }
         public Nullable<double> RentRate { get; set; }
         public Nullable<double> OpDebt { get; set; }
+        public Nullable<double> NetTotal { get; set; }
+        public Nullable<double> Operator { get; set; }
+        public Nullable<double> AcTi { get; set; }
+        public Nullable<double> OpReturn { get; set; }
+        public Nullable<double> DailyLqd { get; set; }
     }
 }

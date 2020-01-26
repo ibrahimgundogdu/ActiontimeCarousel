@@ -311,9 +311,6 @@
     <Compile Include="GetLocationAll_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
-    <Compile Include="GetLocationByUID_Result.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
     <Compile Include="GetLocationCurrentSchedule_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

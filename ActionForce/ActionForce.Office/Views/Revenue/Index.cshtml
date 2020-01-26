@@ -24,10 +24,13 @@
 
 
                 <div class="profile-update-option bg-white ht-50 bd d-flex justify-content-end mg-b-10 mg-lg-b-10 rounded">
-                    @*<div class="d-flex align-items-center pd-x-20 mg-r-auto">
+                    <div class="d-flex align-items-center pd-x-20 mg-r-auto">
 
-                            <span class="tx-15 pd-r-10">@(Html.Raw($"<span clas='text-success'>{Model.Revenues.Count()}</span>")) </span>
-                        </div>*@
+                        <a href="/Revenue/Index?WeekYear=@(Model.PrevWeek.WeekYear)&WeekNumber=@(Model.PrevWeek.WeekNumber)" class="link-03" title="Tümünü Listele">Tümü</a>
+                        <a href="/Revenue/Index?WeekYear=@(Model.PrevWeek.WeekYear)&WeekNumber=@(Model.PrevWeek.WeekNumber)&isactive=1" class="link-03" title="Aktifler">Aktifler</a>
+                        <a href="/Revenue/Index?WeekYear=@(Model.PrevWeek.WeekYear)&WeekNumber=@(Model.PrevWeek.WeekNumber)&isactive=0" class="link-03" title="Pasifler">Pasifler</a>
+
+                    </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
                         <a href="#" id="LocationRevenueDate" class="link-03" title="Tarih Seç">
                             <i data-feather="calendar"></i>
@@ -58,7 +61,7 @@
                     <div class="card-body pd-0">
                         <div class="table-responsive">
                             <table class="table mg-b-0">
-                                @foreach (var item in Model.Revenues)
+                                @foreach (var item in Model.Revenues.OrderBy(x => x.SortBy))
                                 {
                                     var revenueLines = Model.RevenueLines.Where(x => x.RevenueID == item.ID).OrderBy(x => x.Date).ToList();
 
@@ -92,7 +95,7 @@
                                             </th>
                                             <th class="tx-15">
                                                 <a data-toggle="collapse" href="#collapseRevenue@(item.ID)" class="tx-white link-04" role="button" aria-expanded="false" aria-controls="collapseRevenue@(item.ID)">
-                                                    @(item.SortBy) @(item.LocationFullName)
+                                                    @(item.LocationFullName)
                                                 </a>
                                             </th>
                                             <th>@(item.WeekYear) - @(item.WeekNumber)</th>
@@ -114,7 +117,7 @@
                                     <tbody class="collapse table-borderless" id="collapseRevenue@(item.ID)">
                                         <tr>
                                             <td colspan="12" id="detailRevenue@(item.ID)">
-                                               @{Html.RenderPartial("_PartialRevenueDetail",new RevenueDetailModel() { Revenue = item, RevenueLines = revenueLines });}
+                                                @{Html.RenderPartial("_PartialRevenueDetail", new RevenueDetailModel() { Revenue = item, RevenueLines = revenueLines });}
                                             </td>
                                         </tr>
                                     </tbody>

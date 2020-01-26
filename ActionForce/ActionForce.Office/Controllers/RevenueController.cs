@@ -11,7 +11,7 @@ namespace ActionForce.Office.Controllers
     public class RevenueController : BaseController
     {
 
-        public ActionResult Index(int? WeekYear, int? WeekNumber, int? LocationID, DateTime? date)
+        public ActionResult Index(int? WeekYear, int? WeekNumber, int? LocationID, DateTime? date, int? isactive)
         {
             RevenueControlModel model = new RevenueControlModel();
 
@@ -41,16 +41,27 @@ namespace ActionForce.Office.Controllers
             model.PrevWeek = Db.DateList.FirstOrDefault(x => x.DateKey == prevdate);
             model.NextWeek = Db.DateList.FirstOrDefault(x => x.DateKey == nextdate);
 
-            model.Locations = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            //model.Locations = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x=> x.SortBy).ToList();
 
             model.Revenues = Db.VRevenue.Where(x => x.WeekYear == model.WeekYear && x.WeekNumber == model.WeekNumber && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            bool? active = isactive == 1 ? true : isactive == 0 ? false : (bool?)null;
+
+            if (active != null)
+            {
+                model.Revenues = model.Revenues.Where(x => x.IsActive == active).ToList();
+            }
+
             List<long> revids = model.Revenues.Select(x => x.ID).Distinct().ToList();
 
             model.RevenueLines = Db.VRevenueLines.Where(x => x.WeekYear == model.WeekYear && x.WeekNumber == model.WeekNumber && revids.Contains(x.RevenueID.Value)).ToList();
 
+           
+
             return View(model);
         }
 
+        [AllowAnonymous]
         public ActionResult Compute(int? WeekYear, int? WeekNumber, int? LocationID)
         {
             RevenueControlModel model = new RevenueControlModel();
@@ -66,7 +77,7 @@ namespace ActionForce.Office.Controllers
                 }
                 else
                 {
-                    model.Locations = Db.Location.ToList();
+                    model.Locations = Db.Location.Where(x => x.LocationTypeID != 5 && x.LocationTypeID != 6).ToList();
 
                     foreach (var location in model.Locations)
                     {
@@ -98,11 +109,11 @@ namespace ActionForce.Office.Controllers
 
             if (WeekYear > 0 && WeekNumber > 0)
             {
-                model.Locations = Db.Location.ToList();
+                model.Locations = Db.Location.Where(x=> x.LocationTypeID != 5 && x.LocationTypeID != 6).ToList();
 
                 foreach (var location in model.Locations)
                 {
-                    var res = Db.ComputeLocationWeekRevenue(model.WeekNumber, model.WeekYear, location.LocationID);
+                    var res = Db.ComputeLocationWeekRevenue(WeekNumber, WeekYear, location.LocationID);
                 }
             }
 
