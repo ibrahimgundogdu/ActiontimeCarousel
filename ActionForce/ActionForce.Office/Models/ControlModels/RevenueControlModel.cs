@@ -31,6 +31,8 @@ namespace ActionForce.Office
         public IEnumerable<RevenueParameter> RevenueParameters { get; set; }
         public IEnumerable<ActionType> ParameterTypes { get; set; }
 
+        public CounterModel Counters { get; set; }
+
     }
 
     public class RevenueDetailModel

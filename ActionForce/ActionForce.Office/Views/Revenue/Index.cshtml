@@ -26,9 +26,9 @@
                 <div class="profile-update-option bg-white ht-50 bd d-flex justify-content-end mg-b-10 mg-lg-b-10 rounded">
                     <div class="d-flex align-items-center pd-x-20 mg-r-auto">
 
-                        <a href="/Revenue/Index?WeekYear=@(Model.PrevWeek.WeekYear)&WeekNumber=@(Model.PrevWeek.WeekNumber)" class="link-03" title="Tümünü Listele">Tümü</a>
-                        <a href="/Revenue/Index?WeekYear=@(Model.PrevWeek.WeekYear)&WeekNumber=@(Model.PrevWeek.WeekNumber)&isactive=1" class="link-03" title="Aktifler">Aktifler</a>
-                        <a href="/Revenue/Index?WeekYear=@(Model.PrevWeek.WeekYear)&WeekNumber=@(Model.PrevWeek.WeekNumber)&isactive=0" class="link-03" title="Pasifler">Pasifler</a>
+                        <a href="/Revenue/Index?WeekYear=@(Model.FirstWeekDay.WeekYear)&WeekNumber=@(Model.FirstWeekDay.WeekNumber)" class="btn btn-white btn-xs mg-r-10" title="Tümünü Listele">Tümü (@(Model.Revenues.Count()))</a>
+                        <a href="/Revenue/Index?WeekYear=@(Model.FirstWeekDay.WeekYear)&WeekNumber=@(Model.FirstWeekDay.WeekNumber)&isactive=1" class="btn btn-primary btn-xs mg-r-10" title="Aktifler">Aktifler (@(Model.Revenues.Where(x=> x.IsActive == true).Count()))</a>
+                        <a href="/Revenue/Index?WeekYear=@(Model.FirstWeekDay.WeekYear)&WeekNumber=@(Model.FirstWeekDay.WeekNumber)&isactive=0" class="btn btn-secondary btn-xs mg-r-10" title="Pasifler">Pasifler (@(Model.Revenues.Where(x => x.IsActive == false).Count()))</a>
 
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">

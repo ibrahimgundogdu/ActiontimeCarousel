@@ -20,6 +20,11 @@
         <div class="media d-block d-lg-flex">
             <div class="media-body mg-t-40 mg-lg-t-0">
                 <div class="row">
+                    <div class="col-sm-12 bg-white mg-b-10 mg-lg-b-10 rounded">
+                        <a href="/Revenue/Parameters" class="btn btn-white btn-xs mg-r-10" title="Tümünü Listele">Tümü (@(Model.Counters.CountAll))</a>
+                        <a href="/Revenue/Parameters?isactive=1" class="btn btn-primary btn-xs mg-r-10" title="Aktifler">Aktifler (@(Model.Counters.CountActive))</a>
+                        <a href="/Revenue/Parameters?isactive=0" class="btn btn-secondary btn-xs mg-r-10" title="Pasifler">Pasifler (@(Model.Counters.CountPassive))</a>
+                    </div>
                     @foreach (var location in Model.Locations.OrderBy(x => x.SortBy).ToList())
                     {
                         <div class="col-sm-12" style="margin-bottom:20px !important;">
@@ -151,7 +156,7 @@
             $('.money').mask("#.##0,00", { reverse: true });
             $('.money4').mask("#.##0,0000", { reverse: true });
 
-            
+
         });
 
         function AddLocationParameter(locationid) {

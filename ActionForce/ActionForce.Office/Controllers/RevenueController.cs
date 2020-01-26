@@ -120,11 +120,21 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Index", "Revenue", new { WeekYear, WeekNumber });
         }
 
-        public ActionResult Parameters()
+        public ActionResult Parameters(int? isactive)
         {
             RevenueControlModel model = new RevenueControlModel();
 
             model.Locations = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            model.Counters = new CounterModel() { CountActive = model.Locations.Where(x => x.IsActive == true)?.Count() ?? 0, CountPassive = model.Locations.Where(x => x.IsActive == false)?.Count() ?? 0, CountAll = model.Locations?.Count() ?? 0 };
+
+            bool? active = isactive == 1 ? true : isactive == 0 ? false : (bool?)null;
+
+            if (active != null)
+            {
+                model.Locations = model.Locations.Where(x => x.IsActive == active).ToList();
+            }
+
             model.LocationParameters = Db.LocationParam.ToList();
             model.RevenueParameters = Db.RevenueParameter.ToList();
             model.ParameterTypes = Db.ActionType.Where(x => x.IsActive == true && x.IsParam == true);

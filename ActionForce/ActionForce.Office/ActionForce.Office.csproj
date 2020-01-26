@@ -2315,6 +2315,7 @@
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\BankActionModel.cs" />
     <Compile Include="Models\ControlModels\RevenueControlModel.cs" />
+    <Compile Include="Models\CounterModel.cs" />
     <Compile Include="Models\Document\EmployeePermit.cs" />
     <Compile Include="Models\Document\Employees.cs" />
     <Compile Include="Models\ControlModels\EmployeeControlModel.cs" />
