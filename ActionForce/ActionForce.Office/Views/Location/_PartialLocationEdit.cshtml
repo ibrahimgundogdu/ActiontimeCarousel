@@ -5,7 +5,7 @@
         <div class="form-group row mg-b-5">
             <label for="locationCode" class="col-sm-3 col-form-label">Lokasyon Kodu</label>
             <div class="col-sm-6">
-                <span id="locationCode" name="LocationCode" class="tx-light tx-15">@(Model.LocationModel.LocationCode)</span>
+                <input id="locationCode" name="LocationCode" type="text" class="form-control" autocomplete="off" placeholder="Lokasyon Kodu" value="@(Model.LocationModel.LocationCode)">
             </div>
             <div class="col-sm-3">
             </div>
@@ -13,7 +13,7 @@
         <div class="form-group row mg-b-5">
             <label for="locationName" class="col-sm-3 col-form-label">Adı</label>
             <div class="col-sm-6">
-                <span id="locationName" name="LocationName" class="tx-light tx-15">@(Model.LocationModel.LocationName)</span>
+                <input id="locationName" name="LocationName" type="text" class="form-control" autocomplete="off" placeholder="Adı" value="@(Model.LocationModel.LocationName)">
             </div>
             <div class="col-sm-3">
             </div>
@@ -21,7 +21,7 @@
         <div class="form-group row mg-b-5">
             <label for="description" class="col-sm-3 col-form-label">Türü</label>
             <div class="col-sm-6">
-                <span id="description" name="Description" class="tx-light tx-15">@(Model.LocationModel.Description)</span>
+                <input id="description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Türü" value="@(Model.LocationModel.Description)">
             </div>
             <div class="col-sm-3">
             </div>
@@ -29,7 +29,7 @@
         <div class="form-group row mg-b-5">
             <label for="state" class="col-sm-3 col-form-label">Şehir</label>
             <div class="col-sm-6">
-                <span id="state" name="State" class="tx-light tx-15">@(Model.LocationModel.State)</span>
+                <input id="state" name="State" type="text" class="form-control" autocomplete="off" placeholder="Şehir" value="@(Model.LocationModel.State)">
             </div>
             <div class="col-sm-3">
             </div>
@@ -37,7 +37,7 @@
         <div class="form-group row mg-b-5">
             <label for="latitude" class="col-sm-3 col-form-label">Enlem</label>
             <div class="col-sm-6">
-                <span id="latitude" name="Latitude" class="tx-light tx-15">@(Model.LocationModel.Latitude)</span>
+                <input id="latitude" name="Latitude" type="text" class="form-control" autocomplete="off" placeholder="Enlem" value="@(Model.LocationModel.Latitude)">
             </div>
             <div class="col-sm-3">
             </div>
@@ -45,7 +45,7 @@
         <div class="form-group row mg-b-5">
             <label for="longitude" class="col-sm-3 col-form-label">Boylam</label>
             <div class="col-sm-6">
-                <span id="longitude" name="Longitude" class="tx-light tx-15">@(Model.LocationModel.Longitude)</span>
+                <input id="longitude" name="Longitude" type="text" class="form-control" autocomplete="off" placeholder="Boylam" value="@(Model.LocationModel.Longitude)">
             </div>
             <div class="col-sm-3">
             </div>
@@ -53,7 +53,7 @@
         <div class="form-group row mg-b-5">
             <label for="iP" class="col-sm-3 col-form-label">IP</label>
             <div class="col-sm-6">
-                <span id="iP" name="IP" class="tx-light tx-15">@(Model.LocationModel.IP)</span>
+                <input id="iP" name="IP" type="text" class="form-control" autocomplete="off" placeholder="IP" value="@(Model.LocationModel.IP)">
             </div>
             <div class="col-sm-3">
             </div>
@@ -61,7 +61,7 @@
         <div class="form-group row mg-b-5">
             <label for="timezone" class="col-sm-3 col-form-label">Time Zone</label>
             <div class="col-sm-6">
-                <span id="timezone" name="Timezone" class="tx-light tx-15">@(Model.LocationModel.Timezone)</span>
+                <input id="timezone" name="Timezone" type="text" class="form-control" autocomplete="off" placeholder="Time Zone" value="@(Model.LocationModel.Timezone)">
             </div>
             <div class="col-sm-3">
             </div>
@@ -69,7 +69,7 @@
         <div class="form-group row mg-b-5">
             <label for="currency" class="col-sm-3 col-form-label">Para Birimi</label>
             <div class="col-sm-6">
-                <span id="currency" name="Currency" class="tx-light tx-15">@(Model.LocationModel.Currency)</span>
+                <input id="currency" name="Currency" type="text" class="form-control" autocomplete="off" placeholder="Para Birimi" value="@(Model.LocationModel.Currency)">
             </div>
             <div class="col-sm-3">
             </div>
@@ -77,7 +77,7 @@
         <div class="form-group row mg-b-5">
             <label for="sortBy" class="col-sm-3 col-form-label">No</label>
             <div class="col-sm-6">
-                <span id="sortBy" name="SortBy" class="tx-light tx-15">@(Model.LocationModel.SortBy)</span>
+                <input id="sortBy" name="SortBy" type="text" class="form-control" autocomplete="off" placeholder="No" value="@(Model.LocationModel.SortBy)">
             </div>
             <div class="col-sm-3">
             </div>
@@ -85,7 +85,10 @@
         <div class="form-group row mg-b-5">
             <label for="isHaveOperator" class="col-sm-3 col-form-label">Operatör var mı?</label>
             <div class="col-sm-6">
-                <span id="isHaveOperator" name="IsHaveOperator" class="tx-light tx-15">@Html.Raw(Model.LocationModel.IsHaveOperator.Value == true ? "Evet" : "Hayır")</span>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isHaveOperator" name="IsHaveOperator" value="1" @(Model.LocationModel.IsHaveOperator.Value == true ? "checked" : "")>
+                    <label class="custom-control-label" for="isHaveOperator">Operatör var mı?</label>
+                </div>
             </div>
             <div class="col-sm-3">
             </div>
@@ -93,7 +96,10 @@
         <div class="form-group row mg-b-5">
             <label for="isActive" class="col-sm-3 col-form-label">Aktif mi?</label>
             <div class="col-sm-6">
-                <span id="isActive" name="IsActive" class="tx-light tx-15"> @Html.Raw(Model.LocationModel.IsActive.Value == true ? "Evet" : "Hayır")</span>
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="isActive" name="IsActive" value="1" @(Model.LocationModel.IsActive.Value == true ? "checked" : "")>
+                    <label class="custom-control-label" for="isActive">Aktif</label>
+                </div>
             </div>
             <div class="col-sm-3">
             </div>

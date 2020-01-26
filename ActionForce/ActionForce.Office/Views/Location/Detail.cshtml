@@ -10,35 +10,237 @@
 }
 <div class="content-header">
     <div class="content-search col-lg">
-        <span class="tx-20"> @(Model.LocationModel != null ? Model.LocationModel.LocationName + " " + Model.LocationModel.TypeName : "") - Lokasyon Detayı</span>
+        <span class="tx-20">Lokasyon Detayı</span>
     </div>
     <nav class="nav">
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
     </nav>
 </div>
+
 <div class="content-body">
-    <div class="pd-x-0 tx-13">
-        <div class="media d-block d-lg-flex">
+    <div class="container-fluid pd-x-0 tx-13">
+        <div class="media d-lg-flex">
             <div class="profile-sidebar profile-sidebar-two pd-lg-r-15">
                 <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg mg-t-20 mg-sm-t-0">
-                        <nav class="nav flex-column demo-animate-list">
-                            <a href="#" class="nav-link">Cari Hesap</a>
-                            <a href="#" class="nav-link">Set Card</a>
-                            <a href="#" class="nav-link">Lokasyonlar</a>
-                            <a href="#" class="nav-link">Özlük Belgeleri</a>
-                            <a href="#" class="nav-link">Puanlama Skorlama</a>
-                            <a href="#" class="nav-link">Check Liste</a>
-                            <a href="#" class="nav-link">Çalışma Dönemleri</a>
-                            <a href="#" class="nav-link">Ücret Tanımlamaları</a>
-                            <a href="#" onclick="LocationUpdate(@Model.LocationModel.LocationUID);" class="nav-link">Güncelle</a>
+                    <div class="col-sm-3 col-md-2 col-lg">
+                        <span class="@(Model.LocationModel?.IsActive == true ? "avatar avatar-online":"avatar avatar-offline")"></span>
+                        <h5 class="mg-b-2 tx-spacing--1">@(Model.LocationModel.LocationName)</h5>
+                        <p class="tx-color-03 mg-b-0">@(Model.LocationModel.TypeName)</p>
+                        <p class="tx-color-03 mg-b-25">@(Model.LocationModel.SortBy?.Trim())</p>
+                    </div><!-- col -->
+                    <div class="col-sm-8 col-md-7 col-lg mg-t-20 mg-sm-t-0 mg-lg-t-0">
+                        <div class="d-flex mg-b-25">
+                            <a class="btn btn-xs btn-white flex-fill" href="/Location/Edit/@(Model.LocationModel.LocationUID)">Düzenle</a>
+                            <button class="btn btn-xs btn-danger flex-fill mg-l-10">Kapalı @*Mesai Molaya gidecek*@</button>
+                        </div>
+                        <div class="d-flex">
+                            <div class="profile-skillset flex-fill">
+                                <h4><a href="" class="link-01">10:05</a></h4>
+                                <label>Başlama</label>
+                            </div>
+                            <div class="profile-skillset flex-fill">
+                                <h4><a href="" class="link-01">22:20</a></h4>
+                                <label class="pd-l-15">Bitiş</label>
+                            </div>
+                            <div class="profile-skillset flex-fill">
+                                <h4><a href="" class="link-01">12:15</a></h4>
+                                <label class="pd-l-10">Süre</label>
+                            </div>
+                        </div>
+                    </div><!-- col -->
+                    <div class="col-sm-6 col-md-5 col-lg mg-t-20">
+                        <ul class="list-unstyled profile-info-list">
+                            <li><i data-feather="briefcase"></i> <span class="tx-color-03">Bay Area, San Francisco, CA</span></li>
+                            <li><i data-feather="home"></i> <span class="tx-color-03">Westfield, Oakland, CA</span></li>
+                            <li><i data-feather="smartphone"></i> <a href="">(+1) 012 345 6789</a></li>
+                            <li><i data-feather="phone"></i> <a href="">(+1) 987 654 3201</a></li>
+                            <li><i data-feather="mail"></i> <a href="">me@fenchiumao.me</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6 col-md-5 col-lg mg-t-15">
+                        <nav class="nav nav-classic tx-13">
+                            <a href="/Location/Action" class="nav-link"><i data-feather="layers"></i> Cari Hesap</a>
+                            <a href="/Location/Goal" class="nav-link"><i data-feather="target"></i> Hedefler</a>
+                            <a href="/Location/Employee" class="nav-link"><i data-feather="users"></i> Çalışanlar</a>
+                            <a href="/Location/Contract" class="nav-link"><i data-feather="file"></i> Sözleşmeler</a>
+                            <a href="/Location/Period" class="nav-link"><i data-feather="git-commit"></i> Periyotlar</a>
+                            <a href="/Location/PosTerminal" class="nav-link"><i data-feather="credit-card"></i> Pos Cihazları</a>
+                            <a href="/Location/Schedule" class="nav-link"><i data-feather="calendar"></i> Schedule (Takvim)</a>
+                            <a href="/Location/Shift" class="nav-link"><i data-feather="clock"></i> Shift (Mesai)</a>
+                            <a href="/Location/Stat" class="nav-link"><i data-feather="check-square"></i> İstatistik</a>
+                            <a href="/Location/Part" class="nav-link"><i data-feather="grid"></i> Animals/Trambolines</a>
+                            <a href="/Location/Sale" class="nav-link"><i data-feather="dollar-sign"></i> Satışlar</a>
+                            <a href="/Location/Cash" class="nav-link"><i data-feather="file-text"></i> Yazar Kasalar</a>
+                            <a href="/Location/Result" class="nav-link"><i data-feather="moon"></i> Gün Sonları</a>
+                            <a href="/Location/Warehouse" class="nav-link"><i data-feather="truck"></i> Depolar</a>
+                            <a href="/Location/Mall" class="nav-link"><i data-feather="shopping-bag"></i> AVM</a>
+                            <a href="/Location/Edit/@(Model.LocationModel.LocationUID)" class="nav-link"><i data-feather="edit"></i> Güncelle</a>
                         </nav>
+                    </div><!-- col -->
+                </div><!-- row -->
+            </div><!-- profile-sidebar -->
+            <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
+                <div class="profile-update-option bg-white ht-200 d-flex justify-content-end mg-b-20 mg-lg-b-25 rounded">
+                    @Html.Raw(Model.LocationModel.MapURL)
+                </div>
+                <div class="card mg-b-20 mg-lg-b-25">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.LocationModel.LocationName + " " + Model.LocationModel.TypeName) - Lokasyon Detayı</h6>
+                    </div><!-- card-header -->
+                    <div class="card-body pd-20 pd-lg-25">
+                        @{Html.RenderPartial("_PartialLocationDetail", Model);}
+                    </div>
+                    @*<div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
+                            <nav class="nav nav-with-icon tx-13">
+                                <a href="" class="nav-link"><i data-feather="thumbs-up"></i> Like</a>
+                                <a href="" class="nav-link"><i data-feather="message-square"></i> Comment</a>
+                                <a href="" class="nav-link"><i data-feather="share"></i> Share</a>
+                            </nav>
+                        </div>*@<!-- card-footer -->
+                </div><!-- card -->
+                <div class="card mg-b-20 mg-lg-b-25">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Schedule (Takvim) @*Bulunduğu haftadaki*@</h6>
+                        <nav class="nav nav-with-icon tx-13">
+                            <a href="" class="nav-link"><i data-feather="plus"></i> Add New</a>
+                        </nav>
+                    </div><!-- card-header -->
+                    <div class="card-body pd-25">
+                        <div class="media d-block d-sm-flex">
+                            <div class="wd-80 ht-80 bg-ui-04 rounded d-flex align-items-center justify-content-center">
+                                <i data-feather="briefcase" class="tx-white-7 wd-40 ht-40"></i>
+                            </div>
+                            <div class="media-body pd-t-25 pd-sm-t-0 pd-sm-l-25">
+                                <h5 class="mg-b-5">Area Sales Manager</h5>
+                                <p class="mg-b-3 tx-color-02"><span class="tx-medium tx-color-01">ThemePixels, Inc.</span>, Bay Area, San Francisco, CA</p>
+                                <span class="d-block tx-13 tx-color-03">December 2016 - Present</span>
+                                <ul class="pd-l-10 mg-0 mg-t-20 tx-13">
+                                    <li>Reaching the targets and goals set for my area.</li>
+                                    <li>Servicing the needs of my existing customers.</li>
+                                    <li>Maintaining the relationships with existing customers for repeat business.</li>
+                                    <li>Reporting to top managers.</li>
+                                    <li>Keeping up to date with the products.</li>
+                                </ul>
+                            </div>
+                        </div><!-- media -->
+                    </div>
+                    <div class="card-footer bg-transparent pd-y-15 pd-x-20">
+                        <nav class="nav nav-with-icon tx-13">
+                            <a href="" class="nav-link">
+                                Show More Experiences (4)
+                                <i data-feather="chevron-down" class="mg-l-2 mg-r-0 mg-t-2"></i>
+                            </a>
+                        </nav>
+                    </div><!-- card-footer -->
+                </div><!-- card -->
+                <div class="card mg-b-20 mg-lg-b-25">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Shift (Mesai)</h6>
+                        <nav class="nav nav-with-icon tx-13">
+                            <a href="" class="nav-link"><i data-feather="plus"></i> Add New</a>
+                        </nav>
+                    </div><!-- card-header -->
+                    <div class="card-body pd-25">
+                        <div class="media">
+                            <div class="wd-80 ht-80 bg-ui-04 rounded d-flex align-items-center justify-content-center">
+                                <i data-feather="book-open" class="tx-white-7 wd-40 ht-40"></i>
+                            </div>
+                            <div class="media-body pd-l-25">
+                                <h5 class="mg-b-5">BS in Computer Science</h5>
+                                <p class="mg-b-3"><span class="tx-medium tx-color-02">Holy Name University</span>,  Tagbilaran City, Bohol</p>
+                                <span class="d-block tx-13 tx-color-03">2002-2006</span>
+                            </div>
+                        </div><!-- media -->
+                    </div>
+                    <div class="card-footer bg-transparent pd-y-15 pd-x-20">
+                        <nav class="nav nav-with-icon tx-13">
+                            <a href="" class="nav-link">
+                                Show More Education (2)
+                                <i data-feather="chevron-down" class="mg-l-2 mg-r-0 mg-t-2"></i>
+                            </a>
+                        </nav>
+                    </div><!-- card-footer -->
+                </div><!-- card -->
+            </div><!-- media-body -->
+            <div class="profile-sidebar profile-sidebar-two mg-t-40 mg-lg-t-0 pd-lg-l-15">
+                <div class="row">
+                    <div class="col-sm-6 col-md-5 col-lg">
+                        <div class="d-flex align-items-center justify-content-between mg-b-20">
+                            <h6 class="tx-13 tx-spacng-1 tx-uppercase tx-semibold mg-b-0">Çalışanlar</h6>
+                            @*<a href="" class="link-03">Watch All</a>*@
+                        </div>
+                        <ul class="list-unstyled media-list mg-b-15">
+                            @foreach (var item in Model.EmployeeLocationList.OrderByDescending(x=>x.IsActive))
+                            {
+                                <li class="media align-items-center">
+                                    <a href=""><div class="avatar @(item?.IsActive == true ? "avatar-online":"avatar-offline")"><span class="avatar-initial rounded-circle bg-dark">@(item.FullName.Substring(0, 1))</span></div></a>
+                                    <div class="media-body pd-l-15">
+                                        <p class="tx-medium mg-b-0"><a href="" class="link-01">@(item.FullName)</a></p>
+                                        <span class="tx-12 tx-color-03">Operator</span>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                        @*<a href="" class="link-03 d-inline-flex align-items-center">See more stories <i class="icon ion-ios-arrow-down mg-l-5 mg-t-3 tx-12"></i></a>*@
+                    </div><!-- col -->
+                </div><!-- row -->
+            </div><!-- profile-sidebar -->
+        </div><!-- media -->
+    </div><!-- container -->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*<div class="content-body">
+        <div class="pd-x-0 tx-13">
+            <div class="media d-block d-lg-flex">
+                <div class="profile-sidebar profile-sidebar-two pd-lg-r-15">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-lg mg-t-20 mg-sm-t-0">
+                            <nav class="nav flex-column demo-animate-list">
+                                <a href="#" class="nav-link">Cari Hesap</a>
+                                <a href="#" class="nav-link">Hedefler</a>
+                                <a href="#" class="nav-link">Çalışanlar</a>
+                                <a href="#" class="nav-link">Sözleşmeler</a>
+                                <a href="#" class="nav-link">Periyotlar</a>
+                                <a href="#" class="nav-link">Pos Cihazları</a>
+                                <a href="#" class="nav-link">Çalışma Dönemleri</a>
+                                <a href="#" class="nav-link">Schedule (Takvim)</a>
+                                <a href="#" class="nav-link">Shift (Mesai)</a>
+                                <a href="#" class="nav-link">Stats</a>
+                                <a href="#" class="nav-link">Animals/Trambolines</a>
+                                <a href="#" class="nav-link">Satışlar</a>
+                                <a href="#" class="nav-link">Yazar Kasalar</a>
+                                <a href="#" class="nav-link">Gün Sonları</a>
+                                <a href="#" class="nav-link">Depolar</a>
+                                <a href="#" class="nav-link">AVM</a>
+                                <a href="/Location/Edit/@(Model.LocationModel.LocationUID)" class="nav-link">Güncelle</a>
+                            </nav>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10" id="locationModel">
-                @{Html.RenderPartial("_PartialLocationDetail", Model);}
+                <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
+                    @{Html.RenderPartial("_PartialLocationDetail", Model);}
+                </div>
             </div>
         </div>
-    </div>
-</div>
+    </div>*@
