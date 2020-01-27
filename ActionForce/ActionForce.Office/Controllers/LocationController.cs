@@ -34,6 +34,7 @@ namespace ActionForce.Office.Controllers
                 TypeName = x.TypeName,
                 Timezone = x.Timezone
             }).ToList();
+
             model.StateList = model.LocationList.Select(x => x.State).Distinct().OrderBy(x => x).ToList();
             model.TypeList = model.LocationList.Select(x => x.TypeName).Distinct().OrderBy(x => x).ToList();
 

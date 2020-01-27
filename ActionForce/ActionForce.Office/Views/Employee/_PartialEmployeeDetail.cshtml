@@ -1,164 +1,103 @@
 ﻿@model EmployeeControlModel
 
-<div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
-    <div>
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-                <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Çalışan İşlemleri</li>
-            </ol>
-        </nav>
-        <h4 class="mg-b-0 tx-spacing--1">Çalışan Detayı</h4>
-    </div>
-</div>
 
-<div class="row row-xs">
-    <div class="col-lg-12">
+<table class="table table-hover table-striped table-warning mg-b-0">
+    <tbody class="table-hover table-striped">
+        <tr>
+            <td>Ad Soyad</td>
+            <td>@(Model.EmpList.FullName)</td>
+        </tr>
+        <tr>
+            <td>E-Posta</td>
+            <td>@(Model.EmpList.EMail)</td>
+        </tr>
+        <tr>
+            <td>Mobil</td>
+            <td>@(Model.EmpList.Mobile)</td>
+        </tr>
+        <tr>
+            <td>Rol</td>
+            <td>@(Model.EmpList.GroupName)</td>
+        </tr>
+        <tr>
+            <td>Alanı</td>
+            <td>@(Model.EmpList.AreaName)</td>
+        </tr>
+        <tr>
+            <td>Oryantasyon Seviyesi</td>
+            <td>@(Model.EmpList.SequenceName)</td>
+        </tr>
+        <tr>
+            <td>Departman</td>
+            <td>@(Model.EmpList.DepartmentName)</td>
+        </tr>
+        <tr>
+            <td>Pozisyon</td>
+            <td>@(Model.EmpList.PositionName)</td>
+        </tr>
+        <tr>
+            <td>Kategori</td>
+            <td>@(Model.EmpList.SalaryCategoryName)</td>
+        </tr>
+        <tr>
+            <td>Durum</td>
+            <td>@(Model.EmpList.Name)</td>
+        </tr>
+        <tr>
+            <td>Çalışma Türü</td>
+            <td>@(Model.EmpList.TypeName)</td>
+        </tr>
+        <tr>
+            <td>Açıklama</td>
+            <td>@(Model.EmpList.Description)</td>
+        </tr>
+    </tbody>
+</table>
 
-        <div class="form-group row">
-            <label for="FullName" class="col-sm-3 col-form-label">Ad Soyad</label>
-            <div class="col-sm-6">
-                <span id="FullName" name="FullName" class="tx-light tx-15">@(Model.EmpList.FullName)</span>
-            </div>
-            <div class="col-sm-3">
-            </div>
+
+    <div class="row row-xs bg-gray-100 mg-b-0 mg-t-40">
+        <div class="col-sm-3 pd-t-10 pd-b-10">
+            <b>Kayıt Tarihçesi</b>
         </div>
 
-        <div class="form-group row mg-b-5">
-            <label for="EMail" class="col-sm-3 col-form-label">E-Posta</label>
-            <div class="col-sm-6">
-                <span id="EMail" name="EMail" class="tx-light tx-15">@(Model.EmpList.EMail)</span>
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="Mobile" class="col-sm-3 col-form-label">Mobil</label>
-            <div class="col-sm-6">
-                <span id="Mobile" name="Mobile" class="tx-light tx-15">@(Model.EmpList.Mobile)</span>
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="GroupName" class="col-sm-3 col-form-label">Rol</label>
-            <div class="col-sm-6">
-                <span id="GroupName" name="GroupName" class="tx-light tx-15">@(Model.EmpList.GroupName)</span>
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="AreaName" class="col-sm-3 col-form-label">Alan</label>
-            <div class="col-sm-6">
-                <span id="AreaName" name="AreaName" class="tx-light tx-15">@(Model.EmpList.AreaName)</span>
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="SequenceName" class="col-sm-3 col-form-label">Oryantasyon Seviyesi</label>
-            <div class="col-sm-6">
-                <span id="SequenceName" name="SequenceName" class="tx-light tx-15">@(Model.EmpList.SequenceName)</span>
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="DepartmentName" class="col-sm-3 col-form-label">Departman</label>
-            <div class="col-sm-6">
-                <span id="DepartmentName" name="DepartmentName" class="tx-light tx-15">@(Model.EmpList.DepartmentName)</span>
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="PositionName" class="col-sm-3 col-form-label">Pozisyon</label>
-            <div class="col-sm-6">
-                <span id="PositionName" name="PositionName" class="tx-light tx-15">@(Model.EmpList.PositionName)</span>
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="Name" class="col-sm-3 col-form-label">Durum</label>
-            <div class="col-sm-6">
-                <span id="Name" name="Name" class="tx-light tx-15">@(Model.EmpList.Name)</span>
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="TypeName" class="col-sm-3 col-form-label">Çalışma Türü</label>
-            <div class="col-sm-6">
-                <span id="TypeName" name="TypeName" class="tx-light tx-15">@(Model.EmpList.TypeName)</span>
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="SalaryCategoryName" class="col-sm-3 col-form-label">Kategori</label>
-            <div class="col-sm-6">
-                <span id="SalaryCategoryName" name="SalaryCategoryName" class="tx-light tx-15">@(Model.EmpList.SalaryCategoryName)</span>
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row">
-            <label for="Description" class="col-sm-3 col-form-label">Açıklama</label>
-            <div class="col-sm-6">
-                <span id="Description" name="Description" class="tx-light tx-15">@(Model.EmpList.Description)</span>
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
+        @*<div class="col-sm-3 pd-t-10">@(Html.Raw($"<b>Kaydeden </b> : {Model.EmpList.RecordFullName} {Model.EmpList.RecordDate} ")) </div>
+            <div class="col-sm-3 pd-t-10">@(Model.EmpList.UpdateDate != null ? Html.Raw($"<b>Güncelleyen </b> : {Model.EmpList.UpdateFullName} {Model.EmpList.UpdateDate} ") : Html.Raw("")) </div>*@
 
     </div>
-</div>
 
-<div class="row row-xs bg-gray-100 mg-b-0 mg-t-40">
-    <div class="col-sm-3 pd-t-10 pd-b-10">
-        <b>Kayıt Tarihçesi</b>
-    </div>
-    
-    <div class="col-sm-3 pd-t-10">@(Html.Raw($"<b>Kaydeden </b> : {Model.EmpList.RecordFullName} {Model.EmpList.RecordDate} ")) </div>
-    <div class="col-sm-3 pd-t-10">@(Model.EmpList.UpdateDate != null ? Html.Raw($"<b>Güncelleyen </b> : {Model.EmpList.UpdateFullName} {Model.EmpList.UpdateDate} ") : Html.Raw("")) </div>
-
-</div>
-
-@if (Model.LogList != null && Model.LogList.Count() > 0)
-{
-    <div class="row row-xs">
-        <table class="table table-sm table-bordered">
-            <thead>
-                <tr>
-                    <th>Tarih</th>
-                    <th>Kişi</th>
-                    <th>Ortam</th>
-                    <th>İşlem</th>
-                    <th>Açıklama</th>
-                    <th>Alan</th>
-                    <th>Önceki</th>
-                    <th>Yeni</th>
-                    <th>Başarılı?</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.LogList.OrderBy(x => x.RecordDate))
-                {
+    @if (Model.LogList != null && Model.LogList.Count() > 0)
+    {
+        <div class="row row-xs">
+            <table class="table table-sm table-bordered">
+                <thead>
                     <tr>
-                        <td>@(item.RecordDate)</td>
-                        <td>@(item.RecordEmployee)</td>
-                        <td>@(item.Environment)</td>
-                        <td>@(item.ProcessType)</td>
-                        <td>@(item.ResultMessage)</td>
-                        <td>@(item.FieldName)</td>
-                        <td>@(item.OldValue)</td>
-                        <td>@(item.NewValue)</td>
-                        <td>@(item.IsSuccess)</td>
+                        <th>Tarih</th>
+                        <th>Kişi</th>
+                        <th>Ortam</th>
+                        <th>İşlem</th>
+                        <th>Açıklama</th>
+                        <th>Alan</th>
+                        <th>Önceki</th>
+                        <th>Yeni</th>
+                        <th>Başarılı?</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-}
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.LogList.OrderBy(x => x.RecordDate))
+                    {
+                        <tr>
+                            <td>@(item.RecordDate)</td>
+                            <td>@(item.RecordEmployee)</td>
+                            <td>@(item.Environment)</td>
+                            <td>@(item.ProcessType)</td>
+                            <td>@(item.ResultMessage)</td>
+                            <td>@(item.FieldName)</td>
+                            <td>@(item.OldValue)</td>
+                            <td>@(item.NewValue)</td>
+                            <td>@(item.IsSuccess)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }

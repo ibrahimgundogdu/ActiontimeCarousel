@@ -1,0 +1,51 @@
+﻿@model EmployeeControlModel
+
+
+
+
+
+<div class="card mg-b-20 mg-lg-b-25">
+    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.WeekCode). Hafta</h6>
+        <nav class="nav">
+            <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.FirstWeekDay.DateKey.ToLongDateString())</span> <i data-feather="more-horizontal"></i> @(Model.LastWeekDay.DateKey.ToLongDateString())</a>
+        </nav>
+    </div><!-- card-header -->
+    <div class="card-body pd-0">
+        <div class="table-responsive">
+            <table class="table table-primary table-hover table-striped mg-b-0">
+                <thead>
+                    <tr class="table-active">
+                        @foreach (var day in Model.WeekList.OrderBy(x => x.DateKey))
+                        {
+                            <th scope="col" style="width:10%;" class="text-center @(day.DateKey == Model.FirstWeekDay.DateKey ? "bd-l":day.DateKey == Model.LastWeekDay.DateKey ? "bd-r":"")">@($"{day.Day} {day.MonthNameTR} {day.DayNameTR}")</th>
+                        }
+                        <th scope="col" style="width:3%;" class="text-center"></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        @foreach (var weekday in Model.WeekList.OrderBy(x => x.DateKey))
+                        {
+                            var schedule = Model.EmployeeSchedules.FirstOrDefault(x => x.EmployeeID == Model.EmpList.EmployeeID && x.ShiftDate == weekday.DateKey);
+
+                            <td class="text-center @(weekday.DateKey == Model.FirstWeekDay.DateKey ? "bd-l":weekday.DateKey == Model.LastWeekDay.DateKey ? "bd-r":"")">
+                                @if (schedule != null)
+                                {
+                                    @(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToShortDateString() : "") <b>@(schedule?.ShiftDateStart != null ? schedule.ShiftDateStart.Value.ToString("HH\\:mm") : "")</b> <br />@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToShortDateString() : "") <b>@(schedule?.ShiftdateEnd != null ? schedule.ShiftdateEnd.Value.ToString("HH\\:mm") : "")</b>
+
+                                }
+                            </td>
+
+                        }
+                        <td scope="col" style="width:3%;" class="text-center"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+

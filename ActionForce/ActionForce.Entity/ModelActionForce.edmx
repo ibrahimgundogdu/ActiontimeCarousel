@@ -5100,6 +5100,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
           <Parameter Name="Prefix" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="GetEmployeeAll" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OurCompanyID" Type="int" Mode="In" />
+          <Parameter Name="EmployeeUID" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+        </Function>
         <Function Name="GetFromList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
         </Function>
@@ -7325,6 +7330,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VRevenue" EntityType="db293_ActionTimeDbModel.VRevenue" />
           <EntitySet Name="VRevenueLines" EntityType="db293_ActionTimeDbModel.VRevenueLines" />
           <EntitySet Name="LocationParamCalculate" EntityType="db293_ActionTimeDbModel.LocationParamCalculate" />
+          <FunctionImport Name="GetEmployeeAll" ReturnType="Collection(db293_ActionTimeDbModel.GetEmployeeAll_Result1)">
+            <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
+            <Parameter Name="EmployeeUID" Mode="In" Type="Guid" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+          </FunctionImport>
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -12306,6 +12316,127 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SortBy" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
+        <ComplexType Name="GetEmployeeAll_Result">
+          <Property Type="Int32" Name="EmployeeID" Nullable="false" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="FullNameSearch" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="EMail" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FotoFile" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="RoleID" Nullable="true" />
+          <Property Type="Int32" Name="OurCompanyID" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="Boolean" Name="IsTemp" Nullable="true" />
+          <Property Type="Boolean" Name="IsDismissal" Nullable="true" />
+          <Property Type="Int32" Name="RecordEmployeeID" Nullable="true" />
+          <Property Type="DateTime" Name="RecordDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="ShiftTypeID" Nullable="true" />
+          <Property Type="Int32" Name="StatusID" Nullable="true" />
+          <Property Type="Int32" Name="RoleGroupID" Nullable="true" />
+          <Property Type="Int32" Name="DepartmentID" Nullable="true" />
+          <Property Type="Int32" Name="AreaCategoryID" Nullable="true" />
+          <Property Type="Int32" Name="SalaryCategoryID" Nullable="true" />
+          <Property Type="Int32" Name="SequenceID" Nullable="true" />
+          <Property Type="Int32" Name="PositionID" Nullable="true" />
+          <Property Type="String" Name="CompanyName" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="RoleLevel" Nullable="true" />
+          <Property Type="String" Name="RecordFullName" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="SequenceCode" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SequenceName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PositionName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PositionSortBy" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="AreaName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="AreaSortBy" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DeperManSortBy" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="SalaryCategoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SalarySortBy" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="TypeName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ShiftSortBy" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="StatusCode" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="UpdateFullName" Nullable="true" MaxLength="150" />
+          <Property Type="Int32" Name="UpdateEmployeeID" Nullable="true" />
+          <Property Type="DateTime" Name="UpdateDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="IdentityNumber" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="SmsNumber" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="Mobile2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Whatsapp" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Username" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="DateStart" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="DateEnd" Nullable="true" Precision="23" />
+          <Property Type="String" Name="DismissDescription" Nullable="true" />
+          <Property Type="Guid" Name="EmployeeUID" Nullable="true" />
+          <Property Type="String" Name="RecordIP" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="UpdateIP" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="GroupCode" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="GroupName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <ComplexType Name="GetEmployeeAll_Result1">
+          <Property Type="Int32" Name="EmployeeID" Nullable="false" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="FullNameSearch" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="EMail" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="Mobile" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="FotoFile" Nullable="true" MaxLength="50" />
+          <Property Type="Int32" Name="RoleID" Nullable="true" />
+          <Property Type="Int32" Name="OurCompanyID" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="Boolean" Name="IsTemp" Nullable="true" />
+          <Property Type="Boolean" Name="IsDismissal" Nullable="true" />
+          <Property Type="Int32" Name="RecordEmployeeID" Nullable="true" />
+          <Property Type="DateTime" Name="RecordDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="ShiftTypeID" Nullable="true" />
+          <Property Type="Int32" Name="StatusID" Nullable="true" />
+          <Property Type="Int32" Name="RoleGroupID" Nullable="true" />
+          <Property Type="Int32" Name="DepartmentID" Nullable="true" />
+          <Property Type="Int32" Name="AreaCategoryID" Nullable="true" />
+          <Property Type="Int32" Name="SalaryCategoryID" Nullable="true" />
+          <Property Type="Int32" Name="SequenceID" Nullable="true" />
+          <Property Type="Int32" Name="PositionID" Nullable="true" />
+          <Property Type="String" Name="CompanyName" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="Code" Nullable="true" MaxLength="10" />
+          <Property Type="Int32" Name="RoleLevel" Nullable="true" />
+          <Property Type="String" Name="RecordFullName" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="SequenceCode" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="SequenceName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PositionName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="PositionSortBy" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="AreaName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="AreaSortBy" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="DepartmentName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="DeperManSortBy" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="SalaryCategoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="SalarySortBy" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="TypeName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ShiftSortBy" Nullable="true" MaxLength="4" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="StatusCode" Nullable="true" MaxLength="10" />
+          <Property Type="String" Name="UpdateFullName" Nullable="true" MaxLength="150" />
+          <Property Type="Int32" Name="UpdateEmployeeID" Nullable="true" />
+          <Property Type="DateTime" Name="UpdateDate" Nullable="true" Precision="23" />
+          <Property Type="String" Name="IdentityType" Nullable="true" MaxLength="16" />
+          <Property Type="String" Name="IdentityNumber" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Title" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="SmsNumber" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="Mobile2" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Whatsapp" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Username" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Password" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="DateStart" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="DateEnd" Nullable="true" Precision="23" />
+          <Property Type="String" Name="DismissDescription" Nullable="true" />
+          <Property Type="Guid" Name="EmployeeUID" Nullable="true" />
+          <Property Type="String" Name="RecordIP" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="UpdateIP" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="GroupCode" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="GroupName" Nullable="true" MaxLength="50" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -17256,6 +17387,71 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetEmployeeAll" FunctionName="db293_ActionTimeDbModel.Store.GetEmployeeAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetEmployeeAll_Result1">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="FullNameSearch" ColumnName="FullNameSearch" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="FotoFile" ColumnName="FotoFile" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsTemp" ColumnName="IsTemp" />
+                <ScalarProperty Name="IsDismissal" ColumnName="IsDismissal" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="ShiftTypeID" ColumnName="ShiftTypeID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="RoleGroupID" ColumnName="RoleGroupID" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="AreaCategoryID" ColumnName="AreaCategoryID" />
+                <ScalarProperty Name="SalaryCategoryID" ColumnName="SalaryCategoryID" />
+                <ScalarProperty Name="SequenceID" ColumnName="SequenceID" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="RoleLevel" ColumnName="RoleLevel" />
+                <ScalarProperty Name="RecordFullName" ColumnName="RecordFullName" />
+                <ScalarProperty Name="SequenceCode" ColumnName="SequenceCode" />
+                <ScalarProperty Name="SequenceName" ColumnName="SequenceName" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="PositionSortBy" ColumnName="PositionSortBy" />
+                <ScalarProperty Name="AreaName" ColumnName="AreaName" />
+                <ScalarProperty Name="AreaSortBy" ColumnName="AreaSortBy" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="DeperManSortBy" ColumnName="DeperManSortBy" />
+                <ScalarProperty Name="SalaryCategoryName" ColumnName="SalaryCategoryName" />
+                <ScalarProperty Name="SalarySortBy" ColumnName="SalarySortBy" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="ShiftSortBy" ColumnName="ShiftSortBy" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
+                <ScalarProperty Name="UpdateFullName" ColumnName="UpdateFullName" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="IdentityType" ColumnName="IdentityType" />
+                <ScalarProperty Name="IdentityNumber" ColumnName="IdentityNumber" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="SmsNumber" ColumnName="SmsNumber" />
+                <ScalarProperty Name="Mobile2" ColumnName="Mobile2" />
+                <ScalarProperty Name="Whatsapp" ColumnName="Whatsapp" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DismissDescription" ColumnName="DismissDescription" />
+                <ScalarProperty Name="EmployeeUID" ColumnName="EmployeeUID" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="GroupCode" ColumnName="GroupCode" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

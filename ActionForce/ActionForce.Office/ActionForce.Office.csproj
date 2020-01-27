@@ -269,6 +269,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app-chat.html" />
     <Content Include="assets\css\dashforge.auth.css" />
     <Content Include="assets\css\dashforge.calendar.css" />
     <Content Include="assets\css\dashforge.chat.css" />
@@ -322,6 +323,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="dashboard-four.html" />
     <Content Include="Document\Bank\0ecd878a-c741-457f-bd94-7f355f8171d0.jpg" />
     <Content Include="Document\Bank\0f4dca42-8052-4b27-9561-3000df710c0b.jpg" />
     <Content Include="Document\Bank\1ec47086-186e-4a9e-9e20-b8717df360ce.jpg" />
@@ -1925,6 +1927,7 @@
     <Content Include="lib\typeahead.js\typeahead.jquery.min.js" />
     <Content Include="lib\typicons.font\typicons.css" />
     <Content Include="lib\typicons.font\typicons.svg" />
+    <Content Include="page-profile-view.html" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="assets\data\cities.json" />
@@ -2280,7 +2283,6 @@
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="page-profile-view.html" />
     <Content Include="util-animation.html" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -2579,12 +2581,8 @@
     <Content Include="Views\Salary\PermitDetail.cshtml" />
     <Content Include="Views\Cash\NewSalaryPayment.cshtml" />
     <Content Include="Views\Salary\NewSalaryPayment.cshtml" />
-    <Content Include="Views\Employee\_PartialEmployeeCalendar.cshtml" />
-    <Content Include="Views\Employee\_PartialAddEmployeeSchedule.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeShift.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeDetail.cshtml" />
-    <Content Include="Views\Employee\_PartialEmployeeUpdate.cshtml" />
-    <Content Include="Views\Employee\_PartialEmployeeStatus.cshtml" />
     <Content Include="Views\Location\Index.cshtml" />
     <Content Include="Views\Location\_PartialLocationList.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeAddStatus.cshtml" />
@@ -2599,6 +2597,14 @@
     <Content Include="Views\Location\_PartialLocationDetail.cshtml" />
     <Content Include="Views\Location\Edit.cshtml" />
     <Content Include="Views\Location\_PartialLocationEdit.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeAction.cshtml" />
+    <Content Include="Views\Employee\Edit.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeEdit.cshtml" />
+    <Content Include="Views\Employee\Shift.cshtml" />
+    <Content Include="Views\Employee\Schedule.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeSchedule.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeList.cshtml" />
+    <Content Include="Views\Employee\Action.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
