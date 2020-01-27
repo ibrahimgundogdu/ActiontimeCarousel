@@ -8,8 +8,17 @@ namespace ActionForce.Office
 {
     public class EmployeeControlModel : LayoutControlModel
     {
-        public IEnumerable<VEmployeeList> EmployeeList { get; set; }
-        public VEmployeeList EmpList { get; set; }
+
+        public Result Result { get; set; }
+
+
+        public IEnumerable<GetEmployeeAll_Result1> EmployeeList { get; set; }
+        public GetEmployeeAll_Result1 EmpList { get; set; }
+
+        public EmployeeFilterModel FilterModel { get; set; }
+        public WizardModel Wizard { get; set; }
+        public List<ApplicationLog> LogList { get; set; }
+        public List<VEmployeeLocation> EmployeeLocationList { get; set; }
 
 
         public IEnumerable<OurCompany> OurList { get; set; }
@@ -22,10 +31,9 @@ namespace ActionForce.Office
         public IEnumerable<EmployeeSalaryCategory> SalaryCategoryList { get; set; }
         public IEnumerable<EmployeeSequence> SequenceList { get; set; }
 
-        public WizardModel Wizard { get; set; }
-        public Result Result { get; set; }
-        public FilterModel Filters { get; set; }
-        public IEnumerable<ApplicationLog> LogList { get; set; }
+
+
+
 
         public IEnumerable<EmployeeShift> EmployeeShifts { get; set; }
         public IEnumerable<Schedule> EmployeeSchedules { get; set; }
@@ -46,6 +54,12 @@ namespace ActionForce.Office
         public DateList LastWeekDay { get; set; }
 
         public VEmployeeLocation CurrentLocation { get; set; }
+
+        public IEnumerable<VEmployeeCashActions> EmployeeActionList { get; set; }
+
+        public IEnumerable<TotalModel> HeaderTotals { get; set; }
+        public IEnumerable<TotalModel> MiddleTotals { get; set; }
+        public IEnumerable<TotalModel> FooterTotals { get; set; }
 
 
 
@@ -82,4 +96,17 @@ namespace ActionForce.Office
         
 
     }
+
+    public class EmployeeFilterModel
+    {
+        public string FullName { get; set; }
+        public string IsActive { get; set; }
+        public int? LocationID { get; set; }
+        public int? EmployeeID { get; set; }
+        public int? DepartmentID { get; set; }
+        public int? PositionID { get; set; }
+        public DateTime DateBegin { get; set; }
+        public DateTime DateEnd { get; set; }
+    }
+    
 }

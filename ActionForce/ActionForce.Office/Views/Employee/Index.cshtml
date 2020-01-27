@@ -39,20 +39,14 @@
                 @Html.AntiForgeryToken()
                 <div class="form-row align-items-end">
                     <div class="form-group col-md-2 d-flex align-items-end">
-                        <select class="form-control select2" id="employeeID" name="employeeID">
-                            <option value="" label="Çalışan Seçiminiz"></option>
-                            @foreach (var item in Model.VEmployee.OrderBy(x => x.FullName))
-                            {
-                                <option value="@item.EmployeeID" @(Model.Filters.EmployeeID == item.EmployeeID ? "selected" : "")>@(Html.Raw($"<strong>{item.FullName}</strong> ({item.IsActive})"))</option>
-                            }
-                        </select>
+                        <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="Çalışan Adı" value="@(Model.FilterModel?.FullName?? "")">
                     </div>
                     <div class="form-group col-md-2 d-flex align-items-end">
                         <select class="form-control select2" id="LocationID" name="LocationID">
                             <option value="" label="Lokasyon Seçiminiz"></option>
                             @foreach (var item in Model.LocationList)
                             {
-                                <option value="@item.LocationID" @(Model.Filters.LocationID == item.LocationID ? "selected" : "")>@(Html.Raw($"{item.LocationNameSearch} - <strong>{item.Description}</strong>"))</option>
+                                <option value="@item.LocationID" @(Model.FilterModel.LocationID == item.LocationID ? "selected" : "")>@(Html.Raw($"{item.LocationNameSearch} - <strong>{item.Description}</strong>"))</option>
                             }
                         </select>
                     </div>
@@ -61,7 +55,7 @@
                             <option value="" label="Departman Seçiminiz"></option>
                             @foreach (var item in Model.DepartmentList)
                             {
-                                <option value="@item.ID" @(Model.Filters.DepartmentID == item.ID ? "selected" : "")>@(Html.Raw($"{item.DepartmentName} - <strong>{item.SortBy}</strong>"))</option>
+                                <option value="@item.ID" @(Model.FilterModel.DepartmentID == item.ID ? "selected" : "")>@(Html.Raw($"{item.DepartmentName} - <strong>{item.SortBy}</strong>"))</option>
                             }
                         </select>
                     </div>
@@ -70,7 +64,7 @@
                             <option value="" label="Pozisyon Seçiminiz"></option>
                             @foreach (var item in Model.PositionList)
                             {
-                                <option value="@item.ID" @(Model.Filters.PositionID == item.ID ? "selected" : "")>@(Html.Raw($"{item.PositionName} - <strong>{item.SortBy}</strong>"))</option>
+                                <option value="@item.ID" @(Model.FilterModel.PositionID == item.ID ? "selected" : "")>@(Html.Raw($"{item.PositionName} - <strong>{item.SortBy}</strong>"))</option>
                             }
                         </select>
                     </div>
@@ -91,183 +85,40 @@
             </div>
         </div>
     </div>
-    
 
     <div>
-        <div class="table">
-            <table class="table table-sm table-hover">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th>#</th>
-                        <th>Çalışan</th>
-                        <th>Telefon</th>
-                        <th>Rol</th>
-                        <th>Alan</th>
-                        <th>Departman</th>
-                        <th>Pozisyon</th>
-                        <th>Sıra</th>
-                        <th>Tür</th>
-                        <th>Maaş Türü</th>
-                        <th>Durum</th>
-                        <th>Kaydeden</th>
-                        <th>Kayıt Tarihi</th>
-                    </tr>
-                </thead>
-                <tbody>
-
-                    @foreach (var item in Model.EmployeeList)
-                    {
-                        <tr style='@(item.IsActive == false ? "color: red" : "")'>
-                            <td><span class="@(item.IsActive == true ? "tx-success":"tx-danger")">&#8226;</span></td>
-                            <td>@*<img src="http://office.ufegrup.com/img/Employee/@item.FotoFile" class="img wd-40 ht-40 rounded-circle" alt="">*@</td>
-                            <td class="tx-sm-13 bold">@item.EmployeeID</td>
-                            <td class="tx-sm-13"><a href="@("/Employee/Detail/" + @item.EmployeeID)">@item.FullName</a></td>
-                            <td class="tx-sm-13">@item.Mobile</td>
-                            <td class="tx-sm-13">@item.GroupName</td>
-                            <td class="tx-sm-13">@item.AreaName</td>
-                            <td class="tx-sm-13">@item.DepartmentName</td>
-                            <td class="tx-sm-13">@item.PositionName</td>
-                            <td class="tx-sm-13">@item.SequenceName</td>
-                            <td class="tx-sm-13">@item.TypeName</td>
-                            <td class="tx-sm-13">@item.SalaryCategoryName</td>
-                            <td class="tx-sm-13">@item.Name</td>
-                            <td class="tx-sm-13 text-right">@item.RecordFullName</td>
-                            <td class="tx-sm-13 text-right">@item.RecordDate</td>
-
-
-                        </tr>
-                    }
-
-                </tbody>
-            </table>
+        <div class="table" id="EmployeeList">
+            @Html.Partial("_PartialEmployeeList", Model)
         </div>
-
-
-        <footer class="content-footer">
-            <div>
-                <span>&copy; @DateTime.Now.Year UFE Group LLC </span>
-            </div>
-
-        </footer>
-
     </div>
+
 </div>
 
-
 @section scripts {
-    <script src="/lib/cleave.js/cleave.min.js"></script>
-
     <script>
-        $(function () {
-
-            $('.select2').select2({
-                placeholder: 'Çalışan Seçiminiz',
-                searchInputPlaceholder: 'Search options'
-            });
-
-            var dateFormat = 'yy-mm-dd',
-                from = $('#dateFrom')
-                    .datepicker({
-                        defaultDate: '+1w',
-                        numberOfMonths: 2,
-                        dateFormat: "yy-mm-dd",
-                        dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                        monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                        firstDay: 1
-                    })
-                    .on('change', function () {
-                        to.datepicker('option', 'minDate', getDate(this));
-                    }),
-                to = $('#dateTo').datepicker({
-                    defaultDate: '+1w',
-                    numberOfMonths: 2,
-                    dateFormat: "yy-mm-dd",
-                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                    firstDay: 1
-                })
-                    .on('change', function () {
-                        from.datepicker('option', 'maxDate', getDate(this));
-                    });
-
-            $('#DocumentDate').datepicker({
-                dateFormat: "yy-mm-dd",
-                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                firstDay: 1
-            });
-            function getDate(element) {
-                var date;
-                try {
-                    date = $.datepicker.parseDate(dateFormat, element.value);
-                } catch (error) {
-                    date = null;
-                }
-
-                return date;
-
-            }
-
-        });
-
         function EmployeeSearch(active) {
 
+            var data = new FormData();
+
+            data.append('FullName', $("#FullName").val());
+            data.append('DepartmentID', $("#DepartmentID").val());
+            data.append('PositionID', $("#PositionID").val());
+            data.append('LocationID', $("#LocationID").val());
+            data.append('IsActive', active);
+
             $.ajax({
-                method: "GET",
-                url: "/Employee/EmployeeSearch",
-                data: { active: active}
+                url: '@Url.Action("EmployeeSearch", "Employee")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
             }).done(function (d) {
-                $('table tbody').html(d);
-                window.location.href = "/Employee/";
+                $('#EmployeeList').html(d);
             });
         }
-
     </script>
-    <script>
-        $(function () {
-            'use strict'
-
-            $('.off-canvas-menu').on('click', function (e) {
-                e.preventDefault();
-                var target = $(this).attr('href');
-                $(target).addClass('show');
-            });
-
-
-            $('.off-canvas .close').on('click', function (e) {
-                e.preventDefault();
-                $(this).closest('.off-canvas').removeClass('show');
-            })
-
-            $(document).on('click touchstart', function (e) {
-                e.stopPropagation();
-
-                if (!$(e.target).closest('.off-canvas-menu').length) {
-                    var offCanvas = $(e.target).closest('.off-canvas').length;
-                    if (!offCanvas) {
-                        $('.off-canvas.show').addClass('show');
-                    }
-                }
-            });
-
-
-        });
-    </script>
-    @if (Model.Result != null) //
-    {
-        <script type="text/javascript">
-        $.toast({
-            heading: 'Information',
-            text: '@Model.Result.Message ',
-            showHideTransition: 'slide',
-            icon: 'info',
-            hideAfter: 5000,
-            position: 'bottom-right',
-        });
-        </script>
-    }
 }
 
 

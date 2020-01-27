@@ -1,0 +1,266 @@
+﻿@model EmployeeControlModel
+
+
+<div class="table">
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+
+                <th></th>
+                <th></th>
+
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="text-right bg-primary font-weight-bold text-white">@(Model.HeaderTotals.FirstOrDefault(x => x.Currency == "TRL").Total.ToString("N2"))</th>
+                <th>TRL</th>
+
+                <th></th>
+                <th></th>
+                <th></th>
+
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+
+                <th></th>
+                <th></th>
+
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="text-right bg-primary font-weight-bold text-white">@(Model.HeaderTotals.FirstOrDefault(x => x.Currency == "USD").Total.ToString("N2"))</th>
+                <th>USD</th>
+
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+
+                <th></th>
+                <th></th>
+
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th class="text-right  bg-primary font-weight-bold text-white">@(Model.HeaderTotals.FirstOrDefault(x => x.Currency == "EUR").Total.ToString("N2"))</th>
+                <th>EUR</th>
+
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+
+
+
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+
+                <th></th>
+                <th></th>
+
+                <th colspan="5" class="text-center">Ücret</th>
+                <th></th>
+
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <th>Lokasyon</th>
+                <th>Belge Tarihi</th>
+                <th>İşlem</th>
+                <th>Belge No</th>
+
+                <th>Saati</th>
+                <th>Birimi</th>
+
+                <th class="text-right">Hakediş</th>
+                <th class="text-right">Ödeme</th>
+                <th class="text-right">Tutar</th>
+                <th class="text-right">Bakiye</th>
+                <th class="text-right">Toplam Bakiye</th>
+                <th>Para Br.</th>
+
+                <th>Türü</th>
+                <th>Yeri</th>
+                <th>Kayıt</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @{
+
+
+            }
+
+
+            @foreach (var item in Model.EmployeeActionList)
+            {
+                Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency).Total += item.Amount ?? 0;
+                Model.MiddleTotals.FirstOrDefault(x => x.Currency == item.Currency).Total += item.Amount ?? 0;
+
+                <tr>
+
+                    <td class="tx-sm-13 bold">@item.LocationID</td>
+                    <td class="tx-sm-13">@item.ProcessDate.Value.ToShortDateString()</td>
+                    <td class="tx-sm-13">@item.ProcessName</td>
+                    <td class="tx-sm-13">
+                        @(!string.IsNullOrEmpty(item.DocumentNumber) ? Html.Raw($"<a href='/Salary/SalaryDetail/{item.UID}'>{item.DocumentNumber}</a>") : Html.Raw($"<a href='/Salary/Detail/{item.UID}'>{item.DocumentNumberE}</a>"))
+                    </td>
+
+                    <td class="tx-sm-13">@(item.QuantityHour?.ToString("N2"))</td>
+                    <td class="tx-sm-13">@(item.UnitPrice?.ToString("N2"))</td>
+
+                    <td class="tx-sm-13 text-right bg-primary-light">@(item.Collection != null ? item.Collection.Value.ToString("N2") : "")</td>
+                    <td class="tx-sm-13 text-right bg-primary-light">@(item.Payment != null ? item.Payment.Value.ToString("N2") : "")</td>
+                    <td class="tx-sm-13 text-right bg-primary-light">@(item.Amount != null ? item.Amount.Value.ToString("N2") : "")</td>
+                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold text-primary">@(Model.MiddleTotals.FirstOrDefault(x => x.Currency == item.Currency).Total.ToString("N2"))</td>
+                    <td class="tx-sm-13 text-right bg-primary font-weight-bold text-white">@(Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency).Total.ToString("N2"))</td>
+                    <td class="tx-sm-13 font-weight-bold">@item.Currency</td>
+
+                    <td class="tx-sm-13">@item.SalaryTypeName</td>
+                    <td class="tx-sm-13">@item.FromName</td>
+                    <td class="tx-sm-13 text-right">@item.RecordDate</td>
+
+                </tr>
+            }
+
+
+        </tbody>
+        <tfoot>
+            @*Dip Toplam*@
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th colspan="3">Dip Toplam</th>
+
+
+                <th class="text-right bg-light text-primary">@((Model.FooterTotals.FirstOrDefault(x => x.Currency == "TRL").Total - Model.HeaderTotals.FirstOrDefault(x => x.Currency == "TRL").Total).ToString("N2"))</th>
+
+                <th>TRL</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th colspan="3">Dip Toplam</th>
+                <th class="text-right bg-light text-primary">@((Model.FooterTotals.FirstOrDefault(x => x.Currency == "USD").Total - Model.HeaderTotals.FirstOrDefault(x => x.Currency == "USD").Total).ToString("N2"))</th>
+
+                <th>USD</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th colspan="3">Dip Toplam</th>
+                <th class="text-right bg-light text-primary">@((Model.FooterTotals.FirstOrDefault(x => x.Currency == "EUR").Total - Model.HeaderTotals.FirstOrDefault(x => x.Currency == "EUR").Total).ToString("N2"))</th>
+
+                <th>EUR</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+
+
+            @*Seperatör*@
+            <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>&nbsp;</th>
+
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+
+                <th></th>
+                <th></th>
+            </tr>
+
+
+            @*Genel Toplam*@
+            <tr class="bg-light">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th colspan="4">Genel Toplam</th>
+                <th class="text-right bg-primary font-weight-bold text-white">@(Model.FooterTotals.FirstOrDefault(x => x.Currency == "TRL").Total.ToString("N2"))</th>
+                <th>TRL</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr class="bg-light">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th colspan="4">Genel Toplam</th>
+                <th class="text-right bg-primary font-weight-bold text-white">@(Model.FooterTotals.FirstOrDefault(x => x.Currency == "USD").Total.ToString("N2"))</th>
+
+                <th>USD</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            <tr class="bg-light">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th colspan="4">Genel Toplam</th>
+                <th class="text-right bg-primary font-weight-bold text-white">@(Model.FooterTotals.FirstOrDefault(x => x.Currency == "EUR").Total.ToString("N2"))</th>
+                <th>EUR</th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
+</div>

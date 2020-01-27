@@ -901,5 +901,22 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ComputeLocationWeekRevenue", weekParameter, yearParameter, locationIDParameter);
         }
+    
+        public virtual ObjectResult<GetEmployeeAll_Result1> GetEmployeeAll(Nullable<int> ourCompanyID, Nullable<System.Guid> employeeUID, Nullable<int> employeeID)
+        {
+            var ourCompanyIDParameter = ourCompanyID.HasValue ?
+                new ObjectParameter("OurCompanyID", ourCompanyID) :
+                new ObjectParameter("OurCompanyID", typeof(int));
+    
+            var employeeUIDParameter = employeeUID.HasValue ?
+                new ObjectParameter("EmployeeUID", employeeUID) :
+                new ObjectParameter("EmployeeUID", typeof(System.Guid));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetEmployeeAll_Result1>("GetEmployeeAll", ourCompanyIDParameter, employeeUIDParameter, employeeIDParameter);
+        }
     }
 }

@@ -1,0 +1,44 @@
+﻿@model EmployeeControlModel
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th>#</th>
+            <th>Çalışan</th>
+            <th>Telefon</th>
+            <th>Rol</th>
+            <th>Alan</th>
+            <th>Departman</th>
+            <th>Pozisyon</th>
+            <th>Sıra</th>
+            <th>Tür</th>
+            <th>Maaş Türü</th>
+            <th>Durum</th>
+            <th class="text-center">Aktif mi?</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.EmployeeList.OrderBy(x => x.FullName))
+        {
+        <tr style='@(item.IsActive == false ? "color: red" : "")'>
+            <td><a href="@("/Employee/Detail/" + @item.EmployeeUID)"><div class="@(item.IsActive == true ? "avatar avatar-online":"avatar avatar-offline")"><span class="avatar-initial rounded-circle @(item.IsActive == true ? "bg-info":"bg-danger")">@(item.FullName.ToString().Substring(0, 1))</span></div></a></td>
+            <td>@*<img src="http://office.ufegrup.com/img/Employee/@item.FotoFile" class="img wd-40 ht-40 rounded-circle" alt="">*@</td>
+            <td class="tx-sm-13 bold">@item.EmployeeID</td>
+            <td class="tx-sm-13"><a href="@("/Employee/Detail/" + @item.EmployeeUID)">@item.FullName</a></td>
+            <td class="tx-sm-13">@item.Mobile</td>
+            <td class="tx-sm-13">@item.GroupName</td>
+            <td class="tx-sm-13">@item.AreaName</td>
+            <td class="tx-sm-13">@item.DepartmentName</td>
+            <td class="tx-sm-13">@item.PositionName</td>
+            <td class="tx-sm-13">@item.SequenceName</td>
+            <td class="tx-sm-13">@item.TypeName</td>
+            <td class="tx-sm-13">@item.SalaryCategoryName</td>
+            <td class="tx-sm-13">@item.Name</td>
+            <td class="tx-sm-13 text-center">
+                @Html.Raw(item.IsActive.Value == true ? "<i class='ion ion-md-checkmark-circle text-success'></i>" : "<i class='ion ion-md-close-circle'></i>")
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
