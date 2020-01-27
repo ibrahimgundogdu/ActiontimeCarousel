@@ -2599,6 +2599,7 @@
     <Content Include="Views\Location\_PartialLocationDetail.cshtml" />
     <Content Include="Views\Location\Edit.cshtml" />
     <Content Include="Views\Location\_PartialLocationEdit.cshtml" />
+    <Content Include="Views\Revenue\_PartialPeriodParameterDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

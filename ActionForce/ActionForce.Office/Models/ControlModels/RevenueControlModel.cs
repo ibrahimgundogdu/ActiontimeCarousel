@@ -29,6 +29,7 @@ namespace ActionForce.Office
         public IEnumerable<LocationParam> LocationParameters { get; set; }
         public IEnumerable<LocationParamCalculate> LocationParamCalculate { get; set; }
         public IEnumerable<RevenueParameter> RevenueParameters { get; set; }
+        public IEnumerable<LocationPeriods> PeriodParameters { get; set; }
         public IEnumerable<ActionType> ParameterTypes { get; set; }
 
         public CounterModel Counters { get; set; }
@@ -53,5 +54,20 @@ namespace ActionForce.Office
     {
         public Location Location { get; set; }
         public IEnumerable<RevenueParameter> RevenueParameters { get; set; }
+    }
+
+    public class PeriodParameterDetailModel : LayoutControlModel
+    {
+        public Location Location { get; set; }
+        public IEnumerable<LocationPeriods> PeriodParameters { get; set; }
+    }
+
+    public class RevenueComputeFilterModel : LayoutControlModel
+    {
+        public int? LocationID { get; set; }
+        public int? WeekYear { get; set; }
+        public int? WeekNumber { get; set; }
+        public int? WeekNumberBegin { get; set; }
+        public IEnumerable<VRevenue> Revenues { get; set; }
     }
 }

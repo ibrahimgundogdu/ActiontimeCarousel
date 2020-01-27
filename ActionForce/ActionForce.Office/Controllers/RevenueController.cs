@@ -56,18 +56,20 @@ namespace ActionForce.Office.Controllers
 
             model.RevenueLines = Db.VRevenueLines.Where(x => x.WeekYear == model.WeekYear && x.WeekNumber == model.WeekNumber && revids.Contains(x.RevenueID.Value)).ToList();
 
-           
+
 
             return View(model);
         }
 
         [AllowAnonymous]
-        public ActionResult Compute(int? WeekYear, int? WeekNumber, int? LocationID)
+        public ActionResult Compute(int? WeekYear, int? WeekNumber, int? LocationID, int? WeekNumberBegin)
         {
-            RevenueControlModel model = new RevenueControlModel();
+            RevenueComputeFilterModel model = new RevenueComputeFilterModel();
 
-            model.WeekYear = WeekYear ?? 0;
-            model.WeekNumber = WeekNumber ?? 0;
+            model.WeekYear = WeekYear;
+            model.WeekNumber = WeekNumber;
+            model.LocationID = LocationID;
+            model.WeekNumberBegin = WeekNumberBegin;
 
             if (WeekYear > 0 && WeekNumber > 0)
             {
@@ -77,16 +79,52 @@ namespace ActionForce.Office.Controllers
                 }
                 else
                 {
-                    model.Locations = Db.Location.Where(x => x.LocationTypeID != 5 && x.LocationTypeID != 6).ToList();
+                    var locations = Db.Location.Where(x => x.LocationTypeID != 5 && x.LocationTypeID != 6).ToList();
 
-                    foreach (var location in model.Locations)
+                    foreach (var location in locations)
                     {
                         var res = Db.ComputeLocationWeekRevenue(model.WeekNumber, model.WeekYear, location.LocationID);
                     }
                 }
             }
 
-            model.Revenues = Db.VRevenue.Where(x => x.WeekYear == model.WeekYear && x.WeekNumber == model.WeekNumber).ToList();
+
+            if (WeekYear > 0 && WeekNumberBegin > 0)
+            {
+                List<int> locations = Db.Location.Where(x => x.LocationTypeID != 5 && x.LocationTypeID != 6).Select(x => x.LocationID).Distinct().ToList();
+                List<int> weeks = Db.DateList.Where(x => x.WeekYear == WeekYear && x.WeekNumber >= WeekNumberBegin).Select(x => x.WeekNumber.Value).Distinct().OrderBy(x => x).ToList();
+
+                foreach (var week in weeks)
+                {
+                    foreach (var location in locations)
+                    {
+                        var res = Db.ComputeLocationWeekRevenue(week, model.WeekYear, location);
+                    }
+                }
+            }
+
+            if (LocationID > 0 && WeekYear == null && WeekNumber == null) // lokasyonun tüm yılları hesaplanır
+            {
+                for (int i = 2017; i < DateTime.Now.Year + 1; i++)
+                {
+                    List<int> weeks = Db.DateList.Where(x => x.WeekYear == i).Select(x => x.WeekNumber.Value).Distinct().OrderBy(x => x).ToList();
+
+                    foreach (var week in weeks)
+                    {
+                        var res = Db.ComputeLocationWeekRevenue(week, i, LocationID);
+                    }
+                }
+            }
+
+            if (LocationID > 0 && WeekYear > 0 && WeekNumber == null)
+            {
+                List<int> weeks = Db.DateList.Where(x => x.WeekYear == WeekYear).Select(x => x.WeekNumber.Value).Distinct().OrderBy(x => x).ToList();
+
+                foreach (var week in weeks)
+                {
+                    var res = Db.ComputeLocationWeekRevenue(week, WeekYear, LocationID);
+                }
+            }
 
             return View(model);
         }
@@ -109,7 +147,7 @@ namespace ActionForce.Office.Controllers
 
             if (WeekYear > 0 && WeekNumber > 0)
             {
-                model.Locations = Db.Location.Where(x=> x.LocationTypeID != 5 && x.LocationTypeID != 6).ToList();
+                model.Locations = Db.Location.Where(x => x.LocationTypeID != 5 && x.LocationTypeID != 6).ToList();
 
                 foreach (var location in model.Locations)
                 {
@@ -125,6 +163,7 @@ namespace ActionForce.Office.Controllers
             RevenueControlModel model = new RevenueControlModel();
 
             model.Locations = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            List<int> locationids = model.Locations.Select(x => x.LocationID).ToList();
 
             model.Counters = new CounterModel() { CountActive = model.Locations.Where(x => x.IsActive == true)?.Count() ?? 0, CountPassive = model.Locations.Where(x => x.IsActive == false)?.Count() ?? 0, CountAll = model.Locations?.Count() ?? 0 };
 
@@ -135,8 +174,9 @@ namespace ActionForce.Office.Controllers
                 model.Locations = model.Locations.Where(x => x.IsActive == active).ToList();
             }
 
-            model.LocationParameters = Db.LocationParam.ToList();
-            model.RevenueParameters = Db.RevenueParameter.ToList();
+            model.LocationParameters = Db.LocationParam.Where(x => locationids.Contains(x.LocationID)).ToList();
+            model.RevenueParameters = Db.RevenueParameter.Where(x => locationids.Contains(x.LocationID)).ToList();
+            model.PeriodParameters = Db.LocationPeriods.Where(x => locationids.Contains(x.LocationID.Value)).ToList();
             model.ParameterTypes = Db.ActionType.Where(x => x.IsActive == true && x.IsParam == true);
             model.LocationParamCalculate = Db.LocationParamCalculate.ToList();
 
@@ -144,7 +184,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [HttpPost]
-        public PartialViewResult AddLocationParameter(int locationid, string startdate, string total, int typeid, string rate, string calctype) 
+        public PartialViewResult AddLocationParameter(int locationid, string startdate, string total, int typeid, string rate, string calctype)
         {
             LocationParameterDetailModel model = new LocationParameterDetailModel();
 
@@ -224,7 +264,7 @@ namespace ActionForce.Office.Controllers
                 locationParameter.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
                 locationParameter.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                 locationParameter.UpdateIP = OfficeHelper.GetIPAddress();
-                
+
                 Db.SaveChanges();
 
                 var isequal = OfficeHelper.PublicInstancePropertiesEqual<LocationParam>(self, locationParameter, OfficeHelper.getIgnorelist());
@@ -244,8 +284,8 @@ namespace ActionForce.Office.Controllers
             LocationParameterDetailModel model = new LocationParameterDetailModel();
 
             var locationParameter = Db.LocationParam.FirstOrDefault(x => x.ID == id);
-           var location = Db.Location.FirstOrDefault(x => x.LocationID == locationParameter.LocationID);
-            
+            var location = Db.Location.FirstOrDefault(x => x.LocationID == locationParameter.LocationID);
+
             if (locationParameter != null && location != null)
             {
                 OfficeHelper.AddApplicationLog("Office", "LocationParameter", "Delete", id.ToString(), "Revenue", "DeleteLocationParameter", null, true, $"Lokasyon Parametresi Silindi", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, locationParameter);
@@ -283,7 +323,7 @@ namespace ActionForce.Office.Controllers
                 param.IsCash = iscash;
                 param.IsCredit = iscredit;
                 param.IsRent = isrent;
-                
+
                 Db.RevenueParameter.Add(param);
                 Db.SaveChanges();
 
@@ -371,6 +411,122 @@ namespace ActionForce.Office.Controllers
             model.RevenueParameters = Db.RevenueParameter.Where(x => x.LocationID == location.LocationID).ToList();
 
             return PartialView("_PartialRevenueParameterDetail", model);
+        }
+
+        [HttpPost]
+        public PartialViewResult AddPeriodParameter(int locationid, string startdate, string enddate, string description)
+        {
+            PeriodParameterDetailModel model = new PeriodParameterDetailModel();
+            var location = Db.Location.FirstOrDefault(x => x.LocationID == locationid);
+
+            if (!string.IsNullOrEmpty(startdate) && !string.IsNullOrEmpty(enddate))
+            {
+                DateTime startDate = Convert.ToDateTime(startdate);
+                DateTime endDate = Convert.ToDateTime(enddate);
+
+                if (location != null)
+                {
+
+                    LocationPeriods param = new LocationPeriods();
+                    param.ContractStartDate = startDate;
+                    param.ContractFinishDate = endDate;
+                    param.LocationID = locationid;
+                    param.RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                    param.RecordedEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    param.RecordIP = OfficeHelper.GetIPAddress();
+                    param.Description = description;
+                    param.OurCompanyID = location.OurCompanyID;
+
+                    Db.LocationPeriods.Add(param);
+                    Db.SaveChanges();
+
+                    OfficeHelper.AddApplicationLog("Office", "LocationPeriods", "Insert", param.ID.ToString(), "Revenue", "AddPeriodParameter", null, true, $"Lokasyon Periyot Parametresi Eklendi", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, param);
+
+                }
+            }
+
+            model.Location = location;
+            model.PeriodParameters = Db.LocationPeriods.Where(x => x.LocationID == locationid).ToList();
+
+            return PartialView("_PartialPeriodParameterDetail", model);
+        }
+
+        [HttpPost]
+        public PartialViewResult EditPeriodParameter(int id, string startdate, string enddate, string description)
+        {
+            PeriodParameterDetailModel model = new PeriodParameterDetailModel();
+
+            var periodParameter = Db.LocationPeriods.FirstOrDefault(x => x.ID == id);
+
+            if (!string.IsNullOrEmpty(startdate) && !string.IsNullOrEmpty(enddate))
+            {
+
+                DateTime startDate = Convert.ToDateTime(startdate);
+                DateTime endDate = Convert.ToDateTime(enddate);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == periodParameter.LocationID);
+
+                if (periodParameter != null && location != null)
+                {
+
+                    LocationPeriods self = new LocationPeriods()
+                    {
+                        ID = periodParameter.ID,
+                        FinalFinishDate = periodParameter.FinalFinishDate,
+                        Description = periodParameter.Description,
+                        ContractStartDate = periodParameter.ContractStartDate,
+                        ContractFinishDate = periodParameter.ContractFinishDate,
+                        LocationID = periodParameter.LocationID,
+                        OurCompanyID = periodParameter.OurCompanyID,
+                        RecordDate = periodParameter.RecordDate,
+                        RecordedEmployeeID = periodParameter.RecordedEmployeeID,
+                        UpdateEmployeeID = periodParameter.UpdateEmployeeID,
+                        RecordIP = periodParameter.RecordIP,
+                        UpdateDate = periodParameter.UpdateDate,
+                        UpdateIP = periodParameter.UpdateIP
+                    };
+
+                    periodParameter.ContractStartDate = startDate;
+                    periodParameter.ContractFinishDate = endDate;
+                    periodParameter.Description = description;
+                    periodParameter.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+                    periodParameter.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    periodParameter.UpdateIP = OfficeHelper.GetIPAddress();
+
+
+                    Db.SaveChanges();
+
+                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<LocationPeriods>(self, periodParameter, OfficeHelper.getIgnorelist());
+                    OfficeHelper.AddApplicationLog("Office", "LocationPeriods", "Update", periodParameter.ID.ToString(), "Revenue", "EditPeriodParameter", isequal, true, $"{periodParameter.ID} ID li Lokasyon Periyodu Güncellendi", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                }
+
+                model.Location = location;
+            }
+
+            model.PeriodParameters = Db.LocationPeriods.Where(x => x.LocationID == model.Location.LocationID).ToList();
+
+            return PartialView("_PartialPeriodParameterDetail", model);
+        }
+
+        [HttpPost]
+        public PartialViewResult DeletePeriodParameter(int id)
+        {
+            PeriodParameterDetailModel model = new PeriodParameterDetailModel();
+
+            var periodParameter = Db.LocationPeriods.FirstOrDefault(x => x.ID == id);
+            var location = Db.Location.FirstOrDefault(x => x.LocationID == periodParameter.LocationID);
+
+            if (periodParameter != null && location != null)
+            {
+                OfficeHelper.AddApplicationLog("Office", "LocationPeriods", "Delete", id.ToString(), "Revenue", "DeletePeriodParameter", null, true, $"Lokasyon Periyodu Silindi", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, periodParameter);
+
+                Db.LocationPeriods.Remove(periodParameter);
+                Db.SaveChanges();
+            }
+
+            model.Location = location;
+            model.PeriodParameters = Db.LocationPeriods.Where(x => x.LocationID == model.Location.LocationID).ToList();
+
+            return PartialView("_PartialPeriodParameterDetail", model);
         }
 
 

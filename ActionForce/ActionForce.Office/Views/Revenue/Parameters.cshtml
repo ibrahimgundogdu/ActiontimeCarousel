@@ -110,12 +110,38 @@
                                         <div id="RevenueParamDetail@(location.LocationID)">
                                             @{ Html.RenderPartial("_PartialRevenueParameterDetail", new RevenueParameterDetailModel() { Location = location, RevenueParameters = Model.RevenueParameters.Where(x => x.LocationID == location.LocationID).ToList() });}
                                         </div>
+                                        <hr />
+                                        <table class="table table-secondary table-sm tx-13 tx-nowrap mb-0">
+                                            <tbody>
+                                                <tr class="bg-white">
+                                                    <td class="wd-5p"></td>
+                                                    <td class="tx-medium wd-30p" style="padding:2px !important;">
+                                                        Lokasyon Periyodu
+                                                    </td>
+                                                    <td class="wd-15p" style="padding:2px !important;">
+                                                        <input type="text" id="DatePeriodBegin@(location.LocationID)" class="form-control form-control-sm datepicker shiftdate" placeholder="Başlangıç Tarihi">
+                                                    </td>
+                                                    <td class="wd-15p" style="padding:2px !important;">
+                                                        <input type="text" id="DatePeriodEnd@(location.LocationID)" class="form-control form-control-sm datepicker shiftdate" placeholder="Başlangıç Tarihi">
+                                                    </td>
+                                                    <td class="wd-15p" style="padding:2px !important;">
+                                                        <input type="text" id="periodDetail@(location.LocationID)" class="form-control form-control-sm" placeholder="Açıklama">
+                                                    </td>
+                                                    <td class="wd-15p" style="padding:2px !important;">
+                                                        <button type="button" class="btn btn-xs btn-secondary btn-block" onclick="AddPeriodParameter(@(location.LocationID))">Parametre Ekle</button>
+                                                    </td>
+                                                    <td class="wd-5p" style="padding:2px !important;"></td>
+
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div id="PeriodParamDetail@(location.LocationID)">
+                                            @{ Html.RenderPartial("_PartialPeriodParameterDetail", new PeriodParameterDetailModel() { Location = location, PeriodParameters = Model.PeriodParameters.Where(x => x.LocationID == location.LocationID).ToList() });}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-
                     }
                 </div>
 
@@ -332,6 +358,77 @@
                 data: data
             }).done(function (d) {
                 $("#RevenueParamDetail" + locationid).html(d);
+            });
+        }
+
+        function AddPeriodParameter(locationid) {
+
+            var startdate = $('#DatePeriodBegin' + locationid).val();
+            var enddate = $('#DatePeriodEnd' + locationid).val();
+            var description = $('#periodDetail' + locationid).val();
+
+            var data = new FormData();
+
+            data.append('locationid', locationid);
+            data.append('startdate', startdate);
+            data.append('enddate', enddate);
+            data.append('description', description);
+
+            $.ajax({
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                url: "/Revenue/AddPeriodParameter",
+                data: data
+            }).done(function (d) {
+                $("#PeriodParamDetail" + locationid).html(d);
+            });
+        }
+
+        function EditPeriodParameter(id, locationid) {
+
+            var startdate = $('#DatePeriodBegin_' + id).val();
+            var enddate = $('#DatePeriodEnd_' + id).val();
+            var description = $('#periodDetail_' + id).val();
+
+            var data = new FormData();
+
+            data.append('id', id);
+            data.append('startdate', startdate);
+            data.append('enddate', enddate);
+            data.append('description', description);
+
+            $.ajax({
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                url: "/Revenue/EditPeriodParameter",
+                data: data
+            }).done(function (d) {
+                $("#PeriodParamDetail" + locationid).html(d);
+            });
+        }
+
+        function DeletePeriodParameter(id, locationid) {
+
+            var data = new FormData();
+
+            data.append('id', id);
+
+            $.ajax({
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                url: "/Revenue/DeletePeriodParameter",
+                data: data
+            }).done(function (d) {
+                $("#PeriodParamDetail" + locationid).html(d);
             });
         }
 

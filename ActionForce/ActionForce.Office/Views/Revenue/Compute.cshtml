@@ -1,71 +1,13 @@
-﻿@model RevenueControlModel
+﻿@model RevenueComputeFilterModel
 
 @{
     ViewBag.Title = "Compute";
 }
 
-<h2>@Model.WeekYear</h2>
-<h2>@Model.WeekNumber</h2>
+<h2>LocationID : @Model.LocationID</h2>
+<h2>Week Year : @Model.WeekYear</h2>
+<h2>Week Number : @Model.WeekNumber</h2>
+<h2>Week Number Begin : @Model.WeekNumberBegin</h2>
 
-<div class="table">
 
-    <h4>@(Model.Revenues.Count())</h4>
-    <table class="table table-dashboard">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>WeekYear</th>
-                <th>WeekNumber</th>
-                <th>LocationID</th>
-                <th>Currency</th>
-                <th>TotalCash</th>
-                <th>TotalCredit</th>
-                <th>GrossTotal</th>
-                <th>Net</th>
-                <th>Operator</th>
-                <th>ActionTime</th>
-                <th>OpReturn</th>
-                <th>ComputedType</th>
-                <th>ComputedRate</th>
-                <th>UpdateDate</th>
-                <th>TotalLabor</th>
-                <th>TotalExpense</th>
-                <th>TotalCashIn</th>
-                <th>TotalRent</th>
-                <th>TotalCreditCommission</th>
-                <th>TotalInsurance</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            @foreach (var item in Model.Revenues)
-            {
-                <tr>
-                    <td>@(item.ID)</td>
-                    <td>@(item.WeekYear)</td>
-                    <td>@(item.WeekNumber)</td>
-                    <td>@(item.LocationID)</td>
-                    <td>@(item.Currency)</td>
-                    <td>@(item.TotalCash)</td>
-                    <td>@(item.TotalCredit)</td>
-                    <td>@(item.GrossTotal)</td>
-                    <td>@(item.Net)</td>
-                    <td>@(item.Operator)</td>
-                    <td>@(item.ActionTime)</td>
-                    <td>@(item.OpReturn)</td>
-                    <td>@(item.ComputedType)</td>
-                    <td>@(item.ComputedRate)</td>
-                    <td>@(item.UpdateDate)</td>
-                    <td>@(item.TotalLabor)</td>
-                    <td>@(item.TotalExpense)</td>
-                    <td>@(item.TotalCashIn)</td>
-                    <td>@(item.TotalRent)</td>
-                    <td>@(item.TotalCreditCommission)</td>
-                    <td>@(item.TotalInsurance)</td>
-                </tr>
-            }
-
-        </tbody>
-    </table>
-</div>
 

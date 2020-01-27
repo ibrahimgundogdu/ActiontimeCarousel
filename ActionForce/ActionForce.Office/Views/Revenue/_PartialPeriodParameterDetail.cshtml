@@ -1,0 +1,50 @@
+﻿@model PeriodParameterDetailModel
+<table class="table table-secondary table-bordered table-hover table-sm tx-13 tx-nowrap mg-b-0">
+    <thead>
+        <tr class="tx-10 tx-spacing-1 tx-black tx-uppercase">
+            <th class="wd-5p">#</th>
+            <th class="wd-30p">Lokasyon Periyodu</th>
+            <th class="wd-15p">Başlama Tarihi</th>
+            <th class="wd-15p">Bitiş Tarihi</th>
+            <th class="wd-15p">Açıklama</th>
+            <th class="wd-15p">Güncelleme</th>
+            <th class="wd-5p"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var param in Model.PeriodParameters)
+        {
+            <tr class="table-secondary active">
+                <td class="wd-5p"> @(param.ID)</td>
+                <td class="tx-medium wd-30p" style="padding:2px !important;">
+                    Lokasyon Periyodu
+                </td>
+                <td class="wd-15p" style="padding:2px !important;">
+                    <input type="text" id="DatePeriodBegin_@(param.ID)" class="form-control form-control-sm datepicker" placeholder="Başlangıç Tarihi" value="@(param.ContractStartDate?.ToString("yyyy-MM-dd"))" onchange="EditPeriodParameter(@(param.ID),@(param.LocationID))">
+                </td>
+                <td class="wd-15p" style="padding:2px !important;">
+                    <input type="text" id="DatePeriodEnd_@(param.ID)" class="form-control form-control-sm datepicker" placeholder="Bitiş Tarihi" value="@(param.ContractFinishDate?.ToString("yyyy-MM-dd"))" onchange="EditPeriodParameter(@(param.ID),@(param.LocationID))">
+                </td>
+                <td class="wd-15p" style="padding:2px !important;">
+                    <input type="text" id="periodDetail_@(param.ID)" class="form-control form-control-sm" placeholder="Detay" value="@(param.Description)" onchange="EditPeriodParameter(@(param.ID),@(param.LocationID))">
+                </td>
+                <td class="wd-15p" style="padding:2px !important;">
+                    @( param.UpdateDate ?? param.RecordDate)
+                </td>
+                <td class="wd-5p text-center" style="padding:2px !important;">
+                    <button type="button" class="btn btn-icon btn-xs" onclick="confirm('Bu Parametreyi Silmek İstediğinize Emin misiniz?') ? DeletePeriodParameter(@(param.ID),@(param.LocationID)) : ''">
+                        <i class="tx-danger" data-feather="trash"></i> &nbsp;
+                    </button>
+                </td>
+
+            </tr>
+        }
+
+    </tbody>
+</table>
+<script>
+    $(function () {
+        feather.replace();
+    });
+
+</script>
