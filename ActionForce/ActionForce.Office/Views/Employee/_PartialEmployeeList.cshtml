@@ -22,7 +22,7 @@
         @foreach (var item in Model.EmployeeList.OrderBy(x => x.FullName))
         {
         <tr style='@(item.IsActive == false ? "color: red" : "")'>
-            <td><a href="@("/Employee/Detail/" + @item.EmployeeUID)"><div class="@(item.IsActive == true ? "avatar avatar-online":"avatar avatar-offline")"><span class="avatar-initial rounded-circle @(item.IsActive == true ? "bg-info":"bg-danger")">@(item.FullName.ToString().Substring(0, 1))</span></div></a></td>
+            <td><a href="@("/Employee/Detail/" + @item.EmployeeUID)"><div class="@(item.IsActive == true ? "avatar avatar-online":"avatar avatar-offline")"><span class="avatar-initial rounded-circle @(item.IsActive == true ? "bg-info":"bg-danger")">@(item.FullName.ToString().Substring(0, 2))</span></div></a></td>
             <td>@*<img src="http://office.ufegrup.com/img/Employee/@item.FotoFile" class="img wd-40 ht-40 rounded-circle" alt="">*@</td>
             <td class="tx-sm-13 bold">@item.EmployeeID</td>
             <td class="tx-sm-13"><a href="@("/Employee/Detail/" + @item.EmployeeUID)">@item.FullName</a></td>

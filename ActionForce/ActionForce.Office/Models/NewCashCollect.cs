@@ -393,4 +393,11 @@ namespace ActionForce.Office
         public string IsTemp { get; set; }
         public string IsActive { get; set; }
     }
+    public class NewEmployeeLocation
+    {
+        public int EmployeeID { get; set; }
+        public int LocationID { get; set; }
+        public string IsMaster { get; set; }
+        public string IsActive { get; set; }
+    }
 }

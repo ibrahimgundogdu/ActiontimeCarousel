@@ -1,0 +1,30 @@
+﻿@model EmployeeControlModel
+<table class="table table-dark table-hover table-striped mg-b-0">
+    <thead>
+        <tr>
+            <th></th>
+            <th>#</th>
+            <th>Sıra</th>
+            <th>Lokasyon</th>
+            <th>Tür</th>
+            <th>Lokasyon Yeri</th>
+            <th class="text-center">Aktif mi?</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.EmployeeLocationList.OrderBy(x => x.SortBy))
+        {
+        <tr style='@(item.LocationIsActive == false ? "color: red" : "")'>
+            <td><a href="/Employee/Location?id=@(Model.EmpList.EmployeeUID)&lokationID=@(item.LocationUID)"><div class="@(item.IsActive == true ? "avatar avatar-online":"avatar avatar-offline")"><span class="avatar-initial rounded-circle @(item.IsActive == true ? "bg-info":"bg-danger")">@(item.LocationName.ToString().Substring(0, 2))</span></div></a></td>
+            <td class="tx-sm-13 bold">@item.LocationID</td>
+            <td class="tx-sm-13 bold">@item.SortBy</td>
+            <td class="tx-sm-13"><a href="/Employee/Location?id=@(Model.EmpList.EmployeeUID)&locationID=@(item.LocationUID)">@item.LocationName</a></td>
+            <td class="tx-sm-13">@item.LocationTypeName</td>
+            <td class="tx-sm-13">@item.State</td>
+            <td class="tx-sm-13 text-center">
+                @Html.Raw(item.LocationIsActive.Value == true ? "<i class='ion ion-md-checkmark-circle text-success'></i>" : "<i class='ion ion-md-close-circle'></i>")
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>

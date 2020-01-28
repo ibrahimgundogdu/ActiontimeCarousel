@@ -39,6 +39,7 @@ namespace ActionForce.Office
         public IEnumerable<Schedule> EmployeeSchedules { get; set; }
         public IEnumerable<EmployeeShift> EmployeeBreaks { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
+        public Location modelLokation { get; set; }
         public IEnumerable<EmployeeLocation> EmployeeLocations { get; set; }
         public DateList CurrentDate { get; set; }
 
@@ -107,6 +108,8 @@ namespace ActionForce.Office
         public int? PositionID { get; set; }
         public DateTime DateBegin { get; set; }
         public DateTime DateEnd { get; set; }
+        public Guid? LocationUID { get; set; }
+        public Guid? EmployeeUID { get; set; }
     }
     
 }
