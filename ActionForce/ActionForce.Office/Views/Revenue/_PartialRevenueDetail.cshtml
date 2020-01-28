@@ -18,6 +18,7 @@
             <th>Insurance</th>
             <th>OpDebt</th>
             <th>Update Date</th>
+            <th>Envelope</th>
 
         </tr>
     </thead>
@@ -41,7 +42,13 @@
             <td>@(line.Insurance?.ToString("N2"))</td>
             <td>@(line.OpDebt?.ToString("N2"))</td>
             <td>@(Model.Revenue.UpdateDate)</td>
+            <td class="text-center">
+                @if (!string.IsNullOrEmpty(line.EnvelopeFile))
+                {
+                    <a href="@($"http://office.ufegrup.com/Documents/{line.EnvelopeFile}")" target="_blank" class=""><i data-feather="mail"></i></a>
+                }
 
+            </td>
         </tr>
         }
     </tbody>
@@ -62,6 +69,7 @@
             <td>@(Model.RevenueLines?.Sum(x => x.CreditCommission)?.ToString("N2"))</td>
             <td>@(Model.RevenueLines?.Sum(x => x.Insurance)?.ToString("N2"))</td>
             <td>@(Model.RevenueLines?.Sum(x => x.OpDebt)?.ToString("N2"))</td>
+            <td></td>
             <td></td>
 
         </tr>

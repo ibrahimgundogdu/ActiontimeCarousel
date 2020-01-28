@@ -3214,6 +3214,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="AcTi" Type="float" />
           <Property Name="OpReturn" Type="float" />
           <Property Name="DailyLqd" Type="float" />
+          <Property Name="EnvelopeFile" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="RevenueParameter">
           <Key>
@@ -4696,6 +4697,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VRevenueLines' does not hav
           <Property Name="DateKey" Type="date" />
           <Property Name="RentRate" Type="float" />
           <Property Name="OpDebt" Type="float" />
+          <Property Name="EnvelopeFile" Type="nvarchar" MaxLength="50" />
+          <Property Name="DailyLqd" Type="float" />
+          <Property Name="OpReturn" Type="float" />
+          <Property Name="AcTi" Type="float" />
+          <Property Name="Operator" Type="float" />
+          <Property Name="NetTotal" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSchedule' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6718,7 +6725,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VRevenueLines].[DayNameTR] AS [DayNameTR], 
     [VRevenueLines].[DateKey] AS [DateKey], 
     [VRevenueLines].[RentRate] AS [RentRate], 
-    [VRevenueLines].[OpDebt] AS [OpDebt]
+    [VRevenueLines].[OpDebt] AS [OpDebt], 
+    [VRevenueLines].[EnvelopeFile] AS [EnvelopeFile], 
+    [VRevenueLines].[DailyLqd] AS [DailyLqd], 
+    [VRevenueLines].[OpReturn] AS [OpReturn], 
+    [VRevenueLines].[AcTi] AS [AcTi], 
+    [VRevenueLines].[Operator] AS [Operator], 
+    [VRevenueLines].[NetTotal] AS [NetTotal]
     FROM [dbo].[VRevenueLines] AS [VRevenueLines]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VSchedule" EntityType="Self.VSchedule" store:Type="Views" store:Schema="dbo">
@@ -12227,6 +12240,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="AcTi" Type="Double" />
           <Property Name="OpReturn" Type="Double" />
           <Property Name="DailyLqd" Type="Double" />
+          <Property Name="EnvelopeFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="RevenueParameter">
           <Key>
@@ -12308,6 +12322,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="DateKey" Type="DateTime" Precision="0" />
           <Property Name="RentRate" Type="Double" />
           <Property Name="OpDebt" Type="Double" />
+          <Property Name="EnvelopeFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DailyLqd" Type="Double" />
+          <Property Name="OpReturn" Type="Double" />
+          <Property Name="AcTi" Type="Double" />
+          <Property Name="Operator" Type="Double" />
+          <Property Name="NetTotal" Type="Double" />
         </EntityType>
         <EntityType Name="LocationParamCalculate">
           <Key>
@@ -17269,6 +17289,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="RevenueLines">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.RevenueLines">
               <MappingFragment StoreEntitySet="RevenueLines">
+                <ScalarProperty Name="EnvelopeFile" ColumnName="EnvelopeFile" />
                 <ScalarProperty Name="DailyLqd" ColumnName="DailyLqd" />
                 <ScalarProperty Name="OpReturn" ColumnName="OpReturn" />
                 <ScalarProperty Name="AcTi" ColumnName="AcTi" />
@@ -17355,6 +17376,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VRevenueLines">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VRevenueLines">
               <MappingFragment StoreEntitySet="VRevenueLines">
+                <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
+                <ScalarProperty Name="Operator" ColumnName="Operator" />
+                <ScalarProperty Name="AcTi" ColumnName="AcTi" />
+                <ScalarProperty Name="OpReturn" ColumnName="OpReturn" />
+                <ScalarProperty Name="DailyLqd" ColumnName="DailyLqd" />
+                <ScalarProperty Name="EnvelopeFile" ColumnName="EnvelopeFile" />
                 <ScalarProperty Name="OpDebt" ColumnName="OpDebt" />
                 <ScalarProperty Name="RentRate" ColumnName="RentRate" />
                 <ScalarProperty Name="DateKey" ColumnName="DateKey" />
