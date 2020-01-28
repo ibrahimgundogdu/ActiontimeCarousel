@@ -781,6 +781,7 @@
     <Content Include="Views\Shared\_PartialPageHeader.cshtml" />
     <Content Include="Views\Shared\_PartialAsideNavbar.cshtml" />
     <Content Include="Views\Location\SetCurrentLocation.cshtml" />
+    <Content Include="Views\Action\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -791,7 +792,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="libs\plyrist\dist\" />
-    <Folder Include="Views\Action\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Employee\" />
     <Folder Include="Views\Envelope\" />

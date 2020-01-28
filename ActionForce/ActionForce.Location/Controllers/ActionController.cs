@@ -8,10 +8,10 @@ namespace ActionForce.Location.Controllers
 {
     public class ActionController : BaseController
     {
+        [AllowAnonymous]
         public ActionResult Index()
         {
             ActionControlModel model = new ActionControlModel();
-
             return View(model);
         }
     }

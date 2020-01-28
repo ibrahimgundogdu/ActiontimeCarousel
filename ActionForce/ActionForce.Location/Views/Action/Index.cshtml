@@ -1,0 +1,179 @@
+﻿@model ActionControlModel
+@{
+    ViewBag.Title = "Cari Hesap";
+}
+
+<div class="d-flex flex fixed-content">
+
+    <div class="d-flex flex" id="content-body">
+        <div class="d-flex flex-column flex" data-plugin="user">
+            <div class="p-3">
+                <div class="toolbar">
+                    <a href="/" class="btn btn-md btn-white" title="Yeni Satış">
+                        <i class="text-success font-weight-bold" data-feather="plus"></i>
+                    </a>
+                    <a href="/" class="btn btn-md btn-white" title="Yeni Satış">
+                        <i class="text-success font-weight-bold" data-feather="plus"></i>
+                    </a>
+                    <a href="/" class="btn btn-md btn-white" title="Yeni Satış">
+                        <i class="text-success font-weight-bold" data-feather="plus"></i>
+                    </a>
+                    <a href="/" class="btn btn-md btn-white">
+                        <i data-feather="list"></i>
+                    </a>
+                    <a href="#" class="btn btn-md btn-white">
+                        Sipariş No &nbsp;&nbsp;&nbsp;  <span class="font-weight-bold">293877</span>
+                    </a>
+                </div>
+            </div>
+            <div class="scroll-y mx-3 mb-3 card">
+
+                <div class="row no-gutters">
+                    <div class="col-md-12 b-r bg-light--lt">
+                        <div class="p-2">
+                            <span class="text-md"> Cari Hesap</span>
+                            <span class="mr-2 float-right">@(DateTime.Now.ToLongDateString())</span>
+                            <div class="row row-xs">
+                                başlık
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12 bg-light">
+                        <div class="p-2">
+                            
+                            <div class="table-responsive">
+                                <table class="table table-theme table-row v-middle" style="border-spacing: 0 1px !important; padding: 0.5rem !important;">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <td></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="2" class="bg-primary text-md">Nakit</td>
+                                            <td></td>
+                                            <td colspan="2" class="bg-warning text-md">Kart</td>
+                                            <td></td>
+                                            <td class="bg-secondary text-md">Toplam</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="table-light text-sm font-weight-bold">
+                                            <td>Belge</td>
+                                            <td>Tarih</td>
+                                            <td>İşlem</td>
+                                            <td class="text-right">Tahsilat</td>
+                                            <td class="text-right">Ödeme</td>
+                                            <td class="text-right"></td>
+                                            <td class="text-right">Tahsilat</td>
+                                            <td class="text-right">Ödeme</td>
+                                            <td class="text-right"></td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class=" v-middle shadow-sm" data-id="15">
+                                            <td class="flex"><a href="#" class="">A000001</a></td>
+                                            <td><span class="text-sm">2020-01-10</span></td>
+                                            <td><span class="text-sm">Masraf Fişi</span></td>
+                                            <td class="bg-primary--lt text-right text-dark">10,00</td>
+                                            <td class="bg-primary--lt text-right text-light">0,00</td>
+                                            <td class="bg-primary--lt text-right font-weight-bold">10,00</td>
+                                            <td class="bg-warning--lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning--lt text-right text-light">0,00</td>
+                                            <td class="bg-warning--lt text-right font-weight-bold">0,00</td>
+                                            <td class="text-sm text-right text-md p-0">10,00</td>
+                                            <td class="text-right">TRL</td>
+                                        </tr>
+                                        <tr class=" v-middle shadow-sm" data-id="15">
+                                            <td class="flex"><a href="#" class="">A000001</a></td>
+                                            <td><span class="text-sm">2020-01-10</span></td>
+                                            <td><span class="text-sm">Masraf Fişi</span></td>
+                                            <td class="bg-primary--lt text-right text-dark">0,00</td>
+                                            <td class="bg-primary--lt text-right text-light">10,00</td>
+                                            <td class="bg-primary--lt text-right font-weight-bold text-danger">-10,00</td>
+                                            <td class="bg-warning--lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning--lt text-right text-light">0,00</td>
+                                            <td class="bg-warning--lt text-right font-weight-bold">0,00</td>
+                                            <td class="text-sm text-right text-md p-0">-10,00</td>
+                                            <td class="text-right">TRL</td>
+                                        </tr>
+                                        <tr class=" v-middle shadow-sm" data-id="15">
+                                            <td class="flex"><a href="#" class="">A000001</a></td>
+                                            <td><span class="text-sm">2020-01-10</span></td>
+                                            <td><span class="text-sm">Masraf Fişi</span></td>
+                                            <td class="bg-primary--lt text-right text-dark">10,00</td>
+                                            <td class="bg-primary--lt text-right text-light">0,00</td>
+                                            <td class="bg-primary--lt text-right font-weight-bold">10,00</td>
+                                            <td class="bg-warning--lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning--lt text-right text-light">0,00</td>
+                                            <td class="bg-warning--lt text-right font-weight-bold">0,00</td>
+                                            <td class="text-sm text-right text-md p-0">10,00</td>
+                                            <td class="text-right">TRL</td>
+                                        </tr>
+                                        <tr class=" v-middle shadow-sm" data-id="15">
+                                            <td class="flex"><a href="#" class="">A000001</a></td>
+                                            <td><span class="text-sm">2020-01-10</span></td>
+                                            <td><span class="text-sm">Masraf Fişi</span></td>
+                                            <td class="bg-primary--lt text-right text-dark">0,00</td>
+                                            <td class="bg-primary--lt text-right text-light">10,00</td>
+                                            <td class="bg-primary--lt text-right font-weight-bold text-danger">-10,00</td>
+                                            <td class="bg-warning--lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning--lt text-right text-light">0,00</td>
+                                            <td class="bg-warning--lt text-right font-weight-bold">0,00</td>
+                                            <td class="text-sm text-right text-md p-0">-10,00</td>
+                                            <td class="text-right">TRL</td>
+                                        </tr>
+                                        <tr class=" v-middle shadow-sm" data-id="15">
+                                            <td class="flex"><a href="#" class="">A000001</a></td>
+                                            <td><span class="text-sm">2020-01-10</span></td>
+                                            <td><span class="text-sm">Masraf Fişi</span></td>
+                                            <td class="bg-primary--lt text-right text-dark">10,00</td>
+                                            <td class="bg-primary--lt text-right text-light">0,00</td>
+                                            <td class="bg-primary--lt text-right font-weight-bold red">10,00</td>
+                                            <td class="bg-warning--lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning--lt text-right text-light">0,00</td>
+                                            <td class="bg-warning--lt text-right font-weight-bold">0,00</td>
+                                            <td class="text-sm text-right text-md p-0">10,00</td>
+                                            <td class="text-right">TRL</td>
+                                        </tr>
+                                        <tr class=" v-middle shadow-sm" data-id="15">
+                                            <td class="flex"><a href="#" class="">A000001</a></td>
+                                            <td><span class="text-sm">2020-01-10</span></td>
+                                            <td><span class="text-sm">Masraf Fişi</span></td>
+                                            <td class="bg-primary--lt text-right text-dark">0,00</td>
+                                            <td class="bg-primary--lt text-right text-light">10,00</td>
+                                            <td class="bg-primary--lt text-right font-weight-bold text-danger">-10,00</td>
+                                            <td class="bg-warning--lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning--lt text-right text-light">0,00</td>
+                                            <td class="bg-warning--lt text-right font-weight-bold">0,00</td>
+                                            <td class="text-sm text-right text-md p-0">-10,00</td>
+                                            <td class="text-right">TRL</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</div>
+
+@section scripts {
+    @if (Model.Result != null) //
+    {
+        <script>
+            $(function () {
+                notie.setOptions({
+                    alertTime: 5
+                })
+                notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
+                noticed = true;
+            });
+        </script>
+    }
+
+}
