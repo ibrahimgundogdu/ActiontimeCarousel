@@ -25,6 +25,7 @@ namespace ActionForce.Entity
         public string Description { get; set; }
         public string Controller { get; set; }
         public string Action { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RoleGroupPermissions> RoleGroupPermissions { get; set; }

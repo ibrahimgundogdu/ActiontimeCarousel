@@ -2187,6 +2187,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EnvironmentID" Type="int" />
           <Property Name="Module" Type="nvarchar" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="150" />
           <Property Name="Controller" Type="nvarchar" MaxLength="50" />
@@ -8424,6 +8425,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Controller" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Action" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="RoleGroupPermissions" Relationship="db293_ActionTimeDbModel.FK_RoleGroupPermissions_Permission" FromRole="Permission" ToRole="RoleGroupPermissions" />
+          <Property Name="EnvironmentID" Type="Int32" />
         </EntityType>
         <EntityType Name="PrePaidCampaign">
           <Key>
@@ -13579,6 +13581,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="Permission">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Permission">
               <MappingFragment StoreEntitySet="Permission">
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="Action" ColumnName="Action" />
                 <ScalarProperty Name="Controller" ColumnName="Controller" />
                 <ScalarProperty Name="Description" ColumnName="Description" />

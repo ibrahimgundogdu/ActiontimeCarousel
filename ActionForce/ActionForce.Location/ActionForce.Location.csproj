@@ -547,17 +547,25 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ActionController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\EnvelopeController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LogoutController.cs" />
+    <Compile Include="Controllers\MessageController.cs" />
+    <Compile Include="Controllers\SaleController.cs" />
+    <Compile Include="Controllers\ScheduleController.cs" />
+    <Compile Include="Controllers\ShiftController.cs" />
     <Compile Include="Filters\ActionLocationAuthorizeAttribute.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AuthenticationModel.cs" />
+    <Compile Include="Models\ControlModels\ActionControlModel.cs" />
     <Compile Include="Models\ControlModels\DefaultControlModel.cs" />
     <Compile Include="Models\ControlModels\LocationControlModel.cs" />
     <Compile Include="Models\DifferentList.cs" />
@@ -773,6 +781,7 @@
     <Content Include="Views\Shared\_PartialPageHeader.cshtml" />
     <Content Include="Views\Shared\_PartialAsideNavbar.cshtml" />
     <Content Include="Views\Location\SetCurrentLocation.cshtml" />
+    <Content Include="Views\Action\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -784,7 +793,13 @@
     <Folder Include="App_Data\" />
     <Folder Include="libs\plyrist\dist\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Employee\" />
+    <Folder Include="Views\Envelope\" />
     <Folder Include="Views\Logout\" />
+    <Folder Include="Views\Message\" />
+    <Folder Include="Views\Sale\" />
+    <Folder Include="Views\Schedule\" />
+    <Folder Include="Views\Shift\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ActionForce.Entity\ActionForce.Entity.csproj">

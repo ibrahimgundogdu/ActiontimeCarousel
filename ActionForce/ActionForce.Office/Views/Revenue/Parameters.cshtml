@@ -30,7 +30,7 @@
                         <div class="col-sm-12" style="margin-bottom:20px !important;">
                             <div class="card">
                                 <div class="card-header d-sm-flex align-items-start justify-content-between">
-                                    <h6 class="lh-5 mg-b-0">@($"{location.SortBy?.Trim()} {location?.LocationName} {location?.Description} {location?.State}") </h6>
+                                    <h6 class="lh-5 mg-b-0">@($"{location.SortBy?.Trim()} {location?.LocationName} {location?.Description} {location?.State} (#{location.LocationID})") </h6>
                                     <a href="" class="tx-13 link-03"><div class="wd-10 ht-10 rounded-circle @(location.IsActive == true ?"bg-teal":"bg-gray-200") mg-r-auto mg-l-auto"></div></a>
                                 </div><!-- card-header -->
                                 <div class="card-body pd-y-10 pd-x-10">
