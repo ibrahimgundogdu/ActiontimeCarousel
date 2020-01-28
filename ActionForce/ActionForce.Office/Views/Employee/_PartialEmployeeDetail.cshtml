@@ -60,8 +60,8 @@
             <b>Kayıt Tarihçesi</b>
         </div>
 
-        @*<div class="col-sm-3 pd-t-10">@(Html.Raw($"<b>Kaydeden </b> : {Model.EmpList.RecordFullName} {Model.EmpList.RecordDate} ")) </div>
-            <div class="col-sm-3 pd-t-10">@(Model.EmpList.UpdateDate != null ? Html.Raw($"<b>Güncelleyen </b> : {Model.EmpList.UpdateFullName} {Model.EmpList.UpdateDate} ") : Html.Raw("")) </div>*@
+        <div class="col-sm-3 pd-t-10">@(Html.Raw($"<b>Kaydeden </b> : {Model.EmpList.RecordFullName} {Model.EmpList.RecordDate} ")) </div>
+            <div class="col-sm-3 pd-t-10">@(Model.EmpList.UpdateDate != null ? Html.Raw($"<b>Güncelleyen </b> : {Model.EmpList.UpdateFullName} {Model.EmpList.UpdateDate} ") : Html.Raw("")) </div>
 
     </div>
 

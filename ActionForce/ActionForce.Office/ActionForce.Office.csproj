@@ -2579,8 +2579,6 @@
     <Content Include="Views\Salary\PermitDetail.cshtml" />
     <Content Include="Views\Cash\NewSalaryPayment.cshtml" />
     <Content Include="Views\Salary\NewSalaryPayment.cshtml" />
-    <Content Include="Views\Employee\_PartialEmployeeCalendar.cshtml" />
-    <Content Include="Views\Employee\_PartialAddEmployeeSchedule.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeShift.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeDetail.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeUpdate.cshtml" />
@@ -2600,6 +2598,14 @@
     <Content Include="Views\Location\Edit.cshtml" />
     <Content Include="Views\Location\_PartialLocationEdit.cshtml" />
     <Content Include="Views\Revenue\_PartialPeriodParameterDetail.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeAction.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeEdit.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeList.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeSchedule.cshtml" />
+    <Content Include="Views\Employee\Action.cshtml" />
+    <Content Include="Views\Employee\Edit.cshtml" />
+    <Content Include="Views\Employee\Schedule.cshtml" />
+    <Content Include="Views\Employee\Shift.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
