@@ -419,10 +419,10 @@ namespace ActionForce.Office.Controllers
             PeriodParameterDetailModel model = new PeriodParameterDetailModel();
             var location = Db.Location.FirstOrDefault(x => x.LocationID == locationid);
 
-            if (!string.IsNullOrEmpty(startdate) && !string.IsNullOrEmpty(enddate))
+            if (!string.IsNullOrEmpty(startdate))
             {
                 DateTime startDate = Convert.ToDateTime(startdate);
-                DateTime endDate = Convert.ToDateTime(enddate);
+                DateTime? endDate = !string.IsNullOrEmpty(enddate) ? Convert.ToDateTime(enddate) : (DateTime?)null;
 
                 if (location != null)
                 {
@@ -458,11 +458,12 @@ namespace ActionForce.Office.Controllers
 
             var periodParameter = Db.LocationPeriods.FirstOrDefault(x => x.ID == id);
 
-            if (!string.IsNullOrEmpty(startdate) && !string.IsNullOrEmpty(enddate))
+            if (!string.IsNullOrEmpty(startdate))
             {
 
                 DateTime startDate = Convert.ToDateTime(startdate);
-                DateTime endDate = Convert.ToDateTime(enddate);
+                DateTime? endDate = !string.IsNullOrEmpty(enddate) ? Convert.ToDateTime(enddate) : (DateTime?)null;
+
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == periodParameter.LocationID);
 
                 if (periodParameter != null && location != null)
