@@ -1,4 +1,5 @@
 ﻿using ActionForce.Entity;
+using ActionForce.Office.Models.Document;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.SqlServer;
@@ -547,6 +548,38 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        public ActionResult Location(Guid? id, Guid? locationID)
+        {
+            
+            
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            
+
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
+            model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).ToList();
+            model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
+
+            model.EmployeeLocationList = Db.VEmployeeLocation.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+
+            EmployeeFilterModel filterModel = new EmployeeFilterModel();
+            filterModel.EmployeeUID = id;
+            filterModel.EmployeeID = model.EmpList.EmployeeID;
+
+            if (locationID != null)
+            {
+                
+                filterModel.LocationUID = locationID;
+                model.CurrentLocation = model.EmployeeLocationList.FirstOrDefault(x => x.LocationUID == locationID && x.EmployeeUID == id);
+            }
+
+            model.FilterModel = filterModel;
+            TempData["EmployeeFilter"] = filterModel;
+
+            return View(model);
+        }
+
 
 
         [AllowAnonymous]
@@ -737,6 +770,9 @@ namespace ActionForce.Office.Controllers
             return PartialView("_PartialEmployeeAddNew", model);
         }
 
+
+
+
         [HttpPost]
         [AllowAnonymous]
         public ActionResult AddNewEmployee(NewEmployee employee, HttpPostedFileBase FotoFile)
@@ -880,6 +916,85 @@ namespace ActionForce.Office.Controllers
 
             TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
             return RedirectToAction("AddEmployee", "Employee");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult AddEmployeeLocation(NewEmployeeLocation location)
+        {
+            
+            Result<EmployeeLocation> result = new Result<EmployeeLocation>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (location != null)
+            {
+                if (TempData["EmployeeFilter"] != null)
+                {
+                    model.FilterModel = TempData["EmployeeFilter"] as EmployeeFilterModel;
+
+                    if (model.FilterModel.EmployeeUID != null)
+                    {
+                        if (model.FilterModel.LocationUID == null)
+                        {
+                            bool isActive = !string.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false;
+                            bool isMaster = !string.IsNullOrEmpty(location.IsMaster) && location.IsMaster == "1" ? true : false;
+                            EmployeesLocation empdoc = new EmployeesLocation();
+
+                            empdoc.EmployeeID = (int)model.FilterModel.EmployeeID;
+                            empdoc.LocationID = location.LocationID;
+                            empdoc.IsMaster = isMaster;
+                            empdoc.IsActive = isActive;
+
+                            DocumentManager documentManager = new DocumentManager();
+                            result = documentManager.AddEmployeeLocation(empdoc, model.Authentication);
+
+
+                            TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+                            
+                        }
+                        else
+                        {
+                            bool isActive = !string.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false;
+                            bool isMaster = !string.IsNullOrEmpty(location.IsMaster) && location.IsMaster == "1" ? true : false;
+
+                            EmployeesLocation empdoc = new EmployeesLocation();
+
+                            empdoc.EmployeeID = (int)model.FilterModel.EmployeeID;
+                            empdoc.LocationID = location.LocationID;
+                            empdoc.IsMaster = isMaster;
+                            empdoc.IsActive = isActive;
+
+                            DocumentManager documentManager = new DocumentManager();
+                            result = documentManager.EditEmployeeLocation(empdoc, model.Authentication);
+
+
+                            TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+                            
+                        }
+
+                    }
+
+                }
+            }
+            else
+            {
+                result.Message = $"Form bilgileri gelmedi.";
+            }
+
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
+            model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).ToList();
+            model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, model.FilterModel.EmployeeUID, 0).FirstOrDefault();
+
+            model.EmployeeLocationList = Db.VEmployeeLocation.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+
+            TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return PartialView("_PartialEmployeeLocationList", model);
         }
     }
 }

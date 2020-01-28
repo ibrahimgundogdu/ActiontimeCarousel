@@ -2316,6 +2316,7 @@
     <Compile Include="Models\BankActionModel.cs" />
     <Compile Include="Models\ControlModels\RevenueControlModel.cs" />
     <Compile Include="Models\CounterModel.cs" />
+    <Compile Include="Models\Document\EmployeesLocation.cs" />
     <Compile Include="Models\Document\EmployeePermit.cs" />
     <Compile Include="Models\Document\Employees.cs" />
     <Compile Include="Models\ControlModels\EmployeeControlModel.cs" />
@@ -2604,7 +2605,10 @@
     <Content Include="Views\Employee\Edit.cshtml" />
     <Content Include="Views\Employee\Schedule.cshtml" />
     <Content Include="Views\Employee\Shift.cshtml" />
-    <Content Include="Views\Employee\Lokasyon.cshtml" />
+    <Content Include="Views\Employee\Location.cshtml" />
+    <Content Include="Views\Employee\FoodCard.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeLocation.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeLocationList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

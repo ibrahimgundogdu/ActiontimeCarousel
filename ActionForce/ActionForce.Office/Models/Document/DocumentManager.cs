@@ -1,4 +1,5 @@
 ﻿using ActionForce.Entity;
+using ActionForce.Office.Models.Document;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -4692,6 +4693,104 @@ namespace ActionForce.Office
                 }
             }
             
+
+            return result;
+        }
+
+        public Result<EmployeeLocation> AddEmployeeLocation(EmployeesLocation location, AuthenticationModel authentication)
+        {
+            Result<EmployeeLocation> result = new Result<EmployeeLocation>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            if (location != null && authentication != null)
+            {
+                using (ActionTimeEntities Db = new ActionTimeEntities())
+                {
+                    try
+                    {
+
+                        EmployeeLocation emp = new EmployeeLocation();
+
+                        emp.EmployeeID = location.EmployeeID;
+                        emp.LocationID = location.LocationID;
+                        emp.IsMaster = location.IsMaster;
+                        emp.IsActive = location.IsActive;
+
+                        Db.EmployeeLocation.Add(emp);
+                        Db.SaveChanges();
+
+
+
+                        result.IsSuccess = true;
+                        result.Message = "Lokasyon başarılı ile eklendi";
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "EmployeeLocation", "Insert", emp.EmployeeID.ToString(), "Employee", "AddEmployeeLocation", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, emp);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"Çalışan izini eklenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "EmployeeLocation", "Insert", "-1", "Employee", "AddEmployeeLocation", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, location);
+                    }
+
+                }
+            }
+
+            return result;
+        }
+
+        public Result<EmployeeLocation> EditEmployeeLocation(EmployeesLocation location, AuthenticationModel authentication)
+        {
+            Result<EmployeeLocation> result = new Result<EmployeeLocation>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                try
+                {
+                    var isEmployee = Db.EmployeeLocation.FirstOrDefault(x => x.EmployeeID == location.EmployeeID && x.LocationID == location.LocationID);
+                    if (location != null && authentication != null && isEmployee != null)
+                    {
+                        EmployeeLocation emp = new EmployeeLocation()
+                        {
+                            EmployeeID = isEmployee.EmployeeID,
+                            LocationID = isEmployee.LocationID,
+                            IsActive = isEmployee.IsActive,
+                            IsMaster = isEmployee.IsMaster
+                        };
+
+                        isEmployee.LocationID = location.LocationID;
+                        isEmployee.IsMaster = location.IsMaster;
+                        isEmployee.IsActive = location.IsActive;
+                        
+                        Db.SaveChanges();
+
+
+
+                        result.IsSuccess = true;
+                        result.Message = $"{isEmployee.EmployeeID} nolu Çalışan {isEmployee.LocationID} nolu lokasyona başarı ile güncellendi";
+
+                        // log atılır
+                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<EmployeeLocation>(emp, isEmployee, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "AddEmployeeLocation", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                    
+                }
+                catch (Exception ex)
+                {
+                    result.Message = $"Çalışan izini eklenemedi : {ex.Message}";
+                    OfficeHelper.AddApplicationLog("Office", "EmployeeLocation", "Update", "-1", "Employee", "AddEmployeeLocation", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, location);
+                }
+
+            }
 
             return result;
         }
