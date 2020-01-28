@@ -19,7 +19,7 @@ namespace ActionForce.Location
                 var action = httpContext.Request.RequestContext.RouteData.Values["action"].ToString();
                 using (var db = new ActionTimeEntities())
                 {
-                    var roleGroupPermissions = db.RoleGroupPermissions.Include("Permission").Where(x => x.RoleGroupID == authModel.CurrentRoleGroup.ID);
+                    var roleGroupPermissions = db.RoleGroupPermissions.Include("Permission").Where(x => x.RoleGroupID == authModel.CurrentRoleGroup.ID && x.Permission.EnvironmentID == 3);
                     return roleGroupPermissions.Any(x => x.Permission.Controller == controller && x.Permission.Action == action && x.IsNavigate == true);
                 }
             }

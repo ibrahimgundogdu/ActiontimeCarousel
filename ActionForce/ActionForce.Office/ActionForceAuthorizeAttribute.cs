@@ -19,7 +19,7 @@ namespace ActionForce.Office
                 var action = httpContext.Request.RequestContext.RouteData.Values["action"].ToString();
                 using (var db = new ActionTimeEntities())
                 {
-                    var roleGroupPermissions = db.RoleGroupPermissions.Include("Permission").Where(x => x.RoleGroupID == authModel.ActionEmployee.RoleGroupID);
+                    var roleGroupPermissions = db.RoleGroupPermissions.Include("Permission").Where(x => x.RoleGroupID == authModel.ActionEmployee.RoleGroupID && x.Permission.EnvironmentID == 2);
                     return roleGroupPermissions.Any(x => x.Permission.Controller == controller && x.Permission.Action == action && x.IsNavigate == true);
                 }
             }
