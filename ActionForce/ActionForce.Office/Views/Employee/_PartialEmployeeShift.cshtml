@@ -1,15 +1,7 @@
 ﻿@model EmployeeControlModel
 
 
-<div class="card mg-b-20 mg-lg-b-25">
-    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.EmployeeBreak != null ? Html.Raw("Molada") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute == null ? Html.Raw("Mesaide") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute != null ? Html.Raw("Mesaisi Bitti") : Html.Raw("") )</h6>
-        <nav class="nav">
-            <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CurrentDate.DateKey.ToLongDateString())</span></a>
-        </nav>
-    </div><!-- card-header -->
-    <div class="card-body pd-0">
-        <div class="table-responsive">
+
             <table class="table table-sm table-hover">
                 <thead>
                     <tr>
@@ -31,7 +23,7 @@
                                     @foreach (var item in Model.EmployeeSchedules.OrderByDescending(x => x.ShiftDate))
                                     {
                                         var employeeschedule = Model.EmployeeSchedules.FirstOrDefault(x => x.EmployeeID == item.EmployeeID && x.ShiftDate == item.ShiftDate);
-                                        var employeeshift = Model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+                                        var employeeshift = Model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == item.EmployeeID && x.ShiftDate == item.ShiftDate);
                                         var employees = Model.EmployeeList.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
                                         var employeebreak = Model.EmployeeBreaks.Where(x => x.EmployeeID == item.EmployeeID && x.ShiftDate == item.ShiftDate && x.BreakDurationMinute > 0).ToList();
                                         var employeebreakcurrent = Model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == item.EmployeeID && x.BreakDurationMinute == null);
@@ -40,8 +32,8 @@
 
                                     <tr class="@(employeeshift != null && employeeshift.DurationMinute == null ? "table-info":"table-warning")" id="@($"EmployeeStatus_{location.LocationID}_{item.EmployeeID}_2")">
                                         <td class="wd-300 tx-sm-13 font-weight-bold">@location.LocationName @location.Description @location.State</td>
-                                        <td class="wd-300 tx-sm-13 font-weight-bold">@item.DayName</td>
-                                        <td class="wd-300 tx-sm-13 font-weight-bold">@item.Week</td>
+                                        <td class="wd-150 text-center" style="padding:2px !important;">@(item.DayName)</td>
+                                        <td class="wd-150 text-center" style="padding:2px !important;">@item.Year | @item.Month | @item.Week - (Hafta)</td>
                                         <td class="wd-150 text-center @(employeeshift != null && employeeshift.DurationMinute == null ? "bg-info":"bg-warning")" style="padding:2px !important;">@(employeeschedule != null ? employeeschedule?.ShiftDateStart?.ToString("dd.MM.yyyy") : "")</td>
                                         <td class="wd-150 text-center @(employeeshift != null && employeeshift.DurationMinute == null ? "bg-info":"bg-warning")" style="padding:2px !important;">@(employeeschedule != null ? employeeschedule?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeschedule?.ShiftdateEnd != null ? " - " + employeeschedule?.ShiftdateEnd?.ToString("HH\\:mm") : "")</td>
                                         <td class="wd-150 text-center" style="padding:4px !important;">@(employeeshift != null ? employeeshift?.ShiftDateStart?.ToString("HH\\:mm") : "") @(employeeshift?.ShiftDateEnd != null ? " - " + employeeshift?.ShiftDateEnd?.ToString("HH\\:mm") : "")</td>
@@ -62,11 +54,4 @@
 
                 </tbody>
             </table>
-        </div>
-    </div>
-
-
-    <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
-    </div><!-- card-footer -->
-</div>
 

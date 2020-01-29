@@ -14,8 +14,8 @@
     <tbody>
         @foreach (var item in Model.EmployeeLocationList.OrderBy(x => x.SortBy))
         {
-        <tr style='@(item.LocationIsActive == false ? "color: red" : "")'>
-            <td><a href="/Employee/Location?id=@(Model.EmpList.EmployeeUID)&lokationID=@(item.LocationUID)"><div class="@(item.IsActive == true ? "avatar avatar-online":"avatar avatar-offline")"><span class="avatar-initial rounded-circle @(item.IsActive == true ? "bg-info":"bg-danger")">@(item.LocationName.ToString().Substring(0, 2))</span></div></a></td>
+        <tr style='@(Model.FilterModel.LocationUID == item.LocationUID ? "background-color: #fff3e8" : "")'>
+            <td><a href="/Employee/Location?id=@(Model.EmpList.EmployeeUID)&lokationID=@(item.LocationUID)"><div class="@(item.IsActive == true ? "avatar avatar-online":"avatar avatar-offline")"><span class="avatar-initial rounded-circle @(item.IsActive == true ? Model.FilterModel.LocationUID == item.LocationUID ? "bg-indigo-light" : "bg-info":"bg-danger")">@(item.LocationName.ToString().Substring(0, 2))</span></div></a></td>
             <td class="tx-sm-13 bold">@item.LocationID</td>
             <td class="tx-sm-13 bold">@item.SortBy</td>
             <td class="tx-sm-13"><a href="/Employee/Location?id=@(Model.EmpList.EmployeeUID)&locationID=@(item.LocationUID)">@item.LocationName</a></td>

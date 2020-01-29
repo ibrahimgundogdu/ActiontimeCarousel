@@ -1,74 +1,59 @@
 ﻿@model EmployeeControlModel
 
+
+
 @using (Ajax.BeginForm("AddEmployeeLocation", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "LocationList", InsertionMode = InsertionMode.Replace }))
 {
     @Html.AntiForgeryToken()
 
-    <div class="form-row">
+    <div class="card mg-b-20 mg-lg-b-25">
+        <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+            <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0"></h6>
+        </div><!-- card-header -->
+        <div class="card-body pd-20 pd-lg-25">
+            <div class="form-row">
 
-        <div class="form-group col-md-3">
-            <label for="inputPassword4">Lokasyon</label>
-            <select class="form-control" id="LocationID" name="LocationID" required>
-                @foreach (var item in Model.LocationList)
-                {
-                    <option value="@item.LocationID" @(Model.CurrentLocation?.LocationID == item.LocationID ? "selected" : "")>@($"{item.LocationName} {item.Description} ({item.State})")</option>
-                }
-            </select>
-        </div>
-        <div class="form-group col-md-1">
-            <label for="inputPassword4">Aktif mi?</label>
-            <div class="custom-control custom-checkbox mg-t-8">
-                <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="@(Model.CurrentLocation?.IsActive == true ? "1" : "0")" @(Model.CurrentLocation?.IsActive == true ? "checked" : "")>
-                <label class="custom-control-label" for="IsActive">Aktif</label>
+                <div class="form-group col-md-3">
+                    <label for="inputPassword4">Lokasyon</label>
+                    <select class="form-control" id="LocationID" name="LocationID" required>
+                        @foreach (var item in Model.LocationList)
+                        {
+                            <option value="@item.LocationID" @(Model.CurrentLocation?.LocationID == item.LocationID ? "selected" : "")>@($"{item.LocationName} {item.Description} ({item.State})")</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-1">
+                    <label for="inputPassword4">Aktif mi?</label>
+                    <div class="custom-control custom-checkbox mg-t-8">
+                        <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="@(Model.CurrentLocation?.IsActive == true ? "1" : "0")" @(Model.CurrentLocation?.IsActive == true ? "checked" : "")>
+                        <label class="custom-control-label" for="IsActive">Aktif</label>
+                    </div>
+                </div>
+                <div class="form-group col-md-1">
+                    <label for="inputPassword4">Master mi?</label>
+                    <br />
+                    <div class="custom-control custom-checkbox mg-t-8">
+                        <input type="checkbox" class="custom-control-input" id="IsMaster" name="IsMaster" value="@(Model.CurrentLocation?.IsMaster == true ? "1" : "0")" @(Model.CurrentLocation?.IsMaster == true ? "checked" : "")>
+                        <label class="custom-control-label" for="IsMaster">Master?</label>
+                    </div>
+                </div>
+                <div class="form-group col-md-1">
+                    <label for="inputPassword4">&nbsp;</label>
+                    <input id="AddEmployeeLocation" type="submit" class="btn btn-primary btn-block" value="Kaydet" />
+                </div>
             </div>
         </div>
-        <div class="form-group col-md-1">
-            <label for="inputPassword4">Master mi?</label>
-            <br />
-            <div class="custom-control custom-checkbox mg-t-8">
-                <input type="checkbox" class="custom-control-input" id="IsMaster" name="IsMaster" value="@(Model.CurrentLocation?.IsMaster == true ? "1" : "0")" @(Model.CurrentLocation?.IsMaster == true ? "checked" : "")>
-                <label class="custom-control-label" for="IsMaster">Master?</label>
-            </div>
-        </div>
-        <div class="form-group col-md-1">
-            <label for="inputPassword4">&nbsp;</label>
-            <input id="AddEmployeeLocation" type="submit" class="btn btn-primary btn-block" value="Kaydet" />
-        </div>
-    </div>
+
+    </div><!-- card -->
+
+    
 }
 
-    <div id="LocationList">
-        @*<table class="table table-dark table-hover table-striped mg-b-0">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>#</th>
-                    <th>Sıra</th>
-                    <th>Lokasyon</th>
-                    <th>Tür</th>
-                    <th>Lokasyon Yeri</th>
-                    <th class="text-center">Aktif mi?</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model.EmployeeLocationList.OrderBy(x => x.SortBy))
-                {
-                    <tr style='@(item.LocationIsActive == false ? "color: red" : "")'>
-                        <td><a href="/Employee/Location?id=@(Model.EmpList.EmployeeUID)&lokationID=@(item.LocationUID)"><div class="@(item.IsActive == true ? "avatar avatar-online":"avatar avatar-offline")"><span class="avatar-initial rounded-circle @(item.IsActive == true ? "bg-info":"bg-danger")">@(item.LocationName.ToString().Substring(0, 1))</span></div></a></td>
-                        <td class="tx-sm-13 bold">@item.LocationID</td>
-                        <td class="tx-sm-13 bold">@item.SortBy</td>
-                        <td class="tx-sm-13"><a href="/Employee/Location?id=@(Model.EmpList.EmployeeUID)&locationID=@(item.LocationUID)">@item.LocationName</a></td>
-                        <td class="tx-sm-13">@item.LocationTypeName</td>
-                        <td class="tx-sm-13">@item.State</td>
-                        <td class="tx-sm-13 text-center">
-                            @Html.Raw(item.LocationIsActive.Value == true ? "<i class='ion ion-md-checkmark-circle text-success'></i>" : "<i class='ion ion-md-close-circle'></i>")
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>*@
-        @{Html.RenderPartial("_PartialEmployeeLocationList", Model); }
-    </div>
+<div id="LocationList">
+
+    @{Html.RenderPartial("_PartialEmployeeLocationList", Model); }
+</div>
+
 @if (Model.Result != null) //
 {
     <script type="text/javascript">

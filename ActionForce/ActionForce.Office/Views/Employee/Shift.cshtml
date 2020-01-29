@@ -23,11 +23,12 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12 col-lg mg-t-20 mg-sm-t-0">
                         <nav class="nav flex-column demo-animate-list">
+                            <a href="/Employee/Detail/@(Model.EmpList.EmployeeUID)" class="nav-link">Detay</a>
                             <a href="/Employee/Schedule/@(Model.EmpList.EmployeeUID)" class="nav-link">Schedule (Takvim)</a>
-                            <a href="/Employee/Shift/@(Model.EmpList.EmployeeUID)" class="nav-link">Shift (Mesai Mola)</a>
+                            <a href="/Employee/Shift/@(Model.EmpList.EmployeeUID)" class="nav-link active">Shift (Mesai Mola)</a>
                             <a href="/Employee/Action/@(Model.EmpList.EmployeeUID)" class="nav-link">Cari Hesap</a>
                             <a href="/Employee/FoodCard/@(Model.EmpList.EmployeeUID)" class="nav-link">Set Card</a>
-                            <a href="/Employee/Location/@(Model.EmpList.EmployeeUID)" class="nav-link">Lokasyonlar</a>
+                            <a href="/Employee/Location?id=@(Model.EmpList.EmployeeUID)" class="nav-link">Lokasyonlar</a>
                             <a href="#" class="nav-link">Özlük Belgeleri</a>
                             <a href="#" class="nav-link">Puanlama Skorlama</a>
                             <a href="#" class="nav-link">Check Liste</a>
@@ -50,21 +51,36 @@
                             <div></div>
                         </a>
                         <input id="EmployeeID" type="hidden" value="@Model.EmpList.EmployeeID" />
-                        <input id="WeekCode" type="hidden" value="@Model.WeekCode" />
+                        <input id="WeekCode" type="hidden" value="@Model.MoonCode" />
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="/Employee/Shift?week=@(Model.PrevWeekCode)&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bir Önceki Hafta"><i class="fa fa-arrow-left"></i></a>
+                        <a href="/Employee/Shift?month=@(Model.PrevMoonCode)&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bir Önceki Ay"><i class="fa fa-arrow-left"></i></a>
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="/Employee/Shift?date=@(DateTime.Now.ToString("yyyy-MM-dd"))&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bu Hafta"><i class="fa fa-bullseye"></i></a>
+                        <a href="/Employee/Shift?date=@(DateTime.Now.ToString("yyyy-MM-dd"))&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bu Ay"><i class="fa fa-bullseye"></i></a>
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="/Employee/Shift?week=@(Model.NextWeekCode)&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bir Sonraki Hafta"><i class="fa fa-arrow-right"></i></a>
+                        <a href="/Employee/Shift?month=@(Model.NextMoonCode)&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bir Sonraki Ay"><i class="fa fa-arrow-right"></i></a>
                     </div>
 
                 </div>
+                <div class="card mg-b-20 mg-lg-b-25">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.EmployeeBreak != null ? Html.Raw("Molada") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute == null ? Html.Raw("Mesaide") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute != null ? Html.Raw("Mesaisi Bitti") : Html.Raw("") )</h6>
+                        <nav class="nav">
+                            <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CurrentDate.DateKey.ToLongDateString())</span></a>
+                        </nav>
+                    </div><!-- card-header -->
+                    <div class="card-body pd-0">
+                        <div class="table-responsive">
+                            @{Html.RenderPartial("_PartialEmployeeShift", Model);}
+                        </div>
+                    </div>
 
-                @{Html.RenderPartial("_PartialEmployeeShift", Model);}
+
+                    <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
+                    </div><!-- card-footer -->
+                </div>
             </div>
         </div>
     </div>

@@ -33,7 +33,7 @@
             <div class="form-group row mg-b-5">
                 <label for="FullName" class="col-sm-3 col-form-label">Tc Kimlik</label>
                 <div class="col-sm-6">
-                    <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" autocomplete="off" placeholder="Tc Kimlik" value="@(Model.EmpList.IdentityNumber)">
+                    <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" autocomplete="off" placeholder="Tc Kimlik" value="@(Model.EmpList.IdentityNumber)" @(Model.EmpList.IdentityNumber != null ? "readonly" : "")>
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -42,7 +42,7 @@
             <div class="form-group row bg-gray-100">
                 <label for="FullName" class="col-sm-3 col-form-label">Ad Soyad</label>
                 <div class="col-sm-6">
-                    <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="Ad Soyad" value="@(Model.EmpList.FullName)" readonly>
+                    <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="Ad Soyad" value="@(Model.EmpList.FullName)" @(Model.EmpList.FullName != null ? "readonly" : "") required>
                 </div>
                 <div class="col-sm-3">
                 </div>

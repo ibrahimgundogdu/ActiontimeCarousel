@@ -137,11 +137,7 @@ namespace ActionForce.Office.Controllers
         public ActionResult Detail(Guid? id)
         {
             EmployeeControlModel model = new EmployeeControlModel();
-
-            if (id == Guid.Empty)
-            {
-                return RedirectToAction("Index");
-            }
+            
 
             if (TempData["result"] != null)
             {
@@ -166,16 +162,18 @@ namespace ActionForce.Office.Controllers
 
             List<DateTime> datelist = model.WeekList.Select(x => x.DateKey).Distinct().ToList();
 
+            model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).ToList();
             model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
 
             model.EmployeeSchedules = Db.Schedule.Where(x => x.EmployeeID == model.EmpList.EmployeeID && datelist.Contains(x.ShiftDate.Value)).ToList();
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
 
             model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == model.EmpList.EmployeeID && datelist.Contains(x.ShiftDate.Value)).ToList();
 
             model.EmployeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true).ToList();
             model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute > 0).ToList();
             model.LocationList = Db.Location.ToList();
-            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID);
+            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
             model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
 
 
@@ -243,6 +241,69 @@ namespace ActionForce.Office.Controllers
                 model.HeaderTotals = headerTotals;
             }
 
+
+
+
+            List<TotalModel> footerTotals = new List<TotalModel>();
+
+            footerTotals.Add(new TotalModel()
+            {
+                Currency = "TRL",
+                Type = "Salary",
+                Total = model.HeaderTotals.FirstOrDefault(x => x.Currency == "TRL").Total
+            });
+
+
+
+            footerTotals.Add(new TotalModel()
+            {
+                Currency = "USD",
+                Type = "Salary",
+                Total = model.HeaderTotals.FirstOrDefault(x => x.Currency == "USD").Total
+            });
+
+
+
+            footerTotals.Add(new TotalModel()
+            {
+                Currency = "EUR",
+                Type = "Salary",
+                Total = model.HeaderTotals.FirstOrDefault(x => x.Currency == "EUR").Total
+            });
+
+
+
+
+
+            model.FooterTotals = footerTotals;
+
+
+
+            List<TotalModel> middleTotals = new List<TotalModel>();
+
+            middleTotals.Add(new TotalModel()
+            {
+                Currency = "TRL",
+                Type = "Salary",
+                Total = 0
+            });
+
+            middleTotals.Add(new TotalModel()
+            {
+                Currency = "USD",
+                Type = "Salary",
+                Total = 0
+            });
+
+            middleTotals.Add(new TotalModel()
+            {
+                Currency = "EUR",
+                Type = "Salary",
+                Total = 0
+            });
+
+            model.MiddleTotals = middleTotals;
+
             return View(model);
         }
         
@@ -279,7 +340,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Shift(Guid? id, string week)
+        public ActionResult Shift(Guid? id, string month, string date)
         {
             EmployeeControlModel model = new EmployeeControlModel();
 
@@ -291,33 +352,38 @@ namespace ActionForce.Office.Controllers
             var _date = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
             var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
 
-            if (!string.IsNullOrEmpty(week))
+            if (!string.IsNullOrEmpty(month))
             {
-                var weekparts = week.Split('-');
-                int _year = Convert.ToInt32(weekparts[0]);
-                int _week = Convert.ToInt32(weekparts[1]);
-                datekey = Db.DateList.Where(x => x.WeekYear == _year && x.WeekNumber == _week).OrderBy(x => x.DateKey).FirstOrDefault();
+                var moonparts = month.Split('-');
+                int _year = Convert.ToInt32(moonparts[0]);
+                int _moon = Convert.ToInt32(moonparts[1]);
+                datekey = Db.DateList.Where(x => x.Year == _year && x.Month == _moon).OrderBy(x => x.DateKey).FirstOrDefault();
+            }
+            if (!string.IsNullOrEmpty(date))
+            {
+                DateTime? _dateurl = Convert.ToDateTime(date).Date;
+                datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _dateurl);
             }
             model.CurrentDate = datekey;
             
-            string weekcode = $"{datekey.WeekYear}-{datekey.WeekNumber}";
-            var weekdatekeys = Db.DateList.Where(x => x.WeekYear == datekey.WeekYear && x.WeekNumber == datekey.WeekNumber).ToList();
+            string mooncode = $"{datekey.Year}-{datekey.Month}";
+            var moondatekeys = Db.DateList.Where(x => x.Year == datekey.Year && x.Month == datekey.Month).ToList();
 
-            model.WeekCode = weekcode;
+            model.MoonCode = mooncode;
 
-            model.WeekList = weekdatekeys;
-            model.FirstWeekDay = weekdatekeys.OrderBy(x => x.DateKey).FirstOrDefault();
-            model.LastWeekDay = weekdatekeys.OrderByDescending(x => x.DateKey).FirstOrDefault();
+            model.WeekList = moondatekeys;
+            model.FirstMoonDay = moondatekeys.OrderBy(x => x.DateKey).FirstOrDefault();
+            model.LastMoonDay = moondatekeys.OrderByDescending(x => x.DateKey).FirstOrDefault();
 
-            var prevdate = model.FirstWeekDay.DateKey.AddDays(-1).Date;
-            var nextdate = model.LastWeekDay.DateKey.AddDays(1).Date;
+            var prevdate = model.FirstMoonDay.DateKey.AddDays(-1).Date;
+            var nextdate = model.LastMoonDay.DateKey.AddDays(1).Date;
 
             var prevday = Db.DateList.FirstOrDefault(x => x.DateKey == prevdate);
             var nextday = Db.DateList.FirstOrDefault(x => x.DateKey == nextdate);
 
 
-            model.NextWeekCode = $"{nextday.WeekYear}-{nextday.WeekNumber}";
-            model.PrevWeekCode = $"{prevday.WeekYear}-{prevday.WeekNumber}";
+            model.NextMoonCode = $"{nextday.Year}-{nextday.Month}";
+            model.PrevMoonCode = $"{prevday.Year}-{prevday.Month}";
 
             model.CurrentDate = datekey;
 
@@ -552,11 +618,8 @@ namespace ActionForce.Office.Controllers
         public ActionResult Location(Guid? id, Guid? locationID)
         {
             
-            
             EmployeeControlModel model = new EmployeeControlModel();
-
             
-
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
             model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).ToList();
             model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
@@ -580,7 +643,203 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        public ActionResult FoodCard(Guid? id, string month, string date)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
 
+            if (TempData["EmployeeFilter"] != null)
+            {
+                model.FilterModel = TempData["EmployeeFilter"] as EmployeeFilterModel;
+            }
+            else
+            {
+                EmployeeFilterModel filterModel = new EmployeeFilterModel();
+                model.FilterModel = filterModel;
+            }
+
+            var _date = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            if (!string.IsNullOrEmpty(month))
+            {
+                var moonparts = month.Split('-');
+                int _year = Convert.ToInt32(moonparts[0]);
+                int _moon = Convert.ToInt32(moonparts[1]);
+                datekey = Db.DateList.Where(x => x.Year == _year && x.Month == _moon).OrderBy(x => x.DateKey).FirstOrDefault();
+            }
+            if (!string.IsNullOrEmpty(date))
+            {
+                DateTime? _dateurl = Convert.ToDateTime(date).Date;
+                datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _dateurl);
+            }
+            model.CurrentDate = datekey;
+
+            string mooncode = $"{datekey.Year}-{datekey.Month}";
+            var moondatekeys = Db.DateList.Where(x => x.Year == datekey.Year && x.Month == datekey.Month).ToList();
+
+            model.MoonCode = mooncode;
+
+            model.WeekList = moondatekeys;
+            model.FirstMoonDay = moondatekeys.OrderBy(x => x.DateKey).FirstOrDefault();
+            model.LastMoonDay = moondatekeys.OrderByDescending(x => x.DateKey).FirstOrDefault();
+
+            var prevdate = model.FirstMoonDay.DateKey.AddDays(-1).Date;
+            var nextdate = model.LastMoonDay.DateKey.AddDays(1).Date;
+
+            var prevday = Db.DateList.FirstOrDefault(x => x.DateKey == prevdate);
+            var nextday = Db.DateList.FirstOrDefault(x => x.DateKey == nextdate);
+
+
+            model.NextMoonCode = $"{nextday.Year}-{nextday.Month}";
+            model.PrevMoonCode = $"{prevday.Year}-{prevday.Month}";
+
+            model.CurrentDate = datekey;
+
+            List<DateTime> datelist = model.WeekList.Select(x => x.DateKey).Distinct().ToList();
+
+            model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).ToList();
+            model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
+
+            model.SetcardParameter = Db.SetcardParameter.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.Year == datekey.Year);
+
+            model.SalaryEarn = Db.VDocumentSalaryEarn.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+
+
+            var balanceData = Db.VDocumentSalaryEarn.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+            if (balanceData != null && balanceData.Count > 0)
+            {
+                List<TotalFood> headerTotals = new List<TotalFood>();
+
+
+                headerTotals.Add(new TotalFood()
+                {
+                    Currency = "TRL",
+                    Type = "FoodCard",
+                    Amount = balanceData.Where(x => x.Currency == "TRL").Sum(x => x.QuantityHourSalary * x.UnitPrice) ?? 0,
+                    Total = balanceData.Where(x => x.Currency == "TRL").Sum(x => x.QuantityHourFood * model.SetcardParameter.EarnHour * model.SetcardParameter.Amount) ?? 0
+                });
+
+                headerTotals.Add(new TotalFood()
+                {
+                    Currency = "USD",
+                    Type = "FoodCard",
+                    Amount = balanceData.Where(x => x.Currency == "USD").Sum(x => x.QuantityHourSalary * x.UnitPrice) ?? 0,
+                    Total = balanceData.Where(x => x.Currency == "USD").Sum(x => x.QuantityHourFood * model.SetcardParameter.EarnHour * model.SetcardParameter.Amount) ?? 0
+                });
+
+                headerTotals.Add(new TotalFood()
+                {
+                    Currency = "EUR",
+                    Type = "FoodCard",
+                    Amount = balanceData.Where(x => x.Currency == "EUR").Sum(x => x.QuantityHourSalary * x.UnitPrice) ?? 0,
+                    Total = balanceData.Where(x => x.Currency == "EUR").Sum(x => x.QuantityHourFood * model.SetcardParameter.EarnHour * model.SetcardParameter.Amount) ?? 0
+                });
+
+                model.HeaderTotal = headerTotals;
+            }
+            else
+            {
+                List<TotalFood> headerTotals = new List<TotalFood>();
+
+                headerTotals.Add(new TotalFood()
+                {
+                    Currency = "TRL",
+                    Type = "FoodCard",
+                    Amount = 0,
+                    Total = 0
+                });
+
+                headerTotals.Add(new TotalFood()
+                {
+                    Currency = "USD",
+                    Type = "FoodCard",
+                    Amount = 0,
+                    Total = 0
+                });
+
+                headerTotals.Add(new TotalFood()
+                {
+                    Currency = "EUR",
+                    Type = "FoodCard",
+                    Amount = 0,
+                    Total = 0
+                });
+
+                model.HeaderTotal = headerTotals;
+            }
+
+
+
+
+            List<TotalFood> footerTotals = new List<TotalFood>();
+
+            footerTotals.Add(new TotalFood()
+            {
+                Currency = "TRL",
+                Type = "FoodCard",
+                Amount = model.HeaderTotal.FirstOrDefault(x => x.Currency == "TRL").Amount,
+                Total = model.HeaderTotal.FirstOrDefault(x => x.Currency == "TRL").Total
+            });
+
+
+
+            footerTotals.Add(new TotalFood()
+            {
+                Currency = "USD",
+                Type = "FoodCard",
+                Amount = model.HeaderTotal.FirstOrDefault(x => x.Currency == "USD").Amount,
+                Total = model.HeaderTotal.FirstOrDefault(x => x.Currency == "USD").Total
+            });
+
+
+
+            footerTotals.Add(new TotalFood()
+            {
+                Currency = "EUR",
+                Type = "FoodCard",
+                Amount = model.HeaderTotal.FirstOrDefault(x => x.Currency == "EUR").Amount,
+                Total = model.HeaderTotal.FirstOrDefault(x => x.Currency == "EUR").Total
+            });
+
+
+
+
+
+            model.FooterTotal = footerTotals;
+
+
+
+            List<TotalFood> middleTotals = new List<TotalFood>();
+
+            middleTotals.Add(new TotalFood()
+            {
+                Currency = "TRL",
+                Type = "FoodCard",
+                Amount = 0,
+                Total = 0
+            });
+
+            middleTotals.Add(new TotalFood()
+            {
+                Currency = "USD",
+                Type = "FoodCard",
+                Amount = 0,
+                Total = 0
+            });
+
+            middleTotals.Add(new TotalFood()
+            {
+                Currency = "EUR",
+                Type = "FoodCard",
+                Amount = 0,
+                Total = 0
+            });
+
+            model.MiddleTotal = middleTotals;
+
+            return View(model);
+        }
 
         [AllowAnonymous]
         public ActionResult AddEmployee(Guid? id)

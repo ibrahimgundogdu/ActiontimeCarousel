@@ -2342,6 +2342,7 @@
     <Compile Include="Models\Document\SalaryPayment.cs" />
     <Compile Include="Models\Document\TransferModel.cs" />
     <Compile Include="Models\EmployeeShiftModel.cs" />
+    <Compile Include="Models\TotalFood.cs" />
     <Compile Include="Models\WizardModel.cs" />
     <Compile Include="Models\ControlModels\LocationControlModel.cs" />
     <Compile Include="Models\newTransfer.cs" />
@@ -2609,6 +2610,7 @@
     <Content Include="Views\Employee\FoodCard.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeLocation.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeLocationList.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeFoodCard.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
