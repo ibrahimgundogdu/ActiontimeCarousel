@@ -934,6 +934,19 @@ namespace ActionForce.Office.Controllers
             model.UnitSalaryList = Db.VEmployeeSalary.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.EmployeeID == id).ToList();
             model.UnitSalary = model.UnitSalaryList.OrderByDescending(x => x.DateStart).FirstOrDefault();
 
+            var date = DateTime.UtcNow.Date;
+            var prevdate = DateTime.UtcNow.AddDays(-60).Date; // 8 hafta öncesi
+
+            var datebegin = Db.DateList.FirstOrDefault(x => x.DateKey == prevdate);
+            var dateend = Db.DateList.FirstOrDefault(x => x.DateKey == date);
+
+
+            model.DateList = Db.DateList.Where(x => x.DateKey >= prevdate && x.DateKey <= date).ToList();
+            var firstday = model.DateList.OrderBy(x => x.DateKey).FirstOrDefault();
+
+            model.ScheduleList = Db.VSchedule.Where(x => x.EmployeeID == id && x.ShiftDate >= firstday.DateKey).ToList();
+            model.ShiftList = Db.VEmpShift.Where(x => x.EmployeeID == id && x.ShiftDate >= firstday.DateKey).ToList();
+
             return PartialView("_PartialAddEmployeeSalary", model);
         }
 

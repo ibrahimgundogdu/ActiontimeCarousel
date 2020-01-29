@@ -29,6 +29,10 @@ namespace ActionForce.Office
         public IEnumerable<VEmployeeSalaryDist> UnitSalaryDistList { get; set; }
         public VEmployeeSalary UnitSalary { get; set; }
 
+        public IEnumerable<VSchedule> ScheduleList { get; set; }
+        public IEnumerable<VEmpShift> ShiftList { get; set; }
+        public IEnumerable<DateList> DateList { get; set; }
+
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }
         public VLocation CurrentLocation { get; set; }
