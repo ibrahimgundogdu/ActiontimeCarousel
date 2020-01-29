@@ -8,10 +8,11 @@ namespace ActionForce.Location.Controllers
 {
     public class ScheduleController : Controller
     {
-        // GET: Schedule
+        [AllowAnonymous]
         public ActionResult Index()
         {
-            return View();
+            ScheduleControlModel model = new ScheduleControlModel();
+            return View(model);
         }
     }
 }

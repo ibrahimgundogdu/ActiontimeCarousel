@@ -568,6 +568,8 @@
     <Compile Include="Models\ControlModels\ActionControlModel.cs" />
     <Compile Include="Models\ControlModels\DefaultControlModel.cs" />
     <Compile Include="Models\ControlModels\LocationControlModel.cs" />
+    <Compile Include="Models\ControlModels\SaleControlModel.cs" />
+    <Compile Include="Models\ControlModels\ScheduleControlModel.cs" />
     <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\LayoutControlModel.cs" />
     <Compile Include="Models\LocationHelper.cs" />
@@ -782,6 +784,8 @@
     <Content Include="Views\Shared\_PartialAsideNavbar.cshtml" />
     <Content Include="Views\Location\SetCurrentLocation.cshtml" />
     <Content Include="Views\Action\Index.cshtml" />
+    <Content Include="Views\Schedule\Index.cshtml" />
+    <Content Include="Views\Sale\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -797,8 +801,6 @@
     <Folder Include="Views\Envelope\" />
     <Folder Include="Views\Logout\" />
     <Folder Include="Views\Message\" />
-    <Folder Include="Views\Sale\" />
-    <Folder Include="Views\Schedule\" />
     <Folder Include="Views\Shift\" />
   </ItemGroup>
   <ItemGroup>

@@ -6,12 +6,13 @@ using System.Web.Mvc;
 
 namespace ActionForce.Location.Controllers
 {
-    public class SaleController : Controller
+    public class SaleController : BaseController
     {
-        // GET: Sale
+        [AllowAnonymous]
         public ActionResult Index()
         {
-            return View();
+            SaleControlModel model = new SaleControlModel();
+            return View(model);
         }
     }
 }
