@@ -38,7 +38,7 @@
                     <div class="col-sm-8 col-md-7 col-lg mg-t-10 mg-sm-t-0 mg-lg-t-15">
                         <div class="d-flex mg-b-25">
                             <a class="btn btn-xs btn-white flex-fill" href="/Employee/Edit/@(Model.EmpList.EmployeeUID)">Düzenle</a>
-                            <button class="btn btn-xs @(Model.EmployeeBreak != null ? Html.Raw("btn-warning") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute == null ? Html.Raw("btn-success") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute != null ? Html.Raw("btn-danger") : Html.Raw("") ) flex-fill mg-l-10">@(Model.EmployeeBreak != null ? Html.Raw("Molada") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute == null ? Html.Raw("Mesaide") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute != null ? Html.Raw("Mesaisi Bitti") : Html.Raw("") )</button>
+                            <button class="btn btn-xs @(Model.EmployeeSchedule != null ? Model.EmployeeShift != null ? Model.EmployeeBreak != null ? Html.Raw("btn-warning") : Model.EmployeeShift.DurationMinute == null ? Html.Raw("btn-success") : Html.Raw("btn-pink") : Html.Raw("btn-danger") : Html.Raw("btn-dark")) flex-fill mg-l-10">@(Model.EmployeeSchedule != null ? Model.EmployeeShift != null ? Model.EmployeeBreak != null ? Html.Raw("Molada") : Model.EmployeeShift.DurationMinute == null ? Html.Raw("Mesaide") : Html.Raw("Mesai Bitti") : Html.Raw("Kapalı") : Html.Raw("Takvim Yok"))</button>
                         </div>
                         <div class="d-flex mg-b-20">
                             <div class="profile-skillset flex-fill">
@@ -55,6 +55,7 @@
                             </div>
                         </div>
                         <nav class="nav flex-column demo-animate-list">
+                            <a href="/Employee/Detail/@(Model.EmpList.EmployeeUID)" class="nav-link active">Detay</a>
                             <a href="/Employee/Schedule/@(Model.EmpList.EmployeeUID)" class="nav-link">Schedule (Takvim)</a>
                             <a href="/Employee/Shift/@(Model.EmpList.EmployeeUID)" class="nav-link">Shift (Mesai Mola)</a>
                             <a href="/Employee/Action/@(Model.EmpList.EmployeeUID)" class="nav-link">Cari Hesap</a>
@@ -86,11 +87,11 @@
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                         <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.EmpList.FullName) - Cari Hesap</h6>
                         <nav class="nav nav-with-icon tx-13">
-                            <a href="/Employee/Current/@(Model.EmpList.EmployeeUID)" class="nav-link"> Tümü</a>
+                            <a href="/Employee/Action/@(Model.EmpList.EmployeeUID)" class="nav-link"> Tümü</a>
                         </nav>
                     </div><!-- card-header -->
                     <div class="card-body pd-20 pd-lg-25">
-                        @{Html.RenderPartial("_PartialEmployeeShift", Model);}
+                        @{Html.RenderPartial("_PartialEmployeeAction", Model);}
                     </div>
                 </div>
                 <div class="card mg-b-20 mg-lg-b-25">
@@ -125,13 +126,13 @@
                             @*<a href="" class="link-03">Watch All</a>*@
                         </div>
                         <ul class="list-unstyled media-list mg-b-15">
-                            @foreach (var item in Model.EmployeeLocationList.OrderByDescending(x => x.IsActive))
+                            @foreach (var item in Model.EmployeeLocationList.Where(x => x.LocationIsActive == true).OrderByDescending(x => x.IsMaster))
                             {
                                 <li class="media align-items-center">
-                                    <a href=""><div class="avatar @(item?.IsActive == true ? "avatar-online":"avatar-offline")"><span class="avatar-initial rounded-circle bg-dark">@(item.LocationName.Substring(0, 2))</span></div></a>
+                                    <a href=""><div class="avatar @(item?.IsActive == true ? "avatar-online":"avatar-offline")"><span class="avatar-initial rounded-circle @(item.IsMaster == true ? "bg-success" : "bg-dark")">@(item.LocationName.Substring(0, 2))</span></div></a>
                                     <div class="media-body pd-l-15">
-                                        <p class="tx-medium mg-b-0"><a href="" class="link-01">@(item.LocationName) @(item.State)</a></p>
-                                        <span class="tx-12 tx-color-03">@(item.LocationTypeName)</span>
+                                        <p class="tx-medium mg-b-0"><a href="" class="link-01">@(item.LocationName) @(item.LocationTypeName)</a></p>
+                                        <span class="tx-12 tx-color-03">@(item.State)</span>
                                     </div>
                                 </li>
                             }
@@ -150,4 +151,3 @@
         </div>
     </div>
 </div>
-

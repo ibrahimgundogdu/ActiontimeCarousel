@@ -32,7 +32,8 @@ namespace ActionForce.Office
         public IEnumerable<EmployeeSequence> SequenceList { get; set; }
 
 
-
+        public IEnumerable<VDocumentSalaryEarn> SalaryEarn { get; set; }
+        public SetcardParameter SetcardParameter { get; set; }
 
 
         public IEnumerable<EmployeeShift> EmployeeShifts { get; set; }
@@ -50,9 +51,16 @@ namespace ActionForce.Office
         public string PrevWeekCode { get; set; }
         public string TodayWeekCode { get; set; }
 
+        public string MoonCode { get; set; }
+        public string NextMoonCode { get; set; }
+        public string PrevMoonCode { get; set; }
+
 
         public DateList FirstWeekDay { get; set; }
         public DateList LastWeekDay { get; set; }
+
+        public DateList FirstMoonDay { get; set; }
+        public DateList LastMoonDay { get; set; }
 
         public VEmployeeLocation CurrentLocation { get; set; }
 
@@ -61,6 +69,10 @@ namespace ActionForce.Office
         public IEnumerable<TotalModel> HeaderTotals { get; set; }
         public IEnumerable<TotalModel> MiddleTotals { get; set; }
         public IEnumerable<TotalModel> FooterTotals { get; set; }
+
+        public IEnumerable<TotalFood> HeaderTotal { get; set; }
+        public IEnumerable<TotalFood> MiddleTotal { get; set; }
+        public IEnumerable<TotalFood> FooterTotal { get; set; }
 
 
 
