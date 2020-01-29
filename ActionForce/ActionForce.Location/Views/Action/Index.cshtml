@@ -26,23 +26,38 @@
                     </a>
                 </div>
             </div>
-            <div class="scroll-y mx-3 mb-3 card">
-
-                <div class="row no-gutters">
-                    <div class="col-md-12 b-r bg-light--lt">
-                        <div class="p-2">
-                            <span class="text-md"> Cari Hesap</span>
-                            <span class="mr-2 float-right">@(DateTime.Now.ToLongDateString())</span>
-                            <div class="row row-xs">
-                                başlık
-                            </div>
-                        </div>
+            @*<div class="col-md-12 b-r bg-light--lt">
+            <div class="p-2">
+                        <span class="text-md"> Cari Hesap</span>
+                        <span class="mr-2 float-right"></span>
                     </div>
+        </div>*@
+            <div class="scroll-y mx-3 mb-3 card">
+                <div class="row no-gutters">
                     <div class="col-md-12 bg-light">
+
                         <div class="p-2">
-                            
+
                             <div class="table-responsive">
-                                <table class="table table-theme table-row v-middle" style="border-spacing: 0 1px !important; padding: 0.5rem !important;">
+                                <table class="table table-theme table-hover table-row v-middle" style="border-spacing: 0 1px !important; padding: 0.5rem !important;">
+
+                                    <thead>
+                                        <tr class="text-right table-light" style="font-size: 0.875rem; margin-bottom:10px;">
+                                            <th colspan="3" class="text-left">@(DateTime.Now.ToLongDateString()) Devir</th>
+                                            <th>0 EUR</th>
+                                            <th>0 USD</th>
+                                            <th>0 TRL</th>
+                                            <th>0 EUR</th>
+                                            <th>0 USD</th>
+                                            <th>0 TRL</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="9"></td>
+                                        </tr>
+                                    </thead>
+
                                     <thead>
                                         <tr class="text-center">
                                             <td></td>
@@ -70,42 +85,42 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class=" v-middle shadow-sm" data-id="15">
+                                        <tr class=" v-middle shadow-sm">
                                             <td class="flex"><a href="#" class="">A000001</a></td>
                                             <td><span class="text-sm">2020-01-10</span></td>
                                             <td><span class="text-sm">Masraf Fişi</span></td>
-                                            <td class="bg-primary--lt text-right text-dark">10,00</td>
-                                            <td class="bg-primary--lt text-right text-light">0,00</td>
-                                            <td class="bg-primary--lt text-right font-weight-bold">10,00</td>
-                                            <td class="bg-warning--lt text-right text-dark">0,00</td>
-                                            <td class="bg-warning--lt text-right text-light">0,00</td>
-                                            <td class="bg-warning--lt text-right font-weight-bold">0,00</td>
+                                            <td class="bg-primary-lt text-right text-dark">10,00</td>
+                                            <td class="bg-primary-lt text-right text-dark">0,00</td>
+                                            <td class="bg-primary-lt text-right font-weight-bold">10,00</td>
+                                            <td class="bg-warning-lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning-lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning-lt text-right font-weight-bold">0,00</td>
                                             <td class="text-sm text-right text-md p-0">10,00</td>
                                             <td class="text-right">TRL</td>
                                         </tr>
-                                        <tr class=" v-middle shadow-sm" data-id="15">
+                                        <tr class=" v-middle shadow-sm">
                                             <td class="flex"><a href="#" class="">A000001</a></td>
                                             <td><span class="text-sm">2020-01-10</span></td>
                                             <td><span class="text-sm">Masraf Fişi</span></td>
-                                            <td class="bg-primary--lt text-right text-dark">0,00</td>
-                                            <td class="bg-primary--lt text-right text-light">10,00</td>
-                                            <td class="bg-primary--lt text-right font-weight-bold text-danger">-10,00</td>
-                                            <td class="bg-warning--lt text-right text-dark">0,00</td>
-                                            <td class="bg-warning--lt text-right text-light">0,00</td>
-                                            <td class="bg-warning--lt text-right font-weight-bold">0,00</td>
+                                            <td class="bg-primary-lt text-right text-dark">0,00</td>
+                                            <td class="bg-primary-lt text-right text-dark">10,00</td>
+                                            <td class="bg-primary-lt text-right font-weight-bold text-danger">-10,00</td>
+                                            <td class="bg-warning-lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning-lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning-lt text-right font-weight-bold text-danger">0,00</td>
                                             <td class="text-sm text-right text-md p-0">-10,00</td>
                                             <td class="text-right">TRL</td>
                                         </tr>
-                                        <tr class=" v-middle shadow-sm" data-id="15">
+                                        <tr class=" v-middle shadow-sm">
                                             <td class="flex"><a href="#" class="">A000001</a></td>
                                             <td><span class="text-sm">2020-01-10</span></td>
                                             <td><span class="text-sm">Masraf Fişi</span></td>
-                                            <td class="bg-primary--lt text-right text-dark">10,00</td>
-                                            <td class="bg-primary--lt text-right text-light">0,00</td>
-                                            <td class="bg-primary--lt text-right font-weight-bold">10,00</td>
-                                            <td class="bg-warning--lt text-right text-dark">0,00</td>
-                                            <td class="bg-warning--lt text-right text-light">0,00</td>
-                                            <td class="bg-warning--lt text-right font-weight-bold">0,00</td>
+                                            <td class="bg-primary-lt text-right text-dark">10,00</td>
+                                            <td class="bg-primary-lt text-right text-dark">0,00</td>
+                                            <td class="bg-primary-lt text-right font-weight-bold">10,00</td>
+                                            <td class="bg-warning-lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning-lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning-lt text-right font-weight-bold">0,00</td>
                                             <td class="text-sm text-right text-md p-0">10,00</td>
                                             <td class="text-right">TRL</td>
                                         </tr>
@@ -113,43 +128,132 @@
                                             <td class="flex"><a href="#" class="">A000001</a></td>
                                             <td><span class="text-sm">2020-01-10</span></td>
                                             <td><span class="text-sm">Masraf Fişi</span></td>
-                                            <td class="bg-primary--lt text-right text-dark">0,00</td>
-                                            <td class="bg-primary--lt text-right text-light">10,00</td>
-                                            <td class="bg-primary--lt text-right font-weight-bold text-danger">-10,00</td>
-                                            <td class="bg-warning--lt text-right text-dark">0,00</td>
-                                            <td class="bg-warning--lt text-right text-light">0,00</td>
-                                            <td class="bg-warning--lt text-right font-weight-bold">0,00</td>
+                                            <td class="bg-primary-lt text-right text-dark">0,00</td>
+                                            <td class="bg-primary-lt text-right text-dark">10,00</td>
+                                            <td class="bg-primary-lt text-right font-weight-bold text-danger">-10,00</td>
+                                            <td class="bg-warning-lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning-lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning-lt text-right font-weight-bold text-danger">0,00</td>
                                             <td class="text-sm text-right text-md p-0">-10,00</td>
                                             <td class="text-right">TRL</td>
                                         </tr>
-                                        <tr class=" v-middle shadow-sm" data-id="15">
+                                        <tr class=" v-middle shadow-sm">
                                             <td class="flex"><a href="#" class="">A000001</a></td>
                                             <td><span class="text-sm">2020-01-10</span></td>
                                             <td><span class="text-sm">Masraf Fişi</span></td>
-                                            <td class="bg-primary--lt text-right text-dark">10,00</td>
-                                            <td class="bg-primary--lt text-right text-light">0,00</td>
-                                            <td class="bg-primary--lt text-right font-weight-bold red">10,00</td>
-                                            <td class="bg-warning--lt text-right text-dark">0,00</td>
-                                            <td class="bg-warning--lt text-right text-light">0,00</td>
-                                            <td class="bg-warning--lt text-right font-weight-bold">0,00</td>
+                                            <td class="bg-primary-lt text-right text-dark">10,00</td>
+                                            <td class="bg-primary-lt text-right text-dark">0,00</td>
+                                            <td class="bg-primary-lt text-right font-weight-bold red">10,00</td>
+                                            <td class="bg-warning-lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning-lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning-lt text-right font-weight-bold">0,00</td>
                                             <td class="text-sm text-right text-md p-0">10,00</td>
                                             <td class="text-right">TRL</td>
                                         </tr>
-                                        <tr class=" v-middle shadow-sm" data-id="15">
+                                        <tr class=" v-middle shadow-sm">
                                             <td class="flex"><a href="#" class="">A000001</a></td>
                                             <td><span class="text-sm">2020-01-10</span></td>
                                             <td><span class="text-sm">Masraf Fişi</span></td>
-                                            <td class="bg-primary--lt text-right text-dark">0,00</td>
-                                            <td class="bg-primary--lt text-right text-light">10,00</td>
-                                            <td class="bg-primary--lt text-right font-weight-bold text-danger">-10,00</td>
-                                            <td class="bg-warning--lt text-right text-dark">0,00</td>
-                                            <td class="bg-warning--lt text-right text-light">0,00</td>
-                                            <td class="bg-warning--lt text-right font-weight-bold">0,00</td>
+                                            <td class="bg-primary-lt text-right text-dark">0,00</td>
+                                            <td class="bg-primary-lt text-right text-dark">10,00</td>
+                                            <td class="bg-primary-lt text-right font-weight-bold text-danger">-10,00</td>
+                                            <td class="bg-warning-lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning-lt text-right text-dark">0,00</td>
+                                            <td class="bg-warning-lt text-right font-weight-bold">0,00</td>
                                             <td class="text-sm text-right text-md p-0">-10,00</td>
                                             <td class="text-right">TRL</td>
                                         </tr>
                                     </tbody>
+                                    <tfoot class="order-0">
+                                        <tr class=" v-middle shadow-sm">
+                                            <td class="flex"></td>
+                                            <td><span class="text-sm"></span></td>
+                                            <td><span class="text-sm"></span></td>
+                                            <td class="text-right text-dark">0,00</td>
+                                            <td class="text-right text-dark">10,00</td>
+                                            <td class="text-right font-weight-bold">-10,00</td>
+                                            <td class="text-right text-dark">0,00</td>
+                                            <td class="text-right text-dark">0,00</td>
+                                            <td class="text-right font-weight-bold">0,00</td>
+                                            <td class="text-sm text-right text-md p-0">-10,00</td>
+                                            <td class="text-right">TRL</td>
+                                        </tr>
+                                        <tr class=" v-middle shadow-sm">
+                                            <td class="flex"></td>
+                                            <td><span class="text-sm"></span></td>
+                                            <td><span class="text-sm"></span></td>
+                                            <td class="text-right text-dark">0,00</td>
+                                            <td class="text-right text-dark">10,00</td>
+                                            <td class="text-right font-weight-bold">-10,00</td>
+                                            <td class="text-right text-dark">0,00</td>
+                                            <td class="text-right text-dark">0,00</td>
+                                            <td class="text-right font-weight-bold">0,00</td>
+                                            <td class="text-sm text-right text-md p-0">-10,00</td>
+                                            <td class="text-right">USD</td>
+                                        </tr>
+                                        <tr class=" v-middle shadow-sm">
+                                            <td class="flex"></td>
+                                            <td><span class="text-sm"></span></td>
+                                            <td><span class="text-sm"></span></td>
+                                            <td class="text-right text-dark">0,00</td>
+                                            <td class="text-right text-dark">10,00</td>
+                                            <td class="text-right font-weight-bold">-10,00</td>
+                                            <td class="text-right text-dark">0,00</td>
+                                            <td class="text-right text-dark">0,00</td>
+                                            <td class="text-right font-weight-bold">0,00</td>
+                                            <td class="text-md text-right p-0">-10,00</td>
+                                            <td class="text-right">EUR</td>
+                                        </tr>
+
+                                        <tr class=" v-middle">
+                                            <td colspan="11"></td>
+                                        </tr>
+                                        <tr class=" v-middle bg--white">
+                                            <td class="flex"></td>
+                                            <td><span class="text-sm"></span></td>
+                                            <td><span class="text-sm"></span></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-right font-weight-bold">-10,00</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-right font-weight-bold">0,00</td>
+                                            <td class="text-right text-md p-0">-10,00</td>
+                                            <td class="text-right">TRL</td>
+                                        </tr>
+                                        <tr class=" v-middle bg--white">
+                                            <td class="flex"></td>
+                                            <td><span class="text-sm"></span></td>
+                                            <td><span class="text-sm"></span></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-right font-weight-bold">-10,00</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-right font-weight-bold">0,00</td>
+                                            <td class="text-right text-md p-0">-10,00</td>
+                                            <td class="text-right">USD</td>
+                                        </tr>
+                                        <tr class=" v-middle bg--white">
+                                            <td class="flex"></td>
+                                            <td><span class="text-sm"></span></td>
+                                            <td><span class="text-sm"></span></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-right font-weight-bold">-10,00</td>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="text-right font-weight-bold">0,00</td>
+                                            <td class="text-right text-md p-0">-10,00</td>
+                                            <td class="text-right">EUR</td>
+                                        </tr>
+                                    </tfoot>
+
+
+
+
                                 </table>
+
                             </div>
                         </div>
                     </div>
@@ -159,7 +263,7 @@
             </div>
         </div>
     </div>
-   
+
 </div>
 
 @section scripts {

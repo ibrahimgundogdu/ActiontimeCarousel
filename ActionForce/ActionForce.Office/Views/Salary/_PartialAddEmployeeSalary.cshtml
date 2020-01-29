@@ -39,6 +39,50 @@
     @{Html.RenderPartial("_PartialEmployeeSalaryList", Model); }
 </div>
 
+<div class="card-body pd-0">
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+            <thead>
+                <tr>
+                    <th></th>
+                    <th colspan="2">Takvim</th>
+                    <th colspan="2">Mesai</th>
+                    <th></th>
+                </tr>
+                <tr>
+                    <th>tarih</th>
+                    <th>Lokasyon</th>
+                    <th>Takvim</th>
+                    <th>Lokasyon</th>
+                    <th>Mesai</th>
+                    <th>Süre</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var item in Model.DateList.OrderByDescending(x=> x.DateKey))
+                {
+                    var takvim = Model.ScheduleList.FirstOrDefault(x => x.ShiftDate == item.DateKey);
+                    var mesai = Model.ShiftList.FirstOrDefault(x => x.ShiftDate == item.DateKey);
+
+                <tr>
+                    <td class="tx-sm-14 bold">@(item.DateKey.ToLongDateString())</td>
+                    <td class="tx-sm-13">@(takvim?.LocationName)</td>
+                    <td class="tx-sm-13">@(Html.Raw($"{takvim?.ShiftDateStart?.ToString()} <br /> {takvim?.ShiftdateEnd?.ToString()}"))</td>
+                    <td class="tx-sm-13">@($"{mesai?.SortBy} {mesai?.LocationName}")</td>
+                    <td class="tx-sm-13">@(Html.Raw($"{mesai?.ShiftDateStart?.ToString()} <br /> {mesai?.ShiftDateEnd?.ToString()}"))</td>
+                    <td class="tx-sm-13">@(mesai?.ShiftDuration?.ToString())</td>
+                </tr>
+                }
+                
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+
 <script>
         $(function () {
             'use strict'

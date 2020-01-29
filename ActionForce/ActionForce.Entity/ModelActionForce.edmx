@@ -3960,6 +3960,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSalaryEarn' does n
           <Property Name="SystemTotalAmount" Type="float" />
           <Property Name="CategoryID" Type="int" />
           <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="QuantityHourSalary" Type="float" />
+          <Property Name="TotalAmountSalary" Type="float" />
+          <Property Name="QuantityHourFood" Type="float" />
+          <Property Name="TotalAmountFoot" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSalaryPayment' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4468,6 +4472,30 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeSalaryDist' does n
           <Property Name="HourlyExtend" Type="float" />
           <Property Name="ExtendMultiplyRate" Type="float" />
           <Property Name="FullNameSearch" Type="nvarchar" MaxLength="4000" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmpShift' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VEmpShift">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="ShiftDate" Type="date" />
+          <Property Name="ShiftStart" Type="time" Precision="0" />
+          <Property Name="ShiftEnd" Type="time" Precision="0" />
+          <Property Name="Duration" Type="varchar" MaxLength="17" />
+          <Property Name="IsWorkTime" Type="bit" />
+          <Property Name="IsBreakTime" Type="bit" />
+          <Property Name="ShiftDateStart" Type="datetime" />
+          <Property Name="ShiftDateEnd" Type="datetime" />
+          <Property Name="ShiftDuration" Type="time" Precision="0" />
+          <Property Name="DurationMinute" Type="int" />
+          <Property Name="SortBy" Type="char" MaxLength="10" />
+          <Property Name="LocationName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6062,7 +6090,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentSalaryEarn].[SystemQuantityHour] AS [SystemQuantityHour], 
     [VDocumentSalaryEarn].[SystemTotalAmount] AS [SystemTotalAmount], 
     [VDocumentSalaryEarn].[CategoryID] AS [CategoryID], 
-    [VDocumentSalaryEarn].[CategoryName] AS [CategoryName]
+    [VDocumentSalaryEarn].[CategoryName] AS [CategoryName], 
+    [VDocumentSalaryEarn].[QuantityHourSalary] AS [QuantityHourSalary], 
+    [VDocumentSalaryEarn].[TotalAmountSalary] AS [TotalAmountSalary], 
+    [VDocumentSalaryEarn].[QuantityHourFood] AS [QuantityHourFood], 
+    [VDocumentSalaryEarn].[TotalAmountFoot] AS [TotalAmountFoot]
     FROM [dbo].[VDocumentSalaryEarn] AS [VDocumentSalaryEarn]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentSalaryPayment" EntityType="Self.VDocumentSalaryPayment" store:Type="Views" store:Schema="dbo">
@@ -6527,6 +6559,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeSalaryDist].[ExtendMultiplyRate] AS [ExtendMultiplyRate], 
     [VEmployeeSalaryDist].[FullNameSearch] AS [FullNameSearch]
     FROM [dbo].[VEmployeeSalaryDist] AS [VEmployeeSalaryDist]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VEmpShift" EntityType="Self.VEmpShift" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VEmpShift].[ID] AS [ID], 
+    [VEmpShift].[EmployeeID] AS [EmployeeID], 
+    [VEmpShift].[LocationID] AS [LocationID], 
+    [VEmpShift].[ShiftDate] AS [ShiftDate], 
+    [VEmpShift].[ShiftStart] AS [ShiftStart], 
+    [VEmpShift].[ShiftEnd] AS [ShiftEnd], 
+    [VEmpShift].[Duration] AS [Duration], 
+    [VEmpShift].[IsWorkTime] AS [IsWorkTime], 
+    [VEmpShift].[IsBreakTime] AS [IsBreakTime], 
+    [VEmpShift].[ShiftDateStart] AS [ShiftDateStart], 
+    [VEmpShift].[ShiftDateEnd] AS [ShiftDateEnd], 
+    [VEmpShift].[ShiftDuration] AS [ShiftDuration], 
+    [VEmpShift].[DurationMinute] AS [DurationMinute], 
+    [VEmpShift].[SortBy] AS [SortBy], 
+    [VEmpShift].[LocationName] AS [LocationName], 
+    [VEmpShift].[Description] AS [Description], 
+    [VEmpShift].[State] AS [State]
+    FROM [dbo].[VEmpShift] AS [VEmpShift]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VLocation" EntityType="Self.VLocation" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -7349,6 +7402,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="EmployeeUID" Mode="In" Type="Guid" />
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="VEmpShift" EntityType="db293_ActionTimeDbModel.VEmpShift" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -11013,6 +11067,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SystemTotalAmount" Type="Double" />
           <Property Name="CategoryID" Type="Int32" />
           <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="QuantityHourSalary" Type="Double" />
+          <Property Name="TotalAmountSalary" Type="Double" />
+          <Property Name="QuantityHourFood" Type="Double" />
+          <Property Name="TotalAmountFoot" Type="Double" />
         </EntityType>
         <EntityType Name="VEmployeeSalary">
           <Key>
@@ -12459,6 +12517,28 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Type="String" Name="GroupCode" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="GroupName" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <EntityType Name="VEmpShift">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="ShiftDate" Type="DateTime" Precision="0" />
+          <Property Name="ShiftStart" Type="Time" Precision="0" />
+          <Property Name="ShiftEnd" Type="Time" Precision="0" />
+          <Property Name="Duration" Type="String" MaxLength="17" FixedLength="false" Unicode="false" />
+          <Property Name="IsWorkTime" Type="Boolean" />
+          <Property Name="IsBreakTime" Type="Boolean" />
+          <Property Name="ShiftDateStart" Type="DateTime" Precision="3" />
+          <Property Name="ShiftDateEnd" Type="DateTime" Precision="3" />
+          <Property Name="ShiftDuration" Type="Time" Precision="0" />
+          <Property Name="DurationMinute" Type="Int32" />
+          <Property Name="SortBy" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="LocationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -16042,6 +16122,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentSalaryEarn">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentSalaryEarn">
               <MappingFragment StoreEntitySet="VDocumentSalaryEarn">
+                <ScalarProperty Name="TotalAmountFoot" ColumnName="TotalAmountFoot" />
+                <ScalarProperty Name="QuantityHourFood" ColumnName="QuantityHourFood" />
+                <ScalarProperty Name="TotalAmountSalary" ColumnName="TotalAmountSalary" />
+                <ScalarProperty Name="QuantityHourSalary" ColumnName="QuantityHourSalary" />
                 <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="SystemTotalAmount" ColumnName="SystemTotalAmount" />
@@ -17482,6 +17566,29 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="VEmpShift">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmpShift">
+              <MappingFragment StoreEntitySet="VEmpShift">
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="DurationMinute" ColumnName="DurationMinute" />
+                <ScalarProperty Name="ShiftDuration" ColumnName="ShiftDuration" />
+                <ScalarProperty Name="ShiftDateEnd" ColumnName="ShiftDateEnd" />
+                <ScalarProperty Name="ShiftDateStart" ColumnName="ShiftDateStart" />
+                <ScalarProperty Name="IsBreakTime" ColumnName="IsBreakTime" />
+                <ScalarProperty Name="IsWorkTime" ColumnName="IsWorkTime" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="ShiftEnd" ColumnName="ShiftEnd" />
+                <ScalarProperty Name="ShiftStart" ColumnName="ShiftStart" />
+                <ScalarProperty Name="ShiftDate" ColumnName="ShiftDate" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

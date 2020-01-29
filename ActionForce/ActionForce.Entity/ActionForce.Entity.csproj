@@ -750,6 +750,9 @@
     <Compile Include="VEmployeeSalaryDist.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VEmpShift.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VLocation.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
