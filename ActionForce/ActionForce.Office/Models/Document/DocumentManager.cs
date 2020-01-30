@@ -4564,6 +4564,7 @@ namespace ActionForce.Office
                         Employee emp = new Employee();
 
                         emp.FullName = employee.FullName;
+                        emp.IdentityType = employee.IdentityType;
                         emp.IdentityNumber = employee.IdentityNumber;
                         emp.EMail = employee.EMail;
                         emp.Mobile = employee.Mobile;
@@ -4574,8 +4575,8 @@ namespace ActionForce.Office
                         emp.DepartmentID = employee.DepartmentID;
                         emp.Description = employee.Description;
                         emp.EmployeeUID = Guid.NewGuid();
-                        emp.IsActive = true;
-                        emp.IsTemp = false;
+                        emp.IsActive = employee.IsActive;
+                        emp.IsTemp = employee.IsTemp;
                         emp.Mobile2 = employee.Mobile2;
                         emp.Username = employee.Username;
                         emp.Password = employee.Password;
@@ -4588,6 +4589,7 @@ namespace ActionForce.Office
                         emp.Title = employee.Title;
                         emp.Whatsapp = employee.Whatsapp;
                         emp.OurCompanyID = employee.OurCompanyID;
+                        emp.FotoFile = employee.FotoFile;
 
                         Db.Employee.Add(emp);
                         Db.SaveChanges();

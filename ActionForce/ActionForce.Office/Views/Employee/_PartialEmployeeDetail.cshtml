@@ -94,7 +94,7 @@
                             <td>@(item.FieldName)</td>
                             <td>@(item.OldValue)</td>
                             <td>@(item.NewValue)</td>
-                            <td>@(item.IsSuccess)</td>
+                            <td>@Html.Raw(item.IsSuccess.Value == true ? "<i class='ion ion-md-checkmark-circle text-success'></i>" : "<i class='ion ion-md-close-circle'></i>")</td>
                         </tr>
                     }
                 </tbody>

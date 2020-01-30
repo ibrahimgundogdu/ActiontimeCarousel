@@ -15,10 +15,24 @@
                 </div>
             </div>
             <div class="form-group row mg-b-5 bg-gray-50">
-                <label for="Tc" class="col-sm-3 col-form-label">Tc Kimlik</label>
+                <label for="Tc" class="col-sm-3 col-form-label">Kimlik Tipi</label>
                 <div class="col-sm-3">
-                    
-                    <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" value="@(Model.Wizard.IdentityNumber)" @(Model.Wizard.IdentityNumber != "" ? "readonly" : "") autocomplete="off" placeholder="Tc Kimlik No">
+                    <select class="form-control" id="IdentityType" name="IdentityType" @(Model.Wizard.Identity != "" ? "readonly" : "")>
+                        @foreach (var item in Model.IdentityTypes)
+                        {
+                            <option value="@item.ID" @(Model.Wizard.Identity == item.TypeName ? "selected" : "")>@($"{item.TypeName}")</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3"> </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5 bg-gray-50">
+                <label for="Tc" class="col-sm-3 col-form-label">Kimlik Numarası</label>
+                <div class="col-sm-3">
+
+                    <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" value="@(Model.Wizard.IdentityNumber)" @(Model.Wizard.IdentityNumber != "" ? "readonly" : "") autocomplete="off" placeholder="Kimlik No">
                 </div>
                 <div class="col-sm-3"> </div>
                 <div class="col-sm-3">

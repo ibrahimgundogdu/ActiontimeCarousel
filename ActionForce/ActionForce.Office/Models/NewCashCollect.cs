@@ -373,6 +373,7 @@ namespace ActionForce.Office
         public string Title { get; set; }
         public string EMail { get; set; }
         public string Mobile { get; set; }
+        public string IdentityType { get; set; }
         public string IdentityNumber { get; set; }
         public string Mobile2 { get; set; }
         public string Whatsapp { get; set; }

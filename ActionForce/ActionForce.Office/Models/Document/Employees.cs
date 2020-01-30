@@ -12,6 +12,7 @@ namespace ActionForce.Office
         public string Title { get; set; }
         public string EMail { get; set; }
         public string Mobile { get; set; }
+        public string IdentityType { get; set; }
         public string IdentityNumber { get; set; }
         public string Mobile2 { get; set; }
         public string Whatsapp { get; set; }
@@ -29,8 +30,8 @@ namespace ActionForce.Office
         public int SequenceID { get; set; }
         public int PositionID { get; set; }
         public string Description { get; set; }
-        public string IsTemp { get; set; }
-        public string IsActive { get; set; }
+        public bool? IsTemp { get; set; }
+        public bool? IsActive { get; set; }
     }
 
     

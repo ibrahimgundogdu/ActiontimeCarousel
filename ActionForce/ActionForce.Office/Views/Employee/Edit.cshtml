@@ -21,19 +21,50 @@
         <div class="media d-block d-lg-flex">
             <div class="profile-sidebar profile-sidebar-two pd-lg-r-15">
                 <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg mg-t-20 mg-sm-t-0">
+                    <div class="col-sm-3 col-md-2 col-lg">
+                        <div class="avatar avatar-xxl mg-b-20">
+                            <img src="http://office.ufegrup.com/img/Employee/@(Model.EmpList.FotoFile)" class="rounded-10 w-100" alt="">
+                        </div>
+                        <div>
+                            <h5 class="mg-b-2 tx-spacing--1"><span class="@(Model.EmpList?.IsActive == true ? "avatar avatar-online":"avatar avatar-offline")"></span>@(Model.EmpList.FullName)</h5>
+                            <p class="tx-color-03 mg-b-0">@(Model.EmpList.EMail)</p>
+                            <p class="tx-color-03 mg-b-0">@(Model.EmpList.Mobile)</p>
+                        </div>
+
+
+                    </div><!-- col -->
+                    <div class="col-sm-8 col-md-7 col-lg mg-t-10 mg-sm-t-0 mg-lg-t-15">
+                        <div class="d-flex mg-b-25">
+                            <a class="btn btn-xs btn-white flex-fill" href="/Employee/Edit/@(Model.EmpList.EmployeeUID)">Düzenle</a>
+                            <button class="btn btn-xs @(Model.EmployeeSchedule != null ? Model.EmployeeShift != null ? Model.EmployeeBreak != null ? Html.Raw("btn-warning") : Model.EmployeeShift.DurationMinute == null ? Html.Raw("btn-success") : Html.Raw("btn-pink") : Html.Raw("btn-danger") : Html.Raw("btn-dark")) flex-fill mg-l-10">@(Model.EmployeeSchedule != null ? Model.EmployeeShift != null ? Model.EmployeeBreak != null ? Html.Raw("Molada") : Model.EmployeeShift.DurationMinute == null ? Html.Raw("Mesaide") : Html.Raw("Mesai Bitti") : Html.Raw("Kapalı") : Html.Raw("Takvim Yok"))</button>
+                        </div>
+                        <div class="d-flex mg-b-20">
+                            <div class="profile-skillset flex-fill">
+                                <h4><a href="" class="link-01">@(Model.EmployeeShift?.ShiftDateStart?.ToString("HH\\:mm"))</a></h4>
+                                <label>Başlama</label>
+                            </div>
+                            <div class="profile-skillset flex-fill">
+                                <h4><a href="" class="link-01">@(Model.EmployeeShift?.ShiftDateEnd?.ToString("HH\\:mm"))</a></h4>
+                                <label class="pd-l-15">Bitiş</label>
+                            </div>
+                            <div class="profile-skillset flex-fill">
+                                <h4><a href="" class="link-01">@(Model.EmployeeShift?.ShiftDuration?.ToString("HH\\:mm"))</a></h4>
+                                <label class="pd-l-10">Süre</label>
+                            </div>
+                        </div>
                         <nav class="nav flex-column demo-animate-list">
+                            <a href="/Employee/Detail/@(Model.EmpList.EmployeeUID)" class="nav-link">Detay</a>
                             <a href="/Employee/Schedule/@(Model.EmpList.EmployeeUID)" class="nav-link">Schedule (Takvim)</a>
                             <a href="/Employee/Shift/@(Model.EmpList.EmployeeUID)" class="nav-link">Shift (Mesai Mola)</a>
                             <a href="/Employee/Action/@(Model.EmpList.EmployeeUID)" class="nav-link">Cari Hesap</a>
                             <a href="/Employee/FoodCard/@(Model.EmpList.EmployeeUID)" class="nav-link">Set Card</a>
-                            <a href="/Employee/Location/@(Model.EmpList.EmployeeUID)" class="nav-link">Lokasyonlar</a>
+                            <a href="/Employee/Location?id=@(Model.EmpList.EmployeeUID)" class="nav-link">Lokasyonlar</a>
                             <a href="#" class="nav-link">Özlük Belgeleri</a>
                             <a href="#" class="nav-link">Puanlama Skorlama</a>
                             <a href="#" class="nav-link">Check Liste</a>
                             <a href="#" class="nav-link">Çalışma Dönemleri</a>
                             <a href="#" class="nav-link">Ücret Tanımlamaları</a>
-                            <a href="/Employee/Edit/@(Model.EmpList.EmployeeUID)" class="nav-link">Güncelle</a>
+                            <a href="/Employee/Edit/@(Model.EmpList.EmployeeUID)" class="nav-link active">Güncelle</a>
                         </nav>
                     </div>
                 </div>
@@ -41,6 +72,61 @@
             <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
                 @{Html.RenderPartial("_PartialEmployeeEdit", Model);}
             </div>
+            <div class="profile-sidebar profile-sidebar-three mg-t-40 mg-lg-t-0 pd-lg-l-45">
+                <div class="row">
+                    <div class="media d-block d-lg-flex">
+                        <div class="media-body mg-t-40 mg-lg-t-0">
+                            <div class="row">
+                                @*<div class="col-sm-12 bg-white mg-b-10 mg-lg-b-10 rounded">
+                                    
+                                </div>*@
+                                <div class="col-sm-12" style="margin-bottom:20px !important;">
+                                    <div class="card">
+                                        <div class="card-header d-sm-flex align-items-start justify-content-between">
+                                            <h6 class="lh-5 mg-b-0"> </h6>
+                                            <a href="" class="tx-13 link-03"><div class="wd-10 ht-10 rounded-circle @(Model.EmpList.IsActive == true ?"bg-teal":"bg-gray-200") mg-r-auto mg-l-auto"></div></a>
+                                        </div><!-- card-header -->
+                                        <div class="card-body pd-y-10 pd-x-10">
+                                            <div class="table-responsive">
+                                                
+                                                <table class="table table-warning table-sm tx-13 tx-nowrap mb-0">
+                                                    <tbody>
+                                                        <tr class="bg-white">
+                                                            <td class="wd-5p"></td>
+                                                            <td class="tx-medium wd-20p" style="padding:2px !important;">
+                                                                <select class="form-control" id="OurID@(Model.EmpList.EmployeeID)" required>
+                                                                    @foreach (var item in Model.OurList)
+                                                                    {
+                                                                        <option value="@item.CompanyID">@($"{item.CompanyName}")</option>
+                                                                    }
+                                                                </select>
+                                                            </td>
+                                                            <td class="text-right wd-10p" style="padding:2px !important;"><input type="text" id="StartDate@(Model.EmpList.EmployeeID)" class="form-control form-control-sm datepicker shiftdate" placeholder="Başlangıç Tarihi"></td>
+                                                            <td class="text-right wd-10p" style="padding:2px !important;"><input type="text" id="FinishDate@(Model.EmpList.EmployeeID)" class="form-control form-control-sm datepicker shiftdate" placeholder="Bitiş Tarihi"></td>
+                                                            <td class="text-right wd-15p" style="padding:2px !important;"><input type="text" id="Description@(Model.EmpList.EmployeeID)" class="form-control form-control-sm text-right" placeholder="Açıklama"></td>
+
+                                                            <td class="wd-15p" style="padding:2px !important;">
+                                                                <button type="button" class="btn btn-xs btn-dark btn-block" onclick="AddEmployeePeriods(@(Model.EmpList.EmployeeID))">Periods Ekle</button>
+                                                            </td>
+                                                            <td class="wd-5p" style="padding:2px !important;"></td>
+
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div id="EmployeePeriodsDetail@(Model.EmpList.EmployeeID)">
+                                                    @{ Html.RenderPartial("_PartialEmployeePeriodsDetail", Model);}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div><!-- row -->
+            </div><!-- profile-sidebar -->
         </div>
     </div>
 </div>
