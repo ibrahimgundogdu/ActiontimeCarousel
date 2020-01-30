@@ -1,6 +1,7 @@
 ﻿@model ScheduleControlModel
 @{
     ViewBag.Title = "Takvim";
+    ViewBag.PageTitle = $"{DateTime.Now.ToLongDateString()} &nbsp; &nbsp; <span class='font-weight-bold'> Schedule </span>"; 
 }
 
 <div class="d-flex flex fixed-content">
@@ -24,6 +25,43 @@
                     <a href="#" class="btn btn-md btn-white">
                         <span class="font-weight-bold">@(DateTime.Now.ToLongDateString())</span>
                     </a>
+                    <ul class="nav no-border">
+                        <li>
+                            <a href="#">
+                                <span class="nav-icon">
+                                    <i data-feather="power"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="nav-icon">
+                                    <i data-feather="power"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="nav-icon">
+                                    <i data-feather="power"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="nav-icon">
+                                    <i data-feather="power"></i>
+                                </span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <span class="nav-icon">
+                                    <i data-feather="power"></i>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="scroll-y mx-3 mb-3 card">

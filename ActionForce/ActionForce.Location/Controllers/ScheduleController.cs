@@ -12,6 +12,8 @@ namespace ActionForce.Location.Controllers
         public ActionResult Index()
         {
             ScheduleControlModel model = new ScheduleControlModel();
+            model.PageTitle = $"{DateTime.Now.ToLongDateString()} &nbsp; &nbsp; <span class='font-weight-bold'> Schedule & Shift </span>";
+
             return View(model);
         }
     }

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -191,6 +192,8 @@ namespace ActionForce.Office.Controllers
                     DateTime? enddate = Convert.ToDateTime(item.ShiftEndDate);
                     TimeSpan? endtime = Convert.ToDateTime(item.ShiftEndTime + ":00").TimeOfDay;
                     DateTime? enddatetime = enddate.Value.Add(endtime.Value);
+                    var multiplier = Convert.ToDouble(item.UnitPriceMultiplier.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
 
                     var locschedule = Db.LocationSchedule.FirstOrDefault(x => x.ID == item.scheduleID);
 
@@ -216,13 +219,15 @@ namespace ActionForce.Office.Controllers
                             UpdateEmployee = locschedule.UpdateEmployee,
                             UpdateIP = locschedule.UpdateIP,
                             Week = locschedule.Week,
-                            Year = locschedule.Year
+                            Year = locschedule.Year,
+                            UnitPriceMultiplier = locschedule.UnitPriceMultiplier,
+                            ScheduleKey = locschedule.ScheduleKey
                         };
 
 
 
 
-
+                        locschedule.UnitPriceMultiplier = multiplier;
                         locschedule.ShiftDateStart = startdatetime;
                         locschedule.ShiftdateEnd = enddatetime;
                         locschedule.UpdateDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
@@ -230,6 +235,8 @@ namespace ActionForce.Office.Controllers
                         locschedule.UpdateIP = OfficeHelper.GetIPAddress();
 
                         Db.SaveChanges();
+
+                        Db.SetEmployeeScheduleMultiplier(locschedule.LocationID, locschedule.ShiftDate, multiplier); // employeeschedulelerin multiplier lerini günceller
 
                         result.IsSuccess = true;
                         result.Message += $"{locschedule.LocationID} ID li lokasyonun {locschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi güncellendi.";
@@ -273,6 +280,9 @@ namespace ActionForce.Office.Controllers
 
                             var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _dateKey);
 
+                            var multiplier = Convert.ToDouble(item.UnitPriceMultiplier.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
+
                             LocationSchedule locschedule = new LocationSchedule();
 
                             locschedule.Day = datekey.Day;
@@ -283,6 +293,7 @@ namespace ActionForce.Office.Controllers
                             locschedule.StatusID = 2;
                             locschedule.Week = datekey.WeekNumber;
                             locschedule.Year = datekey.WeekYear;
+                            locschedule.UnitPriceMultiplier = multiplier;
 
                             locschedule.ShiftDateStart = startdatetime;
                             locschedule.ShiftdateEnd = enddatetime;
@@ -292,6 +303,9 @@ namespace ActionForce.Office.Controllers
 
                             Db.LocationSchedule.Add(locschedule);
                             Db.SaveChanges();
+
+                            Db.SetEmployeeScheduleMultiplier(locschedule.LocationID, locschedule.ShiftDate, multiplier); // employeeschedulelerin multiplier lerini varsa günceller
+
 
                             result.IsSuccess = true;
                             result.Message += $"{locschedule.LocationID} ID li lokasyonun {locschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi eklendi.";
@@ -460,6 +474,8 @@ namespace ActionForce.Office.Controllers
                     TimeSpan? endtime = Convert.ToDateTime(item.ShiftEndTime + ":00").TimeOfDay;
                     DateTime? enddatetime = enddate.Value.Add(endtime.Value);
 
+                    var multiplier = Convert.ToDouble(item.UnitPriceMultiplier.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
                     var empschedule = Db.Schedule.FirstOrDefault(x => x.Id == item.scheduleID);
 
                     if (!string.IsNullOrEmpty(item.isActive))
@@ -486,9 +502,11 @@ namespace ActionForce.Office.Controllers
                             Year = empschedule.Year,
                             EmployeeID = empschedule.EmployeeID,
                             ShiftEnd = empschedule.ShiftEnd,
-                            ShiftStart = empschedule.ShiftStart
+                            ShiftStart = empschedule.ShiftStart,
+                            UnitPriceMultiplier = empschedule.UnitPriceMultiplier
                         };
 
+                        empschedule.UnitPriceMultiplier = multiplier;
                         empschedule.ShiftDateStart = startdatetime;
                         empschedule.ShiftdateEnd = enddatetime;
                         empschedule.ShiftStart = starttime;
@@ -513,23 +531,18 @@ namespace ActionForce.Office.Controllers
 
                         OfficeHelper.AddApplicationLog("Office", "Schedule", "Delete", empschedule.Id.ToString(), "Schedule", "AddUpdateEmployeeSchedule", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, empschedule);
 
-
                         Db.Schedule.Remove(empschedule);
                         Db.SaveChanges();
-
-                        
 
                     }
                 }
                 else
                 {
 
-
                     if (!string.IsNullOrEmpty(item.isActive))
                     {
                         try
                         {
-
 
                             DateTime? _dateKey = Convert.ToDateTime(item.dateKey);
 
@@ -540,6 +553,19 @@ namespace ActionForce.Office.Controllers
                             DateTime? enddate = Convert.ToDateTime(item.ShiftEndDate);
                             TimeSpan? endtime = Convert.ToDateTime(item.ShiftEndTime + ":00").TimeOfDay;
                             DateTime? enddatetime = enddate.Value.Add(endtime.Value);
+
+                            double? multiplier = 1;
+
+                            if (!string.IsNullOrEmpty(item.UnitPriceMultiplier))
+                            {
+                                multiplier = Convert.ToDouble(item.UnitPriceMultiplier?.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                            }
+                            else
+                            {
+                                var locationschedule = Db.LocationSchedule.FirstOrDefault(x => x.ShiftDate == _dateKey && x.LocationID == item.locationID);
+                                multiplier = locationschedule?.UnitPriceMultiplier ?? 1;
+                            }
+
 
                             var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _dateKey);
 
@@ -557,6 +583,7 @@ namespace ActionForce.Office.Controllers
 
                             locschedule.ShiftStart = starttime;
                             locschedule.ShiftEnd = endtime;
+                            locschedule.UnitPriceMultiplier = multiplier;
 
                             locschedule.ShiftDateStart = startdatetime;
                             locschedule.ShiftdateEnd = enddatetime;

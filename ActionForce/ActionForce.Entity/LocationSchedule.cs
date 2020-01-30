@@ -33,5 +33,6 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public string UpdateIP { get; set; }
         public string ScheduleKey { get; set; }
+        public Nullable<double> UnitPriceMultiplier { get; set; }
     }
 }

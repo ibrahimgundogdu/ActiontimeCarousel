@@ -1,6 +1,8 @@
 ﻿@model DefaultControlModel
 @{
     ViewBag.Title = "Index";
+    ViewBag.PageTitle = $"{DateTime.Now.ToLongDateString()} &nbsp; &nbsp; <span class='font-weight-bold'> {Model.Authentication?.CurrentLocation?.FullName?.ToUpper()} </span>";
+
 }
 
 
@@ -19,6 +21,7 @@
                     <a href="#" class="btn btn-md btn-white">
                         Sipariş No &nbsp;&nbsp;&nbsp;  <span class="font-weight-bold">293877</span>
                     </a>
+                    
                     <button data-toggle="modal" data-target="#content-aside" data-modal class="btn btn-md ml-auto btn-white">
                         <i data-feather="download"></i> &nbsp;&nbsp;&nbsp; Bilet Ekle
                     </button>

@@ -12,6 +12,8 @@ namespace ActionForce.Location.Controllers
         public ActionResult Index()
         {
             ActionControlModel model = new ActionControlModel();
+            model.PageTitle = $"{DateTime.Now.ToLongDateString()} &nbsp; &nbsp; <span class='font-weight-bold'> Action </span>";
+
             return View(model);
         }
     }

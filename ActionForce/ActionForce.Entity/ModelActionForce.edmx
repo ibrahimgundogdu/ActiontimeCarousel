@@ -1948,6 +1948,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
           <Property Name="ScheduleKey" Type="nvarchar" MaxLength="21" StoreGeneratedPattern="Computed" />
+          <Property Name="UnitPriceMultiplier" Type="float" />
         </EntityType>
         <EntityType Name="LocationShift">
           <Key>
@@ -3153,6 +3154,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UpdateEmployee" Type="int" />
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UnitPriceMultiplier" Type="float" />
         </EntityType>
         <EntityType Name="Revenue">
           <Key>
@@ -4603,6 +4605,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationSchedule' does not
           <Property Name="Color" Type="nvarchar" MaxLength="20" />
           <Property Name="OurCompanyID" Type="int" />
           <Property Name="WeekCode" Type="nvarchar" MaxLength="9" />
+          <Property Name="UnitPriceMultiplier" Type="float" />
+          <Property Name="ScheduleKey" Type="nvarchar" MaxLength="21" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationShift' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4777,6 +4781,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSchedule' does not have a 
           <Property Name="ShiftDateEndString" Type="varchar" MaxLength="30" />
           <Property Name="ShiftdateEnd" Type="datetime" />
           <Property Name="DurationMinute" Type="int" />
+          <Property Name="UnitPriceMultiplier" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5166,6 +5171,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <Function Name="RemoveAllAccountActions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ProcessID" Type="bigint" Mode="In" />
           <Parameter Name="ProcessUID" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="SetEmployeeScheduleMultiplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="Date" Type="date" Mode="In" />
+          <Parameter Name="UnitPriceMultiplier" Type="float" Mode="In" />
         </Function>
         <Function Name="SetLocationSchedules" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
@@ -6673,7 +6683,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocationSchedule].[Status] AS [Status], 
     [VLocationSchedule].[Color] AS [Color], 
     [VLocationSchedule].[OurCompanyID] AS [OurCompanyID], 
-    [VLocationSchedule].[WeekCode] AS [WeekCode]
+    [VLocationSchedule].[WeekCode] AS [WeekCode], 
+    [VLocationSchedule].[UnitPriceMultiplier] AS [UnitPriceMultiplier], 
+    [VLocationSchedule].[ScheduleKey] AS [ScheduleKey]
     FROM [dbo].[VLocationSchedule] AS [VLocationSchedule]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VLocationShift" EntityType="Self.VLocationShift" store:Type="Views" store:Schema="dbo">
@@ -6826,7 +6838,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VSchedule].[ShiftDateStartString] AS [ShiftDateStartString], 
     [VSchedule].[ShiftDateEndString] AS [ShiftDateEndString], 
     [VSchedule].[ShiftdateEnd] AS [ShiftdateEnd], 
-    [VSchedule].[DurationMinute] AS [DurationMinute]
+    [VSchedule].[DurationMinute] AS [DurationMinute], 
+    [VSchedule].[UnitPriceMultiplier] AS [UnitPriceMultiplier]
     FROM [dbo].[VSchedule] AS [VSchedule]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="WeekList" EntityType="Self.WeekList" store:Type="Views" store:Schema="dbo">
@@ -7403,6 +7416,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="VEmpShift" EntityType="db293_ActionTimeDbModel.VEmpShift" />
+          <FunctionImport Name="SetEmployeeScheduleMultiplier">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="UnitPriceMultiplier" Mode="In" Type="Double" />
+          </FunctionImport>
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -10485,6 +10503,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateEmployee" Type="Int32" />
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UnitPriceMultiplier" Type="Double" />
         </EntityType>
         <EntityType Name="VDocumentPosCollection">
           <Key>
@@ -10556,6 +10575,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Color" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="OurCompanyID" Type="Int32" />
           <Property Name="WeekCode" Type="String" MaxLength="9" FixedLength="false" Unicode="true" />
+          <Property Name="UnitPriceMultiplier" Type="Double" />
+          <Property Name="ScheduleKey" Type="String" MaxLength="21" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="WeekList">
           <Key>
@@ -10589,6 +10610,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ScheduleKey" Type="String" MaxLength="21" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="UnitPriceMultiplier" Type="Double" />
         </EntityType>
         <EntityType Name="VSchedule">
           <Key>
@@ -10633,6 +10655,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ShiftDateEndString" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="ShiftdateEnd" Type="DateTime" Precision="3" />
           <Property Name="DurationMinute" Type="Int32" />
+          <Property Name="UnitPriceMultiplier" Type="Double" />
         </EntityType>
         <EntityType Name="DayResult">
           <Key>
@@ -15567,6 +15590,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="Schedule">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Schedule">
               <MappingFragment StoreEntitySet="Schedule">
+                <ScalarProperty Name="UnitPriceMultiplier" ColumnName="UnitPriceMultiplier" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
                 <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
@@ -15635,6 +15659,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VLocationSchedule">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationSchedule">
               <MappingFragment StoreEntitySet="VLocationSchedule">
+                <ScalarProperty Name="ScheduleKey" ColumnName="ScheduleKey" />
+                <ScalarProperty Name="UnitPriceMultiplier" ColumnName="UnitPriceMultiplier" />
                 <ScalarProperty Name="WeekCode" ColumnName="WeekCode" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="Color" ColumnName="Color" />
@@ -15677,6 +15703,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="LocationSchedule">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationSchedule">
               <MappingFragment StoreEntitySet="LocationSchedule">
+                <ScalarProperty Name="UnitPriceMultiplier" ColumnName="UnitPriceMultiplier" />
                 <ScalarProperty Name="ScheduleKey" ColumnName="ScheduleKey" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
@@ -15702,6 +15729,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VSchedule">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VSchedule">
               <MappingFragment StoreEntitySet="VSchedule">
+                <ScalarProperty Name="UnitPriceMultiplier" ColumnName="UnitPriceMultiplier" />
                 <ScalarProperty Name="DurationMinute" ColumnName="DurationMinute" />
                 <ScalarProperty Name="ShiftdateEnd" ColumnName="ShiftdateEnd" />
                 <ScalarProperty Name="ShiftDateEndString" ColumnName="ShiftDateEndString" />
@@ -17589,6 +17617,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SetEmployeeScheduleMultiplier" FunctionName="db293_ActionTimeDbModel.Store.SetEmployeeScheduleMultiplier" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

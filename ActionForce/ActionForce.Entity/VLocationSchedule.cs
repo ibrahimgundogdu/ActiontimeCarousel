@@ -39,5 +39,7 @@ namespace ActionForce.Entity
         public string Color { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
         public string WeekCode { get; set; }
+        public Nullable<double> UnitPriceMultiplier { get; set; }
+        public string ScheduleKey { get; set; }
     }
 }

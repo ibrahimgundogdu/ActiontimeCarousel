@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionForce.WebSocket", "Ac
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionForce.Location", "ActionForce.Location\ActionForce.Location.csproj", "{DF3C5D88-8AA4-4C0D-927D-FD54D92D3AB5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionForce.PosService", "ActionForce.IngenicoService\ActionForce.PosService.csproj", "{23607F60-2404-49A5-9409-25B850D47FD4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{DF3C5D88-8AA4-4C0D-927D-FD54D92D3AB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF3C5D88-8AA4-4C0D-927D-FD54D92D3AB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF3C5D88-8AA4-4C0D-927D-FD54D92D3AB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23607F60-2404-49A5-9409-25B850D47FD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23607F60-2404-49A5-9409-25B850D47FD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23607F60-2404-49A5-9409-25B850D47FD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23607F60-2404-49A5-9409-25B850D47FD4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

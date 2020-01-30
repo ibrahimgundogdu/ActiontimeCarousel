@@ -52,5 +52,6 @@ namespace ActionForce.Entity
         public string ShiftDateEndString { get; set; }
         public Nullable<System.DateTime> ShiftdateEnd { get; set; }
         public Nullable<int> DurationMinute { get; set; }
+        public Nullable<double> UnitPriceMultiplier { get; set; }
     }
 }

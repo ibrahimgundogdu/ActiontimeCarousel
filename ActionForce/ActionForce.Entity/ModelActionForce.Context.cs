@@ -919,5 +919,22 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetEmployeeAll_Result1>("GetEmployeeAll", ourCompanyIDParameter, employeeUIDParameter, employeeIDParameter);
         }
+    
+        public virtual int SetEmployeeScheduleMultiplier(Nullable<int> locationID, Nullable<System.DateTime> date, Nullable<double> unitPriceMultiplier)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var unitPriceMultiplierParameter = unitPriceMultiplier.HasValue ?
+                new ObjectParameter("UnitPriceMultiplier", unitPriceMultiplier) :
+                new ObjectParameter("UnitPriceMultiplier", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetEmployeeScheduleMultiplier", locationIDParameter, dateParameter, unitPriceMultiplierParameter);
+        }
     }
 }

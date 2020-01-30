@@ -17,6 +17,8 @@ namespace ActionForce.Office
         public string ShiftEndDate { get; set; }
         public string ShiftEndTime { get; set; }
         public string weekCode { get; set; }
+        public string UnitPriceMultiplier { get; set; }
+
     }
 
     public class EmployeeScheduleEdit
@@ -32,6 +34,7 @@ namespace ActionForce.Office
         public string ShiftEndDate { get; set; }
         public string ShiftEndTime { get; set; }
         public string weekCode { get; set; }
+        public string UnitPriceMultiplier { get; set; }
     }
 
     public class EmployeeBreakEdit

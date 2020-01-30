@@ -11,6 +11,7 @@ namespace ActionForce.Location
     {
         public AuthenticationModel Authentication { get; set; }
         public Result Result { get; set; }
+        public string PageTitle { get; set; }
 
         public LayoutControlModel()
         {

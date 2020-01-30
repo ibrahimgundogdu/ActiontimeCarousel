@@ -67,7 +67,7 @@
 
                                     <thead>
                                         <tr class="bg-white bd-0">
-                                            <th colspan="12"></th>
+                                            <th colspan="14"></th>
                                         </tr>
                                     </thead>
                                     <thead class="table-borderless">
@@ -78,6 +78,8 @@
                                             <th style="vertical-align:bottom !important; padding-bottom:0px;">Cash</th>
                                             <th style="vertical-align:bottom !important; padding-bottom:0px;">Credit</th>
                                             <th style="vertical-align:bottom !important; padding-bottom:0px;">Total</th>
+                                            <th style="vertical-align:bottom !important; padding-bottom:0px;">Labor</th>
+                                            <th style="vertical-align:bottom !important; padding-bottom:0px;">Expense</th>
                                             <th style="vertical-align:bottom !important; padding-bottom:0px;">Net</th>
                                             <th style="vertical-align:bottom !important; padding-bottom:0px;">Operator</th>
                                             <th style="vertical-align:bottom !important; padding-bottom:0px;">AcTi</th>
@@ -102,6 +104,8 @@
                                             <th>@(item.TotalCash?.ToString("N2"))</th>
                                             <th>@(item.TotalCredit?.ToString("N2"))</th>
                                             <th>@(item.GrossTotal?.ToString("N2"))</th>
+                                            <th>@(item.TotalLabor?.ToString("N2"))</th>
+                                            <th>@(item.TotalExpense?.ToString("N2"))</th>
                                             <th>@(item.Net?.ToString("N2"))</th>
                                             <th>@(item.Operator?.ToString("N2"))</th>
                                             <th>@(item.ActionTime?.ToString("N2"))</th>
@@ -116,7 +120,7 @@
                                     </thead>
                                     <tbody class="collapse table-borderless" id="collapseRevenue@(item.ID)">
                                         <tr>
-                                            <td colspan="12" id="detailRevenue@(item.ID)">
+                                            <td colspan="14" id="detailRevenue@(item.ID)">
                                                 @{Html.RenderPartial("_PartialRevenueDetail", new RevenueDetailModel() { Revenue = item, RevenueLines = revenueLines });}
                                             </td>
                                         </tr>
