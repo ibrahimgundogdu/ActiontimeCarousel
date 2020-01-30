@@ -21,6 +21,7 @@ namespace ActionForce.Office
         public List<VEmployeeLocation> EmployeeLocationList { get; set; }
 
 
+        public IEnumerable<IdentityType> IdentityTypes { get; set; }
         public IEnumerable<OurCompany> OurList { get; set; }
         public IEnumerable<RoleGroup> RoleGroupList { get; set; }
         public IEnumerable<EmployeeAreaCategory> AreaCategoryList { get; set; }
@@ -42,6 +43,8 @@ namespace ActionForce.Office
         public IEnumerable<Location> LocationList { get; set; }
         public Location modelLokation { get; set; }
         public IEnumerable<EmployeeLocation> EmployeeLocations { get; set; }
+        public IEnumerable<EmployeePeriods> EmployeePeriods { get; set; }
+        public IEnumerable<DocumentEmployeePermit> EmployeePermits { get; set; }
         public DateList CurrentDate { get; set; }
 
         public List<DateList> WeekList { get; set; }
@@ -113,7 +116,7 @@ namespace ActionForce.Office
     public class EmployeeFilterModel
     {
         public string FullName { get; set; }
-        public string IsActive { get; set; }
+        public int IsActive { get; set; }
         public int? LocationID { get; set; }
         public int? EmployeeID { get; set; }
         public int? DepartmentID { get; set; }

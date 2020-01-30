@@ -23,17 +23,30 @@
             <div class="form-group row">
                 <label for="FullName" class="col-sm-3 col-form-label">Başlık</label>
                 <div class="col-sm-6">
+                    
                     <input id="Title" name="Title" type="text" class="form-control" autocomplete="off" placeholder="Başlık" value="@(Model.EmpList.Title)">
                 </div>
                 <div class="col-sm-3">
                 </div>
             </div>
 
-
             <div class="form-group row mg-b-5">
-                <label for="FullName" class="col-sm-3 col-form-label">Tc Kimlik</label>
+                <label for="FullName" class="col-sm-3 col-form-label">Kimlik Türü</label>
                 <div class="col-sm-6">
-                    <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" autocomplete="off" placeholder="Tc Kimlik" value="@(Model.EmpList.IdentityNumber)" @(Model.EmpList.IdentityNumber != null ? "readonly" : "")>
+                    <select class="form-control" id="IdentityType" name="IdentityType" @(Model.EmpList.IdentityType != null ? "readonly" : "") @(Model.EmpList.IdentityType != null ? "disabled" : "")>
+                        @foreach (var item in Model.IdentityTypes)
+                        {
+                            <option value="@item.ID" @(item.TypeName == Model.EmpList.IdentityType ? "selected" : "")>@($"{item.TypeName}")</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="FullName" class="col-sm-3 col-form-label">Kimlik No</label>
+                <div class="col-sm-6">
+                    <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" autocomplete="off" placeholder="Kimlik No" value="@(Model.EmpList.IdentityNumber)" @(Model.EmpList.IdentityNumber != null ? "readonly" : "")>
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -116,7 +129,7 @@
             </div>
 
 
-            
+
             <div class="form-group row bg-gray-50">
                 <label for="RoleGroupID" class="col-sm-3 col-form-label">Rol Grup</label>
                 <div class="col-sm-6">

@@ -39,10 +39,12 @@
 
                                 <div class="form-group row mg-b-5 bg-gray-50">
                                     <div class="col-sm-3">
-                                        <select class="form-control" id="Identity" name="Identity" required>
-                                            <option value="0">Tc Kimlik</option>
-                                            <option value="1">Identity</option>
-                                            <option value="2">Social Security</option>
+                                        <select class="form-control" id="Identityx" name="Identity" required>
+                                            @foreach (var item in Model.IdentityTypes)
+                                            {
+                                                <option value="@item.ID">@item.TypeName</option>
+                                            }
+
                                         </select>
                                     </div>
                                     <div class="col-sm-3">
@@ -129,6 +131,7 @@
         });
 
         function EmployeeStatus() {
+            var stype = $("#Identityx").text();
             var sidenty = $("#IdentityNumberx").val();
             var sname = $("#FullNamex").val();
             var smail = $("#EMailx").val();
@@ -136,16 +139,16 @@
             $.ajax({
                 method: "GET",
                 url: "/Employee/EmployeeStatus",
-                data: { IdentityNumber: sidenty, FullName: sname, EMail: smail, Mobile: sphone }
+                data: { Identity: stype, IdentityNumber: sidenty, FullName: sname, EMail: smail, Mobile: sphone }
             }).done(function (d) {
                 $("#employeeStatus").html(d);
             });
         }
-        function EmployeeList(IdentityNumber, FullName, EMail, Mobile) {
+        function EmployeeList(Identity, IdentityNumber, FullName, EMail, Mobile) {
             $.ajax({
                 method: "GET",
                 url: "/Employee/EmployeeList",
-                data: { IdentityNumber: IdentityNumber, FullName: FullName, EMail: EMail, Mobile: Mobile }
+                data: { Identity: Identity, IdentityNumber: IdentityNumber, FullName: FullName, EMail: EMail, Mobile: Mobile }
             }).done(function (d) {
                 $("#employeeStatus").html(d);
             });

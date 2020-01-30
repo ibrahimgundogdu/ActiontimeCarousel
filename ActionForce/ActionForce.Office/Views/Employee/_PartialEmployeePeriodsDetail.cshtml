@@ -1,0 +1,47 @@
+﻿@model EmployeeControlModel
+
+
+<table class="table table-light table-bordered table-hover table-sm tx-13 tx-nowrap mg-b-0">
+    <thead>
+        <tr class="tx-10 tx-spacing-1 tx-color-03 tx-uppercase">
+            <th class="wd-5p">#</th>
+            <th class="wd-20p">Ülke</th>
+            <th class="wd-10p">Başlangıç</th>
+            <th class="wd-10p">Bitiş</th>
+            <th class="wd-15p">Açıklama</th>
+            <th class="wd-15p">Güncelleme</th>
+            <th class="wd-5p"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var param in Model.EmployeePeriods)
+        {
+            <tr>
+                <td class="text-left">
+                    @(param.ID)
+                </td>
+                <td class="tx-medium" style="padding:2px 2px 2px 17px !important;">@($"{param.OurCompanyID}")</td>
+
+                <td class="" style="padding:2px !important;">@(param.ContractStartDate?.ToString("yyyy-MM-dd"))</td>
+                <td class="" style="padding:2px !important;">@(param.ContractFinishDate?.ToString("yyyy-MM-dd"))</td>
+
+                <td class="text-right" style="padding:2px !important;">@(param.Description)</td>
+                
+                <td class="" style="padding:2px !important;">
+                    <small class="tx-12 tx-color-03">@(param.UpdateDate ?? param.RecordDate)</small>
+                </td>
+                <td class="text-center">
+                    <button type="button" class="btn btn-icon btn-xs" onclick="confirm('Silmek İstediğinize Emin misiniz?') ? DeleteEmployeePeriods(@(param.ID),@(param.EmployeeID)) : ''">
+                        <i class="tx-danger" data-feather="trash"></i> &nbsp;
+                    </button>
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+<script>
+    $(function () {
+        feather.replace();
+    });
+</script>

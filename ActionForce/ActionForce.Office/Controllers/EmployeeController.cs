@@ -36,7 +36,7 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
             model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
             model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true).ToList();
-
+            model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
             model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).ToList();
 
 
@@ -44,9 +44,10 @@ namespace ActionForce.Office.Controllers
             {
                 model.FilterModel = TempData["EmployeeFilter"] as EmployeeFilterModel;
 
-                if (!String.IsNullOrEmpty(model.FilterModel.FullName))
+                
+                if (model.FilterModel.EmployeeID != null)
                 {
-                    model.EmployeeList = model.EmployeeList.Where(x => x.FullNameSearch.Contains(model.FilterModel.FullName.ToUpper())).ToList();
+                    model.EmployeeList = model.EmployeeList.Where(x => x.EmployeeID == model.FilterModel.EmployeeID).OrderBy(x => x.FullName).ToList();
                 }
                 if (model.FilterModel.DepartmentID != null)
                 {
@@ -61,18 +62,18 @@ namespace ActionForce.Office.Controllers
             
            
 
-            if (!string.IsNullOrEmpty(model.FilterModel.IsActive))
-            {
-                if (model.FilterModel.IsActive == "act")
-                {
-                    model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == true).ToList();
-                }
-                else if (model.FilterModel.IsActive == "psv")
-                {
-                    model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == false).ToList();
-                }
+            //if (!string.IsNullOrEmpty(model.FilterModel.IsActive))
+            //{
+            //    if (model.FilterModel.IsActive == "act")
+            //    {
+            //        model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == true).ToList();
+            //    }
+            //    else if (model.FilterModel.IsActive == "psv")
+            //    {
+            //        model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == false).ToList();
+            //    }
 
-            }
+            //}
 
             return View(model);
         }
@@ -114,20 +115,27 @@ namespace ActionForce.Office.Controllers
                 {
                     model.EmployeeList = model.EmployeeList.Where(x => x.PositionID == model.FilterModel.PositionID).OrderBy(x => x.FullName).ToList();
                 }
-            }
 
-            if (!string.IsNullOrEmpty(model.FilterModel.IsActive))
+                
+            }
+            bool? isActive = filterModel.IsActive == 0 ? false : filterModel.IsActive == 1 ? true : (bool?)null;
+
+            if (isActive != null)
             {
-                if (model.FilterModel.IsActive == "act")
-                {
-                    model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == true).ToList();
-                }
-                else if (model.FilterModel.IsActive == "psv")
-                {
-                    model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == false).ToList();
-                }
-
+                model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == isActive.Value).ToList();
             }
+            //if (!string.IsNullOrEmpty(model.FilterModel.IsActive))
+            //{
+            //    if (model.FilterModel.IsActive == "act")
+            //    {
+            //        model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == true).ToList();
+            //    }
+            //    else if (model.FilterModel.IsActive == "psv")
+            //    {
+            //        model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == false).ToList();
+            //    }
+
+            //}
 
             return PartialView("_PartialEmployeeList", model);
         }
@@ -181,6 +189,9 @@ namespace ActionForce.Office.Controllers
 
             model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Employee" && x.ProcessID == model.EmpList.EmployeeID.ToString()).ToList();
             model.EmployeeLocationList = Db.VEmployeeLocation.Where(x => x.EmployeeUID == id).ToList();
+
+            model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+            model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
 
             model.EmployeeActionList = Db.VEmployeeCashActions.Where(x => x.EmployeeID == model.EmpList.EmployeeID && datelist.Contains(x.ProcessDate.Value)).OrderBy(x => x.ProcessDate).ToList();
 
@@ -336,6 +347,15 @@ namespace ActionForce.Office.Controllers
             model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
             model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Employee" && x.ProcessID == model.EmpList.EmployeeID.ToString()).ToList();
 
+            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date).ToList();
+            model.EmployeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true).ToList();
+            model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute > 0).ToList();
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
+
+            model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+            model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
             return View(model);
         }
 
@@ -399,10 +419,10 @@ namespace ActionForce.Office.Controllers
             model.EmployeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true).ToList();
             model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute > 0).ToList();
             model.LocationList = Db.Location.ToList();
-            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID);
-            model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
 
-            
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
 
             return View(model);
         }
@@ -461,7 +481,15 @@ namespace ActionForce.Office.Controllers
             model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).ToList();
             model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
             model.EmployeeSchedules = Db.Schedule.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
-            //model.EmpSchedule = Db.VSchedule.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+
+            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == model.EmpList.EmployeeID && datelist.Contains(x.ShiftDate.Value)).ToList();
+            model.EmployeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true).ToList();
+            model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute > 0).ToList();
+
+            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
 
             return View(model);
         }
@@ -481,12 +509,22 @@ namespace ActionForce.Office.Controllers
                 model.FilterModel = filterModel;
             }
 
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).ToList();
             model.EmpList = model.EmployeeList.FirstOrDefault(x => x.EmployeeUID == id);
             model.CurrentEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID);
 
             model.EmployeeActionList = Db.VEmployeeCashActions.Where(x => x.EmployeeID == model.EmpList.EmployeeID).OrderBy(x => x.ProcessDate).ToList();
+
+            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date).ToList();
+            model.EmployeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true).ToList();
+            model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute > 0).ToList();
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
 
             var balanceData = Db.VEmployeeCashActions.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
             if (balanceData != null && balanceData.Count > 0)
@@ -619,12 +657,28 @@ namespace ActionForce.Office.Controllers
         {
             
             EmployeeControlModel model = new EmployeeControlModel();
-            
+
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
+
+
+            model.OurList = Db.OurCompany.ToList();
+            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
+
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
             model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).ToList();
             model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
 
             model.EmployeeLocationList = Db.VEmployeeLocation.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+
+            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date).ToList();
+            model.EmployeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true).ToList();
+            model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute > 0).ToList();
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
 
             EmployeeFilterModel filterModel = new EmployeeFilterModel();
             filterModel.EmployeeUID = id;
@@ -700,6 +754,13 @@ namespace ActionForce.Office.Controllers
 
             model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).ToList();
             model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
+
+            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date).ToList();
+            model.EmployeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true).ToList();
+            model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute > 0).ToList();
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
 
             model.SetcardParameter = Db.SetcardParameter.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.Year == datekey.Year);
 
@@ -841,6 +902,11 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+
+
+
+
+
         [AllowAnonymous]
         public ActionResult AddEmployee(Guid? id)
         {
@@ -860,8 +926,9 @@ namespace ActionForce.Office.Controllers
 
             var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
 
-
+            
             model.OurList = Db.OurCompany.ToList();
+            model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
             model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
             model.AreaCategoryList = Db.EmployeeAreaCategory.Where(x => x.IsActive == true).ToList();
             model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
@@ -873,7 +940,8 @@ namespace ActionForce.Office.Controllers
 
             model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
 
-
+            model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+            model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
 
             return View(model);
         }
@@ -922,7 +990,7 @@ namespace ActionForce.Office.Controllers
 
         
         [AllowAnonymous]
-        public PartialViewResult EmployeeStatus(string IdentityNumber, string FullName, string EMail, string Mobile)
+        public PartialViewResult EmployeeStatus(string Identity, string IdentityNumber, string FullName, string EMail, string Mobile)
         {
             EmployeeControlModel model = new EmployeeControlModel();
 
@@ -933,7 +1001,7 @@ namespace ActionForce.Office.Controllers
             else
             {
                 WizardModel wizardModel = new WizardModel();
-
+                wizardModel.Identity = Identity;
                 wizardModel.IdentityNumber = IdentityNumber;
                 wizardModel.FullName = FullName;
                 wizardModel.EMail = EMail;
@@ -941,7 +1009,12 @@ namespace ActionForce.Office.Controllers
 
                 model.Wizard = wizardModel;
             }
-
+            if (model.Wizard.Identity != "")
+            {
+                var idnt = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + Identity + "%", x.IdentityType) > 0).ToList();
+                List<string> _identy = idnt.Select(x => x.IdentityType).ToList();
+                model.Wizard.Identitys = _identy;
+            }
             if (model.Wizard.IdentityNumber != "")
             {
                 var idnt = Db.Employee.Where(x => SqlFunctions.PatIndex("%" + IdentityNumber + "%", x.IdentityNumber) > 0).ToList();
@@ -971,7 +1044,7 @@ namespace ActionForce.Office.Controllers
 
             TempData["Model"] = model;
 
-            if (model.Wizard.IdentityNumbers?.Count() > 0 || model.Wizard.FullNames?.Count() > 0 || model.Wizard.EMails?.Count() > 0 || model.Wizard.Mobiles?.Count() > 0)
+            if (model.Wizard.Identitys?.Count() > 0 || model.Wizard.IdentityNumbers?.Count() > 0 || model.Wizard.FullNames?.Count() > 0 || model.Wizard.EMails?.Count() > 0 || model.Wizard.Mobiles?.Count() > 0)
             {
                 
                 return PartialView("_PartialEmployeeAddStatus", model);
@@ -989,7 +1062,7 @@ namespace ActionForce.Office.Controllers
         
         
         [AllowAnonymous]
-        public PartialViewResult EmployeeList(string IdentityNumber, string FullName, string EMail, string Mobile)
+        public PartialViewResult EmployeeList(string Identity, string IdentityNumber, string FullName, string EMail, string Mobile)
         {
             EmployeeControlModel model = new EmployeeControlModel();
 
@@ -1001,6 +1074,7 @@ namespace ActionForce.Office.Controllers
             else
             {
                 WizardModel wizardModel = new WizardModel();
+                wizardModel.Identity = Identity;
                 wizardModel.IdentityNumber = IdentityNumber;
                 wizardModel.FullName = FullName;
                 wizardModel.EMail = EMail;
@@ -1046,12 +1120,21 @@ namespace ActionForce.Office.Controllers
 
             if (employee != null)
             {
-                Employees empdoc = new Employees();
 
+                bool isActive = !string.IsNullOrEmpty(employee.IsActive) && employee.IsActive == "1" ? true : false;
+                bool isTemp = !string.IsNullOrEmpty(employee.IsTemp) && employee.IsTemp == "1" ? true : false;
+
+                Employees empdoc = new Employees();
+                empdoc.IdentityType = employee.IdentityType;
+                empdoc.IdentityNumber = employee.IdentityNumber;
+                empdoc.Title = employee.Title;
+                empdoc.EMail = employee.EMail;
+                empdoc.FullName = employee.FullName;
+                empdoc.Mobile = empdoc.Mobile;
+                empdoc.Mobile2 = employee.Mobile2;
                 empdoc.AreaCategoryID = employee.AreaCategoryID;
                 empdoc.DepartmentID = employee.DepartmentID;
                 empdoc.Description = employee.Description;
-                empdoc.Mobile2 = employee.Mobile2;
                 empdoc.PositionID = employee.PositionID;
                 empdoc.RoleGroupID = employee.RoleGroupID;
                 empdoc.SalaryCategoryID = employee.SalaryCategoryID;
@@ -1061,6 +1144,9 @@ namespace ActionForce.Office.Controllers
                 empdoc.Whatsapp = employee.Whatsapp;
                 empdoc.Username = employee.Username;
                 empdoc.OurCompanyID = employee.OurCompanyID;
+                empdoc.IsActive = isActive;
+                empdoc.IsTemp = isTemp;
+
                 if (!string.IsNullOrEmpty(employee.Password))
                 {
                     empdoc.Password = OfficeHelper.makeMD5(employee.Password);

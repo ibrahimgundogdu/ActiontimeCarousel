@@ -2611,6 +2611,7 @@
     <Content Include="Views\Employee\_PartialEmployeeLocation.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeLocationList.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeFoodCard.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeePeriodsDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
