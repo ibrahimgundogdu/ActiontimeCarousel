@@ -928,7 +928,6 @@ namespace ActionForce.Office.Controllers
 
             
             model.OurList = Db.OurCompany.ToList();
-            model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
             model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
             model.AreaCategoryList = Db.EmployeeAreaCategory.Where(x => x.IsActive == true).ToList();
             model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
@@ -1039,9 +1038,26 @@ namespace ActionForce.Office.Controllers
                 List<string> _identy = idnt.Select(x => x.Mobile).ToList();
                 model.Wizard.Mobiles = _identy;
             }
+            
+
+            var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
+
+
+            model.OurList = Db.OurCompany.ToList();
+            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
+            model.AreaCategoryList = Db.EmployeeAreaCategory.Where(x => x.IsActive == true).ToList();
+            model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
+            model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true).ToList();
+            model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
+            model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
+            model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
+            model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
+
+            //model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
+
+            //model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
             model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).ToList();
-
-
+            model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
             TempData["Model"] = model;
 
             if (model.Wizard.Identitys?.Count() > 0 || model.Wizard.IdentityNumbers?.Count() > 0 || model.Wizard.FullNames?.Count() > 0 || model.Wizard.EMails?.Count() > 0 || model.Wizard.Mobiles?.Count() > 0)
@@ -1129,7 +1145,7 @@ namespace ActionForce.Office.Controllers
                 empdoc.IdentityNumber = employee.IdentityNumber;
                 empdoc.Title = employee.Title;
                 empdoc.EMail = employee.EMail;
-                empdoc.FullName = employee.FullName;
+                empdoc.FullName = employee.FullName.ToUpper();
                 empdoc.Mobile = empdoc.Mobile;
                 empdoc.Mobile2 = employee.Mobile2;
                 empdoc.AreaCategoryID = employee.AreaCategoryID;

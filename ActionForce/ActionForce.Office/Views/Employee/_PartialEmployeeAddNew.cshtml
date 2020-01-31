@@ -19,7 +19,7 @@
             <div class="form-group row mg-b-5 bg-gray-50">
                 <label for="Tc" class="col-sm-3 col-form-label">Kimlik Tipi</label>
                 <div class="col-sm-3">
-                    <select class="form-control" id="IdentityType" name="IdentityType" @(Model.Wizard.Identity != "" ? "readonly" : "")>
+                    <select class="form-control" id="IdentityType" name="IdentityType" @(Model.Wizard.Identity != "" ? "readonly" : "") @(Model.Wizard.Identity != "" ? "disabled" : "")>
                         @foreach (var item in Model.IdentityTypes)
                         {
                             <option value="@item.ID" @(Model.Wizard.Identity == item.TypeName ? "selected" : "")>@($"{item.TypeName}")</option>
