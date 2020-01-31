@@ -12,6 +12,8 @@ namespace ActionForce.Office
         public IEnumerable<Location> Locations { get; set; }
         public IEnumerable<Employee> Employees { get; set; }
         public IEnumerable<DateList> DateLists { get; set; }
+        public IEnumerable<WeekModel> WeekLists { get; set; }
+
         public int WeekYear { get; set; }
         public int WeekNumber { get; set; }
     }

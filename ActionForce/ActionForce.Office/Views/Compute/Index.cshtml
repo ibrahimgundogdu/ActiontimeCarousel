@@ -25,42 +25,54 @@
                         <div class="card">
                             <div class="card-header d-sm-flex align-items-start justify-content-between">
                                 <h6 class="lh-5 mg-b-0">Hakediş Hesaplamaları </h6>
+                                <div class="mg-r-0 mg-l-auto ">yükleniyor</div>
                             </div><!-- card-header -->
                             <div class="card-body pd-y-10 pd-x-10">
                                 <div class="table-responsive">
                                     <table class="table table-light table-bordered table-hover table-sm tx-13 tx-nowrap mb-0">
-                                        <tfoot>
-                                            <tr class="bg-white">
-                                                <td class="wd-5p"></td>
-                                                <td class="tx-medium wd-30p" style="padding:2px !important;">
-                                                    <select class="form-control" id="Location" required>
-                                                        @foreach (var item in Model.Locations.OrderBy(x=> x.SortBy))
-                                                        {
-                                                            <option value="@item.LocationID">@($"{item.SortBy.Trim()} {item.LocationName} {item.Description} {item.State}")</option>
-                                                        }
-                                                    </select>
-                                                </td>
-                                                <td class="text-right wd-10p" style="padding:2px !important;"><input type="text" id="Date" class="form-control form-control-sm datepicker shiftdate" placeholder="Başlangıç Tarihi"></td>
-                                                <td class="text-right wd-10p" style="padding:2px !important;"><input type="text" id="Total" class="form-control form-control-sm money text-right" placeholder="Tutar"></td>
-                                                <td class="text-right wd-10p" style="padding:2px !important;"><input type="text" id="Rate" class="form-control form-control-sm money4 text-right" placeholder="Oran"></td>
-                                                @*<td class="text-right wd-15p" style="padding:2px !important;">
-                                                    <select class="form-control" id="CalculateType">
-                                                        <option value="">Hafta Seçiminiz</option>
-                                                        @foreach (var item in Model.DateLists)
-                                                        {
-                                                            <option value="@item.ID">@($"{item.Name}")</option>
-                                                        }
-                                                    </select>
-                                                </td>*@
-                                                <td class="wd-15p" style="padding:2px !important;">
-                                                    <button type="button" class="btn btn-xs btn-primary btn-block">Parametre Ekle</button>
-                                                </td>
-                                                <td class="wd-5p" style="padding:2px !important;"></td>
-
+                                        <thead>
+                                            <tr>
+                                                <th>Lokasyon</th>
+                                                <th>Hafta</th>
+                                                <th>Tarih</th>
+                                                <th></th>
                                             </tr>
-                                        </tfoot>
-                                    </table>                                   
+                                        </thead>
+                                        <tbody>
+                                            <tr class="bg-white">
+                                                <td class="" style="padding:2px !important;">
+                                                    <select class="form-control select2 w-100" id="LocationID" name="LocationID">
+                                                        <option value="">Lokasyon Seçiminiz</option>
+                                                        @foreach (var item in Model.Locations.OrderBy(x => x.SortBy))
+                                                        {
+                                                            <option value="@item.LocationID">@($"{item?.SortBy?.Trim()} {item?.LocationName} {item?.Description} {item?.State}")</option>
+                                                        }
+                                                    </select>
+                                                </td>
+
+                                                <td class="" style="padding:2px !important;">
+                                                    <select class="form-control" id="WeekCode">
+                                                        <option value="">Hafta Seçiminiz</option>
+                                                        @foreach (var item in Model.WeekLists)
+                                                        {
+                                                            <option value="@item.WeekKey">@($"{item.WeekKey}")</option>
+                                                        }
+                                                    </select>
+                                                </td>
+                                                <td class="" style="padding:2px !important;">
+                                                    <input type="text" id="Date" class="form-control form-control-sm datepicker shiftdate">
+                                                </td>
+                                                <td class="" style="padding:2px !important;">
+                                                    <button type="button" class="btn btn-primary btn-block">Hesapla</button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
                                 </div>
+                            </div>
+                            <div class="card-footer">
+                                dd
                             </div>
                         </div>
                     </div>
@@ -72,15 +84,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalLocationSchedule" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-body pd-20 pd-sm-40" id="AddLocationSchedule">
 
-            </div>
-        </div>
-    </div>
-</div>
 @section scripts {
 
 
@@ -88,6 +92,12 @@
         $(function () {
             'use strict'
             $("body").addClass("page-profile");
+
+            $('.select2').select2({
+                placeholder: 'Lokasyon Seçiminiz',
+                searchInputPlaceholder: 'Arama Seçenekleri',
+                allowClear:true
+            });
 
             $('.datepicker').datepicker({
                 showOtherMonths: true,
@@ -105,6 +115,32 @@
 
 
         });
+
+        function ComputeSalaryEarns() {
+
+            var locationid = $('#LocationID').val();
+            var date = $('#Date').val();
+            var weekcode = $('#WeekCode').val();
+
+            var data = new FormData();
+
+            data.append('locationid', locationid);
+            data.append('date', date);
+            data.append('weekcode', weekcode);
+           
+
+            $.ajax({
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                url: "/Compute/ComputeSalaryEarns",
+                data: data
+            }).done(function (d) {
+                $("#LocationParamDetail" + locationid).html(d);
+            });
+        }
 
     </script>
 
