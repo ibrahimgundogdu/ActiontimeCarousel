@@ -19,7 +19,7 @@ namespace ActionForce.Office
         public WizardModel Wizard { get; set; }
         public List<ApplicationLog> LogList { get; set; }
         public List<VEmployeeLocation> EmployeeLocationList { get; set; }
-
+        public int empID { get; set; }
 
         public IEnumerable<IdentityType> IdentityTypes { get; set; }
         public IEnumerable<OurCompany> OurList { get; set; }

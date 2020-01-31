@@ -393,6 +393,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public string IsTemp { get; set; }
         public string IsActive { get; set; }
+        public Guid? EmployeeUID { get; set; }
     }
     public class NewEmployeeLocation
     {

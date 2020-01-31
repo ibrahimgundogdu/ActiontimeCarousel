@@ -1140,13 +1140,13 @@ namespace ActionForce.Office.Controllers
                 bool isActive = !string.IsNullOrEmpty(employee.IsActive) && employee.IsActive == "1" ? true : false;
                 bool isTemp = !string.IsNullOrEmpty(employee.IsTemp) && employee.IsTemp == "1" ? true : false;
 
-                Employees empdoc = new Employees();
+                Employee empdoc = new Employee();
                 empdoc.IdentityType = employee.IdentityType;
                 empdoc.IdentityNumber = employee.IdentityNumber;
                 empdoc.Title = employee.Title;
                 empdoc.EMail = employee.EMail;
                 empdoc.FullName = employee.FullName.ToUpper();
-                empdoc.Mobile = empdoc.Mobile;
+                empdoc.Mobile = employee.Mobile;
                 empdoc.Mobile2 = employee.Mobile2;
                 empdoc.AreaCategoryID = employee.AreaCategoryID;
                 empdoc.DepartmentID = employee.DepartmentID;
@@ -1162,6 +1162,10 @@ namespace ActionForce.Office.Controllers
                 empdoc.OurCompanyID = employee.OurCompanyID;
                 empdoc.IsActive = isActive;
                 empdoc.IsTemp = isTemp;
+                empdoc.RecordDate = DateTime.Now;
+                empdoc.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                empdoc.RecordIP = OfficeHelper.GetIPAddress();
+                empdoc.EmployeeUID = Guid.NewGuid();
 
                 if (!string.IsNullOrEmpty(employee.Password))
                 {
@@ -1176,21 +1180,39 @@ namespace ActionForce.Office.Controllers
                     try
                     {
                         FotoFile.SaveAs(Path.Combine(Server.MapPath(path), filename));
+
+                        string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Employee";
+                        string targetPath = @"C:\inetpub\wwwroot\Office\img\Employee";
+                        string sourceFile = System.IO.Path.Combine(sourcePath, filename);
+                        string destFile = System.IO.Path.Combine(targetPath, filename);
+                        System.IO.File.Copy(sourceFile, destFile, true);
                     }
                     catch (Exception)
                     {
                     }
                 }
 
-                DocumentManager documentManager = new DocumentManager();
-                result = documentManager.AddEmployee(empdoc, model.Authentication);
+
+
+                Db.Employee.Add(empdoc);
+                Db.SaveChanges();
+
+                var our = Db.OurCompany.FirstOrDefault(x => x.CompanyID == empdoc.OurCompanyID);
+
+                
+                result.IsSuccess = true;
+                result.Message = "Çalışan başarı ile eklendi";
+
+                // log atılır
+                OfficeHelper.AddApplicationLog("Office", "Employee", "Insert", empdoc.EmployeeID.ToString(), "Employee", "AddEmployee", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(our.TimeZone.Value), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, empdoc);
+                
 
 
                 TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
 
                 if (result.IsSuccess == true)
                 {
-                    return RedirectToAction("Detail", "Employee", new { id = empdoc.EmployeeID });
+                    return RedirectToAction("Detail", "Employee", new { id = empdoc.EmployeeUID });
                 }
                 else
                 {
@@ -1218,76 +1240,138 @@ namespace ActionForce.Office.Controllers
                 Data = null
             };
             EmployeeControlModel model = new EmployeeControlModel();
-
-            if (employee != null)
+            using (ActionTimeEntities Db = new ActionTimeEntities())
             {
-                bool isActive = !string.IsNullOrEmpty(employee.IsActive) && employee.IsActive == "1" ? true : false;
-                bool isTemp = !string.IsNullOrEmpty(employee.IsTemp) && employee.IsTemp == "1" ? true : false;
-
-                Employees empdoc = new Employees();
-                empdoc.IdentityType = employee.IdentityType;
-                empdoc.IdentityNumber = employee.IdentityNumber;
-                empdoc.Title = employee.Title;
-                empdoc.EMail = employee.EMail;
-                empdoc.FullName = employee.FullName;
-                empdoc.Mobile = empdoc.Mobile;
-                empdoc.Mobile2 = employee.Mobile2;
-                empdoc.AreaCategoryID = employee.AreaCategoryID;
-                empdoc.DepartmentID = employee.DepartmentID;
-                empdoc.Description = employee.Description;
-                empdoc.PositionID = employee.PositionID;
-                empdoc.RoleGroupID = employee.RoleGroupID;
-                empdoc.SalaryCategoryID = employee.SalaryCategoryID;
-                empdoc.SequenceID = employee.SequenceID;
-                empdoc.ShiftTypeID = employee.ShiftTypeID;
-                empdoc.StatusID = employee.StatusID;
-                empdoc.Whatsapp = employee.Whatsapp;
-                empdoc.Username = employee.Username;
-                empdoc.OurCompanyID = employee.OurCompanyID;
-                empdoc.IsActive = isActive;
-                empdoc.IsTemp = isTemp;
-                if (!string.IsNullOrEmpty(employee.Password))
+                var isEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeUID == employee.EmployeeUID);
+                if (employee != null && isEmployee != null)
                 {
-                    empdoc.Password = OfficeHelper.makeMD5(employee.Password);
-                }
-                if (FotoFile != null && FotoFile.ContentLength > 0)
-                {
-                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(FotoFile.FileName);
-                    empdoc.FotoFile = filename;
-                    string path = "/Document/Employee";
-
                     try
                     {
-                        FotoFile.SaveAs(Path.Combine(Server.MapPath(path), filename));
+                        bool isActive = !string.IsNullOrEmpty(employee.IsActive) && employee.IsActive == "1" ? true : false;
+                        bool isTemp = !string.IsNullOrEmpty(employee.IsTemp) && employee.IsTemp == "1" ? true : false;
+
+                        var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == isEmployee.OurCompanyID);
+                        Employee self = new Employee()
+                        {
+                            EmployeeID = isEmployee.EmployeeID,
+                            FullName = isEmployee.FullName,
+                            IdentityNumber = isEmployee.IdentityNumber,
+                            EMail = isEmployee.EMail,
+                            Mobile = isEmployee.Mobile,
+                            RecordDate = isEmployee.RecordDate,
+                            RecordEmployeeID = isEmployee.RecordEmployeeID,
+                            RecordIP = isEmployee.RecordIP,
+                            AreaCategoryID = employee.AreaCategoryID,
+                            DepartmentID = isEmployee.DepartmentID,
+                            Description = isEmployee.Description,
+                            EmployeeUID = isEmployee.EmployeeUID,
+                            IsActive = isEmployee.IsActive,
+                            IsTemp = isEmployee.IsTemp,
+                            Mobile2 = isEmployee.Mobile2,
+                            Username = isEmployee.Username,
+                            Password = isEmployee.Password,
+                            PositionID = isEmployee.PositionID,
+                            RoleGroupID = isEmployee.RoleGroupID,
+                            SalaryCategoryID = isEmployee.SalaryCategoryID,
+                            SequenceID = isEmployee.SequenceID,
+                            ShiftTypeID = isEmployee.ShiftTypeID,
+                            StatusID = isEmployee.StatusID,
+                            Title = isEmployee.Title = employee.Title,
+                            Whatsapp = isEmployee.Whatsapp,
+                            OurCompanyID = isEmployee.OurCompanyID
+                            
+
+                        };
+                        isEmployee.AreaCategoryID = employee.AreaCategoryID;
+                        isEmployee.DepartmentID = employee.DepartmentID;
+                        isEmployee.Description = employee.Description;
+                        isEmployee.Mobile2 = employee.Mobile2;
+                        isEmployee.Username = employee.Username;
+                        isEmployee.Password = employee.Password;
+                        isEmployee.PositionID = employee.PositionID;
+                        isEmployee.RoleGroupID = employee.RoleGroupID;
+                        isEmployee.SalaryCategoryID = employee.SalaryCategoryID;
+                        isEmployee.SequenceID = employee.SequenceID;
+                        isEmployee.ShiftTypeID = employee.ShiftTypeID;
+                        isEmployee.StatusID = employee.StatusID;
+                        isEmployee.Title = employee.Title;
+                        isEmployee.Whatsapp = employee.Whatsapp;
+                        isEmployee.UpdateDate = DateTime.UtcNow.AddHours(ourcompany.TimeZone.Value);
+                        isEmployee.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                        isEmployee.UpdateIP = OfficeHelper.GetIPAddress();
+                        isEmployee.IdentityType = employee.IdentityType;
+                        isEmployee.IdentityNumber = employee.IdentityNumber;
+                        isEmployee.Mobile = employee.Mobile;
+                        isEmployee.FullName = employee.FullName;
+                        isEmployee.IsActive = isActive;
+                        isEmployee.IsTemp = isTemp;
+
+                        if (!string.IsNullOrEmpty(employee.Password))
+                        {
+                            isEmployee.Password = OfficeHelper.makeMD5(employee.Password);
+                        }
+                        if (FotoFile != null && FotoFile.ContentLength > 0)
+                        {
+                            string filename = Guid.NewGuid().ToString() + Path.GetExtension(FotoFile.FileName);
+                            isEmployee.FotoFile = filename;
+                            string path = "/Document/Employee";
+
+                            try
+                            {
+                                FotoFile.SaveAs(Path.Combine(Server.MapPath(path), filename));
+
+                                string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Employee";
+                                string targetPath = @"C:\inetpub\wwwroot\Office\img\Employee";
+                                string sourceFile = System.IO.Path.Combine(sourcePath, filename);
+                                string destFile = System.IO.Path.Combine(targetPath, filename);
+                                System.IO.File.Copy(sourceFile, destFile, true);
+                            }
+                            catch (Exception)
+                            {
+                            }
+                        }
+                        Db.SaveChanges();
+                        
+
+                        result.IsSuccess = true;
+                        result.Message = $"{isEmployee.EmployeeID} nolu Çalışan başarı ile Eklendi";
+
+                        
+
+                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<Employee>(self, isEmployee, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "Detail", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                        TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+                        if (result.IsSuccess == true)
+                        {
+
+                            return RedirectToAction("Edit", "Employee", new { id = isEmployee.EmployeeUID });
+                        }
+                        else
+                        {
+                            return RedirectToAction("AddEmployee", "Employee");
+                        }
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+
+                        result.Message = $"Çalışan güncellenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "Detail", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, employee);
                     }
-                }
-
-                DocumentManager documentManager = new DocumentManager();
-                result = documentManager.AddEmployee(empdoc, model.Authentication);
-
-                
-                TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
-
-                if (result.IsSuccess == true)
-                {
-                    return RedirectToAction("Edit", "Employee", new { id = empdoc.EmployeeID });
                 }
                 else
                 {
-                    return RedirectToAction("AddEmployee", "Employee");
+                    result.Message = $"Form bilgileri gelmedi.";
                 }
-            }
-            else
-            {
-                result.Message = $"Form bilgileri gelmedi.";
             }
 
             TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
             return RedirectToAction("AddEmployee", "Employee");
         }
+
+
+
 
         [HttpPost]
         [AllowAnonymous]
