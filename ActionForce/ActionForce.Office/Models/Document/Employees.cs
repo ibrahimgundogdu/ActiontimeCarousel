@@ -32,6 +32,7 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public bool? IsTemp { get; set; }
         public bool? IsActive { get; set; }
+        public Guid? EmployeeUID { get; set; }
     }
 
     

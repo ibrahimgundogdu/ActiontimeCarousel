@@ -4553,6 +4553,7 @@ namespace ActionForce.Office
                 Message = string.Empty,
                 Data = null
             };
+
             EmployeeControlModel model = new EmployeeControlModel();
             if (isemployee != null && authentication != null)
             {
@@ -4621,7 +4622,7 @@ namespace ActionForce.Office
                         var our = Db.OurCompany.FirstOrDefault(x => x.CompanyID == isemployee.OurCompanyID);
 
                         model.empID = emp.EmployeeID;
-
+                        
                         result.IsSuccess = true;
                         result.Message = "Çalışan başarı ile eklendi";
 
@@ -4651,7 +4652,7 @@ namespace ActionForce.Office
             EmployeeControlModel model = new EmployeeControlModel();
             using (ActionTimeEntities Db = new ActionTimeEntities())
             {
-                var isEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == employee.EmployeeID);
+                var isEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeUID == employee.EmployeeUID);
                 if (employee != null && authentication != null && isEmployee != null)
                 {
                     try

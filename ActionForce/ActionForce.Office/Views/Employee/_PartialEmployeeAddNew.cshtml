@@ -106,10 +106,10 @@
             <div class="form-group row bg-gray-50">
                 <label for="OurCompanyID" class="col-sm-3 col-form-label">Ülke</label>
                 <div class="col-sm-3">
-                    <select class="form-control" id="OurCompanyID" name="OurCompanyID" required>
+                    <select class="form-control" id="OurCompanyID" name="OurCompanyID" required disabled>
                         @foreach (var item in Model.OurList)
                         {
-                            <option value="@item.CompanyID">@($"{item.CompanyName}")</option>
+                            <option value="@item.CompanyID" @(Model.Authentication.ActionEmployee.OurCompanyID == item.CompanyID ? "selected" : "")>@($"{item.CompanyName}")</option>
                         }
                     </select>
                 </div>
