@@ -1181,7 +1181,7 @@ namespace ActionForce.Office.Controllers
                     {
                         FotoFile.SaveAs(Path.Combine(Server.MapPath(path), filename));
 
-                        string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Envelope";
+                        string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Employee";
                         string targetPath = @"C:\inetpub\wwwroot\Office\img\Employee";
                         string sourceFile = System.IO.Path.Combine(sourcePath, filename);
                         string destFile = System.IO.Path.Combine(targetPath, filename);
@@ -1320,7 +1320,7 @@ namespace ActionForce.Office.Controllers
                             {
                                 FotoFile.SaveAs(Path.Combine(Server.MapPath(path), filename));
 
-                                string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Envelope";
+                                string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Employee";
                                 string targetPath = @"C:\inetpub\wwwroot\Office\img\Employee";
                                 string sourceFile = System.IO.Path.Combine(sourcePath, filename);
                                 string destFile = System.IO.Path.Combine(targetPath, filename);
