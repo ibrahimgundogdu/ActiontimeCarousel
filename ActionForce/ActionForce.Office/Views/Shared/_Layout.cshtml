@@ -172,16 +172,20 @@
                 <li class="nav-item"><a href="/Location" class="nav-link"><i data-feather="map-pin"></i> <span>Lokasyonlar</span></a></li>
                 <li class="nav-label mg-t-10">Çalışan</li>
                 <li class="nav-item"><a href="/Employee" class="nav-link"><i data-feather="users"></i> <span>Çalışanlar</span></a></li>
-                
-                @if (Model.Authentication.ActionEmployee.RoleGroup.RoleLevel >= 6)
+
+               
+
+                @if (Model.Authentication.ActionEmployee.RoleGroup.RoleLevel >= 5)
                 {
                     <li class="nav-label mg-t-10">Yönetim</li>
 
-                    <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" ? "show" : "")">
+                    <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" || this.ViewContext.RouteData.Values["controller"].ToString() == "Compute" ? "show" : "")">
                         <a href="/Revenue" class="nav-link"><i data-feather="briefcase"></i> <span>Hasılat</span></a>
                         <ul>
                             <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Revenue">Hasılat Raporu</a></li>
                             <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Revenue" && this.ViewContext.RouteData.Values["action"].ToString() == "Parameters" ? "class=active" : "")><a href="/Revenue/Parameters">Parametreler</a></li>
+                            <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Compute" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Compute/Index">Hesaplamalar</a></li>
+
                         </ul>
                     </li>
                 }

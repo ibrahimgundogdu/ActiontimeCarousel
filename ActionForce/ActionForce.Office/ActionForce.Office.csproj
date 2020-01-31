@@ -2293,6 +2293,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CashController.cs" />
     <Compile Include="Controllers\CashRecorderController.cs" />
+    <Compile Include="Controllers\ComputeController.cs" />
     <Compile Include="Controllers\DefinitionController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -2314,6 +2315,7 @@
     <Compile Include="Models\AuditTrail.cs" />
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\BankActionModel.cs" />
+    <Compile Include="Models\ControlModels\ComputeControlModel.cs" />
     <Compile Include="Models\ControlModels\RevenueControlModel.cs" />
     <Compile Include="Models\CounterModel.cs" />
     <Compile Include="Models\Document\EmployeesLocation.cs" />
@@ -2612,6 +2614,7 @@
     <Content Include="Views\Employee\_PartialEmployeeLocationList.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeFoodCard.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeePeriodsDetail.cshtml" />
+    <Content Include="Views\Compute\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2621,6 +2624,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Document\Employee\" />
     <Folder Include="icons\" />
     <Folder Include="Views\Actions\" />
     <Folder Include="Views\Base\" />
