@@ -19,7 +19,7 @@
             <div class="form-group row mg-b-5 bg-gray-50">
                 <label for="Tc" class="col-sm-3 col-form-label">Kimlik Tipi</label>
                 <div class="col-sm-3">
-                    <select class="form-control" id="IdentityType" name="IdentityType" @(Model.Wizard.Identity != "" ? "readonly" : "") @(Model.Wizard.Identity != "" ? "disabled" : "")>
+                    <select class="form-control" id="IdentityType" name="IdentityType" @(Model.Wizard.Identity != "" ? "readonly" : "")>
                         @foreach (var item in Model.IdentityTypes)
                         {
                             <option value="@item.ID" @(Model.Wizard.Identity == item.TypeName ? "selected" : "")>@($"{item.TypeName}")</option>
@@ -50,7 +50,7 @@
                 </div>
             </div>
             <div class="form-group row mg-b-5 bg-gray-50">
-                <label for="Tc" class="col-sm-3 col-form-label">Email</label>
+                <label for="Email" class="col-sm-3 col-form-label">Email</label>
                 <div class="col-sm-3">
                     <input id="EMail" name="EMail" type="text" class="form-control" autocomplete="off" value="@(Model.Wizard.EMail)" @(Model.Wizard.EMail != "" ? "readonly" : "") placeholder="E-Posta Adresi">
                 </div>
@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="form-group row mg-b-5 bg-gray-50">
-                <label for="Tc" class="col-sm-3 col-form-label">Telefon</label>
+                <label for="Mobile" class="col-sm-3 col-form-label">Telefon</label>
                 <div class="col-sm-3">
                     <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" value="@(Model.Wizard.Mobile)" @(Model.Wizard.Mobile != "" ? "readonly" : "") placeholder="Telefon">
                 </div>

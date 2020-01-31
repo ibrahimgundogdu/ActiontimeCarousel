@@ -33,7 +33,7 @@
             <div class="form-group row mg-b-5">
                 <label for="FullName" class="col-sm-3 col-form-label">Kimlik Türü</label>
                 <div class="col-sm-6">
-                    <select class="form-control" id="IdentityType" name="IdentityType" @(Model.EmpList.IdentityType != null ? "readonly" : "") @(Model.EmpList.IdentityType != null ? "disabled" : "")>
+                    <select class="form-control" id="IdentityType" name="IdentityType" @(Model.EmpList.IdentityType != null ? "readonly" : "")>
                         @foreach (var item in Model.IdentityTypes)
                         {
                             <option value="@item.ID" @(item.TypeName == Model.EmpList.IdentityType ? "selected" : "")>@($"{item.TypeName}")</option>

@@ -4545,7 +4545,7 @@ namespace ActionForce.Office
 
 
 
-        public Result<Employee> AddEmployee(Employees employee, AuthenticationModel authentication)
+        public Result<Employee> AddEmployee(Employees isemployee, AuthenticationModel authentication)
         {
             Result<Employee> result = new Result<Employee>()
             {
@@ -4553,8 +4553,8 @@ namespace ActionForce.Office
                 Message = string.Empty,
                 Data = null
             };
-
-            if (employee != null && authentication != null)
+            EmployeeControlModel model = new EmployeeControlModel();
+            if (isemployee != null && authentication != null)
             {
                 using (ActionTimeEntities Db = new ActionTimeEntities())
                 {
@@ -4563,49 +4563,75 @@ namespace ActionForce.Office
                         
                         Employee emp = new Employee();
 
-                        emp.FullName = employee.FullName;
-                        emp.IdentityType = employee.IdentityType;
-                        emp.IdentityNumber = employee.IdentityNumber;
-                        emp.EMail = employee.EMail;
-                        emp.Mobile = employee.Mobile;
+                        emp.FullName = isemployee.FullName;
+                        emp.IdentityType = isemployee.IdentityType;
+                        emp.IdentityNumber = isemployee.IdentityNumber;
+                        emp.EMail = isemployee.EMail;
+                        emp.Mobile = isemployee.Mobile;
                         emp.RecordDate = DateTime.Now;
                         emp.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
                         emp.RecordIP = OfficeHelper.GetIPAddress();
-                        emp.AreaCategoryID = employee.AreaCategoryID;
-                        emp.DepartmentID = employee.DepartmentID;
-                        emp.Description = employee.Description;
+                        emp.AreaCategoryID = isemployee.AreaCategoryID;
+                        emp.DepartmentID = isemployee.DepartmentID;
+                        emp.Description = isemployee.Description;
                         emp.EmployeeUID = Guid.NewGuid();
-                        emp.IsActive = employee.IsActive;
-                        emp.IsTemp = employee.IsTemp;
-                        emp.Mobile2 = employee.Mobile2;
-                        emp.Username = employee.Username;
-                        emp.Password = employee.Password;
-                        emp.PositionID = employee.PositionID;
-                        emp.RoleGroupID = employee.RoleGroupID;
-                        emp.SalaryCategoryID = employee.SalaryCategoryID;
-                        emp.SequenceID = employee.SequenceID;
-                        emp.ShiftTypeID = employee.ShiftTypeID;
-                        emp.StatusID = employee.StatusID;
-                        emp.Title = employee.Title;
-                        emp.Whatsapp = employee.Whatsapp;
-                        emp.OurCompanyID = employee.OurCompanyID;
-                        emp.FotoFile = employee.FotoFile;
+                        emp.IsActive = isemployee.IsActive;
+                        emp.IsTemp = isemployee.IsTemp;
+                        emp.Mobile2 = isemployee.Mobile2;
+                        emp.Username = isemployee.Username;
+                        emp.Password = isemployee.Password;
+                        emp.PositionID = isemployee.PositionID;
+                        emp.RoleGroupID = isemployee.RoleGroupID;
+                        emp.SalaryCategoryID = isemployee.SalaryCategoryID;
+                        emp.SequenceID = isemployee.SequenceID;
+                        emp.ShiftTypeID = isemployee.ShiftTypeID;
+                        emp.StatusID = isemployee.StatusID;
+                        emp.Title = isemployee.Title;
+                        emp.Whatsapp = isemployee.Whatsapp;
+                        emp.OurCompanyID = isemployee.OurCompanyID;
+
+                        //try
+                        //{
+                        //    if (isemployee != null && !string.IsNullOrEmpty(isemployee.FotoFile))
+                        //    {
+                        //        try
+                        //        {
+                        //            string fileName = isemployee.FotoFile;
+                        //            string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Envelope";
+                        //            string targetPath = @"C:\inetpub\wwwroot\Office\Documents";
+                        //            string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
+                        //            string destFile = System.IO.Path.Combine(targetPath, fileName);
+                        //            System.IO.File.Copy(sourceFile, destFile, true);
+                        //            emp.FotoFile = isemployee.FotoFile;
+                        //        }
+                        //        catch (Exception ex)
+                        //        {
+                        //        }
+                        //    }
+                        //}
+                        //catch (Exception)
+                        //{
+
+                        //    throw;
+                        //}
 
                         Db.Employee.Add(emp);
                         Db.SaveChanges();
 
+                        var our = Db.OurCompany.FirstOrDefault(x => x.CompanyID == isemployee.OurCompanyID);
 
+                        model.empID = emp.EmployeeID;
 
                         result.IsSuccess = true;
                         result.Message = "Çalışan başarı ile eklendi";
 
                         // log atılır
-                        OfficeHelper.AddApplicationLog("Office", "Employee", "Insert", emp.EmployeeID.ToString(), "Employee", "AddEmployee", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, emp);
+                        OfficeHelper.AddApplicationLog("Office", "Employee", "Insert", emp.EmployeeID.ToString(), "Employee", "AddEmployee", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(our.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, emp);
                     }
                     catch (Exception ex)
                     {
                         result.Message = $"Çalışan izini eklenemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Employee", "Insert", "-1", "Employee", "AddEmployee", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, employee);
+                        OfficeHelper.AddApplicationLog("Office", "Employee", "Insert", "-1", "Employee", "AddEmployee", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isemployee);
                     }
 
                 }
@@ -4622,6 +4648,7 @@ namespace ActionForce.Office
                 Message = string.Empty,
                 Data = null
             };
+            EmployeeControlModel model = new EmployeeControlModel();
             using (ActionTimeEntities Db = new ActionTimeEntities())
             {
                 var isEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == employee.EmployeeID);
@@ -4657,7 +4684,8 @@ namespace ActionForce.Office
                             StatusID = isEmployee.StatusID,
                             Title = isEmployee.Title = employee.Title,
                             Whatsapp = isEmployee.Whatsapp,
-                            OurCompanyID = isEmployee.OurCompanyID
+                            OurCompanyID = isEmployee.OurCompanyID,
+                            
                     };
                         isEmployee.AreaCategoryID = employee.AreaCategoryID;
                         isEmployee.DepartmentID = employee.DepartmentID;
@@ -4677,8 +4705,39 @@ namespace ActionForce.Office
                         isEmployee.UpdateDate = DateTime.UtcNow.AddHours(ourcompany.TimeZone.Value);
                         isEmployee.UpdateEmployeeID = authentication.ActionEmployee.EmployeeID;
                         isEmployee.UpdateIP = OfficeHelper.GetIPAddress();
+                        isEmployee.IdentityType = employee.IdentityType;
+                        isEmployee.IdentityNumber = employee.IdentityNumber;
+                        isEmployee.Mobile = employee.Mobile;
+                        isEmployee.FullName = employee.FullName;
+                        
 
+                        //try
+                        //{
+                        //    if (employee != null && !string.IsNullOrEmpty(employee.FotoFile))
+                        //    {
+                        //        try
+                        //        {
+                        //            string fileName = employee.FotoFile;
+                        //            string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Envelope";
+                        //            string targetPath = @"C:\inetpub\wwwroot\Office\Documents";
+                        //            string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
+                        //            string destFile = System.IO.Path.Combine(targetPath, fileName);
+                        //            System.IO.File.Copy(sourceFile, destFile, true);
+                        //            isEmployee.FotoFile = employee.FotoFile;
+                        //        }
+                        //        catch (Exception ex)
+                        //        {
+                        //        }
+                        //    }
+                        //}
+                        //catch (Exception)
+                        //{
+
+                        //    throw;
+                        //}
                         Db.SaveChanges();
+
+                        model.empID = isEmployee.EmployeeID;
 
                         result.IsSuccess = true;
                         result.Message = $"{isEmployee.EmployeeID} nolu Çalışan başarı ile Eklendi";

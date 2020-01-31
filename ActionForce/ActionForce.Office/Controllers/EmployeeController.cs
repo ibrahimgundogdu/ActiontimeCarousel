@@ -1146,7 +1146,7 @@ namespace ActionForce.Office.Controllers
                 empdoc.Title = employee.Title;
                 empdoc.EMail = employee.EMail;
                 empdoc.FullName = employee.FullName.ToUpper();
-                empdoc.Mobile = empdoc.Mobile;
+                empdoc.Mobile = employee.Mobile;
                 empdoc.Mobile2 = employee.Mobile2;
                 empdoc.AreaCategoryID = employee.AreaCategoryID;
                 empdoc.DepartmentID = employee.DepartmentID;
@@ -1176,11 +1176,31 @@ namespace ActionForce.Office.Controllers
                     try
                     {
                         FotoFile.SaveAs(Path.Combine(Server.MapPath(path), filename));
+
+                        string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Envelope";
+                        string targetPath = @"C:\inetpub\wwwroot\Office\Documents";
+                        string sourceFile = System.IO.Path.Combine(sourcePath, filename);
+                        string destFile = System.IO.Path.Combine(targetPath, filename);
+                        System.IO.File.Copy(sourceFile, destFile, true);
                     }
                     catch (Exception)
                     {
                     }
                 }
+
+
+
+                //Db.Employee.Add(empdoc);
+                //Db.SaveChanges();
+
+                //var our = Db.OurCompany.FirstOrDefault(x => x.CompanyID == empdoc.OurCompanyID);
+
+
+                //result.IsSuccess = true;
+                //result.Message = "Çalışan başarı ile eklendi";
+
+                //// log atılır
+                //OfficeHelper.AddApplicationLog("Office", "Employee", "Insert", empdoc.EmployeeID.ToString(), "Employee", "AddEmployee", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(our.TimeZone.Value), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, empdoc);
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.AddEmployee(empdoc, model.Authentication);
@@ -1190,7 +1210,9 @@ namespace ActionForce.Office.Controllers
 
                 if (result.IsSuccess == true)
                 {
-                    return RedirectToAction("Detail", "Employee", new { id = empdoc.EmployeeID });
+                    //var emp = Db.Employee.FirstOrDefault(x => x.EmployeeID == empdoc.EmployeeID);
+                    //return RedirectToAction("Detail", "Employee", new { id = emp.EmployeeUID });
+                    return RedirectToAction("AddEmployee", "Employee");
                 }
                 else
                 {
@@ -1229,8 +1251,8 @@ namespace ActionForce.Office.Controllers
                 empdoc.IdentityNumber = employee.IdentityNumber;
                 empdoc.Title = employee.Title;
                 empdoc.EMail = employee.EMail;
-                empdoc.FullName = employee.FullName;
-                empdoc.Mobile = empdoc.Mobile;
+                empdoc.FullName = employee.FullName.ToUpper();
+                empdoc.Mobile = employee.Mobile;
                 empdoc.Mobile2 = employee.Mobile2;
                 empdoc.AreaCategoryID = employee.AreaCategoryID;
                 empdoc.DepartmentID = employee.DepartmentID;
@@ -1259,6 +1281,12 @@ namespace ActionForce.Office.Controllers
                     try
                     {
                         FotoFile.SaveAs(Path.Combine(Server.MapPath(path), filename));
+
+                        string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Envelope";
+                        string targetPath = @"C:\inetpub\wwwroot\Office\Documents";
+                        string sourceFile = System.IO.Path.Combine(sourcePath, filename);
+                        string destFile = System.IO.Path.Combine(targetPath, filename);
+                        System.IO.File.Copy(sourceFile, destFile, true);
                     }
                     catch (Exception)
                     {
@@ -1266,14 +1294,17 @@ namespace ActionForce.Office.Controllers
                 }
 
                 DocumentManager documentManager = new DocumentManager();
-                result = documentManager.AddEmployee(empdoc, model.Authentication);
-
+                result = documentManager.EditEmployee(empdoc, model.Authentication);
+                
                 
                 TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
 
                 if (result.IsSuccess == true)
                 {
-                    return RedirectToAction("Edit", "Employee", new { id = empdoc.EmployeeID });
+                    //var emp = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.empID);
+
+                    //return RedirectToAction("Edit", "Employee", new { id = emp.EmployeeUID });
+                    return RedirectToAction("AddEmployee", "Employee");
                 }
                 else
                 {
