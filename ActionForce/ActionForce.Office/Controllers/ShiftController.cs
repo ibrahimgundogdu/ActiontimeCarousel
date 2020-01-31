@@ -398,7 +398,7 @@ namespace ActionForce.Office.Controllers
 
             var locationshift = Db.LocationShift.FirstOrDefault(x => x.ID == ShiftID);
 
-            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == locationshift.ShiftDate);
+            var datekey = locationshift.ShiftDate.ToString("yyyy-MM-dd");
 
             DateTime? shiftBeginDate = null;
             DateTime? shiftEndDate = null;
@@ -416,10 +416,7 @@ namespace ActionForce.Office.Controllers
                     shiftBeginDate = shiftBeginDate.Value.Add(shiftBeginTime);
                 }
             }
-            else
-            {
-                locationshift.ShiftDateStart = null;
-            }
+            
 
             if (!string.IsNullOrEmpty(ShiftEndDate))
             {
@@ -433,24 +430,18 @@ namespace ActionForce.Office.Controllers
                     shiftEndDate = shiftEndDate.Value.Add(shiftEndTime);
                 }
             }
-            else
+
+            LShift eshift = new LShift()
             {
-                locationshift.ShiftDateFinish = null;
-            }
+                ID = (int)ShiftID,
+                StartDate = shiftBeginDate,
+                EndDate = shiftEndDate
+            };
 
-            if (shiftBeginDate != null && shiftBeginDate is DateTime)
-            {
-                locationshift.ShiftDateStart = shiftBeginDate;
-            }
+            DocumentManager document = new DocumentManager();
+            TempData["result"] = document.EditLocationShift(eshift, model.Authentication);
 
-            if (shiftEndDate != null && shiftEndDate is DateTime)
-            {
-                locationshift.ShiftDateFinish = shiftEndDate;
-            }
-
-            Db.SaveChanges();
-
-            return RedirectToAction("LocationShift", new { date = datekey.DateKey.ToString("yyyy-MM-dd") });
+            return RedirectToAction("Index", "Shift", new { date = datekey });
         }
 
         [AllowAnonymous]
@@ -479,10 +470,7 @@ namespace ActionForce.Office.Controllers
                     shiftBeginDate = shiftBeginDate.Value.Add(shiftBeginTime);
                 }
             }
-            else
-            {
-                employeeshift.ShiftDateStart = null;
-            }
+            
 
             if (!string.IsNullOrEmpty(ShiftEndDate))
             {
@@ -496,24 +484,18 @@ namespace ActionForce.Office.Controllers
                     shiftEndDate = shiftEndDate.Value.Add(shiftEndTime);
                 }
             }
-            else
+
+            EShift eshift = new EShift()
             {
-                employeeshift.ShiftDateEnd = null;
-            }
+                ID = (int)ShiftID,
+                StartDate = shiftBeginDate,
+                EndDate = shiftEndDate
+            };
 
-            if (shiftBeginDate != null && shiftBeginDate is DateTime)
-            {
-                employeeshift.ShiftDateStart = shiftBeginDate;
-            }
+            DocumentManager document = new DocumentManager();
+            TempData["result"] = document.EditEmployeeShift(eshift, model.Authentication);
 
-            if (shiftEndDate != null && shiftEndDate is DateTime)
-            {
-                employeeshift.ShiftDateEnd = shiftEndDate;
-            }
-
-            Db.SaveChanges();
-
-            return RedirectToAction("Index", new { date = datekey.DateKey.ToString("yyyy-MM-dd") });
+            return RedirectToAction("Index","Shift", new { date = datekey.DateKey.ToString("yyyy-MM-dd") });
         }
 
         [AllowAnonymous]
@@ -524,11 +506,13 @@ namespace ActionForce.Office.Controllers
 
             string datekey = string.Empty;
 
+            List<EBreak> breaks = new List<EBreak>();
+
             foreach (var item in employeebreaks)
             {
                 var employeebreak = Db.EmployeeShift.FirstOrDefault(x => x.ID == item.ShiftID);
 
-                datekey = Db.DateList.FirstOrDefault(x => x.DateKey == employeebreak.ShiftDate)?.DateKey.ToString("yyyy-MM-dd");
+                datekey = employeebreak.ShiftDate?.ToString("yyyy-MM-dd");
 
                 DateTime? breakBeginDate = null;
                 DateTime? breakEndDate = null;
@@ -546,10 +530,7 @@ namespace ActionForce.Office.Controllers
                         breakBeginDate = breakBeginDate.Value.Add(breakBeginTime);
                     }
                 }
-                else
-                {
-                    employeebreak.BreakDateStart = null;
-                }
+                
 
                 if (!string.IsNullOrEmpty(item.BreakEndDate))
                 {
@@ -563,27 +544,16 @@ namespace ActionForce.Office.Controllers
                         breakEndDate = breakEndDate.Value.Add(breakEndTime);
                     }
                 }
-                else
-                {
-                    employeebreak.BreakDateEnd = null;
-                }
 
-                if (breakBeginDate != null && breakBeginDate is DateTime)
-                {
-                    employeebreak.BreakDateStart = breakBeginDate;
-                }
+                breaks.Add(new EBreak() { ID = item.ShiftID, StartDate = breakBeginDate, EndDate = breakEndDate });
 
-                if (breakEndDate != null && breakEndDate is DateTime)
-                {
-                    employeebreak.BreakDateEnd = breakEndDate;
-                }
-
-                Db.SaveChanges();
+                
             }
 
+            DocumentManager document = new DocumentManager();
+            TempData["result"] = document.EditEmployeeBreak(breaks, model.Authentication);
 
-
-            return RedirectToAction("Index", new { date = datekey });
+            return RedirectToAction("Index", "Shift", new { date = datekey });
         }
 
 

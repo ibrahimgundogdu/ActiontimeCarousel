@@ -2329,6 +2329,7 @@
     <Compile Include="Models\ControlModels\DefinitionControlModel.cs" />
     <Compile Include="Models\Document\BankTransfer.cs" />
     <Compile Include="Models\Document\CashRecorder.cs" />
+    <Compile Include="Models\Document\EShift.cs" />
     <Compile Include="Models\Document\LocationManager.cs" />
     <Compile Include="Models\Document\PosCancel.cs" />
     <Compile Include="Models\Document\PosRefund.cs" />

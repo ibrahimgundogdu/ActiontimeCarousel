@@ -4561,7 +4561,7 @@ namespace ActionForce.Office
                 {
                     try
                     {
-                        
+
                         Employee emp = new Employee();
 
                         emp.FullName = isemployee.FullName;
@@ -4622,7 +4622,7 @@ namespace ActionForce.Office
                         var our = Db.OurCompany.FirstOrDefault(x => x.CompanyID == isemployee.OurCompanyID);
 
                         model.empID = emp.EmployeeID;
-                        
+
                         result.IsSuccess = true;
                         result.Message = "Çalışan başarı ile eklendi";
 
@@ -4686,8 +4686,8 @@ namespace ActionForce.Office
                             Title = isEmployee.Title = employee.Title,
                             Whatsapp = isEmployee.Whatsapp,
                             OurCompanyID = isEmployee.OurCompanyID,
-                            
-                    };
+
+                        };
                         isEmployee.AreaCategoryID = employee.AreaCategoryID;
                         isEmployee.DepartmentID = employee.DepartmentID;
                         isEmployee.Description = employee.Description;
@@ -4710,7 +4710,7 @@ namespace ActionForce.Office
                         isEmployee.IdentityNumber = employee.IdentityNumber;
                         isEmployee.Mobile = employee.Mobile;
                         isEmployee.FullName = employee.FullName;
-                        
+
 
                         //try
                         //{
@@ -4754,7 +4754,7 @@ namespace ActionForce.Office
                     }
                 }
             }
-            
+
 
             return result;
         }
@@ -4834,7 +4834,7 @@ namespace ActionForce.Office
                         isEmployee.LocationID = location.LocationID;
                         isEmployee.IsMaster = location.IsMaster;
                         isEmployee.IsActive = location.IsActive;
-                        
+
                         Db.SaveChanges();
 
 
@@ -4846,7 +4846,7 @@ namespace ActionForce.Office
                         var isequal = OfficeHelper.PublicInstancePropertiesEqual<EmployeeLocation>(emp, isEmployee, OfficeHelper.getIgnorelist());
                         OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "AddEmployeeLocation", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -4858,7 +4858,274 @@ namespace ActionForce.Office
 
             return result;
         }
-        
+
+
+        public Result<EmployeeShift> EditLocationShift(LShift shift, AuthenticationModel authentication)
+        {
+            Result<EmployeeShift> result = new Result<EmployeeShift>()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var isShift = Db.LocationShift.FirstOrDefault(x => x.ID == shift.ID);
+
+                if (isShift != null && authentication != null && (shift.StartDate != null || shift.EndDate != null))
+                {
+                    var location = Db.Location.FirstOrDefault(x => x.LocationID == isShift.LocationID);
+                    try
+                    {
+                        LocationShift self = new LocationShift()
+                        {
+                            EnvironmentID = isShift.EnvironmentID,
+                            ID = isShift.ID,
+                            CloseEnvironmentID = isShift.CloseEnvironmentID,
+                            Duration = isShift.Duration,
+                            DurationMinute = isShift.DurationMinute,
+                            EmployeeID = isShift.EmployeeID,
+                            FromMobileFinish = isShift.FromMobileFinish,
+                            FromMobileStart = isShift.FromMobileStart,
+                            LatitudeFinish = isShift.LatitudeFinish,
+                            LatitudeStart = isShift.LatitudeStart,
+                            LocationID = isShift.LocationID,
+                            LongitudeFinish = isShift.LongitudeFinish,
+                            LongitudeStart = isShift.LongitudeStart,
+                            RecordDate = isShift.RecordDate,
+                            RecordEmployeeID = isShift.RecordEmployeeID,
+                            ShiftDate = isShift.ShiftDate,
+                            ShiftDateFinish = isShift.ShiftDateFinish,
+                            ShiftDateStart = isShift.ShiftDateStart,
+                            EmployeeIDFinish = isShift.EmployeeIDFinish,
+                            ShiftFinish = isShift.ShiftFinish,
+                            ShiftStart = isShift.ShiftStart,
+                            UpdateDate = isShift.UpdateDate,
+                            UpdateEmployeeID = isShift.UpdateEmployeeID
+
+                        };
+
+                        isShift.ShiftDateStart = shift.StartDate;
+                        isShift.ShiftStart = shift.StartDate?.TimeOfDay ?? null;
+                        isShift.ShiftDateFinish = shift.EndDate;
+                        isShift.ShiftFinish = shift.EndDate?.TimeOfDay ?? null;
+
+                        Db.SaveChanges();
+
+                        result.IsSuccess = true;
+                        result.Message = $"{shift.ID} id li lokasyon mesaisi başarı ile gündellendi";
+
+                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<LocationShift>(self, isShift, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "LocationShift", "Update", isShift.ID.ToString(), "Shift", "UpdateLocationShift", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"lokasyon mesaisi güncellenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "LocationShift", "Update", shift.ID.ToString(), "Shift", "UpdateLocationShift", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+                else if (isShift != null && authentication != null && shift.StartDate == null && shift.EndDate == null)
+                {
+                    var location = Db.Location.FirstOrDefault(x => x.LocationID == isShift.LocationID);
+
+                    result.IsSuccess = true;
+                    result.Message = $"{shift.ID} id li lokasyon mesaisi başarı ile silindi";
+
+                    OfficeHelper.AddApplicationLog("Office", "LocationShift", "Delete", shift.ID.ToString(), "Shift", "UpdateLocationShift", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isShift);
+
+                    Db.LocationShift.Remove(isShift);
+                    Db.SaveChanges();
+                }
+            }
+
+
+            return result;
+        }
+
+        public Result<EmployeeShift> EditEmployeeShift(EShift shift, AuthenticationModel authentication)
+        {
+            Result<EmployeeShift> result = new Result<EmployeeShift>()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var isShift = Db.EmployeeShift.FirstOrDefault(x => x.ID == shift.ID);
+
+                if (isShift != null && authentication != null && (shift.StartDate != null || shift.EndDate != null))
+                {
+                    var location = Db.Location.FirstOrDefault(x => x.LocationID == isShift.LocationID);
+                    try
+                    {
+                        EmployeeShift self = new EmployeeShift()
+                        {
+                            BreakDateEnd = isShift.BreakDateEnd,
+                            EnvironmentID = isShift.EnvironmentID,
+                            ID = isShift.ID,
+                            BreakDateStart = isShift.BreakDateStart,
+                            BreakDuration = isShift.BreakDuration,
+                            BreakDurationMinute = isShift.BreakDurationMinute,
+                            BreakEnd = isShift.BreakEnd,
+                            BreakStart = isShift.BreakStart,
+                            BreakTypeID = isShift.BreakTypeID,
+                            CloseEnvironmentID = isShift.CloseEnvironmentID,
+                            Duration = isShift.Duration,
+                            DurationMinute = isShift.DurationMinute,
+                            EmployeeID = isShift.EmployeeID,
+                            FromMobileFinish = isShift.FromMobileFinish,
+                            FromMobileStart = isShift.FromMobileStart,
+                            IsBreakTime = isShift.IsBreakTime,
+                            IsWorkTime = isShift.IsWorkTime,
+                            LatitudeFinish = isShift.LatitudeFinish,
+                            LatitudeStart = isShift.LatitudeStart,
+                            LocationID = isShift.LocationID,
+                            LongitudeFinish = isShift.LongitudeFinish,
+                            LongitudeStart = isShift.LongitudeStart,
+                            RecordDate = isShift.RecordDate,
+                            RecordEmployeeID = isShift.RecordEmployeeID,
+                            ShiftDate = isShift.ShiftDate,
+                            ShiftDateEnd = isShift.ShiftDateEnd,
+                            ShiftDateStart = isShift.ShiftDateStart,
+                            ShiftDuration = isShift.ShiftDuration,
+                            ShiftEnd = isShift.ShiftEnd,
+                            ShiftStart = isShift.ShiftStart,
+                            UpdateDate = isShift.UpdateDate,
+                            UpdateEmployeeID = isShift.UpdateEmployeeID
+
+                        };
+
+                        isShift.ShiftDateStart = shift.StartDate;
+                        isShift.ShiftStart = shift.StartDate?.TimeOfDay ?? null;
+                        isShift.ShiftDateEnd = shift.EndDate;
+                        isShift.ShiftEnd = shift.EndDate?.TimeOfDay ?? null;
+
+                        Db.SaveChanges();
+
+                        result.IsSuccess = true;
+                        result.Message = $"{shift.ID} id li mesai başarı ile gündellendi";
+
+                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<EmployeeShift>(self, isShift, OfficeHelper.getIgnorelist());
+                        OfficeHelper.AddApplicationLog("Office", "EmployeeShift", "Update", isShift.ID.ToString(), "Shift", "UpdateEmployeeShift", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"mesai güncellenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "EmployeeShift", "Update", shift.ID.ToString(), "Shift", "UpdateEmployeeShift", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+                else if (isShift != null && authentication != null && shift.StartDate == null && shift.EndDate == null)
+                {
+                    var location = Db.Location.FirstOrDefault(x => x.LocationID == isShift.LocationID);
+
+                    result.IsSuccess = true;
+                    result.Message = $"{shift.ID} id li mesai başarı ile silindi";
+
+                    OfficeHelper.AddApplicationLog("Office", "EmployeeShift", "Delete", shift.ID.ToString(), "Shift", "UpdateEmployeeShift", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isShift);
+
+                    Db.EmployeeShift.Remove(isShift);
+                    Db.SaveChanges();
+                }
+            }
+
+
+            return result;
+        }
+
+        public Result<EmployeeShift> EditEmployeeBreak(List<EBreak> breaks, AuthenticationModel authentication)
+        {
+            Result<EmployeeShift> result = new Result<EmployeeShift>()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                foreach (var shift in breaks)
+                {
+                    var isShift = Db.EmployeeShift.FirstOrDefault(x => x.ID == shift.ID);
+
+                    if (isShift != null && authentication != null && (shift.StartDate != null || shift.EndDate != null))
+                    {
+                        var location = Db.Location.FirstOrDefault(x => x.LocationID == isShift.LocationID);
+                        try
+                        {
+                            EmployeeShift self = new EmployeeShift()
+                            {
+                                BreakDateEnd = isShift.BreakDateEnd,
+                                EnvironmentID = isShift.EnvironmentID,
+                                ID = isShift.ID,
+                                BreakDateStart = isShift.BreakDateStart,
+                                BreakDuration = isShift.BreakDuration,
+                                BreakDurationMinute = isShift.BreakDurationMinute,
+                                BreakEnd = isShift.BreakEnd,
+                                BreakStart = isShift.BreakStart,
+                                BreakTypeID = isShift.BreakTypeID,
+                                CloseEnvironmentID = isShift.CloseEnvironmentID,
+                                Duration = isShift.Duration,
+                                DurationMinute = isShift.DurationMinute,
+                                EmployeeID = isShift.EmployeeID,
+                                FromMobileFinish = isShift.FromMobileFinish,
+                                FromMobileStart = isShift.FromMobileStart,
+                                IsBreakTime = isShift.IsBreakTime,
+                                IsWorkTime = isShift.IsWorkTime,
+                                LatitudeFinish = isShift.LatitudeFinish,
+                                LatitudeStart = isShift.LatitudeStart,
+                                LocationID = isShift.LocationID,
+                                LongitudeFinish = isShift.LongitudeFinish,
+                                LongitudeStart = isShift.LongitudeStart,
+                                RecordDate = isShift.RecordDate,
+                                RecordEmployeeID = isShift.RecordEmployeeID,
+                                ShiftDate = isShift.ShiftDate,
+                                ShiftDateEnd = isShift.ShiftDateEnd,
+                                ShiftDateStart = isShift.ShiftDateStart,
+                                ShiftDuration = isShift.ShiftDuration,
+                                ShiftEnd = isShift.ShiftEnd,
+                                ShiftStart = isShift.ShiftStart,
+                                UpdateDate = isShift.UpdateDate,
+                                UpdateEmployeeID = isShift.UpdateEmployeeID
+
+                            };
+
+                            isShift.BreakDateStart = shift.StartDate;
+                            isShift.BreakStart = shift.StartDate?.TimeOfDay ?? null;
+                            isShift.BreakDateEnd = shift.EndDate;
+                            isShift.BreakEnd = shift.EndDate?.TimeOfDay ?? null;
+
+                            Db.SaveChanges();
+
+                            result.IsSuccess = true;
+                            result.Message += $"{shift.ID} id li mola başarı ile gündellendi";
+
+                            var isequal = OfficeHelper.PublicInstancePropertiesEqual<EmployeeShift>(self, isShift, OfficeHelper.getIgnorelist());
+                            OfficeHelper.AddApplicationLog("Office", "EmployeeShift", "Update", isShift.ID.ToString(), "Shift", "UpdateEmployeeBreaks", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        }
+                        catch (Exception ex)
+                        {
+                            result.Message += $"mola güncellenemedi : {ex.Message}";
+                            OfficeHelper.AddApplicationLog("Office", "EmployeeShift", "Update", shift.ID.ToString(), "Shift", "UpdateEmployeeBreaks", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        }
+                    }
+                    else if (isShift != null && authentication != null && shift.StartDate == null && shift.EndDate == null)
+                    {
+                        var location = Db.Location.FirstOrDefault(x => x.LocationID == isShift.LocationID);
+
+                        result.IsSuccess = true;
+                        result.Message += $"{shift.ID} id li mola başarı ile silindi";
+
+                        OfficeHelper.AddApplicationLog("Office", "EmployeeShift", "Delete", shift.ID.ToString(), "Shift", "UpdateEmployeeBreaks", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isShift);
+
+                        Db.EmployeeShift.Remove(isShift);
+                        Db.SaveChanges();
+                    }
+                }
+            }
+
+
+            return result;
+        }
 
     }
 }
