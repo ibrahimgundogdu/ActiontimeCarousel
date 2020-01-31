@@ -31,7 +31,7 @@
                     <small class="tx-12 tx-color-03">@(param.UpdateDate ?? param.RecordDate)</small>
                 </td>
                 <td class="text-center">
-                    <button type="button" class="btn btn-icon btn-xs" onclick="confirm('Silmek İstediğinize Emin misiniz?') ? DeleteEmployeePeriods(@(param.ID),@(param.EmployeeID)) : ''">
+                    <button type="button" class="btn btn-icon btn-xs" onclick="confirm('Silmek İstediğinize Emin misiniz?') ? DeleteEmployeePeriods(@(param.ID)) : ''">
                         <i class="tx-danger" data-feather="trash"></i> &nbsp;
                     </button>
                 </td>

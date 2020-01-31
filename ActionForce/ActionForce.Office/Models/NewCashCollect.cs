@@ -401,4 +401,14 @@ namespace ActionForce.Office
         public string IsMaster { get; set; }
         public string IsActive { get; set; }
     }
+    public class NewPeriods
+    {
+        public int ID { get; set; }
+        public int EmployeeID { get; set; }
+        public int OurCompanyID { get; set; }
+        public string startdate { get; set; }
+        public string enddate { get; set; }
+        public string FinalFinishDate { get; set; }
+        public string Description { get; set; }
+    }
 }

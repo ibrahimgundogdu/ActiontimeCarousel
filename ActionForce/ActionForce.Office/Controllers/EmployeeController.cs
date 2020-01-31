@@ -1205,12 +1205,20 @@ namespace ActionForce.Office.Controllers
 
             if (employee != null)
             {
-                Employees empdoc = new Employees();
+                bool isActive = !string.IsNullOrEmpty(employee.IsActive) && employee.IsActive == "1" ? true : false;
+                bool isTemp = !string.IsNullOrEmpty(employee.IsTemp) && employee.IsTemp == "1" ? true : false;
 
+                Employees empdoc = new Employees();
+                empdoc.IdentityType = employee.IdentityType;
+                empdoc.IdentityNumber = employee.IdentityNumber;
+                empdoc.Title = employee.Title;
+                empdoc.EMail = employee.EMail;
+                empdoc.FullName = employee.FullName;
+                empdoc.Mobile = empdoc.Mobile;
+                empdoc.Mobile2 = employee.Mobile2;
                 empdoc.AreaCategoryID = employee.AreaCategoryID;
                 empdoc.DepartmentID = employee.DepartmentID;
                 empdoc.Description = employee.Description;
-                empdoc.Mobile2 = employee.Mobile2;
                 empdoc.PositionID = employee.PositionID;
                 empdoc.RoleGroupID = employee.RoleGroupID;
                 empdoc.SalaryCategoryID = employee.SalaryCategoryID;
@@ -1220,6 +1228,8 @@ namespace ActionForce.Office.Controllers
                 empdoc.Whatsapp = employee.Whatsapp;
                 empdoc.Username = employee.Username;
                 empdoc.OurCompanyID = employee.OurCompanyID;
+                empdoc.IsActive = isActive;
+                empdoc.IsTemp = isTemp;
                 if (!string.IsNullOrEmpty(employee.Password))
                 {
                     empdoc.Password = OfficeHelper.makeMD5(employee.Password);
@@ -1247,7 +1257,7 @@ namespace ActionForce.Office.Controllers
 
                 if (result.IsSuccess == true)
                 {
-                    return RedirectToAction("Detail", "Employee", new { id = empdoc.EmployeeID });
+                    return RedirectToAction("Edit", "Employee", new { id = empdoc.EmployeeID });
                 }
                 else
                 {
@@ -1340,6 +1350,129 @@ namespace ActionForce.Office.Controllers
             TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
 
             return PartialView("_PartialEmployeeLocationList", model);
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddEmployeePeriods(NewPeriods period)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
+            var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == period.EmployeeID);
+            var isperiod = Db.EmployeePeriods.FirstOrDefault(x => x.EmployeeID == period.EmployeeID);
+            if (isperiod?.ContractStartDate != null)
+            {
+                if (isperiod.ContractFinishDate == null)
+                {
+                    return RedirectToAction("Edit", new { id = employee.EmployeeUID });
+                }
+            }
+            if (!string.IsNullOrEmpty(period.startdate))
+            {
+                DateTime startDate = Convert.ToDateTime(period.startdate);
+                DateTime? endDate = !string.IsNullOrEmpty(period.enddate) ? Convert.ToDateTime(period.enddate) : (DateTime?)null;
+
+                if (employee != null)
+                {
+
+                    EmployeePeriods param = new EmployeePeriods();
+                    param.ContractStartDate = startDate;
+                    param.ContractFinishDate = endDate;
+                    param.OurCompanyID = period.EmployeeID;
+                    param.RecordDate = DateTime.UtcNow.AddHours(3);
+                    param.RecordedEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    param.RecordIP = OfficeHelper.GetIPAddress();
+                    param.Description = period.Description;
+                    param.OurCompanyID = period.OurCompanyID;
+
+                    Db.EmployeePeriods.Add(param);
+                    Db.SaveChanges();
+
+                    OfficeHelper.AddApplicationLog("Office", "EmployeePeriods", "Insert", param.ID.ToString(), "Employee", "AddPeriodParameter", null, true, $"Çalışan Periyot Parametresi Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, param);
+
+                }
+            }
+            
+            model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == period.EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeePeriodsDetail", model);
+        }
+
+        [HttpPost]
+        public PartialViewResult EditEmployeePeriods(NewPeriods period)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            var periodParameter = Db.EmployeePeriods.FirstOrDefault(x => x.ID == period.ID);
+
+            if (!string.IsNullOrEmpty(period.startdate))
+            {
+
+                DateTime startDate = Convert.ToDateTime(period.startdate);
+                DateTime? endDate = !string.IsNullOrEmpty(period.enddate) ? Convert.ToDateTime(period.enddate) : (DateTime?)null;
+
+                var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == periodParameter.EmployeeID);
+
+                if (periodParameter != null && employee != null)
+                {
+
+                    EmployeePeriods self = new EmployeePeriods ()
+                    {
+                        ID = periodParameter.ID,
+                        FinalFinishDate = periodParameter.FinalFinishDate,
+                        Description = periodParameter.Description,
+                        ContractStartDate = periodParameter.ContractStartDate,
+                        ContractFinishDate = periodParameter.ContractFinishDate,
+                        EmployeeID = periodParameter.EmployeeID,
+                        OurCompanyID = periodParameter.OurCompanyID,
+                        RecordDate = periodParameter.RecordDate,
+                        RecordedEmployeeID = periodParameter.RecordedEmployeeID,
+                        UpdateEmployeeID = periodParameter.UpdateEmployeeID,
+                        RecordIP = periodParameter.RecordIP,
+                        UpdateDate = periodParameter.UpdateDate,
+                        UpdateIP = periodParameter.UpdateIP
+                    };
+
+                    periodParameter.ContractStartDate = startDate;
+                    periodParameter.ContractFinishDate = endDate;
+                    periodParameter.Description = period.Description;
+                    periodParameter.UpdateDate = DateTime.UtcNow.AddHours(3);
+                    periodParameter.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    periodParameter.UpdateIP = OfficeHelper.GetIPAddress();
+
+
+                    Db.SaveChanges();
+
+                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<EmployeePeriods>(self, periodParameter, OfficeHelper.getIgnorelist());
+                    OfficeHelper.AddApplicationLog("Office", "EmployeePeriods", "Update", periodParameter.ID.ToString(), "Employee", "EditEmployeePeriods", isequal, true, $"{periodParameter.ID} ID li Çalışan Periyodu Güncellendi", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                }
+                
+            }
+
+            model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == period.EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeePeriodsDetail", model);
+        }
+
+        [HttpPost]
+        public PartialViewResult DeleteEmployeePeriods(int id)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            var periodParameter = Db.EmployeePeriods.FirstOrDefault(x => x.ID == id);
+            var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == periodParameter.EmployeeID);
+
+            if (periodParameter != null && employee != null)
+            {
+                OfficeHelper.AddApplicationLog("Office", "EmployeePeriods", "Delete", id.ToString(), "Employee", "DeleteEmployeePeriods", null, true, $"Çalışan Periyodu Silindi", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, periodParameter);
+
+                Db.EmployeePeriods.Remove(periodParameter);
+                Db.SaveChanges();
+            }
+            
+            model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == employee.EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeePeriodsDetail", model);
         }
     }
 }

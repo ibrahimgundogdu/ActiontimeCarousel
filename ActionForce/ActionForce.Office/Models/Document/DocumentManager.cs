@@ -4699,6 +4699,8 @@ namespace ActionForce.Office
             return result;
         }
 
+
+
         public Result<EmployeeLocation> AddEmployeeLocation(EmployeesLocation location, AuthenticationModel authentication)
         {
             Result<EmployeeLocation> result = new Result<EmployeeLocation>()
@@ -4796,6 +4798,7 @@ namespace ActionForce.Office
 
             return result;
         }
+        
 
     }
 }

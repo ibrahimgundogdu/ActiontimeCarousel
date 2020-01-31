@@ -88,31 +88,36 @@
                                         </div><!-- card-header -->
                                         <div class="card-body pd-y-10 pd-x-10">
                                             <div class="table-responsive">
-                                                
-                                                <table class="table table-warning table-sm tx-13 tx-nowrap mb-0">
-                                                    <tbody>
-                                                        <tr class="bg-white">
-                                                            <td class="wd-5p"></td>
-                                                            <td class="tx-medium wd-20p" style="padding:2px !important;">
-                                                                <select class="form-control" id="OurID@(Model.EmpList.EmployeeID)" required>
-                                                                    @foreach (var item in Model.OurList)
-                                                                    {
-                                                                        <option value="@item.CompanyID">@($"{item.CompanyName}")</option>
-                                                                    }
-                                                                </select>
-                                                            </td>
-                                                            <td class="text-right wd-10p" style="padding:2px !important;"><input type="text" id="StartDate@(Model.EmpList.EmployeeID)" class="form-control form-control-sm datepicker shiftdate" placeholder="Başlangıç Tarihi"></td>
-                                                            <td class="text-right wd-10p" style="padding:2px !important;"><input type="text" id="FinishDate@(Model.EmpList.EmployeeID)" class="form-control form-control-sm datepicker shiftdate" placeholder="Bitiş Tarihi"></td>
-                                                            <td class="text-right wd-15p" style="padding:2px !important;"><input type="text" id="Description@(Model.EmpList.EmployeeID)" class="form-control form-control-sm text-right" placeholder="Açıklama"></td>
+                                                @using (Ajax.BeginForm("AddEmployeePeriods", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "EmployeePeriodsDetail", InsertionMode = InsertionMode.Replace }))
+                                                {
+                                                    @Html.AntiForgeryToken()
 
-                                                            <td class="wd-15p" style="padding:2px !important;">
-                                                                <button type="button" class="btn btn-xs btn-dark btn-block" onclick="AddEmployeePeriods(@(Model.EmpList.EmployeeID))">Periods Ekle</button>
-                                                            </td>
-                                                            <td class="wd-5p" style="padding:2px !important;"></td>
+                                                    <table class="table table-warning table-sm tx-13 tx-nowrap mb-0">
+                                                        <tbody>
+                                                            <tr class="bg-white">
+                                                                <td class="wd-5p"></td>
+                                                                <td class="tx-medium wd-20p" style="padding:2px !important;">
+                                                                    <select class="form-control" id="OurCompanyID" name="OurCompanyID" required>
+                                                                        @foreach (var item in Model.OurList)
+                                                                        {
+                                                                            <option value="@item.CompanyID">@($"{item.CompanyName}")</option>
+                                                                        }
+                                                                    </select>
+                                                                </td>
+                                                                <td class="text-right wd-10p" style="padding:2px !important;"><input type="text" id="ContractStartDate" name="ContractStartDate" class="form-control form-control-sm datepicker shiftdate" placeholder="Başlangıç Tarihi"></td>
+                                                                <td class="text-right wd-10p" style="padding:2px !important;"><input type="text" id="ContractFinishDate" name="ContractFinishDate" class="form-control form-control-sm datepicker shiftdate" placeholder="Bitiş Tarihi"></td>
+                                                                <td class="text-right wd-15p" style="padding:2px !important;"><input type="text" id="Description" name="Description" class="form-control form-control-sm text-right" placeholder="Açıklama"></td>
 
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
+                                                                <td class="wd-15p" style="padding:2px !important;">
+                                                                    <button type="submit" class="btn btn-xs btn-dark btn-block">Periods Ekle</button>
+                                                                </td>
+                                                                <td class="wd-5p" style="padding:2px !important;"></td>
+
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                }
+
                                                 <div id="EmployeePeriodsDetail@(Model.EmpList.EmployeeID)">
                                                     @{ Html.RenderPartial("_PartialEmployeePeriodsDetail", Model);}
                                                 </div>
