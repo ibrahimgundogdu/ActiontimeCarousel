@@ -1,112 +1,159 @@
 ﻿@model LocationControlModel
 
-<div class="row row-xs">
-    <div class="col-lg-12">
-        <div class="form-group row mg-b-5">
-            <label for="locationCode" class="col-sm-3 col-form-label">Lokasyon Kodu</label>
-            <div class="col-sm-6">
-                <input id="locationCode" name="LocationCode" type="text" class="form-control" autocomplete="off" placeholder="Lokasyon Kodu" value="@(Model.LocationModel.LocationCode)">
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="locationName" class="col-sm-3 col-form-label">Adı</label>
-            <div class="col-sm-6">
-                <input id="locationName" name="LocationName" type="text" class="form-control" autocomplete="off" placeholder="Adı" value="@(Model.LocationModel.LocationName)">
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="description" class="col-sm-3 col-form-label">Türü</label>
-            <div class="col-sm-6">
-                <input id="description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Türü" value="@(Model.LocationModel.Description)">
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="state" class="col-sm-3 col-form-label">Şehir</label>
-            <div class="col-sm-6">
-                <input id="state" name="State" type="text" class="form-control" autocomplete="off" placeholder="Şehir" value="@(Model.LocationModel.State)">
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="latitude" class="col-sm-3 col-form-label">Enlem</label>
-            <div class="col-sm-6">
-                <input id="latitude" name="Latitude" type="text" class="form-control" autocomplete="off" placeholder="Enlem" value="@(Model.LocationModel.Latitude)">
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="longitude" class="col-sm-3 col-form-label">Boylam</label>
-            <div class="col-sm-6">
-                <input id="longitude" name="Longitude" type="text" class="form-control" autocomplete="off" placeholder="Boylam" value="@(Model.LocationModel.Longitude)">
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="iP" class="col-sm-3 col-form-label">IP</label>
-            <div class="col-sm-6">
-                <input id="iP" name="IP" type="text" class="form-control" autocomplete="off" placeholder="IP" value="@(Model.LocationModel.IP)">
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="timezone" class="col-sm-3 col-form-label">Time Zone</label>
-            <div class="col-sm-6">
-                <input id="timezone" name="Timezone" type="text" class="form-control" autocomplete="off" placeholder="Time Zone" value="@(Model.LocationModel.Timezone)">
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="currency" class="col-sm-3 col-form-label">Para Birimi</label>
-            <div class="col-sm-6">
-                <input id="currency" name="Currency" type="text" class="form-control" autocomplete="off" placeholder="Para Birimi" value="@(Model.LocationModel.Currency)">
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="sortBy" class="col-sm-3 col-form-label">No</label>
-            <div class="col-sm-6">
-                <input id="sortBy" name="SortBy" type="text" class="form-control" autocomplete="off" placeholder="No" value="@(Model.LocationModel.SortBy)">
-            </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="isHaveOperator" class="col-sm-3 col-form-label">Operatör var mı?</label>
-            <div class="col-sm-6">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="isHaveOperator" name="IsHaveOperator" value="1" @(Model.LocationModel.IsHaveOperator.Value == true ? "checked" : "")>
-                    <label class="custom-control-label" for="isHaveOperator">Operatör var mı?</label>
+@using (Html.BeginForm("EditLocation", "Location", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="row row-xs">
+        <div class="col-lg-12">
+            <div class="form-group row mg-b-5">
+                <label for="locationCode" class="col-sm-3 col-form-label">Lokasyon Kodu</label>
+                <div class="col-sm-6">
+                    <input id="locationCode" name="LocationCode" type="text" class="form-control" autocomplete="off" placeholder="Lokasyon Kodu" value="@(Model.LocationModel.LocationCode)">
+                </div>
+                <div class="col-sm-3">
                 </div>
             </div>
-            <div class="col-sm-3">
-            </div>
-        </div>
-        <div class="form-group row mg-b-5">
-            <label for="isActive" class="col-sm-3 col-form-label">Aktif mi?</label>
-            <div class="col-sm-6">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="isActive" name="IsActive" value="1" @(Model.LocationModel.IsActive.Value == true ? "checked" : "")>
-                    <label class="custom-control-label" for="isActive">Aktif</label>
+            <div class="form-group row mg-b-5">
+                <label for="locationName" class="col-sm-3 col-form-label">Adı</label>
+                <div class="col-sm-6">
+                    <input id="locationName" name="LocationName" type="text" class="form-control" autocomplete="off" placeholder="Adı" value="@(Model.LocationModel.LocationName)">
+                </div>
+                <div class="col-sm-3">
                 </div>
             </div>
-            <div class="col-sm-3">
+            <div class="form-group row mg-b-5">
+                <label for="description" class="col-sm-3 col-form-label">Türü</label>
+                <div class="col-sm-6">
+                    <input id="description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Türü" value="@(Model.LocationModel.Description)">
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="state" class="col-sm-3 col-form-label">Şehir</label>
+                <div class="col-sm-6">
+                    <input id="state" name="State" type="text" class="form-control" autocomplete="off" placeholder="Şehir" value="@(Model.LocationModel.State)">
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="latitude" class="col-sm-3 col-form-label">Enlem</label>
+                <div class="col-sm-6">
+                    <input id="latitude" name="Latitude" type="text" class="form-control" autocomplete="off" placeholder="Enlem" value="@(Model.LocationModel.Latitude)">
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="longitude" class="col-sm-3 col-form-label">Boylam</label>
+                <div class="col-sm-6">
+                    <input id="longitude" name="Longitude" type="text" class="form-control" autocomplete="off" placeholder="Boylam" value="@(Model.LocationModel.Longitude)">
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="iP" class="col-sm-3 col-form-label">IP</label>
+                <div class="col-sm-6">
+                    <input id="iP" name="IP" type="text" class="form-control" autocomplete="off" placeholder="IP" value="@(Model.LocationModel.IP)">
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="ourCompany" class="col-sm-3 col-form-label">Firma</label>
+                <div class="col-sm-6">
+                    <select class="form-control" id="ourCompany" name="OurCompany" required="">
+                        @foreach (var item in Model.OurCompanyList)
+                        {
+                            <option value="@(item.CompanyID)" @(Model.LocationModel.OurCompany == item.CompanyID ? "selected" : "")>@(item.CompanyName)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="avm" class="col-sm-3 col-form-label">AVM</label>
+                <div class="col-sm-6">
+                    @*<input id="sortBy" name="SortBy" type="text" class="form-control" autocomplete="off" placeholder="No" value="@(Model.LocationModel.SortBy)">*@
+                    <select class="form-control" id="avm" name="AVM" required="">
+                        <option value="Metrocity"> Metrocity</option>
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="timezone" class="col-sm-3 col-form-label">Time Zone</label>
+                <div class="col-sm-6">
+                    <select class="form-control" id="timezone" name="Timezone" required="">
+                        @for (int i = 3; i >= -13; i--)
+                        {
+                            <option value="@i" @(Model.LocationModel.Timezone == i ? "selected" : "")>@( i > 0 ? "+" + i : i.ToString())</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="currency" class="col-sm-3 col-form-label">Para Birimi</label>
+                <div class="col-sm-6">
+                    <input id="currency" name="Currency" type="text" class="form-control" autocomplete="off" placeholder="Para Birimi" value="@(Model.LocationModel.Currency)" readonly>
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="sortBy" class="col-sm-3 col-form-label">No</label>
+                <div class="col-sm-6">
+                    <input id="sortBy" name="SortBy" type="text" class="form-control" autocomplete="off" placeholder="No" value="@(Model.LocationModel.SortBy)">
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="mapUrl" class="col-sm-3 col-form-label">Map URL</label>
+                <div class="col-sm-6">
+                    <input id="mapUrl" name="MapURL" type="text" class="form-control" autocomplete="off" placeholder="Map URL" value="@(Model.LocationModel.MapURL)">
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="isHaveOperator" class="col-sm-3 col-form-label">Operatör var mı?</label>
+                <div class="col-sm-6">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="isHaveOperator" name="IsHaveOperator" value="1" @(Model.LocationModel.IsHaveOperator.Value == true ? "checked" : "")>
+                        <label class="custom-control-label" for="isHaveOperator">Operatör var mı?</label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="isActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+                <div class="col-sm-6">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="isActive" name="IsActive" value="1" @(Model.LocationModel.IsActive.Value == true ? "checked" : "")>
+                        <label class="custom-control-label" for="isActive">Aktif</label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <div class="col-sm-3">
+                </div>
+                <div class="col-sm-6">
+                    <button type="submit" class="btn btn-primary btn-block">Lokasyon Güncelle</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
+}
 <div class="row row-xs bg-gray-100 mg-b-0 mg-t-40">
     <div class="col-sm-3 pd-t-10 pd-b-10">
         <b>Kayıt Tarihçesi</b>
@@ -149,3 +196,4 @@
         </table>
     </div>
 }
+
