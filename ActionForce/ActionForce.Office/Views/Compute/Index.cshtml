@@ -63,7 +63,7 @@
                                                     <input type="text" id="Date" class="form-control form-control-sm datepicker shiftdate">
                                                 </td>
                                                 <td class="" style="padding:2px !important;">
-                                                    <button type="button" class="btn btn-primary btn-block">Hesapla</button>
+                                                    <button type="button" class="btn btn-primary btn-block" onclick="ComputeSalaryEarns()">Hesapla</button>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -71,8 +71,8 @@
 
                                 </div>
                             </div>
-                            <div class="card-footer">
-                                dd
+                            <div class="card-footer" id="ComputeSalaryEarnResult">
+                                
                             </div>
                         </div>
                     </div>
@@ -138,7 +138,7 @@
                 url: "/Compute/ComputeSalaryEarns",
                 data: data
             }).done(function (d) {
-                $("#LocationParamDetail" + locationid).html(d);
+                $("#ComputeSalaryEarnResult").html(d);
             });
         }
 

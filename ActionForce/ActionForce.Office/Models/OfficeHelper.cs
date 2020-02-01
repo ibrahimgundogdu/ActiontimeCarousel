@@ -1425,6 +1425,7 @@ namespace ActionForce.Office
 
                         var locschedule = db.LocationSchedule.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date);
                         var location = db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
+                        var employee = db.Employee.FirstOrDefault(x => x.EmployeeID == employeeid);
                         var locationstats = db.LocationStats.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.StatsID == 2 && x.OptionID == 3);
 
 
@@ -1435,6 +1436,7 @@ namespace ActionForce.Office
                             var employeeshift = db.EmployeeShift.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date && x.EmployeeID == employeeid);
                             var empunits = db.EmployeeSalary.Where(x => x.EmployeeID == employeeid && x.DateStart <= dayresult.Date).ToList();
                             var hourprice = empunits.Where(x => x.Hourly > 0 && x.DateStart <= dayresult.Date).OrderByDescending(x => x.DateStart).FirstOrDefault();
+                            var setcardparam = db.SetcardParameter.Where(x => x.Year <= dayresult.Date.Year && x.OurCompanyID == authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Year).FirstOrDefault();
 
                             double? durationhour = 0;
                             double? unithour = hourprice?.Hourly ?? 0;
@@ -1564,7 +1566,14 @@ namespace ActionForce.Office
                                         UnitPrice = existssalaryearn.UnitPrice,
                                         UpdateDate = existssalaryearn.UpdateDate,
                                         UpdateEmployee = existssalaryearn.UpdateEmployee,
-                                        UpdateIP = existssalaryearn.UpdateIP
+                                        UpdateIP = existssalaryearn.UpdateIP,
+                                        CategoryID = existssalaryearn.CategoryID,
+                                        QuantityHourFood = existssalaryearn.QuantityHourFood,
+                                        QuantityHourSalary = existssalaryearn.QuantityHourSalary,
+                                        TotalAmountFood = existssalaryearn.TotalAmountFood,
+                                        TotalAmountSalary = existssalaryearn.TotalAmountSalary,
+                                        UnitFoodPrice = existssalaryearn.UnitFoodPrice,
+                                        TotalAmountLabor = existssalaryearn.TotalAmountLabor
                                     };
 
 
@@ -1577,8 +1586,8 @@ namespace ActionForce.Office
                                     existssalaryearn.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
                                     existssalaryearn.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
                                     existssalaryearn.UpdateIP = OfficeHelper.GetIPAddress();
+                                    existssalaryearn.UnitFoodPrice = setcardparam != null ? setcardparam.Amount : 0;
 
-                                    //log at
                                     db.SaveChanges();
 
                                     var empaction = db.EmployeeCashActions.FirstOrDefault(x => x.EmployeeID == employeeid && x.ActionTypeID == 32 && x.ProcessID == existssalaryearn.ID && x.ProcessDate == dayresult.Date && x.ProcessUID == existssalaryearn.UID);
@@ -1599,7 +1608,7 @@ namespace ActionForce.Office
                                         OfficeHelper.AddEmployeeAction(existssalaryearn.EmployeeID, existssalaryearn.LocationID, existssalaryearn.ActionTypeID, existssalaryearn.ActionTypeName, existssalaryearn.ID, existssalaryearn.Date, existssalaryearn.Description, 1, existssalaryearn.TotalAmount, 0, existssalaryearn.Currency, null, null, null, existssalaryearn.RecordEmployeeID, existssalaryearn.RecordDate, existssalaryearn.UID.Value, existssalaryearn.DocumentNumber, 3);
                                     }
 
-
+                                    //log at
                                     var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentSalaryEarn>(self, existssalaryearn, OfficeHelper.getIgnorelist());
                                     OfficeHelper.AddApplicationLog("Office", "DocumentSalaryEarn", "Update", existssalaryearn.ID.ToString(), "Result", "SalaryEarn", isequal, true, $"Hakediş güncellendi", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
@@ -1707,7 +1716,7 @@ namespace ActionForce.Office
             return issuccess;
         }
 
-        public static bool CheckSalaryEarn(long? resultid, DateTime? date, int? locationid, AuthenticationModel authentication)
+        public static bool CheckSalaryEarn(DateTime? date, int? locationid, AuthenticationModel authentication)
         {
             bool issuccess = false;
 

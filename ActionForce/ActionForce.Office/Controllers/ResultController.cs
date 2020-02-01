@@ -299,7 +299,7 @@ namespace ActionForce.Office.Controllers
             };
 
             ResultControlModel model = new ResultControlModel();
-            DocumentManager documentManager = new DocumentManager();
+            //DocumentManager documentManager = new DocumentManager();
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
 
             if (!string.IsNullOrEmpty(totalamount))
@@ -1239,7 +1239,7 @@ namespace ActionForce.Office.Controllers
 
                 if (dayresult != null)
                 {
-                    var check = OfficeHelper.CheckSalaryEarn(dayresult.ID, dateKey, location.LocationID, model.Authentication);
+                    var check = OfficeHelper.CheckSalaryEarn(dateKey, location.LocationID, model.Authentication);
                 }
 
                 result.IsSuccess = true;

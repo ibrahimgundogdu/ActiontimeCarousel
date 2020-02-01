@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -16,12 +17,67 @@ namespace ActionForce.Office.Controllers
             model.Locations = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.WeekLists = Db.DateList.Where(x => x.WeekYear >= 2017 && x.WeekYear <= DateTime.Now.Year && x.DateKey <= datenow).Select(x => new WeekModel()
             {
-                WeekKey = x.WeekYear+"-"+x.WeekNumber,
+                WeekKey = x.WeekYear + "-" + x.WeekNumber,
                 WeekYear = x.WeekYear.Value,
                 WeekNumber = x.WeekNumber.Value
-            }).Distinct().OrderByDescending(x=> x.WeekKey).ToList();
+            }).Distinct().OrderByDescending(x => x.WeekKey).ToList();
 
             return View(model);
         }
+
+        public string ComputeSalaryEarns(int? locationid, string date, string weekcode)
+        {
+            ComputeControlModel model = new ComputeControlModel();
+
+            if (!string.IsNullOrEmpty(date) || !string.IsNullOrEmpty(weekcode) || locationid > 0)
+            {
+
+                if (!string.IsNullOrEmpty(date))
+                {
+                    var _date = DateTime.ParseExact(date, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                    model.DateLists = Db.DateList.Where(x => x.DateKey == _date).ToList();
+                }
+
+                if (!string.IsNullOrEmpty(weekcode) && string.IsNullOrEmpty(date))
+                {
+                    model.DateLists = Db.DateList.Where(x => x.WeekKey == weekcode).ToList();
+                }
+
+                model.Locations = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+                if (locationid > 0)
+                {
+                    model.Locations = model.Locations.Where(x => x.LocationID == locationid).ToList();
+                }
+
+                if (model.DateLists.Count() <= 0)
+                {
+                    var _datenow = DateTime.UtcNow.Date;
+                    model.DateLists = Db.DateList.Where(x => x.DateKey == _datenow).ToList();
+                }
+
+                // 01 hakedişler tekrar hesaplanır.
+                foreach (var location in model.Locations)
+                {
+                    
+                    foreach (var datelist in model.DateLists)
+                    {
+                        var result = OfficeHelper.CheckSalaryEarn(datelist.DateKey, location.LocationID, model.Authentication);
+                    }
+
+                    // 02. hesaplanan hakedişler günsonu dosyasına yazılır
+
+
+                    //03. hasılat raporu çalıştırılır.
+                    var datelistone = model.DateLists.FirstOrDefault();
+                    var resultrevenue = Db.ComputeLocationWeekRevenue(datelistone.WeekNumber, datelistone.WeekYear, location.LocationID);
+                }
+
+
+            }
+
+            return "";
+        }
+
     }
 }

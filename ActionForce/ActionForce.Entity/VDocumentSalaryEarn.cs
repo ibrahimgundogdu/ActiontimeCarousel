@@ -49,6 +49,10 @@ namespace ActionForce.Entity
         public Nullable<double> QuantityHourSalary { get; set; }
         public Nullable<double> TotalAmountSalary { get; set; }
         public Nullable<double> QuantityHourFood { get; set; }
-        public Nullable<double> TotalAmountFoot { get; set; }
+        public Nullable<double> TotalAmountFood { get; set; }
+        public Nullable<double> UnitFoodPrice { get; set; }
+        public Nullable<long> ResultID { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
+        public Nullable<double> TotalAmountLabor { get; set; }
     }
 }

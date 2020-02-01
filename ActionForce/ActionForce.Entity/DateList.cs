@@ -29,5 +29,6 @@ namespace ActionForce.Entity
         public string Description { get; set; }
         public Nullable<int> WeekYear { get; set; }
         public Nullable<int> WeekNumber { get; set; }
+        public string WeekKey { get; set; }
     }
 }

@@ -34,6 +34,7 @@ namespace ActionForce.Entity
         public Nullable<bool> IsActive { get; set; }
         public string ActionTypeName { get; set; }
         public Nullable<int> ActionTypeID { get; set; }
+        public Nullable<int> CategoryID { get; set; }
         public string Description { get; set; }
         public Nullable<long> ResultID { get; set; }
         public Nullable<int> EnvironmentID { get; set; }
@@ -41,10 +42,11 @@ namespace ActionForce.Entity
         public Nullable<double> SystemUnitPrice { get; set; }
         public Nullable<double> SystemQuantityHour { get; set; }
         public Nullable<double> SystemTotalAmount { get; set; }
-        public Nullable<int> CategoryID { get; set; }
         public Nullable<double> QuantityHourSalary { get; set; }
         public Nullable<double> TotalAmountSalary { get; set; }
         public Nullable<double> QuantityHourFood { get; set; }
-        public Nullable<double> TotalAmountFoot { get; set; }
+        public Nullable<double> UnitFoodPrice { get; set; }
+        public Nullable<double> TotalAmountFood { get; set; }
+        public Nullable<double> TotalAmountLabor { get; set; }
     }
 }

@@ -163,7 +163,6 @@ namespace ActionForce.Entity
         public virtual DbSet<DocumentSaleExchange> DocumentSaleExchange { get; set; }
         public virtual DbSet<DocumentTicketSaleReturns> DocumentTicketSaleReturns { get; set; }
         public virtual DbSet<DocumentTicketSales> DocumentTicketSales { get; set; }
-        public virtual DbSet<DocumentSalaryEarn> DocumentSalaryEarn { get; set; }
         public virtual DbSet<VDocumentCashCollections> VDocumentCashCollections { get; set; }
         public virtual DbSet<Currency> Currency { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
@@ -200,7 +199,6 @@ namespace ActionForce.Entity
         public virtual DbSet<VDocumentPosCancel> VDocumentPosCancel { get; set; }
         public virtual DbSet<VDocumentPosRefund> VDocumentPosRefund { get; set; }
         public virtual DbSet<VDayResultItemList> VDayResultItemList { get; set; }
-        public virtual DbSet<VDocumentSalaryEarn> VDocumentSalaryEarn { get; set; }
         public virtual DbSet<VEmployeeSalary> VEmployeeSalary { get; set; }
         public virtual DbSet<VEmployeeSalaryDist> VEmployeeSalaryDist { get; set; }
         public virtual DbSet<CashRecorders> CashRecorders { get; set; }
@@ -256,6 +254,8 @@ namespace ActionForce.Entity
         public virtual DbSet<VRevenueLines> VRevenueLines { get; set; }
         public virtual DbSet<LocationParamCalculate> LocationParamCalculate { get; set; }
         public virtual DbSet<VEmpShift> VEmpShift { get; set; }
+        public virtual DbSet<DocumentSalaryEarn> DocumentSalaryEarn { get; set; }
+        public virtual DbSet<VDocumentSalaryEarn> VDocumentSalaryEarn { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
