@@ -91,7 +91,6 @@ namespace ActionForce.Entity
         public virtual DbSet<LoginLog> LoginLog { get; set; }
         public virtual DbSet<MobileLog> MobileLog { get; set; }
         public virtual DbSet<MobileLoginLog> MobileLoginLog { get; set; }
-        public virtual DbSet<OurCompany> OurCompany { get; set; }
         public virtual DbSet<OurCompanyPartner> OurCompanyPartner { get; set; }
         public virtual DbSet<PayMethod> PayMethod { get; set; }
         public virtual DbSet<PerformanceCategory> PerformanceCategory { get; set; }
@@ -256,6 +255,7 @@ namespace ActionForce.Entity
         public virtual DbSet<VRevenueLines> VRevenueLines { get; set; }
         public virtual DbSet<LocationParamCalculate> LocationParamCalculate { get; set; }
         public virtual DbSet<VEmpShift> VEmpShift { get; set; }
+        public virtual DbSet<OurCompany> OurCompany { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -869,23 +869,6 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationCurrentShift_Result>("GetLocationCurrentShift", locationIDParameter, dateParameter);
         }
     
-        public virtual ObjectResult<GetLocationAll_Result> GetLocationAll(Nullable<int> ourCompanyID, Nullable<System.Guid> locationUID, Nullable<int> locationID)
-        {
-            var ourCompanyIDParameter = ourCompanyID.HasValue ?
-                new ObjectParameter("OurCompanyID", ourCompanyID) :
-                new ObjectParameter("OurCompanyID", typeof(int));
-    
-            var locationUIDParameter = locationUID.HasValue ?
-                new ObjectParameter("LocationUID", locationUID) :
-                new ObjectParameter("LocationUID", typeof(System.Guid));
-    
-            var locationIDParameter = locationID.HasValue ?
-                new ObjectParameter("LocationID", locationID) :
-                new ObjectParameter("LocationID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationAll_Result>("GetLocationAll", ourCompanyIDParameter, locationUIDParameter, locationIDParameter);
-        }
-    
         public virtual int ComputeLocationWeekRevenue(Nullable<int> week, Nullable<int> year, Nullable<int> locationID)
         {
             var weekParameter = week.HasValue ?
@@ -935,6 +918,23 @@ namespace ActionForce.Entity
                 new ObjectParameter("UnitPriceMultiplier", typeof(double));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetEmployeeScheduleMultiplier", locationIDParameter, dateParameter, unitPriceMultiplierParameter);
+        }
+    
+        public virtual ObjectResult<GetLocationAll_Result1> GetLocationAll(Nullable<int> ourCompanyID, Nullable<System.Guid> locationUID, Nullable<int> locationID)
+        {
+            var ourCompanyIDParameter = ourCompanyID.HasValue ?
+                new ObjectParameter("OurCompanyID", ourCompanyID) :
+                new ObjectParameter("OurCompanyID", typeof(int));
+    
+            var locationUIDParameter = locationUID.HasValue ?
+                new ObjectParameter("LocationUID", locationUID) :
+                new ObjectParameter("LocationUID", typeof(System.Guid));
+    
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationAll_Result1>("GetLocationAll", ourCompanyIDParameter, locationUIDParameter, locationIDParameter);
         }
     }
 }

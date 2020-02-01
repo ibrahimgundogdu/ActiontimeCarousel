@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 
 namespace ActionForce.Office.Controllers
 {
@@ -32,7 +33,8 @@ namespace ActionForce.Office.Controllers
                 SortBy = x.SortBy,
                 State = x.State,
                 TypeName = x.TypeName,
-                Timezone = x.Timezone
+                Timezone = x.Timezone,
+                OurCompany = x.OurCompanyID
             }).ToList();
 
             model.StateList = model.LocationList.Select(x => x.State).Distinct().OrderBy(x => x).ToList();
@@ -95,7 +97,8 @@ namespace ActionForce.Office.Controllers
                 SortBy = x.SortBy,
                 State = x.State,
                 TypeName = x.TypeName,
-                Timezone = x.Timezone
+                Timezone = x.Timezone,
+                OurCompany = x.OurCompanyID
             }).ToList();
 
             #region Filter
@@ -152,10 +155,19 @@ namespace ActionForce.Office.Controllers
                 SortBy = x.SortBy,
                 State = x.State,
                 TypeName = x.TypeName,
-                Timezone = x.Timezone
+                Timezone = x.Timezone,
+                OurCompany = x.OurCompanyID
             }).FirstOrDefault();
-            model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
-            model.EmployeeLocationList = Db.VEmployeeLocation.Where(x => x.LocationUID == id).ToList();
+
+            if (model.LocationModel != null)
+            {
+                model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
+                model.EmployeeLocationList = Db.VEmployeeLocation.Where(x => x.LocationUID == id).ToList();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Location");
+            }
 
             return View(model);
         }
@@ -188,11 +200,125 @@ namespace ActionForce.Office.Controllers
                 SortBy = x.SortBy,
                 State = x.State,
                 TypeName = x.TypeName,
-                Timezone = x.Timezone
+                Timezone = x.Timezone,
+                OurCompany = x.OurCompanyID
             }).FirstOrDefault();
-            model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
-            
+
+            if (model.LocationModel != null)
+            {
+                model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
+                model.OurCompanyList = Db.OurCompany.ToList();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Location");
+            }
+
             return View(model);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult GetTimezoneList(int ourCompanyId)
+        {
+            var getOurCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == ourCompanyId);
+
+            List<SelectListItem> list = new List<SelectListItem>();
+
+            int start, finish = 0;
+
+            start = getOurCompany.TimeZone.Value > getOurCompany.TimeZoneTo.Value ? getOurCompany.TimeZone.Value : getOurCompany.TimeZoneTo.Value;
+            finish = getOurCompany.TimeZone.Value < getOurCompany.TimeZoneTo.Value ? getOurCompany.TimeZone.Value : getOurCompany.TimeZoneTo.Value;
+
+            for (int i = start; i >= finish; i--)
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = i.ToString(),
+                    Text = i > 0 ? "+" + i : i.ToString()
+                });
+            }
+
+            OurCompanyModel model = new OurCompanyModel()
+            {
+                Currency = getOurCompany.Currency,
+                SelectList = list
+            };
+
+            //JavaScriptSerializer javaScriptSerializer = new JavaScriptSerializer();
+            //string result = javaScriptSerializer.Serialize(model);
+
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public ActionResult EditLocation(LocationModel location)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            LocationControlModel model = new LocationControlModel();
+
+            if (location != null)
+            {
+                //    EmployeePermit permitdoc = new EmployeePermit();
+
+                //    permitdoc.ActinTypeID = cashactType.ID;
+                //    permitdoc.ActionTypeName = cashactType.Name;
+                //    permitdoc.Date = docDate;
+                //    permitdoc.DateBegin = beginDatetime.Value;
+                //    permitdoc.DateEnd = endDatetime.Value;
+                //    permitdoc.Description = permit.Description;
+                //    permitdoc.EmployeeID = permit.EmployeeID;
+                //    permitdoc.IsActive = isActive;
+                //    permitdoc.LocationID = location.LocationID;
+                //    permitdoc.OurCompanyID = location.OurCompanyID;
+                //    permitdoc.PermitTypeID = permit.PermitTypeID;
+                //    permitdoc.ReturnWorkDate = returnWorkDate;
+                //    permitdoc.StatusID = permit.StatusID;
+                //    permitdoc.TimeZone = location.Timezone.Value;
+                //    permitdoc.UID = permit.UID;
+                //    permitdoc.ID = permit.ID;
+
+                //    DocumentManager documentManager = new DocumentManager();
+                //    var editresult = documentManager.EditEmployeePermit(permitdoc, model.Authentication);
+
+
+                //    TempData["result"] = new Result() { IsSuccess = editresult.IsSuccess, Message = editresult.Message };
+
+                //    if (result.IsSuccess == true)
+                //    {
+                //        return RedirectToAction("PermitDetail", "Salary", new { id = permitdoc.UID });
+                //    }
+                //    else
+                //    {
+                //        return RedirectToAction("AddPermit", "Salary");
+                //    }
+
+                //}
+                //else
+                //{
+                //    result.Message = $"Form bilgileri gelmedi.";
+                //}
+
+                //TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            }
+
+            return RedirectToAction("Index", "Location");
+        }
+
+    }
+
+    public class OurCompanyModel
+    {
+        public List<SelectListItem> SelectList { get; set; }
+        public string Currency { get; set; }
     }
 }

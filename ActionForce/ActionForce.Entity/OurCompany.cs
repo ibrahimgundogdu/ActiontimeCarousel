@@ -20,6 +20,7 @@ namespace ActionForce.Entity
         public string Latitude { get; set; }
         public string Longitude { get; set; }
         public Nullable<int> TimeZone { get; set; }
+        public Nullable<int> TimeZoneTo { get; set; }
         public string Currency { get; set; }
         public string Weight { get; set; }
         public string Distance { get; set; }

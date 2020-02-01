@@ -17,6 +17,7 @@ namespace ActionForce.Office
         public LocationFilterModel FilterModel { get; set; }
         public List<ApplicationLog> LogList { get; set; }
         public List<VEmployeeLocation> EmployeeLocationList { get; set; }
+        public List<OurCompany> OurCompanyList { get; set; }
     }
 
     public class LocationFilterModel
@@ -30,6 +31,7 @@ namespace ActionForce.Office
     public class LocationModel
     {
         public int LocationID { get; set; }
+        public int OurCompany { get; set; }
         public string LocationCode { get; set; }
         public string LocationName { get; set; }
         public string LocationNameSearch { get; set; }

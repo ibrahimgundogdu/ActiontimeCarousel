@@ -30,5 +30,6 @@ namespace ActionForce.Entity
         public string TypeName { get; set; }
         public string Currency { get; set; }
         public Nullable<System.Guid> LocationUID { get; set; }
+        public int OurCompanyID { get; set; }
     }
 }
