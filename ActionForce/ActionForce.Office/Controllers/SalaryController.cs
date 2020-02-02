@@ -124,15 +124,15 @@ namespace ActionForce.Office.Controllers
                     earn.EnvironmentID = 2;
                     earn.LocationID = location.LocationID;
                     earn.QuantityHour = quantity;
-                    earn.TotalAmount = (double)((double)cashSalary.QuantityHour * (double?)cashSalary.UnitPrice);
+                    //earn.TotalAmount = (double)((double)cashSalary.QuantityHour * (double?)cashSalary.UnitPrice);
                     earn.UID = Guid.NewGuid();
-                    earn.UnitPrice = (double?)cashSalary.UnitPrice;
+                    //earn.UnitPrice = (double?)cashSalary.UnitPrice;
                     earn.TimeZone = location.Timezone;
                     earn.OurCompanyID = location.OurCompanyID;
                     earn.CategoryID = cashSalary.CategoryID ?? (int?)null;
-                    earn.SystemQuantityHour = earn.QuantityHour;
-                    earn.SystemTotalAmount = earn.TotalAmount;
-                    earn.SystemUnitPrice = earn.UnitPrice;
+                    //earn.SystemQuantityHour = earn.QuantityHour;
+                    //earn.SystemTotalAmount = earn.TotalAmount;
+                    //earn.SystemUnitPrice = earn.UnitPrice;
 
                     DocumentManager documentManager = new DocumentManager();
                     var addresult = documentManager.AddSalaryEarn(earn, model.Authentication);
@@ -185,7 +185,7 @@ namespace ActionForce.Office.Controllers
                 {
                     SalaryEarn sale = new SalaryEarn();
                     sale.ActionTypeID = cashEarn.ActinTypeID;
-                    sale.TotalAmount = amount;
+                    //sale.TotalAmount = amount;
                     sale.Currency = currency;
                     sale.Description = cashEarn.Description;
                     sale.DocumentDate = docDate;
@@ -193,13 +193,13 @@ namespace ActionForce.Office.Controllers
                     sale.EmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                     sale.LocationID = cashEarn.LocationID;
                     sale.UID = cashEarn.UID;
-                    sale.UnitPrice = unit;
+                    //sale.UnitPrice = unit;
                     sale.QuantityHour = quantity;
                     sale.CategoryID = cashEarn.CategoryID;
 
-                    sale.SystemQuantityHour = sale.QuantityHour;
-                    sale.SystemTotalAmount = sale.TotalAmount;
-                    sale.SystemUnitPrice = sale.UnitPrice;
+                    //sale.SystemQuantityHour = sale.QuantityHour;
+                    //sale.SystemTotalAmount = sale.TotalAmount;
+                    //sale.SystemUnitPrice = sale.UnitPrice;
 
                     DocumentManager documentManager = new DocumentManager();
                     var editresult = documentManager.EditSalaryEarn(sale, model.Authentication);

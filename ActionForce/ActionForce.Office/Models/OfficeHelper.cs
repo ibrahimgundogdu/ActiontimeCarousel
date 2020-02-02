@@ -1425,28 +1425,20 @@ namespace ActionForce.Office
 
                         var locschedule = db.LocationSchedule.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date);
                         var location = db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
-                        var employee = db.Employee.FirstOrDefault(x => x.EmployeeID == employeeid);
-                        var locationstats = db.LocationStats.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.StatsID == 2 && x.OptionID == 3);
+                        //var employee = db.Employee.FirstOrDefault(x => x.EmployeeID == employeeid);
+                        //var locationstats = db.LocationStats.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.StatsID == 2 && x.OptionID == 3);
 
 
                         if (locschedule != null)
                         {
                             var employeeschedule = db.Schedule.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date && x.EmployeeID == employeeid);
-
                             var employeeshift = db.EmployeeShift.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date && x.EmployeeID == employeeid);
-                            var empunits = db.EmployeeSalary.Where(x => x.EmployeeID == employeeid && x.DateStart <= dayresult.Date).ToList();
-                            var hourprice = empunits.Where(x => x.Hourly > 0 && x.DateStart <= dayresult.Date).OrderByDescending(x => x.DateStart).FirstOrDefault();
-                            var setcardparam = db.SetcardParameter.Where(x => x.Year <= dayresult.Date.Year && x.OurCompanyID == authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Year).FirstOrDefault();
+                            
+                            //var empunits = db.EmployeeSalary.Where(x => x.EmployeeID == employeeid && x.DateStart <= dayresult.Date).ToList();
+                            //var hourprice = empunits.Where(x => x.Hourly > 0 && x.DateStart <= dayresult.Date).OrderByDescending(x => x.DateStart).FirstOrDefault();
+                            ////var setcardparam = db.SetcardParameter.Where(x => x.Year <= dayresult.Date.Year && x.OurCompanyID == authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Year).FirstOrDefault();
 
                             double? durationhour = 0;
-                            double? unithour = hourprice?.Hourly ?? 0;
-
-
-                            if (location.OurCompanyID == 1 && locationstats != null)
-                            {
-                                unithour = unithour + 1;
-                            }
-
 
                             TimeSpan? duration = null;
 
@@ -1481,7 +1473,7 @@ namespace ActionForce.Office
 
                                 itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
                                 {
-                                    Amount = (durationhour * unithour),
+                                    Amount = 0,
                                     Category = x.Category,
                                     Currency = location.Currency,
                                     ResultID = dayresult.ID,
@@ -1489,12 +1481,12 @@ namespace ActionForce.Office
                                     Quantity = 0,
                                     SystemQuantity = 0,
                                     Exchange = 1,
-                                    SystemAmount = (durationhour * unithour),
+                                    SystemAmount = 0,
                                     LocationID = location.LocationID,
                                     Date = dayresult.Date,
                                     EmployeeID = employeeid,
                                     SystemHourQuantity = durationhour,
-                                    UnitHourPrice = unithour,
+                                    UnitHourPrice = 0,
                                     RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
                                     RecordEmployeeID = authentication.ActionEmployee.EmployeeID,
                                     RecordIP = GetIPAddress(),
@@ -1532,92 +1524,12 @@ namespace ActionForce.Office
                                 }).FirstOrDefault());
 
                                 // maaş hakedişi dosya ve hareket olarak ekle
+                                DocumentManager documentManager = new DocumentManager();
 
                                 var existssalaryearn = db.DocumentSalaryEarn.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == employeeid && x.Date == dayresult.Date);
 
                                 if (existssalaryearn != null)
                                 {
-
-                                    DocumentSalaryEarn self = new DocumentSalaryEarn()
-                                    {
-                                        ActionTypeID = existssalaryearn.ActionTypeID,
-                                        ActionTypeName = existssalaryearn.ActionTypeName,
-                                        Currency = existssalaryearn.Currency,
-                                        Date = existssalaryearn.Date,
-                                        Description = existssalaryearn.Description,
-                                        DocumentNumber = existssalaryearn.DocumentNumber,
-                                        EmployeeID = existssalaryearn.EmployeeID,
-                                        EnvironmentID = existssalaryearn.EnvironmentID,
-                                        ID = existssalaryearn.ID,
-                                        IsActive = existssalaryearn.IsActive,
-                                        LocationID = existssalaryearn.LocationID,
-                                        OurCompanyID = existssalaryearn.OurCompanyID,
-                                        QuantityHour = existssalaryearn.QuantityHour,
-                                        RecordDate = existssalaryearn.RecordDate,
-                                        RecordEmployeeID = existssalaryearn.RecordEmployeeID,
-                                        RecordIP = existssalaryearn.RecordIP,
-                                        ReferenceID = existssalaryearn.ReferenceID,
-                                        ResultID = existssalaryearn.ResultID,
-                                        SystemQuantityHour = existssalaryearn.SystemQuantityHour,
-                                        SystemTotalAmount = existssalaryearn.SystemTotalAmount,
-                                        SystemUnitPrice = existssalaryearn.SystemUnitPrice,
-                                        TotalAmount = existssalaryearn.TotalAmount,
-                                        UID = existssalaryearn.UID,
-                                        UnitPrice = existssalaryearn.UnitPrice,
-                                        UpdateDate = existssalaryearn.UpdateDate,
-                                        UpdateEmployee = existssalaryearn.UpdateEmployee,
-                                        UpdateIP = existssalaryearn.UpdateIP,
-                                        CategoryID = existssalaryearn.CategoryID,
-                                        QuantityHourFood = existssalaryearn.QuantityHourFood,
-                                        QuantityHourSalary = existssalaryearn.QuantityHourSalary,
-                                        TotalAmountFood = existssalaryearn.TotalAmountFood,
-                                        TotalAmountSalary = existssalaryearn.TotalAmountSalary,
-                                        UnitFoodPrice = existssalaryearn.UnitFoodPrice,
-                                        TotalAmountLabor = existssalaryearn.TotalAmountLabor
-                                    };
-
-
-                                    existssalaryearn.QuantityHour = durationhour.Value;
-                                    existssalaryearn.SystemQuantityHour = durationhour.Value;
-                                    existssalaryearn.TotalAmount = (durationhour.Value * unithour.Value);
-                                    existssalaryearn.SystemTotalAmount = (durationhour.Value * unithour.Value);
-                                    existssalaryearn.UnitPrice = unithour;
-                                    existssalaryearn.SystemUnitPrice = unithour;
-                                    existssalaryearn.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
-                                    existssalaryearn.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
-                                    existssalaryearn.UpdateIP = OfficeHelper.GetIPAddress();
-                                    existssalaryearn.UnitFoodPrice = setcardparam != null ? setcardparam.Amount : 0;
-
-                                    db.SaveChanges();
-
-                                    var empaction = db.EmployeeCashActions.FirstOrDefault(x => x.EmployeeID == employeeid && x.ActionTypeID == 32 && x.ProcessID == existssalaryearn.ID && x.ProcessDate == dayresult.Date && x.ProcessUID == existssalaryearn.UID);
-
-                                    if (empaction != null)
-                                    {
-
-                                        empaction.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
-                                        empaction.UpdateEmployeeID = authentication.ActionEmployee.EmployeeID;
-                                        empaction.Collection = (durationhour.Value * unithour.Value);
-                                        empaction.Payment = 0;
-
-                                        db.SaveChanges();
-
-                                    }
-                                    else
-                                    {
-                                        OfficeHelper.AddEmployeeAction(existssalaryearn.EmployeeID, existssalaryearn.LocationID, existssalaryearn.ActionTypeID, existssalaryearn.ActionTypeName, existssalaryearn.ID, existssalaryearn.Date, existssalaryearn.Description, 1, existssalaryearn.TotalAmount, 0, existssalaryearn.Currency, null, null, null, existssalaryearn.RecordEmployeeID, existssalaryearn.RecordDate, existssalaryearn.UID.Value, existssalaryearn.DocumentNumber, 3);
-                                    }
-
-                                    //log at
-                                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<DocumentSalaryEarn>(self, existssalaryearn, OfficeHelper.getIgnorelist());
-                                    OfficeHelper.AddApplicationLog("Office", "DocumentSalaryEarn", "Update", existssalaryearn.ID.ToString(), "Result", "SalaryEarn", isequal, true, $"Hakediş güncellendi", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-
-
-                                }
-                                else
-                                {
-                                    DocumentManager documentManager = new DocumentManager();
 
                                     SalaryEarn earn = new SalaryEarn();
 
@@ -1631,14 +1543,30 @@ namespace ActionForce.Office
                                     earn.OurCompanyID = location.OurCompanyID;
                                     earn.QuantityHour = durationhour.Value;
                                     earn.ResultID = dayresult.ID;
-                                    earn.SystemTotalAmount = (durationhour * unithour);
-                                    earn.SystemQuantityHour = durationhour;
-                                    earn.SystemUnitPrice = unithour;
                                     earn.TimeZone = location.Timezone;
-                                    earn.TotalAmount = (durationhour.Value * unithour.Value);
-                                    earn.UID = Guid.NewGuid();
-                                    earn.UnitPrice = unithour;
+                                    earn.UID = dayresult.UID.Value;
+                                    earn.Description = dayresult.Description;
+                                    
+                                    var res = documentManager.EditSalaryEarn(earn, authentication);  // log zaten var.
 
+                                }
+                                else
+                                {
+
+                                    SalaryEarn earn = new SalaryEarn();
+
+                                    earn.ActionTypeID = 32;
+                                    earn.ActionTypeName = "Ücret Hakediş";
+                                    earn.Currency = location.Currency;
+                                    earn.DocumentDate = dayresult.Date;
+                                    earn.EmployeeID = employeeid;
+                                    earn.EnvironmentID = 2;
+                                    earn.LocationID = location.LocationID;
+                                    earn.OurCompanyID = location.OurCompanyID;
+                                    earn.QuantityHour = durationhour.Value;
+                                    earn.ResultID = dayresult.ID;
+                                    earn.TimeZone = location.Timezone;
+                                    earn.UID = Guid.NewGuid();
 
                                     var res = documentManager.AddSalaryEarn(earn, authentication);  // log zaten var.
                                 }
@@ -1676,7 +1604,7 @@ namespace ActionForce.Office
                                     Date = dayresult.Date,
                                     EmployeeID = employeeid,
                                     SystemHourQuantity = 0,
-                                    UnitHourPrice = unithour,
+                                    UnitHourPrice = 0,
                                     RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
                                     RecordEmployeeID = authentication.ActionEmployee.EmployeeID,
                                     RecordIP = GetIPAddress()

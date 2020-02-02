@@ -54,5 +54,6 @@ namespace ActionForce.Entity
         public Nullable<long> ResultID { get; set; }
         public Nullable<int> EnvironmentID { get; set; }
         public Nullable<double> TotalAmountLabor { get; set; }
+        public Nullable<double> UnitPriceMultiplierApplied { get; set; }
     }
 }

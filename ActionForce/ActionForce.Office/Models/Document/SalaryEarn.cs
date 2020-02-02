@@ -9,9 +9,9 @@ namespace ActionForce.Office
     {
         public int ActionTypeID { get; set; }
         public string ActionTypeName { get; set; }
-        public double? UnitPrice { get; set; }
+        //public double? UnitPrice { get; set; }
         public double? QuantityHour { get; set; }
-        public double TotalAmount { get; set; }
+        //public double TotalAmount { get; set; }
         public int LocationID { get; set; }
         public int OurCompanyID { get; set; }
         public int? EmployeeID { get; set; }
@@ -23,9 +23,9 @@ namespace ActionForce.Office
         public int? EnvironmentID { get; set; }
         public int? TimeZone { get; set; }
         public Guid UID { get; set; }
-        public double? SystemUnitPrice { get; set; }
-        public double? SystemQuantityHour { get; set; }
-        public double? SystemTotalAmount { get; set; }
+        //public double? SystemUnitPrice { get; set; }
+        //public double? SystemQuantityHour { get; set; }
+        //public double? SystemTotalAmount { get; set; }
         public int? CategoryID { get; set; }
     }
 }

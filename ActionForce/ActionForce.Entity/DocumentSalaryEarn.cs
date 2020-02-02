@@ -48,5 +48,6 @@ namespace ActionForce.Entity
         public Nullable<double> UnitFoodPrice { get; set; }
         public Nullable<double> TotalAmountFood { get; set; }
         public Nullable<double> TotalAmountLabor { get; set; }
+        public Nullable<double> UnitPriceMultiplierApplied { get; set; }
     }
 }

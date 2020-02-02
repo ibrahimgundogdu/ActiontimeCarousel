@@ -25,6 +25,5 @@ namespace ActionForce.Entity
         public string Weight { get; set; }
         public string Distance { get; set; }
         public string Culture { get; set; }
-        public Nullable<int> TimeZoneTo { get; set; }
     }
 }
