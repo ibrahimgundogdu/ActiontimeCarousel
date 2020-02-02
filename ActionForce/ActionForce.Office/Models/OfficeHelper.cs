@@ -1425,19 +1425,12 @@ namespace ActionForce.Office
 
                         var locschedule = db.LocationSchedule.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date);
                         var location = db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
-                        //var employee = db.Employee.FirstOrDefault(x => x.EmployeeID == employeeid);
-                        //var locationstats = db.LocationStats.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.StatsID == 2 && x.OptionID == 3);
-
 
                         if (locschedule != null)
                         {
                             var employeeschedule = db.Schedule.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date && x.EmployeeID == employeeid);
                             var employeeshift = db.EmployeeShift.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date && x.EmployeeID == employeeid);
                             
-                            //var empunits = db.EmployeeSalary.Where(x => x.EmployeeID == employeeid && x.DateStart <= dayresult.Date).ToList();
-                            //var hourprice = empunits.Where(x => x.Hourly > 0 && x.DateStart <= dayresult.Date).OrderByDescending(x => x.DateStart).FirstOrDefault();
-                            ////var setcardparam = db.SetcardParameter.Where(x => x.Year <= dayresult.Date.Year && x.OurCompanyID == authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Year).FirstOrDefault();
-
                             double? durationhour = 0;
 
                             TimeSpan? duration = null;
@@ -1544,7 +1537,7 @@ namespace ActionForce.Office
                                     earn.QuantityHour = durationhour.Value;
                                     earn.ResultID = dayresult.ID;
                                     earn.TimeZone = location.Timezone;
-                                    earn.UID = dayresult.UID.Value;
+                                    earn.UID = existssalaryearn.UID.Value;
                                     earn.Description = dayresult.Description;
                                     
                                     var res = documentManager.EditSalaryEarn(earn, authentication);  // log zaten var.

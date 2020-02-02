@@ -78,45 +78,23 @@ function AddCashRecorder(id) {
     });
 }
 
-function AddSalaryEarn(id, itemid, employeeid) {
+function AddSalaryEarn(id, employeeid) {
 
-    var typeid = $('#S8TYPEID' + employeeid).val();
     var description = $('#S8SDE' + employeeid).val();
-    var duration = $('#S8SD' + employeeid).val();
-    var unithprice = $('#S8SU' + employeeid).val();
-    var totalamount = $('#S8ST' + employeeid).val();
 
-    console.log(unithprice);
-    console.log(totalamount);
-    var data = new FormData();
-
-    //jQuery.each(jQuery('#E13TRLF')[0].files, function (i, file) {
-    //    data.append('file', file);
-    //});
-
-    data.append('id', id);
-    data.append('itemid', itemid);
-    data.append('employeeid', employeeid);
-    data.append('typeid', typeid);
-    data.append('description', description);
-    data.append('duration', duration);
-    data.append('unithprice', unithprice);
-    data.append('totalamount', totalamount);
-
+    console.log("id:", id);
+    console.log("employeeid:", employeeid);
+    console.log("description:", description);
 
     $.ajax({
-        cache: false,
-        contentType: false,
-        processData: false,
-        method: 'POST',
-        type: 'POST',
+        method: "GET",
         url: "/Result/AddSalaryEarn",
-        data: data,
+        data: { id: id, employeeid: employeeid, description: description },
         beforeSend: function () {
             $("#Loading").show();
-        },
+        }
     }).done(function (d) {
-
+        console.log(d);
         $("#EmployeeSalary").html(d);
         ResultSummary(id);
 

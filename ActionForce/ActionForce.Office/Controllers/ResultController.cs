@@ -287,9 +287,8 @@ namespace ActionForce.Office.Controllers
             return PartialView("_PartialCashRecorder", model);
         }
 
-        [HttpPost]
         [AllowAnonymous]
-        public PartialViewResult AddSalaryEarn(long? id, int? itemid, int? typeid, int? employeeid, string description, string duration, string unithprice, string totalamount)
+        public PartialViewResult AddSalaryEarn(long? id, int? employeeid, string description)  // , string duration, string unithprice, string totalamount
         {
             Result<DocumentSalaryEarn> result = new Result<DocumentSalaryEarn>()
             {
@@ -299,25 +298,13 @@ namespace ActionForce.Office.Controllers
             };
 
             ResultControlModel model = new ResultControlModel();
-            //DocumentManager documentManager = new DocumentManager();
+
             var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
 
-            if (!string.IsNullOrEmpty(totalamount))
+            if (dayresult != null)
             {
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == typeid);
-                var item = Db.DayResultItemList.FirstOrDefault(x => x.ID == itemid);
-                var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
-                TimeSpan? sure = Convert.ToDateTime(duration + ":00").TimeOfDay;
-                var unitPrice = Convert.ToDouble(unithprice.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var totalAmount = Convert.ToDouble(totalamount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-
                 var issuccess = OfficeHelper.CalculateSalaryEarn(id, employeeid.Value, dayresult.Date, dayresult.LocationID, model.Authentication);
             }
-            else
-            {
-                result.Message = "Tutar kısmı boş yada 0'dan küçük olamaz. ";
-            }
-
 
             model.CashActionTypes = Db.CashActionType.Where(x => x.IsActive == true).ToList();
             model.EmployeeActions = Db.VEmployeeCashActions.Where(x => x.LocationID == dayresult.LocationID && x.ProcessDate == dayresult.Date).ToList();
