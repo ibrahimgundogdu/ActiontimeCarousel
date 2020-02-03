@@ -343,10 +343,7 @@
     <Content Include="Document\Expense\080affc7-8edd-4cc1-8ecf-4222cb4d0125.png" />
     <Content Include="Document\Expense\4418fe55-7e76-477e-ba09-48f04ae1cee6.jpg" />
     <Content Include="Document\Expense\a78d9ebd-9590-4ca6-8ddd-d32ea8065573.jpg" />
-    <Content Include="el-list-group.html" />
-    <Content Include="el-steps.html" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <Content Include="form-wizard.html" />
     <Content Include="Global.asax" />
     <Content Include="images\login.png" />
     <Content Include="images\loginback.png" />
@@ -2280,8 +2277,6 @@
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="Scripts\modernizr-2.6.2.js" />
-    <Content Include="page-profile-view.html" />
-    <Content Include="util-animation.html" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>

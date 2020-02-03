@@ -75,7 +75,7 @@
                                     <select class="form-control" id="LocationID" name="LocationID" required>
                                         @foreach (var item in Model.LocationList.OrderBy(x => x.SortBy))
                                         {
-                                            <option value="@item.LocationID" @(item.LocationID == Model.CurrentPermit.LocationID ? "selected" : "")>@($"{item.SortBy.Trim()} {item.LocationName} {item.Description} {item.State}" )</option>
+                                            <option value="@item.LocationID" @(item.LocationID == Model.CurrentPermit.LocationID ? "selected" : "")>@($"{item?.SortBy?.Trim()} {item?.LocationName} {item?.Description} {item?.State}" )</option>
                                         }
                                     </select>
                                 </div>

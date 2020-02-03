@@ -1,4 +1,4 @@
-﻿using ActionForce.Entity;
+﻿ using ActionForce.Entity;
 using ActionForce.Integration;
 using System;
 using System.Collections.Generic;
@@ -1519,7 +1519,7 @@ namespace ActionForce.Office
                                 // maaş hakedişi dosya ve hareket olarak ekle
                                 DocumentManager documentManager = new DocumentManager();
 
-                                var existssalaryearn = db.DocumentSalaryEarn.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == employeeid && x.Date == dayresult.Date);
+                                var existssalaryearn = db.DocumentSalaryEarn.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == employeeid && x.Date == dayresult.Date && x.ActionTypeID == 32 && x.IsActive == true);
 
                                 if (existssalaryearn != null)
                                 {
@@ -1538,7 +1538,7 @@ namespace ActionForce.Office
                                     earn.ResultID = dayresult.ID;
                                     earn.TimeZone = location.Timezone;
                                     earn.UID = existssalaryearn.UID.Value;
-                                    earn.Description = dayresult.Description;
+                                    earn.Description = existssalaryearn.Description;
                                     
                                     var res = documentManager.EditSalaryEarn(earn, authentication);  // log zaten var.
 
@@ -1737,5 +1737,104 @@ namespace ActionForce.Office
                 }
             }
         }
+
+        public static bool ComputeSalaryEarn(int employeeid, DateTime? date, int? locationid, AuthenticationModel authentication)
+        {
+            bool issuccess = false;
+
+            if (employeeid > 0 && date != null && locationid > 0)
+            {
+
+                using (ActionTimeEntities db = new ActionTimeEntities())
+                {
+                    var dayresult = db.DayResult.FirstOrDefault(x => x.LocationID == locationid && x.Date == date);
+                    var locschedule = db.LocationSchedule.FirstOrDefault(x => x.LocationID == locationid && x.ShiftDate == date);
+                    var location = db.Location.FirstOrDefault(x => x.LocationID == locationid);
+
+                    if (locschedule != null)
+                    {
+                        var employeeschedule = db.Schedule.FirstOrDefault(x => x.LocationID == locationid && x.ShiftDate == date && x.EmployeeID == employeeid);
+                        var employeeshift = db.EmployeeShift.FirstOrDefault(x => x.LocationID == locationid && x.ShiftDate == date && x.EmployeeID == employeeid);
+
+
+                        double? durationhour = 0;
+
+                        TimeSpan? duration = null;
+
+                        if (employeeschedule != null && employeeshift != null)
+                        {
+                            DateTime? starttime = employeeschedule.ShiftDateStart;
+                            if (employeeshift.ShiftDateStart > starttime)
+                            {
+                                starttime = employeeshift.ShiftDateStart;
+                            }
+
+                            DateTime? finishtime = employeeschedule.ShiftdateEnd;
+                            if (employeeshift.ShiftDateEnd < finishtime)
+                            {
+                                finishtime = employeeshift.ShiftDateEnd;
+                            }
+
+                            if (finishtime != null && starttime != null)
+                            {
+                                duration = (finishtime - starttime).Value;
+                                double? durationminute = (finishtime - starttime).Value.TotalMinutes;
+                                durationhour = (durationminute / 60);
+                            }
+
+                            
+                            // maaş hakedişi dosya ve hareket olarak ekle
+                            DocumentManager documentManager = new DocumentManager();
+
+                            var existssalaryearn = db.DocumentSalaryEarn.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == employeeid && x.Date == date && x.ActionTypeID == 32 && x.IsActive == true);
+
+                            if (existssalaryearn != null)
+                            {
+                                SalaryEarn earn = new SalaryEarn();
+                                earn.ActionTypeID = 32;
+                                earn.ActionTypeName = "Ücret Hakediş";
+                                earn.Currency = location.Currency;
+                                earn.DocumentDate = date;
+                                earn.EmployeeID = employeeid;
+                                earn.EnvironmentID = 2;
+                                earn.LocationID = location.LocationID;
+                                earn.OurCompanyID = location.OurCompanyID;
+                                earn.QuantityHour = durationhour.Value;
+                                earn.ResultID = dayresult != null ? dayresult.ID : (long?)null;
+                                earn.TimeZone = location.Timezone;
+                                earn.UID = existssalaryearn.UID.Value;
+                                earn.Description = dayresult?.Description;
+
+                                var res = documentManager.EditSalaryEarn(earn, authentication);
+
+                            }
+                            else
+                            {
+                                SalaryEarn earn = new SalaryEarn();
+                                earn.ActionTypeID = 32;
+                                earn.ActionTypeName = "Ücret Hakediş";
+                                earn.Currency = location.Currency;
+                                earn.DocumentDate = date;
+                                earn.EmployeeID = employeeid;
+                                earn.EnvironmentID = 2;
+                                earn.LocationID = location.LocationID;
+                                earn.OurCompanyID = location.OurCompanyID;
+                                earn.QuantityHour = durationhour.Value;
+                                earn.ResultID = dayresult != null ? dayresult.ID : (long?)null;
+                                earn.TimeZone = location.Timezone;
+                                earn.UID = Guid.NewGuid();
+
+                                var res = documentManager.AddSalaryEarn(earn, authentication);
+                            }
+
+                        }
+                       
+                    }
+                }
+            }
+
+            return issuccess;
+        }
+
     }
 }

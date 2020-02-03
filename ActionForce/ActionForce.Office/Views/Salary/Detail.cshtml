@@ -26,16 +26,10 @@
             <div class="media-body  mg-t-40 mg-lg-t-0">
                 <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
                     <div>
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-                                <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Çalışan Cari İşlemleri</li>
-                            </ol>
-                        </nav>
-                        <h4 class="mg-b-0 tx-spacing--1">Ücret Hakediş Detayı</h4>
+                        <h4 class="mg-b-0 tx-spacing--1">@(Model.Detail?.DocumentNumber) @(Model.Detail?.ActionTypeName?.ToString()) Detayı</h4>
                     </div>
                     <div class="d-none d-md-block">
-                        @{Html.RenderPartial("_PartialAddSalaryMenu");}
+                        <a href="/Salary/Index" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; Hakediş Listesi</a>
                     </div>
                 </div>
 
@@ -43,189 +37,171 @@
                 @using (Html.BeginForm("EditSalaryEarn", "Salary", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
+
                     <div class="row row-xs">
-                        <div class="col-lg-6">
-                            <div class="card mg-b-20 mg-lg-b-25">
-                                <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                                    <h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.Detail.ActionName}"))</h6>
-                                    <input name="ActinTypeID" type="hidden" value="32" />
-                                    <input name="UID" type="hidden" value="@(Model.Detail.UID)" />
-                                    <nav class="nav">
-                                        <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.Detail.Date.Value.ToLongDateString())</span></a>
-                                    </nav>
+                        <div class="col-lg-12">
+                            <input id="ID" name="ID" type="hidden" value="@(Model.Detail?.ID)" />
+                            <input id="UID" name="UID" type="hidden" value="@(Model.Detail?.UID)" />
+
+                            <div class="form-group row mg-b-0">
+                                <label for="ActionTypeName" class="col-sm-3 col-form-label">İşlem Türü</label>
+                                <div class="col-sm-6">
+                                    <span id="ActionTypeName" name="ActionTypeName" class="tx-light tx-15">@(Model.Detail?.ActionTypeName?.ToString())</span>
                                 </div>
-                                <div class="card-body pd-20">
-                                    <form>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Kasa Tipi</label>
-                                            <div class="col-sm-9">
-                                                <span class="text-danger">@Model.Detail.ActionTypeName</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Döküman Nr</label>
-                                            <div class="col-sm-9">
-                                                <span class="text-danger">@Model.Detail.DocumentNumber</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Tarih</label>
-                                            <div class="col-sm-9">
-                                                <input id="UpdateDocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.Detail.Date.Value.ToString("yyyy-MM-dd"))" required>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Kime</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control select2" name="EmployeeID" onchange="SalaryEarn(this.value)" required>
-                                                    @foreach (var item in Model.FromList)
-                                                    {
-                                                        <option value="@item.Code" @(Model.Detail.EmployeeID != null ? Model.Detail.EmployeeID == item.ID ? "selected" : "" : "")>@(Html.Raw($"{item.Name}"))</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Lokasyon</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control select2" name="LocationID" required>
-                                                    @foreach (var item in Model.LocationList)
-                                                    {
-                                                        <option value="@item.LocationID" @(Model.Detail.LocationID == item.LocationID ? "selected" : "")>@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Kategori</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control select2" name="CategoryID">
-                                                    @foreach (var item in Model.SalaryCategories)
-                                                    {
-                                                        <option value="@item.ID" @(Model.Detail.CategoryID == item.ID ? "selected" : "")>@($"{item.SortBy} ({item.CategoryName})")</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Tutar</label>
-                                            <div class="col-sm-9">
-                                                <input name="TotalAmount" type="text" class="form-control money" autocomplete="off" value="@(Model.Detail.TotalAmount?.ToString("N2"))" placeholder="Tutar" readonly required>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Saatlik Ücret</label>
-                                            <div class="col-sm-9">
-                                                <input name="UnitPrice" type="text" class="form-control money" autocomplete="off" value="@(Model.Detail.UnitPrice?.ToString("N2"))" placeholder="Birim Fiyat" readonly required>
-
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Toplam  Saat</label>
-                                            <div class="col-sm-9">
-                                                <input name="QuantityHour" type="text" class="form-control money" autocomplete="off" value="@Model.Detail.QuantityHour" placeholder="Toplam Saat" required>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Para Birimi</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control" name="Currency" required>
-                                                    @foreach (var item in Model.CurrencyList)
-                                                    {
-                                                        <option value="@item.Code" @(Model.Detail.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
-                                            <div class="col-sm-9">
-                                                <input name="ReferanceID" type="text" class="form-control number" value="@Model.Detail.ReferenceID" autocomplete="off" placeholder="Referans ID">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Açıklama</label>
-                                            <div class="col-sm-9">
-                                                <textarea name="Description" rows="4" class="form-control" value="@Model.Detail.Description" placeholder="Açıklama"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-3">Active?</div>
-                                            <div class="col-sm-9">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" name="IsActive" value="@Model.Detail.IsActive" checked="@Model.Detail.IsActive" class="custom-control-input">
-                                                    <label class="custom-control-label">Aktif mi?</label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row mg-b-0">
-                                            <div class="col-sm-3"></div>
-                                            <div class="col-sm-3">
-                                                @if (Model.Detail.IsActive == true)
-                                                {
-                                                    <button class="btn btn-primary btn-block">Hakediş Güncelle</button>
-                                                }
-
-                                            </div>
-                                            <div class="col-sm-3">
-                                                @if (Model.Detail.IsActive == true)
-                                                {
-                                                <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.Detail.TotalAmount?.ToString()) tutarlı hakedişi iptal etmek istediğine emin misin?')? DeleteSalaryEarn('@Model.Detail.UID') : ''">Hakediş Sil</button>
-                                                }
-
-                                            </div>
-                                        </div>
-
-
-                                    </form>
-                                </div>
-                                <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
-                                    <nav class="nav nav-with-icon tx-13">
-                                        <a href="" class="nav-link"><i data-feather="save"></i> <strong>İlk Kayıt : </strong></a>
-                                        <a href="" class="nav-link"><i data-feather="user-plus"></i> @(Html.Raw($"{Model.Detail.RecorderFullName}"))</a>
-                                        <a href="" class="nav-link"><i data-feather="calendar"></i> @(Html.Raw($"{Model.Detail.RecordDate.Value.ToLongDateString()}"))</a>
-                                        <a href="" class="nav-link"><span>|</span></a>
-                                        <a href="" class="nav-link"><i data-feather="edit"></i> <strong>Güncelleyen : </strong></a>
-                                        <a href="" class="nav-link"><i data-feather="user-check"></i> @(Html.Raw($"{Model.Detail.UpdaterFullName}"))</a>
-                                        <a href="" class="nav-link"><i data-feather="calendar"></i> @(Model.Detail.UpdateDate != null ? Html.Raw($"{Model.Detail.UpdateDate.Value.ToLongDateString()}") : Html.Raw($""))</a>
-                                    </nav>
+                                <div class="col-sm-3">
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header pd-b-0 pd-x-20 bd-b-0">
-                                    <div class="d-sm-flex align-items-center justify-content-between">
-                                        <h6 class="mg-b-0">@(Model.Detail.ActionName)</h6>
-                                        <p class="tx-12 tx-color-03 mg-b-0">@(Model.Detail.Date.Value.ToLongDateString())</p>
-                                    </div>
-                                </div><!-- card-header -->
-                                <div class="card-body pd-20">
-                                    <ul class="activity tx-13">
 
-                                        @foreach (var item in Model.History)
-                                        {
-                                            <li class="activity-item">
-                                                <div class="activity-icon @(item.ProcessType == "Insert" ? "bg-success-light tx-success": item.ProcessType == "Update" ? "bg-indigo-light tx-indigo" : "bg-pink-light tx-pink")">
-                                                    <i data-feather="@(item.ProcessType == "Insert" ? "plus-circle" : item.ProcessType == "Update" ? "edit" : "trash-2")"></i>
-                                                </div>
-
-                                                <div class="activity-body">
-                                                    <p class="mg-b-2"><strong>@item.ProcessType :</strong> @(item.ErrorMessage != "" ? Html.Raw($"<span class='text-danger'>{item.ErrorMessage}</span>") : Html.Raw($"<span class='text-black-50'>{item.ResultMessage}</span>"))</p>
-                                                    @(Html.Raw($"<p class='mg - b - 2'>{item.FieldName} <strong> | </strong> {item.OldValue} <strong> | </strong> {item.NewValue} </p>"))
-                                                    <small class="tx-color-03">@(Html.Raw($"{item.RecordDate.Value.ToLongDateString()} {item.RecordDate.Value.ToLongTimeString()} {item.RecordEmployee}"))</small>
-                                                </div>
-                                            </li>
-                                        }
-
-                                    </ul>
+                            <div class="form-group row mg-b-5">
+                                <label for="DocumentNumber" class="col-sm-3 col-form-label">Doküman No</label>
+                                <div class="col-sm-6">
+                                    <label id="DocumentNumber" name="DocumentNumber" class="tx-light tx-15">@(Model.Detail?.DocumentNumber)</label>
+                                </div>
+                                <div class="col-sm-3">
                                 </div>
                             </div>
+
+                            <div class="form-group row  bg-gray-50">
+                                <label for="DocumentDate" class="col-sm-3 col-form-label">Tarih</label>
+                                <div class="col-sm-6">
+                                    <label class="tx-light tx-15">@(Model.Detail.Date?.ToLongDateString())</label>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-5 bg-gray-50">
+                                <label for="LocationID" class="col-sm-3 col-form-label">Lokasyon</label>
+                                <div class="col-sm-6">
+                                    @($"{Model.Detail?.LocationFullName}" )
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row bg-gray-50 font-weight-bold">
+                                <label for="EmployeeID" class="col-sm-3 col-form-label">Çalışan</label>
+                                <div class="col-sm-6">
+                                    @($"{Model.Detail?.EmployeeFullName}" )
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row  mg-b-5 text-right">
+                                <label for="DateBegin" class="col-sm-3 col-form-label"></label>
+                                <div class="col-sm-2">
+                                    <span class="tx-light tx-15">Birim Ücret</span>
+                                </div>
+                                <div class="col-sm-2">
+                                    <span class="tx-light tx-15">Süre (Saat)</span>
+                                </div>
+                                <div class="col-sm-2">
+                                    <span class="tx-light tx-15">Toplam Tutar</span>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row  mg-b-5  bg-gray-50  text-right">
+                                <label for="DateBegin" class="col-sm-3 col-form-label text-left">Genel Hakediş</label>
+                                <div class="col-sm-2">
+                                    <label class="tx-right tx-15">@(Model.Detail?.UnitPrice?.ToString("N2"))</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="tx-right tx-15">@(Model.Detail?.QuantityHour?.ToString("N2"))</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="tx-right tx-15">@(Model.Detail?.TotalAmount?.ToString("N2"))</label>
+                                </div>
+                                <div class="col-sm-3 text-left">
+                                    @(Model.Detail?.Currency)
+                                </div>
+                            </div>
+
+                            <div class="form-group row  mg-b-5  bg-gray-100  text-right">
+                                <label for="DateBegin" class="col-sm-3 col-form-label text-left">Ücret Hakediş</label>
+                                <div class="col-sm-2">
+                                    <label class="tx-right tx-15">@(Model.Detail?.UnitPrice?.ToString("N2"))</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="tx-right tx-15">@(Model.Detail?.QuantityHourSalary?.ToString("N2"))</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="tx-right tx-15">@(Model.Detail?.TotalAmountSalary?.ToString("N2"))</label>
+                                </div>
+                                <div class="col-sm-3 text-left">
+                                    @(Model.Detail?.Currency)
+                                </div>
+                            </div>
+
+                            <div class="form-group row  mg-b-5  bg-gray-50 text-right">
+                                <label for="DateBegin" class="col-sm-3 col-form-label text-left">Setcard Hakediş</label>
+                                <div class="col-sm-2">
+                                    <label class="tx-right tx-15 col-form-label">@(Model.Detail?.UnitFoodPrice?.ToString("N2"))</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="tx-right tx-15">@(Model.Detail?.QuantityHourFood?.ToString("N2"))</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="tx-right tx-15">@(Model.Detail?.TotalAmountFood?.ToString("N2"))</label>
+                                </div>
+                                <div class="col-sm-3 text-left">
+                                    @(Model.Detail?.Currency)
+                                </div>
+                            </div>
+
+                            <div class="form-group row  mg-b-5  bg-gray-100 text-right font-weight-bold">
+                                <label for="DateEnd" class="col-sm-3 col-form-label text-left">Toplam Hakediş / Mesai Çarpanı</label>
+                                <div class="col-sm-2">
+                                    <label class="tx-right tx-15">@(Model.Detail?.TotalAmountLabor?.ToString("N2"))</label>
+                                </div>
+                                <div class="col-sm-2 text-left">
+                                    <label class="tx-15 text-left">@(Model.Detail?.Currency)</label>
+                                </div>
+                                <div class="col-sm-2">
+                                    <label class="tx-right tx-15">X @(Model.Detail?.UnitPriceMultiplierApplied)</label>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="Description" class="col-sm-3 col-form-label">Açıklama</label>
+                                <div class="col-sm-6">
+                                    <textarea id="Description" name="Description" rows="3" cols="20" class="form-control" style="width:100% !important;">@(Model.Detail?.Description)</textarea>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-0">
+                                <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+                                <div class="col-sm-6">
+                                    @(Model.Detail?.IsActive == true ? "Aktif" : "Pasif")
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                            <div class="form-group row mg-b-0">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-6">
+                                    <button type="@(Model.Detail.IsActive == true ? "submit":"button")" class="btn btn-primary btn-block">Hakediş Güncelle</button>
+                                </div>
+                                <div class="col-sm-3">
+                                    @if (Model.Detail.IsActive == true)
+                                    {
+                                        <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.Detail.TotalAmount?.ToString()) tutarlı hakedişi iptal etmek istediğine emin misin?')? DeleteSalaryEarn('@Model.Detail.UID') : ''">Hakediş Sil</button>
+                                    }
+                                </div>
+                            </div>
+
                         </div>
                     </div>
+
+
+
 
                 }
             </div>
@@ -233,9 +209,6 @@
     </div>
 </div>
 
-@section canvasmenu {
-    @*@{Html.RenderPartial("_PartialDocumentForms", Model);}*@
-}
 
 @section scripts {
     <script>
@@ -268,30 +241,23 @@
 
         function DeleteSalaryEarn(id) {
             window.location.href = "/Salary/DeleteSalaryEarn/" + id;
-            //$.ajax({
-            //    method: "GET",
-            //    url: "/Salary/DeleteSalaryEarn",
-            //    data: { id: id }
-            //}).done(function (d) {
-            //    $("#DeleteSalaryEarn").html(d);
-            //});
         }
 
         function SalaryEarn(EmployeeID) {
             $.ajax({
-                    method: "GET",
-                    url: "/Salary/SalaryEarn",
+                method: "GET",
+                url: "/Salary/SalaryEarn",
                 data: { id: EmployeeID }
 
-                }).done(function (d) {
-                    $("#UnitPrice").val(d);
+            }).done(function (d) {
+                $("#UnitPrice").val(d);
 
 
-                });
+            });
         }
-        
+
     </script>
-    
+
     <script>
 
 

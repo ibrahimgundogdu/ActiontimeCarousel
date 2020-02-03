@@ -56,17 +56,40 @@ namespace ActionForce.Office.Controllers
                     model.DateLists = Db.DateList.Where(x => x.DateKey == _datenow).ToList();
                 }
 
+
                 // 01 hakedişler tekrar hesaplanır.
                 foreach (var location in model.Locations)
                 {
-                    
+
                     foreach (var datelist in model.DateLists)
                     {
-                        var result = OfficeHelper.CheckSalaryEarn(datelist.DateKey, location.LocationID, model.Authentication);
+                        List<int> employeeIds = new List<int>();
+
+                        var employeeschedule = Db.Schedule.Where(x => x.LocationID == locationid && x.ShiftDate == datelist.DateKey).Select(x => x.EmployeeID.Value).ToList();
+                        employeeIds.AddRange(employeeschedule.Distinct());
+                        var employeeshift = Db.EmployeeShift.Where(x => x.LocationID == locationid && x.ShiftDate == datelist.DateKey).Select(x => x.EmployeeID.Value).ToList();
+                        employeeIds.AddRange(employeeshift.Distinct());
+                        employeeIds = employeeIds.Distinct().ToList();
+
+                        foreach (var empid in employeeIds)
+                        {
+                            var result = OfficeHelper.ComputeSalaryEarn(empid, datelist.DateKey, location.LocationID, model.Authentication);
+                        }
+
+                        // 02. hesaplanan hakedişler günsonu dosyasına yazılır
+                        var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == locationid && x.Date == datelist.DateKey);
+
+                        if (dayresult != null)
+                        {
+                            if (dayresult.StateID == 2 || dayresult.StateID == 3 || dayresult.StateID == 4)
+                            {
+                                DocumentManager document = new DocumentManager();
+                                var islocal = Request.IsLocal;
+
+                                var updresult = document.CheckResultBackward(dayresult.UID.Value, model.Authentication, islocal);
+                            }
+                        }
                     }
-
-                    // 02. hesaplanan hakedişler günsonu dosyasına yazılır
-
 
                     //03. hasılat raporu çalıştırılır.
                     var datelistone = model.DateLists.FirstOrDefault();

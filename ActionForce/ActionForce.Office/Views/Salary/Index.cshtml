@@ -27,13 +27,10 @@
             <h4 class="mg-b-0 tx-spacing--1">Ücret Hakediş</h4>
         </div>
         <div class="d-none d-md-block">
-            @{Html.RenderPartial("_PartialAddSalaryMenu");}
+            <a href="/Salary/AddNewSalaryEarn" class="btn btn-primary btn-uppercase"><i data-feather="plus-square"></i> &nbsp; Hakediş  Ekle</a>
         </div>
     </div>
-    <!--<div id="OffCanvasAddCashCollect" class="off-canvas off-canvas-overlay off-canvas-right">
-             any content goes here
-        form
-    </div>-->
+
 
 
 
@@ -133,7 +130,6 @@
 }
 
 @section scripts {
-    <script src="/lib/cleave.js/cleave.min.js"></script>
 
     <script>
         $(function () {
@@ -174,6 +170,7 @@
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1
             });
+
             function getDate(element) {
                 var date;
                 try {
@@ -188,15 +185,6 @@
 
         });
 
-        //function DeleteSalaryEarn(id) {
-        //    $.ajax({
-        //        method: "GET",
-        //        url: "/Salary/DeleteSalaryEarn",
-        //        data: { id: id }
-        //    }).done(function (d) {
-        //        $("#DeleteSalaryEarn").html(d);
-        //    });
-        //}
 
         function SalaryEarn(EmployeeID) {
             $.ajax({

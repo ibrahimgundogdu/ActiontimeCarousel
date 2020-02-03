@@ -2242,7 +2242,7 @@ namespace ActionForce.Office
 
                         var empunits = Db.EmployeeSalary.Where(x => x.EmployeeID == salary.EmployeeID && x.DateStart <= salary.DocumentDate && x.Hourly > 0).OrderByDescending(x => x.DateStart).FirstOrDefault();
                         double? unitprice = empunits?.Hourly ?? 0;
-                        
+
                         var locationstats = Db.LocationStats.FirstOrDefault(x => x.LocationID == salary.LocationID && x.StatsID == 2 && x.OptionID == 3);
                         if (location.OurCompanyID == 1 && locationstats != null)
                         {
@@ -2261,7 +2261,7 @@ namespace ActionForce.Office
                         salaryEarn.UnitPrice = unitprice;
                         salaryEarn.TotalAmount = (salaryEarn.QuantityHour * salaryEarn.UnitPrice);
                         salaryEarn.UnitPriceMultiplierApplied = salaryMultiplier;
-                        
+
                         salaryEarn.Currency = salary.Currency;
                         salaryEarn.Date = salary.DocumentDate;
                         salaryEarn.Description = salary.Description;
@@ -2291,15 +2291,15 @@ namespace ActionForce.Office
                             salaryEarn.QuantityHourSalary = (salaryEarn.QuantityHour * 0.9);
                             salaryEarn.QuantityHourFood = (salaryEarn.QuantityHour * 0.9);
                         }
-                          
-                        
+
+
 
                         Db.DocumentSalaryEarn.Add(salaryEarn);
                         Db.SaveChanges();
 
                         // cari hesap işlemesi
                         OfficeHelper.AddEmployeeAction(salaryEarn.EmployeeID, salaryEarn.LocationID, salaryEarn.ActionTypeID, salaryEarn.ActionTypeName, salaryEarn.ID, salaryEarn.Date, salaryEarn.Description, 1, salaryEarn.TotalAmountSalary, 0, salaryEarn.Currency, null, null, null, salaryEarn.RecordEmployeeID, salaryEarn.RecordDate, salaryEarn.UID.Value, salaryEarn.DocumentNumber, 3);
-                        if (salaryEarn.TotalAmountFood>0)
+                        if (salaryEarn.TotalAmountFood > 0)
                         {
                             var setcartacttype = Db.CashActionType.FirstOrDefault(x => x.ID == 39);
                             OfficeHelper.AddEmployeeAction(salaryEarn.EmployeeID, salaryEarn.LocationID, setcartacttype.ID, setcartacttype.Name, salaryEarn.ID, salaryEarn.Date, salaryEarn.Description, 1, salaryEarn.TotalAmountFood, 0, salaryEarn.Currency, null, null, null, salaryEarn.RecordEmployeeID, salaryEarn.RecordDate, salaryEarn.UID.Value, salaryEarn.DocumentNumber, 17);
@@ -2398,7 +2398,7 @@ namespace ActionForce.Office
                             UID = isEarn.UID,
                             UnitFoodPrice = isEarn.UnitFoodPrice,
                             UnitPriceMultiplierApplied = isEarn.UnitPriceMultiplierApplied
-                            
+
                         };
 
                         isEarn.ReferenceID = salary.ReferanceID;
@@ -2409,7 +2409,7 @@ namespace ActionForce.Office
                         isEarn.TotalAmount = (double)((double?)isEarn.UnitPrice * (double)isEarn.QuantityHour);
                         isEarn.UnitPriceMultiplierApplied = salaryMultiplier;
                         isEarn.Description = salary.Description;
-                        
+
                         isEarn.UpdateDate = DateTime.UtcNow.AddHours(salary.TimeZone.Value);
                         isEarn.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
                         isEarn.UpdateIP = OfficeHelper.GetIPAddress();
@@ -2476,35 +2476,35 @@ namespace ActionForce.Office
             {
                 using (ActionTimeEntities Db = new ActionTimeEntities())
                 {
-                    var isCash = Db.DocumentSalaryEarn.FirstOrDefault(x => x.UID == id);
-                    if (isCash != null)
+                    var SalaryEarn = Db.DocumentSalaryEarn.FirstOrDefault(x => x.UID == id);
+                    if (SalaryEarn != null)
                     {
                         try
                         {
-                            var exchange = OfficeHelper.GetExchange(Convert.ToDateTime(isCash.Date));
 
-                            isCash.IsActive = false;
-                            isCash.UpdateDate = DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3));
-                            isCash.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
-                            isCash.UpdateIP = OfficeHelper.GetIPAddress();
+                            SalaryEarn.IsActive = false;
+                            SalaryEarn.UpdateDate = DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(SalaryEarn.LocationID ?? 3));
+                            SalaryEarn.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
+                            SalaryEarn.UpdateIP = OfficeHelper.GetIPAddress();
 
                             Db.SaveChanges();
 
                             //maaş hesap işlemi
-                            OfficeHelper.AddEmployeeAction(isCash.EmployeeID, isCash.LocationID, isCash.ActionTypeID, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.Description, 1, -1 * isCash.TotalAmount, 0, isCash.Currency, null, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value, isCash.DocumentNumber, 3);
+                            var actions = Db.EmployeeCashActions.Where(x => x.ProcessUID == SalaryEarn.UID && x.ProcessID == SalaryEarn.ID).ToList();
+                            Db.EmployeeCashActions.RemoveRange(actions);
+                            Db.SaveChanges();
 
                             result.IsSuccess = true;
                             result.Message = "Ücret Hakediş iptal edildi";
 
                             // log atılır
-                            OfficeHelper.AddApplicationLog("Office", "Salary", "Remove", isCash.ID.ToString(), "Salary", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isCash);
+                            OfficeHelper.AddApplicationLog("Office", "DocumentSalaryEarn", "Delete", SalaryEarn.ID.ToString(), "Salary", "Detail", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(SalaryEarn.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, SalaryEarn);
 
                         }
                         catch (Exception ex)
                         {
-
-                            result.Message = $"{isCash.TotalAmount} {isCash.Currency} tutarındaki ÜCRET HAKEDİŞ iptal edilemedi : {ex.Message}";
-                            OfficeHelper.AddApplicationLog("Office", "Salary", "Remove", "-1", "Salary", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(isCash.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                            result.Message = $"{SalaryEarn.TotalAmount} {SalaryEarn.Currency} tutarındaki ÜCRET HAKEDİŞ iptal edilemedi : {ex.Message}";
+                            OfficeHelper.AddApplicationLog("Office", "Salary", "Remove", "-1", "Salary", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(SalaryEarn.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                         }
                     }
 
@@ -4434,7 +4434,7 @@ namespace ActionForce.Office
                             // eğer status 1 ise ve izin saatlik ücretsiz kesintili ise carisine kesinti işlenir.
                             if (employeePermit.StatusID == 1 && employeePermit.IsPaidTo == false && employeePermit.TotalAmount > 0 && permit.PermitTypeID == 2)
                             {
-                                OfficeHelper.AddEmployeeAction(employeePermit.EmployeeID, employeePermit.LocationID, employeePermit.ActionTypeID, employeePermit.ActionTypeName, employeePermit.ID, employeePermit.Date, employeePermit.Description, 1, 0, employeePermit.TotalAmount, employeePermit.Currency, null, null, 3, employeePermit.RecordEmployeeID, employeePermit.RecordDate, employeePermit.UID.Value, employeePermit.DocumentNumber, 16);
+                                OfficeHelper.AddEmployeeAction(employeePermit.EmployeeID, employeePermit.LocationID, employeePermit.ActionTypeID, employeePermit.ActionTypeName, employeePermit.ID, employeePermit.Date, employeePermit.Description, 1, (-1 * employeePermit.TotalAmount), 0, employeePermit.Currency, null, null, 3, employeePermit.RecordEmployeeID, employeePermit.RecordDate, employeePermit.UID.Value, employeePermit.DocumentNumber, 16);
                             }
 
                             result.IsSuccess = true;
@@ -4577,7 +4577,7 @@ namespace ActionForce.Office
                             // eğer status 1 ise ve izin saatlik ve ücretsiz kesintili ise carisine kesinti işlenir.
                             if (isPermit.StatusID == 1 && isPermit.IsPaidTo == false && isPermit.TotalAmount > 0 && permit.PermitTypeID == 2)
                             {
-                                OfficeHelper.AddEmployeeAction(isPermit.EmployeeID, isPermit.LocationID, isPermit.ActionTypeID, isPermit.ActionTypeName, isPermit.ID, isPermit.Date, isPermit.Description, 1, 0, isPermit.TotalAmount, isPermit.Currency, null, null, 3, isPermit.UpdateEmployeeID, isPermit.UpdateDate, isPermit.UID.Value, isPermit.DocumentNumber, 16);
+                                OfficeHelper.AddEmployeeAction(isPermit.EmployeeID, isPermit.LocationID, isPermit.ActionTypeID, isPermit.ActionTypeName, isPermit.ID, isPermit.Date, isPermit.Description, 1, (-1 * isPermit.TotalAmount), 0, isPermit.Currency, null, null, 3, isPermit.UpdateEmployeeID, isPermit.UpdateDate, isPermit.UID.Value, isPermit.DocumentNumber, 16);
                             }
 
                             if (isPermit.StatusID == 2)

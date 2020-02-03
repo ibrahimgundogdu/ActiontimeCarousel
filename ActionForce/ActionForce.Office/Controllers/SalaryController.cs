@@ -166,57 +166,24 @@ namespace ActionForce.Office.Controllers
 
             SalaryControlModel model = new SalaryControlModel();
 
-            if (cashEarn != null)
+            if (cashEarn != null && cashEarn.ID > 0 && cashEarn.UID != null)
             {
-                var fromPrefix = cashEarn.EmployeeID.Substring(0, 1);
-                var fromID = Convert.ToInt32(cashEarn.EmployeeID.Substring(1, cashEarn.EmployeeID.Length - 1));
-                var amount = Convert.ToDouble(cashEarn.TotalAmount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var unit = Convert.ToDouble(cashEarn.UnitPrice.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var quantity = Convert.ToDouble(cashEarn.QuantityHour.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var currency = cashEarn.Currency;
-                var docDate = DateTime.Now.Date;
-                if (DateTime.TryParse(cashEarn.DocumentDate, out docDate))
+
+                var salaryearn = Db.DocumentSalaryEarn.FirstOrDefault(x => x.ID == cashEarn.ID && x.UID == cashEarn.UID);
+
+                if (salaryearn != null)
                 {
-                    docDate = Convert.ToDateTime(cashEarn.DocumentDate).Date;
-                }
+                    salaryearn.Description = cashEarn.Description;
+                    Db.SaveChanges();
 
-                var price = Convert.ToDouble(cashEarn.UnitPrice.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                if (quantity > 0 && price > 0)
-                {
-                    SalaryEarn sale = new SalaryEarn();
-                    sale.ActionTypeID = cashEarn.ActinTypeID;
-                    //sale.TotalAmount = amount;
-                    sale.Currency = currency;
-                    sale.Description = cashEarn.Description;
-                    sale.DocumentDate = docDate;
-                    sale.EnvironmentID = 2;
-                    sale.EmployeeID = fromPrefix == "E" ? fromID : (int?)null;
-                    sale.LocationID = cashEarn.LocationID;
-                    sale.UID = cashEarn.UID;
-                    //sale.UnitPrice = unit;
-                    sale.QuantityHour = quantity;
-                    sale.CategoryID = cashEarn.CategoryID;
-
-                    //sale.SystemQuantityHour = sale.QuantityHour;
-                    //sale.SystemTotalAmount = sale.TotalAmount;
-                    //sale.SystemUnitPrice = sale.UnitPrice;
-
-                    DocumentManager documentManager = new DocumentManager();
-                    var editresult = documentManager.EditSalaryEarn(sale, model.Authentication);
-
-                    result.IsSuccess = editresult.IsSuccess;
-                    result.Message = editresult.Message;
-                }
-                else
-                {
-                    result.IsSuccess = true;
-                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
-                }
+                    var issuccess = OfficeHelper.CalculateSalaryEarn(salaryearn.ResultID.Value, salaryearn.EmployeeID.Value, salaryearn.Date.Value, salaryearn.LocationID.Value, model.Authentication);
+                    result.IsSuccess = issuccess;
+                    result.Message = "Hakediş başarı ile güncellendi";
+                } 
             }
 
             TempData["result"] = result;
             return RedirectToAction("Detail", new { id = cashEarn.UID });
-
         }
 
         [AllowAnonymous]
@@ -1334,8 +1301,8 @@ namespace ActionForce.Office.Controllers
             model.PermitTypes = Db.PermitType.Where(x => x.IsActive == true);
             model.PermitStatus = Db.PermitStatus.Where(x => x.IsActive == true).ToList();
             model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Permit" && x.ProcessID == model.CurrentPermit.ID.ToString()).ToList();
-            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
             return View(model);
         }
@@ -1414,7 +1381,7 @@ namespace ActionForce.Office.Controllers
 
                     TempData["result"] = new Result() { IsSuccess = editresult.IsSuccess, Message = editresult.Message };
 
-                    if (result.IsSuccess == true)
+                    if (editresult.IsSuccess == true)
                     {
                         return RedirectToAction("PermitDetail", "Salary", new { id = permitdoc.UID });
                     }
