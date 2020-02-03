@@ -7,12 +7,8 @@
                 <th>#</th>
                 <th>Lokasyon</th>
                 <th>Tarih</th>
-                <th>Birim Fiyat</th>
-                <th>Çalışma Süresi</th>
-                <th>Saatlik Hakediş</th>
                 <th>Hakediş</th>
-                <th>Set Card Çarpan</th>
-                <th>Set Card Hakediş</th>
+                <th>Toplam</th>
                 <th>Para Birimi</th>
             </tr>
         </thead>
@@ -24,7 +20,7 @@
             }
 
 
-            @foreach (var item in Model.SalaryEarn)
+            @foreach (var item in Model.CashAction)
             {
                 //Model.FooterTotals.FirstOrDefault(x => x.Currency == item.Currency).Total += item.Amount ?? 0;
                 //Model.MiddleTotals.FirstOrDefault(x => x.Currency == item.Currency).Total += item.Amount ?? 0;
@@ -32,17 +28,12 @@
             <tr>
 
                 <td class="tx-sm-13 bold">@item.LocationID</td>
-                <td class="tx-sm-13">@item.LocationFullName</td>
+                <td class="tx-sm-13">@item.LocationName</td>
 
-                <td class="tx-sm-13">@(item.Date?.ToLongDateString())</td>
+                <td class="tx-sm-13">@(item.ProcessDate?.ToLongDateString())</td>
 
-                <td class="tx-sm-13">@(item.UnitPrice?.ToString("N2"))</td>
-                <td class="tx-sm-13">@(item.QuantityHour?.ToString("N2"))</td>
-                <td class="tx-sm-13 font-weight-bold">@(item.QuantityHourSalary?.ToString("N2"))</td>
-
-                <td class="text-left bg-light font-weight-bold">@((item.UnitPrice * item.QuantityHourSalary)?.ToString("N2"))</td>
-                <td class="tx-sm-13 font-weight-bold">@(item.QuantityHourFood?.ToString("N4"))</td>
-                <td class="text-left bg-warning font-weight-bold">@((item.QuantityHourFood * Model.SetcardParameter.EarnHour * Model.SetcardParameter.Amount)?.ToString("N4"))</td>
+                <td class="tx-sm-13 font-weight-bold">@(item.Collection?.ToString("N2"))</td>
+                <td class="text-left bg-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
                 <td class="tx-sm-13">@item.Currency</td>
 
 
@@ -58,12 +49,8 @@
             <tr class="bg-light">
                 <th></th>
                 <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
                 <th colspan="1">Genel Toplam</th>
                 <th class="text-right bg-dark font-weight-bold text-white">@(Model.FooterTotal.FirstOrDefault(x => x.Currency == "TRL").Amount.ToString("N2"))</th>
-                <th></th>
                 <th class="text-right bg-dark font-weight-bold text-white">@(Model.FooterTotal.FirstOrDefault(x => x.Currency == "TRL").Total.ToString("N4"))</th>
                 <th>TRL</th>
                 <th></th>
@@ -73,12 +60,8 @@
             <tr class="bg-light">
                 <th></th>
                 <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
                 <th colspan="1">Genel Toplam</th>
                 <th class="text-right bg-dark font-weight-bold text-white">@(Model.FooterTotal.FirstOrDefault(x => x.Currency == "USD").Amount.ToString("N2"))</th>
-                <th></th>
                 <th class="text-right bg-dark font-weight-bold text-white">@(Model.FooterTotal.FirstOrDefault(x => x.Currency == "USD").Total.ToString("N4"))</th>
 
                 <th>USD</th>
@@ -89,12 +72,8 @@
             <tr class="bg-light">
                 <th></th>
                 <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
                 <th colspan="1">Genel Toplam</th>
                 <th class="text-right bg-dark font-weight-bold text-white">@(Model.FooterTotal.FirstOrDefault(x => x.Currency == "EUR").Amount.ToString("N2"))</th>
-                <th></th>
                 <th class="text-right bg-dark font-weight-bold text-white">@(Model.FooterTotal.FirstOrDefault(x => x.Currency == "EUR").Total.ToString("N4"))</th>
                 <th>EUR</th>
                 <th></th>

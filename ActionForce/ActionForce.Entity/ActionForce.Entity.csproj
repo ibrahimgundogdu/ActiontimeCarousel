@@ -567,6 +567,9 @@
     <Compile Include="StatsOptions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="SystemCheckEmployeeRows.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="Task.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -778,6 +781,12 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VSchedule.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VSystemCheckEmployeePerformance.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VSystemCheckEmployeeRows.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="WeekList.cs">

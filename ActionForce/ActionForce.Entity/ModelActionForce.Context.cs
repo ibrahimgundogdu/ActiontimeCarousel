@@ -256,6 +256,9 @@ namespace ActionForce.Entity
         public virtual DbSet<DocumentSalaryEarn> DocumentSalaryEarn { get; set; }
         public virtual DbSet<VDocumentSalaryEarn> VDocumentSalaryEarn { get; set; }
         public virtual DbSet<OurCompany> OurCompany { get; set; }
+        public virtual DbSet<SystemCheckEmployeeRows> SystemCheckEmployeeRows { get; set; }
+        public virtual DbSet<VSystemCheckEmployeePerformance> VSystemCheckEmployeePerformance { get; set; }
+        public virtual DbSet<VSystemCheckEmployeeRows> VSystemCheckEmployeeRows { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

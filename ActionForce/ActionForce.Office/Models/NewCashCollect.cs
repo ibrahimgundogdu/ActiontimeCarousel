@@ -412,4 +412,14 @@ namespace ActionForce.Office
         public string FinalFinishDate { get; set; }
         public string Description { get; set; }
     }
+    public class NewSalary
+    {
+        public int ID { get; set; }
+        public int EmployeeID { get; set; }
+        public string DateStart { get; set; }
+        public string Hourly { get; set; }
+        public string Monthly { get; set; }
+        public string HourlyExtend { get; set; }
+        public string ExtendMultiplyRate { get; set; }
+    }
 }

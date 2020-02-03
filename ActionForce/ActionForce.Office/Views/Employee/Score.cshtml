@@ -55,12 +55,12 @@
                         <nav class="nav flex-column demo-animate-list">
                             <a href="/Employee/Detail/@(Model.EmpList.EmployeeUID)" class="nav-link">Detay</a>
                             <a href="/Employee/Schedule/@(Model.EmpList.EmployeeUID)" class="nav-link">Schedule (Takvim)</a>
-                            <a href="/Employee/Shift/@(Model.EmpList.EmployeeUID)" class="nav-link active">Shift (Mesai Mola)</a>
+                            <a href="/Employee/Shift/@(Model.EmpList.EmployeeUID)" class="nav-link">Shift (Mesai Mola)</a>
                             <a href="/Employee/Action/@(Model.EmpList.EmployeeUID)" class="nav-link">Cari Hesap</a>
                             <a href="/Employee/FoodCard/@(Model.EmpList.EmployeeUID)" class="nav-link">Set Card</a>
                             <a href="/Employee/Location?id=@(Model.EmpList.EmployeeUID)" class="nav-link">Lokasyonlar</a>
                             <a href="#" class="nav-link">Özlük Belgeleri</a>
-                            <a href="/Employee/Score/@(Model.EmpList.EmployeeUID)" class="nav-link">Puanlama Skorlama</a>
+                            <a href="/Employee/Score/@(Model.EmpList.EmployeeUID)" class="nav-link active">Puanlama Skorlama</a>
                             <a href="/Employee/Check/@(Model.EmpList.EmployeeUID)" class="nav-link">Check Liste</a>
                             <a href="/Employee/Period/@(Model.EmpList.EmployeeUID)" class="nav-link">Çalışma Dönemleri</a>
                             <a href="/Employee/Salary/@(Model.EmpList.EmployeeUID)" class="nav-link">Ücret Tanımlamaları</a>
@@ -81,16 +81,16 @@
                             <div></div>
                         </a>
                         <input id="EmployeeID" type="hidden" value="@Model.EmpList.EmployeeID" />
-                        <input id="WeekCode" type="hidden" value="@Model.MoonCode" />
+                        <input id="WeekCode" type="hidden" value="@Model.WeekCode" />
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="/Employee/Shift?month=@(Model.PrevMoonCode)&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bir Önceki Ay"><i class="fa fa-arrow-left"></i></a>
+                        <a href="/Employee/Score?week=@(Model.PrevWeekCode)&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bir Önceki Hafta"><i class="fa fa-arrow-left"></i></a>
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="/Employee/Shift?date=@(DateTime.Now.ToString("yyyy-MM-dd"))&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bu Ay"><i class="fa fa-bullseye"></i></a>
+                        <a href="/Employee/Score?date=@(DateTime.Now.ToString("yyyy-MM-dd"))&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bu Hafta"><i class="fa fa-bullseye"></i></a>
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="/Employee/Shift?month=@(Model.NextMoonCode)&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bir Sonraki Ay"><i class="fa fa-arrow-right"></i></a>
+                        <a href="/Employee/Score?week=@(Model.NextWeekCode)&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bir Sonraki Hafta"><i class="fa fa-arrow-right"></i></a>
                     </div>
 
                 </div>
@@ -103,7 +103,7 @@
                     </div><!-- card-header -->
                     <div class="card-body pd-0">
                         <div class="table-responsive">
-                            @{Html.RenderPartial("_PartialEmployeeShift", Model);}
+                            @{Html.RenderPartial("_PartialEmployeeScore", Model);}
                         </div>
                     </div>
 
@@ -115,3 +115,5 @@
         </div>
     </div>
 </div>
+
+

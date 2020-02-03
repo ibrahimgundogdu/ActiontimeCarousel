@@ -2617,6 +2617,12 @@
     <Content Include="Views\Employee\_PartialEmployeeFoodCard.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeePeriodsDetail.cshtml" />
     <Content Include="Views\Compute\Index.cshtml" />
+    <Content Include="Views\Employee\Salary.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeSalary.cshtml" />
+    <Content Include="Views\Employee\Period.cshtml" />
+    <Content Include="Views\Employee\Check.cshtml" />
+    <Content Include="Views\Employee\Score.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeScore.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

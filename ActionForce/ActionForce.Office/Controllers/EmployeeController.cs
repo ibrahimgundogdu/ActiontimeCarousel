@@ -762,12 +762,12 @@ namespace ActionForce.Office.Controllers
             model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
             model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
 
-            model.SetcardParameter = Db.SetcardParameter.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.Year == datekey.Year);
+            //model.SetcardParameter = Db.SetcardParameter.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.Year == datekey.Year);
 
-            model.SalaryEarn = Db.VDocumentSalaryEarn.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+            //model.SalaryEarn = Db.VDocumentSalaryEarn.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+            model.CashAction = Db.VEmployeeCashActions.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.ActionTypeID == 39 && datelist.Contains(x.ProcessDate.Value)).ToList();
 
-
-            var balanceData = Db.VDocumentSalaryEarn.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+            var balanceData = Db.VEmployeeCashActions.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.ActionTypeID == 39 && datelist.Contains(x.ProcessDate.Value)).ToList();
             if (balanceData != null && balanceData.Count > 0)
             {
                 List<TotalFood> headerTotals = new List<TotalFood>();
@@ -777,24 +777,24 @@ namespace ActionForce.Office.Controllers
                 {
                     Currency = "TRL",
                     Type = "FoodCard",
-                    Amount = balanceData.Where(x => x.Currency == "TRL").Sum(x => x.QuantityHourSalary * x.UnitPrice) ?? 0,
-                    Total = balanceData.Where(x => x.Currency == "TRL").Sum(x => x.QuantityHourFood * model.SetcardParameter.EarnHour * model.SetcardParameter.Amount) ?? 0
+                    Amount = balanceData.Where(x => x.Currency == "TRL").Sum(x => x.Collection) ?? 0,
+                    Total = balanceData.Where(x => x.Currency == "TRL").Sum(x => x.Amount) ?? 0
                 });
 
                 headerTotals.Add(new TotalFood()
                 {
                     Currency = "USD",
                     Type = "FoodCard",
-                    Amount = balanceData.Where(x => x.Currency == "USD").Sum(x => x.QuantityHourSalary * x.UnitPrice) ?? 0,
-                    Total = balanceData.Where(x => x.Currency == "USD").Sum(x => x.QuantityHourFood * model.SetcardParameter.EarnHour * model.SetcardParameter.Amount) ?? 0
+                    Amount = balanceData.Where(x => x.Currency == "USD").Sum(x => x.Collection) ?? 0,
+                    Total = balanceData.Where(x => x.Currency == "USD").Sum(x => x.Amount) ?? 0
                 });
 
                 headerTotals.Add(new TotalFood()
                 {
                     Currency = "EUR",
                     Type = "FoodCard",
-                    Amount = balanceData.Where(x => x.Currency == "EUR").Sum(x => x.QuantityHourSalary * x.UnitPrice) ?? 0,
-                    Total = balanceData.Where(x => x.Currency == "EUR").Sum(x => x.QuantityHourFood * model.SetcardParameter.EarnHour * model.SetcardParameter.Amount) ?? 0
+                    Amount = balanceData.Where(x => x.Currency == "EUR").Sum(x => x.Collection) ?? 0,
+                    Total = balanceData.Where(x => x.Currency == "EUR").Sum(x => x.Amount) ?? 0
                 });
 
                 model.HeaderTotal = headerTotals;
@@ -902,8 +902,166 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        public ActionResult Salary(Guid? id)
+        {
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
 
 
+            model.OurList = Db.OurCompany.ToList();
+            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
+
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
+            model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).ToList();
+            model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
+
+            model.EmployeeLocationList = Db.VEmployeeLocation.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+
+            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date).ToList();
+            model.EmployeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true).ToList();
+            model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute > 0).ToList();
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
+
+            model.EmployeeSalary = Db.EmployeeSalary.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+
+            return View(model);
+        }
+        
+        [AllowAnonymous]
+        public ActionResult Period(Guid? id)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            var _date = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
+
+
+            model.OurList = Db.OurCompany.ToList();
+
+            model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
+
+            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date).ToList();
+            model.EmployeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true).ToList();
+            model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute > 0).ToList();
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
+
+            model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult Check(Guid? id)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            var _date = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
+
+
+            model.OurList = Db.OurCompany.ToList();
+
+            model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
+
+            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date).ToList();
+            model.EmployeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true).ToList();
+            model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute > 0).ToList();
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
+            
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult Score(Guid? id, string week, string date)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            if (!string.IsNullOrEmpty(week))
+            {
+                var weekparts = week.Split('-');
+                int _year = Convert.ToInt32(weekparts[0]);
+                int _week = Convert.ToInt32(weekparts[1]);
+                datekey = Db.DateList.Where(x => x.WeekYear == _year && x.WeekNumber == _week).OrderBy(x => x.DateKey).FirstOrDefault();
+            }
+
+            model.CurrentLocation = Db.VEmployeeLocation.FirstOrDefault(x => x.EmployeeUID == id);
+
+            if (id != null)
+            {
+                model.CurrentLocation = Db.VEmployeeLocation.FirstOrDefault(x => x.EmployeeUID == id);
+            }
+
+            string weekcode = $"{datekey.WeekYear}-{datekey.WeekNumber}";
+            var weekdatekeys = Db.DateList.Where(x => x.WeekYear == datekey.WeekYear && x.WeekNumber == datekey.WeekNumber).ToList();
+
+            model.WeekCode = weekcode;
+
+            model.CurrentDate = datekey;
+            model.WeekList = weekdatekeys;
+            model.FirstWeekDay = weekdatekeys.OrderBy(x => x.DateKey).FirstOrDefault();
+            model.LastWeekDay = weekdatekeys.OrderByDescending(x => x.DateKey).FirstOrDefault();
+
+            var prevdate = model.FirstWeekDay.DateKey.AddDays(-1).Date;
+            var nextdate = model.LastWeekDay.DateKey.AddDays(1).Date;
+
+            var prevday = Db.DateList.FirstOrDefault(x => x.DateKey == prevdate);
+            var nextday = Db.DateList.FirstOrDefault(x => x.DateKey == nextdate);
+
+
+            model.NextWeekCode = $"{nextday.WeekYear}-{nextday.WeekNumber}";
+            model.PrevWeekCode = $"{prevday.WeekYear}-{prevday.WeekNumber}";
+
+
+            List<DateTime> datelist = model.WeekList.Select(x => x.DateKey).Distinct().ToList();
+
+
+
+            model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).ToList();
+            model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
+
+            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date).ToList();
+            model.EmployeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true).ToList();
+            model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute > 0).ToList();
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
+
+            model.EmployeeCheck = Db.VSystemCheckEmployeeRows.Where(x => x.EmployeeID == model.EmpList.EmployeeID && datelist.Contains(x.DateKey.Value)).ToList();
+            return View(model);
+        }
 
 
 
@@ -912,7 +1070,7 @@ namespace ActionForce.Office.Controllers
         {
             EmployeeControlModel model = new EmployeeControlModel();
 
-            
+
             if (TempData["wizard"] != null)
             {
                 model.Wizard = TempData["wizard"] as WizardModel;
@@ -920,13 +1078,13 @@ namespace ActionForce.Office.Controllers
             else
             {
                 WizardModel wizardModel = new WizardModel();
-                
+
                 model.Wizard = wizardModel;
             }
 
             var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
 
-            
+
             model.OurList = Db.OurCompany.ToList();
             model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
             model.AreaCategoryList = Db.EmployeeAreaCategory.Where(x => x.IsActive == true).ToList();
@@ -944,50 +1102,7 @@ namespace ActionForce.Office.Controllers
 
             return View(model);
         }
-        
 
-        public PartialViewResult AddEmployeeSchedule(int empid, string week)
-        {
-
-
-            EmployeeControlModel model = new EmployeeControlModel();
-
-            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
-            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
-
-            if (!string.IsNullOrEmpty(week))
-            {
-                var weekparts = week.Split('-');
-                int _year = Convert.ToInt32(weekparts[0]);
-                int _week = Convert.ToInt32(weekparts[1]);
-                datekey = Db.DateList.Where(x => x.WeekYear == _year && x.WeekNumber == _week).OrderBy(x => x.DateKey).FirstOrDefault();
-            }
-
-            string weekcode = $"{datekey.WeekYear}-{datekey.WeekNumber}";
-            var weekdatekeys = Db.DateList.Where(x => x.WeekYear == datekey.WeekYear && x.WeekNumber == datekey.WeekNumber).ToList();
-
-            model.WeekCode = weekcode;
-            model.CurrentDate = datekey;
-            model.WeekList = weekdatekeys;
-            model.FirstWeekDay = weekdatekeys.OrderBy(x => x.DateKey).FirstOrDefault();
-            model.LastWeekDay = weekdatekeys.OrderByDescending(x => x.DateKey).FirstOrDefault();
-
-            model.CurrentEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == empid);
-
-
-            var schedulelist = Db.VSchedule.Where(x => x.WeekCode.Trim() == weekcode && x.EmployeeID == empid).ToList();
-            model.EmpSchedule = schedulelist;
-
-
-
-            return PartialView("_PartialAddEmployeeSchedule", model);
-        }
-
-
-
-
-
-        
         [AllowAnonymous]
         public PartialViewResult EmployeeStatus(string Identity, string IdentityNumber, string FullName, string EMail, string Mobile)
         {
@@ -1038,7 +1153,7 @@ namespace ActionForce.Office.Controllers
                 List<string> _identy = idnt.Select(x => x.Mobile).ToList();
                 model.Wizard.Mobiles = _identy;
             }
-            
+
 
             var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
 
@@ -1062,20 +1177,17 @@ namespace ActionForce.Office.Controllers
 
             if (model.Wizard.Identitys?.Count() > 0 || model.Wizard.IdentityNumbers?.Count() > 0 || model.Wizard.FullNames?.Count() > 0 || model.Wizard.EMails?.Count() > 0 || model.Wizard.Mobiles?.Count() > 0)
             {
-                
+
                 return PartialView("_PartialEmployeeAddStatus", model);
             }
             else
             {
-                
+
                 return PartialView("_PartialEmployeeAddNew", model);
             }
-            
+
 
         }
-
-
-        
         
         [AllowAnonymous]
         public PartialViewResult EmployeeList(string Identity, string IdentityNumber, string FullName, string EMail, string Mobile)
@@ -1120,6 +1232,48 @@ namespace ActionForce.Office.Controllers
         }
 
 
+
+        
+        
+
+        public PartialViewResult AddEmployeeSchedule(int empid, string week)
+        {
+
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            if (!string.IsNullOrEmpty(week))
+            {
+                var weekparts = week.Split('-');
+                int _year = Convert.ToInt32(weekparts[0]);
+                int _week = Convert.ToInt32(weekparts[1]);
+                datekey = Db.DateList.Where(x => x.WeekYear == _year && x.WeekNumber == _week).OrderBy(x => x.DateKey).FirstOrDefault();
+            }
+
+            string weekcode = $"{datekey.WeekYear}-{datekey.WeekNumber}";
+            var weekdatekeys = Db.DateList.Where(x => x.WeekYear == datekey.WeekYear && x.WeekNumber == datekey.WeekNumber).ToList();
+
+            model.WeekCode = weekcode;
+            model.CurrentDate = datekey;
+            model.WeekList = weekdatekeys;
+            model.FirstWeekDay = weekdatekeys.OrderBy(x => x.DateKey).FirstOrDefault();
+            model.LastWeekDay = weekdatekeys.OrderByDescending(x => x.DateKey).FirstOrDefault();
+
+            model.CurrentEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == empid);
+
+
+            var schedulelist = Db.VSchedule.Where(x => x.WeekCode.Trim() == weekcode && x.EmployeeID == empid).ToList();
+            model.EmpSchedule = schedulelist;
+
+
+
+            return PartialView("_PartialAddEmployeeSchedule", model);
+        }
+
+        
 
 
         [HttpPost]
@@ -1398,6 +1552,7 @@ namespace ActionForce.Office.Controllers
                         {
                             bool isActive = !string.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false;
                             bool isMaster = !string.IsNullOrEmpty(location.IsMaster) && location.IsMaster == "1" ? true : false;
+
                             EmployeesLocation empdoc = new EmployeesLocation();
 
                             empdoc.EmployeeID = (int)model.FilterModel.EmployeeID;
@@ -1410,7 +1565,36 @@ namespace ActionForce.Office.Controllers
 
 
                             TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
-                            
+                            //try
+                            //{
+                            //    bool isActive = !string.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false;
+                            //    bool isMaster = !string.IsNullOrEmpty(location.IsMaster) && location.IsMaster == "1" ? true : false;
+
+                            //    EmployeeLocation emp = new EmployeeLocation();
+
+                            //    emp.EmployeeID = (int)model.FilterModel.EmployeeID;
+                            //    emp.LocationID = location.LocationID;
+                            //    emp.IsMaster = isMaster;
+                            //    emp.IsActive = isActive;
+
+                            //    Db.EmployeeLocation.Add(emp);
+                            //    Db.SaveChanges();
+
+
+
+                            //    result.IsSuccess = true;
+                            //    result.Message = "Lokasyon başarılı ile eklendi";
+
+
+                            //    OfficeHelper.AddApplicationLog("Office", "EmployeeLocation", "Insert", emp.EmployeeID.ToString(), "Employee", "AddEmployeeLocation", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, emp);
+                            //}
+                            //catch (Exception ex)
+                            //{
+
+                            //    result.Message = $"Çalışan izini eklenemedi : {ex.Message}";
+                            //    OfficeHelper.AddApplicationLog("Office", "EmployeeLocation", "Insert", "-1", "Employee", "AddEmployeeLocation", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, location);
+                            //}
+
                         }
                         else
                         {
@@ -1427,8 +1611,59 @@ namespace ActionForce.Office.Controllers
                             DocumentManager documentManager = new DocumentManager();
                             result = documentManager.EditEmployeeLocation(empdoc, model.Authentication);
 
-
                             TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+                            //try
+                            //{
+                            //    var isEmployee = Db.EmployeeLocation.FirstOrDefault(x => x.EmployeeID == model.FilterModel.EmployeeID && x.LocationID == location.LocationID);
+                            //    if (isEmployee != null)
+                            //    {
+                            //        bool isActive = !string.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false;
+                            //        bool isMaster = !string.IsNullOrEmpty(location.IsMaster) && location.IsMaster == "1" ? true : false;
+
+                            //        EmployeeLocation emp = new EmployeeLocation()
+                            //        {
+                            //            EmployeeID = (int)model.FilterModel.EmployeeID,
+                            //            LocationID = isEmployee.LocationID,
+                            //            IsActive = isEmployee.IsActive,
+                            //            IsMaster = isEmployee.IsMaster
+                            //        };
+
+                            //        isEmployee.LocationID = location.LocationID;
+                            //        isEmployee.IsMaster = isMaster;
+                            //        isEmployee.IsActive = isActive;
+
+                            //        Db.SaveChanges();
+
+
+                            //        //EmployeesLocation empdoc = new EmployeesLocation();
+
+                            //        //empdoc.EmployeeID = (int)model.FilterModel.EmployeeID;
+                            //        //empdoc.LocationID = location.LocationID;
+                            //        //empdoc.IsMaster = isMaster;
+                            //        //empdoc.IsActive = isActive;
+
+                            //        //DocumentManager documentManager = new DocumentManager();
+                            //        //result = documentManager.EditEmployeeLocation(empdoc, model.Authentication);
+
+
+                            //        result.IsSuccess = true;
+                            //        result.Message = $"{isEmployee.EmployeeID} nolu Çalışan {isEmployee.LocationID} nolu lokasyona başarı ile güncellendi";
+
+                            //        TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+                            //        // log atılır
+                            //        var isequal = OfficeHelper.PublicInstancePropertiesEqual<EmployeeLocation>(emp, isEmployee, OfficeHelper.getIgnorelist());
+                            //        OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "AddEmployeeLocation", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                            //    }
+
+                            //}
+                            //catch (Exception ex)
+                            //{
+                            //    result.Message = $"Çalışan izini eklenemedi : {ex.Message}";
+                            //    OfficeHelper.AddApplicationLog("Office", "EmployeeLocation", "Update", "-1", "Employee", "AddEmployeeLocation", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, location);
+                            //}
+                            
+                            
                             
                         }
 
@@ -1573,6 +1808,117 @@ namespace ActionForce.Office.Controllers
             model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == employee.EmployeeID).ToList();
 
             return PartialView("_PartialEmployeePeriodsDetail", model);
+        }
+
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddEmployeeSalary(NewSalary empSalary)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+            var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == empSalary.EmployeeID);
+            var issalary = Db.EmployeeSalary.FirstOrDefault(x => x.EmployeeID == empSalary.EmployeeID);
+            if (issalary?.DateStart != null)
+            {
+                if (issalary.DateStart == null)
+                {
+                    return RedirectToAction("Salary", new { id = employee.EmployeeUID });
+                }
+            }
+            
+            if (!string.IsNullOrEmpty(empSalary.DateStart))
+            {
+                var our = Db.VEmployee.FirstOrDefault(x => x.EmployeeID == empSalary.EmployeeID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == our.OurCompanyID);
+
+                var hourly = Convert.ToDouble(empSalary.Hourly.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var hourlyExtent = Convert.ToDouble(empSalary.HourlyExtend.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var extendMultiplyRate = Convert.ToDouble(empSalary.ExtendMultiplyRate.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
+                var docDate = DateTime.Now.Date;
+
+                if (DateTime.TryParse(empSalary.DateStart, out docDate))
+                {
+                    docDate = Convert.ToDateTime(empSalary.DateStart).Date;
+                }
+
+                var isSalary = Db.EmployeeSalary.FirstOrDefault(x => x.EmployeeID == empSalary.EmployeeID && x.DateStart == docDate);
+
+                if (isSalary == null)
+                {
+                    try
+                    {
+                        EmployeeSalary newEmpSalary = new EmployeeSalary();
+
+                        newEmpSalary.EmployeeID = empSalary.EmployeeID;
+                        newEmpSalary.DateStart = docDate;
+                        newEmpSalary.Hourly = hourly;
+                        newEmpSalary.Money = ourcompany.Currency;
+                        newEmpSalary.HourlyExtend = hourlyExtent;
+                        newEmpSalary.ExtendMultiplyRate = extendMultiplyRate;
+
+                        Db.EmployeeSalary.Add(newEmpSalary);
+                        Db.SaveChanges();
+
+                        result.IsSuccess = true;
+                        result.Message = "Employee saatlik ücret başarı ile eklendi";
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", newEmpSalary.ID.ToString(), "Salary", "Unit", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newEmpSalary);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"Emplopyee saatlik ücret eklenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", "-1", "Salary", "Unit", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = $"{our.FullName} Employee { isSalary.DateStart } tarihinde ücret girişi mevcuttur. Kontrol edip güncel tarihli ücret girişi yapabilirsiniz.";
+
+                }
+
+                model.EmployeeSalary = Db.EmployeeSalary.Where(x => x.EmployeeID == empSalary.EmployeeID).ToList();
+
+            }
+
+
+            TempData["result"] = result;
+
+            model.Result = result;
+            
+
+            return PartialView("_PartialEmployeeSalary", model);
+        }
+        
+
+        [HttpPost]
+        public PartialViewResult DeleteEmployeeSalary(int id)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            var isSalary = Db.EmployeeSalary.FirstOrDefault(x => x.ID == id);
+            var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == isSalary.EmployeeID);
+
+            if (isSalary != null && employee != null)
+            {
+                OfficeHelper.AddApplicationLog("Office", "EmployeeSalary", "Delete", id.ToString(), "Employee", "DeleteEmployeeSalary", null, true, $"Çalışan ücret tanımı Silindi", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isSalary);
+
+                Db.EmployeeSalary.Remove(isSalary);
+                Db.SaveChanges();
+            }
+
+            model.EmployeeSalary = Db.EmployeeSalary.Where(x => x.EmployeeID == employee.EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeeSalary", model);
         }
     }
 }
