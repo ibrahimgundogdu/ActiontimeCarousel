@@ -3161,6 +3161,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
           <Property Name="UnitPriceMultiplier" Type="float" />
         </EntityType>
+        <EntityType Name="SystemCheckEmployeeRows">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="CriteriaID" Type="int" />
+          <Property Name="CheckTypeID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="Parameter" Type="nvarchar" MaxLength="50" />
+          <Property Name="Score" Type="int" />
+          <Property Name="DateKey" Type="date" />
+          <Property Name="Year" Type="int" StoreGeneratedPattern="Computed" />
+          <Property Name="Quarter" Type="int" StoreGeneratedPattern="Computed" />
+          <Property Name="RecorderID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="IsSystem" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="Revenue">
           <Key>
             <PropertyRef Name="ID" />
@@ -4794,6 +4815,61 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSchedule' does not have a 
           <Property Name="UnitPriceMultiplier" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSystemCheckEmployeePerformance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VSystemCheckEmployeePerformance">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="CriteriaID" Type="int" />
+          <Property Name="CheckTypeID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="Parameter" Type="nvarchar" MaxLength="50" />
+          <Property Name="Score" Type="int" />
+          <Property Name="DateKey" Type="date" />
+          <Property Name="Year" Type="int" />
+          <Property Name="Quarter" Type="int" />
+          <Property Name="RecorderID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="IsSystem" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CriteriaName" Type="nvarchar" MaxLength="80" />
+          <Property Name="Name" Type="nvarchar" MaxLength="80" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSystemCheckEmployeeRows' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VSystemCheckEmployeeRows">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="CriteriaID" Type="int" />
+          <Property Name="CheckTypeID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="Parameter" Type="nvarchar" MaxLength="50" />
+          <Property Name="Score" Type="int" />
+          <Property Name="DateKey" Type="date" />
+          <Property Name="Year" Type="int" />
+          <Property Name="Quarter" Type="int" />
+          <Property Name="RecorderID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="IsSystem" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="LocationName" Type="nvarchar" MaxLength="50" />
+          <Property Name="LocationTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Recorder" Type="nvarchar" MaxLength="150" />
+          <Property Name="Code" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="WeekList">
           <Key>
@@ -5407,6 +5483,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="TrampolinePartType" EntityType="Self.TrampolinePartType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TrampolineType" EntityType="Self.TrampolineType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Schedule" EntityType="Self.Schedule" Schema="Office" store:Type="Tables" />
+          <EntitySet Name="SystemCheckEmployeeRows" EntityType="Self.SystemCheckEmployeeRows" Schema="Office" store:Type="Tables" />
           <EntitySet Name="Revenue" EntityType="Self.Revenue" Schema="Report" store:Type="Tables" />
           <EntitySet Name="RevenueLines" EntityType="Self.RevenueLines" Schema="Report" store:Type="Tables" />
           <EntitySet Name="RevenueParameter" EntityType="Self.RevenueParameter" Schema="Report" store:Type="Tables" />
@@ -6862,6 +6939,55 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VSchedule].[UnitPriceMultiplier] AS [UnitPriceMultiplier]
     FROM [dbo].[VSchedule] AS [VSchedule]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VSystemCheckEmployeePerformance" EntityType="Self.VSystemCheckEmployeePerformance" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VSystemCheckEmployeePerformance].[ID] AS [ID], 
+    [VSystemCheckEmployeePerformance].[OurCompanyID] AS [OurCompanyID], 
+    [VSystemCheckEmployeePerformance].[LocationID] AS [LocationID], 
+    [VSystemCheckEmployeePerformance].[EmployeeID] AS [EmployeeID], 
+    [VSystemCheckEmployeePerformance].[CriteriaID] AS [CriteriaID], 
+    [VSystemCheckEmployeePerformance].[CheckTypeID] AS [CheckTypeID], 
+    [VSystemCheckEmployeePerformance].[Description] AS [Description], 
+    [VSystemCheckEmployeePerformance].[Parameter] AS [Parameter], 
+    [VSystemCheckEmployeePerformance].[Score] AS [Score], 
+    [VSystemCheckEmployeePerformance].[DateKey] AS [DateKey], 
+    [VSystemCheckEmployeePerformance].[Year] AS [Year], 
+    [VSystemCheckEmployeePerformance].[Quarter] AS [Quarter], 
+    [VSystemCheckEmployeePerformance].[RecorderID] AS [RecorderID], 
+    [VSystemCheckEmployeePerformance].[RecordDate] AS [RecordDate], 
+    [VSystemCheckEmployeePerformance].[IsSystem] AS [IsSystem], 
+    [VSystemCheckEmployeePerformance].[IsActive] AS [IsActive], 
+    [VSystemCheckEmployeePerformance].[CriteriaName] AS [CriteriaName], 
+    [VSystemCheckEmployeePerformance].[Name] AS [Name]
+    FROM [dbo].[VSystemCheckEmployeePerformance] AS [VSystemCheckEmployeePerformance]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VSystemCheckEmployeeRows" EntityType="Self.VSystemCheckEmployeeRows" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VSystemCheckEmployeeRows].[ID] AS [ID], 
+    [VSystemCheckEmployeeRows].[OurCompanyID] AS [OurCompanyID], 
+    [VSystemCheckEmployeeRows].[LocationID] AS [LocationID], 
+    [VSystemCheckEmployeeRows].[EmployeeID] AS [EmployeeID], 
+    [VSystemCheckEmployeeRows].[CriteriaID] AS [CriteriaID], 
+    [VSystemCheckEmployeeRows].[CheckTypeID] AS [CheckTypeID], 
+    [VSystemCheckEmployeeRows].[Description] AS [Description], 
+    [VSystemCheckEmployeeRows].[Parameter] AS [Parameter], 
+    [VSystemCheckEmployeeRows].[Score] AS [Score], 
+    [VSystemCheckEmployeeRows].[DateKey] AS [DateKey], 
+    [VSystemCheckEmployeeRows].[Year] AS [Year], 
+    [VSystemCheckEmployeeRows].[Quarter] AS [Quarter], 
+    [VSystemCheckEmployeeRows].[RecorderID] AS [RecorderID], 
+    [VSystemCheckEmployeeRows].[RecordDate] AS [RecordDate], 
+    [VSystemCheckEmployeeRows].[IsSystem] AS [IsSystem], 
+    [VSystemCheckEmployeeRows].[IsActive] AS [IsActive], 
+    [VSystemCheckEmployeeRows].[FullName] AS [FullName], 
+    [VSystemCheckEmployeeRows].[LocationName] AS [LocationName], 
+    [VSystemCheckEmployeeRows].[LocationTypeName] AS [LocationTypeName], 
+    [VSystemCheckEmployeeRows].[State] AS [State], 
+    [VSystemCheckEmployeeRows].[TypeName] AS [TypeName], 
+    [VSystemCheckEmployeeRows].[Recorder] AS [Recorder], 
+    [VSystemCheckEmployeeRows].[Code] AS [Code]
+    FROM [dbo].[VSystemCheckEmployeeRows] AS [VSystemCheckEmployeeRows]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="WeekList" EntityType="Self.WeekList" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [WeekList].[Id] AS [Id], 
@@ -7446,6 +7572,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
+          <EntitySet Name="SystemCheckEmployeeRows" EntityType="db293_ActionTimeDbModel.SystemCheckEmployeeRows" />
+          <EntitySet Name="VSystemCheckEmployeePerformance" EntityType="db293_ActionTimeDbModel.VSystemCheckEmployeePerformance" />
+          <EntitySet Name="VSystemCheckEmployeeRows" EntityType="db293_ActionTimeDbModel.VSystemCheckEmployeeRows" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -12617,6 +12746,78 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Type="Guid" Name="LocationUID" Nullable="true" />
           <Property Type="Int32" Name="OurCompanyID" Nullable="false" />
         </ComplexType>
+        <EntityType Name="SystemCheckEmployeeRows">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="CriteriaID" Type="Int32" />
+          <Property Name="CheckTypeID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Parameter" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Score" Type="Int32" />
+          <Property Name="DateKey" Type="DateTime" Precision="0" />
+          <Property Name="Year" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Quarter" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="RecorderID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="IsSystem" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="VSystemCheckEmployeePerformance">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="CriteriaID" Type="Int32" />
+          <Property Name="CheckTypeID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Parameter" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Score" Type="Int32" />
+          <Property Name="DateKey" Type="DateTime" Precision="0" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="Quarter" Type="Int32" />
+          <Property Name="RecorderID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="IsSystem" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CriteriaName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VSystemCheckEmployeeRows">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="CriteriaID" Type="Int32" />
+          <Property Name="CheckTypeID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Parameter" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Score" Type="Int32" />
+          <Property Name="DateKey" Type="DateTime" Precision="0" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="Quarter" Type="Int32" />
+          <Property Name="RecorderID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="IsSystem" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="LocationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LocationTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Recorder" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -17685,6 +17886,81 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetSalaryMultiplier" FunctionName="db293_ActionTimeDbModel.Store.GetSalaryMultiplier" />
+          <EntitySetMapping Name="SystemCheckEmployeeRows">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SystemCheckEmployeeRows">
+              <MappingFragment StoreEntitySet="SystemCheckEmployeeRows">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsSystem" ColumnName="IsSystem" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecorderID" ColumnName="RecorderID" />
+                <ScalarProperty Name="Quarter" ColumnName="Quarter" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="DateKey" ColumnName="DateKey" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="Parameter" ColumnName="Parameter" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CheckTypeID" ColumnName="CheckTypeID" />
+                <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VSystemCheckEmployeePerformance">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VSystemCheckEmployeePerformance">
+              <MappingFragment StoreEntitySet="VSystemCheckEmployeePerformance">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="CriteriaName" ColumnName="CriteriaName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsSystem" ColumnName="IsSystem" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecorderID" ColumnName="RecorderID" />
+                <ScalarProperty Name="Quarter" ColumnName="Quarter" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="DateKey" ColumnName="DateKey" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="Parameter" ColumnName="Parameter" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CheckTypeID" ColumnName="CheckTypeID" />
+                <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VSystemCheckEmployeeRows">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VSystemCheckEmployeeRows">
+              <MappingFragment StoreEntitySet="VSystemCheckEmployeeRows">
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Recorder" ColumnName="Recorder" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="LocationTypeName" ColumnName="LocationTypeName" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsSystem" ColumnName="IsSystem" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecorderID" ColumnName="RecorderID" />
+                <ScalarProperty Name="Quarter" ColumnName="Quarter" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="DateKey" ColumnName="DateKey" />
+                <ScalarProperty Name="Score" ColumnName="Score" />
+                <ScalarProperty Name="Parameter" ColumnName="Parameter" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CheckTypeID" ColumnName="CheckTypeID" />
+                <ScalarProperty Name="CriteriaID" ColumnName="CriteriaID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

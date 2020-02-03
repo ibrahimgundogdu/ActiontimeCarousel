@@ -33,6 +33,7 @@ namespace ActionForce.Office
         public IEnumerable<EmployeeSequence> SequenceList { get; set; }
 
 
+        public IEnumerable<VEmployeeCashActions> CashAction { get; set; }
         public IEnumerable<VDocumentSalaryEarn> SalaryEarn { get; set; }
         public SetcardParameter SetcardParameter { get; set; }
 
@@ -44,7 +45,10 @@ namespace ActionForce.Office
         public Location modelLokation { get; set; }
         public IEnumerable<EmployeeLocation> EmployeeLocations { get; set; }
         public IEnumerable<EmployeePeriods> EmployeePeriods { get; set; }
+        public IEnumerable<EmployeeSalary> EmployeeSalary { get; set; }
         public IEnumerable<DocumentEmployeePermit> EmployeePermits { get; set; }
+        public IEnumerable<VSystemCheckEmployeeRows> EmployeeCheck { get; set; }
+        public IEnumerable<VSystemCheckEmployeePerformance> EmployeeCheckPerformans { get; set; }
         public DateList CurrentDate { get; set; }
 
         public List<DateList> WeekList { get; set; }

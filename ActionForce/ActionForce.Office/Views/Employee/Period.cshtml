@@ -1,6 +1,6 @@
 ﻿@model EmployeeControlModel
 @{
-    ViewBag.Title = "Employee Mesai";
+    ViewBag.Title = "Employee Çalışma Dönemleri";
 }
 @section style{
     <link href="/lib/animate.css/animate.min.css" rel="stylesheet">
@@ -10,7 +10,7 @@
 }
 <div class="content-header">
     <div class="content-search col-lg">
-        <span class="tx-20"> @(Model.EmpList != null ? Model.EmpList.FullName + " " + Model.EmpList.TypeName : "") - Mesai Mola</span>
+        <span class="tx-20"> @(Model.EmpList != null ? Model.EmpList.FullName + " " + Model.EmpList.TypeName : "") - Çalışma Dönemleri</span>
     </div>
     <nav class="nav">
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
@@ -55,14 +55,14 @@
                         <nav class="nav flex-column demo-animate-list">
                             <a href="/Employee/Detail/@(Model.EmpList.EmployeeUID)" class="nav-link">Detay</a>
                             <a href="/Employee/Schedule/@(Model.EmpList.EmployeeUID)" class="nav-link">Schedule (Takvim)</a>
-                            <a href="/Employee/Shift/@(Model.EmpList.EmployeeUID)" class="nav-link active">Shift (Mesai Mola)</a>
+                            <a href="/Employee/Shift/@(Model.EmpList.EmployeeUID)" class="nav-link">Shift (Mesai Mola)</a>
                             <a href="/Employee/Action/@(Model.EmpList.EmployeeUID)" class="nav-link">Cari Hesap</a>
                             <a href="/Employee/FoodCard/@(Model.EmpList.EmployeeUID)" class="nav-link">Set Card</a>
                             <a href="/Employee/Location?id=@(Model.EmpList.EmployeeUID)" class="nav-link">Lokasyonlar</a>
                             <a href="#" class="nav-link">Özlük Belgeleri</a>
                             <a href="/Employee/Score/@(Model.EmpList.EmployeeUID)" class="nav-link">Puanlama Skorlama</a>
                             <a href="/Employee/Check/@(Model.EmpList.EmployeeUID)" class="nav-link">Check Liste</a>
-                            <a href="/Employee/Period/@(Model.EmpList.EmployeeUID)" class="nav-link">Çalışma Dönemleri</a>
+                            <a href="/Employee/Period/@(Model.EmpList.EmployeeUID)" class="nav-link active">Çalışma Dönemleri</a>
                             <a href="/Employee/Salary/@(Model.EmpList.EmployeeUID)" class="nav-link">Ücret Tanımlamaları</a>
                             <a href="/Employee/Edit/@(Model.EmpList.EmployeeUID)" class="nav-link">Güncelle</a>
                         </nav>
@@ -70,48 +70,53 @@
                 </div>
             </div>
             <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
-                <div class="profile-update-option bg-white ht-50 bd d-flex justify-content-end mg-b-20 mg-lg-b-20 rounded">
-                    <div class="d-flex align-items-center pd-x-5 mg-r-auto">
 
-                    </div>
-                    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="#" id="EmployeeScheduleDate" class="link-03" title="Tarih Seç">
-                            <i class="fa fa-calendar"></i>
-                            <input type="hidden" id="DatePicker" />
-                            <div></div>
-                        </a>
-                        <input id="EmployeeID" type="hidden" value="@Model.EmpList.EmployeeID" />
-                        <input id="WeekCode" type="hidden" value="@Model.MoonCode" />
-                    </div>
-                    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="/Employee/Shift?month=@(Model.PrevMoonCode)&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bir Önceki Ay"><i class="fa fa-arrow-left"></i></a>
-                    </div>
-                    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="/Employee/Shift?date=@(DateTime.Now.ToString("yyyy-MM-dd"))&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bu Ay"><i class="fa fa-bullseye"></i></a>
-                    </div>
-                    <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                        <a href="/Employee/Shift?month=@(Model.NextMoonCode)&id=@(Model.EmpList.EmployeeUID)" class="link-03" title="Bir Sonraki Ay"><i class="fa fa-arrow-right"></i></a>
-                    </div>
-
-                </div>
                 <div class="card mg-b-20 mg-lg-b-25">
-                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.EmployeeBreak != null ? Html.Raw("Molada") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute == null ? Html.Raw("Mesaide") : Model.EmployeeShift != null && Model.EmployeeShift.DurationMinute != null ? Html.Raw("Mesaisi Bitti") : Html.Raw("") )</h6>
-                        <nav class="nav">
-                            <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CurrentDate.DateKey.ToLongDateString())</span></a>
-                        </nav>
-                    </div><!-- card-header -->
+
                     <div class="card-body pd-0">
                         <div class="table-responsive">
-                            @{Html.RenderPartial("_PartialEmployeeShift", Model);}
+                            @using (Ajax.BeginForm("AddEmployeePeriods", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "EmployeePeriodsDetail", InsertionMode = InsertionMode.Replace }))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <table class="table table-warning table-sm tx-13 tx-nowrap mb-0">
+                                    <tbody>
+                                        <tr class="bg-white">
+                                            <td class="wd-5p"></td>
+                                            <td class="tx-medium wd-20p" style="padding:2px !important;">
+                                                <select class="form-control" id="OurCompanyID" name="OurCompanyID" required disabled>
+                                                    @foreach (var item in Model.OurList)
+                                                    {
+                                                        <option value="@item.CompanyID" @(Model.Authentication.ActionEmployee.OurCompanyID == item.CompanyID ? "selected" : "")>@($"{item.CompanyName}")</option>
+                                                    }
+                                                </select>
+                                            </td>
+                                            <td class="text-right wd-10p" style="padding:2px !important;"><input type="text" id="ContractStartDate" name="ContractStartDate" class="form-control form-control-sm datepicker shiftdate" placeholder="@DateTime.Now.ToString("yyyy-MM-dd")"></td>
+                                            <td class="text-right wd-10p" style="padding:2px !important;"><input type="text" id="ContractFinishDate" name="ContractFinishDate" class="form-control form-control-sm datepicker shiftdate" placeholder="@DateTime.Now.ToString("yyyy-MM-dd")"></td>
+                                            <td class="text-right wd-15p" style="padding:2px !important;"><input type="text" id="Description" name="Description" class="form-control form-control-sm text-right" placeholder="Açıklama"></td>
+
+                                            <td class="wd-15p" style="padding:2px !important;">
+                                                <button type="submit" class="btn btn-xs btn-dark btn-block">Periods Ekle</button>
+                                            </td>
+                                            <td class="wd-5p" style="padding:2px !important;"></td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            }
+
+                            <div id="EmployeePeriodsDetail@(Model.EmpList.EmployeeID)">
+                                @{ Html.RenderPartial("_PartialEmployeePeriodsDetail", Model);}
+                            </div>
                         </div>
                     </div>
 
-
-                    <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
-                    </div><!-- card-footer -->
                 </div>
+
             </div>
         </div>
     </div>
 </div>
+
+
+

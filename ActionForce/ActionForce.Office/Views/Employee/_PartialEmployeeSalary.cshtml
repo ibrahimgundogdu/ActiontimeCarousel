@@ -1,0 +1,45 @@
+﻿@model EmployeeControlModel
+
+
+<table class="table table-light table-bordered table-hover table-sm tx-13 tx-nowrap mg-b-0">
+    <thead>
+        <tr class="tx-10 tx-spacing-1 tx-color-03 tx-uppercase">
+            <th class="wd-5p">#</th>
+            <th class="wd-10p">Başlangıç</th>
+            <th class="wd-10p">Saatlik</th>
+            <th class="wd-10p">Aylık</th>
+            <th class="wd-10p">Mesai</th>
+            <th class="wd-10p">Çarpan</th>
+            <th class="wd-5p"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.EmployeeSalary.OrderByDescending(x => x.DateStart))
+        {
+        <tr>
+            <td class="text-left">
+                @(item.ID)
+            </td>
+
+            <td class="" style="padding:2px !important;">@(item.DateStart?.ToString("yyyy-MM-dd"))</td>
+            <td class="" style="padding:2px !important;">@(item.Hourly?.ToString())</td>
+
+            <td class="" style="padding:2px !important;">@(item.Monthly?.ToString())</td>
+            <td class="" style="padding:2px !important;">@(item.HourlyExtend?.ToString())</td>
+            <td class="" style="padding:2px !important;">@(item.ExtendMultiplyRate?.ToString())</td>
+
+            <td class="text-center">
+                <button type="button" class="btn btn-icon btn-xs" onclick="confirm('Silmek İstediğinize Emin misiniz?') ? DeleteEmployeeSalary(@(item.ID)) : ''">
+                    <i class="tx-danger" data-feather="trash"></i> &nbsp;
+                </button>
+            </td>
+        </tr>
+        }
+
+    </tbody>
+</table>
+<script>
+    $(function () {
+        feather.replace();
+    });
+</script>
