@@ -51,6 +51,21 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        public ActionResult AddNewSalaryEarn()
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            
+            model.BankAccountList = Db.VBankAccount.ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 1 && x.IsActive == true).ToList();
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.FullName).ToList();
+
+            return View(model);
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public ActionResult Filter(int? locationId, DateTime? beginDate, DateTime? endDate)
@@ -179,7 +194,7 @@ namespace ActionForce.Office.Controllers
                     var issuccess = OfficeHelper.CalculateSalaryEarn(salaryearn.ResultID.Value, salaryearn.EmployeeID.Value, salaryearn.Date.Value, salaryearn.LocationID.Value, model.Authentication);
                     result.IsSuccess = issuccess;
                     result.Message = "Hakediş başarı ile güncellendi";
-                } 
+                }
             }
 
             TempData["result"] = result;
@@ -226,7 +241,7 @@ namespace ActionForce.Office.Controllers
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            
+
             model.UnitPrice = Db.EmployeeSalary.ToList();
             model.Detail = Db.VDocumentSalaryEarn.FirstOrDefault(x => x.UID == id);
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Detail.LocationID);
@@ -339,13 +354,13 @@ namespace ActionForce.Office.Controllers
                 model.Result = TempData["result"] as Result ?? null;
             }
 
-            model.BankAccountList = Db.VBankAccount.Where(x=> x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 1 && x.IsActive == true).ToList();
+            model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 1 && x.IsActive == true).ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.SalaryTypes = Db.SalaryType.Where(x => x.IsActive == true).ToList();
-            
+
             return View(model);
 
 
@@ -389,11 +404,11 @@ namespace ActionForce.Office.Controllers
                 {
                     docDate = Convert.ToDateTime(cashsalary.DocumentDate).Date;
                 }
-                
+
 
                 var exchange = OfficeHelper.GetExchange(docDate);
 
-                
+
 
                 if (amount > 0)
                 {
