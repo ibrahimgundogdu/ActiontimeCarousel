@@ -19,5 +19,6 @@ namespace ActionForce.Entity
         public string CategoryName { get; set; }
         public string SortBy { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public Nullable<bool> IsAutoCompute { get; set; }
     }
 }

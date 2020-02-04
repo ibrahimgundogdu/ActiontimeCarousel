@@ -2453,6 +2453,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ParentID" Type="int" />
           <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsAutoCompute" Type="bit" />
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
@@ -11468,6 +11469,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsAutoCompute" Type="Boolean" />
         </EntityType>
         <EntityType Name="Setcards">
           <Key>
@@ -16660,6 +16662,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="SalaryCategory">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SalaryCategory">
               <MappingFragment StoreEntitySet="SalaryCategory">
+                <ScalarProperty Name="IsAutoCompute" ColumnName="IsAutoCompute" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="SortBy" ColumnName="SortBy" />
                 <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />

@@ -56,12 +56,9 @@ namespace ActionForce.Office.Controllers
         {
             SalaryControlModel model = new SalaryControlModel();
 
-            
-            model.BankAccountList = Db.VBankAccount.ToList();
-            model.CurrencyList = OfficeHelper.GetCurrency();
-            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 1 && x.IsActive == true).ToList();
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 1 && x.IsActive == true && x.IsAutoCompute == false).OrderBy(x=> x.SortBy).ToList();
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.FullName).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
 
             return View(model);
         }
