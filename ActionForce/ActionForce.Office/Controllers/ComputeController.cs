@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.SignalR;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -9,10 +10,16 @@ namespace ActionForce.Office.Controllers
 {
     public class ComputeController : BaseController
     {
+
         // GET: Compute
         public ActionResult Index()
         {
             ComputeControlModel model = new ComputeControlModel();
+
+            //var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            //hubContext.Clients.All.AddMessageToPage("Hakediş", "Hesaplama Başladı");
+
+
             DateTime datenow = DateTime.UtcNow.AddHours(3).Date;
             model.Locations = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.WeekLists = Db.DateList.Where(x => x.WeekYear >= 2017 && x.WeekYear <= DateTime.Now.Year && x.DateKey <= datenow).Select(x => new WeekModel()
@@ -25,9 +32,12 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
-        public string ComputeSalaryEarns(int? locationid, string date, string weekcode)
+        public void ComputeSalaryEarns(int? locationid, string date, string weekcode)
         {
             ComputeControlModel model = new ComputeControlModel();
+
+            var hubContext = GlobalHost.ConnectionManager.GetHubContext<ChatHub>();
+            hubContext.Clients.All.AddMessageToPage("Hakediş", "Hesaplama Başladı");
 
             if (!string.IsNullOrEmpty(date) || !string.IsNullOrEmpty(weekcode) || locationid > 0)
             {
@@ -73,11 +83,16 @@ namespace ActionForce.Office.Controllers
 
                         foreach (var empid in employeeIds)
                         {
+                            var employee = Db.Employee.FirstOrDefault(x=> x.EmployeeID == empid);
                             var result = OfficeHelper.ComputeSalaryEarn(empid, datelist.DateKey, location.LocationID, model.Authentication);
+                            hubContext.Clients.All.AddMessageToPage("Hakediş", $"{employee.FullName} çalışanı {datelist.DateKey.ToLongDateString()} günü için hakediş hesaplandı : {result}");
+
                         }
 
+                        hubContext.Clients.All.AddMessageToPage("Hakediş", $"{location.SortBy.Trim()} {location.LocationName} lokasyonunda {datelist.DateKey.ToLongDateString()} günü için hakedişler hesaplandı");
+
                         // 02. hesaplanan hakedişler günsonu dosyasına yazılır
-                        var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == locationid && x.Date == datelist.DateKey);
+                        var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == locationid && x.Date == datelist.DateKey && x.IsActive == true);
 
                         if (dayresult != null)
                         {
@@ -87,6 +102,9 @@ namespace ActionForce.Office.Controllers
                                 var islocal = Request.IsLocal;
 
                                 var updresult = document.CheckResultBackward(dayresult.UID.Value, model.Authentication, islocal);
+
+                                hubContext.Clients.All.AddMessageToPage("Günsonu", $"{location.SortBy.Trim()} {location.LocationName} lokasyonunda {datelist.DateKey.ToLongDateString()} günü için günsonu dosyasına aktarım sonucu : {updresult.IsSuccess} : {updresult.Message}");
+
                             }
                         }
                     }
@@ -94,12 +112,15 @@ namespace ActionForce.Office.Controllers
                     //03. hasılat raporu çalıştırılır.
                     var datelistone = model.DateLists.FirstOrDefault();
                     var resultrevenue = Db.ComputeLocationWeekRevenue(datelistone.WeekNumber, datelistone.WeekYear, location.LocationID);
+
+                    hubContext.Clients.All.AddMessageToPage("Rapor", $"{location.SortBy.Trim()} {location.LocationName} lokasyonunda hasılat raporu hesaplandı");
+
                 }
 
 
             }
 
-            return "";
+           
         }
 
     }

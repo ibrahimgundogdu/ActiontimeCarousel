@@ -2251,66 +2251,80 @@ namespace ActionForce.Office
 
                         unitprice = unitprice * salaryMultiplier;
 
+                        var SalaryEarn = Db.DocumentSalaryEarn.FirstOrDefault(x => x.LocationID == salary.LocationID && x.EmployeeID == salary.EmployeeID && x.Date == salary.DocumentDate && x.ResultID == salary.ResultID);
 
-                        DocumentSalaryEarn salaryEarn = new DocumentSalaryEarn();
-
-                        salaryEarn.ActionTypeID = salary.ActionTypeID;
-                        salaryEarn.ActionTypeName = salary.ActionTypeName;
-                        salaryEarn.EmployeeID = salary.EmployeeID;
-                        salaryEarn.QuantityHour = salary.QuantityHour;
-                        salaryEarn.UnitPrice = unitprice;
-                        salaryEarn.TotalAmount = (salaryEarn.QuantityHour * salaryEarn.UnitPrice);
-                        salaryEarn.UnitPriceMultiplierApplied = salaryMultiplier;
-
-                        salaryEarn.Currency = salary.Currency;
-                        salaryEarn.Date = salary.DocumentDate;
-                        salaryEarn.Description = salary.Description;
-                        salaryEarn.DocumentNumber = OfficeHelper.GetDocumentNumber(salary.OurCompanyID, "SE");
-                        salaryEarn.IsActive = true;
-                        salaryEarn.LocationID = salary.LocationID;
-                        salaryEarn.OurCompanyID = salary.OurCompanyID;
-                        salaryEarn.RecordDate = DateTime.UtcNow.AddHours(salary.TimeZone.Value);
-                        salaryEarn.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
-                        salaryEarn.RecordIP = OfficeHelper.GetIPAddress();
-                        salaryEarn.UID = salary.UID;
-                        salaryEarn.EnvironmentID = salary.EnvironmentID;
-                        salaryEarn.ReferenceID = salary.ReferanceID;
-                        salaryEarn.ResultID = salary.ResultID;
-                        salaryEarn.SystemQuantityHour = salary.QuantityHour;
-                        salaryEarn.SystemTotalAmount = (salaryEarn.QuantityHour * salaryEarn.UnitPrice);
-                        salaryEarn.SystemUnitPrice = unitprice;
-                        salaryEarn.CategoryID = salary.CategoryID;
-
-                        salaryEarn.UnitFoodPrice = 0;
-                        salaryEarn.QuantityHourSalary = salaryEarn.QuantityHour;
-                        salaryEarn.QuantityHourFood = salaryEarn.QuantityHour;
-
-                        if (employee.OurCompanyID == 2 && employee.AreaCategoryID == 2 && (employee.PositionID == 5 || employee.PositionID == 6))
+                        if (SalaryEarn == null)
                         {
-                            salaryEarn.UnitFoodPrice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
-                            salaryEarn.QuantityHourSalary = (salaryEarn.QuantityHour * 0.9);
-                            salaryEarn.QuantityHourFood = (salaryEarn.QuantityHour * 0.9);
+
+
+                            DocumentSalaryEarn salaryEarn = new DocumentSalaryEarn();
+
+                            salaryEarn.ActionTypeID = salary.ActionTypeID;
+                            salaryEarn.ActionTypeName = salary.ActionTypeName;
+                            salaryEarn.EmployeeID = salary.EmployeeID;
+                            salaryEarn.QuantityHour = salary.QuantityHour;
+                            salaryEarn.UnitPrice = unitprice;
+                            salaryEarn.TotalAmount = (salaryEarn.QuantityHour * salaryEarn.UnitPrice);
+                            salaryEarn.UnitPriceMultiplierApplied = salaryMultiplier;
+
+                            salaryEarn.Currency = salary.Currency;
+                            salaryEarn.Date = salary.DocumentDate;
+                            salaryEarn.Description = salary.Description;
+                            salaryEarn.DocumentNumber = OfficeHelper.GetDocumentNumber(salary.OurCompanyID, "SE");
+                            salaryEarn.IsActive = true;
+                            salaryEarn.LocationID = salary.LocationID;
+                            salaryEarn.OurCompanyID = salary.OurCompanyID;
+                            salaryEarn.RecordDate = DateTime.UtcNow.AddHours(salary.TimeZone.Value);
+                            salaryEarn.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                            salaryEarn.RecordIP = OfficeHelper.GetIPAddress();
+                            salaryEarn.UID = salary.UID;
+                            salaryEarn.EnvironmentID = salary.EnvironmentID;
+                            salaryEarn.ReferenceID = salary.ReferanceID;
+                            salaryEarn.ResultID = salary.ResultID;
+                            salaryEarn.SystemQuantityHour = salary.QuantityHour;
+                            salaryEarn.SystemTotalAmount = (salaryEarn.QuantityHour * salaryEarn.UnitPrice);
+                            salaryEarn.SystemUnitPrice = unitprice;
+                            salaryEarn.CategoryID = salary.CategoryID;
+
+                            salaryEarn.UnitFoodPrice = 0;
+                            salaryEarn.QuantityHourSalary = salaryEarn.QuantityHour;
+                            salaryEarn.QuantityHourFood = salaryEarn.QuantityHour;
+
+                            if (employee.OurCompanyID == 2 && employee.AreaCategoryID == 2 && (employee.PositionID == 5 || employee.PositionID == 6))
+                            {
+                                salaryEarn.UnitFoodPrice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
+                                salaryEarn.QuantityHourSalary = (salaryEarn.QuantityHour * 0.9);
+                                salaryEarn.QuantityHourFood = (salaryEarn.QuantityHour * 0.9);
+                            }
+
+
+
+                            Db.DocumentSalaryEarn.Add(salaryEarn);
+                            Db.SaveChanges();
+
+                            // cari hesap işlemesi
+                            OfficeHelper.AddEmployeeAction(salaryEarn.EmployeeID, salaryEarn.LocationID, salaryEarn.ActionTypeID, salaryEarn.ActionTypeName, salaryEarn.ID, salaryEarn.Date, salaryEarn.Description, 1, salaryEarn.TotalAmountSalary, 0, salaryEarn.Currency, null, null, null, salaryEarn.RecordEmployeeID, salaryEarn.RecordDate, salaryEarn.UID.Value, salaryEarn.DocumentNumber, 3);
+                            if (salaryEarn.TotalAmountFood > 0)
+                            {
+                                var setcartacttype = Db.CashActionType.FirstOrDefault(x => x.ID == 39);
+                                OfficeHelper.AddEmployeeAction(salaryEarn.EmployeeID, salaryEarn.LocationID, setcartacttype.ID, setcartacttype.Name, salaryEarn.ID, salaryEarn.Date, salaryEarn.Description, 1, salaryEarn.TotalAmountFood, 0, salaryEarn.Currency, null, null, null, salaryEarn.RecordEmployeeID, salaryEarn.RecordDate, salaryEarn.UID.Value, salaryEarn.DocumentNumber, 17);
+                            }
+
+                            result.IsSuccess = true;
+                            result.Message = "Ücret Hakediş başarı ile eklendi";
+
+                            // log atılır
+                            OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", salaryEarn.ID.ToString(), "Salary", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(salary.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, salaryEarn);
                         }
-
-
-
-                        Db.DocumentSalaryEarn.Add(salaryEarn);
-                        Db.SaveChanges();
-
-                        // cari hesap işlemesi
-                        OfficeHelper.AddEmployeeAction(salaryEarn.EmployeeID, salaryEarn.LocationID, salaryEarn.ActionTypeID, salaryEarn.ActionTypeName, salaryEarn.ID, salaryEarn.Date, salaryEarn.Description, 1, salaryEarn.TotalAmountSalary, 0, salaryEarn.Currency, null, null, null, salaryEarn.RecordEmployeeID, salaryEarn.RecordDate, salaryEarn.UID.Value, salaryEarn.DocumentNumber, 3);
-                        if (salaryEarn.TotalAmountFood > 0)
+                        else
                         {
-                            var setcartacttype = Db.CashActionType.FirstOrDefault(x => x.ID == 39);
-                            OfficeHelper.AddEmployeeAction(salaryEarn.EmployeeID, salaryEarn.LocationID, setcartacttype.ID, setcartacttype.Name, salaryEarn.ID, salaryEarn.Date, salaryEarn.Description, 1, salaryEarn.TotalAmountFood, 0, salaryEarn.Currency, null, null, null, salaryEarn.RecordEmployeeID, salaryEarn.RecordDate, salaryEarn.UID.Value, salaryEarn.DocumentNumber, 17);
+                            result.IsSuccess = false;
+                            result.Message = "Ücret Hakedişi daha önce zaten var";
+
+                            // log atılır
+                            OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", SalaryEarn.ID.ToString(), "Salary", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(salary.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
                         }
-
-                        result.IsSuccess = true;
-                        result.Message = "Ücret Hakediş başarı ile eklendi";
-
-                        // log atılır
-                        OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", salaryEarn.ID.ToString(), "Salary", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(salary.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, salaryEarn);
-
                     }
                     catch (Exception ex)
                     {
@@ -4085,6 +4099,7 @@ namespace ActionForce.Office
                     List<int> cashprocess = new int[] { 23, 27 }.ToList();
                     List<int> cardsales = new int[] { 1, 3, 5 }.ToList();
                     List<int> maas = new int[] { 3, 31 }.ToList();
+                    List<int> hakedisid = new int[] { 32,36,39 }.ToList();
                     List<int> cashexpense = new int[] { 4, 29 }.ToList();
                     List<int> cashexchange = new int[] { 25 }.ToList();
                     List<int> bankeft = new int[] { 11, 30 }.ToList();
@@ -4096,7 +4111,7 @@ namespace ActionForce.Office
                     var cashtotal = cashActions.Where(x => cashsales.Contains(x.CashActionTypeID.Value)).Sum(x => x.Amount).Value;
                     var credittotal = bankActions.Where(x => cardsales.Contains(x.BankActionTypeID.Value)).Sum(x => x.Amount).Value;
                     var maastotal = cashActions.Where(x => maas.Contains(x.CashActionTypeID.Value)).Sum(x => x.Amount).Value;
-                    var hakedis = emplActions.Where(x => x.ActionTypeID == 32).Sum(x => x.Amount).Value;
+                    var hakedis = emplActions.Where(x => hakedisid.Contains(x.ActionTypeID.Value)).Sum(x => x.Amount).Value;
                     var expensetotal = cashActions.Where(x => cashexpense.Contains(x.CashActionTypeID.Value)).Sum(x => x.Amount).Value;
 
                     var cashrecorder = Db.DocumentCashRecorderSlip.FirstOrDefault(x => x.LocationID == isResult.LocationID && x.Date == isResult.Date);

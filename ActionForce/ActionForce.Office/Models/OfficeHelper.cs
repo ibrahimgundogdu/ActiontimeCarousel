@@ -1806,6 +1806,7 @@ namespace ActionForce.Office
                                 earn.Description = dayresult?.Description;
 
                                 var res = documentManager.EditSalaryEarn(earn, authentication);
+                                issuccess = res.IsSuccess;
 
                             }
                             else
@@ -1825,6 +1826,7 @@ namespace ActionForce.Office
                                 earn.UID = Guid.NewGuid();
 
                                 var res = documentManager.AddSalaryEarn(earn, authentication);
+                                issuccess = res.IsSuccess;
                             }
 
                         }

@@ -71,10 +71,11 @@
 
                                 </div>
                             </div>
-                            <div class="card-footer" id="ComputeSalaryEarnResult">
-                                
+                            <div class="card-footer">
+
                             </div>
                         </div>
+                        <ul id="ComputeSalaryEarnResult"></ul>
                     </div>
                 </div>
 
@@ -86,7 +87,26 @@
 
 
 @section scripts {
+    <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
+    <script src="~/signalr/hubs"></script>
+    <script>
+        $(function () {
+            var chat = $.connection.chatHub;
+            chat.client.addMessageToPage = function (name, message) {
+                console.log(name);
+                console.log(message);
 
+                $('#ComputeSalaryEarnResult').append('<li><strong>' + htmlEncode(name)
+                    + '</strong>: ' + htmlEncode(message) + '</li>');
+            };
+            $.connection.hub.start();
+        });
+
+        function htmlEncode(value) {
+            //var encodedValue = $('<div />').text(value).html();
+            return value;
+        }
+    </script>
 
     <script>
         $(function () {
@@ -96,7 +116,7 @@
             $('.select2').select2({
                 placeholder: 'Lokasyon Seçiminiz',
                 searchInputPlaceholder: 'Arama Seçenekleri',
-                allowClear:true
+                allowClear: true
             });
 
             $('.datepicker').datepicker({
@@ -127,7 +147,7 @@
             data.append('locationid', locationid);
             data.append('date', date);
             data.append('weekcode', weekcode);
-           
+
 
             $.ajax({
                 cache: false,
@@ -138,7 +158,7 @@
                 url: "/Compute/ComputeSalaryEarns",
                 data: data
             }).done(function (d) {
-                $("#ComputeSalaryEarnResult").html(d);
+                //$("#ComputeSalaryEarnResult").html(d);
             });
         }
 
