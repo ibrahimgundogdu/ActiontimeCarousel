@@ -49,6 +49,9 @@ namespace ActionForce.Office
         public IEnumerable<DocumentEmployeePermit> EmployeePermits { get; set; }
         public IEnumerable<VSystemCheckEmployeeRows> EmployeeCheck { get; set; }
         public IEnumerable<VSystemCheckEmployeePerformance> EmployeeCheckPerformans { get; set; }
+        public IEnumerable<VPersonalDocument> PersonalDocument { get; set; }
+        public IEnumerable<PersonalDocumentType> PersonalDocumentType { get; set; }
+        public IEnumerable<PersonalDocument> PersonalDocumentList { get; set; }
         public DateList CurrentDate { get; set; }
 
         public List<DateList> WeekList { get; set; }

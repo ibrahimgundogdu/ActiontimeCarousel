@@ -967,7 +967,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Check(Guid? id)
+        public ActionResult Document(Guid? id)
         {
             EmployeeControlModel model = new EmployeeControlModel();
 
@@ -992,7 +992,9 @@ namespace ActionForce.Office.Controllers
             model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
             model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
             model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
-            
+
+            model.PersonalDocument = Db.VPersonalDocument.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+            model.PersonalDocumentType = Db.PersonalDocumentType.Where(x => x.IsActive == true).ToList();
             return View(model);
         }
 
@@ -1809,6 +1811,77 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialEmployeePeriodsDetail", model);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddEmployeeDocument(NewDocument document, HttpPostedFileBase DocumentFile)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
+            var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == document.EmployeeID);
+            var isdocument = Db.PersonalDocument.FirstOrDefault(x => x.EmployeeID == document.EmployeeID);
+            
+
+            if (employee != null)
+            {
+
+                PersonalDocument param = new PersonalDocument();
+                param.EmployeeID = employee.EmployeeID;
+                param.DocumentTypeID = document.DocumentTypeID;
+                param.DocumentDescription = document.DocumentDescription;
+                param.RecordDate = DateTime.UtcNow.AddHours(3);
+                param.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                param.RecordIP = OfficeHelper.GetIPAddress();
+
+                if (DocumentFile != null && DocumentFile.ContentLength > 0)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(DocumentFile.FileName);
+                    param.DocumentFile = filename;
+                    string path = "/Document/Employee/Document";
+                    param.DocumentPath = path;
+
+                    try
+                    {
+                        DocumentFile.SaveAs(Path.Combine(Server.MapPath(path), filename));
+                        
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+
+                Db.PersonalDocument.Add(param);
+                Db.SaveChanges();
+
+                OfficeHelper.AddApplicationLog("Office", "PersonalDocument", "Insert", param.ID.ToString(), "Employee", "AddEmployeeDocument", null, true, $"Çalışan Özlük Belgesi Eklendi", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, param);
+
+            }
+
+            model.PersonalDocument = Db.VPersonalDocument.Where(x => x.EmployeeID == document.EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeeDocumentDetail", model);
+        }
+
+        [HttpPost]
+        public PartialViewResult DeleteEmployeeDocument(int id)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            var periodParameter = Db.PersonalDocument.FirstOrDefault(x => x.ID == id);
+            var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == periodParameter.EmployeeID);
+
+            if (periodParameter != null && employee != null)
+            {
+                OfficeHelper.AddApplicationLog("Office", "PersonalDocument", "Delete", id.ToString(), "Employee", "DeleteEmployeeDocument", null, true, $"Çalışan Doküman Silindi", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, periodParameter);
+
+                Db.PersonalDocument.Remove(periodParameter);
+                Db.SaveChanges();
+            }
+
+            model.PersonalDocument = Db.VPersonalDocument.Where(x => x.EmployeeID == employee.EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeeDocumentDetail", model);
+        }
+
 
 
 

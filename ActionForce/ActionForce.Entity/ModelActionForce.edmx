@@ -2219,6 +2219,33 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="PersonalDocument">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="DocumentTypeID" Type="int" />
+          <Property Name="DocumentPath" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocumentFile" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocumentDescription" Type="nvarchar" MaxLength="150" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="PersonalDocumentType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentTypeName" Type="nvarchar" MaxLength="100" />
+          <Property Name="IsOptional" Type="bit" />
+          <Property Name="SortBy" Type="char" MaxLength="4" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="PosTerminal">
           <Key>
             <PropertyRef Name="ID" />
@@ -4676,6 +4703,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationShift' does not ha
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPersonalDocument' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VPersonalDocument">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="DocumentTypeID" Type="int" />
+          <Property Name="DocumentPath" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocumentFile" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocumentDescription" Type="nvarchar" MaxLength="150" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="DocumentTypeName" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPosTerminal' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VPosTerminal">
           <Key>
@@ -5422,6 +5470,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Permission" EntityType="Self.Permission" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PermitStatus" EntityType="Self.PermitStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PermitType" EntityType="Self.PermitType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PersonalDocument" EntityType="Self.PersonalDocument" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PersonalDocumentType" EntityType="Self.PersonalDocumentType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PosTerminal" EntityType="Self.PosTerminal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrePaidCampaign" EntityType="Self.PrePaidCampaign" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrePaidCampaignPrices" EntityType="Self.PrePaidCampaignPrices" Schema="dbo" store:Type="Tables" />
@@ -6815,6 +6865,24 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocationShift].[LocationFullName] AS [LocationFullName]
     FROM [dbo].[VLocationShift] AS [VLocationShift]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VPersonalDocument" EntityType="Self.VPersonalDocument" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VPersonalDocument].[ID] AS [ID], 
+    [VPersonalDocument].[EmployeeID] AS [EmployeeID], 
+    [VPersonalDocument].[DocumentTypeID] AS [DocumentTypeID], 
+    [VPersonalDocument].[DocumentPath] AS [DocumentPath], 
+    [VPersonalDocument].[DocumentFile] AS [DocumentFile], 
+    [VPersonalDocument].[DocumentDescription] AS [DocumentDescription], 
+    [VPersonalDocument].[RecordDate] AS [RecordDate], 
+    [VPersonalDocument].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VPersonalDocument].[RecordIP] AS [RecordIP], 
+    [VPersonalDocument].[UpdateDate] AS [UpdateDate], 
+    [VPersonalDocument].[UpdateEmployeeID] AS [UpdateEmployeeID], 
+    [VPersonalDocument].[UpdateIP] AS [UpdateIP], 
+    [VPersonalDocument].[FullName] AS [FullName], 
+    [VPersonalDocument].[DocumentTypeName] AS [DocumentTypeName]
+    FROM [dbo].[VPersonalDocument] AS [VPersonalDocument]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VPosTerminal" EntityType="Self.VPosTerminal" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VPosTerminal].[ID] AS [ID], 
@@ -7576,6 +7644,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="SystemCheckEmployeeRows" EntityType="db293_ActionTimeDbModel.SystemCheckEmployeeRows" />
           <EntitySet Name="VSystemCheckEmployeePerformance" EntityType="db293_ActionTimeDbModel.VSystemCheckEmployeePerformance" />
           <EntitySet Name="VSystemCheckEmployeeRows" EntityType="db293_ActionTimeDbModel.VSystemCheckEmployeeRows" />
+          <EntitySet Name="PersonalDocument" EntityType="db293_ActionTimeDbModel.PersonalDocument" />
+          <EntitySet Name="PersonalDocumentType" EntityType="db293_ActionTimeDbModel.PersonalDocumentType" />
+          <EntitySet Name="VPersonalDocument" EntityType="db293_ActionTimeDbModel.VPersonalDocument" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -12820,6 +12891,52 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Recorder" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Code" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="PersonalDocument">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="DocumentTypeID" Type="Int32" />
+          <Property Name="DocumentPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentDescription" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PersonalDocumentType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentTypeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="IsOptional" Type="Boolean" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="VPersonalDocument">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="DocumentTypeID" Type="Int32" />
+          <Property Name="DocumentPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentDescription" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="DocumentTypeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -17960,6 +18077,55 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PersonalDocument">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PersonalDocument">
+              <MappingFragment StoreEntitySet="PersonalDocument">
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="DocumentDescription" ColumnName="DocumentDescription" />
+                <ScalarProperty Name="DocumentFile" ColumnName="DocumentFile" />
+                <ScalarProperty Name="DocumentPath" ColumnName="DocumentPath" />
+                <ScalarProperty Name="DocumentTypeID" ColumnName="DocumentTypeID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PersonalDocumentType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PersonalDocumentType">
+              <MappingFragment StoreEntitySet="PersonalDocumentType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="IsOptional" ColumnName="IsOptional" />
+                <ScalarProperty Name="DocumentTypeName" ColumnName="DocumentTypeName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VPersonalDocument">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPersonalDocument">
+              <MappingFragment StoreEntitySet="VPersonalDocument">
+                <ScalarProperty Name="DocumentTypeName" ColumnName="DocumentTypeName" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="DocumentDescription" ColumnName="DocumentDescription" />
+                <ScalarProperty Name="DocumentFile" ColumnName="DocumentFile" />
+                <ScalarProperty Name="DocumentPath" ColumnName="DocumentPath" />
+                <ScalarProperty Name="DocumentTypeID" ColumnName="DocumentTypeID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

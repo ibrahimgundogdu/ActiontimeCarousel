@@ -413,6 +413,15 @@ namespace ActionForce.Office
         public string FinalFinishDate { get; set; }
         public string Description { get; set; }
     }
+    public class NewDocument
+    {
+        public int ID { get; set; }
+        public int EmployeeID { get; set; }
+        public int DocumentTypeID { get; set; }
+        public string DocumentPath { get; set; }
+        public string DocumentFile { get; set; }
+        public string DocumentDescription { get; set; }
+    }
     public class NewSalary
     {
         public int ID { get; set; }

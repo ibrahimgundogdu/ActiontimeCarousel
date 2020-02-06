@@ -256,6 +256,9 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SystemCheckEmployeeRows" Width="1.5" PointX="5.375" PointY="54.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSystemCheckEmployeePerformance" Width="1.5" PointX="7.375" PointY="54.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSystemCheckEmployeeRows" Width="1.5" PointX="23.375" PointY="54.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.PersonalDocument" Width="1.5" PointX="25.375" PointY="54.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.PersonalDocumentType" Width="1.5" PointX="54.375" PointY="32.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPersonalDocument" Width="1.5" PointX="54.375" PointY="35.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
