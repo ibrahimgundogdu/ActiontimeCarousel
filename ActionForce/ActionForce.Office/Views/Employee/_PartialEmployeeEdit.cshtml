@@ -34,7 +34,7 @@
             <div class="form-group row mg-b-5">
                 <label for="FullName" class="col-sm-3 col-form-label">Kimlik Türü</label>
                 <div class="col-sm-6">
-                    <select class="form-control" id="IdentityType" name="IdentityType" @(Model.EmpList.IdentityType != null ? "readonly" : "")>
+                    <select class="form-control" id="IdentityType" name="IdentityType">
                         @foreach (var item in Model.IdentityTypes)
                         {
                             <option value="@item.ID" @(item.TypeName == Model.EmpList.IdentityType ? "selected" : "")>@($"{item.TypeName}")</option>
@@ -47,7 +47,7 @@
             <div class="form-group row mg-b-5">
                 <label for="FullName" class="col-sm-3 col-form-label">Kimlik No</label>
                 <div class="col-sm-6">
-                    <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" autocomplete="off" placeholder="Kimlik No" value="@(Model.EmpList.IdentityNumber)" @(Model.EmpList.IdentityNumber != null ? "readonly" : "")>
+                    <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" autocomplete="off" placeholder="Kimlik No" value="@(Model.EmpList.IdentityNumber)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -56,7 +56,7 @@
             <div class="form-group row bg-gray-100">
                 <label for="FullName" class="col-sm-3 col-form-label">Ad Soyad</label>
                 <div class="col-sm-6">
-                    <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="Ad Soyad" value="@(Model.EmpList.FullName)" @(Model.EmpList.FullName != null ? "readonly" : "") required>
+                    <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="Ad Soyad" value="@(Model.EmpList.FullName)" required>
                 </div>
                 <div class="col-sm-3">
                 </div>

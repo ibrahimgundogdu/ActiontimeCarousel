@@ -5328,6 +5328,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
         </Function>
         <Function Name="SetShiftDates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="sp_employeeUID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="UpdateCashAction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CashID" Type="int" Mode="In" />
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -7655,6 +7656,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="PersonalDocument" EntityType="db293_ActionTimeDbModel.PersonalDocument" />
           <EntitySet Name="PersonalDocumentType" EntityType="db293_ActionTimeDbModel.PersonalDocumentType" />
           <EntitySet Name="VPersonalDocument" EntityType="db293_ActionTimeDbModel.VPersonalDocument" />
+          <FunctionImport Name="sp_employeeUID" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -18139,6 +18141,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_employeeUID" FunctionName="db293_ActionTimeDbModel.Store.sp_employeeUID" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

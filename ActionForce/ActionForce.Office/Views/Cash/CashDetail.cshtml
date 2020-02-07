@@ -264,10 +264,6 @@
     </div>
 </div>
 
-@*@section canvasmenu {
-        @{Html.RenderPartial("_PartialDocumentForms", Model);}
-
-    }*@
 
 @section scripts {
     <script>
@@ -300,13 +296,6 @@
 
         function DeleteCashCollection(id) {
             window.location.href = "/Cash/DeleteCashCollection/" + id;
-            //$.ajax({
-            //    method: "GET",
-            //    url: "/Cash/DeleteCashCollection",
-            //    data: { id: id }
-            //}).done(function (d) {
-            //    $("#DeleteCashCollection").html(d);
-            //});
         }
     </script>
     @if (Model.Result != null) //

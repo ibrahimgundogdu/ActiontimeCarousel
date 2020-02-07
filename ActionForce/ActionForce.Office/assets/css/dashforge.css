@@ -9582,6 +9582,23 @@ textarea.form-control {
     right: 7px;
     box-shadow: 0 0 0 3px #fff; }
 
+.avatar-xxxl {
+    width: 260px;
+    height: 260px;
+}
+
+    .avatar-xxxl .avatar-initial {
+        font-size: 45px;
+    }
+
+    .avatar-xxxl.avatar-offline::after, .avatar-xxxl.avatar-online::after {
+        width: 13px;
+        height: 13px;
+        bottom: 6px;
+        right: 7px;
+        box-shadow: 0 0 0 3px #fff;
+    }
+
 .button-group {
   display: flex;
   align-items: stretch;

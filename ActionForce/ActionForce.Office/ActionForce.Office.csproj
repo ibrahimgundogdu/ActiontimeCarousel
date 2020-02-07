@@ -2526,7 +2526,6 @@
     <Content Include="Views\Cash\SaleDetail.cshtml" />
     <Content Include="Views\Cash\ExchangeDetail.cshtml" />
     <Content Include="Views\Cash\OpenDetail.cshtml" />
-    <Content Include="Views\Cash\CashPaymentDetail.cshtml" />
     <Content Include="Views\Cash\PaymentDetail.cshtml" />
     <Content Include="Views\Cash\ExpenseDetail.cshtml" />
     <Content Include="Views\Cash\SaleRefundDetail.cshtml" />
@@ -2646,6 +2645,14 @@
     <Content Include="Views\Employee\_PartialEmployeeDocumentDetail.cshtml" />
     <Content Include="Views\Cash\_PartialCashList.cshtml" />
     <Content Include="Views\Cash\AddCash.cshtml" />
+    <Content Include="Views\Cash\AddSale.cshtml" />
+    <Content Include="Views\Cash\_PartialSaleList.cshtml" />
+    <Content Include="Views\Cash\AddExchange.cshtml" />
+    <Content Include="Views\Cash\_PartialExchangeList.cshtml" />
+    <Content Include="Views\Cash\AddOpen.cshtml" />
+    <Content Include="Views\Cash\_PartialOpenList.cshtml" />
+    <Content Include="Views\Cash\AddPayment.cshtml" />
+    <Content Include="Views\Cash\_PartialPaymentList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
