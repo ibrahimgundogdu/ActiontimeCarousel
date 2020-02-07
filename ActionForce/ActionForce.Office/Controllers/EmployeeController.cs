@@ -32,12 +32,13 @@ namespace ActionForce.Office.Controllers
                 EmployeeFilterModel filterModel = new EmployeeFilterModel();
                 model.FilterModel = filterModel;
             }
+            Db.sp_employeeUID();
             model.VEmployee = Db.VEmployee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
             model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
             model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true).ToList();
             model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
-            model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).ToList();
+            model.EmployeeList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).Where(x => x.IsActive == true).ToList();
 
 
             if (TempData["EmployeeFilter"] != null)
@@ -60,20 +61,6 @@ namespace ActionForce.Office.Controllers
                 }
             }
             
-           
-
-            //if (!string.IsNullOrEmpty(model.FilterModel.IsActive))
-            //{
-            //    if (model.FilterModel.IsActive == "act")
-            //    {
-            //        model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == true).ToList();
-            //    }
-            //    else if (model.FilterModel.IsActive == "psv")
-            //    {
-            //        model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == false).ToList();
-            //    }
-
-            //}
 
             return View(model);
         }
@@ -124,18 +111,8 @@ namespace ActionForce.Office.Controllers
             {
                 model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == isActive.Value).ToList();
             }
-            //if (!string.IsNullOrEmpty(model.FilterModel.IsActive))
-            //{
-            //    if (model.FilterModel.IsActive == "act")
-            //    {
-            //        model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == true).ToList();
-            //    }
-            //    else if (model.FilterModel.IsActive == "psv")
-            //    {
-            //        model.EmployeeList = model.EmployeeList.Where(x => x.IsActive == false).ToList();
-            //    }
+            
 
-            //}
 
             return PartialView("_PartialEmployeeList", model);
         }
@@ -327,7 +304,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result ?? null;
             }
-
+            
             var _date = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
             var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
 

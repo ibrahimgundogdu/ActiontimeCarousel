@@ -306,11 +306,9 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
-            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
+            
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
-            model.StatusList = Db.BankTransferStatus.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -352,6 +350,47 @@ namespace ActionForce.Office.Controllers
             TempData["filter"] = model;
 
             return RedirectToAction("Sale", "Cash");
+        }
+
+        [AllowAnonymous]
+        public ActionResult AddSale(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+            model.PayMethodList = Db.PayMethod.ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult SaleDetail(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+            
+            model.PayMethodList = Db.PayMethod.ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            model.SaleDetail = Db.VDocumentTicketSales.FirstOrDefault(x => x.UID == id);
+            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Sale" && x.Environment == "Office" && x.ProcessID == model.SaleDetail.ID.ToString()).ToList();
+
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
+
+            return View(model);
         }
 
         [HttpPost]
@@ -520,31 +559,8 @@ namespace ActionForce.Office.Controllers
 
         }
 
-        [AllowAnonymous]
-        public ActionResult SaleDetail(Guid? id)
-        {
-            CashControlModel model = new CashControlModel();
 
-            if (TempData["result"] != null)
-            {
-                model.Result = TempData["result"] as Result ?? null;
-            }
-            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
-            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
-            model.BankAccountList = Db.BankAccount.ToList();
-            model.PayMethodList = Db.PayMethod.ToList();
-            model.StatusList = Db.BankTransferStatus.ToList();
-            model.CurrencyList = OfficeHelper.GetCurrency();
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
-            model.SaleDetail = Db.VDocumentTicketSales.FirstOrDefault(x => x.UID == id);
-            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Sale" && x.Environment == "Office" && x.ProcessID == model.SaleDetail.ID.ToString()).ToList();
-
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
-
-            return View(model);
-        }
 
 
 
@@ -570,11 +586,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
-            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
-            model.BankAccountList = Db.BankAccount.ToList();
-            model.PayMethodList = Db.PayMethod.ToList();
-            model.StatusList = Db.BankTransferStatus.ToList();
+            
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
@@ -617,6 +629,46 @@ namespace ActionForce.Office.Controllers
             TempData["filter"] = model;
 
             return RedirectToAction("Exchange", "Cash");
+        }
+
+        [AllowAnonymous]
+        public ActionResult AddExchange(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult ExchangeDetail(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+            
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            model.ExchangeDetail = Db.VDocumentSaleExchange.FirstOrDefault(x => x.UID == id);
+            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "ExchangeSale" && x.Environment == "Office" && x.ProcessID == model.ExchangeDetail.ID.ToString()).ToList();
+
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
+
+            return View(model);
         }
 
         [HttpPost]
@@ -831,31 +883,8 @@ namespace ActionForce.Office.Controllers
 
         }
 
-        [AllowAnonymous]
-        public ActionResult ExchangeDetail(Guid? id)
-        {
-            CashControlModel model = new CashControlModel();
 
-            if (TempData["result"] != null)
-            {
-                model.Result = TempData["result"] as Result ?? null;
-            }
-            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
-            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
-            model.BankAccountList = Db.BankAccount.ToList();
-            model.PayMethodList = Db.PayMethod.ToList();
-            model.StatusList = Db.BankTransferStatus.ToList();
-            model.CurrencyList = OfficeHelper.GetCurrency();
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
-            model.ExchangeDetail = Db.VDocumentSaleExchange.FirstOrDefault(x => x.UID == id);
-            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "ExchangeSale" && x.Environment == "Office" && x.ProcessID == model.ExchangeDetail.ID.ToString()).ToList();
-
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
-
-            return View(model);
-        }
 
 
 
@@ -881,11 +910,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
-            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
-            model.BankAccountList = Db.BankAccount.ToList();
-            model.PayMethodList = Db.PayMethod.ToList();
-            model.StatusList = Db.BankTransferStatus.ToList();
+            
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -925,6 +950,47 @@ namespace ActionForce.Office.Controllers
             TempData["filter"] = model;
 
             return RedirectToAction("Open", "Cash");
+        }
+
+        [AllowAnonymous]
+        public ActionResult AddOpen(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+            
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult OpenDetail(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+
+            model.OpenDetail = Db.VDocumentCashOpen.FirstOrDefault(x => x.UID == id);
+            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Open" && x.Environment == "Office" && x.ProcessID == model.OpenDetail.ID.ToString()).ToList();
+
+            //model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
+
+            return View(model);
         }
 
         [HttpPost]
@@ -1084,31 +1150,8 @@ namespace ActionForce.Office.Controllers
 
         }
 
-        [AllowAnonymous]
-        public ActionResult OpenDetail(Guid? id)
-        {
-            CashControlModel model = new CashControlModel();
 
-            if (TempData["result"] != null)
-            {
-                model.Result = TempData["result"] as Result ?? null;
-            }
-            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
-            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
-            model.BankAccountList = Db.BankAccount.ToList();
-            model.PayMethodList = Db.PayMethod.ToList();
-            model.StatusList = Db.BankTransferStatus.ToList();
-            model.CurrencyList = OfficeHelper.GetCurrency();
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
-            model.OpenDetail = Db.VDocumentCashOpen.FirstOrDefault(x => x.UID == id);
-            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "Open" && x.Environment == "Office" && x.ProcessID == model.OpenDetail.ID.ToString()).ToList();
-
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
-
-            return View(model);
-        }
 
 
 
@@ -1134,11 +1177,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
-            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
-            model.BankAccountList = Db.BankAccount.ToList();
-            model.PayMethodList = Db.PayMethod.ToList();
-            model.StatusList = Db.BankTransferStatus.ToList();
+            
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -1180,6 +1219,46 @@ namespace ActionForce.Office.Controllers
             TempData["filter"] = model;
 
             return RedirectToAction("CashPayment", "Cash");
+        }
+
+        [AllowAnonymous]
+        public ActionResult AddPayment(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult PaymentDetail(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+            
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            model.PaymentDetail = Db.VDocumentCashPayments.FirstOrDefault(x => x.UID == id);
+            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "CashPayment" && x.Environment == "Office" && x.ProcessID == model.PaymentDetail.ID.ToString()).ToList();
+
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A" || x.Prefix == "E").ToList();
+
+            return View(model);
         }
 
         [HttpPost]
@@ -1349,31 +1428,8 @@ namespace ActionForce.Office.Controllers
 
         }
 
-        [AllowAnonymous]
-        public ActionResult PaymentDetail(Guid? id)
-        {
-            CashControlModel model = new CashControlModel();
 
-            if (TempData["result"] != null)
-            {
-                model.Result = TempData["result"] as Result ?? null;
-            }
-            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
-            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
-            model.BankAccountList = Db.BankAccount.ToList();
-            model.PayMethodList = Db.PayMethod.ToList();
-            model.StatusList = Db.BankTransferStatus.ToList();
-            model.CurrencyList = OfficeHelper.GetCurrency();
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
-            model.PaymentDetail = Db.VDocumentCashPayments.FirstOrDefault(x => x.UID == id);
-            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "CashPayment" && x.Environment == "Office" && x.ProcessID == model.PaymentDetail.ID.ToString()).ToList();
-
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A" || x.Prefix == "E").ToList();
-
-            return View(model);
-        }
 
 
 

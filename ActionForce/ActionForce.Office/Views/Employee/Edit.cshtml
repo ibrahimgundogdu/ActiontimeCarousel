@@ -19,25 +19,35 @@
 <div class="content-body">
     <div class="pd-x-0 tx-13">
         <div class="media d-block d-lg-flex">
-            <div class="profile-sidebar profile-sidebar-two pd-lg-r-15">
+            <div class="profile-sidebar profile-sidebar-three">
                 <div class="row">
-                    <div class="col-sm-3 col-md-2 col-lg">
-                        <div class="avatar avatar-xxl mg-b-20">
+                    <div class="col-lg">
+                        <div class="avatar avatar-xxxl mg-b-20">
                             <img src="http://office.ufegrup.com/img/Employee/@(Model.EmpList.FotoFile)" class="rounded-10 w-100" alt="">
                         </div>
                         <div>
-                            <h5 class="mg-b-2 tx-spacing--1"><span class="@(Model.EmpList?.IsActive == true ? "avatar avatar-online":"avatar avatar-offline")"></span>@(Model.EmpList.FullName)</h5>
-                            <p class="tx-color-03 mg-b-0">@(Model.EmpList.EMail)</p>
-                            <p class="tx-color-03 mg-b-0">@(Model.EmpList.Mobile)</p>
+                            <h5 class="mg-b-2 tx-spacing--1 tx-center">@(Model.EmpList.FullName)</h5>
+                            <p class="tx-color-03 tx-center mg-b-0">@(Model.EmpList.EMail)</p>
+                            <p class="tx-color-03 tx-center mg-b-0">@(Model.EmpList.Mobile)</p>
                         </div>
-
-
                     </div><!-- col -->
                     <div class="col-sm-8 col-md-7 col-lg mg-t-10 mg-sm-t-0 mg-lg-t-15">
                         <div class="d-flex mg-b-25">
                             <a class="btn btn-xs btn-white flex-fill" href="/Employee/Edit/@(Model.EmpList.EmployeeUID)">Düzenle</a>
                             <button class="btn btn-xs @(Model.EmployeeSchedule != null ? Model.EmployeeShift != null ? Model.EmployeeBreak != null ? Html.Raw("btn-warning") : Model.EmployeeShift.DurationMinute == null ? Html.Raw("btn-success") : Html.Raw("btn-pink") : Html.Raw("btn-danger") : Html.Raw("btn-dark")) flex-fill mg-l-10">@(Model.EmployeeSchedule != null ? Model.EmployeeShift != null ? Model.EmployeeBreak != null ? Html.Raw("Molada") : Model.EmployeeShift.DurationMinute == null ? Html.Raw("Mesaide") : Html.Raw("Mesai Bitti") : Html.Raw("Kapalı") : Html.Raw("Takvim Yok"))</button>
                         </div>
+                        <hr />
+                        <div class="d-flex mg-b-20">
+                            <div class="profile-skillset flex-fill">
+                                <h4><a href="" class="link-01">@(Model.EmployeeSchedule?.ShiftDateStart?.ToString("HH\\:mm"))</a></h4>
+                                <label>Başlama</label>
+                            </div>
+                            <div class="profile-skillset flex-fill tx-right">
+                                <h4><a href="" class="link-01">@(Model.EmployeeSchedule?.ShiftdateEnd?.ToString("HH\\:mm"))</a></h4>
+                                <label class="pd-l-15">Bitiş</label>
+                            </div>
+                        </div>
+                        <hr />
                         <div class="d-flex mg-b-20">
                             <div class="profile-skillset flex-fill">
                                 <h4><a href="" class="link-01">@(Model.EmployeeShift?.ShiftDateStart?.ToString("HH\\:mm"))</a></h4>
@@ -52,7 +62,8 @@
                                 <label class="pd-l-10">Süre</label>
                             </div>
                         </div>
-                        <nav class="nav flex-column demo-animate-list">
+                        <hr />
+                        <nav class="nav nav-classic flex-column tx-13">
                             <a href="/Employee/Detail/@(Model.EmpList.EmployeeUID)" class="nav-link">Detay</a>
                             <a href="/Employee/Schedule/@(Model.EmpList.EmployeeUID)" class="nav-link">Schedule (Takvim)</a>
                             <a href="/Employee/Shift/@(Model.EmpList.EmployeeUID)" class="nav-link">Shift (Mesai Mola)</a>
@@ -69,12 +80,17 @@
                 </div>
             </div>
             <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
-                @{Html.RenderPartial("_PartialEmployeeEdit", Model);}
+                <div class="card mg-b-20 mg-lg-b-5">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
 
+                    </div><!-- card-header -->
+                    <div class="card-body">
+                        @{Html.RenderPartial("_PartialEmployeeEdit", Model);}
+                    </div>
+
+                </div>
                 <div class="row">
-                    @*<div class="col-sm-12 bg-white mg-b-10 mg-lg-b-10 rounded">
 
-                </div>*@
                     <div class="col-sm-12" style="margin-bottom:20px !important;">
                         <div class="card">
                             <div class="card-header d-sm-flex align-items-start justify-content-between">
@@ -121,6 +137,9 @@
                         </div>
                     </div>
                 </div>
+                
+
+                
             </div>
 
             @*<div class="profile-sidebar profile-sidebar-three mg-t-40 mg-lg-t-0 pd-lg-l-45">
