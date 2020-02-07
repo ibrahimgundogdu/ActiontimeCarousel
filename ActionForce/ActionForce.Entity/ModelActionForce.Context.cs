@@ -972,5 +972,10 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemoveDayResult", locationIDParameter, dateParameter);
         }
+    
+        public virtual int sp_employeeUID()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_employeeUID");
+        }
     }
 }
