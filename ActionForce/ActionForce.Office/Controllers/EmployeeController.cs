@@ -1433,15 +1433,13 @@ namespace ActionForce.Office.Controllers
                             Title = isEmployee.Title = employee.Title,
                             Whatsapp = isEmployee.Whatsapp,
                             OurCompanyID = isEmployee.OurCompanyID
-                            
-
                         };
                         isEmployee.AreaCategoryID = employee.AreaCategoryID;
                         isEmployee.DepartmentID = employee.DepartmentID;
                         isEmployee.Description = employee.Description;
                         isEmployee.Mobile2 = employee.Mobile2;
                         isEmployee.Username = employee.Username;
-                        isEmployee.Password = employee.Password;
+                        //isEmployee.Password = employee.Password;
                         isEmployee.PositionID = employee.PositionID;
                         isEmployee.RoleGroupID = employee.RoleGroupID;
                         isEmployee.SalaryCategoryID = employee.SalaryCategoryID;
@@ -1486,11 +1484,8 @@ namespace ActionForce.Office.Controllers
                         }
                         Db.SaveChanges();
                         
-
                         result.IsSuccess = true;
                         result.Message = $"{isEmployee.EmployeeID} nolu Çalışan başarı ile Eklendi";
-
-                        
 
                         var isequal = OfficeHelper.PublicInstancePropertiesEqual<Employee>(self, isEmployee, OfficeHelper.getIgnorelist());
                         OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "Detail", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
