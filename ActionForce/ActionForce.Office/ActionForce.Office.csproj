@@ -2639,10 +2639,13 @@
     <Content Include="Views\Employee\Salary.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeSalary.cshtml" />
     <Content Include="Views\Employee\Period.cshtml" />
-    <Content Include="Views\Employee\Check.cshtml" />
     <Content Include="Views\Employee\Score.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeScore.cshtml" />
     <Content Include="Views\Salary\AddNewSalaryEarn.cshtml" />
+    <Content Include="Views\Employee\Document.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeDocumentDetail.cshtml" />
+    <Content Include="Views\Cash\_PartialCashList.cshtml" />
+    <Content Include="Views\Cash\AddCash.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -2652,7 +2655,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Document\Employee\" />
+    <Folder Include="Document\Employee\Document\" />
     <Folder Include="icons\" />
     <Folder Include="Views\Actions\" />
     <Folder Include="Views\Base\" />

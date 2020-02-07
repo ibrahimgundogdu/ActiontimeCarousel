@@ -259,6 +259,9 @@ namespace ActionForce.Entity
         public virtual DbSet<SystemCheckEmployeeRows> SystemCheckEmployeeRows { get; set; }
         public virtual DbSet<VSystemCheckEmployeePerformance> VSystemCheckEmployeePerformance { get; set; }
         public virtual DbSet<VSystemCheckEmployeeRows> VSystemCheckEmployeeRows { get; set; }
+        public virtual DbSet<PersonalDocument> PersonalDocument { get; set; }
+        public virtual DbSet<PersonalDocumentType> PersonalDocumentType { get; set; }
+        public virtual DbSet<VPersonalDocument> VPersonalDocument { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
