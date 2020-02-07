@@ -50,6 +50,41 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
+        public ActionResult ResetEnvelope(int? LocationID, string Date)
+        {
+            ResultControlModel model = new ResultControlModel();
+
+            DateTime datekey = DateTime.UtcNow.Date;
+
+            if (!string.IsNullOrEmpty(Date))
+            {
+                datekey = Convert.ToDateTime(Date).Date;
+            }
+
+            if (LocationID >0)
+            {
+                // dayresult ve itemsler kontrol edilir
+
+                var itemscount = Db.DayResultItemList.Where(x => x.LocationID == LocationID && x.Date == datekey).ToList()?.Count ?? 0;
+
+                if (itemscount <= 2)
+                {
+                    var removed = Db.RemoveDayResult(LocationID, datekey);
+
+                    model.Result = new Result<DayResult>() { IsSuccess = true, Message = "Gün sonu silindi!" };
+                }
+                else
+                {
+                    model.Result = new Result<DayResult>() { IsSuccess = false, Message = "Sorun bulunamadığı için gün sonu silinmedi." };
+                }
+            }
+
+            TempData["result"] = model.Result;
+
+            return RedirectToAction("Envelope", new { date = Date });
+        }
+
+        [AllowAnonymous]
         public ActionResult New(string id, int? locationID, string date)
         {
             ResultControlModel model = new ResultControlModel();
@@ -1179,13 +1214,13 @@ namespace ActionForce.Office.Controllers
 
                     // eski sisteme uyumlu kayıtlar at.
 
-                    if (StateID == 2 || StateID == 3 || StateID == 4 )
+                    if (StateID == 2 || StateID == 3 || StateID == 4)
                     {
                         DocumentManager document = new DocumentManager();
                         var islocal = Request.IsLocal;
 
-                       var updresult =  document.CheckResultBackward(dayresult.UID.Value, model.Authentication, islocal);
-                        result.Message +=  updresult.Message;
+                        var updresult = document.CheckResultBackward(dayresult.UID.Value, model.Authentication, islocal);
+                        result.Message += updresult.Message;
                     }
 
                     // log at

@@ -2323,6 +2323,7 @@
     <Compile Include="Controllers\SalaryController.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />
+    <Compile Include="Controllers\TicketSaleController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -2668,6 +2669,7 @@
     <Folder Include="Views\Finance\" />
     <Folder Include="Views\Logout\" />
     <Folder Include="Views\Pos\" />
+    <Folder Include="Views\TicketSale\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ActionForce.Entity\ActionForce.Entity.csproj">

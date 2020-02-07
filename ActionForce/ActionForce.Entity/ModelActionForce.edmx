@@ -5312,6 +5312,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="ProcessID" Type="bigint" Mode="In" />
           <Parameter Name="ProcessUID" Type="uniqueidentifier" Mode="In" />
         </Function>
+        <Function Name="RemoveDayResult" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="Date" Type="date" Mode="In" />
+        </Function>
         <Function Name="SetEmployeeScheduleMultiplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="Date" Type="date" Mode="In" />
@@ -7645,6 +7649,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="SystemCheckEmployeeRows" EntityType="db293_ActionTimeDbModel.SystemCheckEmployeeRows" />
           <EntitySet Name="VSystemCheckEmployeePerformance" EntityType="db293_ActionTimeDbModel.VSystemCheckEmployeePerformance" />
           <EntitySet Name="VSystemCheckEmployeeRows" EntityType="db293_ActionTimeDbModel.VSystemCheckEmployeeRows" />
+          <FunctionImport Name="RemoveDayResult">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+          </FunctionImport>
           <EntitySet Name="PersonalDocument" EntityType="db293_ActionTimeDbModel.PersonalDocument" />
           <EntitySet Name="PersonalDocumentType" EntityType="db293_ActionTimeDbModel.PersonalDocumentType" />
           <EntitySet Name="VPersonalDocument" EntityType="db293_ActionTimeDbModel.VPersonalDocument" />
@@ -18083,6 +18091,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="RemoveDayResult" FunctionName="db293_ActionTimeDbModel.Store.RemoveDayResult" />
           <EntitySetMapping Name="PersonalDocument">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PersonalDocument">
               <MappingFragment StoreEntitySet="PersonalDocument">

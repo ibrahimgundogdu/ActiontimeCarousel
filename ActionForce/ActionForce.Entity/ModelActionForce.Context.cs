@@ -960,9 +960,17 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetSalaryMultiplier", locationIDParameter, employeeIDParameter, dateParameter);
         }
     
-        public virtual int sp_employeeUID()
+        public virtual int RemoveDayResult(Nullable<int> locationID, Nullable<System.DateTime> date)
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_employeeUID");
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemoveDayResult", locationIDParameter, dateParameter);
         }
     }
 }

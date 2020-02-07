@@ -11,6 +11,7 @@ namespace ActionForce.Office
     {
         public override Task OnConnected()
         {
+
             return base.OnConnected();
         }
 
@@ -21,6 +22,7 @@ namespace ActionForce.Office
 
         public override Task OnDisconnected(bool stopCalled)
         {
+
             return base.OnDisconnected(stopCalled);
         }
 
