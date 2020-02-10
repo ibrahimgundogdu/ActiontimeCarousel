@@ -85,7 +85,7 @@
 
                     <div class="card-body pd-0">
                         <div class="table-responsive">
-                            @using (Ajax.BeginForm("AddEmployeeDocument", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "EmployeeDocumentDetail", InsertionMode = InsertionMode.Replace }))
+                            @using (Ajax.BeginForm("AddEmployeeDocument", null, new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "EmployeeDocumentDetail", InsertionMode = InsertionMode.Replace }, new { enctype = "multipart/form-data" }))
                             {
                                 @Html.AntiForgeryToken()
 
@@ -106,6 +106,7 @@
 
 
                                             <td class="wd-15p" style="padding:2px !important;">
+                                                <input name="EmployeeID" type="hidden" value="@(Model.EmpList.EmployeeID)" />
                                                 <button type="submit" class="btn btn-xs btn-dark btn-block">Doküman Ekle</button>
                                             </td>
                                             <td class="wd-5p" style="padding:2px !important;"></td>
@@ -115,7 +116,7 @@
                                 </table>
                             }
 
-                            <div id="EmployeeDocumentDetail@(Model.EmpList.EmployeeID)">
+                            <div id="EmployeeDocumentDetail">
                                 @{ Html.RenderPartial("_PartialEmployeeDocumentDetail", Model);}
                             </div>
                         </div>
@@ -128,6 +129,37 @@
     </div>
 </div>
 
+@section scripts {
+    <script src="/lib/cleave.js/cleave.min.js"></script>
+
+    <script>
+        $(function () {
+            'use strict'
+            
+
+        });
+
+        function DeleteEmployeeDocument(id) {
+
+            var data = new FormData();
+
+            data.append('id', id);
+
+            $.ajax({
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                url: "/Employee/DeleteEmployeeDocument",
+                data: data
+            }).done(function (d) {
+                $("#EmployeeDocumentDetail").html(d);
+            });
+        }
+        
 
 
 
+    </script>
+    }

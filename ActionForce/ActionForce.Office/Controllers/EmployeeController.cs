@@ -1834,6 +1834,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public PartialViewResult DeleteEmployeeDocument(int id)
         {
             EmployeeControlModel model = new EmployeeControlModel();
@@ -1884,6 +1885,7 @@ namespace ActionForce.Office.Controllers
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == our.OurCompanyID);
 
                 var hourly = Convert.ToDouble(empSalary.Hourly.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var monthly = Convert.ToDouble(empSalary.Monthly.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var hourlyExtent = Convert.ToDouble(empSalary.HourlyExtend.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var extendMultiplyRate = Convert.ToDouble(empSalary.ExtendMultiplyRate.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
@@ -1905,6 +1907,7 @@ namespace ActionForce.Office.Controllers
                         newEmpSalary.EmployeeID = empSalary.EmployeeID;
                         newEmpSalary.DateStart = docDate;
                         newEmpSalary.Hourly = hourly;
+                        newEmpSalary.Monthly = monthly;
                         newEmpSalary.Money = ourcompany.Currency;
                         newEmpSalary.HourlyExtend = hourlyExtent;
                         newEmpSalary.ExtendMultiplyRate = extendMultiplyRate;
