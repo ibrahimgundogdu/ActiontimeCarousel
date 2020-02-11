@@ -27,5 +27,14 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public string UpdateIP { get; set; }
+        public Nullable<int> EmployeeStatusID { get; set; }
+        public Nullable<int> ShiftTypeID { get; set; }
+        public Nullable<int> RoleGroupID { get; set; }
+        public Nullable<int> DepartmentID { get; set; }
+        public Nullable<int> AreaCategoryID { get; set; }
+        public Nullable<int> SalaryCategoryID { get; set; }
+        public Nullable<int> SequenceID { get; set; }
+        public Nullable<int> PositionID { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
     }
 }

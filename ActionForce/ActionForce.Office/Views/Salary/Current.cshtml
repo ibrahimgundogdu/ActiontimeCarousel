@@ -43,7 +43,7 @@
 
 
     <div>
-        <h4 id="section2" class="mg-b-10">Çalışan Cari Hesap Ekstresi</h4>
+        <h4 id="section2" class="mg-b-10"><a href="/Employee/Detail/@(Model.CurrentEmployee.EmployeeUID)" target="_blank">@(Model.CurrentEmployee.FullName)</a> Cari Hesap Ekstresi</h4>
         <div class="table">
             <table class="table table-sm table-hover">
                 <thead>
@@ -163,11 +163,11 @@
 
                     <tr>
 
-                        <td class="tx-sm-13 bold">@item.LocationID</td>
+                        <td class="tx-sm-13 bold">@item.LocationName</td>
                         <td class="tx-sm-13">@item.ProcessDate.Value.ToShortDateString()</td>
                         <td class="tx-sm-13">@item.ProcessName</td>
                         <td class="tx-sm-13">
-                        @(!string.IsNullOrEmpty(item.DocumentNumber) ? Html.Raw($"<a href='/Salary/SalaryDetail/{item.UID}'>{item.DocumentNumber}</a>")  : Html.Raw($"<a href='/Salary/Detail/{item.UID}'>{item.DocumentNumberE}</a>"))
+                        @(item.ActionTypeID == 31 ? Html.Raw($"<a href='/Salary/SalaryDetail/{item.UID}'>{item.ActionDocumentNumber}</a>")  : Html.Raw($"<a href='/Salary/Detail/{item.UID}'>{item.ActionDocumentNumber}</a>"))   @*izin de eklenecek*@
                         </td>
 
                         <td class="tx-sm-13">@(item.QuantityHour?.ToString("N2"))</td>

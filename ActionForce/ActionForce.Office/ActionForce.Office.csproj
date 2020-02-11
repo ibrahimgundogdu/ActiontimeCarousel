@@ -2336,6 +2336,7 @@
     <Compile Include="Models\ControlModels\ComputeControlModel.cs" />
     <Compile Include="Models\ControlModels\RevenueControlModel.cs" />
     <Compile Include="Models\CounterModel.cs" />
+    <Compile Include="Models\Crypter.cs" />
     <Compile Include="Models\Document\EmployeesLocation.cs" />
     <Compile Include="Models\Document\EmployeePermit.cs" />
     <Compile Include="Models\Document\Employees.cs" />
