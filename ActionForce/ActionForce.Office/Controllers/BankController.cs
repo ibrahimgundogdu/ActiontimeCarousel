@@ -85,6 +85,53 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Index", "Bank");
         }
 
+        [AllowAnonymous]
+        public ActionResult AddCollection(Guid? id)
+        {
+            BankControlModel model = new BankControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result<BankActions> ?? null;
+            }
+
+            model.BankAccountList = Db.BankAccount.Where(x => x.AccountTypeID == 2 && x.IsActive == true).ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult Detail(Guid? id)
+        {
+            BankControlModel model = new BankControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result<BankActions> ?? null;
+            }
+
+            model.BankAccountList = Db.BankAccount.Where(x => x.AccountTypeID == 2 && x.IsActive == true).ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            model.Detail = Db.VDocumentPosCollection.FirstOrDefault(x => x.UID == id);
+            model.History = Db.ApplicationLog.Where(x => x.Controller == "Bank" && x.Action == "Index" && x.Environment == "Office" && x.ProcessID == model.Detail.ID.ToString()).ToList();
+
+
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
+
+            return View(model);
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public ActionResult AddPosCollection(NewPosCollect posCollect)
@@ -155,31 +202,6 @@ namespace ActionForce.Office.Controllers
             TempData["result"] = messageresult;
 
             return RedirectToAction("Index", "Bank");
-        }
-
-        [AllowAnonymous]
-        public ActionResult Detail(Guid? id)
-        {
-            BankControlModel model = new BankControlModel();
-
-            if (TempData["result"] != null)
-            {
-                model.Result = TempData["result"] as Result<BankActions> ?? null;
-            }
-
-            model.BankAccountList = Db.BankAccount.Where(x => x.AccountTypeID == 2 && x.IsActive == true).ToList();
-            model.CurrencyList = OfficeHelper.GetCurrency();
-
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-
-            model.Detail = Db.VDocumentPosCollection.FirstOrDefault(x => x.UID == id);
-            model.History = Db.ApplicationLog.Where(x => x.Controller == "Bank" && x.Action == "Index" && x.Environment == "Office" && x.ProcessID == model.Detail.ID.ToString()).ToList();
-            
-
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
-
-            return View(model);
         }
 
         [HttpPost]

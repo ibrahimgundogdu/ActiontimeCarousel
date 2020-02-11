@@ -24,20 +24,20 @@
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb breadcrumb-style1 mg-b-10">
                                 <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Tahsilat İşlemleri</li>
+                                <li class="breadcrumb-item active" aria-current="page">Masraf Ödeme Fişi</li>
                             </ol>
                         </nav>
-                        <h4 class="mg-b-0 tx-spacing--1">Yeni Tahsilat</h4>
+                        <h4 class="mg-b-0 tx-spacing--1">Yeni Masraf Ödeme Fişi</h4>
                     </div>
                     <div class="d-none d-md-block">
 
-                        <a href="/Cash/Index/" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; Tahsilat Listesi</a>
+                        <a href="/Cash/Expense/" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; Masraf Fişi Listesi</a>
                     </div>
                 </div>
-                @using (Html.BeginForm("AddCashCollection", "Cash", FormMethod.Post))
+                @using (Html.BeginForm("AddCashExpense", "Cash", FormMethod.Post, new { enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
-                    
+
                     <div class="row row-xs">
                         <div class="col-lg-12">
                             <div class="form-group row mg-b-5 bg-gray-100">
@@ -61,6 +61,20 @@
                                         @foreach (var item in Model.LocationList)
                                         {
                                             <option value="@item.LocationID">@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3"> </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row mg-b-5 bg-gray-100">
+                                <label for="ExpenseTypeID" class="col-sm-3 col-form-label">Masraf Tipi</label>
+                                <div class="col-sm-3">
+                                    <select class="form-control" id="ExpenseTypeID" name="ExpenseTypeID" required>
+                                        @foreach (var item in Model.ExpenseTypeList)
+                                        {
+                                            <option value="@item.ID">@(Html.Raw($"{item.ExpenseName}"))</option>
                                         }
                                     </select>
                                 </div>
@@ -118,11 +132,47 @@
                                 <div class="col-sm-3">
                                 </div>
                             </div>
+                            <div class="form-group row mg-b-5">
+                                <label for="SlipNumber" class="col-sm-3 col-form-label">Fiş Numarası</label>
+
+                                <div class="col-sm-3">
+                                    <input type="text" name="SlipNumber" class="form-control" />
+                                </div>
+                                <div class="col-sm-3">
+
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="documentFile" class="col-sm-3 col-form-label">Dekont</label>
+
+                                <div class="col-sm-3">
+                                    <input type="file" name="documentFile" style="width: 100%;" class="form-control" />
+                                </div>
+                                <div class="col-sm-3">
+
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="SlipDate" class="col-sm-3 col-form-label">Fiş Tarihi</label>
+
+                                <div class="col-sm-2">
+                                    <input id="SlipDate" name="SlipDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Fiş Tarihi" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                                </div>
+                                <div class="col-sm-1">
+                                    <input id="SlipTime" name="SlipTime" type="text" class="form-control hourfull" autocomplete="off" placeholder="hh:mm:ss" value="@(DateTime.Now.ToString("HH:mm:ss"))" required>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
                             <div class="form-group row mg-b-0">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-3">
-                                    <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="23" />
-                                    <button type="submit" class="btn btn-primary btn-block">Tahsilat Ekle</button>
+                                    <input id="ActinTypeID" name="ActinTypeID" type="hidden" value="29" />
+                                    <button type="submit" class="btn btn-primary btn-block">Masraf Fişi Ekle</button>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -183,6 +233,7 @@
         </script>
     }
 }
+
 
 
 

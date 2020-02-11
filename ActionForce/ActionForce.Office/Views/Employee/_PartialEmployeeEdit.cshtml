@@ -135,6 +135,7 @@
                 <label for="RoleGroupID" class="col-sm-3 col-form-label">Rol Grup</label>
                 <div class="col-sm-6">
                     <select class="form-control" id="RoleGroupID" name="RoleGroupID" required>
+                        <option value="">Rol Seçiniz</option>
                         @foreach (var item in Model.RoleGroupList.OrderBy(x => x.RoleLevel))
                         {
                             <option value="@item.ID" @(item.ID == Model.EmpList.RoleGroupID ? "selected" : "")>@($"{item.GroupCode} {item.GroupName}" )</option>
@@ -150,6 +151,7 @@
                 <label for="AreaCategoryID" class="col-sm-3 col-form-label">Alan</label>
                 <div class="col-sm-6">
                     <select class="form-control" id="AreaCategoryID" name="AreaCategoryID" required>
+                        <option value="">Alan Seçiniz</option>
                         @foreach (var item in Model.AreaCategoryList.OrderBy(x => x.SortBy))
                         {
                             <option value="@item.ID" @(item.ID == Model.EmpList.AreaCategoryID ? "selected" : "")>@($"{item.SortBy} {item.AreaName}" )</option>
@@ -163,6 +165,7 @@
                 <label for="DepartmentID" class="col-sm-3 col-form-label">Departman</label>
                 <div class="col-sm-6">
                     <select class="form-control" id="DepartmentID" name="DepartmentID" required>
+                        <option value="">Departman Seçiniz</option>
                         @foreach (var item in Model.DepartmentList.OrderBy(x => x.SortBy))
                         {
                             <option value="@item.ID" @(item.ID == Model.EmpList.DepartmentID ? "selected" : "")>@($"{item.SortBy} {item.DepartmentName}" )</option>
@@ -176,6 +179,7 @@
                 <label for="PositionID" class="col-sm-3 col-form-label">Pozisyon</label>
                 <div class="col-sm-6">
                     <select class="form-control" id="PositionID" name="PositionID" required>
+                        <option value="">Pozisyon Seçiniz</option>
                         @foreach (var item in Model.PositionList.OrderBy(x => x.SortBy))
                         {
                             <option value="@item.ID" @(item.ID == Model.EmpList.PositionID ? "selected" : "")>@($"{item.SortBy} {item.PositionName}" )</option>
@@ -189,6 +193,7 @@
                 <label for="StatusID" class="col-sm-3 col-form-label">Durum</label>
                 <div class="col-sm-6">
                     <select class="form-control" id="StatusID" name="StatusID" required>
+                        <option value="">Durum Seçiniz</option>
                         @foreach (var item in Model.StatusList)
                         {
                             <option value="@item.ID" @(item.ID == Model.EmpList.StatusID ? "selected" : "")>@($"{item.Code} {item.Name}" )</option>
@@ -202,6 +207,7 @@
                 <label for="ShiftTypeID" class="col-sm-3 col-form-label">Çalışma Türü</label>
                 <div class="col-sm-6">
                     <select class="form-control" id="ShiftTypeID" name="ShiftTypeID" required>
+                        <option value="">Çalışma Seçiniz</option>
                         @foreach (var item in Model.ShiftTypeList)
                         {
                             <option value="@item.ID" @(item.ID == Model.EmpList.ShiftTypeID ? "selected" : "")>@($"{item.SortBy} {item.TypeName}" )</option>
@@ -215,6 +221,7 @@
                 <label for="SalaryCategoryID" class="col-sm-3 col-form-label">Kategori</label>
                 <div class="col-sm-6">
                     <select class="form-control" id="SalaryCategoryID" name="SalaryCategoryID" required>
+                        <option value="">Kategori Seçiniz</option>
                         @foreach (var item in Model.SalaryCategoryList)
                         {
                             <option value="@item.ID" @(item.ID == Model.EmpList.SalaryCategoryID ? "selected" : "")>@($"{item.SortBy} {item.SalaryCategoryName}" )</option>
@@ -228,6 +235,7 @@
                 <label for="SequenceID" class="col-sm-3 col-form-label">Oryantasyon Seviyesi</label>
                 <div class="col-sm-6">
                     <select class="form-control" id="SequenceID" name="SequenceID" required>
+                        <option value="">Oryantasyon Seçiniz</option>
                         @foreach (var item in Model.SequenceList)
                         {
                             <option value="@item.ID" @(item.ID == Model.EmpList.SequenceID ? "selected" : "")>@($"{item.Code} {item.Name}" )</option>

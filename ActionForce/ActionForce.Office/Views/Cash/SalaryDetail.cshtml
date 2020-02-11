@@ -4,11 +4,6 @@
 }
 
 @section style{
-    <style type="text/css">
-        .form-group {
-            margin-bottom: 8px;
-        }
-    </style>
     <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
 }
 
@@ -35,7 +30,6 @@
                         <h4 class="mg-b-0 tx-spacing--1">Maaş Avans Ödemesi Detayı</h4>
                     </div>
                     <div class="d-none d-md-block">
-                        @*@{Html.RenderPartial("_PartialAddCashMenu");}*@
                         <a href="/Cash/NewSalaryPayment" class="btn btn-primary btn-uppercase"><i data-feather="plus-square"></i> &nbsp; Kasadan Maaş Ödeme Ekle</a>
                         <a href="/Cash/SalaryPayment" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; Kasadan Maaş Ödeme Listesi</a>
                     </div>
@@ -216,220 +210,7 @@
                         </div>
                     </div>
 
-                    @*<div class="row row-xs">
-                        <div class="col-lg-6">
-                            <div class="card mg-b-20 mg-lg-b-25">
-                                <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                                    <h6 class="tx-uppercase tx-semibold mg-b-0">@(Html.Raw($"{Model.SalaryDetail.ActionName}"))</h6>
-                                    <input name="ActinTypeID" type="hidden" value="31" />
-                                    <input name="UID" type="hidden" value="@(Model.SalaryDetail.UID)" />
-                                    <nav class="nav">
-                                        <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.SalaryDetail.Date.Value.ToLongDateString())</span></a>
-                                    </nav>
-                                </div><!-- card-header -->
-                                <div class="card-body pd-20">
-                                    <form>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Kasa Tipi</label>
-                                            <div class="col-sm-9">
-                                                <span class="text-danger">@Model.SalaryDetail.ActionTypeName</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Kasa</label>
-                                            <div class="col-sm-9">
-                                                <span class="text-danger">@Model.SalaryDetail.CashName</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Döküman Nr</label>
-                                            <div class="col-sm-9">
-                                                <span class="text-danger">@Model.SalaryDetail.DocumentNumber</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Tarih</label>
-                                            <div class="col-sm-9">
-                                                <input id="UpdateDocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.SalaryDetail.Date.Value.ToString("yyyy-MM-dd"))" required>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Kime</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control select2" name="FromID" required>
-                                                    @foreach (var item in Model.FromList)
-                                                    {
-                                                        <option value="@item.Code" @(Model.SalaryDetail.ToEmployeeID != null ? Model.SalaryDetail.ToEmployeeID == item.ID ? "selected" : "" : "")>@(Html.Raw($"{item.Name}"))</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Lokasyon</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control select2" name="LocationID" required>
-                                                    @foreach (var item in Model.LocationList)
-                                                    {
-                                                        <option value="@item.LocationID" @(Model.SalaryDetail.LocationID == item.LocationID ? "selected" : "")>@($"{item.SortBy}  {item.LocationName} {item.State} {item.Description}" )</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Kategori</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control select2" name="CategoryID">
-                                                    @foreach (var item in Model.SalaryCategories)
-                                                    {
-                                                        <option value="@item.ID" @(Model.SalaryDetail.CategoryID == item.ID ? "selected" : "")>@($"{item.SortBy} ({item.CategoryName})")</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Tutar</label>
-                                            <div class="col-sm-9">
-                                                <input name="Amount" type="text" class="form-control money" autocomplete="off" value="@(Model.SalaryDetail.Amount?.ToString("N2"))" placeholder="Tutar" required>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Para Birimi</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control" name="Currency" required>
-                                                    @foreach (var item in Model.CurrencyList)
-                                                    {
-                                                        <option value="@item.Code" @(Model.SalaryDetail.Currency == item.Code ? "selected" : "")>@($"{item.Code} ({item.Sign})")</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Hangi Kasadan</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control" name="BankAccountID">
-                                                    <option value="0" @(Model.SalaryDetail.FromCashID != null ? "selected" : "")>Kasa</option>
-                                                    @foreach (var item in Model.BankAccountList)
-                                                    {
-                                                        <option value="@item.ID" @(Model.SalaryDetail.FromBankAccountID != null ? Model.SalaryDetail.FromBankAccountID == item.BankID ? "selected" : "" : "")>@($"{item.Bank.Name} ({item.AccountName})")</option>
-                                                    }
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Ödeme Türü</label>
-                                            <div class="col-sm-9">
-                                                <select class="form-control" name="SalaryType" required>
-                                                    <option value="1" @(Model.SalaryDetail.SalaryType == 1 ? "selected" : "")>Maaş Ödemesi</option>
-                                                    <option value="2" @(Model.SalaryDetail.SalaryType == 2 ? "selected" : "")>Avans Ödemesi</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Kuru</label>
-                                            <div class="col-sm-9">
-                                                <input name="ExchangeRate" type="text" class="form-control money4" autocomplete="off" placeholder="Döviz Kuru">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Kur</label>
-                                            <div class="col-sm-9">
-                                                <input name="Exchange" type="text" class="form-control money4" autocomplete="off" value="@(Model.SalaryDetail.ExchangeRate?.ToString("N4"))" readonly>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Döviz Tutarı</label>
-                                            <div class="col-sm-3">
-                                                <span class="text-danger">@($"{Model.SalaryDetail.SystemAmount?.ToString("N4")} {Model.SalaryDetail.SystemCurrency}")</span>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3" class="col-sm-3 col-form-label">Referans ID</label>
-                                            <div class="col-sm-9">
-                                                <input name="ReferanceID" type="text" class="form-control number" value="@Model.SalaryDetail.ReferenceID" autocomplete="off" placeholder="Referans ID">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3" class="col-sm-3 col-form-label">Açıklama</label>
-                                            <div class="col-sm-9">
-                                                <textarea name="Description" rows="4" class="form-control" value="@Model.SalaryDetail.Description" placeholder="Açıklama"></textarea>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-3">Active?</div>
-                                            <div class="col-sm-9">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" name="IsActive" value="@Model.SalaryDetail.IsActive" checked="@Model.SalaryDetail.IsActive" class="custom-control-input">
-                                                    <label class="custom-control-label">Aktif mi?</label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row mg-b-0">
-                                            <div class="col-sm-3"></div>
-                                            <div class="col-sm-3">
-                                                @if (Model.SalaryDetail.IsActive == true)
-                                                {
-                                                    <button class="btn btn-primary btn-block">Maaş Avans Güncelle</button>
-                                                }
-
-                                            </div>
-                                            <div class="col-sm-3">
-                                                @if (Model.SalaryDetail.IsActive == true)
-                                                {
-                                                    <button type="button" class="btn btn-danger btn-block" onclick="confirm('@(Model.SalaryDetail.Amount?.ToString()) tutarlı maaş avans ödemesini iptal etmek istediğine emin misin?')? DeleteCashSalaryPayment('@Model.SalaryDetail.UID') : ''">Maaş Avans Sil</button>
-
-                                                }
-
-                                            </div>
-                                        </div>
-
-
-                                    </form>
-                                </div>
-                                <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
-                                    <nav class="nav nav-with-icon tx-13">
-                                        <a href="" class="nav-link"><i data-feather="save"></i> <strong>İlk Kayıt : </strong></a>
-                                        <a href="" class="nav-link"><i data-feather="user-plus"></i> @(Html.Raw($"{Model.SalaryDetail.RecorderFullName}"))</a>
-                                        <a href="" class="nav-link"><i data-feather="calendar"></i> @(Html.Raw($"{Model.SalaryDetail.RecordDate.Value.ToLongDateString()}"))</a>
-                                        <a href="" class="nav-link"><span>|</span></a>
-                                        <a href="" class="nav-link"><i data-feather="edit"></i> <strong>Güncelleyen : </strong></a>
-                                        <a href="" class="nav-link"><i data-feather="user-check"></i> @(Html.Raw($"{Model.SalaryDetail.UpdaterFullName}"))</a>
-                                        <a href="" class="nav-link"><i data-feather="calendar"></i> @(Model.SalaryDetail.UpdateDate != null ? Html.Raw($"{Model.SalaryDetail.UpdateDate.Value.ToLongDateString()}") : Html.Raw($""))</a>
-                                    </nav>
-                                </div><!-- card-footer -->
-                            </div><!-- card -->
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="card">
-                                <div class="card-header pd-b-0 pd-x-20 bd-b-0">
-                                    <div class="d-sm-flex align-items-center justify-content-between">
-                                        <h6 class="mg-b-0">@(Model.SalaryDetail.ActionName)</h6>
-                                        <p class="tx-12 tx-color-03 mg-b-0">@(Model.SalaryDetail.Date.Value.ToLongDateString())</p>
-                                    </div>
-                                </div><!-- card-header -->
-                                <div class="card-body pd-20">
-                                    <ul class="activity tx-13">
-
-                                        @foreach (var item in Model.History)
-                                        {
-                                            <li class="activity-item">
-                                                <div class="activity-icon @(item.ProcessType == "Insert" ? "bg-success-light tx-success": item.ProcessType == "Update" ? "bg-indigo-light tx-indigo" : "bg-pink-light tx-pink")">
-                                                    <i data-feather="@(item.ProcessType == "Insert" ? "plus-circle" : item.ProcessType == "Update" ? "edit" : "trash-2")"></i>
-                                                </div>
-
-                                                <div class="activity-body">
-                                                    <p class="mg-b-2"><strong>@item.ProcessType :</strong> @(item.ErrorMessage != "" ? Html.Raw($"<span class='text-danger'>{item.ErrorMessage}</span>") : Html.Raw($"<span class='text-black-50'>{item.ResultMessage}</span>"))</p>
-                                                    @(Html.Raw($"<p class='mg - b - 2'>{item.FieldName} <strong> | </strong> {item.OldValue} <strong> | </strong> {item.NewValue} </p>"))
-                                                    <small class="tx-color-03">@(Html.Raw($"{item.RecordDate.Value.ToLongDateString()} {item.RecordDate.Value.ToLongTimeString()} {item.RecordEmployee}"))</small>
-                                                </div>
-                                            </li>
-                                        }
-
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>*@
+                    
 
 
                 }
@@ -438,9 +219,7 @@
     </div>
 </div>
 
-@section canvasmenu {
-    @*@{Html.RenderPartial("_PartialDocumentForms", Model);}*@
-}
+
 
 @section scripts {
     <script>
@@ -472,47 +251,8 @@
 
         function DeleteCashSalaryPayment(id) {
             window.location.href = "/Cash/DeleteCashSalaryPayment/" + id;
-            //$.ajax({
-            //    method: "GET",
-            //    url: "/Cash/DeleteCashSalaryPayment",
-            //    data: { id: id }
-            //}).done(function (d) {
-            //    $("#DeleteCashSalaryPayment").html(d);
-            //});
         }
 
-    </script>
-    <script>
-
-
-        $(function () {
-            'use strict'
-
-            $('.off-canvas-menu').on('click', function (e) {
-                e.preventDefault();
-                var target = $(this).attr('href');
-                $(target).addClass('show');
-            });
-
-
-            $('.off-canvas .close').on('click', function (e) {
-                e.preventDefault();
-                $(this).closest('.off-canvas').removeClass('show');
-            })
-
-            $(document).on('click touchstart', function (e) {
-                e.stopPropagation();
-
-                if (!$(e.target).closest('.off-canvas-menu').length) {
-                    var offCanvas = $(e.target).closest('.off-canvas').length;
-                    if (!offCanvas) {
-                        $('.off-canvas.show').addClass('show');
-                    }
-                }
-            });
-
-
-        });
     </script>
     @if (Model.Result != null) //
     {

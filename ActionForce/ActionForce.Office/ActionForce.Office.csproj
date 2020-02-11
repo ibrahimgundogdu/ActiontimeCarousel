@@ -2496,9 +2496,7 @@
     <Content Include="scss\util\_width.scss" />
     <Content Include="scss\_mixins.scss" />
     <Content Include="scss\_variables.scss" />
-    <Content Include="Views\Cash\_PartialAddCashMenu.cshtml" />
     <Content Include="Views\Cash\Sale.cshtml" />
-    <Content Include="Views\Cash\_PartialDocumentForms.cshtml" />
     <Content Include="Views\Cash\Exchange.cshtml" />
     <Content Include="Views\Cash\Open.cshtml" />
     <Content Include="Views\Result\Envelope.cshtml" />
@@ -2653,6 +2651,15 @@
     <Content Include="Views\Cash\_PartialOpenList.cshtml" />
     <Content Include="Views\Cash\AddPayment.cshtml" />
     <Content Include="Views\Cash\_PartialPaymentList.cshtml" />
+    <Content Include="Views\Cash\_PartialSaleRefundList.cshtml" />
+    <Content Include="Views\Cash\AddSaleRefund.cshtml" />
+    <Content Include="Views\Cash\AddExpense.cshtml" />
+    <Content Include="Views\Cash\_PartialExpenseList.cshtml" />
+    <Content Include="Views\Cash\AddBankTransfer.cshtml" />
+    <Content Include="Views\Cash\_PartialTransferList.cshtml" />
+    <Content Include="Views\Cash\_PartialSalaryList.cshtml" />
+    <Content Include="Views\Bank\_PartialCollectionList.cshtml" />
+    <Content Include="Views\Bank\AddCollection.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

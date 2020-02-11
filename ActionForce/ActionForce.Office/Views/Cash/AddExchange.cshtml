@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                             <div class="form-group row bg-gray-100">
-                                <label for="Email" class="col-sm-3 col-form-label">Para Birimi</label>
+                                <label for="Currency" class="col-sm-3 col-form-label">Para Birimi</label>
                                 <div class="col-sm-3">
                                     <select class="form-control" id="Currency" name="Currency" required>
                                         @foreach (var item in Model.CurrencyList)
@@ -70,7 +70,7 @@
                                 </div>
                             </div>
                             <div class="form-group row mg-b-5 bg-gray-100">
-                                <label for="Tc" class="col-sm-3 col-form-label">Döviz Tutarı</label>
+                                <label for="Amount" class="col-sm-3 col-form-label">Döviz Tutarı</label>
                                 <div class="col-sm-3">
                                     <input id="Amount" name="Amount" autocomplete="off" type="text" class="form-control money" placeholder="Tutar" required>
                                 </div>
@@ -79,7 +79,7 @@
                                 </div>
                             </div>
                             <div class="form-group row mg-b-5 bg-gray-100">
-                                <label for="Tc" class="col-sm-3 col-form-label">Döviz Değeri</label>
+                                <label for="Exchange" class="col-sm-3 col-form-label">Döviz Değeri</label>
                                 <div class="col-sm-3">
                                     <input id="Exchange" name="Exchange" type="text" class="form-control money4" autocomplete="off" placeholder="Kur" required>
                                 </div>
@@ -88,7 +88,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="Tc" class="col-sm-3 col-form-label">Referans ID</label>
+                                <label for="ReferanceID" class="col-sm-3 col-form-label">Referans ID</label>
                                 <div class="col-sm-3">
                                     <input id="ReferanceID" name="ReferanceID" autocomplete="off" type="text" class="form-control number" placeholder="Referans ID">
                                 </div>
@@ -97,7 +97,7 @@
                                 </div>
                             </div>
                             <div class="form-group row bg-gray-50">
-                                <label for="Mobile" class="col-sm-3 col-form-label">Tarih</label>
+                                <label for="DocumentDate" class="col-sm-3 col-form-label">Tarih</label>
                                 <div class="col-sm-3">
                                     <input id="DocumentDate" name="DocumentDate" type="text" class="form-control shiftdate" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
                                 </div>
@@ -111,6 +111,18 @@
                                     <textarea id="Description" name="Description" rows="5" cols="20" class="form-control" style="width:100% !important;"></textarea>
                                 </div>
                                 <div class="col-sm-3"> </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="documentFile" class="col-sm-3 col-form-label">Dekont</label>
+
+                                <div class="col-sm-3">
+                                    <input type="file" name="documentFile" style="width: 100%;" class="form-control" />
+                                </div>
+                                <div class="col-sm-3">
+                                    
+                                </div>
                                 <div class="col-sm-3">
                                 </div>
                             </div>
@@ -147,6 +159,12 @@
             $('.select2').select2({
                 placeholder: 'Çalışan Seçiminiz',
                 searchInputPlaceholder: 'Search options'
+            });
+            $('#DocumentDate').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
             });
         });
         $(function () {

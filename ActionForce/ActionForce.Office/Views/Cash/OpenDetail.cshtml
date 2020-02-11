@@ -34,7 +34,6 @@
                     </div>
                 </div>
 
-
                 @using (Html.BeginForm("EditCashOpen", "Cash", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
@@ -46,7 +45,7 @@
 
                                 <div class="col-sm-6">
 
-                                    <input id="ActionTypeName" name="ActionTypeName" type="text" class="form-control" placeholder="Kasa Tipi" value="@Model.OpenDetail.ActionTypeName" readonly>
+                                    <input id="ActionTypeName" name="ActionTypeName" type="text" class="form-control" placeholder="Kasa Tipi" value="@(Model.OpenDetail?.ActionTypeName)" readonly>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -56,7 +55,7 @@
 
                                 <div class="col-sm-6">
 
-                                    <input id="CashName" name="CashName" type="text" class="form-control" placeholder="Kasa" value="@Model.OpenDetail.CashName" readonly>
+                                    <input id="CashName" name="CashName" type="text" class="form-control" placeholder="Kasa" value="@(Model.OpenDetail?.CashName)" readonly>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -66,7 +65,7 @@
 
                                 <div class="col-sm-6">
 
-                                    <input id="DocumentNumber" name="DocumentNumber" type="text" class="form-control" placeholder="Kasa" value="@Model.OpenDetail.DocumentNumber" readonly>
+                                    <input id="DocumentNumber" name="DocumentNumber" type="text" class="form-control" placeholder="Kasa" value="@(Model.OpenDetail?.DocumentNumber)" readonly>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -75,7 +74,7 @@
                                 <label for="DocumentDate" class="col-sm-3 col-form-label">Tarih</label>
 
                                 <div class="col-sm-6">
-                                    <input id="UpdateDocumentDate" name="DocumentDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.OpenDetail.Date.Value.ToString("yyyy-MM-dd"))" required>
+                                    <input id="UpdateDocumentDate" name="DocumentDate" type="text" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.OpenDetail?.Date.Value.ToString("yyyy-MM-dd"))" required>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -98,7 +97,7 @@
                                 <label for="Amount" class="col-sm-3 col-form-label">Tutar</label>
 
                                 <div class="col-sm-6">
-                                    <input name="Amount" type="text" class="form-control money" autocomplete="off" value="@(Model.OpenDetail.Amount?.ToString("N2"))" placeholder="Tutar" required>
+                                    <input name="Amount" type="text" class="form-control money" autocomplete="off" value="@(Model.CashDetail?.Amount?.ToString("N2"))" placeholder="Tutar" required>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -130,7 +129,7 @@
                                 <label for="Exchange" class="col-sm-3 col-form-label">Kur</label>
 
                                 <div class="col-sm-6">
-                                    <input name="Exchange" type="text" class="form-control money4" autocomplete="off" value="@(Model.OpenDetail.ExchangeRate?.ToString("N4"))" readonly>
+                                    <input name="Exchange" type="text" class="form-control money4" autocomplete="off" value="@(Model.OpenDetail?.ExchangeRate?.ToString("N4"))" readonly>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -139,7 +138,7 @@
                                 <label for="SystemAmount" class="col-sm-3 col-form-label">Döviz Tutar</label>
 
                                 <div class="col-sm-6">
-                                    <input name="SystemAmount" type="text" class="form-control" autocomplete="off" value="@($"{Model.OpenDetail.SystemAmount?.ToString("N2")} {Model.CashDetail.SystemCurrency}")" placeholder="Döviz Tutar" required>
+                                    <input name="SystemAmount" type="text" class="form-control" autocomplete="off" value="@($"{Model.OpenDetail?.SystemAmount?.ToString("N2")} {Model.OpenDetail.SystemCurrency}")" placeholder="Döviz Tutar" required>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -148,7 +147,7 @@
                                 <label for="ReferenceID" class="col-sm-3 col-form-label">Referans ID</label>
 
                                 <div class="col-sm-6">
-                                    <input name="ReferanceID" type="text" class="form-control" autocomplete="off" value="@Model.OpenDetail.ReferenceID" placeholder="Referans ID">
+                                    <input name="ReferanceID" type="text" class="form-control" autocomplete="off" value="@(Model.OpenDetail?.ReferenceID)" placeholder="Referans ID">
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -156,7 +155,7 @@
                             <div class="form-group row">
                                 <label for="Description" class="col-sm-3 col-form-label">Açıklama</label>
                                 <div class="col-sm-6">
-                                    <textarea id="Description" name="Description" rows="5" cols="20" class="form-control" style="width:100% !important;">@(Model.OpenDetail.Description)</textarea>
+                                    <textarea id="Description" name="Description" rows="5" cols="20" class="form-control" style="width:100% !important;">@(Model.OpenDetail?.Description)</textarea>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>
@@ -165,7 +164,7 @@
                                 <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
                                 <div class="col-sm-2">
                                     <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" @(Model.OpenDetail.IsActive == true ? "checked" : "")>
+                                        <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" @(Model.OpenDetail?.IsActive == true ? "checked" : "")>
                                         <label class="custom-control-label" for="IsActive">Aktif</label>
                                     </div>
                                 </div>
@@ -175,18 +174,18 @@
                             <div class="form-group row mg-b-0">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-3">
-                                    <input name="ActinTypeID" type="hidden" value="26" />
-                                    <input name="UID" type="hidden" value="@(Model.OpenDetail.UID)" />
-                                    @if (Model.OpenDetail.IsActive == true)
+                                    <input name="ActinTypeID" type="hidden" value="23" />
+                                    <input name="UID" type="hidden" value="@(Model.OpenDetail?.UID)" />
+                                    @if (Model.OpenDetail?.IsActive == true)
                                     {
-                                        <button type="submit" class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                        <button type="submit" class="btn btn-primary btn-block">Açılış Fişi Güncelle</button>
                                     }
 
                                 </div>
                                 <div class="col-sm-3">
-                                    @if (Model.OpenDetail.IsActive == true)
+                                    @if (Model.OpenDetail?.IsActive == true)
                                     {
-                                        <a href="#" class="btn btn-danger btn-block btn-icon" onclick="confirm('Silmek Istediğinize Emin misiniz?')? DeleteCashOpen('@Model.OpenDetail.UID'):''">Açılış Fiş Sil <i data-feather="trash-2"></i></a>
+                                        <a href="#" class="btn btn-danger btn-block btn-icon" onclick="confirm('Silmek Istediğinize Emin misiniz?')? DeleteCashOpen('@(Model.OpenDetail?.UID)'):''">Tahsilat Sil <i data-feather="trash-2"></i></a>
                                     }
 
                                 </div>
@@ -195,8 +194,8 @@
                             </div>
                         </div>
                     </div>
-
                 }
+                
 
                 <div class="row row-xs bg-gray-100 mg-b-0 mg-t-40">
                     <div class="col-sm-3 pd-t-10 pd-b-10">
