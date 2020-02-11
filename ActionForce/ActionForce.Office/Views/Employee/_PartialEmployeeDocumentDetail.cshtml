@@ -22,7 +22,7 @@
                 <td class="tx-medium" style="padding:2px 2px 2px 17px !important;">@($"{param.DocumentTypeName}")</td>
 
                 <td class="" style="padding:2px !important;">@(param.DocumentDescription)</td>
-                <td class="" style="padding:2px !important;"><img src="~/Document/Employee/Document/@param.DocumentFile" class="img-thumbnail" alt="Responsive image"></td>
+                <td class="" style="padding:2px !important;"><img src="~/Document/Employee/Document/@param.DocumentFile" class="img-thumbnail" alt="Responsive image" width="100"></td>
                 <td class="" style="padding:2px !important;">
                     <small class="tx-12 tx-color-03">@(param.UpdateDate ?? param.RecordDate)</small>
                 </td>
@@ -39,5 +39,7 @@
 <script>
     $(function () {
         feather.replace();
+
+        
     });
 </script>

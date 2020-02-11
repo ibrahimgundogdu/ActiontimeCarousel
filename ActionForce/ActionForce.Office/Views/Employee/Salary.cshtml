@@ -100,6 +100,7 @@
                                             <td class="text-right wd-5p" style="padding:2px !important;"><input type="text" id="ExtendMultiplyRate" name="ExtendMultiplyRate" class="form-control form-control-sm money text-right" placeholder="Çarpan"></td>
 
                                             <td class="wd-15p" style="padding:2px !important;">
+                                                <input name="EmployeeID" type="hidden" value="@(Model.EmpList.EmployeeID)" />
                                                 <button type="submit" class="btn btn-xs btn-dark btn-block">Ücret Tanımı Ekle</button>
                                             </td>
                                             <td class="wd-5p" style="padding:2px !important;"></td>
@@ -109,7 +110,7 @@
                                 </table>
                             }
 
-                            <div id="EmployeeSalary@(Model.EmpList.EmployeeID)">
+                            <div id="EmployeeSalary">
                                 @{ Html.RenderPartial("_PartialEmployeeSalary", Model);}
                             </div>
                         </div>
