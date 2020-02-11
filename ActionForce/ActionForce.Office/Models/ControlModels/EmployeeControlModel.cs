@@ -12,8 +12,8 @@ namespace ActionForce.Office
         public Result Result { get; set; }
 
 
-        public IEnumerable<GetEmployeeAll_Result1> EmployeeList { get; set; }
-        public GetEmployeeAll_Result1 EmpList { get; set; }
+        public IEnumerable<GetEmployeeAll_Result3> EmployeeList { get; set; }
+        public GetEmployeeAll_Result3 EmpList { get; set; }
 
         public EmployeeFilterModel FilterModel { get; set; }
         public WizardModel Wizard { get; set; }
