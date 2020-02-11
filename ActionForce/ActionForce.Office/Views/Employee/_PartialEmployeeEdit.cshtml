@@ -335,8 +335,8 @@
                         <td>@(item.ProcessType)</td>
                         <td>@(item.ResultMessage)</td>
                         <td>@(item.FieldName)</td>
-                        <td>@(item.OldValue)</td>
-                        <td>@(item.NewValue)</td>
+                        <td><span title="@(item.OldValue)">@(item.OldValue != null && item.OldValue.StartsWith("System.") ? "...": item?.OldValue)</span></td>
+                        <td><span title="@(item.NewValue)">@(item.NewValue != null && item.NewValue.StartsWith("System.") ? "..." : item?.NewValue)</span></td>
                         <td>@(item.IsSuccess)</td>
                     </tr>
                 }
