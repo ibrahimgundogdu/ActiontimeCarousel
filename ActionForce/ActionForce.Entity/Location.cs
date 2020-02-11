@@ -43,5 +43,6 @@ namespace ActionForce.Entity
         public string RecordIP { get; set; }
         public Nullable<System.Guid> LocationUID { get; set; }
         public Nullable<int> POSAccountID { get; set; }
+        public string LocationFullName { get; set; }
     }
 }

@@ -51,5 +51,11 @@ namespace ActionForce.Entity
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<System.Guid> ProcessUID { get; set; }
         public string ActionDocumentNumber { get; set; }
+        public Nullable<double> QuantityHourSalary { get; set; }
+        public Nullable<double> TotalAmountSalary { get; set; }
+        public Nullable<double> QuantityHourFood { get; set; }
+        public Nullable<double> UnitFoodPrice { get; set; }
+        public Nullable<double> TotalAmountFood { get; set; }
+        public Nullable<double> SystemUnitPrice { get; set; }
     }
 }
