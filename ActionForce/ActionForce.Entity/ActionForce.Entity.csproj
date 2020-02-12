@@ -161,6 +161,9 @@
     <Compile Include="CostumeType.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="CountryPhoneCode.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="Currency.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

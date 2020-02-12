@@ -23,6 +23,7 @@ namespace ActionForce.Office
 
         public IEnumerable<IdentityType> IdentityTypes { get; set; }
         public IEnumerable<OurCompany> OurList { get; set; }
+        public IEnumerable<CountryPhoneCode> PhoneCodes { get; set; }
         public IEnumerable<RoleGroup> RoleGroupList { get; set; }
         public IEnumerable<EmployeeAreaCategory> AreaCategoryList { get; set; }
         public IEnumerable<Department> DepartmentList { get; set; }

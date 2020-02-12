@@ -259,6 +259,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PersonalDocument" Width="1.5" PointX="25.375" PointY="54.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PersonalDocumentType" Width="1.5" PointX="54.375" PointY="32.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPersonalDocument" Width="1.5" PointX="54.375" PointY="35.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.CountryPhoneCode" Width="1.5" PointX="39.375" PointY="54.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

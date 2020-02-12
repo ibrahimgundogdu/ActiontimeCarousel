@@ -595,6 +595,16 @@
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="CountryPhoneCode">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="8" />
+          <Property Name="Country" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="4" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="Currency">
           <Key>
             <PropertyRef Name="ID" />
@@ -1368,6 +1378,7 @@
           <Property Name="FullName" Type="nvarchar" MaxLength="150" />
           <Property Name="FullNameSearch" Type="nvarchar" MaxLength="4000" StoreGeneratedPattern="Computed" />
           <Property Name="EMail" Type="nvarchar" MaxLength="150" />
+          <Property Name="CountryPhoneCode" Type="nvarchar" MaxLength="8" />
           <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
           <Property Name="SmsNumber" Type="nvarchar" MaxLength="4000" StoreGeneratedPattern="Computed" />
           <Property Name="Mobile2" Type="nvarchar" MaxLength="50" />
@@ -5407,6 +5418,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="CheckParameters" EntityType="Self.CheckParameters" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Costume" EntityType="Self.Costume" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CostumeType" EntityType="Self.CostumeType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CountryPhoneCode" EntityType="Self.CountryPhoneCode" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerActions" EntityType="Self.CustomerActions" Schema="dbo" store:Type="Tables" />
@@ -7679,6 +7691,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="EmployeeUID" Mode="In" Type="Guid" />
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="CountryPhoneCode" EntityType="db293_ActionTimeDbModel.CountryPhoneCode" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -11990,6 +12003,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <NavigationProperty Name="RoleGroup" Relationship="db293_ActionTimeDbModel.FK_Employee_RoleGroup" FromRole="Employee" ToRole="RoleGroup" />
           <NavigationProperty Name="EmployeeLocation" Relationship="db293_ActionTimeDbModel.FK_EmployeeLocation_Employee" FromRole="Employee" ToRole="EmployeeLocation" />
           <Property Name="IdentityType" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="CountryPhoneCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="EmployeeAreaCategory">
           <Key>
@@ -13107,6 +13121,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Type="String" Name="GroupCode" Nullable="true" MaxLength="20" />
           <Property Type="String" Name="GroupName" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <EntityType Name="CountryPhoneCode">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -17344,6 +17368,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="Employee">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Employee">
               <MappingFragment StoreEntitySet="Employee">
+                <ScalarProperty Name="CountryPhoneCode" ColumnName="CountryPhoneCode" />
                 <ScalarProperty Name="IdentityType" ColumnName="IdentityType" />
                 <ScalarProperty Name="PositionID" ColumnName="PositionID" />
                 <ScalarProperty Name="SequenceID" ColumnName="SequenceID" />
@@ -18318,6 +18343,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="CountryPhoneCode">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CountryPhoneCode">
+              <MappingFragment StoreEntitySet="CountryPhoneCode">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

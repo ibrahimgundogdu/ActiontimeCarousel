@@ -58,6 +58,7 @@ namespace ActionForce.Entity
         public Nullable<int> SequenceID { get; set; }
         public Nullable<int> PositionID { get; set; }
         public string IdentityType { get; set; }
+        public string CountryPhoneCode { get; set; }
     
         public virtual Role Role { get; set; }
         public virtual RoleGroup RoleGroup { get; set; }

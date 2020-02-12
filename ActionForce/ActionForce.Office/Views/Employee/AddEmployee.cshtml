@@ -21,13 +21,8 @@
             <div class="media-body  mg-t-40 mg-lg-t-0">
                 <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
                     <div>
-                        <nav aria-label="breadcrumb">
-                            <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-                                <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
-                                <li class="breadcrumb-item active" aria-current="page">Çalışan İşlemleri</li>
-                            </ol>
-                        </nav>
-                        <h4 class="mg-b-0 tx-spacing--1">Yeni Çalışan</h4>
+
+                        <h4 class="mg-b-0 tx-spacing--1">01. Temel Bilgiler</h4>
                     </div>
                     <div class="d-none d-md-block">
                         <a href="/Employee/" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; Çalışan Listesi</a>
@@ -35,76 +30,87 @@
                 </div>
                 <div id="employeeStatus">
                     <div class="row no-gutters">
-                            <div class="col-lg-12">
-
-
-
+                        <div class="col-lg-12">
+                            @using (Html.BeginForm("AddEmployee2", "Employee", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
                                 <div class="form-group row mg-b-5 bg-gray-50">
                                     <label for="Identityx" class="col-sm-3 col-form-label">Kimlik Türü / Numarası</label>
-                                    <div class="col-sm-3">
-                                        <select class="form-control tx-15" id="Identityx" name="IdentityType" required>
+                                    <div class="col-sm-2">
+                                        <select class="form-control tx-15" id="IdentityType" name="IdentityType" required>
                                             @foreach (var item in Model.IdentityTypes)
                                             {
-                                                <option value="@item.ID">@item.TypeName</option>
+                                                <option value="@item.TypeCode">@item.TypeName</option>
                                             }
 
                                         </select>
                                     </div>
-                                    <div class="col-sm-3">
-                                        <input id="IdentityNumberx" name="IdentityNumber" type="text" maxlength="11" class="form-control tx-15" autocomplete="off" placeholder="TCKN" value="28091527206">
+                                    <div class="col-sm-4">
+                                        <input id="IdentityNumber" name="IdentityNumber" type="text" maxlength="11" class="form-control tx-15" autocomplete="off" placeholder="TCKN" required>
                                     </div>
                                     <div class="col-sm-3">
                                         <label for="Identityx" class="col-form-label" title="Gerekli Alan"> * </label>
                                     </div>
                                 </div>
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="FullNamex" class="col-sm-3 col-form-label">Ad Soyad</label>
+                                    <label for="FullNamex" class="col-sm-3 col-form-label">Adı Soyadı</label>
                                     <div class="col-sm-6">
-                                        <input id="FullNamex" name="FullName" type="text" class="form-control tx-15" autocomplete="off" placeholder="Ad Soyad" required>
+                                        <input id="FullName" name="FullName" type="text" class="form-control tx-15" autocomplete="off" placeholder="Ad Soyad" required>
                                     </div>
                                     <div class="col-sm-3"><label for="Identityx" class="col-form-label" title="Gerekli Alan"> * </label></div>
                                 </div>
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="EMailx" class="col-sm-3 col-form-label">Email</label>
+                                    <label for="EMailx" class="col-sm-3 col-form-label">E-Posta Adresi</label>
                                     <div class="col-sm-6">
-                                        <input id="EMailx" name="EMail" type="email" class="form-control tx-15" autocomplete="off" placeholder="E-Posta Adresi">
+                                        <input id="EMail" name="EMail" type="email" class="form-control tx-15" autocomplete="off" placeholder="E-Posta Adresi">
                                     </div>
                                     <div class="col-sm-3">
                                     </div>
                                 </div>
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Mobilex" class="col-sm-3 col-form-label">Telefon</label>
-                                    <div class="col-sm-6">
+                                    <label for="Mobilex" class="col-sm-3 col-form-label">Telefonu</label>
+                                    <div class="col-sm-2">
+                                        <select class="form-control tx-15" id="PhoneCode" name="PhoneCode">
+                                            @foreach (var item in Model.PhoneCodes)
+                                            {
+                                                <option value="@item.Code">@(item.Code) @(item.Country)</option>
+                                            }
+
+                                        </select>
                                     </div>
-                                    <div class="col-sm-6">
-                                        <input id="Mobilex" name="Mobile" type="tel" class="form-control phone tx-15" autocomplete="off" placeholder="Telefon">
+                                    <div class="col-sm-4">
+                                        <input id="Mobile" name="Mobile" type="tel" class="form-control phone tx-15" autocomplete="off" placeholder="(000) 000 00 00">
                                     </div>
                                     <div class="col-sm-3">
                                     </div>
                                 </div>
-
                                 <div class="form-group row mg-b-0">
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-6">
-                                        <button type="submit" class="btn btn-primary btn-block">Employee Ekle</button>
+                                        <button type="submit" class="btn btn-primary btn-block tx-15">Çalışan Ekle</button>
                                     </div>
                                     <div class="col-sm-3">
                                     </div>
                                 </div>
-
-                            </div>
+                            }
                         </div>
+                    </div>
                 </div>
-                    
 
 
-                </div>
+
             </div>
+        </div>
     </div>
 </div>
 
 @section scripts {
     <script>
+
+        $('#IdentityType').on('change', function () {
+            $('#IdentityNumber').attr('placeholder', this.value)
+        });
+
         //$(function () {
         //    'use strict'
         //    $('.select2').select2({
@@ -121,8 +127,8 @@
         //    $('.money').mask("#.##0,00", { reverse: true });
         //    $('.quantity').mask("##0", { reverse: true });
         //    $('.money4').mask("#.##0,0000", { reverse: true });
-        //    $('.phone').mask('(000) 000 00 00');
-            
+        $('.phone').mask('(000) 000 00 00');
+
         //});
 
         //function EmployeeStatus() {
