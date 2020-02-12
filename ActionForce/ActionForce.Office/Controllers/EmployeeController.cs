@@ -1061,22 +1061,22 @@ namespace ActionForce.Office.Controllers
                 model.Wizard = wizardModel;
             }
 
-            var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
+            //var rolLevel = model.Authentication.ActionEmployee.RoleGroup.RoleLevel;
 
 
             model.OurList = Db.OurCompany.ToList();
-            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
-            model.AreaCategoryList = Db.EmployeeAreaCategory.Where(x => x.IsActive == true).ToList();
-            model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
-            model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true).ToList();
-            model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
-            model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
-            model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
-            model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
+            //model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
+            //model.AreaCategoryList = Db.EmployeeAreaCategory.Where(x => x.IsActive == true).ToList();
+            //model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
+            //model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true).ToList();
+            //model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
+            //model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
+            //model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
+            //model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
 
-            model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
+            //model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
 
-            model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+            //model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
             model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
 
             return View(model);
