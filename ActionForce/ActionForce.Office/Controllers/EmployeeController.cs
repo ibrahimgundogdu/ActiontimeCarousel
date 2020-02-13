@@ -1050,23 +1050,12 @@ namespace ActionForce.Office.Controllers
             EmployeeControlModel model = new EmployeeControlModel();
 
 
-            if (TempData["wizard"] != null)
+            if (TempData["CheckEmployee"] != null)
             {
-                model.Wizard = TempData["wizard"] as WizardModel;
-            }
-            else
-            {
-                WizardModel wizardModel = new WizardModel();
-
-                model.Wizard = wizardModel;
+                model.CheckEmployee = TempData["CheckEmployee"] as CheckEmployee;
             }
 
-            //var rolLevel = model.Authentication.ActionEmployee.RoleGroup.RoleLevel;
-
-
-            model.OurList = Db.OurCompany.ToList();
             model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-
             model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
 
             return View(model);
@@ -1074,31 +1063,190 @@ namespace ActionForce.Office.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public ActionResult AddEmployee2()
+        public ActionResult AddEmployeeCheck(CheckEmployee employee)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
+            model.Result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            List<Employee> absoluteEmployees = new List<Employee>();
+            List<Employee> optionalEmployees = new List<Employee>();
+            employee.FullName = employee.FullName.ToUpper().Trim();
+            TempData["CheckEmployee"] = employee;
+
+            if (employee != null)
+            {
+                model.CheckEmployee = employee;
+
+                var rolLevel = model.Authentication.ActionEmployee.RoleGroup.RoleLevel;
+
+                model.OurList = Db.OurCompany.ToList();
+                model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+                model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
+
+                var absemployeeid = Db.Employee.Where(x => (x.IdentityType == employee.IdentityType && x.IdentityNumber == employee.IdentityNumber)).ToList();
+                absoluteEmployees.AddRange(absemployeeid.Distinct());
+
+                if (!string.IsNullOrEmpty(employee.EMail))
+                {
+                    var absemployeeem = Db.Employee.Where(x => (x.EMail.Trim() == employee.EMail.Trim())).ToList();
+                    absoluteEmployees.AddRange(absemployeeem.Distinct());
+                }
+
+                if (!string.IsNullOrEmpty(employee.Mobile))
+                {
+                    var absemployeeph = Db.Employee.Where(x => (x.CountryPhoneCode == employee.CountryPhoneCode && x.Mobile.Trim() == employee.Mobile.Trim())).ToList();
+                    absoluteEmployees.AddRange(absemployeeph.Distinct());
+                }
+
+                if (!string.IsNullOrEmpty(employee.FullName))
+                {
+                    var optemployee = Db.Employee.Where(x => x.FullName.ToUpper().Trim().Contains(employee.FullName)).ToList();
+                    optionalEmployees.AddRange(optemployee.Distinct());
+                }
+
+                model.AbsoluteEmployees = absoluteEmployees;
+                model.OptionalEmployees = optionalEmployees.Where(x => !absoluteEmployees.Contains(x));
+            }
+            else
+            {
+                model.Result.Message = "Girilen bilgilere ulaşılamadı";
+                return RedirectToAction("AddEmployee", "Employee");
+            }
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult AddEmployeeComplete()
         {
             EmployeeControlModel model = new EmployeeControlModel();
 
 
-            if (TempData["wizard"] != null)
+            if (TempData["CheckEmployee"] != null)
             {
-                model.Wizard = TempData["wizard"] as WizardModel;
+                model.CheckEmployee = TempData["CheckEmployee"] as CheckEmployee;
+
+                model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+                model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
+
+
+                return View(model);
+
             }
             else
             {
-                WizardModel wizardModel = new WizardModel();
-
-                model.Wizard = wizardModel;
+                return RedirectToAction("AddEmployee", "Employee");
             }
 
-            //var rolLevel = model.Authentication.ActionEmployee.RoleGroup.RoleLevel;
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddEmployeeCompleteForm(Employee employee, HttpPostedFileBase FotoFile)
+        {
+            Result<Employee> result = new Result<Employee>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (employee != null)
+            {
+
+                bool isActive = !string.IsNullOrEmpty(employee.IsActive) && employee.IsActive == "1" ? true : false;
+
+                Employee empdoc = new Employee();
+                empdoc.IdentityType = employee.IdentityType;
+                empdoc.IdentityNumber = employee.IdentityNumber;
+                empdoc.Title = employee.Title;
+                empdoc.EMail = employee.EMail;
+                empdoc.FullName = employee.FullName.ToUpper();
+                empdoc.Mobile = employee.Mobile;
+                empdoc.Mobile2 = employee.Mobile2;
+                empdoc.AreaCategoryID = employee.AreaCategoryID;
+                empdoc.DepartmentID = employee.DepartmentID;
+                empdoc.Description = employee.Description;
+                empdoc.PositionID = employee.PositionID;
+                empdoc.RoleGroupID = employee.RoleGroupID;
+                empdoc.SalaryCategoryID = employee.SalaryCategoryID;
+                empdoc.SequenceID = employee.SequenceID;
+                empdoc.ShiftTypeID = employee.ShiftTypeID;
+                empdoc.StatusID = employee.StatusID;
+                empdoc.Whatsapp = employee.Whatsapp;
+                empdoc.Username = employee.Username;
+                empdoc.OurCompanyID = employee.OurCompanyID;
+                empdoc.IsActive = isActive;
+                empdoc.IsTemp = isTemp;
+                empdoc.RecordDate = DateTime.Now;
+                empdoc.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                empdoc.RecordIP = OfficeHelper.GetIPAddress();
+                empdoc.EmployeeUID = Guid.NewGuid();
+
+                if (!string.IsNullOrEmpty(employee.Password))
+                {
+                    empdoc.Password = OfficeHelper.makeMD5(employee.Password);
+                }
+                if (FotoFile != null && FotoFile.ContentLength > 0)
+                {
+                    string filename = Guid.NewGuid().ToString() + Path.GetExtension(FotoFile.FileName);
+                    empdoc.FotoFile = filename;
+                    string path = "/Document/Employee";
+
+                    try
+                    {
+                        FotoFile.SaveAs(Path.Combine(Server.MapPath(path), filename));
+
+                        string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Employee";
+                        string targetPath = @"C:\inetpub\wwwroot\Office\img\Employee";
+                        string sourceFile = System.IO.Path.Combine(sourcePath, filename);
+                        string destFile = System.IO.Path.Combine(targetPath, filename);
+                        System.IO.File.Copy(sourceFile, destFile, true);
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
 
 
-            model.OurList = Db.OurCompany.ToList();
-            model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
-            model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
+                Db.Employee.Add(empdoc);
+                Db.SaveChanges();
 
-            return View(model);
+                var our = Db.OurCompany.FirstOrDefault(x => x.CompanyID == empdoc.OurCompanyID);
+
+
+                result.IsSuccess = true;
+                result.Message = "Çalışan başarı ile eklendi";
+
+                // log atılır
+                OfficeHelper.AddApplicationLog("Office", "Employee", "Insert", empdoc.EmployeeID.ToString(), "Employee", "AddEmployee", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(our.TimeZone.Value), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, empdoc);
+
+
+
+                TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+                if (result.IsSuccess == true)
+                {
+                    return RedirectToAction("Detail", "Employee", new { id = empdoc.EmployeeUID });
+                }
+                else
+                {
+                    return RedirectToAction("AddEmployee", "Employee");
+                }
+            }
+            else
+            {
+                result.Message = $"Form bilgileri gelmedi.";
+            }
+
+            TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+            return RedirectToAction("AddEmployee", "Employee");
         }
 
 

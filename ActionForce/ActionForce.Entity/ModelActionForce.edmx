@@ -1387,7 +1387,7 @@
           <Property Name="Password" Type="nvarchar" MaxLength="50" />
           <Property Name="FotoFile" Type="nvarchar" MaxLength="50" />
           <Property Name="RoleID" Type="int" />
-          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="OurCompanyID" Type="int" Nullable="false" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="IsTemp" Type="bit" />
           <Property Name="IsActive" Type="bit" />
@@ -5028,6 +5028,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Employee_OurCompany">
+          <End Role="OurCompany" Type="Self.OurCompany" Multiplicity="1" />
+          <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OurCompany">
+              <PropertyRef Name="CompanyID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="OurCompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Employee_Role">
           <End Role="Role" Type="Self.Role" Multiplicity="0..1" />
           <End Role="Employee" Type="Self.Employee" Multiplicity="*" />
@@ -7128,6 +7140,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <End Role="Bank" EntitySet="Bank" />
             <End Role="BankAccount" EntitySet="BankAccount" />
           </AssociationSet>
+          <AssociationSet Name="FK_Employee_OurCompany" Association="Self.FK_Employee_OurCompany">
+            <End Role="OurCompany" EntitySet="OurCompany" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
           <AssociationSet Name="FK_Employee_Role" Association="Self.FK_Employee_Role">
             <End Role="Role" EntitySet="Role" />
             <End Role="Employee" EntitySet="Employee" />
@@ -7692,6 +7708,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="CountryPhoneCode" EntityType="db293_ActionTimeDbModel.CountryPhoneCode" />
+          <AssociationSet Name="FK_Employee_OurCompany" Association="db293_ActionTimeDbModel.FK_Employee_OurCompany">
+            <End Role="OurCompany" EntitySet="OurCompany" />
+            <End Role="Employee" EntitySet="Employee" />
+          </AssociationSet>
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -11976,7 +11996,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FotoFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="RoleID" Type="Int32" />
-          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsTemp" Type="Boolean" />
           <Property Name="IsActive" Type="Boolean" />
@@ -12004,6 +12024,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <NavigationProperty Name="EmployeeLocation" Relationship="db293_ActionTimeDbModel.FK_EmployeeLocation_Employee" FromRole="Employee" ToRole="EmployeeLocation" />
           <Property Name="IdentityType" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
           <Property Name="CountryPhoneCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="OurCompany" Relationship="db293_ActionTimeDbModel.FK_Employee_OurCompany" FromRole="Employee" ToRole="OurCompany" />
         </EntityType>
         <EntityType Name="EmployeeAreaCategory">
           <Key>
@@ -12860,6 +12881,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Weight" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Distance" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Culture" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Employee" Relationship="db293_ActionTimeDbModel.FK_Employee_OurCompany" FromRole="OurCompany" ToRole="Employee" />
         </EntityType>
         <ComplexType Name="GetLocationAll_Result1">
           <Property Type="Int32" Name="LocationID" Nullable="false" />
@@ -13131,6 +13153,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
+        <Association Name="FK_Employee_OurCompany">
+          <End Type="db293_ActionTimeDbModel.OurCompany" Role="OurCompany" Multiplicity="1" />
+          <End Type="db293_ActionTimeDbModel.Employee" Role="Employee" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="OurCompany">
+              <PropertyRef Name="CompanyID" />
+            </Principal>
+            <Dependent Role="Employee">
+              <PropertyRef Name="OurCompanyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->

@@ -9,7 +9,8 @@
 
 <div class="content-header">
     <div class="content-search">
-        <span class="tx-20">Çalışan Ekleme</span>
+        <h4>Yeni Çalışan Ekleme</h4>
+
     </div>
     <nav class="nav">
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
@@ -19,67 +20,67 @@
     <div class="pd-x-0 tx-13">
         <div class="media d-block d-lg-flex">
             <div class="media-body  mg-t-40 mg-lg-t-0">
-                <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
-                    <div>
-
+                <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30 row">
+                    <div class=" col-md-4"></div>
+                    <div class="col-md-4 tx-center">
                         <h4 class="mg-b-0 tx-spacing--1">01. Temel Bilgiler</h4>
                     </div>
-                    <div class="d-none d-md-block">
-                        <a href="/Employee/" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; Çalışan Listesi</a>
+                    <div class="d-none d-md-block col-md-4 tx-right">
+                        <a href="/Employee/" class="btn btn-primary btn-uppercase"><i data-feather="users"></i> &nbsp; Çalışanlar Listesi</a>
                     </div>
                 </div>
                 <div id="employeeStatus">
                     <div class="row no-gutters">
                         <div class="col-lg-12">
-                            @using (Html.BeginForm("AddEmployee2", "Employee", FormMethod.Post))
+                            @using (Html.BeginForm("AddEmployeeCheck", "Employee", FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Identityx" class="col-sm-3 col-form-label">Kimlik Türü / Numarası</label>
+                                    <label for="IdentityNumber" class="col-sm-3 col-form-label">Kimlik Türü / Numarası</label>
                                     <div class="col-sm-2">
                                         <select class="form-control tx-15" id="IdentityType" name="IdentityType" required>
                                             @foreach (var item in Model.IdentityTypes)
                                             {
-                                                <option value="@item.TypeCode">@item.TypeName</option>
+                                                <option value="@item.TypeCode" @(Model?.CheckEmployee?.IdentityType == item.TypeCode ? "selected" : "")>@item.TypeName</option>
                                             }
 
                                         </select>
                                     </div>
                                     <div class="col-sm-4">
-                                        <input id="IdentityNumber" name="IdentityNumber" type="text" maxlength="11" class="form-control tx-15" autocomplete="off" placeholder="TCKN" required>
+                                        <input id="IdentityNumber" name="IdentityNumber" type="text" maxlength="11" class="form-control tx-15" autocomplete="off" placeholder="TCKN" required value="@(Model?.CheckEmployee?.IdentityNumber)">
                                     </div>
                                     <div class="col-sm-3">
                                         <label for="Identityx" class="col-form-label" title="Gerekli Alan"> * </label>
                                     </div>
                                 </div>
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="FullNamex" class="col-sm-3 col-form-label">Adı Soyadı</label>
+                                    <label for="FullName" class="col-sm-3 col-form-label">Adı Soyadı</label>
                                     <div class="col-sm-6">
-                                        <input id="FullName" name="FullName" type="text" class="form-control tx-15" autocomplete="off" placeholder="Ad Soyad" required>
+                                        <input id="FullName" name="FullName" type="text" class="form-control tx-15" autocomplete="off" placeholder="Adı Soyadı" required value="@(Model?.CheckEmployee?.FullName)">
                                     </div>
                                     <div class="col-sm-3"><label for="Identityx" class="col-form-label" title="Gerekli Alan"> * </label></div>
                                 </div>
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="EMailx" class="col-sm-3 col-form-label">E-Posta Adresi</label>
+                                    <label for="EMail" class="col-sm-3 col-form-label">E-Posta Adresi</label>
                                     <div class="col-sm-6">
-                                        <input id="EMail" name="EMail" type="email" class="form-control tx-15" autocomplete="off" placeholder="E-Posta Adresi">
+                                        <input id="EMail" name="EMail" type="email" class="form-control tx-15" autocomplete="off" placeholder="E-Posta Adresi" value="@(Model?.CheckEmployee?.EMail)">
                                     </div>
                                     <div class="col-sm-3">
                                     </div>
                                 </div>
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Mobilex" class="col-sm-3 col-form-label">Telefonu</label>
+                                    <label for="Mobile" class="col-sm-3 col-form-label">Telefonu</label>
                                     <div class="col-sm-2">
-                                        <select class="form-control tx-15" id="PhoneCode" name="PhoneCode">
+                                        <select class="form-control tx-15" id="CountryPhoneCode" name="CountryPhoneCode">
                                             @foreach (var item in Model.PhoneCodes)
                                             {
-                                                <option value="@item.Code">@(item.Code) @(item.Country)</option>
+                                                <option value="@item.Code" @(Model?.CheckEmployee?.CountryPhoneCode == item.Code ? "selected" : "")>@(item.Code) @(item.Country)</option>
                                             }
 
                                         </select>
                                     </div>
                                     <div class="col-sm-4">
-                                        <input id="Mobile" name="Mobile" type="tel" class="form-control phone tx-15" autocomplete="off" placeholder="(000) 000 00 00">
+                                        <input id="Mobile" name="Mobile" type="tel" class="form-control phone tx-15" autocomplete="off" placeholder="(000) 000 00 00" value="@(Model?.CheckEmployee?.Mobile)">
                                     </div>
                                     <div class="col-sm-3">
                                     </div>
@@ -111,49 +112,8 @@
             $('#IdentityNumber').attr('placeholder', this.value)
         });
 
-        //$(function () {
-        //    'use strict'
-        //    $('.select2').select2({
-        //        placeholder: 'Çalışan Seçiminiz',
-        //        searchInputPlaceholder: 'Search options'
-        //    });
-        //});
-        //$(function () {
-        //    $('.shiftbegintime').mask('00:00');
-        //    $('.hour').mask('00:00');
-        //    $('.hourfull').mask('00:00:00');
-        //    $('.shiftdate').mask('0000-00-00');
-        //    $('.fulldate').mask('0000-00-00 00:00:00');
-        //    $('.money').mask("#.##0,00", { reverse: true });
-        //    $('.quantity').mask("##0", { reverse: true });
-        //    $('.money4').mask("#.##0,0000", { reverse: true });
         $('.phone').mask('(000) 000 00 00');
 
-        //});
-
-        //function EmployeeStatus() {
-        //    var stype = $("#Identityx").text();
-        //    var sidenty = $("#IdentityNumberx").val();
-        //    var sname = $("#FullNamex").val();
-        //    var smail = $("#EMailx").val();
-        //    var sphone = $("#Mobilex").val();
-        //    $.ajax({
-        //        method: "GET",
-        //        url: "/Employee/EmployeeStatus",
-        //        data: { Identity: stype, IdentityNumber: sidenty, FullName: sname, EMail: smail, Mobile: sphone }
-        //    }).done(function (d) {
-        //        $("#employeeStatus").html(d);
-        //    });
-        //}
-        //function EmployeeList(Identity, IdentityNumber, FullName, EMail, Mobile) {
-        //    $.ajax({
-        //        method: "GET",
-        //        url: "/Employee/EmployeeList",
-        //        data: { Identity: Identity, IdentityNumber: IdentityNumber, FullName: FullName, EMail: EMail, Mobile: Mobile }
-        //    }).done(function (d) {
-        //        $("#employeeStatus").html(d);
-        //    });
-        //}
     </script>
 
     @if (Model.Result != null) //

@@ -34,7 +34,7 @@ namespace ActionForce.Entity
         public string Password { get; set; }
         public string FotoFile { get; set; }
         public Nullable<int> RoleID { get; set; }
-        public Nullable<int> OurCompanyID { get; set; }
+        public int OurCompanyID { get; set; }
         public string Description { get; set; }
         public Nullable<bool> IsTemp { get; set; }
         public Nullable<bool> IsActive { get; set; }
@@ -64,5 +64,6 @@ namespace ActionForce.Entity
         public virtual RoleGroup RoleGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<EmployeeLocation> EmployeeLocation { get; set; }
+        public virtual OurCompany OurCompany { get; set; }
     }
 }

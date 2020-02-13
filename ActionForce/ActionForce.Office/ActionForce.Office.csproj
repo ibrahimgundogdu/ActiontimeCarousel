@@ -2364,6 +2364,7 @@
     <Compile Include="Models\Document\SalaryPayment.cs" />
     <Compile Include="Models\Document\TransferModel.cs" />
     <Compile Include="Models\EmployeeShiftModel.cs" />
+    <Compile Include="Models\CheckEmployee.cs" />
     <Compile Include="Models\TotalFood.cs" />
     <Compile Include="Models\WeekModel.cs" />
     <Compile Include="Models\WizardModel.cs" />
@@ -2661,6 +2662,8 @@
     <Content Include="Views\Cash\_PartialSalaryList.cshtml" />
     <Content Include="Views\Bank\_PartialCollectionList.cshtml" />
     <Content Include="Views\Bank\AddCollection.cshtml" />
+    <Content Include="Views\Employee\AddEmployeeCheck.cshtml" />
+    <Content Include="Views\Employee\AddEmployeeComplete.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

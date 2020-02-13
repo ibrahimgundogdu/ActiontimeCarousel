@@ -10,6 +10,11 @@ namespace ActionForce.Office
     {
 
         public Result Result { get; set; }
+        public CheckEmployee CheckEmployee { get; set; }
+        public IEnumerable<Employee> Employees { get; set; }
+        public IEnumerable<Employee> AbsoluteEmployees { get; set; }
+        public IEnumerable<Employee> OptionalEmployees { get; set; }
+
 
 
         public IEnumerable<GetEmployeeAll_Result3> EmployeeList { get; set; }
@@ -17,6 +22,8 @@ namespace ActionForce.Office
 
         public EmployeeFilterModel FilterModel { get; set; }
         public WizardModel Wizard { get; set; }
+        
+        
         public List<ApplicationLog> LogList { get; set; }
         public List<VEmployeeLocation> EmployeeLocationList { get; set; }
         public int empID { get; set; }
