@@ -1367,6 +1367,15 @@
           <Property Name="SortBy" Type="nchar" MaxLength="10" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="EmailType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="20" />
+          <Property Name="SortBy" Type="char" MaxLength="2" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="Employee">
           <Key>
             <PropertyRef Name="EmployeeID" />
@@ -1484,6 +1493,18 @@
           <Property Name="SendDate" Type="datetime" />
           <Property Name="Status" Type="int" />
         </EntityType>
+        <EntityType Name="EmployeeEmails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="TypeID" Type="int" />
+          <Property Name="EMail" Type="nvarchar" MaxLength="120" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsMaster" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="EmployeeLocation">
           <Key>
             <PropertyRef Name="ID" />
@@ -1521,6 +1542,19 @@
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="UpdateEmployeeID" Type="int" />
           <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="EmployeePhones">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="PhoneTypeID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+          <Property Name="CountryPhoneCode" Type="nvarchar" MaxLength="8" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsMaster" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="EmployeePositions">
           <Key>
@@ -1725,6 +1759,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TypeCode" Type="nvarchar" MaxLength="16" />
           <Property Name="TypeName" Type="nvarchar" MaxLength="40" />
+          <Property Name="MinLenght" Type="int" Nullable="false" />
+          <Property Name="MaxLenght" Type="int" Nullable="false" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="Inspection">
@@ -2265,6 +2301,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="DocumentTypeName" Type="nvarchar" MaxLength="100" />
           <Property Name="IsOptional" Type="bit" />
           <Property Name="SortBy" Type="char" MaxLength="4" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="PhoneType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="20" />
+          <Property Name="SortBy" Type="char" MaxLength="2" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="PosTerminal">
@@ -5459,13 +5504,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DocumentTransfer" EntityType="Self.DocumentTransfer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentTransferStatus" EntityType="Self.DocumentTransferStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentType" EntityType="Self.DocumentType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmailType" EntityType="Self.EmailType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Employee" EntityType="Self.Employee" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeAreaCategory" EntityType="Self.EmployeeAreaCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeCashActions" EntityType="Self.EmployeeCashActions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeDismissal" EntityType="Self.EmployeeDismissal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeDismissalStage" EntityType="Self.EmployeeDismissalStage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeeEmails" EntityType="Self.EmployeeEmails" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeLocation" EntityType="Self.EmployeeLocation" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeePeriods" EntityType="Self.EmployeePeriods" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EmployeePhones" EntityType="Self.EmployeePhones" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeePositions" EntityType="Self.EmployeePositions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeSalary" EntityType="Self.EmployeeSalary" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EmployeeSalaryCategory" EntityType="Self.EmployeeSalaryCategory" Schema="dbo" store:Type="Tables" />
@@ -5517,6 +5565,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="PermitType" EntityType="Self.PermitType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PersonalDocument" EntityType="Self.PersonalDocument" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PersonalDocumentType" EntityType="Self.PersonalDocumentType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PhoneType" EntityType="Self.PhoneType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PosTerminal" EntityType="Self.PosTerminal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrePaidCampaign" EntityType="Self.PrePaidCampaign" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrePaidCampaignPrices" EntityType="Self.PrePaidCampaignPrices" Schema="dbo" store:Type="Tables" />
@@ -7658,7 +7707,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="VEmployeeList" EntityType="db293_ActionTimeDbModel.VEmployeeList" />
           <EntitySet Name="VBankAccount" EntityType="db293_ActionTimeDbModel.VBankAccount" />
-          <EntitySet Name="IdentityType" EntityType="db293_ActionTimeDbModel.IdentityType" />
           <EntitySet Name="EmployeePeriods" EntityType="db293_ActionTimeDbModel.EmployeePeriods" />
           <EntitySet Name="LocationPeriods" EntityType="db293_ActionTimeDbModel.LocationPeriods" />
           <EntitySet Name="Revenue" EntityType="db293_ActionTimeDbModel.Revenue" />
@@ -7712,6 +7760,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <End Role="OurCompany" EntitySet="OurCompany" />
             <End Role="Employee" EntitySet="Employee" />
           </AssociationSet>
+          <EntitySet Name="EmailType" EntityType="db293_ActionTimeDbModel.EmailType" />
+          <EntitySet Name="EmployeeEmails" EntityType="db293_ActionTimeDbModel.EmployeeEmails" />
+          <EntitySet Name="EmployeePhones" EntityType="db293_ActionTimeDbModel.EmployeePhones" />
+          <EntitySet Name="PhoneType" EntityType="db293_ActionTimeDbModel.PhoneType" />
+          <EntitySet Name="IdentityType" EntityType="db293_ActionTimeDbModel.IdentityType" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -12425,15 +12478,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="IdentityType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TypeCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
-          <Property Name="TypeName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
         <EntityType Name="EmployeePeriods">
           <Key>
             <PropertyRef Name="ID" />
@@ -13165,6 +13209,60 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="EmailType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="EmployeeEmails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="TypeID" Type="Int32" />
+          <Property Name="EMail" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsMaster" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="EmployeePhones">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="PhoneTypeID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CountryPhoneCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsMaster" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="PhoneType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="IdentityType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeCode" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="TypeName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="MinLenght" Type="Int32" Nullable="false" />
+          <Property Name="MaxLenght" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -17812,16 +17910,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="IdentityType">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.IdentityType">
-              <MappingFragment StoreEntitySet="IdentityType">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
-                <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="EmployeePeriods">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeePeriods">
               <MappingFragment StoreEntitySet="EmployeePeriods">
@@ -18384,6 +18472,65 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="SortBy" ColumnName="SortBy" />
                 <ScalarProperty Name="Country" ColumnName="Country" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmailType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmailType">
+              <MappingFragment StoreEntitySet="EmailType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeeEmails">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeeEmails">
+              <MappingFragment StoreEntitySet="EmployeeEmails">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EmployeePhones">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeePhones">
+              <MappingFragment StoreEntitySet="EmployeePhones">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="CountryPhoneCode" ColumnName="CountryPhoneCode" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="PhoneTypeID" ColumnName="PhoneTypeID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PhoneType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PhoneType">
+              <MappingFragment StoreEntitySet="PhoneType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IdentityType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.IdentityType">
+              <MappingFragment StoreEntitySet="IdentityType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="MaxLenght" ColumnName="MaxLenght" />
+                <ScalarProperty Name="MinLenght" ColumnName="MinLenght" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

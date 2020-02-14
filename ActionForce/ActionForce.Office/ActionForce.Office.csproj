@@ -2365,6 +2365,7 @@
     <Compile Include="Models\Document\TransferModel.cs" />
     <Compile Include="Models\EmployeeShiftModel.cs" />
     <Compile Include="Models\CheckEmployee.cs" />
+    <Compile Include="Models\NewEmployee.cs" />
     <Compile Include="Models\TotalFood.cs" />
     <Compile Include="Models\WeekModel.cs" />
     <Compile Include="Models\WizardModel.cs" />

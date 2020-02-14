@@ -37,8 +37,10 @@
                             @using (Html.BeginForm("AddEmployeeCompleteForm", "Employee", FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
+
+
                                 <div class="form-group row">
-                                    <label for="Title" class="col-sm-3 col-form-label">Tanım</label>
+                                    <label for="Title" class="col-sm-3 col-form-label">Tanımı</label>
                                     <div class="col-sm-6">
                                         <input id="Title" name="Title" type="text" class="form-control" autocomplete="off" placeholder="Title">
                                     </div>
@@ -47,12 +49,12 @@
                                 </div>
 
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Tc" class="col-sm-3 col-form-label">Kimlik Tipi</label>
+                                    <label for="IdentityType" class="col-sm-3 col-form-label">Kimlik Tipi</label>
                                     <div class="col-sm-6">
                                         <select class="form-control" id="IdentityType" name="IdentityType" readonly>
                                             @foreach (var item in Model.IdentityTypes)
                                             {
-                                                <option value="@item.TypeCode" @(Model.CheckEmployee.IdentityType == item.TypeCode ? "selected" : "")>@($"{item.TypeName}")</option>
+                                                <option value="@item.TypeCode" @(Model.CheckEmployee.IdentityType == item.TypeCode ? "selected" : "disabled")>@($"{item.TypeName}")</option>
                                             }
                                         </select>
                                     </div>
@@ -63,7 +65,7 @@
                                 <div class="form-group row mg-b-5 bg-gray-50">
                                     <label for="IdentityNumber" class="col-sm-3 col-form-label">Kimlik Numarası</label>
                                     <div class="col-sm-6">
-                                        <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" value="@(Model.CheckEmployee.IdentityNumber)" @(!string.IsNullOrEmpty(Model.CheckEmployee.IdentityNumber) && ? "readonly" : "") autocomplete="off" placeholder="Kimlik No">
+                                        <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" value="@(Model.CheckEmployee.IdentityNumber)" @(!string.IsNullOrEmpty(Model.CheckEmployee.IdentityNumber) && Model.CheckEmployee.IdentityNumber.Length >= 10 ? "readonly" : "") autocomplete="off" placeholder="Kimlik No">
                                     </div>
                                     <div class="col-sm-3">
                                     </div>
@@ -71,43 +73,38 @@
                                 <div class="form-group row mg-b-5 bg-gray-50">
                                     <label for="FullName" class="col-sm-3 col-form-label">Adı Soyadı</label>
                                     <div class="col-sm-6">
-                                        <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" value="@(Model.CheckEmployee.FullName)" @(Model.Wizard.FullName != "" ? "readonly" : "") placeholder="Ad Soyad" required>
+                                        <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" value="@(Model.CheckEmployee.FullName)" @(!string.IsNullOrEmpty(Model.CheckEmployee.FullName) && Model.CheckEmployee.FullName.Length >= 3 ? "readonly" : "") placeholder="Ad Soyad" required>
                                     </div>
                                     <div class="col-sm-3">
                                     </div>
                                 </div>
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Email" class="col-sm-3 col-form-label">Email</label>
+                                    <label for="E_mail" class="col-sm-3 col-form-label">Emaili</label>
                                     <div class="col-sm-6">
-                                        <input id="EMail" name="EMail" type="text" class="form-control" autocomplete="off" value="@(Model.Wizard.EMail)" @(Model.Wizard.EMail != "" ? "readonly" : "") placeholder="E-Posta Adresi">
+                                        <input id="E_mail" name="EMail" type="text" class="form-control" autocomplete="off" value="@(Model.CheckEmployee.EMail)" @(!string.IsNullOrEmpty(Model.CheckEmployee.EMail) && Model.CheckEmployee.EMail.Length >= 7 ? "readonly" : "") placeholder="E-Posta Adresi">
                                     </div>
                                     <div class="col-sm-3">
                                     </div>
                                 </div>
+
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="Mobile" class="col-sm-3 col-form-label">Telefon</label>
-                                    <div class="col-sm-6">
-                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" value="@(Model.Wizard.Mobile)" @(Model.Wizard.Mobile != "" ? "readonly" : "") placeholder="Telefon">
+                                    <label for="Mobile" class="col-sm-3 col-form-label">Telefonu</label>
+                                    <div class="col-sm-3">
+                                        <select class="form-control" id="CountryPhoneCode" name="CountryPhoneCode">
+                                            @foreach (var item in Model.PhoneCodes)
+                                            {
+                                                <option value="@item.Code" @(Model.CheckEmployee.CountryPhoneCode == item.Code ? "selected" : "")>@($"{item.Code} {item.Country}")</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" value="@(Model.CheckEmployee.Mobile)" @(!string.IsNullOrEmpty(Model.CheckEmployee.Mobile) && Model.CheckEmployee.Mobile.Length >= 7 ? "readonly" : "") placeholder="Telefon">
                                     </div>
                                     <div class="col-sm-3">
                                     </div>
                                 </div>
-                                <div class="form-group row mg-b-5">
-                                    <label for="Mobile" class="col-sm-3 col-form-label">Telefon2</label>
-                                    <div class="col-sm-6">
-                                        <input id="Mobile2" name="Mobile2" type="text" class="form-control" autocomplete="off" placeholder="Telefon">
-                                    </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="Whatsapp" class="col-sm-3 col-form-label">Whatsapp</label>
-                                    <div class="col-sm-6">
-                                        <input id="Whatsapp" name="Whatsapp" type="text" class="form-control" autocomplete="off" placeholder="Whatsapp">
-                                    </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
+
+
                                 <div class="form-group row mg-b-5">
                                     <label for="Username" class="col-sm-3 col-form-label">Kullanıcı Adı</label>
                                     <div class="col-sm-6">
@@ -117,34 +114,23 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <label for="Password" class="col-sm-3 col-form-label">Şifre</label>
+                                    <label for="Password" class="col-sm-3 col-form-label">Şifresi</label>
                                     <div class="col-sm-6">
                                         <input id="Password" name="Password" type="text" class="form-control" autocomplete="off" placeholder="Şifre">
                                     </div>
                                     <div class="col-sm-3">
                                     </div>
                                 </div>
-                                <div class="form-group row bg-gray-50">
-                                    <label for="OurCompanyID" class="col-sm-3 col-form-label">Ülke</label>
-                                    <div class="col-sm-6">
-                                        <select class="form-control" id="OurCompanyID" name="OurCompanyID" required disabled>
-                                            @foreach (var item in Model.OurList)
-                                            {
-                                                <option value="@item.CompanyID" @(Model.Authentication.ActionEmployee.OurCompanyID == item.CompanyID ? "selected" : "")>@($"{item.CompanyName}")</option>
-                                            }
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-3">
-                                    </div>
-                                </div>
+
 
                                 <div class="form-group row bg-gray-50">
-                                    <label for="RoleGroupID" class="col-sm-3 col-form-label">Rol Grup</label>
+                                    <label for="RoleGroupID" class="col-sm-3 col-form-label">Yetki Rol Grubu</label>
                                     <div class="col-sm-6">
                                         <select class="form-control" id="RoleGroupID" name="RoleGroupID" required>
+                                            <option value="">Yetki Rol Grubu Seçiniz </option>
                                             @foreach (var item in Model.RoleGroupList.OrderBy(x => x.RoleLevel))
                                             {
-                                                <option value="@item.ID">@($"{item.GroupCode} {item.GroupName}")</option>
+                                                <option value="@item.ID" @(item.RoleLevel1.LevelNumber > Model.Authentication.ActionEmployee.RoleGroup.RoleLevel ? "disabled" : "")>@($"{item.GroupCode} {item.GroupName}")</option>
                                             }
                                         </select>
                                     </div>
@@ -153,9 +139,10 @@
                                 </div>
 
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="AreaCategoryID" class="col-sm-3 col-form-label">Alan</label>
+                                    <label for="AreaCategoryID" class="col-sm-3 col-form-label">Alanı</label>
                                     <div class="col-sm-6">
                                         <select class="form-control" id="AreaCategoryID" name="AreaCategoryID" required>
+                                            <option value="">Alan Seçiniz </option>
                                             @foreach (var item in Model.AreaCategoryList.OrderBy(x => x.SortBy))
                                             {
                                                 <option value="@item.ID">@($"{item.SortBy} {item.AreaName}")</option>
@@ -166,9 +153,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="DepartmentID" class="col-sm-3 col-form-label">Departman</label>
+                                    <label for="DepartmentID" class="col-sm-3 col-form-label">Departmanı</label>
                                     <div class="col-sm-6">
                                         <select class="form-control" id="DepartmentID" name="DepartmentID" required>
+                                            <option value="">Departman Seçiniz </option>
                                             @foreach (var item in Model.DepartmentList.OrderBy(x => x.SortBy))
                                             {
                                                 <option value="@item.ID">@($"{item.SortBy} {item.DepartmentName}")</option>
@@ -179,9 +167,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="PositionID" class="col-sm-3 col-form-label">Pozisyon</label>
+                                    <label for="PositionID" class="col-sm-3 col-form-label">Pozisyonu</label>
                                     <div class="col-sm-6">
                                         <select class="form-control" id="PositionID" name="PositionID" required>
+                                            <option value="">Pozisyon Seçiniz </option>
                                             @foreach (var item in Model.PositionList.OrderBy(x => x.SortBy))
                                             {
                                                 <option value="@item.ID">@($"{item.SortBy} {item.PositionName}")</option>
@@ -192,9 +181,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="StatusID" class="col-sm-3 col-form-label">Durum</label>
+                                    <label for="StatusID" class="col-sm-3 col-form-label">Durumu</label>
                                     <div class="col-sm-6">
                                         <select class="form-control" id="StatusID" name="StatusID" required>
+                                            <option value="">Durum Seçiniz </option>
                                             @foreach (var item in Model.StatusList)
                                             {
                                                 <option value="@item.ID">@($"{item.Code} {item.Name}")</option>
@@ -207,6 +197,7 @@
                                     <label for="ShiftTypeID" class="col-sm-3 col-form-label">Çalışma Türü</label>
                                     <div class="col-sm-6">
                                         <select class="form-control" id="ShiftTypeID" name="ShiftTypeID" required>
+                                            <option value="">Çalışma Türünü Seçiniz </option>
                                             @foreach (var item in Model.ShiftTypeList)
                                             {
                                                 <option value="@item.ID">@($"{item.SortBy} {item.TypeName}")</option>
@@ -216,9 +207,10 @@
                                     <div class="col-sm-3"></div>
                                 </div>
                                 <div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="SalaryCategoryID" class="col-sm-3 col-form-label">Kategori</label>
+                                    <label for="SalaryCategoryID" class="col-sm-3 col-form-label">Ücret Kategorisi</label>
                                     <div class="col-sm-6">
                                         <select class="form-control" id="SalaryCategoryID" name="SalaryCategoryID" required>
+                                            <option value="">Ücret Kategorisi Seçiniz </option>
                                             @foreach (var item in Model.SalaryCategoryList)
                                             {
                                                 <option value="@item.ID">@($"{item.SortBy} {item.SalaryCategoryName}")</option>
@@ -232,6 +224,7 @@
                                     <label for="SequenceID" class="col-sm-3 col-form-label">Oryantasyon Seviyesi</label>
                                     <div class="col-sm-6">
                                         <select class="form-control" id="SequenceID" name="SequenceID" required>
+                                            <option value="">Oryantasyon Seviyesi Seçiniz </option>
                                             @foreach (var item in Model.SequenceList)
                                             {
                                                 <option value="@item.ID">@($"{item.Code} {item.Name}")</option>
@@ -243,9 +236,9 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="FotoFile" class="col-sm-3 col-form-label">Resim</label>
+                                    <label for="FotoFile" class="col-sm-3 col-form-label">Fotoğrafı</label>
                                     <div class="col-sm-6">
-                                        <input type="file" name="FotoFile" style="width: 100%;" class="form-control" />
+                                        <input type="file" id="FotoFile" name="FotoFile" style="width: 100%;" class="form-control" />
                                     </div>
                                     <div class="col-sm-3"> </div>
                                 </div>
@@ -253,26 +246,44 @@
                                 <div class="form-group row">
                                     <label for="Description" class="col-sm-3 col-form-label">Açıklama</label>
                                     <div class="col-sm-6">
-                                        <textarea id="Description" name="Description" rows="5" cols="20" class="form-control" style="width:100% !important;"></textarea>
+                                        <textarea id="Description" name="Description" rows="5" class="form-control" style="width:100% !important;"></textarea>
                                     </div>
                                     <div class="col-sm-3"> </div>
                                 </div>
 
-                                <div class="form-group row mg-b-0">
-                                    <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+                                <div class="form-group row bg-gray-50">
+                                    <label for="OurCompanyID" class="col-sm-3 col-form-label">Ana Firma</label>
                                     <div class="col-sm-6">
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" checked>
-                                            <label class="custom-control-label" for="IsActive">Aktif?</label>
-                                        </div>
+                                        <select class="form-control" id="OurCompanyID" name="OurCompanyID" required>
+                                            @foreach (var item in Model.OurList)
+                                            {
+                                                <option value="@item.CompanyID" @(Model.Authentication.ActionEmployee.OurCompanyID == item.CompanyID ? "selected" : "")>@($"{item.CompanyName}")</option>
+                                            }
+                                        </select>
                                     </div>
-                                    <div class="col-sm-3"> </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row bg-gray-50">
+                                    <label for="LocationID" class="col-sm-3 col-form-label">İlişkili Lokasyonu</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" id="LocationID" name="LocationID" required>
+                                            <option value="">İlişkili Lokasyonu Seçiniz </option>
+                                            @foreach (var item in Model.LocationList)
+                                            {
+                                                <option value="@item.LocationID">@($"{item.LocationFullName}")</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                    </div>
                                 </div>
 
                                 <div class="form-group row mg-b-0">
                                     <div class="col-sm-3"></div>
                                     <div class="col-sm-6">
-                                        <button type="submit" class="btn btn-primary btn-block">Employee Ekle</button>
+                                        <button type="submit" class="btn btn-primary btn-block">Çalışanı Ekle</button>
                                     </div>
                                     <div class="col-sm-3">
                                     </div>
@@ -297,6 +308,39 @@
         });
 
         $('.phone').mask('(000) 000 00 00');
+
+
+        $(document).ready(function () {
+            $("#OurCompanyID").change(function () {
+
+                var ourCompanyID = $("#OurCompanyID").val();
+
+                console.log(ourCompanyID);
+
+                $.ajax
+                    ({
+                        url: '/Employee/GetLocationList',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            ourCompanyId: ourCompanyID
+                        }),
+                        success: function (data) {
+
+                            $("#LocationID").empty();
+
+                            $("#LocationID").append($('<option></option>', { "value": '', "text": 'İlişkili Lokasyon Seçiniz' }));
+
+                            $.each(data, function (index, label) {
+                                $("#LocationID").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+                        },
+                        error: function () {
+                        },
+                    });
+            });
+        });
 
     </script>
 

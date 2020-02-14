@@ -12,13 +12,14 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class IdentityType
+    public partial class EmployeeEmails
     {
         public int ID { get; set; }
-        public string TypeCode { get; set; }
-        public string TypeName { get; set; }
-        public int MinLenght { get; set; }
-        public int MaxLenght { get; set; }
+        public Nullable<int> EmployeeID { get; set; }
+        public Nullable<int> TypeID { get; set; }
+        public string EMail { get; set; }
+        public string Description { get; set; }
+        public Nullable<bool> IsMaster { get; set; }
         public Nullable<bool> IsActive { get; set; }
     }
 }

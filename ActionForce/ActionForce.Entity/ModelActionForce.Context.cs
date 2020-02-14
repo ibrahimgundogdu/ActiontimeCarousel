@@ -243,7 +243,6 @@ namespace ActionForce.Entity
         public virtual DbSet<VDocumentSalaryPayment> VDocumentSalaryPayment { get; set; }
         public virtual DbSet<VEmployeeList> VEmployeeList { get; set; }
         public virtual DbSet<VBankAccount> VBankAccount { get; set; }
-        public virtual DbSet<IdentityType> IdentityType { get; set; }
         public virtual DbSet<EmployeePeriods> EmployeePeriods { get; set; }
         public virtual DbSet<LocationPeriods> LocationPeriods { get; set; }
         public virtual DbSet<Revenue> Revenue { get; set; }
@@ -263,6 +262,11 @@ namespace ActionForce.Entity
         public virtual DbSet<PersonalDocumentType> PersonalDocumentType { get; set; }
         public virtual DbSet<VPersonalDocument> VPersonalDocument { get; set; }
         public virtual DbSet<CountryPhoneCode> CountryPhoneCode { get; set; }
+        public virtual DbSet<EmailType> EmailType { get; set; }
+        public virtual DbSet<EmployeeEmails> EmployeeEmails { get; set; }
+        public virtual DbSet<EmployeePhones> EmployeePhones { get; set; }
+        public virtual DbSet<PhoneType> PhoneType { get; set; }
+        public virtual DbSet<IdentityType> IdentityType { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

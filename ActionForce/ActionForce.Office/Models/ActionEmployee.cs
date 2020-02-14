@@ -17,7 +17,7 @@ namespace ActionForce.Office
         public string Token { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
         public Nullable<int> RoleGroupID { get; set; }
-        public virtual OurCompany OurCompany { get; set; }
+        public virtual ActionOurCompany OurCompany { get; set; }
         public virtual ActionRoleGroup RoleGroup { get; set; }
     }
 
@@ -27,5 +27,13 @@ namespace ActionForce.Office
         public string GroupName { get; set; }
         public int RoleLevel { get; set; }
 
+    }
+
+    public class ActionOurCompany
+    {
+        public int CompanyID { get; set; }
+        public string CompanyName { get; set; }
+        public int? TimeZone { get; set; }
+        public string Currency { get; set; }
     }
 }

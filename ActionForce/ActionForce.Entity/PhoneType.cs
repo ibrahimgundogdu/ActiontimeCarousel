@@ -12,13 +12,11 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class IdentityType
+    public partial class PhoneType
     {
         public int ID { get; set; }
-        public string TypeCode { get; set; }
         public string TypeName { get; set; }
-        public int MinLenght { get; set; }
-        public int MaxLenght { get; set; }
+        public string SortBy { get; set; }
         public Nullable<bool> IsActive { get; set; }
     }
 }

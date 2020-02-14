@@ -63,7 +63,7 @@ namespace ActionForce.Office.Controllers
                             RoleGroup = new ActionRoleGroup() { ID = roleGroup.ID, GroupName = roleGroup.GroupName, RoleLevel = roleGroup.RoleLevel.Value },
                             OurCompanyID = User.OurCompanyID,
                             Title = User.Title,
-                            OurCompany = ourCompany,
+                            OurCompany = new ActionOurCompany() { CompanyID = ourCompany.CompanyID, CompanyName = ourCompany.CompanyName, TimeZone = ourCompany.TimeZone, Currency= ourCompany.Currency },
                             Token = User.EmployeeUID.ToString()
                         },
                         Culture = ourCompany.Culture
@@ -138,7 +138,7 @@ namespace ActionForce.Office.Controllers
                 using (ActionTimeEntities db = new ActionTimeEntities())
                 {
                     var ourcompany = db.OurCompany.FirstOrDefault(x => x.CompanyID == id);
-                    Authentication.ActionEmployee.OurCompany = ourcompany;
+                    Authentication.ActionEmployee.OurCompany = new ActionOurCompany() { CompanyID = ourcompany.CompanyID, CompanyName = ourcompany.CompanyName, TimeZone = ourcompany.TimeZone, Currency = ourcompany.Currency };
                     Authentication.ActionEmployee.OurCompanyID = id;
                     ChangeCulture(ourcompany.Culture);
                 }

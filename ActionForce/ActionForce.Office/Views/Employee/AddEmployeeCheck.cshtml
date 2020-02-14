@@ -121,7 +121,7 @@
                                 </div>
                             }
 
-                            @if (Model.AbsoluteEmployees == null)
+                            @if (Model.AbsoluteEmployees.Count() <= 0)
                             {
                                 <div class="form-group row mg-b-5 bg-gray-50">
                                     <label for="FullName" class="col-sm-3 col-form-label">Ekleyeceğiniz çalışan listede yok ise</label>

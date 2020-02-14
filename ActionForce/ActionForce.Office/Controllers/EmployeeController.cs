@@ -1132,7 +1132,18 @@ namespace ActionForce.Office.Controllers
 
                 model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
                 model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
+                model.OurList = Db.OurCompany.ToList();
+                model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true).ToList();
+                model.AreaCategoryList = Db.EmployeeAreaCategory.Where(x => x.IsActive == true).ToList();
+                model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
+                model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true).ToList();
+                model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
+                model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
+                model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
+                model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
+                model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x=> x.SortBy).ToList();
 
+                TempData["CheckEmployee"] = model.CheckEmployee;
 
                 return View(model);
 
@@ -1146,7 +1157,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult AddEmployeeCompleteForm(Employee employee, HttpPostedFileBase FotoFile)
+        public ActionResult AddEmployeeCompleteForm(CheckedEmployee employee, HttpPostedFileBase FotoFile)
         {
             Result<Employee> result = new Result<Employee>()
             {
@@ -1159,7 +1170,7 @@ namespace ActionForce.Office.Controllers
             if (employee != null)
             {
 
-                bool isActive = !string.IsNullOrEmpty(employee.IsActive) && employee.IsActive == "1" ? true : false;
+                bool isActive = true; //!string.IsNullOrEmpty(employee.IsActive) && employee.IsActive == "1" ? true : false;
 
                 Employee empdoc = new Employee();
                 empdoc.IdentityType = employee.IdentityType;
@@ -1168,7 +1179,6 @@ namespace ActionForce.Office.Controllers
                 empdoc.EMail = employee.EMail;
                 empdoc.FullName = employee.FullName.ToUpper();
                 empdoc.Mobile = employee.Mobile;
-                empdoc.Mobile2 = employee.Mobile2;
                 empdoc.AreaCategoryID = employee.AreaCategoryID;
                 empdoc.DepartmentID = employee.DepartmentID;
                 empdoc.Description = employee.Description;
@@ -1178,11 +1188,9 @@ namespace ActionForce.Office.Controllers
                 empdoc.SequenceID = employee.SequenceID;
                 empdoc.ShiftTypeID = employee.ShiftTypeID;
                 empdoc.StatusID = employee.StatusID;
-                empdoc.Whatsapp = employee.Whatsapp;
                 empdoc.Username = employee.Username;
-                empdoc.OurCompanyID = employee.OurCompanyID;
+                empdoc.OurCompanyID = employee.OurCompanyID.Value;
                 empdoc.IsActive = isActive;
-                empdoc.IsTemp = isTemp;
                 empdoc.RecordDate = DateTime.Now;
                 empdoc.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                 empdoc.RecordIP = OfficeHelper.GetIPAddress();
@@ -1248,6 +1256,27 @@ namespace ActionForce.Office.Controllers
             TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
             return RedirectToAction("AddEmployee", "Employee");
         }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult GetLocationList(int ourCompanyId)
+        {
+            var locationList = Db.Location.Where(x => x.OurCompanyID == ourCompanyId && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+            foreach (var location in locationList)
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = location.LocationID.ToString(),
+                    Text = location.LocationFullName
+                });
+            }
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
 
 
         [AllowAnonymous]

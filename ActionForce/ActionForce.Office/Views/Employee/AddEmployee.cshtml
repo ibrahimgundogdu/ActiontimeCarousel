@@ -37,17 +37,17 @@
                                 @Html.AntiForgeryToken()
                                 <div class="form-group row mg-b-5 bg-gray-50">
                                     <label for="IdentityNumber" class="col-sm-3 col-form-label">Kimlik Türü / Numarası</label>
-                                    <div class="col-sm-2">
+                                    <div class="col-sm-3">
                                         <select class="form-control tx-15" id="IdentityType" name="IdentityType" required>
                                             @foreach (var item in Model.IdentityTypes)
                                             {
-                                                <option value="@item.TypeCode" @(Model?.CheckEmployee?.IdentityType == item.TypeCode ? "selected" : "")>@item.TypeName</option>
+                                                <option value="@item.TypeCode" @(Model?.CheckEmployee?.IdentityType == item.TypeCode ? "selected" : "") data-minlenght="@(item.MinLenght)"  data-maxlenght="@(item.MaxLenght)">@(item.MinLenght == item.MaxLenght ?  $"{item.TypeName} ({item.MinLenght})" : $"{item.TypeName} ({item.MinLenght} - {item.MaxLenght} )")</option>
                                             }
 
                                         </select>
                                     </div>
-                                    <div class="col-sm-4">
-                                        <input id="IdentityNumber" name="IdentityNumber" type="text" maxlength="11" class="form-control tx-15" autocomplete="off" placeholder="TCKN" required value="@(Model?.CheckEmployee?.IdentityNumber)">
+                                    <div class="col-sm-3">
+                                        <input id="IdentityNumber" name="IdentityNumber" type="text" pattern=".{11,11}" class="form-control tx-15 TCKN" autocomplete="off" placeholder="TCKN" required value="@(Model?.CheckEmployee?.IdentityNumber)">
                                     </div>
                                     <div class="col-sm-3">
                                         <label for="Identityx" class="col-form-label" title="Gerekli Alan"> * </label>
@@ -113,6 +113,10 @@
         });
 
         $('.phone').mask('(000) 000 00 00');
+        $('.TCKN').mask('00000000000');
+        $('.SOCIALNUMBER').mask('0000000000000');
+        $('.TAXNUMBER').mask('00000000000');
+
 
     </script>
 

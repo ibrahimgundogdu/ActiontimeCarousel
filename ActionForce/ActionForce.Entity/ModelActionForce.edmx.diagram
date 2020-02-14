@@ -240,7 +240,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentSalaryPayment" Width="1.5" PointX="33.375" PointY="47.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeList" Width="1.5" PointX="52.375" PointY="29.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VBankAccount" Width="1.5" PointX="35.375" PointY="43.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.IdentityType" Width="1.5" PointX="47.375" PointY="9.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeePeriods" Width="1.5" PointX="52.75" PointY="42.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationPeriods" Width="1.5" PointX="52.75" PointY="47.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Revenue" Width="1.5" PointX="52.75" PointY="52.75" />
@@ -261,6 +260,11 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPersonalDocument" Width="1.5" PointX="54.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CountryPhoneCode" Width="1.5" PointX="39.375" PointY="54.75" />
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_Employee_OurCompany" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmailType" Width="1.5" PointX="41.75" PointY="54.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeEmails" Width="1.5" PointX="0.75" PointY="55.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeePhones" Width="1.5" PointX="55.75" PointY="7.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.PhoneType" Width="1.5" PointX="55.75" PointY="11.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.IdentityType" Width="1.5" PointX="55.375" PointY="14.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
