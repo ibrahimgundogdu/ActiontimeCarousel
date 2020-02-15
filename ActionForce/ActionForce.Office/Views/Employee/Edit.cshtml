@@ -1,6 +1,6 @@
 ﻿@model EmployeeControlModel
 @{
-    ViewBag.Title = "Employee Düzenleme ";
+    ViewBag.Title = "Çalışan Düzenleme ";
 }
 @section style{
     <link href="/lib/animate.css/animate.min.css" rel="stylesheet">
@@ -10,7 +10,7 @@
 }
 <div class="content-header">
     <div class="content-search col-lg">
-        <span class="tx-20"> @(Model.EmpList != null ? Model.EmpList.FullName + " " + Model.EmpList.TypeName : "") - Employee Güncelleme</span>
+        <span class="tx-20"> @(Model.Employee != null ? Model.Employee.FullName + " " + Model.Employee.ShiftTypeName : "")</span>
     </div>
     <nav class="nav">
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
@@ -23,17 +23,17 @@
                 <div class="row">
                     <div class="col-lg">
                         <div class="avatar avatar-xxxl mg-b-20">
-                            <img src="http://office.ufegrup.com/img/Employee/@(Model.EmpList.FotoFile)" class="rounded-10 w-100" alt="">
+                            <img src="http://office.ufegrup.com/img/Employee/@(Model.Employee.FotoFile)" class="rounded-10 w-100" alt="">
                         </div>
                         <div>
-                            <h5 class="mg-b-2 tx-spacing--1 tx-center">@(Model.EmpList.FullName)</h5>
-                            <p class="tx-color-03 tx-center mg-b-0">@(Model.EmpList.EMail)</p>
-                            <p class="tx-color-03 tx-center mg-b-0">@(Model.EmpList.Mobile)</p>
+                            <h5 class="mg-b-2 tx-spacing--1 tx-center">@(Model.Employee.FullName)</h5>
+                            <p class="tx-color-03 tx-center mg-b-0">@(Model.Employee.EMail)</p>
+                            <p class="tx-color-03 tx-center mg-b-0">@(Model.Employee.CountryPhoneCode) @(Model.Employee.Mobile)</p>
                         </div>
                     </div><!-- col -->
                     <div class="col-sm-8 col-md-7 col-lg mg-t-10 mg-sm-t-0 mg-lg-t-15">
                         <div class="d-flex mg-b-25">
-                            <a class="btn btn-xs btn-white flex-fill" href="/Employee/Edit/@(Model.EmpList.EmployeeUID)">Düzenle</a>
+                            <a class="btn btn-xs btn-white flex-fill" href="/Employee/Edit/@(Model.Employee.EmployeeUID)">Düzenle</a>
                             <button class="btn btn-xs @(Model.EmployeeSchedule != null ? Model.EmployeeShift != null ? Model.EmployeeBreak != null ? Html.Raw("btn-warning") : Model.EmployeeShift.DurationMinute == null ? Html.Raw("btn-success") : Html.Raw("btn-pink") : Html.Raw("btn-danger") : Html.Raw("btn-dark")) flex-fill mg-l-10">@(Model.EmployeeSchedule != null ? Model.EmployeeShift != null ? Model.EmployeeBreak != null ? Html.Raw("Molada") : Model.EmployeeShift.DurationMinute == null ? Html.Raw("Mesaide") : Html.Raw("Mesai Bitti") : Html.Raw("Kapalı") : Html.Raw("Takvim Yok"))</button>
                         </div>
                         <hr />
@@ -64,28 +64,358 @@
                         </div>
                         <hr />
                         <nav class="nav nav-classic flex-column tx-13">
-                            <a href="/Employee/Detail/@(Model.EmpList.EmployeeUID)" class="nav-link">Detay</a>
-                            <a href="/Employee/Schedule/@(Model.EmpList.EmployeeUID)" class="nav-link">Schedule (Takvim)</a>
-                            <a href="/Employee/Shift/@(Model.EmpList.EmployeeUID)" class="nav-link">Shift (Mesai Mola)</a>
-                            <a href="/Employee/Action/@(Model.EmpList.EmployeeUID)" class="nav-link">Cari Hesap</a>
-                            <a href="/Employee/FoodCard/@(Model.EmpList.EmployeeUID)" class="nav-link">Set Card</a>
-                            <a href="/Employee/Location?id=@(Model.EmpList.EmployeeUID)" class="nav-link">Lokasyonlar</a>
-                            <a href="/Employee/Document/@(Model.EmpList.EmployeeUID)" class="nav-link">Özlük Belgeleri</a>
-                            <a href="/Employee/Score/@(Model.EmpList.EmployeeUID)" class="nav-link">Puanlama Skorlama</a>
-                            <a href="/Employee/Period/@(Model.EmpList.EmployeeUID)" class="nav-link">Çalışma Dönemleri</a>
-                            <a href="/Employee/Salary/@(Model.EmpList.EmployeeUID)" class="nav-link">Ücret Tanımlamaları</a>
-                            <a href="/Employee/Edit/@(Model.EmpList.EmployeeUID)" class="nav-link active">Güncelle</a>
+                            <a href="/Employee/Detail/@(Model.Employee.EmployeeUID)" class="nav-link">Detay</a>
+                            <a href="/Employee/Schedule/@(Model.Employee.EmployeeUID)" class="nav-link">Schedule (Takvim)</a>
+                            <a href="/Employee/Shift/@(Model.Employee.EmployeeUID)" class="nav-link">Shift (Mesai Mola)</a>
+                            <a href="/Employee/Action/@(Model.Employee.EmployeeUID)" class="nav-link">Cari Hesap</a>
+                            <a href="/Employee/FoodCard/@(Model.Employee.EmployeeUID)" class="nav-link">Set Card</a>
+                            <a href="/Employee/Location?id=@(Model.Employee.EmployeeUID)" class="nav-link">Lokasyonlar</a>
+                            <a href="/Employee/Document/@(Model.Employee.EmployeeUID)" class="nav-link">Özlük Belgeleri</a>
+                            <a href="/Employee/Score/@(Model.Employee.EmployeeUID)" class="nav-link">Puanlama Skorlama</a>
+                            <a href="/Employee/Period/@(Model.Employee.EmployeeUID)" class="nav-link">Çalışma Dönemleri</a>
+                            <a href="/Employee/Salary/@(Model.Employee.EmployeeUID)" class="nav-link">Ücret Tanımlamaları</a>
+                            <a href="/Employee/Edit/@(Model.Employee.EmployeeUID)" class="nav-link active">Güncelle</a>
                         </nav>
                     </div>
                 </div>
             </div>
-            <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
+            <div class="media-body mg-t-40 mg-lg-t-0 pd-l-20">
                 <div class="card mg-b-20 mg-lg-b-5">
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-
+                        @(Model.Employee.FullName)
                     </div><!-- card-header -->
                     <div class="card-body">
-                        @{Html.RenderPartial("_PartialEmployeeEdit", Model);}
+                        @using (Html.BeginForm("EditEmployee", "Employee", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="row row-xs">
+
+                                <div class="col-lg-12">
+                                    <div class="form-group row  mg-b-5 bg-gray-50">
+                                        <label for="OurCompanyID" class="col-sm-3 col-form-label">Ülke</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" id="OurCompanyID" name="OurCompanyID" required>
+                                                @foreach (var item in Model.OurList)
+                                                {
+                                                    <option value="@item.CompanyID" @(Model.Employee.OurCompanyID == item.CompanyID ? "selected" : "")>@($"{item.CompanyName}")</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row  mg-b-5">
+                                        <label for="Title" class="col-sm-3 col-form-label">Başlık</label>
+                                        <div class="col-sm-6">
+                                            <input id="Title" name="Title" type="text" class="form-control" autocomplete="off" placeholder="Başlık" value="@(Model.Employee.Title)">
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row mg-b-5">
+                                        <label for="IdentityType" class="col-sm-3 col-form-label">Kimlik Türü</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" id="IdentityType" name="IdentityType">
+                                                @foreach (var item in Model.IdentityTypes)
+                                                {
+                                                    <option value="@item.ID" @(item.TypeName == Model.Employee.IdentityType ? "selected" : "")>@($"{item.TypeName}")</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row mg-b-5">
+                                        <label for="IdentityNumber" class="col-sm-3 col-form-label">Kimlik No</label>
+                                        <div class="col-sm-6">
+                                            <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" autocomplete="off" placeholder="Kimlik No" value="@(Model.Employee.IdentityNumber)">
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row bg-gray-100">
+                                        <label for="FullName" class="col-sm-3 col-form-label">Ad Soyad</label>
+                                        <div class="col-sm-6">
+                                            <input id="FullName" name="FullName" type="text" class="form-control tx-14" autocomplete="off" placeholder="Ad Soyad" value="@(Model.Employee.FullName)" required>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row mg-b-5">
+                                        <label for="EMail" class="col-sm-3 col-form-label">E-Posta</label>
+                                        <div class="col-sm-6">
+                                            <input id="EMail" name="EMail" type="text" class="form-control" autocomplete="off" placeholder="E-Posta" value="@(Model.Employee.EMail)">
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row mg-b-5">
+                                        <label for="Mobile" class="col-sm-3 col-form-label">Mobil</label>
+                                        <div class="col-sm-3">
+                                            <select class="form-control" id="CountryPhoneCode" name="CountryPhoneCode">
+                                                @foreach (var item in Model.PhoneCodes)
+                                                {
+                                                    <option value="@item.Code" @(item.Code == Model.Employee.CountryPhoneCode ? "selected" : "")>@($"{item.Code} {item.Country}")</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                            <input id="Mobile" name="Mobile" type="text" class="form-control phone" autocomplete="off" placeholder="Telefon" value="@(Model.Employee.Mobile)">
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mg-b-5">
+                                        <label for="Mobile2" class="col-sm-3 col-form-label">Mobil2</label>
+                                        <div class="col-sm-6">
+                                            <input id="Mobile2" name="Mobile2" type="text" class="form-control" autocomplete="off" placeholder="Telefon" value="@(Model.Employee.Mobile2)">
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="Whatsapp" class="col-sm-3 col-form-label">Whatsapp</label>
+                                        <div class="col-sm-6">
+                                            <input id="Whatsapp" name="Whatsapp" type="text" class="form-control" autocomplete="off" placeholder="Whatsapp" value="@(Model.Employee.Whatsapp)">
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row mg-b-5">
+                                        <label for="Username" class="col-sm-3 col-form-label">Kullanıcı Adı</label>
+                                        <div class="col-sm-6">
+                                            <input id="Username" name="Username" type="text" class="form-control" autocomplete="off" placeholder="Kullanıcı Adı" value="@(Model.Employee.Username)">
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="Password" class="col-sm-3 col-form-label">Şifre</label>
+                                        <div class="col-sm-6">
+                                            <input id="Password" name="Password" type="text" class="form-control" autocomplete="off" placeholder="Şifre">
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row bg-gray-50">
+                                        <label for="RoleGroupID" class="col-sm-3 col-form-label">Rol Grup</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" id="RoleGroupID" name="RoleGroupID" required>
+                                                <option value="">Rol Seçiniz</option>
+                                                @foreach (var item in Model.RoleGroupList.OrderBy(x => x.RoleLevel))
+                                                {
+                                                    <option value="@item.ID" @(item.ID == Model.Employee.RoleGroupID ? "selected" : "")>@($"{item.GroupCode} {item.GroupName}" )</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row mg-b-5 bg-gray-50">
+                                        <label for="AreaCategoryID" class="col-sm-3 col-form-label">Alan</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" id="AreaCategoryID" name="AreaCategoryID" required>
+                                                <option value="">Alan Seçiniz</option>
+                                                @foreach (var item in Model.AreaCategoryList.OrderBy(x => x.SortBy))
+                                                {
+                                                    <option value="@item.ID" @(item.ID == Model.Employee.AreaCategoryID ? "selected" : "")>@($"{item.SortBy} {item.AreaName}" )</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mg-b-5 bg-gray-50">
+                                        <label for="DepartmentID" class="col-sm-3 col-form-label">Departman</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" id="DepartmentID" name="DepartmentID" required>
+                                                <option value="">Departman Seçiniz</option>
+                                                @foreach (var item in Model.DepartmentList.OrderBy(x => x.SortBy))
+                                                {
+                                                    <option value="@item.ID" @(item.ID == Model.Employee.DepartmentID ? "selected" : "")>@($"{item.SortBy} {item.DepartmentName}" )</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mg-b-5 bg-gray-50">
+                                        <label for="PositionID" class="col-sm-3 col-form-label">Pozisyon</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" id="PositionID" name="PositionID" required>
+                                                <option value="">Pozisyon Seçiniz</option>
+                                                @foreach (var item in Model.PositionList.OrderBy(x => x.SortBy))
+                                                {
+                                                    <option value="@item.ID" @(item.ID == Model.Employee.PositionID ? "selected" : "")>@($"{item.SortBy} {item.PositionName}" )</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mg-b-5 bg-gray-50">
+                                        <label for="StatusID" class="col-sm-3 col-form-label">Durum</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" id="StatusID" name="StatusID" required>
+                                                <option value="">Durum Seçiniz</option>
+                                                @foreach (var item in Model.StatusList)
+                                                {
+                                                    <option value="@item.ID" @(item.ID == Model.Employee.StatusID ? "selected" : "")>@($"0{item.ID} {item.Name}" )</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mg-b-5 bg-gray-50">
+                                        <label for="ShiftTypeID" class="col-sm-3 col-form-label">Çalışma Türü</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" id="ShiftTypeID" name="ShiftTypeID" required>
+                                                <option value="">Çalışma Seçiniz</option>
+                                                @foreach (var item in Model.ShiftTypeList)
+                                                {
+                                                    <option value="@item.ID" @(item.ID == Model.Employee.ShiftTypeID ? "selected" : "")>@($"{item.SortBy} {item.TypeName}" )</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mg-b-5 bg-gray-50">
+                                        <label for="SalaryCategoryID" class="col-sm-3 col-form-label">Kategori</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" id="SalaryCategoryID" name="SalaryCategoryID" required>
+                                                <option value="">Kategori Seçiniz</option>
+                                                @foreach (var item in Model.SalaryCategoryList)
+                                                {
+                                                    <option value="@item.ID" @(item.ID == Model.Employee.SalaryCategoryID ? "selected" : "")>@($"{item.SortBy} {item.SalaryCategoryName}" )</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row bg-gray-50">
+                                        <label for="SequenceID" class="col-sm-3 col-form-label">Oryantasyon Seviyesi</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" id="SequenceID" name="SequenceID" required>
+                                                <option value="">Oryantasyon Seçiniz</option>
+                                                @foreach (var item in Model.SequenceList)
+                                                {
+                                                    <option value="@item.ID" @(item.ID == Model.Employee.SequenceID ? "selected" : "")>@($"0{item.Sequence} {item.Code} {item.Name}" )</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <label for="FotoFile" class="col-sm-3 col-form-label">Resim</label>
+                                        <div class="col-sm-6">
+                                            <input type="file" id="FotoFile" name="FotoFile" value="@Model.Employee.FotoFile" style="width: 100%;" class="form-control" />
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="Description" class="col-sm-3 col-form-label">Açıklama</label>
+                                        <div class="col-sm-6">
+                                            <textarea id="Description" name="Description" rows="5" cols="20" class="form-control" style="width:100% !important;">@(Model.Employee.Description)</textarea>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row mg-b-0">
+                                        <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+                                        <div class="col-sm-6">
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" @(Model.Employee.IsActive == true ? "checked" : "")>
+                                                <label class="custom-control-label" for="IsActive">Aktif</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row mg-b-0">
+                                        <div class="col-sm-3"></div>
+                                        <div class="col-sm-6">
+                                            <input id="EmployeeID" name="EmployeeID" type="hidden" value="@(Model.Employee.EmployeeID)" />
+                                            <input id="EmployeeUID" name="EmployeeUID" type="hidden" value="@(Model.Employee.EmployeeUID)" />
+                                            <button type="submit" class="btn btn-primary btn-block">Çalışan Güncelle</button>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+
+                        <div class="row row-xs bg-gray-100 mg-b-0 mg-t-40">
+                            <div class="col-sm-3 pd-t-10 pd-b-10">
+                                <b>Kayıt Tarihçesi</b>
+                            </div>
+
+                            <div class="col-sm-4 pd-t-10">@(Html.Raw($"<b>Kaydeden </b> : {Model.Employee.RecordEmployeeName} {Model.Employee.RecordDate} ")) </div>
+                            <div class="col-sm-4 pd-t-10">@(Model.Employee.UpdateDate != null ? Html.Raw($"<b>Güncelleyen </b> : {Model.Employee.UpdateEmployeeName} {Model.Employee.UpdateDate} ") : Html.Raw("")) </div>
+
+                        </div>
+
+                        @if (Model.LogList != null && Model.LogList.Count() > 0)
+                        {
+                            <div class="row row-xs">
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Tarih</th>
+                                            <th>Kişi</th>
+                                            <th>Ortam</th>
+                                            <th>İşlem</th>
+                                            <th>Açıklama</th>
+                                            <th>Alan</th>
+                                            <th>Önceki</th>
+                                            <th>Yeni</th>
+                                            <th>Başarılı?</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model.LogList.OrderBy(x => x.RecordDate))
+                                        {
+                                            <tr>
+                                                <td>@(item.RecordDate)</td>
+                                                <td>@(item.RecordEmployee)</td>
+                                                <td>@(item.Environment)</td>
+                                                <td>@(item.ProcessType)</td>
+                                                <td>@(item.ResultMessage)</td>
+                                                <td>@(item.FieldName)</td>
+                                                <td><span title="@(item.OldValue)">@(item.OldValue != null && item.OldValue.StartsWith("System.") ? "..." : item?.OldValue)</span></td>
+                                                <td><span title="@(item.NewValue)">@(item.NewValue != null && item.NewValue.StartsWith("System.") ? "..." : item?.NewValue)</span></td>
+                                                <td>@(item.IsSuccess)</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
                     </div>
 
                 </div>
@@ -95,7 +425,7 @@
                         <div class="card">
                             <div class="card-header d-sm-flex align-items-start justify-content-between">
                                 <h6 class="lh-5 mg-b-0"> </h6>
-                                <a href="" class="tx-13 link-03"><div class="wd-10 ht-10 rounded-circle @(Model.EmpList.IsActive == true ?"bg-teal":"bg-gray-200") mg-r-auto mg-l-auto"></div></a>
+                                <a href="" class="tx-13 link-03"><div class="wd-10 ht-10 rounded-circle @(Model.Employee.IsActive == true ?"bg-teal":"bg-gray-200") mg-r-auto mg-l-auto"></div></a>
                             </div><!-- card-header -->
                             <div class="card-body pd-y-10 pd-x-10">
                                 <div class="table-responsive">
@@ -129,7 +459,7 @@
                                         </table>
                                     }
 
-                                    <div id="EmployeePeriodsDetail@(Model.EmpList.EmployeeID)">
+                                    <div id="EmployeePeriodsDetail@(Model.Employee.EmployeeID)">
                                         @{ Html.RenderPartial("_PartialEmployeePeriodsDetail", Model);}
                                     </div>
                                 </div>
@@ -137,22 +467,61 @@
                         </div>
                     </div>
                 </div>
-                
 
-                
-            </div>
-
-            @*<div class="profile-sidebar profile-sidebar-three mg-t-40 mg-lg-t-0 pd-lg-l-45">
-            <div class="row">
-                <div class="media d-block d-lg-flex">
-                <div class="media-body mg-t-40 mg-lg-t-0">
 
 
             </div>
-
-                </div>
-            </div>
-        </div>*@
         </div>
     </div>
 </div>
+@section scripts {
+    <script>
+
+        $('#IdentityType').on('change', function () {
+            var minlenght = $(this).find(':selected').data('minlenght');
+            var maxlenght = $(this).find(':selected').data('maxlenght');
+
+
+
+            $('#IdentityNumber').attr('placeholder', this.value);
+            $('#IdentityNumber').attr('pattern', '.{' + minlenght + ',' + maxlenght+'}');
+
+            $('#IdentityNumber').removeClass();
+            if (this.value == "TCKN") {
+                $('#IdentityNumber').addClass("form-control tx-15 TCKN");
+            }
+            else if (this.value == "SOCIALNUMBER") {
+                $('#IdentityNumber').addClass("form-control tx-15 SOCIALNUMBER");
+            }
+            else if (this.value == "TAXNUMBER") {
+                $('#IdentityNumber').addClass("form-control tx-15 TAXNUMBER");
+            }
+            else {
+                $('#IdentityNumber').addClass("form-control tx-15");
+            }
+
+
+        });
+
+        $('.phone').mask('(000) 000 00 00');
+        $('.TCKN').mask('00000000000');
+        $('.SOCIALNUMBER').mask('0000000000000');
+        $('.TAXNUMBER').mask('00000000000');
+
+
+    </script>
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}

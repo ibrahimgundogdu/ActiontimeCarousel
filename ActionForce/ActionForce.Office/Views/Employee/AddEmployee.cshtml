@@ -43,7 +43,6 @@
                                             {
                                                 <option value="@item.TypeCode" @(Model?.CheckEmployee?.IdentityType == item.TypeCode ? "selected" : "") data-minlenght="@(item.MinLenght)"  data-maxlenght="@(item.MaxLenght)">@(item.MinLenght == item.MaxLenght ?  $"{item.TypeName} ({item.MinLenght})" : $"{item.TypeName} ({item.MinLenght} - {item.MaxLenght} )")</option>
                                             }
-
                                         </select>
                                     </div>
                                     <div class="col-sm-3">
@@ -109,7 +108,29 @@
     <script>
 
         $('#IdentityType').on('change', function () {
-            $('#IdentityNumber').attr('placeholder', this.value)
+            var minlenght = $(this).find(':selected').data('minlenght');
+            var maxlenght = $(this).find(':selected').data('maxlenght');
+
+           
+
+            $('#IdentityNumber').attr('placeholder', this.value);
+            $('#IdentityNumber').attr('pattern', '.{' + minlenght + ',' + maxlenght+'}');
+            
+            $('#IdentityNumber').removeClass();
+            if (this.value == "TCKN") {
+                $('#IdentityNumber').addClass("form-control tx-15 TCKN");
+            }
+            else if (this.value == "SOCIALNUMBER") {
+                $('#IdentityNumber').addClass("form-control tx-15 SOCIALNUMBER");
+            }
+            else if (this.value == "TAXNUMBER") {
+                $('#IdentityNumber').addClass("form-control tx-15 TAXNUMBER");
+            }
+            else {
+                $('#IdentityNumber').addClass("form-control tx-15");
+            }
+
+            
         });
 
         $('.phone').mask('(000) 000 00 00');

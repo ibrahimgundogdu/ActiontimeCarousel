@@ -265,6 +265,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeePhones" Width="1.5" PointX="55.75" PointY="7.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PhoneType" Width="1.5" PointX="55.75" PointY="11.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.IdentityType" Width="1.5" PointX="55.375" PointY="14.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeAll" Width="1.5" PointX="55.375" PointY="40.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

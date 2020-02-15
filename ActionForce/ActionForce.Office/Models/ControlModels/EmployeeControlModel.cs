@@ -12,6 +12,7 @@ namespace ActionForce.Office
         public Result Result { get; set; }
         public CheckEmployee CheckEmployee { get; set; }
         public IEnumerable<Employee> Employees { get; set; }
+        public VEmployeeAll Employee { get; set; }
         public IEnumerable<Employee> AbsoluteEmployees { get; set; }
         public IEnumerable<Employee> OptionalEmployees { get; set; }
 

@@ -765,6 +765,9 @@
     <Compile Include="VEmployee.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VEmployeeAll.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VEmployeeCashActions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

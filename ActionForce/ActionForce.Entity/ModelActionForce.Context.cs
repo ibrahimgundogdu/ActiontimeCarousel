@@ -267,6 +267,7 @@ namespace ActionForce.Entity
         public virtual DbSet<EmployeePhones> EmployeePhones { get; set; }
         public virtual DbSet<PhoneType> PhoneType { get; set; }
         public virtual DbSet<IdentityType> IdentityType { get; set; }
+        public virtual DbSet<VEmployeeAll> VEmployeeAll { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

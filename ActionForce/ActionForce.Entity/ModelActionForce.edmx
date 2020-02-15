@@ -4365,6 +4365,67 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployee' does not have a 
           <Property Name="EmployeeUID" Type="uniqueidentifier" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeAll' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VEmployeeAll">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="IdentityType" Type="nvarchar" MaxLength="16" />
+          <Property Name="IdentityNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Title" Type="nvarchar" MaxLength="150" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="FullNameSearch" Type="nvarchar" MaxLength="4000" />
+          <Property Name="EMail" Type="nvarchar" MaxLength="150" />
+          <Property Name="CountryPhoneCode" Type="nvarchar" MaxLength="8" />
+          <Property Name="Mobile" Type="nvarchar" MaxLength="50" />
+          <Property Name="FotoFile" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="OurCompanyID" Type="int" Nullable="false" />
+          <Property Name="OurCompanyName" Type="nvarchar" MaxLength="150" />
+          <Property Name="OurCompanyCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="IsDismissal" Type="bit" />
+          <Property Name="DismissDescription" Type="nvarchar(max)" />
+          <Property Name="Mobile2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Whatsapp" Type="nvarchar" MaxLength="50" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" />
+          <Property Name="DateStart" Type="datetime" />
+          <Property Name="DateEnd" Type="datetime" />
+          <Property Name="EmployeeUID" Type="uniqueidentifier" />
+          <Property Name="ShiftTypeID" Type="int" />
+          <Property Name="ShiftTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="StatusID" Type="int" />
+          <Property Name="StatusCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
+          <Property Name="RoleGroupID" Type="int" />
+          <Property Name="RoleLevel" Type="int" />
+          <Property Name="RoleGroupCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="RoleGroupName" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepartmentID" Type="int" />
+          <Property Name="DepartmentName" Type="nvarchar" MaxLength="50" />
+          <Property Name="AreaCategoryID" Type="int" />
+          <Property Name="WorkAreaName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SalaryCategoryID" Type="int" />
+          <Property Name="SalaryCategoryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SequenceID" Type="int" />
+          <Property Name="SequenceCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="SequenceName" Type="nvarchar" MaxLength="50" />
+          <Property Name="PositionID" Type="int" />
+          <Property Name="PositionName" Type="nvarchar" MaxLength="50" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeName" Type="nvarchar" MaxLength="150" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployeeName" Type="nvarchar" MaxLength="150" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeCashActions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VEmployeeCashActions">
           <Key>
@@ -6603,6 +6664,63 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployee].[EmployeeUID] AS [EmployeeUID]
     FROM [dbo].[VEmployee] AS [VEmployee]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VEmployeeAll" EntityType="Self.VEmployeeAll" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VEmployeeAll].[EmployeeID] AS [EmployeeID], 
+    [VEmployeeAll].[IdentityType] AS [IdentityType], 
+    [VEmployeeAll].[IdentityNumber] AS [IdentityNumber], 
+    [VEmployeeAll].[Title] AS [Title], 
+    [VEmployeeAll].[FullName] AS [FullName], 
+    [VEmployeeAll].[FullNameSearch] AS [FullNameSearch], 
+    [VEmployeeAll].[EMail] AS [EMail], 
+    [VEmployeeAll].[CountryPhoneCode] AS [CountryPhoneCode], 
+    [VEmployeeAll].[Mobile] AS [Mobile], 
+    [VEmployeeAll].[FotoFile] AS [FotoFile], 
+    [VEmployeeAll].[RoleID] AS [RoleID], 
+    [VEmployeeAll].[OurCompanyID] AS [OurCompanyID], 
+    [VEmployeeAll].[OurCompanyName] AS [OurCompanyName], 
+    [VEmployeeAll].[OurCompanyCode] AS [OurCompanyCode], 
+    [VEmployeeAll].[Description] AS [Description], 
+    [VEmployeeAll].[IsDismissal] AS [IsDismissal], 
+    [VEmployeeAll].[DismissDescription] AS [DismissDescription], 
+    [VEmployeeAll].[Mobile2] AS [Mobile2], 
+    [VEmployeeAll].[Whatsapp] AS [Whatsapp], 
+    [VEmployeeAll].[Username] AS [Username], 
+    [VEmployeeAll].[Password] AS [Password], 
+    [VEmployeeAll].[DateStart] AS [DateStart], 
+    [VEmployeeAll].[DateEnd] AS [DateEnd], 
+    [VEmployeeAll].[EmployeeUID] AS [EmployeeUID], 
+    [VEmployeeAll].[ShiftTypeID] AS [ShiftTypeID], 
+    [VEmployeeAll].[ShiftTypeName] AS [ShiftTypeName], 
+    [VEmployeeAll].[StatusID] AS [StatusID], 
+    [VEmployeeAll].[StatusCode] AS [StatusCode], 
+    [VEmployeeAll].[StatusName] AS [StatusName], 
+    [VEmployeeAll].[RoleGroupID] AS [RoleGroupID], 
+    [VEmployeeAll].[RoleLevel] AS [RoleLevel], 
+    [VEmployeeAll].[RoleGroupCode] AS [RoleGroupCode], 
+    [VEmployeeAll].[RoleGroupName] AS [RoleGroupName], 
+    [VEmployeeAll].[DepartmentID] AS [DepartmentID], 
+    [VEmployeeAll].[DepartmentName] AS [DepartmentName], 
+    [VEmployeeAll].[AreaCategoryID] AS [AreaCategoryID], 
+    [VEmployeeAll].[WorkAreaName] AS [WorkAreaName], 
+    [VEmployeeAll].[SalaryCategoryID] AS [SalaryCategoryID], 
+    [VEmployeeAll].[SalaryCategoryName] AS [SalaryCategoryName], 
+    [VEmployeeAll].[SequenceID] AS [SequenceID], 
+    [VEmployeeAll].[SequenceCode] AS [SequenceCode], 
+    [VEmployeeAll].[SequenceName] AS [SequenceName], 
+    [VEmployeeAll].[PositionID] AS [PositionID], 
+    [VEmployeeAll].[PositionName] AS [PositionName], 
+    [VEmployeeAll].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VEmployeeAll].[RecordDate] AS [RecordDate], 
+    [VEmployeeAll].[RecordEmployeeName] AS [RecordEmployeeName], 
+    [VEmployeeAll].[RecordIP] AS [RecordIP], 
+    [VEmployeeAll].[UpdateEmployeeID] AS [UpdateEmployeeID], 
+    [VEmployeeAll].[UpdateDate] AS [UpdateDate], 
+    [VEmployeeAll].[UpdateEmployeeName] AS [UpdateEmployeeName], 
+    [VEmployeeAll].[UpdateIP] AS [UpdateIP], 
+    [VEmployeeAll].[IsActive] AS [IsActive]
+    FROM [dbo].[VEmployeeAll] AS [VEmployeeAll]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VEmployeeCashActions" EntityType="Self.VEmployeeCashActions" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VEmployeeCashActions].[ID] AS [ID], 
@@ -7765,6 +7883,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="EmployeePhones" EntityType="db293_ActionTimeDbModel.EmployeePhones" />
           <EntitySet Name="PhoneType" EntityType="db293_ActionTimeDbModel.PhoneType" />
           <EntitySet Name="IdentityType" EntityType="db293_ActionTimeDbModel.IdentityType" />
+          <EntitySet Name="VEmployeeAll" EntityType="db293_ActionTimeDbModel.VEmployeeAll" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -13263,6 +13382,65 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="MaxLenght" Type="Int32" Nullable="false" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
+        <EntityType Name="VEmployeeAll">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="IdentityType" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="IdentityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Title" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="FullNameSearch" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="EMail" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="CountryPhoneCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FotoFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsDismissal" Type="Boolean" />
+          <Property Name="DismissDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Mobile2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Whatsapp" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DateStart" Type="DateTime" Precision="3" />
+          <Property Name="DateEnd" Type="DateTime" Precision="3" />
+          <Property Name="EmployeeUID" Type="Guid" />
+          <Property Name="ShiftTypeID" Type="Int32" />
+          <Property Name="ShiftTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StatusID" Type="Int32" />
+          <Property Name="StatusCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RoleGroupID" Type="Int32" />
+          <Property Name="RoleLevel" Type="Int32" />
+          <Property Name="RoleGroupCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RoleGroupName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepartmentID" Type="Int32" />
+          <Property Name="DepartmentName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AreaCategoryID" Type="Int32" />
+          <Property Name="WorkAreaName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SalaryCategoryID" Type="Int32" />
+          <Property Name="SalaryCategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SequenceID" Type="Int32" />
+          <Property Name="SequenceCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="SequenceName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PositionID" Type="Int32" />
+          <Property Name="PositionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -18532,6 +18710,65 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="TypeName" ColumnName="TypeName" />
                 <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VEmployeeAll">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeAll">
+              <MappingFragment StoreEntitySet="VEmployeeAll">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployeeName" ColumnName="UpdateEmployeeName" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeName" ColumnName="RecordEmployeeName" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="SequenceName" ColumnName="SequenceName" />
+                <ScalarProperty Name="SequenceCode" ColumnName="SequenceCode" />
+                <ScalarProperty Name="SequenceID" ColumnName="SequenceID" />
+                <ScalarProperty Name="SalaryCategoryName" ColumnName="SalaryCategoryName" />
+                <ScalarProperty Name="SalaryCategoryID" ColumnName="SalaryCategoryID" />
+                <ScalarProperty Name="WorkAreaName" ColumnName="WorkAreaName" />
+                <ScalarProperty Name="AreaCategoryID" ColumnName="AreaCategoryID" />
+                <ScalarProperty Name="DepartmentName" ColumnName="DepartmentName" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="RoleGroupName" ColumnName="RoleGroupName" />
+                <ScalarProperty Name="RoleGroupCode" ColumnName="RoleGroupCode" />
+                <ScalarProperty Name="RoleLevel" ColumnName="RoleLevel" />
+                <ScalarProperty Name="RoleGroupID" ColumnName="RoleGroupID" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="StatusCode" ColumnName="StatusCode" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="ShiftTypeName" ColumnName="ShiftTypeName" />
+                <ScalarProperty Name="ShiftTypeID" ColumnName="ShiftTypeID" />
+                <ScalarProperty Name="EmployeeUID" ColumnName="EmployeeUID" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="Whatsapp" ColumnName="Whatsapp" />
+                <ScalarProperty Name="Mobile2" ColumnName="Mobile2" />
+                <ScalarProperty Name="DismissDescription" ColumnName="DismissDescription" />
+                <ScalarProperty Name="IsDismissal" ColumnName="IsDismissal" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="OurCompanyCode" ColumnName="OurCompanyCode" />
+                <ScalarProperty Name="OurCompanyName" ColumnName="OurCompanyName" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="FotoFile" ColumnName="FotoFile" />
+                <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="CountryPhoneCode" ColumnName="CountryPhoneCode" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="FullNameSearch" ColumnName="FullNameSearch" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="IdentityNumber" ColumnName="IdentityNumber" />
+                <ScalarProperty Name="IdentityType" ColumnName="IdentityType" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

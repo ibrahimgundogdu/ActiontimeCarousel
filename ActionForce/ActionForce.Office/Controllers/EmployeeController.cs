@@ -299,6 +299,7 @@ namespace ActionForce.Office.Controllers
         public ActionResult Edit(Guid? id)
         {
             EmployeeControlModel model = new EmployeeControlModel();
+            Db.Configuration.LazyLoadingEnabled = false;
 
             if (TempData["result"] != null)
             {
@@ -308,11 +309,11 @@ namespace ActionForce.Office.Controllers
             var _date = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
             var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
 
-            var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
+            var rolLevel = model.Authentication.ActionEmployee.RoleGroup.RoleLevel;
 
 
             model.OurList = Db.OurCompany.ToList();
-            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
+            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true).ToList();
             model.AreaCategoryList = Db.EmployeeAreaCategory.Where(x => x.IsActive == true).ToList();
             model.DepartmentList = Db.Department.Where(x => x.IsActive == true).ToList();
             model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true).ToList();
@@ -320,20 +321,176 @@ namespace ActionForce.Office.Controllers
             model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
             model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
+            model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.Employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeUID == id);
+            model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Employee" && x.ProcessID == model.Employee.EmployeeID.ToString()).ToList();
 
-            model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
-            model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Employee" && x.ProcessID == model.EmpList.EmployeeID.ToString()).ToList();
+            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date).ToList();
+            var employeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true && x.EmployeeID == model.Employee.EmployeeID).ToList();
 
-            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date).ToList();
-            model.EmployeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true).ToList();
-            model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute > 0).ToList();
-            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
-            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.ShiftDate == _date);
-            model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.EmpList.EmployeeID && x.BreakDurationMinute == null);
+            model.EmployeeBreaks = employeeBreaks.Where(x => x.BreakDurationMinute > 0).ToList();
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date);
+            model.EmployeeBreak = employeeBreaks.Where(x => x.EmployeeID == model.Employee.EmployeeID && x.BreakDurationMinute == null).OrderByDescending(x => x.ShiftDate).FirstOrDefault();
 
-            model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == model.EmpList.EmployeeID).ToList();
+            model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == model.Employee.EmployeeID).ToList();
             model.IdentityTypes = Db.IdentityType.Where(x => x.IsActive == true).ToList();
+
             return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult EditEmployee(EditedEmployee employee)
+        {
+            Result<Employee> result = new Result<Employee>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            var isEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == employee.EmployeeID && x.EmployeeUID == employee.EmployeeUID);
+
+            if (employee != null && isEmployee != null)
+            {
+                try
+                {
+                    bool isActive = !string.IsNullOrEmpty(employee.IsActive) && employee.IsActive == "1" ? true : false;
+
+                    var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == isEmployee.OurCompanyID);
+                    Employee self = new Employee()
+                    {
+                        EmployeeID = isEmployee.EmployeeID,
+                        FullName = isEmployee.FullName,
+                        IdentityNumber = isEmployee.IdentityNumber,
+                        EMail = isEmployee.EMail,
+                        Mobile = isEmployee.Mobile,
+                        RecordDate = isEmployee.RecordDate,
+                        RecordEmployeeID = isEmployee.RecordEmployeeID,
+                        RecordIP = isEmployee.RecordIP,
+                        AreaCategoryID = employee.AreaCategoryID,
+                        DepartmentID = isEmployee.DepartmentID,
+                        Description = isEmployee.Description,
+                        EmployeeUID = isEmployee.EmployeeUID,
+                        IsActive = isEmployee.IsActive,
+                        IsTemp = isEmployee.IsTemp,
+                        Mobile2 = isEmployee.Mobile2,
+                        Username = isEmployee.Username,
+                        Password = isEmployee.Password,
+                        PositionID = isEmployee.PositionID,
+                        RoleGroupID = isEmployee.RoleGroupID,
+                        SalaryCategoryID = isEmployee.SalaryCategoryID,
+                        SequenceID = isEmployee.SequenceID,
+                        ShiftTypeID = isEmployee.ShiftTypeID,
+                        StatusID = isEmployee.StatusID,
+                        Title = isEmployee.Title = employee.Title,
+                        Whatsapp = isEmployee.Whatsapp,
+                        OurCompanyID = isEmployee.OurCompanyID,
+                        CountryPhoneCode = isEmployee.CountryPhoneCode,
+                        DateStart = isEmployee.DateStart,
+                        DateEnd = isEmployee.DateEnd,
+                        DismissDescription = isEmployee.DismissDescription,
+                        FotoFile = isEmployee.FotoFile,
+                        IdentityType = isEmployee.IdentityType,
+                        FullNameSearch = isEmployee.FullNameSearch,
+                        IsDismissal = isEmployee.IsDismissal,
+                        SmsNumber = isEmployee.SmsNumber,
+                        UpdateDate = isEmployee.UpdateDate,
+                        UpdateEmployeeID = isEmployee.UpdateEmployeeID,
+                        UpdateIP = isEmployee.UpdateIP
+                    };
+
+                    isEmployee.AreaCategoryID = employee.AreaCategoryID;
+                    isEmployee.DepartmentID = employee.DepartmentID;
+                    isEmployee.Description = employee.Description;
+                    isEmployee.Mobile2 = employee.Mobile2;
+                    isEmployee.Username = employee.Username;
+                    isEmployee.PositionID = employee.PositionID;
+                    isEmployee.RoleGroupID = employee.RoleGroupID;
+                    isEmployee.SalaryCategoryID = employee.SalaryCategoryID;
+                    isEmployee.SequenceID = employee.SequenceID;
+                    isEmployee.ShiftTypeID = employee.ShiftTypeID;
+                    isEmployee.StatusID = employee.StatusID;
+                    isEmployee.Title = employee.Title;
+                    isEmployee.Whatsapp = employee.Whatsapp;
+                    isEmployee.UpdateDate = DateTime.UtcNow.AddHours(ourcompany.TimeZone.Value);
+                    isEmployee.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    isEmployee.UpdateIP = OfficeHelper.GetIPAddress();
+                    isEmployee.IdentityType = employee.IdentityType;
+                    isEmployee.IdentityNumber = employee.IdentityNumber;
+                    isEmployee.Mobile = employee.Mobile.Replace("(","").Replace(")","").Replace(" ","");
+                    isEmployee.FullName = employee.FullName;
+                    isEmployee.IsActive = isActive;
+                    isEmployee.CountryPhoneCode = employee.CountryPhoneCode;
+                    isEmployee.EMail = employee.EMail;
+                    isEmployee.OurCompanyID = employee.OurCompanyID;
+                    
+
+                    if (!string.IsNullOrEmpty(employee.Password))
+                    {
+                        isEmployee.Password = OfficeHelper.makeMD5(employee.Password);
+                    }
+
+                    if (employee.FotoFile != null && employee.FotoFile.ContentLength > 0)
+                    {
+                        string filename = Guid.NewGuid().ToString() + Path.GetExtension(employee.FotoFile.FileName);
+                        isEmployee.FotoFile = filename;
+                        string path = "/Document/Employee";
+
+                        try
+                        {
+                            employee.FotoFile.SaveAs(Path.Combine(Server.MapPath(path), filename));
+
+                            if (!Request.IsLocal)
+                            {
+                                string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Employee";
+                                string targetPath = @"C:\inetpub\wwwroot\Office\img\Employee";
+                                string sourceFile = System.IO.Path.Combine(sourcePath, filename);
+                                string destFile = System.IO.Path.Combine(targetPath, filename);
+                                System.IO.File.Copy(sourceFile, destFile, true);
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+
+                    Db.SaveChanges();
+
+                    result.IsSuccess = true;
+                    result.Message = $"{isEmployee.EmployeeID} nolu Çalışan başarı ile güncellendi";
+
+                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<Employee>(self, isEmployee, OfficeHelper.getIgnorelist());
+                    OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "Detail", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                    TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+                    if (result.IsSuccess == true)
+                    {
+
+                        return RedirectToAction("Edit", "Employee", new { id = isEmployee.EmployeeUID });
+                    }
+                    else
+                    {
+                        return RedirectToAction("AddEmployee", "Employee");
+                    }
+                }
+                catch (Exception ex)
+                {
+
+                    result.Message = $"Çalışan güncellenemedi : {ex.Message}";
+                    OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "Detail", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, employee);
+                }
+            }
+            else
+            {
+                result.Message = $"Form bilgileri gelmedi.";
+            }
+
+            TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+            return RedirectToAction("AddEmployee", "Employee");
         }
 
         [AllowAnonymous]
@@ -1110,6 +1267,9 @@ namespace ActionForce.Office.Controllers
 
                 model.AbsoluteEmployees = absoluteEmployees;
                 model.OptionalEmployees = optionalEmployees.Where(x => !absoluteEmployees.Contains(x));
+
+                model.Result.IsSuccess = true;
+                model.Result.Message = $"{model.AbsoluteEmployees.Count()} adet tam uyumlu, {model.OptionalEmployees.Count()} adet benzer kayıt bulundu";
             }
             else
             {
@@ -1141,7 +1301,7 @@ namespace ActionForce.Office.Controllers
                 model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
                 model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
                 model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
-                model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x=> x.SortBy).ToList();
+                model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
                 TempData["CheckEmployee"] = model.CheckEmployee;
 
@@ -1167,18 +1327,25 @@ namespace ActionForce.Office.Controllers
             };
             EmployeeControlModel model = new EmployeeControlModel();
 
+            Db.Configuration.LazyLoadingEnabled = false;
+
             if (employee != null)
             {
 
-                bool isActive = true; //!string.IsNullOrEmpty(employee.IsActive) && employee.IsActive == "1" ? true : false;
+                bool isActive = true;
+                DateTime daterecord = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
+                employee.Mobile = employee.Mobile.Replace("(", "").Replace(")", "").Replace(" ", "");
 
                 Employee empdoc = new Employee();
+
                 empdoc.IdentityType = employee.IdentityType;
                 empdoc.IdentityNumber = employee.IdentityNumber;
                 empdoc.Title = employee.Title;
                 empdoc.EMail = employee.EMail;
                 empdoc.FullName = employee.FullName.ToUpper();
+                empdoc.CountryPhoneCode = employee.CountryPhoneCode;
                 empdoc.Mobile = employee.Mobile;
+
                 empdoc.AreaCategoryID = employee.AreaCategoryID;
                 empdoc.DepartmentID = employee.DepartmentID;
                 empdoc.Description = employee.Description;
@@ -1191,10 +1358,11 @@ namespace ActionForce.Office.Controllers
                 empdoc.Username = employee.Username;
                 empdoc.OurCompanyID = employee.OurCompanyID.Value;
                 empdoc.IsActive = isActive;
-                empdoc.RecordDate = DateTime.Now;
+                empdoc.RecordDate = daterecord;
                 empdoc.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                 empdoc.RecordIP = OfficeHelper.GetIPAddress();
                 empdoc.EmployeeUID = Guid.NewGuid();
+                empdoc.DateStart = daterecord.Date;
 
                 if (!string.IsNullOrEmpty(employee.Password))
                 {
@@ -1210,21 +1378,24 @@ namespace ActionForce.Office.Controllers
                     {
                         FotoFile.SaveAs(Path.Combine(Server.MapPath(path), filename));
 
-                        string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Employee";
-                        string targetPath = @"C:\inetpub\wwwroot\Office\img\Employee";
-                        string sourceFile = System.IO.Path.Combine(sourcePath, filename);
-                        string destFile = System.IO.Path.Combine(targetPath, filename);
-                        System.IO.File.Copy(sourceFile, destFile, true);
+                        if (!Request.IsLocal)
+                        {
+                            string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Employee";
+                            string targetPath = @"C:\inetpub\wwwroot\Office\img\Employee";
+                            string sourceFile = System.IO.Path.Combine(sourcePath, filename);
+                            string destFile = System.IO.Path.Combine(targetPath, filename);
+                            System.IO.File.Copy(sourceFile, destFile, true);
+                        }
+
                     }
                     catch (Exception)
                     {
                     }
                 }
 
-
-
                 Db.Employee.Add(empdoc);
                 Db.SaveChanges();
+
 
                 var our = Db.OurCompany.FirstOrDefault(x => x.CompanyID == empdoc.OurCompanyID);
 
@@ -1232,8 +1403,74 @@ namespace ActionForce.Office.Controllers
                 result.IsSuccess = true;
                 result.Message = "Çalışan başarı ile eklendi";
 
+                // emaili ejklenir
+                if (!string.IsNullOrEmpty(empdoc.EMail))
+                {
+                    EmployeeEmails empemail = new EmployeeEmails()
+                    {
+                        EmployeeID = empdoc.EmployeeID,
+                        EMail = empdoc.EMail,
+                        IsActive = true,
+                        IsMaster = true,
+                        TypeID = 1
+                    };
+                    Db.EmployeeEmails.Add(empemail);
+                    Db.SaveChanges();
+                }
+                // Telefonu eklenir
+                if (!string.IsNullOrEmpty(empdoc.Mobile))
+                {
+                    EmployeePhones empphone = new EmployeePhones()
+                    {
+                        EmployeeID = empdoc.EmployeeID,
+                        PhoneNumber = empdoc.Mobile,
+                        IsActive = true,
+                        IsMaster = true,
+                        PhoneTypeID = 1,
+                        CountryPhoneCode = empdoc.CountryPhoneCode
+                    };
+                    Db.EmployeePhones.Add(empphone);
+                    Db.SaveChanges();
+                }
+                // periyotları eklenir.
+                EmployeePeriods empperiods = new EmployeePeriods();
+                empperiods.AreaCategoryID = empdoc.AreaCategoryID;
+                empperiods.ContractStartDate = empdoc.RecordDate;
+                empperiods.DepartmentID = empdoc.DepartmentID;
+                empperiods.EmployeeID = empdoc.EmployeeID;
+                empperiods.EmployeeStatusID = empdoc.StatusID;
+                empperiods.OurCompanyID = empdoc.OurCompanyID;
+                empperiods.PositionID = empdoc.PositionID;
+                empperiods.RecordDate = empdoc.RecordDate;
+                empperiods.RecordedEmployeeID = empdoc.RecordEmployeeID;
+                empperiods.RecordIP = empdoc.RecordIP;
+                empperiods.RoleGroupID = empdoc.RoleGroupID;
+                empperiods.SalaryCategoryID = empdoc.SalaryCategoryID;
+                empperiods.SequenceID = empdoc.SequenceID;
+                empperiods.ShiftTypeID = empdoc.ShiftTypeID;
+                empperiods.StartDate = empdoc.DateStart;
+
+                Db.EmployeePeriods.Add(empperiods);
+                Db.SaveChanges();
+
+                // lokasyon ilişkisi eklenir.
+
+                if (employee.LocationID > 0)
+                {
+                    EmployeeLocation emploc = new EmployeeLocation();
+                    emploc.EmployeeID = empdoc.EmployeeID;
+                    emploc.IsActive = true;
+                    emploc.IsMaster = true;
+                    emploc.LocationID = employee.LocationID.Value;
+                    emploc.RoleID = 1;
+
+                    Db.EmployeeLocation.Add(emploc);
+                    Db.SaveChanges();
+                }
+
+
                 // log atılır
-                OfficeHelper.AddApplicationLog("Office", "Employee", "Insert", empdoc.EmployeeID.ToString(), "Employee", "AddEmployee", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(our.TimeZone.Value), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, empdoc);
+                OfficeHelper.AddApplicationLog("Office", "Employee", "Insert", empdoc.EmployeeID.ToString(), "Employee", "AddEmployee", null, true, $"{result.Message}", string.Empty, empdoc.RecordDate.Value, model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, empdoc);
 
 
 
@@ -1256,6 +1493,8 @@ namespace ActionForce.Office.Controllers
             TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
             return RedirectToAction("AddEmployee", "Employee");
         }
+
+
 
 
         [HttpPost]
@@ -1408,10 +1647,6 @@ namespace ActionForce.Office.Controllers
         }
 
 
-
-
-
-
         public PartialViewResult AddEmployeeSchedule(int empid, string week)
         {
 
@@ -1448,8 +1683,6 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialAddEmployeeSchedule", model);
         }
-
-
 
 
         [HttpPost]
@@ -1558,142 +1791,6 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("AddEmployee", "Employee");
         }
 
-
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult EditEmployee(NewEmployee employee, HttpPostedFileBase FotoFile)
-        {
-            Result<Employee> result = new Result<Employee>()
-            {
-                IsSuccess = false,
-                Message = string.Empty,
-                Data = null
-            };
-            EmployeeControlModel model = new EmployeeControlModel();
-            using (ActionTimeEntities Db = new ActionTimeEntities())
-            {
-                var isEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeUID == employee.EmployeeUID);
-                if (employee != null && isEmployee != null)
-                {
-                    try
-                    {
-                        bool isActive = !string.IsNullOrEmpty(employee.IsActive) && employee.IsActive == "1" ? true : false;
-                        bool isTemp = !string.IsNullOrEmpty(employee.IsTemp) && employee.IsTemp == "1" ? true : false;
-
-                        var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == isEmployee.OurCompanyID);
-                        Employee self = new Employee()
-                        {
-                            EmployeeID = isEmployee.EmployeeID,
-                            FullName = isEmployee.FullName,
-                            IdentityNumber = isEmployee.IdentityNumber,
-                            EMail = isEmployee.EMail,
-                            Mobile = isEmployee.Mobile,
-                            RecordDate = isEmployee.RecordDate,
-                            RecordEmployeeID = isEmployee.RecordEmployeeID,
-                            RecordIP = isEmployee.RecordIP,
-                            AreaCategoryID = employee.AreaCategoryID,
-                            DepartmentID = isEmployee.DepartmentID,
-                            Description = isEmployee.Description,
-                            EmployeeUID = isEmployee.EmployeeUID,
-                            IsActive = isEmployee.IsActive,
-                            IsTemp = isEmployee.IsTemp,
-                            Mobile2 = isEmployee.Mobile2,
-                            Username = isEmployee.Username,
-                            Password = isEmployee.Password,
-                            PositionID = isEmployee.PositionID,
-                            RoleGroupID = isEmployee.RoleGroupID,
-                            SalaryCategoryID = isEmployee.SalaryCategoryID,
-                            SequenceID = isEmployee.SequenceID,
-                            ShiftTypeID = isEmployee.ShiftTypeID,
-                            StatusID = isEmployee.StatusID,
-                            Title = isEmployee.Title = employee.Title,
-                            Whatsapp = isEmployee.Whatsapp,
-                            OurCompanyID = isEmployee.OurCompanyID
-                        };
-                        isEmployee.AreaCategoryID = employee.AreaCategoryID;
-                        isEmployee.DepartmentID = employee.DepartmentID;
-                        isEmployee.Description = employee.Description;
-                        isEmployee.Mobile2 = employee.Mobile2;
-                        isEmployee.Username = employee.Username;
-                        //isEmployee.Password = employee.Password;
-                        isEmployee.PositionID = employee.PositionID;
-                        isEmployee.RoleGroupID = employee.RoleGroupID;
-                        isEmployee.SalaryCategoryID = employee.SalaryCategoryID;
-                        isEmployee.SequenceID = employee.SequenceID;
-                        isEmployee.ShiftTypeID = employee.ShiftTypeID;
-                        isEmployee.StatusID = employee.StatusID;
-                        isEmployee.Title = employee.Title;
-                        isEmployee.Whatsapp = employee.Whatsapp;
-                        isEmployee.UpdateDate = DateTime.UtcNow.AddHours(ourcompany.TimeZone.Value);
-                        isEmployee.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                        isEmployee.UpdateIP = OfficeHelper.GetIPAddress();
-                        isEmployee.IdentityType = employee.IdentityType;
-                        isEmployee.IdentityNumber = employee.IdentityNumber;
-                        isEmployee.Mobile = employee.Mobile;
-                        isEmployee.FullName = employee.FullName;
-                        isEmployee.IsActive = isActive;
-                        isEmployee.IsTemp = isTemp;
-
-                        if (!string.IsNullOrEmpty(employee.Password))
-                        {
-                            isEmployee.Password = OfficeHelper.makeMD5(employee.Password);
-                        }
-                        if (FotoFile != null && FotoFile.ContentLength > 0)
-                        {
-                            string filename = Guid.NewGuid().ToString() + Path.GetExtension(FotoFile.FileName);
-                            isEmployee.FotoFile = filename;
-                            string path = "/Document/Employee";
-
-                            try
-                            {
-                                FotoFile.SaveAs(Path.Combine(Server.MapPath(path), filename));
-
-                                string sourcePath = @"C:\inetpub\wwwroot\Action\Document\Employee";
-                                string targetPath = @"C:\inetpub\wwwroot\Office\img\Employee";
-                                string sourceFile = System.IO.Path.Combine(sourcePath, filename);
-                                string destFile = System.IO.Path.Combine(targetPath, filename);
-                                System.IO.File.Copy(sourceFile, destFile, true);
-                            }
-                            catch (Exception)
-                            {
-                            }
-                        }
-                        Db.SaveChanges();
-
-                        result.IsSuccess = true;
-                        result.Message = $"{isEmployee.EmployeeID} nolu Çalışan başarı ile Eklendi";
-
-                        var isequal = OfficeHelper.PublicInstancePropertiesEqual<Employee>(self, isEmployee, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "Detail", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-
-                        TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
-
-                        if (result.IsSuccess == true)
-                        {
-
-                            return RedirectToAction("Edit", "Employee", new { id = isEmployee.EmployeeUID });
-                        }
-                        else
-                        {
-                            return RedirectToAction("AddEmployee", "Employee");
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-
-                        result.Message = $"Çalışan güncellenemedi : {ex.Message}";
-                        OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "Detail", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, employee);
-                    }
-                }
-                else
-                {
-                    result.Message = $"Form bilgileri gelmedi.";
-                }
-            }
-
-            TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
-            return RedirectToAction("AddEmployee", "Employee");
-        }
 
 
 
