@@ -1,55 +1,72 @@
 ﻿@model EmployeeControlModel
 
 
-<table class="table table-dark table-hover table-striped mg-b-0">
+<table class="table table-light table-hover table-striped mg-b-0">
     <tbody class="table-hover table-striped">
         <tr>
-            <td>Ad Soyad</td>
-            <td>@(Model.EmpList.FullName)</td>
+            <td class="wd-25p">Adı Soyadı</td>
+            <td>@(Model.Employee.FullName)</td>
         </tr>
         <tr>
-            <td>E-Posta</td>
-            <td>@(Model.EmpList.EMail)</td>
+            <td>E-Postası</td>
+            <td>@(Model.Employee.EMail)</td>
         </tr>
         <tr>
-            <td>Mobil</td>
-            <td>@(Model.EmpList.Mobile)</td>
+            <td>Cep Telefonu</td>
+            <td>@(Model.Employee.CountryPhoneCode) @(Model.Employee.Mobile)</td>
         </tr>
         <tr>
-            <td>Rol</td>
-            <td>@(Model.EmpList.GroupName)</td>
+            <td>Firması</td>
+            <td>@(Model.Employee.OurCompanyName)</td>
         </tr>
         <tr>
-            <td>Alanı</td>
-            <td>@(Model.EmpList.AreaName)</td>
+            <td>Ülkesi</td>
+            <td>@(Model.Employee.OurCompanyCode)</td>
         </tr>
         <tr>
-            <td>Oryantasyon Seviyesi</td>
-            <td>@(Model.EmpList.SequenceName)</td>
+            <td>Yetki Grubu</td>
+            <td>@(Model.Employee.RoleGroupName)</td>
         </tr>
         <tr>
-            <td>Departman</td>
-            <td>@(Model.EmpList.DepartmentName)</td>
+            <td>Kullanıcı Adı</td>
+            <td>@(Model.Employee.Username)</td>
         </tr>
         <tr>
-            <td>Pozisyon</td>
-            <td>@(Model.EmpList.PositionName)</td>
+            <td>Çalışma Alanı</td>
+            <td>@(Model.Employee.WorkAreaName)</td>
+        </tr>
+
+        <tr>
+            <td>Departmanı</td>
+            <td>@(Model.Employee.DepartmentName)</td>
         </tr>
         <tr>
-            <td>Kategori</td>
-            <td>@(Model.EmpList.SalaryCategoryName)</td>
+            <td>Pozisyonu</td>
+            <td>@(Model.Employee.PositionName)</td>
         </tr>
         <tr>
-            <td>Durum</td>
-            <td>@(Model.EmpList.Name)</td>
+            <td>Ücret Kategorisi</td>
+            <td>@(Model.Employee.SalaryCategoryName)</td>
+        </tr>
+        <tr>
+            <td>Durumu</td>
+            <td>@(Model.Employee.StatusName)</td>
         </tr>
         <tr>
             <td>Çalışma Türü</td>
-            <td>@(Model.EmpList.TypeName)</td>
+            <td>@(Model.Employee.ShiftTypeName)</td>
+        </tr>
+        <tr>
+            <td>Oryantasyon Seviyesi</td>
+            <td>@(Model.Employee.SequenceName)</td>
         </tr>
         <tr>
             <td>Açıklama</td>
-            <td>@(Model.EmpList.Description)</td>
+            <td>@(Model.Employee.Description)</td>
+        </tr>
+        <tr>
+            <td>Aktif</td>
+            <td>@(Model.Employee.IsActive == true ? "Aktif":"Pasif")</td>
         </tr>
     </tbody>
 </table>
@@ -60,8 +77,8 @@
             <b>Kayıt Tarihçesi</b>
         </div>
 
-        <div class="col-sm-3 pd-t-10">@(Html.Raw($"<b>Kaydeden </b> : {Model.EmpList.RecordFullName} {Model.EmpList.RecordDate} ")) </div>
-            <div class="col-sm-3 pd-t-10">@(Model.EmpList.UpdateDate != null ? Html.Raw($"<b>Güncelleyen </b> : {Model.EmpList.UpdateFullName} {Model.EmpList.UpdateDate} ") : Html.Raw("")) </div>
+        <div class="col-sm-4 pd-t-10">@(Html.Raw($"<b>Kaydeden </b> : {Model.Employee.RecordEmployeeName} {Model.Employee.RecordDate} ")) </div>
+            <div class="col-sm-4 pd-t-10">@(Model.Employee.UpdateDate != null ? Html.Raw($"<b>Güncelleyen </b> : {Model.Employee.UpdateEmployeeName} {Model.Employee.UpdateDate} ") : Html.Raw("")) </div>
 
     </div>
 
@@ -83,7 +100,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.LogList.OrderBy(x => x.RecordDate))
+                    @foreach (var item in Model.LogList.Where(x=> x.OldValue != null && !x.OldValue.StartsWith("System.")).OrderBy(x => x.RecordDate))
                     {
                         <tr>
                             <td>@(item.RecordDate)</td>

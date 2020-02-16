@@ -4,9 +4,8 @@
 }
 
 @section style{
-    <link href="/lib/animate.css/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/lib/animate.css/animate.min.css">
     <link rel="stylesheet" href="/assets/css/dashforge.demo.css">
-    <link rel="stylesheet" href="/assets/css/dashforge.css">
     <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
 }
 
@@ -23,117 +22,63 @@
         <div class="media d-block d-lg-flex">
             <div class="profile-sidebar profile-sidebar-three">
                 <div class="row">
-                    <div class="col-lg">
-                        <div class="avatar avatar-xxxl mg-b-20">
-                            <img src="http://office.ufegrup.com/img/Employee/@(Model.EmpList.FotoFile)" class="rounded-10 w-100" alt="">
-                        </div>
-                        <div>
-                            <h5 class="mg-b-2 tx-spacing--1 tx-center">@(Model.EmpList.FullName)</h5>
-                            <p class="tx-color-03 tx-center mg-b-0">@(Model.EmpList.EMail)</p>
-                            <p class="tx-color-03 tx-center mg-b-0">@(Model.EmpList.Mobile)</p>
-                        </div>
-                    </div><!-- col -->
-                    <div class="col-sm-8 col-md-7 col-lg mg-t-10 mg-sm-t-0 mg-lg-t-15">
-                        <div class="d-flex mg-b-25">
-                            <a class="btn btn-xs btn-white flex-fill" href="/Employee/Edit/@(Model.EmpList.EmployeeUID)">Düzenle</a>
-                            <button class="btn btn-xs @(Model.EmployeeSchedule != null ? Model.EmployeeShift != null ? Model.EmployeeBreak != null ? Html.Raw("btn-warning") : Model.EmployeeShift.DurationMinute == null ? Html.Raw("btn-success") : Html.Raw("btn-pink") : Html.Raw("btn-danger") : Html.Raw("btn-dark")) flex-fill mg-l-10">@(Model.EmployeeSchedule != null ? Model.EmployeeShift != null ? Model.EmployeeBreak != null ? Html.Raw("Molada") : Model.EmployeeShift.DurationMinute == null ? Html.Raw("Mesaide") : Html.Raw("Mesai Bitti") : Html.Raw("Kapalı") : Html.Raw("Takvim Yok"))</button>
-                        </div>
-                        <hr />
-                        <div class="d-flex mg-b-20">
-                            <div class="profile-skillset flex-fill">
-                                <h4><a href="" class="link-01">@(Model.EmployeeSchedule?.ShiftDateStart?.ToString("HH\\:mm"))</a></h4>
-                                <label>Başlama</label>
-                            </div>
-                            <div class="profile-skillset flex-fill tx-right">
-                                <h4><a href="" class="link-01">@(Model.EmployeeSchedule?.ShiftdateEnd?.ToString("HH\\:mm"))</a></h4>
-                                <label class="pd-l-15">Bitiş</label>
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="d-flex mg-b-20">
-                            <div class="profile-skillset flex-fill">
-                                <h4><a href="" class="link-01">@(Model.EmployeeShift?.ShiftDateStart?.ToString("HH\\:mm"))</a></h4>
-                                <label>Başlama</label>
-                            </div>
-                            <div class="profile-skillset flex-fill">
-                                <h4><a href="" class="link-01">@(Model.EmployeeShift?.ShiftDateEnd?.ToString("HH\\:mm"))</a></h4>
-                                <label class="pd-l-15">Bitiş</label>
-                            </div>
-                            <div class="profile-skillset flex-fill">
-                                <h4><a href="" class="link-01">@(Model.EmployeeShift?.ShiftDuration?.ToString("HH\\:mm"))</a></h4>
-                                <label class="pd-l-10">Süre</label>
-                            </div>
-                        </div>
-                        <hr />
-                        <nav class="nav nav-classic flex-column tx-13">
-                            <a href="/Employee/Detail/@(Model.EmpList.EmployeeUID)" class="nav-link active">Detay</a>
-                            <a href="/Employee/Schedule/@(Model.EmpList.EmployeeUID)" class="nav-link">Schedule (Takvim)</a>
-                            <a href="/Employee/Shift/@(Model.EmpList.EmployeeUID)" class="nav-link">Shift (Mesai Mola)</a>
-                            <a href="/Employee/Action/@(Model.EmpList.EmployeeUID)" class="nav-link">Cari Hesap</a>
-                            <a href="/Employee/FoodCard/@(Model.EmpList.EmployeeUID)" class="nav-link">Set Card</a>
-                            <a href="/Employee/Location?id=@(Model.EmpList.EmployeeUID)" class="nav-link">Lokasyonlar</a>
-                            <a href="/Employee/Document/@(Model.EmpList.EmployeeUID)" class="nav-link">Özlük Belgeleri</a>
-                            <a href="/Employee/Score/@(Model.EmpList.EmployeeUID)" class="nav-link">Puanlama Skorlama</a>
-                            <a href="/Employee/Period/@(Model.EmpList.EmployeeUID)" class="nav-link">Çalışma Dönemleri</a>
-                            <a href="/Employee/Salary/@(Model.EmpList.EmployeeUID)" class="nav-link">Ücret Tanımlamaları</a>
-                            <a href="/Employee/Edit/@(Model.EmpList.EmployeeUID)" class="nav-link">Güncelle</a>
-                        </nav>
-                    </div>
+                    @{Html.RenderPartial("_PartialProfileSideBar", Model);}
                 </div>
             </div>
 
-
-            <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
-
+            <div class="media-body mg-t-40 mg-lg-t-0 pd-l-20">
                 <div class="card mg-b-20 mg-lg-b-5">
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.EmpList.FullName) - Çalışan Detayı</h6>
-                    </div><!-- card-header -->
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.Employee.FullName) - Çalışan Detayı</h6>
+                    </div>
                     <div class="card-body pd-20 pd-lg-5">
                         @{Html.RenderPartial("_PartialEmployeeDetail", Model);}
                     </div>
                 </div>
+
                 <div class="card mg-b-20 mg-lg-b-5">
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.EmpList.FullName) - Cari Hesap</h6>
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.Employee.FullName) - Cari Hesap</h6>
                         <nav class="nav nav-with-icon tx-13">
-                            <a href="/Employee/Action/@(Model.EmpList.EmployeeUID)" class="nav-link"> Tümü</a>
+                            <a href="/Employee/Action/@(Model.Employee.EmployeeUID)" class="nav-link"> Tümü</a>
                         </nav>
-                    </div><!-- card-header -->
+                    </div>
                     <div class="card-body pd-20 pd-lg-5">
                         @{Html.RenderPartial("_PartialEmployeeAction", Model);}
                     </div>
                 </div>
+
                 <div class="card mg-b-20 mg-lg-b-25">
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.EmpList.FullName) - Shift (Mesai)</h6>
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.Employee.FullName) - Shift (Mesai)</h6>
                         <nav class="nav nav-with-icon tx-13">
-                            <a href="/Employee/Shift/@(Model.EmpList.EmployeeUID)" class="nav-link"> Tümü</a>
+                            <a href="/Employee/Shift/@(Model.Employee.EmployeeUID)" class="nav-link"> Tümü</a>
                         </nav>
-                    </div><!-- card-header -->
+                    </div>
                     <div class="card-body pd-20 pd-lg-5">
                         @{Html.RenderPartial("_PartialEmployeeShift", Model);}
                     </div>
                 </div>
+
                 <div class="card mg-b-20 mg-lg-b-25">
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.EmpList.FullName) - Schedule (Takvim)</h6>
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.Employee.FullName) - Schedule (Takvim)</h6>
                         <nav class="nav nav-with-icon tx-13">
-                            <a href="/Employee/Schedule/@(Model.EmpList.EmployeeUID)" class="nav-link"> Tümü</a>
+                            <a href="/Employee/Schedule/@(Model.Employee.EmployeeUID)" class="nav-link"> Tümü</a>
                         </nav>
-                    </div><!-- card-header -->
+                    </div>
                     <div class="card-body pd-20 pd-lg-5">
                         @{Html.RenderPartial("_PartialEmployeeSchedule", Model);}
                     </div>
                 </div>
 
-            </div><!-- media-body -->
-            <div class="profile-sidebar profile-sidebar-two mg-t-40 mg-lg-t-0 pd-lg-l-15">
+            </div>
+
+            @*<div class="profile-sidebar profile-sidebar-two mg-t-40 mg-lg-t-0 pd-lg-l-15">
                 <div class="row">
                     <div class="col-sm-6 col-md-5 col-lg">
                         <div class="d-flex align-items-center justify-content-between mg-b-20">
                             <h6 class="tx-13 tx-spacng-1 tx-uppercase tx-semibold mg-b-0">Çalışanlar</h6>
-                            @*<a href="" class="link-03">Watch All</a>*@
                         </div>
                         <ul class="list-unstyled media-list mg-b-15">
                             @foreach (var item in Model.EmployeeLocationList.Where(x => x.LocationIsActive == true).OrderByDescending(x => x.IsMaster))
@@ -147,16 +92,9 @@
                                 </li>
                             }
                         </ul>
-                        @*<a href="" class="link-03 d-inline-flex align-items-center">See more stories <i class="icon ion-ios-arrow-down mg-l-5 mg-t-3 tx-12"></i></a>*@
                     </div><!-- col -->
                 </div><!-- row -->
-            </div><!-- profile-sidebar -->
-
-
-
-
-
-
+            </div>*@<!-- profile-sidebar -->
 
         </div>
     </div>

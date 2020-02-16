@@ -18,8 +18,8 @@ namespace ActionForce.Office
 
 
 
-        public IEnumerable<GetEmployeeAll_Result3> EmployeeList { get; set; }
-        public GetEmployeeAll_Result3 EmpList { get; set; }
+        public IEnumerable<VEmployeeAll> EmployeeList { get; set; }
+        //public GetEmployeeAll_Result3 EmpList { get; set; }
 
         public EmployeeFilterModel FilterModel { get; set; }
         public WizardModel Wizard { get; set; }
@@ -141,6 +141,7 @@ namespace ActionForce.Office
         public DateTime DateEnd { get; set; }
         public Guid? LocationUID { get; set; }
         public Guid? EmployeeUID { get; set; }
+        public string SearchKey { get; set; }
     }
     
 }

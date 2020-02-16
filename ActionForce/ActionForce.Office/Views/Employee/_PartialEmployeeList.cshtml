@@ -27,14 +27,14 @@
             <td class="tx-sm-13 bold">@item.EmployeeID</td>
             <td class="tx-sm-13"><a class="@(item.IsActive == false ? "tx-danger" : "tx-dark")" href="@("/Employee/Detail/" + @item.EmployeeUID)">@item.FullName</a></td>
             <td class="tx-sm-13">@item.Mobile</td>
-            <td class="tx-sm-13">@item.GroupName</td>
-            <td class="tx-sm-13">@item.AreaName</td>
+            <td class="tx-sm-13">@item.RoleGroupName</td>
+            <td class="tx-sm-13">@item.WorkAreaName</td>
             <td class="tx-sm-13">@item.DepartmentName</td>
             <td class="tx-sm-13">@item.PositionName</td>
             <td class="tx-sm-13">@item.SequenceName</td>
-            <td class="tx-sm-13">@item.TypeName</td>
+            <td class="tx-sm-13">@item.ShiftTypeName</td>
             <td class="tx-sm-13">@item.SalaryCategoryName</td>
-            <td class="tx-sm-13">@item.Name</td>
+            <td class="tx-sm-13">@item.StatusName</td>
             <td class="tx-sm-13 text-center">
                 @Html.Raw(item.IsActive.Value == true ? "<i class='ion ion-md-checkmark-circle text-success'></i>" : "<i class='ion ion-md-close-circle'></i>")
             </td>

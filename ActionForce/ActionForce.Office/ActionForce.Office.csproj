@@ -2665,6 +2665,7 @@
     <Content Include="Views\Bank\AddCollection.cshtml" />
     <Content Include="Views\Employee\AddEmployeeCheck.cshtml" />
     <Content Include="Views\Employee\AddEmployeeComplete.cshtml" />
+    <Content Include="Views\Employee\_PartialProfileSideBar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -18,13 +18,11 @@
 <div class="content-body">
     <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
         <div>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-style1 mg-b-10">
-                    <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
-                    <li class="breadcrumb-item active" aria-current="page">Çalışan İşlemleri</li>
-                </ol>
-            </nav>
-            <h4 class="mg-b-0 tx-spacing--1">Çalışan İşlemleri</h4>
+            <div class="btn-group btn-group-sm" role="group">
+                <button type="button" class="btn btn-light" onclick="EmployeeSearch('-1');">Tümü</button>
+                <button type="button" class="btn btn-primary" onclick="EmployeeSearch('1');">Aktifler</button>
+                <button type="button" class="btn btn-secondary" onclick="EmployeeSearch('0');">Pasifler</button>
+            </div>
         </div>
         <div class="d-none d-md-block">
             <a href="@("/Employee/AddEmployee/")" class="btn btn-primary btn-uppercase"><i data-feather="plus-square"></i> &nbsp; Çalışan Ekle</a>
@@ -33,27 +31,31 @@
 
 
     <div class="row">
-        <div class="col-9">
+        <div class="col-12">
             @using (Html.BeginForm("EmployeeFilter", "Employee", FormMethod.Post))
             {
                 @Html.AntiForgeryToken()
             <div class="form-row align-items-end">
-                
+
+                <div class="form-group col-md-2 d-flex align-items-end">
+                    <input id="SearchKey" name="SearchKey" type="text" class="form-control" autocomplete="off" placeholder="Arama">
+                </div>
+
                 <div class="form-group col-md-2 d-flex align-items-end">
                     <select class="form-control select2" id="EmployeeID" name="EmployeeID">
                         <option value="" label="Employee Seçiminiz"></option>
                         @foreach (var item in Model.VEmployee)
                         {
-                            <option value="@item.EmployeeID" @(Model.FilterModel.EmployeeID == item.EmployeeID ? "selected" : "")>@(Html.Raw($"{item.FullNameSearch}"))</option>
+                            <option value="@item.EmployeeID" @(Model.FilterModel.EmployeeID == item.EmployeeID ? "selected" : "")>@(Html.Raw($"{item.FullName} "))</option>
                         }
                     </select>
                 </div>
-                <div class="form-group col-md-2 d-flex align-items-end">
+                <div class="form-group col-md-3 d-flex align-items-end">
                     <select class="form-control select2" id="LocationID" name="LocationID">
                         <option value="" label="Lokasyon Seçiminiz"></option>
                         @foreach (var item in Model.LocationList)
                         {
-                            <option value="@item.LocationID" @(Model.FilterModel.LocationID == item.LocationID ? "selected" : "")>@(Html.Raw($"{item.LocationNameSearch} - <strong>{item.Description}</strong>"))</option>
+                            <option value="@item.LocationID" @(Model.FilterModel.LocationID == item.LocationID ? "selected" : "")>@(Html.Raw($"{item.LocationFullName}"))</option>
                         }
                     </select>
                 </div>
@@ -62,7 +64,7 @@
                         <option value="" label="Departman Seçiminiz"></option>
                         @foreach (var item in Model.DepartmentList)
                         {
-                            <option value="@item.ID" @(Model.FilterModel.DepartmentID == item.ID ? "selected" : "")>@(Html.Raw($"{item.DepartmentName} - <strong>{item.SortBy}</strong>"))</option>
+                            <option value="@item.ID" @(Model.FilterModel.DepartmentID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.SortBy}</strong> {item.DepartmentName}"))</option>
                         }
                     </select>
                 </div>
@@ -71,7 +73,7 @@
                         <option value="" label="Pozisyon Seçiminiz"></option>
                         @foreach (var item in Model.PositionList)
                         {
-                            <option value="@item.ID" @(Model.FilterModel.PositionID == item.ID ? "selected" : "")>@(Html.Raw($"{item.PositionName} - <strong>{item.SortBy}</strong>"))</option>
+                            <option value="@item.ID" @(Model.FilterModel.PositionID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.SortBy}</strong> {item.PositionName}"))</option>
                         }
                     </select>
                 </div>
@@ -81,15 +83,6 @@
             </div>
 
             }
-        </div>
-
-
-        <div class="col-3">
-            <div class="btn-group btn-group-sm float-right" role="group">
-                <button type="button" class="btn btn-light" onclick="EmployeeSearch('-1');">Tümü</button>
-                <button type="button" class="btn btn-primary" onclick="EmployeeSearch('1');">Aktifler</button>
-                <button type="button" class="btn btn-secondary" onclick="EmployeeSearch('0');">Pasifler</button>
-            </div>
         </div>
     </div>
 
@@ -111,6 +104,7 @@
         function EmployeeSearch(active) {
             var data = new FormData();
             
+            data.append('SearchKey', $("#SearchKey").val());
             data.append('DepartmentID', $("#DepartmentID").val());
             data.append('PositionID', $("#PositionID").val());
             data.append('LocationID', $("#LocationID").val());

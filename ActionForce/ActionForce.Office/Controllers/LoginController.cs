@@ -47,7 +47,7 @@ namespace ActionForce.Office.Controllers
                 var roleGroup = db.RoleGroup.FirstOrDefault(x => x.ID == User.RoleGroupID);
 
 
-                if (roleGroup != null && roleGroup.RoleLevel1.LevelNumber >= 3 && User.IsTemp == false && User.IsActive == true && (User.IsDismissal == false || User.IsDismissal == null))
+                if (roleGroup != null && roleGroup.RoleLevel1.LevelNumber >= 3 && (User.IsTemp == false || User.IsTemp == null) && User.IsActive == true && (User.IsDismissal == false || User.IsDismissal == null))
                 {
 
                     var authModel = new AuthenticationModel()

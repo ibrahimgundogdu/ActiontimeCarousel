@@ -25,7 +25,7 @@
 
                 <div class="col-sm-6">
 
-                    <input id="Title" name="Title" type="text" class="form-control" autocomplete="off" placeholder="Başlık" value="@(Model.EmpList.Title)">
+                    <input id="Title" name="Title" type="text" class="form-control" autocomplete="off" placeholder="Başlık" value="@(Model.Employee.Title)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -37,7 +37,7 @@
                     <select class="form-control" id="IdentityType" name="IdentityType">
                         @foreach (var item in Model.IdentityTypes)
                         {
-                            <option value="@item.ID" @(item.TypeName == Model.EmpList.IdentityType ? "selected" : "")>@($"{item.TypeName}")</option>
+                            <option value="@item.ID" @(item.TypeName == Model.Employee.IdentityType ? "selected" : "")>@($"{item.TypeName}")</option>
                         }
                     </select>
                 </div>
@@ -47,7 +47,7 @@
             <div class="form-group row mg-b-5">
                 <label for="FullName" class="col-sm-3 col-form-label">Kimlik No</label>
                 <div class="col-sm-6">
-                    <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" autocomplete="off" placeholder="Kimlik No" value="@(Model.EmpList.IdentityNumber)">
+                    <input id="IdentityNumber" name="IdentityNumber" type="text" class="form-control" autocomplete="off" placeholder="Kimlik No" value="@(Model.Employee.IdentityNumber)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -56,7 +56,7 @@
             <div class="form-group row bg-gray-100">
                 <label for="FullName" class="col-sm-3 col-form-label">Ad Soyad</label>
                 <div class="col-sm-6">
-                    <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="Ad Soyad" value="@(Model.EmpList.FullName)" required>
+                    <input id="FullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="Ad Soyad" value="@(Model.Employee.FullName)" required>
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -66,7 +66,7 @@
             <div class="form-group row mg-b-5">
                 <label for="EMail" class="col-sm-3 col-form-label">E-Posta</label>
                 <div class="col-sm-6">
-                    <input id="EMail" name="EMail" type="text" class="form-control" autocomplete="off" placeholder="E-Posta" value="@(Model.EmpList.EMail)">
+                    <input id="EMail" name="EMail" type="text" class="form-control" autocomplete="off" placeholder="E-Posta" value="@(Model.Employee.EMail)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -74,7 +74,7 @@
             <div class="form-group row mg-b-5">
                 <label for="Mobile" class="col-sm-3 col-form-label">Mobil</label>
                 <div class="col-sm-6">
-                    <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon" value="@(Model.EmpList.Mobile)">
+                    <input id="Mobile" name="Mobile" type="text" class="form-control" autocomplete="off" placeholder="Telefon" value="@(Model.Employee.Mobile)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -82,7 +82,7 @@
             <div class="form-group row mg-b-5">
                 <label for="Mobile2" class="col-sm-3 col-form-label">Mobil2</label>
                 <div class="col-sm-6">
-                    <input id="Mobile2" name="Mobile2" type="text" class="form-control" autocomplete="off" placeholder="Telefon" value="@(Model.EmpList.Mobile2)">
+                    <input id="Mobile2" name="Mobile2" type="text" class="form-control" autocomplete="off" placeholder="Telefon" value="@(Model.Employee.Mobile2)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -90,7 +90,7 @@
             <div class="form-group row">
                 <label for="Whatsapp" class="col-sm-3 col-form-label">Whatsapp</label>
                 <div class="col-sm-6">
-                    <input id="Whatsapp" name="Whatsapp" type="text" class="form-control" autocomplete="off" placeholder="Whatsapp" value="@(Model.EmpList.Whatsapp)">
+                    <input id="Whatsapp" name="Whatsapp" type="text" class="form-control" autocomplete="off" placeholder="Whatsapp" value="@(Model.Employee.Whatsapp)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -100,7 +100,7 @@
             <div class="form-group row mg-b-5">
                 <label for="Username" class="col-sm-3 col-form-label">Kullanıcı Adı</label>
                 <div class="col-sm-6">
-                    <input id="Username" name="Username" type="text" class="form-control" autocomplete="off" placeholder="Kullanıcı Adı" value="@(Model.EmpList.Username)">
+                    <input id="Username" name="Username" type="text" class="form-control" autocomplete="off" placeholder="Kullanıcı Adı" value="@(Model.Employee.Username)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -120,7 +120,7 @@
                     <select class="form-control" id="OurCompanyID" name="OurCompanyID" required disabled>
                         @foreach (var item in Model.OurList)
                         {
-                            <option value="@item.CompanyID" @(Model.EmpList.OurCompanyID == item.CompanyID ? "selected" : "")>@($"{item.CompanyName}")</option>
+                            <option value="@item.CompanyID" @(Model.Employee.OurCompanyID == item.CompanyID ? "selected" : "")>@($"{item.CompanyName}")</option>
                         }
                     </select>
                 </div>
@@ -138,7 +138,7 @@
                         <option value="">Rol Seçiniz</option>
                         @foreach (var item in Model.RoleGroupList.OrderBy(x => x.RoleLevel))
                         {
-                            <option value="@item.ID" @(item.ID == Model.EmpList.RoleGroupID ? "selected" : "")>@($"{item.GroupCode} {item.GroupName}" )</option>
+                            <option value="@item.ID" @(item.ID == Model.Employee.RoleGroupID ? "selected" : "")>@($"{item.GroupCode} {item.GroupName}" )</option>
                         }
                     </select>
                 </div>
@@ -154,7 +154,7 @@
                         <option value="">Alan Seçiniz</option>
                         @foreach (var item in Model.AreaCategoryList.OrderBy(x => x.SortBy))
                         {
-                            <option value="@item.ID" @(item.ID == Model.EmpList.AreaCategoryID ? "selected" : "")>@($"{item.SortBy} {item.AreaName}" )</option>
+                            <option value="@item.ID" @(item.ID == Model.Employee.AreaCategoryID ? "selected" : "")>@($"{item.SortBy} {item.AreaName}" )</option>
                         }
                     </select>
                 </div>
@@ -168,7 +168,7 @@
                         <option value="">Departman Seçiniz</option>
                         @foreach (var item in Model.DepartmentList.OrderBy(x => x.SortBy))
                         {
-                            <option value="@item.ID" @(item.ID == Model.EmpList.DepartmentID ? "selected" : "")>@($"{item.SortBy} {item.DepartmentName}" )</option>
+                            <option value="@item.ID" @(item.ID == Model.Employee.DepartmentID ? "selected" : "")>@($"{item.SortBy} {item.DepartmentName}" )</option>
                         }
                     </select>
                 </div>
@@ -182,7 +182,7 @@
                         <option value="">Pozisyon Seçiniz</option>
                         @foreach (var item in Model.PositionList.OrderBy(x => x.SortBy))
                         {
-                            <option value="@item.ID" @(item.ID == Model.EmpList.PositionID ? "selected" : "")>@($"{item.SortBy} {item.PositionName}" )</option>
+                            <option value="@item.ID" @(item.ID == Model.Employee.PositionID ? "selected" : "")>@($"{item.SortBy} {item.PositionName}" )</option>
                         }
                     </select>
                 </div>
@@ -196,7 +196,7 @@
                         <option value="">Durum Seçiniz</option>
                         @foreach (var item in Model.StatusList)
                         {
-                            <option value="@item.ID" @(item.ID == Model.EmpList.StatusID ? "selected" : "")>@($"{item.Code} {item.Name}" )</option>
+                            <option value="@item.ID" @(item.ID == Model.Employee.StatusID ? "selected" : "")>@($"{item.Code} {item.Name}" )</option>
                         }
                     </select>
                 </div>
@@ -210,7 +210,7 @@
                         <option value="">Çalışma Seçiniz</option>
                         @foreach (var item in Model.ShiftTypeList)
                         {
-                            <option value="@item.ID" @(item.ID == Model.EmpList.ShiftTypeID ? "selected" : "")>@($"{item.SortBy} {item.TypeName}" )</option>
+                            <option value="@item.ID" @(item.ID == Model.Employee.ShiftTypeID ? "selected" : "")>@($"{item.SortBy} {item.TypeName}" )</option>
                         }
                     </select>
                 </div>
@@ -224,7 +224,7 @@
                         <option value="">Kategori Seçiniz</option>
                         @foreach (var item in Model.SalaryCategoryList)
                         {
-                            <option value="@item.ID" @(item.ID == Model.EmpList.SalaryCategoryID ? "selected" : "")>@($"{item.SortBy} {item.SalaryCategoryName}" )</option>
+                            <option value="@item.ID" @(item.ID == Model.Employee.SalaryCategoryID ? "selected" : "")>@($"{item.SortBy} {item.SalaryCategoryName}" )</option>
                         }
                     </select>
                 </div>
@@ -238,7 +238,7 @@
                         <option value="">Oryantasyon Seçiniz</option>
                         @foreach (var item in Model.SequenceList)
                         {
-                            <option value="@item.ID" @(item.ID == Model.EmpList.SequenceID ? "selected" : "")>@($"{item.Code} {item.Name}" )</option>
+                            <option value="@item.ID" @(item.ID == Model.Employee.SequenceID ? "selected" : "")>@($"{item.Code} {item.Name}" )</option>
                         }
                     </select>
                 </div>
@@ -250,7 +250,7 @@
             <div class="form-group row">
                 <label for="FotoFile" class="col-sm-3 col-form-label">Resim</label>
                 <div class="col-sm-6">
-                    <input type="file" name="FotoFile" value="@Model.EmpList.FotoFile" style="width: 100%;" class="form-control" />
+                    <input type="file" name="FotoFile" value="@Model.Employee.FotoFile" style="width: 100%;" class="form-control" />
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -259,7 +259,7 @@
             <div class="form-group row">
                 <label for="Description" class="col-sm-3 col-form-label">Açıklama</label>
                 <div class="col-sm-6">
-                    <textarea id="Description" name="Description" rows="5" cols="20" class="form-control" style="width:100% !important;">@(Model.EmpList.Description)</textarea>
+                    <textarea id="Description" name="Description" rows="5" cols="20" class="form-control" style="width:100% !important;">@(Model.Employee.Description)</textarea>
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -269,16 +269,11 @@
                 <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
                 <div class="col-sm-2">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" @(Model.EmpList.IsActive == true ? "checked" : "")>
+                        <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" @(Model.Employee.IsActive == true ? "checked" : "")>
                         <label class="custom-control-label" for="IsActive">Aktif</label>
                     </div>
                 </div>
-                <div class="col-sm-2">
-                    <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="IsTemp" name="IsTemp" value="1" @(Model.EmpList.IsTemp == true ? "checked" : "")>
-                        <label class="custom-control-label" for="IsTemp">IsTemp</label>
-                    </div>
-                </div>
+                
                 <div class="col-sm-3">
                 </div>
             </div>
@@ -286,8 +281,8 @@
             <div class="form-group row mg-b-0">
                 <div class="col-sm-3"></div>
                 <div class="col-sm-6">
-                    <input id="ID" name="ID" type="hidden" value="@(Model.EmpList.EmployeeID)" />
-                    <input id="EmployeeUID" name="EmployeeUID" type="hidden" value="@(Model.EmpList.EmployeeUID)" />
+                    <input id="ID" name="ID" type="hidden" value="@(Model.Employee.EmployeeID)" />
+                    <input id="EmployeeUID" name="EmployeeUID" type="hidden" value="@(Model.Employee.EmployeeUID)" />
                     <button type="submit" class="btn btn-primary btn-block">Çalışan Güncelle</button>
                 </div>
                 <div class="col-sm-3">
@@ -303,8 +298,8 @@
         <b>Kayıt Tarihçesi</b>
     </div>
 
-    <div class="col-sm-3 pd-t-10">@(Html.Raw($"<b>Kaydeden </b> : {Model.EmpList.RecordFullName} {Model.EmpList.RecordDate} ")) </div>
-    <div class="col-sm-3 pd-t-10">@(Model.EmpList.UpdateDate != null ? Html.Raw($"<b>Güncelleyen </b> : {Model.EmpList.UpdateFullName} {Model.EmpList.UpdateDate} ") : Html.Raw("")) </div>
+    <div class="col-sm-3 pd-t-10">@(Html.Raw($"<b>Kaydeden </b> : {Model.Employee.RecordEmployeeName} {Model.Employee.RecordDate} ")) </div>
+    <div class="col-sm-3 pd-t-10">@(Model.Employee.UpdateDate != null ? Html.Raw($"<b>Güncelleyen </b> : {Model.Employee.UpdateEmployeeName} {Model.Employee.UpdateDate} ") : Html.Raw("")) </div>
 
 </div>
 

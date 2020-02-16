@@ -21,62 +21,7 @@
         <div class="media d-block d-lg-flex">
             <div class="profile-sidebar profile-sidebar-three">
                 <div class="row">
-                    <div class="col-lg">
-                        <div class="avatar avatar-xxxl mg-b-20">
-                            <img src="http://office.ufegrup.com/img/Employee/@(Model.Employee.FotoFile)" class="rounded-10 w-100" alt="">
-                        </div>
-                        <div>
-                            <h5 class="mg-b-2 tx-spacing--1 tx-center">@(Model.Employee.FullName)</h5>
-                            <p class="tx-color-03 tx-center mg-b-0">@(Model.Employee.EMail)</p>
-                            <p class="tx-color-03 tx-center mg-b-0">@(Model.Employee.CountryPhoneCode) @(Model.Employee.Mobile)</p>
-                        </div>
-                    </div><!-- col -->
-                    <div class="col-sm-8 col-md-7 col-lg mg-t-10 mg-sm-t-0 mg-lg-t-15">
-                        <div class="d-flex mg-b-25">
-                            <a class="btn btn-xs btn-white flex-fill" href="/Employee/Edit/@(Model.Employee.EmployeeUID)">Düzenle</a>
-                            <button class="btn btn-xs @(Model.EmployeeSchedule != null ? Model.EmployeeShift != null ? Model.EmployeeBreak != null ? Html.Raw("btn-warning") : Model.EmployeeShift.DurationMinute == null ? Html.Raw("btn-success") : Html.Raw("btn-pink") : Html.Raw("btn-danger") : Html.Raw("btn-dark")) flex-fill mg-l-10">@(Model.EmployeeSchedule != null ? Model.EmployeeShift != null ? Model.EmployeeBreak != null ? Html.Raw("Molada") : Model.EmployeeShift.DurationMinute == null ? Html.Raw("Mesaide") : Html.Raw("Mesai Bitti") : Html.Raw("Kapalı") : Html.Raw("Takvim Yok"))</button>
-                        </div>
-                        <hr />
-                        <div class="d-flex mg-b-20">
-                            <div class="profile-skillset flex-fill">
-                                <h4><a href="" class="link-01">@(Model.EmployeeSchedule?.ShiftDateStart?.ToString("HH\\:mm"))</a></h4>
-                                <label>Başlama</label>
-                            </div>
-                            <div class="profile-skillset flex-fill tx-right">
-                                <h4><a href="" class="link-01">@(Model.EmployeeSchedule?.ShiftdateEnd?.ToString("HH\\:mm"))</a></h4>
-                                <label class="pd-l-15">Bitiş</label>
-                            </div>
-                        </div>
-                        <hr />
-                        <div class="d-flex mg-b-20">
-                            <div class="profile-skillset flex-fill">
-                                <h4><a href="" class="link-01">@(Model.EmployeeShift?.ShiftDateStart?.ToString("HH\\:mm"))</a></h4>
-                                <label>Başlama</label>
-                            </div>
-                            <div class="profile-skillset flex-fill">
-                                <h4><a href="" class="link-01">@(Model.EmployeeShift?.ShiftDateEnd?.ToString("HH\\:mm"))</a></h4>
-                                <label class="pd-l-15">Bitiş</label>
-                            </div>
-                            <div class="profile-skillset flex-fill">
-                                <h4><a href="" class="link-01">@(Model.EmployeeShift?.ShiftDuration?.ToString())</a></h4>
-                                <label class="pd-l-10">Süre</label>
-                            </div>
-                        </div>
-                        <hr />
-                        <nav class="nav nav-classic flex-column tx-13">
-                            <a href="/Employee/Detail/@(Model.Employee.EmployeeUID)" class="nav-link">Detay</a>
-                            <a href="/Employee/Schedule/@(Model.Employee.EmployeeUID)" class="nav-link">Schedule (Takvim)</a>
-                            <a href="/Employee/Shift/@(Model.Employee.EmployeeUID)" class="nav-link">Shift (Mesai Mola)</a>
-                            <a href="/Employee/Action/@(Model.Employee.EmployeeUID)" class="nav-link">Cari Hesap</a>
-                            <a href="/Employee/FoodCard/@(Model.Employee.EmployeeUID)" class="nav-link">Set Card</a>
-                            <a href="/Employee/Location?id=@(Model.Employee.EmployeeUID)" class="nav-link">Lokasyonlar</a>
-                            <a href="/Employee/Document/@(Model.Employee.EmployeeUID)" class="nav-link">Özlük Belgeleri</a>
-                            <a href="/Employee/Score/@(Model.Employee.EmployeeUID)" class="nav-link">Puanlama Skorlama</a>
-                            <a href="/Employee/Period/@(Model.Employee.EmployeeUID)" class="nav-link">Çalışma Dönemleri</a>
-                            <a href="/Employee/Salary/@(Model.Employee.EmployeeUID)" class="nav-link">Ücret Tanımlamaları</a>
-                            <a href="/Employee/Edit/@(Model.Employee.EmployeeUID)" class="nav-link active">Güncelle</a>
-                        </nav>
-                    </div>
+                    @{Html.RenderPartial("_PartialProfileSideBar", Model);}
                 </div>
             </div>
             <div class="media-body mg-t-40 mg-lg-t-0 pd-l-20">
@@ -121,7 +66,7 @@
                                             <select class="form-control" id="IdentityType" name="IdentityType">
                                                 @foreach (var item in Model.IdentityTypes)
                                                 {
-                                                    <option value="@item.ID" @(item.TypeName == Model.Employee.IdentityType ? "selected" : "")>@($"{item.TypeName}")</option>
+                                                    <option value="@item.TypeCode" @(item.TypeCode == Model.Employee.IdentityType ? "selected" : "")>@($"{item.TypeName}")</option>
                                                 }
                                             </select>
                                         </div>
@@ -210,13 +155,13 @@
                                     </div>
 
                                     <div class="form-group row bg-gray-50">
-                                        <label for="RoleGroupID" class="col-sm-3 col-form-label">Rol Grup</label>
+                                        <label for="RoleGroupID" class="col-sm-3 col-form-label">Yetki Rol Grubu</label>
                                         <div class="col-sm-6">
                                             <select class="form-control" id="RoleGroupID" name="RoleGroupID" required>
                                                 <option value="">Rol Seçiniz</option>
                                                 @foreach (var item in Model.RoleGroupList.OrderBy(x => x.RoleLevel))
                                                 {
-                                                    <option value="@item.ID" @(item.ID == Model.Employee.RoleGroupID ? "selected" : "")>@($"{item.GroupCode} {item.GroupName}" )</option>
+                                                    <option value="@item.ID" @(item.ID == Model.Employee.RoleGroupID ? "selected" : "")  @(item.ID != Model.Employee.RoleGroupID && item.RoleLevel.Value > Model.Authentication.ActionEmployee.RoleGroup.RoleLevel ? "disabled" : "")>@($"{item.GroupCode} {item.GroupName}" )</option>
                                                 }
                                             </select>
                                         </div>
