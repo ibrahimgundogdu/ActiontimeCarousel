@@ -27,6 +27,7 @@ namespace ActionForce.Office
         
         public List<ApplicationLog> LogList { get; set; }
         public List<VEmployeeLocation> EmployeeLocationList { get; set; }
+        public List<VEmployeeLocationPosition> EmployeeLocationPositions { get; set; }
         public int empID { get; set; }
 
         public IEnumerable<IdentityType> IdentityTypes { get; set; }

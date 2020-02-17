@@ -1544,6 +1544,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.AddressType' does not have 
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="EmployeeID" Type="int" Nullable="false" />
           <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="PositionID" Type="int" />
           <Property Name="RoleID" Type="int" />
           <Property Name="IsMaster" Type="bit" />
           <Property Name="IsActive" Type="bit" />
@@ -1594,6 +1595,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.AddressType' does not have 
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PositionName" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsLocation" Type="bit" />
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
@@ -3388,6 +3390,23 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UpdateEmployeeID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.LocationEmployeeCheck' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="LocationEmployeeCheck">
+          <Key>
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="SortBy" Type="char" MaxLength="10" />
+          <Property Name="LocationName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="Expr1" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VBankAccount' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VBankAccount">
           <Key>
@@ -4664,6 +4683,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeLocationList' does
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeLocationPosition' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VEmployeeLocationPosition">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="LocationID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="PositionID" Type="int" />
+          <Property Name="RoleID" Type="int" />
+          <Property Name="IsMaster" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="EmployeeFullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+          <Property Name="PositionName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeSalary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VEmployeeSalary">
           <Key>
@@ -5786,6 +5824,19 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [EmployeeX].[IsActive] AS [IsActive], 
     [EmployeeX].[IsDismissal] AS [IsDismissal]
     FROM [dbo].[EmployeeX] AS [EmployeeX]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="LocationEmployeeCheck" EntityType="Self.LocationEmployeeCheck" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [LocationEmployeeCheck].[LocationID] AS [LocationID], 
+    [LocationEmployeeCheck].[SortBy] AS [SortBy], 
+    [LocationEmployeeCheck].[LocationName] AS [LocationName], 
+    [LocationEmployeeCheck].[Description] AS [Description], 
+    [LocationEmployeeCheck].[State] AS [State], 
+    [LocationEmployeeCheck].[EmployeeID] AS [EmployeeID], 
+    [LocationEmployeeCheck].[FullName] AS [FullName], 
+    [LocationEmployeeCheck].[RoleID] AS [RoleID], 
+    [LocationEmployeeCheck].[Expr1] AS [Expr1]
+    FROM [dbo].[LocationEmployeeCheck] AS [LocationEmployeeCheck]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VBankAccount" EntityType="Self.VBankAccount" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -6948,6 +6999,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeLocationList].[Description] AS [Description]
     FROM [dbo].[VEmployeeLocationList] AS [VEmployeeLocationList]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VEmployeeLocationPosition" EntityType="Self.VEmployeeLocationPosition" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VEmployeeLocationPosition].[ID] AS [ID], 
+    [VEmployeeLocationPosition].[EmployeeID] AS [EmployeeID], 
+    [VEmployeeLocationPosition].[LocationID] AS [LocationID], 
+    [VEmployeeLocationPosition].[PositionID] AS [PositionID], 
+    [VEmployeeLocationPosition].[RoleID] AS [RoleID], 
+    [VEmployeeLocationPosition].[IsMaster] AS [IsMaster], 
+    [VEmployeeLocationPosition].[IsActive] AS [IsActive], 
+    [VEmployeeLocationPosition].[EmployeeFullName] AS [EmployeeFullName], 
+    [VEmployeeLocationPosition].[LocationFullName] AS [LocationFullName], 
+    [VEmployeeLocationPosition].[PositionName] AS [PositionName]
+    FROM [dbo].[VEmployeeLocationPosition] AS [VEmployeeLocationPosition]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VEmployeeSalary" EntityType="Self.VEmployeeSalary" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VEmployeeSalary].[ID] AS [ID], 
@@ -7927,6 +7992,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VEmployeeAll" EntityType="db293_ActionTimeDbModel.VEmployeeAll" />
           <EntitySet Name="EmployeeAddress" EntityType="db293_ActionTimeDbModel.EmployeeAddress" />
           <EntitySet Name="AddressType" EntityType="db293_ActionTimeDbModel.AddressType" />
+          <EntitySet Name="LocationEmployeeCheck" EntityType="db293_ActionTimeDbModel.LocationEmployeeCheck" />
+          <EntitySet Name="VEmployeeLocationPosition" EntityType="db293_ActionTimeDbModel.VEmployeeLocationPosition" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -8546,6 +8613,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsActive" Type="Boolean" />
           <NavigationProperty Name="Role" Relationship="db293_ActionTimeDbModel.FK_EmployeeLocation_Role" FromRole="EmployeeLocation" ToRole="Role" />
           <NavigationProperty Name="Employee" Relationship="db293_ActionTimeDbModel.FK_EmployeeLocation_Employee" FromRole="EmployeeLocation" ToRole="Employee" />
+          <Property Name="PositionID" Type="Int32" />
         </EntityType>
         <EntityType Name="EmployeeSalary">
           <Key>
@@ -12263,6 +12331,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="PositionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsLocation" Type="Boolean" />
         </EntityType>
         <EntityType Name="EmployeeSalaryCategory">
           <Key>
@@ -13514,6 +13583,38 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SortBy" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
+        <EntityType Name="LocationEmployeeCheck">
+          <Key>
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="SortBy" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="LocationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="Expr1" Type="Int32" />
+        </EntityType>
+        <EntityType Name="VEmployeeLocationPosition">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="LocationID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="PositionID" Type="Int32" />
+          <Property Name="RoleID" Type="Int32" />
+          <Property Name="IsMaster" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="EmployeeFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="PositionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -14155,6 +14256,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="EmployeeLocation">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeeLocation">
               <MappingFragment StoreEntitySet="EmployeeLocation">
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
                 <ScalarProperty Name="RoleID" ColumnName="RoleID" />
@@ -17811,6 +17913,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="EmployeePositions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.EmployeePositions">
               <MappingFragment StoreEntitySet="EmployeePositions">
+                <ScalarProperty Name="IsLocation" ColumnName="IsLocation" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="SortBy" ColumnName="SortBy" />
                 <ScalarProperty Name="PositionName" ColumnName="PositionName" />
@@ -18873,6 +18976,37 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="SortBy" ColumnName="SortBy" />
                 <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LocationEmployeeCheck">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationEmployeeCheck">
+              <MappingFragment StoreEntitySet="LocationEmployeeCheck">
+                <ScalarProperty Name="Expr1" ColumnName="Expr1" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VEmployeeLocationPosition">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeLocationPosition">
+              <MappingFragment StoreEntitySet="VEmployeeLocationPosition">
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="EmployeeFullName" ColumnName="EmployeeFullName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+                <ScalarProperty Name="PositionID" ColumnName="PositionID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

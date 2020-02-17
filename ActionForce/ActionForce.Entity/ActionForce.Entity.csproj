@@ -392,6 +392,9 @@
     <Compile Include="LocationCR.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="LocationEmployeeCheck.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="LocationGoals.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -784,6 +787,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VEmployeeLocationList.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VEmployeeLocationPosition.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VEmployeeSalary.cs">

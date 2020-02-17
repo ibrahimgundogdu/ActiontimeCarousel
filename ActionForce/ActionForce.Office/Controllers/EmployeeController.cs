@@ -862,13 +862,9 @@ namespace ActionForce.Office.Controllers
             EmployeeControlModel model = new EmployeeControlModel();
 
             var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
-            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
-
-            var rolLevel = Db.VEmployeeList.FirstOrDefault(x => x.EmployeeID == model.Authentication.ActionEmployee.EmployeeID)?.RoleLevel;
-
 
             model.OurList = Db.OurCompany.ToList();
-            model.RoleGroupList = Db.RoleGroup.Where(x => x.IsActive == true && x.RoleLevel <= rolLevel).ToList();
+            model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true && x.IsLocation == true).ToList();
 
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
             model.EmployeeList = Db.VEmployeeAll.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
@@ -876,28 +872,13 @@ namespace ActionForce.Office.Controllers
 
             //model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
 
-            model.EmployeeLocationList = Db.VEmployeeLocation.Where(x => x.EmployeeID == model.Employee.EmployeeID).ToList();
+            model.EmployeeLocationPositions = Db.VEmployeeLocationPosition.Where(x => x.EmployeeID == model.Employee.EmployeeID).ToList();
 
-            model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date).ToList();
-            model.EmployeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true).ToList();
-            model.EmployeeBreaks = model.EmployeeBreaks.Where(x => x.EmployeeID == model.Employee.EmployeeID && x.BreakDurationMinute > 0).ToList();
-            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date);
-            model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date);
-            model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.BreakDurationMinute == null);
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date && x.StatusID == 2);
+            model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date && x.IsWorkTime == true);
+            model.EmployeeBreak = Db.EmployeeShift.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date && x.IsBreakTime == true && x.BreakDurationMinute == null);
 
-            EmployeeFilterModel filterModel = new EmployeeFilterModel();
-            filterModel.EmployeeUID = id;
-            filterModel.EmployeeID = model.Employee.EmployeeID;
-
-            //if (locationID != null)
-            //{
-
-            //    filterModel.LocationUID = locationID;
-            //    model.CurrentLocation = model.EmployeeLocationList.FirstOrDefault(x => x.LocationUID == locationID && x.EmployeeUID == id);
-            //}
-
-            model.FilterModel = filterModel;
-            TempData["EmployeeFilter"] = filterModel;
+            
 
             return View(model);
         }
@@ -1884,6 +1865,7 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public PartialViewResult AddEmployeeLocation(NewEmployeeLocation location)
         {
+            EmployeeControlModel model = new EmployeeControlModel();
 
             Result<EmployeeLocation> result = new Result<EmployeeLocation>()
             {
@@ -1891,150 +1873,48 @@ namespace ActionForce.Office.Controllers
                 Message = string.Empty,
                 Data = null
             };
-            EmployeeControlModel model = new EmployeeControlModel();
 
             if (location != null)
             {
-                if (TempData["EmployeeFilter"] != null)
-                {
-                    model.FilterModel = TempData["EmployeeFilter"] as EmployeeFilterModel;
+                bool isActive = !string.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false;
+                bool isMaster = !string.IsNullOrEmpty(location.IsMaster) && location.IsMaster == "1" ? true : false;
 
-                    if (model.FilterModel.EmployeeUID != null)
-                    {
-                        if (model.FilterModel.LocationUID == null)
-                        {
-                            bool isActive = !string.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false;
-                            bool isMaster = !string.IsNullOrEmpty(location.IsMaster) && location.IsMaster == "1" ? true : false;
+                EmployeesLocation empdoc = new EmployeesLocation();
 
-                            EmployeesLocation empdoc = new EmployeesLocation();
+                empdoc.EmployeeID = location.EmployeeID;
+                empdoc.LocationID = location.LocationID;
+                empdoc.PositionID = location.PositionID;
+                empdoc.IsMaster = isMaster;
+                empdoc.IsActive = isActive;
 
-                            empdoc.EmployeeID = (int)model.FilterModel.EmployeeID;
-                            empdoc.LocationID = location.LocationID;
-                            empdoc.IsMaster = isMaster;
-                            empdoc.IsActive = isActive;
-
-                            DocumentManager documentManager = new DocumentManager();
-                            result = documentManager.AddEmployeeLocation(empdoc, model.Authentication);
+                DocumentManager documentManager = new DocumentManager();
+                result = documentManager.AddEmployeeLocation(empdoc, model.Authentication);
 
 
-                            TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
-                            //try
-                            //{
-                            //    bool isActive = !string.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false;
-                            //    bool isMaster = !string.IsNullOrEmpty(location.IsMaster) && location.IsMaster == "1" ? true : false;
-
-                            //    EmployeeLocation emp = new EmployeeLocation();
-
-                            //    emp.EmployeeID = (int)model.FilterModel.EmployeeID;
-                            //    emp.LocationID = location.LocationID;
-                            //    emp.IsMaster = isMaster;
-                            //    emp.IsActive = isActive;
-
-                            //    Db.EmployeeLocation.Add(emp);
-                            //    Db.SaveChanges();
-
-
-
-                            //    result.IsSuccess = true;
-                            //    result.Message = "Lokasyon başarılı ile eklendi";
-
-
-                            //    OfficeHelper.AddApplicationLog("Office", "EmployeeLocation", "Insert", emp.EmployeeID.ToString(), "Employee", "AddEmployeeLocation", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, emp);
-                            //}
-                            //catch (Exception ex)
-                            //{
-
-                            //    result.Message = $"Çalışan izini eklenemedi : {ex.Message}";
-                            //    OfficeHelper.AddApplicationLog("Office", "EmployeeLocation", "Insert", "-1", "Employee", "AddEmployeeLocation", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, location);
-                            //}
-
-                        }
-                        else
-                        {
-                            bool isActive = !string.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false;
-                            bool isMaster = !string.IsNullOrEmpty(location.IsMaster) && location.IsMaster == "1" ? true : false;
-
-                            EmployeesLocation empdoc = new EmployeesLocation();
-
-                            empdoc.EmployeeID = (int)model.FilterModel.EmployeeID;
-                            empdoc.LocationID = location.LocationID;
-                            empdoc.IsMaster = isMaster;
-                            empdoc.IsActive = isActive;
-
-                            DocumentManager documentManager = new DocumentManager();
-                            result = documentManager.EditEmployeeLocation(empdoc, model.Authentication);
-
-                            TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
-                            //try
-                            //{
-                            //    var isEmployee = Db.EmployeeLocation.FirstOrDefault(x => x.EmployeeID == model.FilterModel.EmployeeID && x.LocationID == location.LocationID);
-                            //    if (isEmployee != null)
-                            //    {
-                            //        bool isActive = !string.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false;
-                            //        bool isMaster = !string.IsNullOrEmpty(location.IsMaster) && location.IsMaster == "1" ? true : false;
-
-                            //        EmployeeLocation emp = new EmployeeLocation()
-                            //        {
-                            //            EmployeeID = (int)model.FilterModel.EmployeeID,
-                            //            LocationID = isEmployee.LocationID,
-                            //            IsActive = isEmployee.IsActive,
-                            //            IsMaster = isEmployee.IsMaster
-                            //        };
-
-                            //        isEmployee.LocationID = location.LocationID;
-                            //        isEmployee.IsMaster = isMaster;
-                            //        isEmployee.IsActive = isActive;
-
-                            //        Db.SaveChanges();
-
-
-                            //        //EmployeesLocation empdoc = new EmployeesLocation();
-
-                            //        //empdoc.EmployeeID = (int)model.FilterModel.EmployeeID;
-                            //        //empdoc.LocationID = location.LocationID;
-                            //        //empdoc.IsMaster = isMaster;
-                            //        //empdoc.IsActive = isActive;
-
-                            //        //DocumentManager documentManager = new DocumentManager();
-                            //        //result = documentManager.EditEmployeeLocation(empdoc, model.Authentication);
-
-
-                            //        result.IsSuccess = true;
-                            //        result.Message = $"{isEmployee.EmployeeID} nolu Çalışan {isEmployee.LocationID} nolu lokasyona başarı ile güncellendi";
-
-                            //        TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
-
-                            //        // log atılır
-                            //        var isequal = OfficeHelper.PublicInstancePropertiesEqual<EmployeeLocation>(emp, isEmployee, OfficeHelper.getIgnorelist());
-                            //        OfficeHelper.AddApplicationLog("Office", "Employee", "Update", isEmployee.EmployeeID.ToString(), "Employee", "AddEmployeeLocation", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                            //    }
-
-                            //}
-                            //catch (Exception ex)
-                            //{
-                            //    result.Message = $"Çalışan izini eklenemedi : {ex.Message}";
-                            //    OfficeHelper.AddApplicationLog("Office", "EmployeeLocation", "Update", "-1", "Employee", "AddEmployeeLocation", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, location);
-                            //}
-
-
-
-                        }
-
-                    }
-
-                }
+                TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
             }
             else
             {
                 result.Message = $"Form bilgileri gelmedi.";
             }
 
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+
+            model.OurList = Db.OurCompany.ToList();
+            model.PositionList = Db.EmployeePositions.Where(x => x.IsActive == true && x.IsLocation == true).ToList();
+
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
             model.EmployeeList = Db.VEmployeeAll.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
-            //model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, model.FilterModel.EmployeeUID, 0).FirstOrDefault();
-            model.Employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeUID == model.FilterModel.EmployeeUID);
+            model.Employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeID == location.EmployeeID);
 
-            model.EmployeeLocationList = Db.VEmployeeLocation.Where(x => x.EmployeeID == model.Employee.EmployeeID).ToList();
+            //model.EmpList = Db.GetEmployeeAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).FirstOrDefault();
+
+            model.EmployeeLocationPositions = Db.VEmployeeLocationPosition.Where(x => x.EmployeeID == model.Employee.EmployeeID).ToList();
+
+            model.EmployeeSchedule = Db.Schedule.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date && x.StatusID == 2);
+            model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date && x.IsWorkTime == true);
+            model.EmployeeBreak = Db.EmployeeShift.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date && x.IsBreakTime == true && x.BreakDurationMinute == null);
+
 
             TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
 
@@ -2088,6 +1968,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public PartialViewResult EditEmployeePeriods(NewPeriods period)
         {
             EmployeeControlModel model = new EmployeeControlModel();
@@ -2141,6 +2022,28 @@ namespace ActionForce.Office.Controllers
             model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == period.EmployeeID).ToList();
 
             return PartialView("_PartialEmployeePeriodsDetail", model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult DeleteEmployeeLocation(int id)
+        {
+            EmployeeControlModel model = new EmployeeControlModel();
+            Db.Configuration.LazyLoadingEnabled = false;
+
+            var employeelocation = Db.EmployeeLocation.FirstOrDefault(x => x.ID == id);
+            var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == employeelocation.EmployeeID);
+
+            if (employeelocation != null && employee != null)
+            {
+                OfficeHelper.AddApplicationLog("Office", "EmployeeLocation", "Delete", id.ToString(), "Employee", "EmployeeLocation", null, true, $"Çalışan Lokasyonu Silindi", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, employeelocation);
+
+                Db.EmployeeLocation.Remove(employeelocation);
+                Db.SaveChanges();
+            }
+
+            model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == employee.EmployeeID).ToList();
+
+            return RedirectToAction("Location","Employee", new { id = employee.EmployeeUID });
         }
 
         [HttpPost]

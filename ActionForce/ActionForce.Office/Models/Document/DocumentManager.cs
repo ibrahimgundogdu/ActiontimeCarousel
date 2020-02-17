@@ -4865,6 +4865,7 @@ namespace ActionForce.Office
 
                         emp.EmployeeID = location.EmployeeID;
                         emp.LocationID = location.LocationID;
+                        emp.PositionID = location.PositionID;
                         emp.IsMaster = location.IsMaster;
                         emp.IsActive = location.IsActive;
 
@@ -4874,14 +4875,14 @@ namespace ActionForce.Office
 
 
                         result.IsSuccess = true;
-                        result.Message = "Lokasyon başarılı ile eklendi";
+                        result.Message = "Çalışan - Lokasyon ilişkisi başarılı ile eklendi";
 
                         // log atılır
                         OfficeHelper.AddApplicationLog("Office", "EmployeeLocation", "Insert", emp.EmployeeID.ToString(), "Employee", "AddEmployeeLocation", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, emp);
                     }
                     catch (Exception ex)
                     {
-                        result.Message = $"Çalışan izini eklenemedi : {ex.Message}";
+                        result.Message = $"Çalışan - Lokasyon ilişkisi eklenemedi : {ex.Message}";
                         OfficeHelper.AddApplicationLog("Office", "EmployeeLocation", "Insert", "-1", "Employee", "AddEmployeeLocation", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, location);
                     }
 

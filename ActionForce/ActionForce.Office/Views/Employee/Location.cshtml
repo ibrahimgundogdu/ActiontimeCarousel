@@ -23,10 +23,31 @@
                 </div>
             </div>
             <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
-                
+
                 @{Html.RenderPartial("_PartialEmployeeLocation", Model);}
             </div>
         </div>
     </div>
 </div>
 
+
+@section scripts {
+    <script>
+        function DeleteEmployeeLocation(id) {
+            window.location.href = "/Employee/DeleteEmployeeLocation/" + id;
+        }
+    </script>
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}

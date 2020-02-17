@@ -270,6 +270,8 @@ namespace ActionForce.Entity
         public virtual DbSet<VEmployeeAll> VEmployeeAll { get; set; }
         public virtual DbSet<EmployeeAddress> EmployeeAddress { get; set; }
         public virtual DbSet<AddressType> AddressType { get; set; }
+        public virtual DbSet<LocationEmployeeCheck> LocationEmployeeCheck { get; set; }
+        public virtual DbSet<VEmployeeLocationPosition> VEmployeeLocationPosition { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

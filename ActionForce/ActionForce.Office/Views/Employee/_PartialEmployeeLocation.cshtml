@@ -9,44 +9,40 @@
     <table class="table table-warning table-sm tx-13 tx-nowrap mb-5p">
         <tbody>
             <tr class="bg-white">
-                <td class="wd-5p"></td>
-                <td class="tx-medium wd-10p" style="padding:2px !important;">
-                    Lokasyon
-                </td>
-                <td class="text-right wd-15p" style="padding:2px !important;">
-                    <select class="form-control wd-90p select2" id="LocationID" name="LocationID">
+                <td class="text-right wd-40p" style="padding:2px !important;">
+                    <input id="EmployeeID" name="EmployeeID" type="hidden" value="@(Model.Employee.EmployeeID)" />
+                    <select class="form-control wd-90p" id="LocationID" name="LocationID">
                         <option value="">Lokasyon Seçiminiz</option>
                         @foreach (var item in Model.LocationList)
                         {
-                            <option value="@item.LocationID" @(Model.CurrentLocation?.LocationID == item.LocationID ? "selected" : "")>@($"{item.LocationName} {item.Description} {item.State}")</option>
+                            <option value="@item.LocationID">@($"{item.LocationFullName}")</option>
                         }
                     </select>
                 </td>
-                <td class="text-right wd-15p" style="padding:2px !important;">
-                    <select class="form-control wd-90p select2" id="RolID" name="RolID">
+                <td class="text-right wd-20p" style="padding:2px !important;">
+                    <select class="form-control wd-90p" id="PositionID" name="PositionID">
                         <option value="">Rol Seçiminiz</option>
-                        @foreach (var item in Model.RoleGroupList)
+                        @foreach (var item in Model.PositionList)
                         {
-                            <option value="@item.ID" @(Model.CurrentLocation?.RoleID == item.ID ? "selected" : "")>@($"{item.RoleLevel} {item.GroupName}")</option>
+                            <option value="@item.ID">@($"{item.SortBy} {item.PositionName}")</option>
                         }
                     </select>
                 </td>
                 <td class="wd-10p" style="padding:2px !important;">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" @(Model.CurrentLocation?.IsActive == true ? "checked" : "")>
+                        <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" checked>
                         <label class="custom-control-label" for="IsActive">Aktif</label>
                     </div>
                 </td>
                 <td class="wd-10p" style="padding:2px !important;">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="IsMaster" name="IsMaster" value="1" @(Model.CurrentLocation?.IsMaster == true ? "checked" : "")>
+                        <input type="checkbox" class="custom-control-input" id="IsMaster" name="IsMaster" value="1" checked>
                         <label class="custom-control-label" for="IsMaster">Master</label>
                     </div>
                 </td>
-                <td class="wd-15p" style="padding:2px !important;">
-                    <button type="submit" class="btn btn-xs btn-dark btn-block">@(Model.CurrentLocation?.LocationID != null ? "Lokasyon Güncelle" : "Lokasyon Ekle")</button>
+                <td class="wd-20p" style="padding:2px !important;">
+                    <button type="submit" class="btn btn-xs btn-dark btn-block">Çalışanı Lokasyona Ekle</button>
                 </td>
-                <td class="wd-5p" style="padding:2px !important;"></td>
 
             </tr>
         </tbody>

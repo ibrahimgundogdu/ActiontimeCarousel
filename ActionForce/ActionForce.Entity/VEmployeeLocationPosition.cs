@@ -12,17 +12,17 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class EmployeeLocation
+    public partial class VEmployeeLocationPosition
     {
         public int ID { get; set; }
         public int EmployeeID { get; set; }
         public int LocationID { get; set; }
+        public Nullable<int> PositionID { get; set; }
         public Nullable<int> RoleID { get; set; }
         public Nullable<bool> IsMaster { get; set; }
         public Nullable<bool> IsActive { get; set; }
-        public Nullable<int> PositionID { get; set; }
-    
-        public virtual Role Role { get; set; }
-        public virtual Employee Employee { get; set; }
+        public string EmployeeFullName { get; set; }
+        public string LocationFullName { get; set; }
+        public string PositionName { get; set; }
     }
 }
