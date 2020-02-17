@@ -266,6 +266,8 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PhoneType" Width="1.5" PointX="55.75" PointY="11.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.IdentityType" Width="1.5" PointX="55.375" PointY="14.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeAll" Width="1.5" PointX="55.375" PointY="40.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeAddress" Width="1.5" PointX="55.375" PointY="17.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.AddressType" Width="1.5" PointX="44.375" PointY="55.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

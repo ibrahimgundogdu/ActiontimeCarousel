@@ -59,6 +59,11 @@ namespace ActionForce.Entity
         public Nullable<int> PositionID { get; set; }
         public string IdentityType { get; set; }
         public string CountryPhoneCode { get; set; }
+        public string Address { get; set; }
+        public Nullable<int> Country { get; set; }
+        public Nullable<int> State { get; set; }
+        public Nullable<int> City { get; set; }
+        public string PostCode { get; set; }
     
         public virtual Role Role { get; set; }
         public virtual RoleGroup RoleGroup { get; set; }

@@ -19,9 +19,9 @@
     <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
         <div>
             <div class="btn-group btn-group-sm" role="group">
-                <button type="button" class="btn btn-light" onclick="EmployeeSearch('-1');">Tümü</button>
-                <button type="button" class="btn btn-primary" onclick="EmployeeSearch('1');">Aktifler</button>
-                <button type="button" class="btn btn-secondary" onclick="EmployeeSearch('0');">Pasifler</button>
+                <button type="button" class="btn btn-light" onclick="EmployeeFilter('-1');">Tümü</button>
+                <button type="button" class="btn btn-primary" onclick="EmployeeFilter('1');">Aktifler</button>
+                <button type="button" class="btn btn-secondary" onclick="EmployeeFilter('0');">Pasifler</button>
             </div>
         </div>
         <div class="d-none d-md-block">
@@ -38,42 +38,41 @@
             <div class="form-row align-items-end">
 
                 <div class="form-group col-md-2 d-flex align-items-end">
-                    <input id="SearchKey" name="SearchKey" type="text" class="form-control" autocomplete="off" placeholder="Arama">
-                </div>
-
-                <div class="form-group col-md-2 d-flex align-items-end">
-                    <select class="form-control select2" id="EmployeeID" name="EmployeeID">
-                        <option value="" label="Employee Seçiminiz"></option>
-                        @foreach (var item in Model.VEmployee)
-                        {
-                            <option value="@item.EmployeeID" @(Model.FilterModel.EmployeeID == item.EmployeeID ? "selected" : "")>@(Html.Raw($"{item.FullName} "))</option>
-                        }
-                    </select>
+                    <input id="SearchKey" name="SearchKey" type="text" class="form-control" autocomplete="off" placeholder="Arama" value="@(Model.FilterModel?.SearchKey)">
                 </div>
                 <div class="form-group col-md-3 d-flex align-items-end">
                     <select class="form-control select2" id="LocationID" name="LocationID">
                         <option value="" label="Lokasyon Seçiminiz"></option>
                         @foreach (var item in Model.LocationList)
                         {
-                            <option value="@item.LocationID" @(Model.FilterModel.LocationID == item.LocationID ? "selected" : "")>@(Html.Raw($"{item.LocationFullName}"))</option>
+                            <option value="@item.LocationID" @(Model.FilterModel?.LocationID == item.LocationID ? "selected" : "")>@(Html.Raw($"{item.LocationFullName}"))</option>
                         }
                     </select>
                 </div>
                 <div class="form-group col-md-2 d-flex align-items-end">
-                    <select class="form-control select2" id="DepartmentID" name="DepartmentID">
+                    <select class="form-control" id="AreaID" name="AreaID">
+                        <option value="" label="Çalışma Alanı Seçiminiz"></option>
+                        @foreach (var item in Model.AreaCategoryList)
+                        {
+                            <option value="@item.ID" @(Model.FilterModel?.AreaID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.SortBy}</strong> {item.AreaName} "))</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-2 d-flex align-items-end">
+                    <select class="form-control" id="DepartmentID" name="DepartmentID">
                         <option value="" label="Departman Seçiminiz"></option>
                         @foreach (var item in Model.DepartmentList)
                         {
-                            <option value="@item.ID" @(Model.FilterModel.DepartmentID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.SortBy}</strong> {item.DepartmentName}"))</option>
+                            <option value="@item.ID" @(Model.FilterModel?.DepartmentID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.SortBy}</strong> {item.DepartmentName}"))</option>
                         }
                     </select>
                 </div>
                 <div class="form-group col-md-2 d-flex align-items-end">
-                    <select class="form-control select2" id="PositionID" name="PositionID">
+                    <select class="form-control" id="PositionID" name="PositionID">
                         <option value="" label="Pozisyon Seçiminiz"></option>
                         @foreach (var item in Model.PositionList)
                         {
-                            <option value="@item.ID" @(Model.FilterModel.PositionID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.SortBy}</strong> {item.PositionName}"))</option>
+                            <option value="@item.ID" @(Model.FilterModel?.PositionID == item.ID ? "selected" : "")>@(Html.Raw($"<strong>{item.SortBy}</strong> {item.PositionName}"))</option>
                         }
                     </select>
                 </div>
@@ -97,18 +96,20 @@
 @section scripts {
     <script>
         $('.select2').select2({
-            placeholder: 'Seçiminiz',
-            searchInputPlaceholder: 'Search options'
+            placeholder: 'Lokasyon Seçiminiz',
+            searchInputPlaceholder: 'Search options',
+            allowClear: true
         });
 
-        function EmployeeSearch(active) {
+        function EmployeeFilter(active) {
             var data = new FormData();
-            
+
+
             data.append('SearchKey', $("#SearchKey").val());
             data.append('DepartmentID', $("#DepartmentID").val());
             data.append('PositionID', $("#PositionID").val());
             data.append('LocationID', $("#LocationID").val());
-            data.append('EmployeeID', $("#EmployeeID").val());
+            data.append('AreaID', $("#AreaID").val());
             data.append('IsActive', active);
 
             $.ajax({

@@ -142,6 +142,8 @@ namespace ActionForce.Office
         public Guid? LocationUID { get; set; }
         public Guid? EmployeeUID { get; set; }
         public string SearchKey { get; set; }
+        public int? AreaID { get; set; }
+        
     }
     
 }

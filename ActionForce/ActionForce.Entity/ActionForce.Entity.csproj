@@ -95,6 +95,9 @@
     <Compile Include="ActionTypeExpense.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="AddressType.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="Animal.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -252,6 +255,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="Employee.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EmployeeAddress.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="EmployeeAreaCategory.cs">
