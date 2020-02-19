@@ -272,6 +272,9 @@ namespace ActionForce.Entity
         public virtual DbSet<AddressType> AddressType { get; set; }
         public virtual DbSet<LocationEmployeeCheck> LocationEmployeeCheck { get; set; }
         public virtual DbSet<VEmployeeLocationPosition> VEmployeeLocationPosition { get; set; }
+        public virtual DbSet<Country> Country { get; set; }
+        public virtual DbSet<State> State { get; set; }
+        public virtual DbSet<City> City { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

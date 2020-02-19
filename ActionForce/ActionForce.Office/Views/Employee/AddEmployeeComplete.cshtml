@@ -105,6 +105,66 @@
                                 </div>
 
 
+
+                                <div class="form-group row  mg-b-5  bg-gray-50">
+                                    <label for="Country" class="col-sm-3 col-form-label">Ülke / Eyalet / Şehir</label>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" id="Country" name="Country" required>
+                                            @foreach (var item in Model.CountryList)
+                                            {
+                                                <option value="@item.ID" @(Model.Authentication.ActionEmployee.OurCompanyID == item.OurCompanyID ? "selected":"")>@($"{item.CountryName}")</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" id="State" name="State" required>
+                                            <option value="">Eyalet Seçiminiz</option>
+                                            @foreach (var item in Model.StateList)
+                                            {
+                                                <option value="@item.ID">@($"{item.StateName}")</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <select class="form-control" id="City" name="City" required>
+                                            <option value="">Şehir Seçiminiz</option>
+                                            @foreach (var item in Model.CityList)
+                                            {
+                                                <option value="@item.ID">@($"{item.CityName}")</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row  mg-b-5  bg-gray-50">
+                                    <label for="Address" class="col-sm-3 col-form-label">Adres</label>
+                                    <div class="col-sm-6">
+                                        <textarea id="Address" name="Address" rows="3" class="form-control" autocomplete="off" placeholder="Adres" style="width:100% !important;" required></textarea>
+                                    </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row bg-gray-50">
+                                    <label for="PostCode" class="col-sm-3 col-form-label">Posta Kodu / ZIP Code</label>
+                                    <div class="col-sm-6">
+                                        <input id="PostCode" name="PostCode" type="text" class="form-control postcode" autocomplete="off" placeholder="Posta Kodu" required>
+                                    </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+
+
+
+
+
+
+
+
+
+
                                 <div class="form-group row mg-b-5">
                                     <label for="Username" class="col-sm-3 col-form-label">Kullanıcı Adı</label>
                                     <div class="col-sm-6">
@@ -307,9 +367,11 @@
         });
 
         $('.phone').mask('(000) 000 00 00');
+        $('.postcode').mask('00000-000');
 
 
         $(document).ready(function () {
+
             $("#OurCompanyID").change(function () {
 
                 var ourCompanyID = $("#OurCompanyID").val();
@@ -339,6 +401,66 @@
                         },
                     });
             });
+
+            $("#Country").change(function () {
+
+                var countryID = $("#Country").val();
+
+                $.ajax
+                    ({
+                        url: '/Employee/GetStateList',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            countryid: countryID
+                        }),
+                        success: function (data) {
+
+                            $("#State").empty();
+
+                            $("#State").append($('<option></option>', { "value": '', "text": 'Eyalet Seçiminiz' }));
+
+                            $.each(data, function (index, label) {
+                                $("#State").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+                        },
+                        error: function () {
+                        },
+                    });
+            });
+
+           
+
+            $("#State").change(function () {
+
+                var stateID = $("#State").val();
+
+                $.ajax
+                    ({
+                        url: '/Employee/GetCityList',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            stateid: stateID
+                        }),
+                        success: function (data) {
+
+                            $("#City").empty();
+
+                            $("#City").append($('<option></option>', { "value": '', "text": 'Şehir Seçiminiz' }));
+
+                            $.each(data, function (index, label) {
+                                $("#City").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+                        },
+                        error: function () {
+                        },
+                    });
+            });
+
+
         });
 
     </script>

@@ -346,6 +346,12 @@ namespace ActionForce.Office.Controllers
             model.Employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeUID == id);
             model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Employee" && x.ProcessID == model.Employee.EmployeeID.ToString()).ToList();
 
+            model.CountryList = Db.Country.Where(x => x.IsActive == true).ToList();
+            int countryid = model.Employee?.Country ?? model.CountryList.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ID;
+            model.StateList = Db.State.Where(x => x.IsActive == true && x.CountryID == countryid).ToList();
+            int stateid = model.Employee?.State ?? model.StateList.FirstOrDefault().ID;
+            model.CityList = Db.City.Where(x => x.IsActive == true && x.StateID == stateid).ToList();
+
             model.EmployeeShifts = Db.EmployeeShift.Where(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date).ToList();
             var employeeBreaks = model.EmployeeShifts.Where(x => x.IsBreakTime == true && x.EmployeeID == model.Employee.EmployeeID).ToList();
 
@@ -425,7 +431,13 @@ namespace ActionForce.Office.Controllers
                         SmsNumber = isEmployee.SmsNumber,
                         UpdateDate = isEmployee.UpdateDate,
                         UpdateEmployeeID = isEmployee.UpdateEmployeeID,
-                        UpdateIP = isEmployee.UpdateIP
+                        UpdateIP = isEmployee.UpdateIP,
+                        City = isEmployee.City,
+                        Address = isEmployee.Address,
+                        Country = isEmployee.Country,
+                        PostCode = isEmployee.PostCode,
+                        State = isEmployee.State
+
                     };
 
                     isEmployee.AreaCategoryID = employee.AreaCategoryID;
@@ -452,6 +464,13 @@ namespace ActionForce.Office.Controllers
                     isEmployee.CountryPhoneCode = employee.CountryPhoneCode;
                     isEmployee.EMail = employee.EMail;
                     isEmployee.OurCompanyID = employee.OurCompanyID;
+
+                    isEmployee.Country = employee.Country;
+                    isEmployee.State = employee.State;
+                    isEmployee.City = employee.City;
+                    isEmployee.Address = employee.Address;
+                    isEmployee.PostCode = employee.PostCode;
+
 
                     if (isEmployee.StatusID == 1 && isEmployee.DateStart == null)
                     {
@@ -497,11 +516,95 @@ namespace ActionForce.Office.Controllers
                     result.IsSuccess = true;
                     result.Message = $"{isEmployee.EmployeeID} nolu Çalışan başarı ile güncellendi";
 
+                    // mail güncellenir
+                    var mastermail = Db.EmployeeEmails.FirstOrDefault(x => x.EmployeeID == isEmployee.EmployeeID && x.IsMaster == true && x.IsActive == true);
+                    if (mastermail != null && !string.IsNullOrEmpty(employee.EMail) && employee.EMail != mastermail.EMail)
+                    {
+                        mastermail.EMail = employee.EMail;
+                        Db.SaveChanges();
+                    }
+                    else
+                    {
+                        EmployeeEmails newmail = new EmployeeEmails();
+
+                        newmail.EMail = employee.EMail;
+                        newmail.EmployeeID = employee.EmployeeID;
+                        newmail.IsActive = true;
+                        newmail.IsMaster = true;
+                        newmail.TypeID = 1;
+
+                        Db.EmployeeEmails.Add(newmail);
+                        Db.SaveChanges();
+                    }
+
+                    // telefon güncellenir
+
+                    var masterphone = Db.EmployeePhones.FirstOrDefault(x => x.EmployeeID == isEmployee.EmployeeID && x.IsMaster == true && x.IsActive == true);
+                    if (masterphone != null && !string.IsNullOrEmpty(employee.Mobile) && isEmployee.Mobile != masterphone.PhoneNumber)
+                    {
+                        masterphone.PhoneNumber = isEmployee.Mobile;
+                        Db.SaveChanges();
+                    }
+                    else
+                    {
+                        EmployeePhones newphone = new EmployeePhones();
+
+                        newphone.PhoneNumber = isEmployee.Mobile;
+                        newphone.EmployeeID = employee.EmployeeID;
+                        newphone.IsActive = true;
+                        newphone.IsMaster = true;
+                        newphone.PhoneTypeID = 1;
+                        newphone.CountryPhoneCode = isEmployee.CountryPhoneCode;
+
+                        Db.EmployeePhones.Add(newphone);
+                        Db.SaveChanges();
+                    }
+
+                    // adres güncellenir
+                    var masteradres = Db.EmployeeAddress.FirstOrDefault(x => x.EmployeeID == isEmployee.EmployeeID && x.IsMaster == true && x.IsActive == true);
+                    if (masteradres != null)
+                    {
+                        masteradres.Address = employee.Address;
+                        masteradres.City = employee.City;
+                        masteradres.Country = employee.Country;
+                        masteradres.State = employee.State;
+                        masteradres.PostCode = employee.PostCode;
+
+                        Db.SaveChanges();
+                    }
+                    else
+                    {
+                        EmployeeAddress newadres = new EmployeeAddress();
+
+                        newadres.Address = employee.Address;
+                        newadres.City = employee.City;
+                        newadres.Country = employee.Country;
+                        newadres.State = employee.State;
+                        newadres.PostCode = employee.PostCode;
+                        newadres.AddressTypeID = 1;
+                        newadres.EmployeeID = isEmployee.EmployeeID;
+                        newadres.IsActive = true;
+                        newadres.IsMaster = true;
+
+                        Db.EmployeeAddress.Add(newadres);
+                        Db.SaveChanges();
+                    }
+
                     // kontroller yapılır.
 
+                    EmployeePeriotCheck checkparam = new EmployeePeriotCheck();
 
+                    checkparam.AreaCategoryID = employee.AreaCategoryID;
+                    checkparam.DepartmentID = employee.DepartmentID;
+                    checkparam.PositionID = employee.PositionID;
+                    checkparam.SalaryCategoryID = employee.SalaryCategoryID;
+                    checkparam.SequenceID = employee.SequenceID;
+                    checkparam.ShiftTypeID = employee.ShiftTypeID;
+                    checkparam.StatusID = employee.StatusID;
+                    checkparam.EmployeeID = employee.EmployeeID;
+                    checkparam.RoleGroupID = employee.RoleGroupID;
 
-
+                    var ischecked = OfficeHelper.CheckEmployeePeriods(checkparam, model.Authentication);
 
                     // log atılır.
                     var isequal = OfficeHelper.PublicInstancePropertiesEqual<Employee>(self, isEmployee, OfficeHelper.getIgnorelist());
@@ -878,7 +981,7 @@ namespace ActionForce.Office.Controllers
             model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date && x.IsWorkTime == true);
             model.EmployeeBreak = Db.EmployeeShift.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date && x.IsBreakTime == true && x.BreakDurationMinute == null);
 
-            
+
 
             return View(model);
         }
@@ -1358,6 +1461,13 @@ namespace ActionForce.Office.Controllers
                 model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
                 model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
                 model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
+
+                model.CountryList = Db.Country.Where(x => x.IsActive == true).ToList();
+                int countryid = model.CountryList.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ID;
+                model.StateList = Db.State.Where(x => x.IsActive == true && x.CountryID == countryid).ToList();
+                int stateid = model.StateList.FirstOrDefault().ID;
+                model.CityList = Db.City.Where(x => x.IsActive == true && x.StateID == stateid).ToList();
+
                 model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
                 TempData["CheckEmployee"] = model.CheckEmployee;
@@ -1416,6 +1526,12 @@ namespace ActionForce.Office.Controllers
                 empdoc.OurCompanyID = employee.OurCompanyID.Value;
                 empdoc.IsActive = isActive;
                 empdoc.IsTemp = false;
+                empdoc.Country = employee.Country;
+                empdoc.State = employee.State;
+                empdoc.City = employee.City;
+                empdoc.Address = employee.Address;
+                empdoc.PostCode = employee.PostCode;
+
                 empdoc.RecordDate = daterecord;
                 empdoc.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                 empdoc.RecordIP = OfficeHelper.GetIPAddress();
@@ -1427,6 +1543,7 @@ namespace ActionForce.Office.Controllers
                 }
                 else if (empdoc.StatusID == 2)
                 {
+                    empdoc.DateStart = daterecord.Date;
                     empdoc.DateEnd = daterecord.Date;
                 }
 
@@ -1469,7 +1586,7 @@ namespace ActionForce.Office.Controllers
                 result.IsSuccess = true;
                 result.Message = "Çalışan başarı ile eklendi";
 
-                // emaili ejklenir
+                // emaili eklenir
                 if (!string.IsNullOrEmpty(empdoc.EMail))
                 {
                     EmployeeEmails empemail = new EmployeeEmails()
@@ -1498,27 +1615,30 @@ namespace ActionForce.Office.Controllers
                     Db.EmployeePhones.Add(empphone);
                     Db.SaveChanges();
                 }
-                // periyotları eklenir.
-                EmployeePeriods empperiods = new EmployeePeriods();
-                empperiods.AreaCategoryID = empdoc.AreaCategoryID;
-                empperiods.ContractStartDate = empdoc.RecordDate;
-                empperiods.DepartmentID = empdoc.DepartmentID;
-                empperiods.EmployeeID = empdoc.EmployeeID;
-                empperiods.EmployeeStatusID = empdoc.StatusID;
-                empperiods.OurCompanyID = empdoc.OurCompanyID;
-                empperiods.PositionID = empdoc.PositionID;
-                empperiods.RecordDate = empdoc.RecordDate;
-                empperiods.RecordedEmployeeID = empdoc.RecordEmployeeID;
-                empperiods.RecordIP = empdoc.RecordIP;
-                empperiods.RoleGroupID = empdoc.RoleGroupID;
-                empperiods.SalaryCategoryID = empdoc.SalaryCategoryID;
-                empperiods.SequenceID = empdoc.SequenceID;
-                empperiods.ShiftTypeID = empdoc.ShiftTypeID;
-                empperiods.StartDate = empdoc.DateStart;
 
-                Db.EmployeePeriods.Add(empperiods);
-                Db.SaveChanges();
+                if (empdoc.StatusID >= 1)
+                {
+                    // periyotları eklenir.
+                    EmployeePeriods empperiods = new EmployeePeriods();
+                    empperiods.AreaCategoryID = empdoc.AreaCategoryID;
+                    empperiods.ContractStartDate = empdoc.RecordDate;
+                    empperiods.DepartmentID = empdoc.DepartmentID;
+                    empperiods.EmployeeID = empdoc.EmployeeID;
+                    empperiods.EmployeeStatusID = empdoc.StatusID;
+                    empperiods.OurCompanyID = empdoc.OurCompanyID;
+                    empperiods.PositionID = empdoc.PositionID;
+                    empperiods.RecordDate = empdoc.RecordDate;
+                    empperiods.RecordedEmployeeID = empdoc.RecordEmployeeID;
+                    empperiods.RecordIP = empdoc.RecordIP;
+                    empperiods.RoleGroupID = empdoc.RoleGroupID;
+                    empperiods.SalaryCategoryID = empdoc.SalaryCategoryID;
+                    empperiods.SequenceID = empdoc.SequenceID;
+                    empperiods.ShiftTypeID = empdoc.ShiftTypeID;
+                    empperiods.StartDate = empdoc.DateStart;
 
+                    Db.EmployeePeriods.Add(empperiods);
+                    Db.SaveChanges();
+                }
                 // lokasyon ilişkisi eklenir.
 
                 if (employee.LocationID > 0)
@@ -1534,6 +1654,20 @@ namespace ActionForce.Office.Controllers
                     Db.SaveChanges();
                 }
 
+                // adresi eklenir.
+
+                EmployeeAddress adres = new EmployeeAddress();
+                adres.Address = empdoc.Address;
+                adres.AddressTypeID = 1;
+                adres.City = empdoc.City;
+                adres.Country = empdoc.Country;
+                adres.EmployeeID = empdoc.EmployeeID;
+                adres.IsActive = true;
+                adres.IsMaster = true;
+                adres.PostCode = empdoc.PostCode;
+                adres.State = empdoc.State;
+                Db.EmployeeAddress.Add(adres);
+                Db.SaveChanges();
 
                 // log atılır
                 OfficeHelper.AddApplicationLog("Office", "Employee", "Insert", empdoc.EmployeeID.ToString(), "Employee", "AddEmployee", null, true, $"{result.Message}", string.Empty, empdoc.RecordDate.Value, model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, empdoc);
@@ -1582,7 +1716,44 @@ namespace ActionForce.Office.Controllers
             return Json(list, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult GetStateList(int countryid)
+        {
+            var statelist = Db.State.Where(x => x.CountryID == countryid && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
+            List<SelectListItem> list = new List<SelectListItem>();
+            foreach (var state in statelist)
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = state.ID.ToString(),
+                    Text = state.StateName
+                });
+            }
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult GetCityList(int stateid)
+        {
+            var citylist = Db.City.Where(x => x.StateID == stateid && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            List<SelectListItem> list = new List<SelectListItem>();
+            foreach (var city in citylist)
+            {
+                list.Add(new SelectListItem()
+                {
+                    Value = city.ID.ToString(),
+                    Text = city.CityName
+                });
+            }
+
+            return Json(list, JsonRequestBehavior.AllowGet);
+
+        }
 
         [AllowAnonymous]
         public PartialViewResult EmployeeStatus(string Identity, string IdentityNumber, string FullName, string EMail, string Mobile)
@@ -2043,7 +2214,7 @@ namespace ActionForce.Office.Controllers
 
             model.EmployeePeriods = Db.EmployeePeriods.Where(x => x.EmployeeID == employee.EmployeeID).ToList();
 
-            return RedirectToAction("Location","Employee", new { id = employee.EmployeeUID });
+            return RedirectToAction("Location", "Employee", new { id = employee.EmployeeUID });
         }
 
         [HttpPost]

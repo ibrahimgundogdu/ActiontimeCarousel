@@ -158,10 +158,16 @@
     <Compile Include="CheckParameters.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="City.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="Costume.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="CostumeType.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Country.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="CountryPhoneCode.cs">
@@ -595,6 +601,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="SMSNumber.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="State.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="Stats.cs">

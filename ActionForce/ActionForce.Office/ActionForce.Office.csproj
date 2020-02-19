@@ -2363,6 +2363,7 @@
     <Compile Include="Models\Document\CashExpense.cs" />
     <Compile Include="Models\Document\SalaryPayment.cs" />
     <Compile Include="Models\Document\TransferModel.cs" />
+    <Compile Include="Models\EmployeePeriotCheck.cs" />
     <Compile Include="Models\EmployeeShiftModel.cs" />
     <Compile Include="Models\CheckEmployee.cs" />
     <Compile Include="Models\NewEmployee.cs" />

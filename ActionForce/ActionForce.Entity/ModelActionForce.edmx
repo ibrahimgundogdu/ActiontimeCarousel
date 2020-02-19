@@ -586,6 +586,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.AddressType' does not have 
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CheckParameter" Type="int" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CountryID" Type="int" />
+          <Property Name="StateID" Type="int" />
+          <Property Name="Code" Type="nvarchar" MaxLength="20" />
+          <Property Name="CityName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="3" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="Costume">
           <Key>
             <PropertyRef Name="ID" />
@@ -604,6 +618,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.AddressType' does not have 
           <Property Name="TypeNameEN" Type="nvarchar" MaxLength="50" />
           <Property Name="TypeNameTR" Type="nvarchar" MaxLength="50" />
           <Property Name="SortBy" Type="char" MaxLength="4" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="Code" Type="nvarchar" MaxLength="20" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="3" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="CountryPhoneCode">
@@ -2672,6 +2697,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="IsHR" Type="bit" />
           <Property Name="IsInfo" Type="bit" />
         </EntityType>
+        <EntityType Name="State">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CountryID" Type="int" />
+          <Property Name="Code" Type="nvarchar" MaxLength="20" />
+          <Property Name="StateName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="3" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="Stats">
           <Key>
             <PropertyRef Name="StatsID" />
@@ -4475,6 +4511,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeAll' does not have
           <Property Name="UpdateEmployeeName" Type="nvarchar" MaxLength="150" />
           <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
           <Property Name="IsActive" Type="bit" />
+          <Property Name="Address" Type="nvarchar" MaxLength="350" />
+          <Property Name="Country" Type="int" />
+          <Property Name="State" Type="int" />
+          <Property Name="City" Type="int" />
+          <Property Name="PostCode" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeCashActions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5606,6 +5647,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="CheckParameters" EntityType="Self.CheckParameters" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Costume" EntityType="Self.Costume" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CostumeType" EntityType="Self.CostumeType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CountryPhoneCode" EntityType="Self.CountryPhoneCode" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
@@ -5727,6 +5769,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="SetcardSubscription" EntityType="Self.SetcardSubscription" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SetcardSubscriptionType" EntityType="Self.SetcardSubscriptionType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SMSNumber" EntityType="Self.SMSNumber" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="State" EntityType="Self.State" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Stats" EntityType="Self.Stats" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="StatsOptions" EntityType="Self.StatsOptions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Task" EntityType="Self.Task" Schema="dbo" store:Type="Tables" />
@@ -5771,6 +5814,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [AddressType].[SortBy] AS [SortBy], 
     [AddressType].[IsActive] AS [IsActive]
     FROM [dbo].[AddressType] AS [AddressType]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="City" EntityType="Self.City" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [City].[ID] AS [ID], 
+    [City].[CountryID] AS [CountryID], 
+    [City].[StateID] AS [StateID], 
+    [City].[Code] AS [Code], 
+    [City].[CityName] AS [CityName], 
+    [City].[SortBy] AS [SortBy], 
+    [City].[IsActive] AS [IsActive]
+    FROM [dbo].[City] AS [City]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="EmployeeShiftX" EntityType="Self.EmployeeShiftX" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -6810,7 +6864,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeAll].[UpdateDate] AS [UpdateDate], 
     [VEmployeeAll].[UpdateEmployeeName] AS [UpdateEmployeeName], 
     [VEmployeeAll].[UpdateIP] AS [UpdateIP], 
-    [VEmployeeAll].[IsActive] AS [IsActive]
+    [VEmployeeAll].[IsActive] AS [IsActive], 
+    [VEmployeeAll].[Address] AS [Address], 
+    [VEmployeeAll].[Country] AS [Country], 
+    [VEmployeeAll].[State] AS [State], 
+    [VEmployeeAll].[City] AS [City], 
+    [VEmployeeAll].[PostCode] AS [PostCode]
     FROM [dbo].[VEmployeeAll] AS [VEmployeeAll]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VEmployeeCashActions" EntityType="Self.VEmployeeCashActions" store:Type="Views" store:Schema="dbo">
@@ -7994,6 +8053,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="AddressType" EntityType="db293_ActionTimeDbModel.AddressType" />
           <EntitySet Name="LocationEmployeeCheck" EntityType="db293_ActionTimeDbModel.LocationEmployeeCheck" />
           <EntitySet Name="VEmployeeLocationPosition" EntityType="db293_ActionTimeDbModel.VEmployeeLocationPosition" />
+          <EntitySet Name="Country" EntityType="db293_ActionTimeDbModel.Country" />
+          <EntitySet Name="State" EntityType="db293_ActionTimeDbModel.State" />
+          <EntitySet Name="City" EntityType="db293_ActionTimeDbModel.City" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -13557,6 +13619,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateEmployeeName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Address" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="Int32" />
+          <Property Name="State" Type="Int32" />
+          <Property Name="City" Type="Int32" />
+          <Property Name="PostCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="EmployeeAddress">
           <Key>
@@ -13614,6 +13681,40 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="EmployeeFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="PositionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Country">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="OurCompanyID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="State">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CountryID" Type="Int32" />
+          <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="City">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CountryID" Type="Int32" />
+          <Property Name="StateID" Type="Int32" />
+          <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -18897,6 +18998,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VEmployeeAll">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeAll">
               <MappingFragment StoreEntitySet="VEmployeeAll">
+                <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
                 <ScalarProperty Name="UpdateEmployeeName" ColumnName="UpdateEmployeeName" />
@@ -19007,6 +19113,43 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="PositionID" ColumnName="PositionID" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Country">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Country">
+              <MappingFragment StoreEntitySet="Country">
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="State">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.State">
+              <MappingFragment StoreEntitySet="State">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="City">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.City">
+              <MappingFragment StoreEntitySet="City">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

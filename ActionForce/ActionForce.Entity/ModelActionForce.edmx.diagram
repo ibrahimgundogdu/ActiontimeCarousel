@@ -270,6 +270,9 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.AddressType" Width="1.5" PointX="44.375" PointY="55.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationEmployeeCheck" Width="1.5" PointX="46.375" PointY="55.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeLocationPosition" Width="1.5" PointX="48.375" PointY="55.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Country" Width="1.5" PointX="55.375" PointY="52.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.State" Width="1.5" PointX="55.375" PointY="55.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.City" Width="1.5" PointX="56.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

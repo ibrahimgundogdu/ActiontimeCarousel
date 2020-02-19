@@ -426,6 +426,13 @@ namespace ActionForce.Office
         public string IsActive { get; set; }
         public Guid? EmployeeUID { get; set; }
 
+
+        public int? Country { get; set; }
+        public int? State { get; set; }
+        public int? City { get; set; }
+        public string Address { get; set; }
+        public string PostCode { get; set; }
+
     }
     public class NewEmployeeLocation
     {

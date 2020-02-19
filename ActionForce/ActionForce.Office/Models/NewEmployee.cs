@@ -28,5 +28,12 @@ namespace ActionForce.Office
         public int? OurCompanyID { get; set; }
         public int? LocationID { get; set; }
 
+        public int? Country { get; set; }
+        public int? State { get; set; }
+        public int? City { get; set; }
+        public string Address { get; set; }
+        public string PostCode { get; set; }
+
+
     }
 }

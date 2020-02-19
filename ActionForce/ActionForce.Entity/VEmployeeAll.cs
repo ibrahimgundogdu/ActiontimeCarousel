@@ -67,5 +67,10 @@ namespace ActionForce.Entity
         public string UpdateEmployeeName { get; set; }
         public string UpdateIP { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public string Address { get; set; }
+        public Nullable<int> Country { get; set; }
+        public Nullable<int> State { get; set; }
+        public Nullable<int> City { get; set; }
+        public string PostCode { get; set; }
     }
 }

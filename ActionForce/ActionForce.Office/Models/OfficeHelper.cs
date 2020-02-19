@@ -1838,5 +1838,35 @@ namespace ActionForce.Office
             return issuccess;
         }
 
+        public static bool CheckEmployeePeriods(EmployeePeriotCheck periodcheck, AuthenticationModel authentication)
+        {
+            bool issuccess = false;
+            var date = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone.Value);
+
+            if (periodcheck != null)
+            {
+                //public int? AreaCategoryID { get; set; }
+                //public int? DepartmentID { get; set; }
+                //public int? PositionID { get; set; }
+                //public int? SalaryCategoryID { get; set; }
+                //public int? SequenceID { get; set; }
+                //public int? ShiftTypeID { get; set; }
+                //public int? StatusID { get; set; }
+                //RoleGroupID
+
+                using (ActionTimeEntities db = new ActionTimeEntities())
+                {
+                    var areacategory = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.AreaCategoryID != null).OrderByDescending(x=> x.StartDate).ThenByDescending(x=> x.RecordDate).FirstOrDefault();
+
+                    if (areacategory != null && areacategory.AreaCategoryID != periodcheck.AreaCategoryID && areacategory.StartDate != date)
+                    {
+
+                    }
+                   
+                }
+            }
+
+            return issuccess;
+        }
     }
 }

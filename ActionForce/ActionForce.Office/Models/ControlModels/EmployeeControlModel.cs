@@ -126,7 +126,9 @@ namespace ActionForce.Office
         public IEnumerable<VLocationSchedule> VLocationSchedule { get; set; }
         public IEnumerable<VSchedule> EmpSchedule { get; set; }
 
-        
+        public IEnumerable<Country> CountryList { get; set; }
+        public IEnumerable<State> StateList { get; set; }
+        public IEnumerable<City> CityList { get; set; }
 
     }
 
