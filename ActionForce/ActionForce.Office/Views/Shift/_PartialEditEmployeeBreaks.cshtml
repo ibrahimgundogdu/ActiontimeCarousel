@@ -44,7 +44,7 @@
                         <th scope="col">@((Model.EmployeeShift != null && Model.EmployeeShift?.ShiftDateEnd != null) ? Model.EmployeeShift?.ShiftDateEnd?.Date.ToShortDateString() : "")</th>
                         <th scope="col">@((Model.EmployeeShift != null && Model.EmployeeShift?.ShiftDateEnd != null) ? Model.EmployeeShift?.ShiftDateEnd?.ToString("HH\\:mm\\:ss") : "")</th>
 
-                        <th scope="col"></th>
+                        <th scope="col">@(Model.EmployeeShift?.ShiftDuration?.ToString("hh\\:mm\\:ss") ?? "")</th>
                     </tr>
 
                     @{ int index = 0;}
@@ -73,12 +73,23 @@
                             <td>
                                 <input name="employeebreaks[@index].BreakEndTime" type="text" class="form-control hourfull" autocomplete="off" value="@(item?.BreakDateEnd?.ToString("HH\\:mm\\:ss"))">
                             </td>
-                            <td></td>
+                            <td>@(item?.BreakDuration?.ToString("hh\\:mm\\:ss") ?? "")</td>
                         </tr>
                         index++;
                     }
 
                 </tbody>
+                <tfoot>
+                    <tr>
+                        <td scope="col"></td>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                        <th scope="col" class="text-right">@(Model.EmployeeBreaks.Sum(x=> x.BreakDurationMinute) ?? 0) dk.</th>
+                    </tr>
+                </tfoot>
             </table>
         </div>
         <div class="form-group mg-t-10">
