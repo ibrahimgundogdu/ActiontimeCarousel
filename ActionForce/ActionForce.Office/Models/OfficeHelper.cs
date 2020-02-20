@@ -1,4 +1,4 @@
-﻿ using ActionForce.Entity;
+﻿using ActionForce.Entity;
 using ActionForce.Integration;
 using System;
 using System.Collections.Generic;
@@ -1430,7 +1430,7 @@ namespace ActionForce.Office
                         {
                             var employeeschedule = db.Schedule.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date && x.EmployeeID == employeeid);
                             var employeeshift = db.EmployeeShift.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date && x.EmployeeID == employeeid);
-                            
+
                             double? durationhour = 0;
 
                             TimeSpan? duration = null;
@@ -1539,7 +1539,7 @@ namespace ActionForce.Office
                                     earn.TimeZone = location.Timezone;
                                     earn.UID = existssalaryearn.UID.Value;
                                     earn.Description = existssalaryearn.Description;
-                                    
+
                                     var res = documentManager.EditSalaryEarn(earn, authentication);  // log zaten var.
 
                                 }
@@ -1782,7 +1782,7 @@ namespace ActionForce.Office
                                 durationhour = (durationminute / 60);
                             }
 
-                            
+
                             // maaş hakedişi dosya ve hareket olarak ekle
                             DocumentManager documentManager = new DocumentManager();
 
@@ -1830,7 +1830,7 @@ namespace ActionForce.Office
                             }
 
                         }
-                       
+
                     }
                 }
             }
@@ -1842,28 +1842,373 @@ namespace ActionForce.Office
         {
             bool issuccess = false;
             var date = DateTime.UtcNow.AddHours(authentication.ActionEmployee.OurCompany.TimeZone.Value);
+            var datedate = date;
 
             if (periodcheck != null)
             {
-                //public int? AreaCategoryID { get; set; }
-                //public int? DepartmentID { get; set; }
-                //public int? PositionID { get; set; }
-                //public int? SalaryCategoryID { get; set; }
-                //public int? SequenceID { get; set; }
-                //public int? ShiftTypeID { get; set; }
-                //public int? StatusID { get; set; }
-                //RoleGroupID
-
                 using (ActionTimeEntities db = new ActionTimeEntities())
                 {
-                    var areacategory = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.AreaCategoryID != null).OrderByDescending(x=> x.StartDate).ThenByDescending(x=> x.RecordDate).FirstOrDefault();
+                    var employee = db.Employee.FirstOrDefault(x => x.EmployeeID == periodcheck.EmployeeID);
 
-                    if (areacategory != null && areacategory.AreaCategoryID != periodcheck.AreaCategoryID && areacategory.StartDate != date)
+                    //AreaCategoryID
+                    var areacategory = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.AreaCategoryID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
+                    if (employee != null && areacategory != null && areacategory.AreaCategoryID != periodcheck.AreaCategoryID)
                     {
+                        if (areacategory.StartDate == datedate)
+                        {
+                            areacategory.AreaCategoryID = periodcheck.AreaCategoryID;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            EmployeePeriods newperiod = new EmployeePeriods();
 
+                            newperiod.AreaCategoryID = periodcheck.AreaCategoryID;
+                            newperiod.EmployeeID = periodcheck.EmployeeID;
+                            newperiod.ContractStartDate = datedate;
+                            newperiod.OurCompanyID = employee.OurCompanyID;
+                            newperiod.RecordDate = date;
+                            newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                            newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                            newperiod.StartDate = datedate;
+
+                            db.EmployeePeriods.Add(newperiod);
+                            db.SaveChanges();
+                        }
                     }
-                   
+                    else if (employee != null && areacategory == null)
+                    {
+                        EmployeePeriods newperiod = new EmployeePeriods();
+
+                        newperiod.AreaCategoryID = periodcheck.AreaCategoryID;
+                        newperiod.EmployeeID = periodcheck.EmployeeID;
+                        newperiod.ContractStartDate = datedate;
+                        newperiod.OurCompanyID = employee.OurCompanyID;
+                        newperiod.RecordDate = date;
+                        newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                        newperiod.StartDate = datedate;
+
+                        db.EmployeePeriods.Add(newperiod);
+                        db.SaveChanges();
+                    }
+
+                    //DepartmentID
+                    var department = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.DepartmentID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
+                    if (employee != null && department != null && department.DepartmentID != periodcheck.DepartmentID)
+                    {
+                        if (department.StartDate == datedate)
+                        {
+                            department.DepartmentID = periodcheck.DepartmentID;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            EmployeePeriods newperiod = new EmployeePeriods();
+
+                            newperiod.DepartmentID = periodcheck.DepartmentID;
+                            newperiod.EmployeeID = periodcheck.EmployeeID;
+                            newperiod.ContractStartDate = datedate;
+                            newperiod.OurCompanyID = employee.OurCompanyID;
+                            newperiod.RecordDate = date;
+                            newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                            newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                            newperiod.StartDate = datedate;
+
+                            db.EmployeePeriods.Add(newperiod);
+                            db.SaveChanges();
+                        }
+                    }
+                    else if (employee != null && department == null)
+                    {
+                        EmployeePeriods newperiod = new EmployeePeriods();
+
+                        newperiod.DepartmentID = periodcheck.DepartmentID;
+                        newperiod.EmployeeID = periodcheck.EmployeeID;
+                        newperiod.ContractStartDate = datedate;
+                        newperiod.OurCompanyID = employee.OurCompanyID;
+                        newperiod.RecordDate = date;
+                        newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                        newperiod.StartDate = datedate;
+
+                        db.EmployeePeriods.Add(newperiod);
+                        db.SaveChanges();
+                    }
+
+                    //PositionID
+                    var position = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.PositionID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
+                    if (employee != null && position != null && position.PositionID != periodcheck.PositionID)
+                    {
+                        if (position.StartDate == datedate)
+                        {
+                            position.PositionID = periodcheck.PositionID;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            EmployeePeriods newperiod = new EmployeePeriods();
+
+                            newperiod.PositionID = periodcheck.PositionID;
+                            newperiod.EmployeeID = periodcheck.EmployeeID;
+                            newperiod.ContractStartDate = datedate;
+                            newperiod.OurCompanyID = employee.OurCompanyID;
+                            newperiod.RecordDate = date;
+                            newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                            newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                            newperiod.StartDate = datedate;
+
+                            db.EmployeePeriods.Add(newperiod);
+                            db.SaveChanges();
+                        }
+                    }
+                    else if (employee != null && position == null)
+                    {
+                        EmployeePeriods newperiod = new EmployeePeriods();
+
+                        newperiod.PositionID = periodcheck.PositionID;
+                        newperiod.EmployeeID = periodcheck.EmployeeID;
+                        newperiod.ContractStartDate = datedate;
+                        newperiod.OurCompanyID = employee.OurCompanyID;
+                        newperiod.RecordDate = date;
+                        newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                        newperiod.StartDate = datedate;
+
+                        db.EmployeePeriods.Add(newperiod);
+                        db.SaveChanges();
+                    }
+
+                    //SalaryCategoryID
+                    var salarycategory = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.SalaryCategoryID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
+                    if (employee != null && salarycategory != null && salarycategory.SalaryCategoryID != periodcheck.SalaryCategoryID)
+                    {
+                        if (salarycategory.StartDate == datedate)
+                        {
+                            salarycategory.SalaryCategoryID = periodcheck.SalaryCategoryID;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            EmployeePeriods newperiod = new EmployeePeriods();
+
+                            newperiod.SalaryCategoryID = periodcheck.SalaryCategoryID;
+                            newperiod.EmployeeID = periodcheck.EmployeeID;
+                            newperiod.ContractStartDate = datedate;
+                            newperiod.OurCompanyID = employee.OurCompanyID;
+                            newperiod.RecordDate = date;
+                            newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                            newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                            newperiod.StartDate = datedate;
+
+                            db.EmployeePeriods.Add(newperiod);
+                            db.SaveChanges();
+                        }
+                    }
+                    else if (employee != null && salarycategory == null)
+                    {
+                        EmployeePeriods newperiod = new EmployeePeriods();
+
+                        newperiod.SalaryCategoryID = periodcheck.SalaryCategoryID;
+                        newperiod.EmployeeID = periodcheck.EmployeeID;
+                        newperiod.ContractStartDate = datedate;
+                        newperiod.OurCompanyID = employee.OurCompanyID;
+                        newperiod.RecordDate = date;
+                        newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                        newperiod.StartDate = datedate;
+
+                        db.EmployeePeriods.Add(newperiod);
+                        db.SaveChanges();
+                    }
+
+                    //SequenceID
+                    var sequence = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.SequenceID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
+                    if (employee != null && sequence != null && sequence.SequenceID != periodcheck.SequenceID)
+                    {
+                        if (sequence.StartDate == datedate)
+                        {
+                            sequence.SequenceID = periodcheck.SequenceID;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            EmployeePeriods newperiod = new EmployeePeriods();
+
+                            newperiod.SequenceID = periodcheck.SequenceID;
+                            newperiod.EmployeeID = periodcheck.EmployeeID;
+                            newperiod.ContractStartDate = datedate;
+                            newperiod.OurCompanyID = employee.OurCompanyID;
+                            newperiod.RecordDate = date;
+                            newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                            newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                            newperiod.StartDate = datedate;
+
+                            db.EmployeePeriods.Add(newperiod);
+                            db.SaveChanges();
+                        }
+                    }
+                    else if (employee != null && sequence == null)
+                    {
+                        EmployeePeriods newperiod = new EmployeePeriods();
+
+                        newperiod.SequenceID = periodcheck.SequenceID;
+                        newperiod.EmployeeID = periodcheck.EmployeeID;
+                        newperiod.ContractStartDate = datedate;
+                        newperiod.OurCompanyID = employee.OurCompanyID;
+                        newperiod.RecordDate = date;
+                        newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                        newperiod.StartDate = datedate;
+
+                        db.EmployeePeriods.Add(newperiod);
+                        db.SaveChanges();
+                    }
+
+                    //ShiftTypeID
+                    var shifttype = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.ShiftTypeID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
+                    if (employee != null && shifttype != null && shifttype.ShiftTypeID != periodcheck.ShiftTypeID)
+                    {
+                        if (shifttype.StartDate == datedate)
+                        {
+                            shifttype.ShiftTypeID = periodcheck.ShiftTypeID;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            EmployeePeriods newperiod = new EmployeePeriods();
+
+                            newperiod.ShiftTypeID = periodcheck.ShiftTypeID;
+                            newperiod.EmployeeID = periodcheck.EmployeeID;
+                            newperiod.ContractStartDate = datedate;
+                            newperiod.OurCompanyID = employee.OurCompanyID;
+                            newperiod.RecordDate = date;
+                            newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                            newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                            newperiod.StartDate = datedate;
+
+                            db.EmployeePeriods.Add(newperiod);
+                            db.SaveChanges();
+                        }
+                    }
+                    else if (employee != null && shifttype == null)
+                    {
+                        EmployeePeriods newperiod = new EmployeePeriods();
+
+                        newperiod.ShiftTypeID = periodcheck.ShiftTypeID;
+                        newperiod.EmployeeID = periodcheck.EmployeeID;
+                        newperiod.ContractStartDate = datedate;
+                        newperiod.OurCompanyID = employee.OurCompanyID;
+                        newperiod.RecordDate = date;
+                        newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                        newperiod.StartDate = datedate;
+
+                        db.EmployeePeriods.Add(newperiod);
+                        db.SaveChanges();
+                    }
+
+                    //RoleGroupID
+                    var rolegroup = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.RoleGroupID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
+                    if (employee != null && rolegroup != null && rolegroup.RoleGroupID != periodcheck.RoleGroupID)
+                    {
+                        if (rolegroup.StartDate == datedate)
+                        {
+                            rolegroup.RoleGroupID = periodcheck.RoleGroupID;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            EmployeePeriods newperiod = new EmployeePeriods();
+
+                            newperiod.RoleGroupID = periodcheck.RoleGroupID;
+                            newperiod.EmployeeID = periodcheck.EmployeeID;
+                            newperiod.ContractStartDate = datedate;
+                            newperiod.OurCompanyID = employee.OurCompanyID;
+                            newperiod.RecordDate = date;
+                            newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                            newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                            newperiod.StartDate = datedate;
+
+                            db.EmployeePeriods.Add(newperiod);
+                            db.SaveChanges();
+                        }
+                    }
+                    else if (employee != null && rolegroup == null)
+                    {
+                        EmployeePeriods newperiod = new EmployeePeriods();
+
+                        newperiod.RoleGroupID = periodcheck.RoleGroupID;
+                        newperiod.EmployeeID = periodcheck.EmployeeID;
+                        newperiod.ContractStartDate = datedate;
+                        newperiod.OurCompanyID = employee.OurCompanyID;
+                        newperiod.RecordDate = date;
+                        newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                        newperiod.StartDate = datedate;
+
+                        db.EmployeePeriods.Add(newperiod);
+                        db.SaveChanges();
+                    }
+
+                    //StatusID
+                    var status = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.EmployeeStatusID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
+                    if (employee != null && status != null && status.EmployeeStatusID != periodcheck.StatusID)
+                    {
+                        EmployeePeriods newperiod = new EmployeePeriods();
+
+                        newperiod.EmployeeStatusID = periodcheck.StatusID;
+                        newperiod.EmployeeID = periodcheck.EmployeeID;
+                        newperiod.OurCompanyID = employee.OurCompanyID;
+                        newperiod.RecordDate = date;
+                        newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                        newperiod.StartDate = datedate;
+                        newperiod.ContractStartDate = datedate;
+
+                        db.EmployeePeriods.Add(newperiod);
+
+                        if (periodcheck.StatusID == 1 && employee.DateStart == null)
+                        {
+                            employee.DateStart = datedate;
+                        }
+                        else if (periodcheck.StatusID == 2 && employee.DateEnd == null)
+                        {
+                            employee.DateEnd = datedate;
+                        }
+
+                        db.SaveChanges();
+                    }
+                    else if (employee != null && status == null)
+                    {
+                        EmployeePeriods newperiod = new EmployeePeriods();
+
+                        newperiod.EmployeeStatusID = periodcheck.StatusID;
+                        newperiod.EmployeeID = periodcheck.EmployeeID;
+                        newperiod.ContractStartDate = datedate;
+                        newperiod.OurCompanyID = employee.OurCompanyID;
+                        newperiod.RecordDate = date;
+                        newperiod.RecordedEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        newperiod.RecordIP = OfficeHelper.GetIPAddress();
+                        newperiod.StartDate = datedate;
+
+                        db.EmployeePeriods.Add(newperiod);
+
+                        if (periodcheck.StatusID == 1 && employee.DateStart == null)
+                        {
+                            employee.DateStart = datedate;
+                        }
+                        else if (periodcheck.StatusID == 2 && employee.DateEnd == null)
+                        {
+                            employee.DateEnd = datedate;
+                        }
+
+                        db.SaveChanges();
+                    }
+
                 }
+
+                issuccess = true;
             }
 
             return issuccess;
