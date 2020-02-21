@@ -1852,7 +1852,7 @@ namespace ActionForce.Office
 
                     //AreaCategoryID
                     var areacategory = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.AreaCategoryID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
-                    if (employee != null && areacategory != null && areacategory.AreaCategoryID != periodcheck.AreaCategoryID)
+                    if (employee != null && areacategory != null && areacategory.AreaCategoryID != periodcheck.AreaCategoryID && periodcheck.AreaCategoryID != null)
                     {
                         if (areacategory.StartDate == datedate)
                         {
@@ -1876,7 +1876,7 @@ namespace ActionForce.Office
                             db.SaveChanges();
                         }
                     }
-                    else if (employee != null && areacategory == null)
+                    else if (employee != null && areacategory == null && periodcheck.AreaCategoryID != null)
                     {
                         EmployeePeriods newperiod = new EmployeePeriods();
 
@@ -1895,7 +1895,7 @@ namespace ActionForce.Office
 
                     //DepartmentID
                     var department = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.DepartmentID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
-                    if (employee != null && department != null && department.DepartmentID != periodcheck.DepartmentID)
+                    if (employee != null && department != null && department.DepartmentID != periodcheck.DepartmentID && periodcheck.DepartmentID != null)
                     {
                         if (department.StartDate == datedate)
                         {
@@ -1919,7 +1919,7 @@ namespace ActionForce.Office
                             db.SaveChanges();
                         }
                     }
-                    else if (employee != null && department == null)
+                    else if (employee != null && department == null && periodcheck.DepartmentID != null)
                     {
                         EmployeePeriods newperiod = new EmployeePeriods();
 
@@ -1938,7 +1938,7 @@ namespace ActionForce.Office
 
                     //PositionID
                     var position = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.PositionID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
-                    if (employee != null && position != null && position.PositionID != periodcheck.PositionID)
+                    if (employee != null && position != null && position.PositionID != periodcheck.PositionID && periodcheck.PositionID != null)
                     {
                         if (position.StartDate == datedate)
                         {
@@ -1962,7 +1962,7 @@ namespace ActionForce.Office
                             db.SaveChanges();
                         }
                     }
-                    else if (employee != null && position == null)
+                    else if (employee != null && position == null && periodcheck.PositionID != null)
                     {
                         EmployeePeriods newperiod = new EmployeePeriods();
 
@@ -1981,7 +1981,7 @@ namespace ActionForce.Office
 
                     //SalaryCategoryID
                     var salarycategory = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.SalaryCategoryID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
-                    if (employee != null && salarycategory != null && salarycategory.SalaryCategoryID != periodcheck.SalaryCategoryID)
+                    if (employee != null && salarycategory != null && salarycategory.SalaryCategoryID != periodcheck.SalaryCategoryID && periodcheck.SalaryCategoryID != null)
                     {
                         if (salarycategory.StartDate == datedate)
                         {
@@ -2005,7 +2005,7 @@ namespace ActionForce.Office
                             db.SaveChanges();
                         }
                     }
-                    else if (employee != null && salarycategory == null)
+                    else if (employee != null && salarycategory == null && periodcheck.SalaryCategoryID != null)
                     {
                         EmployeePeriods newperiod = new EmployeePeriods();
 
@@ -2024,7 +2024,7 @@ namespace ActionForce.Office
 
                     //SequenceID
                     var sequence = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.SequenceID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
-                    if (employee != null && sequence != null && sequence.SequenceID != periodcheck.SequenceID)
+                    if (employee != null && sequence != null && sequence.SequenceID != periodcheck.SequenceID && periodcheck.SequenceID != null)
                     {
                         if (sequence.StartDate == datedate)
                         {
@@ -2048,7 +2048,7 @@ namespace ActionForce.Office
                             db.SaveChanges();
                         }
                     }
-                    else if (employee != null && sequence == null)
+                    else if (employee != null && sequence == null && periodcheck.SequenceID != null)
                     {
                         EmployeePeriods newperiod = new EmployeePeriods();
 
@@ -2067,7 +2067,7 @@ namespace ActionForce.Office
 
                     //ShiftTypeID
                     var shifttype = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.ShiftTypeID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
-                    if (employee != null && shifttype != null && shifttype.ShiftTypeID != periodcheck.ShiftTypeID)
+                    if (employee != null && shifttype != null && shifttype.ShiftTypeID != periodcheck.ShiftTypeID && periodcheck.ShiftTypeID != null)
                     {
                         if (shifttype.StartDate == datedate)
                         {
@@ -2091,7 +2091,7 @@ namespace ActionForce.Office
                             db.SaveChanges();
                         }
                     }
-                    else if (employee != null && shifttype == null)
+                    else if (employee != null && shifttype == null && periodcheck.ShiftTypeID != null)
                     {
                         EmployeePeriods newperiod = new EmployeePeriods();
 
@@ -2110,7 +2110,7 @@ namespace ActionForce.Office
 
                     //RoleGroupID
                     var rolegroup = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.RoleGroupID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
-                    if (employee != null && rolegroup != null && rolegroup.RoleGroupID != periodcheck.RoleGroupID)
+                    if (employee != null && rolegroup != null && rolegroup.RoleGroupID != periodcheck.RoleGroupID && periodcheck.RoleGroupID != null)
                     {
                         if (rolegroup.StartDate == datedate)
                         {
@@ -2134,7 +2134,7 @@ namespace ActionForce.Office
                             db.SaveChanges();
                         }
                     }
-                    else if (employee != null && rolegroup == null)
+                    else if (employee != null && rolegroup == null && periodcheck.RoleGroupID != null)
                     {
                         EmployeePeriods newperiod = new EmployeePeriods();
 
@@ -2153,7 +2153,7 @@ namespace ActionForce.Office
 
                     //StatusID
                     var status = db.EmployeePeriods.Where(x => x.EmployeeID == periodcheck.EmployeeID && x.EmployeeStatusID != null).OrderByDescending(x => x.StartDate).ThenByDescending(x => x.RecordDate).FirstOrDefault();
-                    if (employee != null && status != null && status.EmployeeStatusID != periodcheck.StatusID)
+                    if (employee != null && status != null && status.EmployeeStatusID != periodcheck.StatusID && periodcheck.StatusID != null)
                     {
                         EmployeePeriods newperiod = new EmployeePeriods();
 
@@ -2179,7 +2179,7 @@ namespace ActionForce.Office
 
                         db.SaveChanges();
                     }
-                    else if (employee != null && status == null)
+                    else if (employee != null && status == null && periodcheck.StatusID != null)
                     {
                         EmployeePeriods newperiod = new EmployeePeriods();
 

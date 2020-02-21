@@ -75,6 +75,7 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EmployeeFilter(EmployeeFilterModel filterModel)
         {
+            filterModel.SearchKey = filterModel.SearchKey.ToUpper();
             TempData["EmployeeFilter"] = filterModel;
 
             return RedirectToAction("Index");
@@ -91,6 +92,8 @@ namespace ActionForce.Office.Controllers
 
             if (filterModel != null)
             {
+                filterModel.SearchKey = filterModel.SearchKey.ToUpper();
+
                 model.FilterModel = filterModel;
 
                 if (!string.IsNullOrEmpty(model.FilterModel.SearchKey))
@@ -956,8 +959,24 @@ namespace ActionForce.Office.Controllers
             model.EmployeeShift = Db.EmployeeShift.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date && x.IsWorkTime == true);
             model.EmployeeBreak = Db.EmployeeShift.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date && x.IsBreakTime == true && x.BreakDurationMinute == null);
 
+            model.EmployeePhones = Db.VEmployeePhones.Where(x => x.EmployeeID == model.Employee.EmployeeID).ToList();
+            model.EmployeeEmails = Db.VEmployeeEmails.Where(x => x.EmployeeID == model.Employee.EmployeeID).ToList();
+            model.EmployeeAddress = Db.VEmployeeAddress.Where(x => x.EmployeeID == model.Employee.EmployeeID).ToList();
+            model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.PhoneTypes = Db.PhoneType.Where(x => x.IsActive == true).ToList();
+            model.EmailTypes = Db.EmailType.Where(x => x.IsActive == true).ToList();
+            model.AddressTypes = Db.AddressType.Where(x => x.IsActive == true).ToList();
+
+            model.CountryList = Db.Country.Where(x => x.IsActive == true).ToList();
+            int countryid = model.Employee?.Country ?? model.CountryList.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ID;
+            model.StateList = Db.State.Where(x => x.IsActive == true && x.CountryID == countryid).ToList();
+            int stateid = model.Employee?.State ?? model.StateList.FirstOrDefault().ID;
+            model.CityList = Db.City.Where(x => x.IsActive == true && x.StateID == stateid).ToList();
+
+
             return View(model);
         }
+
         [AllowAnonymous]
         public ActionResult Location(Guid? id)
         {
@@ -2308,6 +2327,107 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialEmployeeDocumentDetail", model);
         }
+
+
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult AddEmployeePhone(NewPhone newphone)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (newphone != null)
+            {
+                var employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeID == newphone.EmployeeID);
+
+                EmployeePhones phone = new EmployeePhones();
+
+                phone.CountryPhoneCode = newphone.CountryPhoneCode.Trim();
+                phone.Description = newphone.Description;
+                phone.EmployeeID = newphone.EmployeeID;
+                phone.IsMaster = !string.IsNullOrEmpty(newphone.IsMaster) && newphone.IsMaster == "1" ? true : false;
+                phone.IsActive = !string.IsNullOrEmpty(newphone.IsActive) && newphone.IsActive == "1" ? true : false;
+                phone.PhoneNumber = newphone.Mobile.Replace("(", "").Replace(")", "").Replace(" ", "") ?? "";
+                phone.PhoneTypeID = newphone.PhoneType;
+
+                Db.EmployeePhones.Add(phone);
+                Db.SaveChanges();
+
+                result.IsSuccess = true;
+                result.Message = $"{phone.PhoneNumber} nolu telefon eklendi";
+
+                //model.Employee = employee;
+            }
+            else
+            {
+                result.Message = $"Form bilgisi boş olamaz";
+            }
+
+            TempData["result"] = result;
+
+            model.Result = result;
+
+
+            model.EmployeePhones = Db.VEmployeePhones.Where(x => x.EmployeeID == newphone.EmployeeID).ToList();
+            //model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            //model.PhoneTypes = Db.PhoneType.Where(x => x.IsActive == true).ToList();
+
+            return PartialView("_PartialEmployeePhones", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult AddEmployeeMail(NewEmail newemail)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (newemail != null)
+            {
+                var employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeID == newemail.EmployeeID);
+
+                EmployeeEmails email = new EmployeeEmails();
+
+                email.Description = newemail.Description;
+                email.EmployeeID = newemail.EmployeeID;
+                email.IsMaster = !string.IsNullOrEmpty(newemail.IsMaster) && newemail.IsMaster == "1" ? true : false;
+                email.IsActive = !string.IsNullOrEmpty(newemail.IsActive) && newemail.IsActive == "1" ? true : false;
+                email.EMail = newemail.EMail.Trim() ?? "";
+                email.TypeID = newemail.EmailType;
+
+                Db.EmployeeEmails.Add(email);
+                Db.SaveChanges();
+
+                result.IsSuccess = true;
+                result.Message = $"{newemail.EMail} e-posta adresi eklendi";
+            }
+            else
+            {
+                result.Message = $"Form bilgisi boş olamaz";
+            }
+
+            TempData["result"] = result;
+
+            model.Result = result;
+
+            model.EmployeeEmails = Db.VEmployeeEmails.Where(x => x.EmployeeID == newemail.EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeeEmails", model);
+        }
+
+
 
 
 

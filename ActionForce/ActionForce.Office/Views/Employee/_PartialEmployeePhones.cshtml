@@ -1,0 +1,34 @@
+﻿@model EmployeeControlModel
+
+<table class="table table-light table-hover mg-b-0">
+    <thead>
+        <tr>
+            <th>Kod</th>
+            <th>Telefon</th>
+            <th>Tür</th>
+            <th>Açıklama</th>
+            <th>Birincil</th>
+            <th>Aktif</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.EmployeePhones)
+        {
+        <tr>
+            <td>@(item.CountryPhoneCode)</td>
+            <td class="tx-black tx-15">@(item.PhoneNumber)</td>
+            <td>@(item.PhoneTypeName)</td>
+            <td>@(item.Description)</td>
+            <td>@(item.IsMaster)</td>
+            <td>@(item.IsActive)</td>
+            <td class="tx-right">
+                <a href="#" class="link-03 lh-0 tx-primary btn-xxs btn-light" style="padding:10px 10px 5px 10px;" title="Güncelle"><i class="icon ion-md-checkmark-circle-outline tx-15"></i></a>
+                <a href="#" class="link-03 lh-0 tx-primary btn-xxs btn-light" style="padding:10px 10px 5px 10px;" title="Birincil Yap"><i class="icon ion-md-arrow-up tx-15"></i></a>
+                <a href="#" class="link-03 lh-0 tx-primary btn-xxs btn-light" style="padding:10px 10px 5px 10px;" title="Kaldır"><i class="icon ion-md-close-circle-outline tx-15"></i></a>
+            </td>
+        </tr>
+        }
+
+    </tbody>
+</table>

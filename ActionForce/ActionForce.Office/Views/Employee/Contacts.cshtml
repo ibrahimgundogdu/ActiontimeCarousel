@@ -11,7 +11,7 @@
 
 <div class="content-header">
     <div class="content-search">
-        <span class="tx-20">Çalışan Detayı</span>
+        <span class="tx-20">Çalışan İletişim Bilgileri</span>
     </div>
     <nav class="nav">
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
@@ -26,19 +26,444 @@
                 </div>
             </div>
 
-            <div class="media-body mg-t-40 mg-lg-t-0 pd-l-20">
-                <div class="card mg-b-20 mg-lg-b-5">
+            <div class="media-body  mg-t-40 mg-lg-t-0 pd-l-20">
+                <div class="card mg-b-20">
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.Employee.FullName)</h6>
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Telefonları</h6>
+                        <div class="d-flex tx-15">
+                            <a href="#modalEmployeePhone" data-toggle="modal" class="link-03 lh-0 tx-primary"><i class="icon ion-md-add-circle-outline tx-15"></i> &nbsp; Telefon Ekle</a>
+                        </div>
                     </div>
-                    <div class="card-body pd-20 pd-lg-5">
-                        @{Html.RenderPartial("_PartialEmployeeDetail", Model);}
+                    <div class="card-body pd-20 pd-lg-5" id="EmployeePhones">
+                        @{Html.RenderPartial("_PartialEmployeePhones", Model);}
                     </div>
                 </div>
-
+                <div class="card mg-b-20">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">E-Posta Adresleri</h6>
+                        <div class="d-flex tx-15">
+                            <a href="#modalEmployeeMail" data-toggle="modal" class="link-03 lh-0 tx-primary"><i class="icon ion-md-add-circle-outline tx-15"></i> &nbsp; E-Posta Ekle</a>
+                        </div>
+                    </div>
+                    <div class="card-body pd-20 pd-lg-5" id="EmployeeEmails">
+                        @{Html.RenderPartial("_PartialEmployeeEmails", Model);}
+                    </div>
+                </div>
+                <div class="card mg-b-20">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Adresleri</h6>
+                        <div class="d-flex tx-15">
+                            <a href="#modalEmployeeAddress" data-toggle="modal" class="link-03 lh-0 tx-primary"><i class="icon ion-md-add-circle-outline tx-15"></i> &nbsp; Adres Ekle</a>
+                        </div>
+                    </div>
+                    <div class="card-body pd-20 pd-lg-5" id="EmployeeAddress">
+                        @{Html.RenderPartial("_PartialEmployeeAddress", Model);}
+                    </div>
+                </div>
             </div>
 
-        
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalEmployeePhone" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body pd-20 pd-sm-40" id="AddEmployeePhone">
+                <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </a>
+                <div>
+                    <h4>@Model.Employee.FullName  | <span class="font-weight-bold text-black-50">Telefon Ekle</span></h4>
+
+                    @using (Ajax.BeginForm("AddEmployeePhone", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "EmployeePhones", InsertionMode = InsertionMode.Replace, OnSuccess= "OnPhoneSuccess" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group row bg-gray-50 mg-b-5">
+                            <label for="Mobile" class="col-sm-3 col-form-label">Telefonu</label>
+                            <div class="col-sm-3">
+                                <select class="form-control" id="CountryPhoneCode" name="CountryPhoneCode">
+                                    @foreach (var item in Model.PhoneCodes)
+                                    {
+                                        <option value="@item.Code" @(Model.Employee.CountryPhoneCode == item.Code ? "selected" : "")>@($"{item.Code} {item.Country      }")</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-sm-6">
+                                <input id="Mobile" name="Mobile" type="text" class="form-control phone" autocomplete="off" placeholder="Telefon" required>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group row bg-gray-50 mg-b-5">
+                            <label for="PhoneType" class="col-sm-3 col-form-label">Telefon Türü</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="PhoneType" name="PhoneType" required>
+                                    <option value="">Telefon Türünü Seçiniz </option>
+                                    @foreach (var item in Model.PhoneTypes.OrderBy(x => x.SortBy))
+                                    {
+                                        <option value="@item.ID">@($"{item.TypeName}")</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="Description" class="col-sm-3 col-form-label">Açıklaması</label>
+                            <div class="col-sm-9">
+                                <input id="Description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Açıklaması">
+                            </div>
+                        </div>
+
+                        <div class="form-group row mg-b-0">
+                            <label for="IsMaster" class="col-sm-3 col-form-label">Birincil mi?</label>
+                            <div class="col-sm-9">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="IsMaster" name="IsMaster" value="1">
+                                    <label class="custom-control-label" for="IsMaster">Birincil</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mg-b-0">
+                            <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+                            <div class="col-sm-9">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" checked>
+                                    <label class="custom-control-label" for="IsActive">Aktif</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mg-b-0">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9">
+                                <input id="EmployeeID" name="EmployeeID" type="hidden" value="@(Model.Employee.EmployeeID)" />
+                                <button type="submit" class="btn btn-primary btn-block">Telefonu Ekle</button>
+                            </div>
+                        </div>
+
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEmployeeMail" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body pd-20 pd-sm-40" id="AddEmployeeMail">
+                <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </a>
+                <div>
+                    <h4>@Model.Employee.FullName  | <span class="font-weight-bold text-black-50">E-Posta Ekle</span></h4>
+
+                    @using (Ajax.BeginForm("AddEmployeeMail", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "EmployeeEmails", InsertionMode = InsertionMode.Replace, OnSuccess = "OnMailSuccess" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group row bg-gray-50 mg-b-5">
+                            <label for="EMail" class="col-sm-3 col-form-label">E-Posta Adresi</label>
+                            <div class="col-sm-9">
+                                <input id="EMail" name="EMail" type="email" class="form-control" autocomplete="off" placeholder="E-Posta" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row bg-gray-50 mg-b-5">
+                            <label for="EmailType" class="col-sm-3 col-form-label">E-Posta Türü</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="EmailType" name="EmailType" required>
+                                    <option value="">E-Posta Türünü Seçiniz </option>
+                                    @foreach (var item in Model.EmailTypes.OrderBy(x => x.SortBy))
+                                    {
+                                        <option value="@item.ID">@($"{item.TypeName}")</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="Description" class="col-sm-3 col-form-label">Açıklaması</label>
+                            <div class="col-sm-9">
+                                <input id="Description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Açıklaması">
+                            </div>
+                        </div>
+
+                        <div class="form-group row mg-b-0">
+                            <label for="IsMaster" class="col-sm-3 col-form-label">Birincil mi?</label>
+                            <div class="col-sm-9">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="IsMaster" name="IsMaster" value="1">
+                                    <label class="custom-control-label" for="IsMaster">Birincil</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mg-b-0">
+                            <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+                            <div class="col-sm-9">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" checked>
+                                    <label class="custom-control-label" for="IsActive">Aktif</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mg-b-0">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9">
+                                <input id="EmployeeID" name="EmployeeID" type="hidden" value="@(Model.Employee.EmployeeID)" />
+                                <button type="submit" class="btn btn-primary btn-block">E-Postayı Ekle</button>
+                            </div>
+                        </div>
+
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEmployeeAddress" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body pd-20 pd-sm-40" id="AddEmployeeAddress">
+                <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </a>
+                <div>
+                    <h4>@Model.Employee.FullName  | <span class="font-weight-bold text-black-50">Adres Ekle</span></h4>
+
+                    @using (Ajax.BeginForm("AddEmployeeAddress", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "EmployeeAddress", InsertionMode = InsertionMode.Replace, OnSuccess = "OnAddressSuccess" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group row bg-gray-50 mg-b-5">
+                            <label for="Address" class="col-sm-3 col-form-label">Posta Adresi</label>
+                            <div class="col-sm-9">
+                                <input id="Address" name="Address" type="email" class="form-control" autocomplete="off" placeholder="Adres" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row bg-gray-50 mg-b-5">
+                            <label for="AddressType" class="col-sm-3 col-form-label">Adres Türü</label>
+                            <div class="col-sm-9">
+                                <select class="form-control" id="AddressType" name="AddressType" required>
+                                    <option value="">E-Posta Türünü Seçiniz </option>
+                                    @foreach (var item in Model.AddressTypes.OrderBy(x => x.SortBy))
+                                    {
+                                        <option value="@item.ID">@($"{item.TypeName}")</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+
+
+                        <div class="form-group row  mg-b-5  bg-gray-50">
+                            <label for="Country" class="col-sm-3 col-form-label">Ülke / Eyalet / Şehir</label>
+                            <div class="col-sm-3">
+                                <select class="form-control" id="Country" name="Country" required>
+                                    @foreach (var item in Model.CountryList)
+                                    {
+                                        <option value="@item.ID" @(Model.Authentication.ActionEmployee.OurCompanyID == item.OurCompanyID ? "selected" : "")>@($"{item.CountryName}")</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control" id="State" name="State" required>
+                                    <option value="">Eyalet Seçiminiz</option>
+                                    @foreach (var item in Model.StateList)
+                                    {
+                                        <option value="@item.ID">@($"{item.StateName}")</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-sm-3">
+                                <select class="form-control" id="City" name="City" required>
+                                    <option value="">Şehir Seçiminiz</option>
+                                    @foreach (var item in Model.CityList)
+                                    {
+                                        <option value="@item.ID">@($"{item.CityName}")</option>
+                                    }
+                                </select>
+                            </div>
+                            
+                        </div>
+
+                        <div class="form-group row  mg-b-5  bg-gray-50">
+                            <label for="Address" class="col-sm-3 col-form-label">Adres</label>
+                            <div class="col-sm-6">
+                                <textarea id="Address" name="Address" rows="3" class="form-control" autocomplete="off" placeholder="Adres" style="width:100% !important;" required></textarea>
+                            </div>
+                            <div class="col-sm-3">
+                            </div>
+                        </div>
+
+                        <div class="form-group row bg-gray-50">
+                            <label for="PostCode" class="col-sm-3 col-form-label">Posta Kodu / ZIP Code</label>
+                            <div class="col-sm-6">
+                                <input id="PostCode" name="PostCode" type="text" class="form-control postcode" autocomplete="off" placeholder="Posta Kodu" required>
+                            </div>
+                            <div class="col-sm-3">
+                            </div>
+                        </div>
+
+
+
+
+
+
+
+                        <div class="form-group row">
+                            <label for="Description" class="col-sm-3 col-form-label">Açıklaması</label>
+                            <div class="col-sm-9">
+                                <input id="Description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Açıklaması">
+                            </div>
+                        </div>
+
+                        <div class="form-group row mg-b-0">
+                            <label for="IsMaster" class="col-sm-3 col-form-label">Birincil mi?</label>
+                            <div class="col-sm-9">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="IsMaster" name="IsMaster" value="1">
+                                    <label class="custom-control-label" for="IsMaster">Birincil</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mg-b-0">
+                            <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+                            <div class="col-sm-9">
+                                <div class="custom-control custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" checked>
+                                    <label class="custom-control-label" for="IsActive">Aktif</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mg-b-0">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9">
+                                <input id="EmployeeID" name="EmployeeID" type="hidden" value="@(Model.Employee.EmployeeID)" />
+                                <button type="submit" class="btn btn-primary btn-block">E-Postayı Ekle</button>
+                            </div>
+                        </div>
+
+                    }
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+
+        $('.phone').mask('(000) 000 00 00');
+        $('.postcode').mask('00000-000');
+
+
+        function OnPhoneSuccess(data) {
+            $('#modalEmployeePhone').modal('hide');
+        } 
+        
+        function OnMailSuccess(data) {
+            $('#modalEmployeeMail').modal('hide');
+        }
+
+        function OnAddressSuccess(data) {
+            $('#modalEmployeeAddress').modal('hide');
+        }
+
+        $(document).ready(function () {
+
+            $("#Country").change(function () {
+
+                var countryID = $("#Country").val();
+
+                $.ajax
+                    ({
+                        url: '/Employee/GetStateList',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            countryid: countryID
+                        }),
+                        success: function (data) {
+
+                            $("#State").empty();
+
+                            $("#State").append($('<option></option>', { "value": '', "text": 'Eyalet Seçiminiz' }));
+
+                            $.each(data, function (index, label) {
+                                $("#State").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+                        },
+                        error: function () {
+                        },
+                    });
+            });
+
+
+
+            $("#State").change(function () {
+
+                var stateID = $("#State").val();
+
+                $.ajax
+                    ({
+                        url: '/Employee/GetCityList',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            stateid: stateID
+                        }),
+                        success: function (data) {
+
+                            $("#City").empty();
+
+                            $("#City").append($('<option></option>', { "value": '', "text": 'Şehir Seçiminiz' }));
+
+                            $.each(data, function (index, label) {
+                                $("#City").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+                        },
+                        error: function () {
+                        },
+                    });
+            });
+
+
+        });
+
+    </script>
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}

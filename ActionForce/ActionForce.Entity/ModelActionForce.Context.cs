@@ -275,6 +275,9 @@ namespace ActionForce.Entity
         public virtual DbSet<Country> Country { get; set; }
         public virtual DbSet<State> State { get; set; }
         public virtual DbSet<City> City { get; set; }
+        public virtual DbSet<VEmployeeAddress> VEmployeeAddress { get; set; }
+        public virtual DbSet<VEmployeeEmails> VEmployeeEmails { get; set; }
+        public virtual DbSet<VEmployeePhones> VEmployeePhones { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

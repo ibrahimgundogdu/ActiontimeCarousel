@@ -130,6 +130,13 @@ namespace ActionForce.Office
         public IEnumerable<State> StateList { get; set; }
         public IEnumerable<City> CityList { get; set; }
 
+        public IEnumerable<VEmployeePhones> EmployeePhones { get; set; }
+        public IEnumerable<PhoneType> PhoneTypes { get; set; }
+        public IEnumerable<VEmployeeEmails> EmployeeEmails { get; set; }
+        public IEnumerable<EmailType> EmailTypes { get; set; }
+        public IEnumerable<VEmployeeAddress> EmployeeAddress { get; set; }
+        public IEnumerable<AddressType> AddressTypes { get; set; }
+
     }
 
     public class EmployeeFilterModel

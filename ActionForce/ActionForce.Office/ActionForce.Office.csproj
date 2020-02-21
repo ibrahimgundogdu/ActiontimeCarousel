@@ -2367,6 +2367,7 @@
     <Compile Include="Models\EmployeeShiftModel.cs" />
     <Compile Include="Models\CheckEmployee.cs" />
     <Compile Include="Models\NewEmployee.cs" />
+    <Compile Include="Models\NewPhone.cs" />
     <Compile Include="Models\TotalFood.cs" />
     <Compile Include="Models\WeekModel.cs" />
     <Compile Include="Models\WizardModel.cs" />
@@ -2668,6 +2669,9 @@
     <Content Include="Views\Employee\AddEmployeeComplete.cshtml" />
     <Content Include="Views\Employee\_PartialProfileSideBar.cshtml" />
     <Content Include="Views\Employee\Contacts.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeePhones.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeEmails.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeAddress.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

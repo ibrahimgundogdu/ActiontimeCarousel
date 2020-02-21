@@ -4452,6 +4452,29 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployee' does not have a 
           <Property Name="EmployeeUID" Type="uniqueidentifier" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeAddress' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VEmployeeAddress">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="AddressTypeID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+          <Property Name="Address" Type="nvarchar" MaxLength="350" />
+          <Property Name="Country" Type="int" />
+          <Property Name="State" Type="int" />
+          <Property Name="City" Type="int" />
+          <Property Name="PostCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="IsMaster" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="AddressTypeName" Type="nvarchar" MaxLength="20" />
+          <Property Name="CityName" Type="nvarchar" MaxLength="50" />
+          <Property Name="StateName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeAll' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VEmployeeAll">
           <Key>
@@ -4568,6 +4591,21 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeCashActions' does 
           <Property Name="UnitFoodPrice" Type="float" />
           <Property Name="TotalAmountFood" Type="float" />
           <Property Name="SystemUnitPrice" Type="float" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeEmails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VEmployeeEmails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="TypeID" Type="int" />
+          <Property Name="EMail" Type="nvarchar" MaxLength="120" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsMaster" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="EmailTypeName" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -4741,6 +4779,23 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeLocationPosition' 
           <Property Name="EmployeeFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="PositionName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeePhones' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VEmployeePhones">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="PhoneTypeID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" />
+          <Property Name="CountryPhoneCode" Type="nvarchar" MaxLength="8" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsMaster" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="PhoneTypeName" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeSalary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6810,6 +6865,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployee].[EmployeeUID] AS [EmployeeUID]
     FROM [dbo].[VEmployee] AS [VEmployee]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VEmployeeAddress" EntityType="Self.VEmployeeAddress" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VEmployeeAddress].[ID] AS [ID], 
+    [VEmployeeAddress].[EmployeeID] AS [EmployeeID], 
+    [VEmployeeAddress].[AddressTypeID] AS [AddressTypeID], 
+    [VEmployeeAddress].[Description] AS [Description], 
+    [VEmployeeAddress].[Address] AS [Address], 
+    [VEmployeeAddress].[Country] AS [Country], 
+    [VEmployeeAddress].[State] AS [State], 
+    [VEmployeeAddress].[City] AS [City], 
+    [VEmployeeAddress].[PostCode] AS [PostCode], 
+    [VEmployeeAddress].[IsMaster] AS [IsMaster], 
+    [VEmployeeAddress].[IsActive] AS [IsActive], 
+    [VEmployeeAddress].[AddressTypeName] AS [AddressTypeName], 
+    [VEmployeeAddress].[CityName] AS [CityName], 
+    [VEmployeeAddress].[StateName] AS [StateName], 
+    [VEmployeeAddress].[CountryName] AS [CountryName]
+    FROM [dbo].[VEmployeeAddress] AS [VEmployeeAddress]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VEmployeeAll" EntityType="Self.VEmployeeAll" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VEmployeeAll].[EmployeeID] AS [EmployeeID], 
@@ -6918,6 +6992,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeCashActions].[TotalAmountFood] AS [TotalAmountFood], 
     [VEmployeeCashActions].[SystemUnitPrice] AS [SystemUnitPrice]
     FROM [dbo].[VEmployeeCashActions] AS [VEmployeeCashActions]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VEmployeeEmails" EntityType="Self.VEmployeeEmails" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VEmployeeEmails].[ID] AS [ID], 
+    [VEmployeeEmails].[EmployeeID] AS [EmployeeID], 
+    [VEmployeeEmails].[TypeID] AS [TypeID], 
+    [VEmployeeEmails].[EMail] AS [EMail], 
+    [VEmployeeEmails].[Description] AS [Description], 
+    [VEmployeeEmails].[IsMaster] AS [IsMaster], 
+    [VEmployeeEmails].[IsActive] AS [IsActive], 
+    [VEmployeeEmails].[EmailTypeName] AS [EmailTypeName]
+    FROM [dbo].[VEmployeeEmails] AS [VEmployeeEmails]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VEmployeeList" EntityType="Self.VEmployeeList" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -7071,6 +7157,19 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeLocationPosition].[LocationFullName] AS [LocationFullName], 
     [VEmployeeLocationPosition].[PositionName] AS [PositionName]
     FROM [dbo].[VEmployeeLocationPosition] AS [VEmployeeLocationPosition]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VEmployeePhones" EntityType="Self.VEmployeePhones" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VEmployeePhones].[ID] AS [ID], 
+    [VEmployeePhones].[EmployeeID] AS [EmployeeID], 
+    [VEmployeePhones].[PhoneTypeID] AS [PhoneTypeID], 
+    [VEmployeePhones].[Description] AS [Description], 
+    [VEmployeePhones].[CountryPhoneCode] AS [CountryPhoneCode], 
+    [VEmployeePhones].[PhoneNumber] AS [PhoneNumber], 
+    [VEmployeePhones].[IsMaster] AS [IsMaster], 
+    [VEmployeePhones].[IsActive] AS [IsActive], 
+    [VEmployeePhones].[PhoneTypeName] AS [PhoneTypeName]
+    FROM [dbo].[VEmployeePhones] AS [VEmployeePhones]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VEmployeeSalary" EntityType="Self.VEmployeeSalary" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -8056,6 +8155,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Country" EntityType="db293_ActionTimeDbModel.Country" />
           <EntitySet Name="State" EntityType="db293_ActionTimeDbModel.State" />
           <EntitySet Name="City" EntityType="db293_ActionTimeDbModel.City" />
+          <EntitySet Name="VEmployeeAddress" EntityType="db293_ActionTimeDbModel.VEmployeeAddress" />
+          <EntitySet Name="VEmployeeEmails" EntityType="db293_ActionTimeDbModel.VEmployeeEmails" />
+          <EntitySet Name="VEmployeePhones" EntityType="db293_ActionTimeDbModel.VEmployeePhones" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -13716,6 +13818,55 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SortBy" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
+        <EntityType Name="VEmployeeAddress">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="AddressTypeID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="Int32" />
+          <Property Name="State" Type="Int32" />
+          <Property Name="City" Type="Int32" />
+          <Property Name="PostCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="IsMaster" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="AddressTypeName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VEmployeeEmails">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="TypeID" Type="Int32" />
+          <Property Name="EMail" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsMaster" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="EmailTypeName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VEmployeePhones">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="PhoneTypeID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CountryPhoneCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsMaster" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="PhoneTypeName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -19150,6 +19301,56 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="StateID" ColumnName="StateID" />
                 <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VEmployeeAddress">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeAddress">
+              <MappingFragment StoreEntitySet="VEmployeeAddress">
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="AddressTypeName" ColumnName="AddressTypeName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+                <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="AddressTypeID" ColumnName="AddressTypeID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VEmployeeEmails">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeEmails">
+              <MappingFragment StoreEntitySet="VEmployeeEmails">
+                <ScalarProperty Name="EmailTypeName" ColumnName="EmailTypeName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="TypeID" ColumnName="TypeID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VEmployeePhones">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeePhones">
+              <MappingFragment StoreEntitySet="VEmployeePhones">
+                <ScalarProperty Name="PhoneTypeName" ColumnName="PhoneTypeName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="CountryPhoneCode" ColumnName="CountryPhoneCode" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="PhoneTypeID" ColumnName="PhoneTypeID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
