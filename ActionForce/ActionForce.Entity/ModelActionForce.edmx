@@ -5619,6 +5619,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <Function Name="GetToList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
         </Function>
+        <Function Name="MakeEmployeeMasterAdress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AddressID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="MakeEmployeeMasterEmail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AddressID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="MakeEmployeeMasterPhone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AddressID" Type="int" Mode="In" />
+        </Function>
         <Function Name="RemoveAllAccountActions" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ProcessID" Type="bigint" Mode="In" />
           <Parameter Name="ProcessUID" Type="uniqueidentifier" Mode="In" />
@@ -5626,6 +5635,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <Function Name="RemoveDayResult" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="Date" Type="date" Mode="In" />
+        </Function>
+        <Function Name="RemoveEmployeeAddress" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AddressID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RemoveEmployeeEmail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AddressID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RemoveEmployeePhone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="AddressID" Type="int" Mode="In" />
         </Function>
         <Function Name="SetEmployeeScheduleMultiplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -8158,6 +8176,24 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VEmployeeAddress" EntityType="db293_ActionTimeDbModel.VEmployeeAddress" />
           <EntitySet Name="VEmployeeEmails" EntityType="db293_ActionTimeDbModel.VEmployeeEmails" />
           <EntitySet Name="VEmployeePhones" EntityType="db293_ActionTimeDbModel.VEmployeePhones" />
+          <FunctionImport Name="MakeEmployeeMasterAdress">
+          <Parameter Name="AddressID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MakeEmployeeMasterEmail">
+          <Parameter Name="AddressID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="MakeEmployeeMasterPhone">
+          <Parameter Name="AddressID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="RemoveEmployeeAddress">
+            <Parameter Name="AddressID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="RemoveEmployeeEmail">
+            <Parameter Name="AddressID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="RemoveEmployeePhone">
+            <Parameter Name="AddressID" Mode="In" Type="Int32" />
+          </FunctionImport>
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -19355,6 +19391,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="MakeEmployeeMasterAdress" FunctionName="db293_ActionTimeDbModel.Store.MakeEmployeeMasterAdress" />
+          <FunctionImportMapping FunctionImportName="MakeEmployeeMasterEmail" FunctionName="db293_ActionTimeDbModel.Store.MakeEmployeeMasterEmail" />
+          <FunctionImportMapping FunctionImportName="MakeEmployeeMasterPhone" FunctionName="db293_ActionTimeDbModel.Store.MakeEmployeeMasterPhone" />
+          <FunctionImportMapping FunctionImportName="RemoveEmployeeAddress" FunctionName="db293_ActionTimeDbModel.Store.RemoveEmployeeAddress" />
+          <FunctionImportMapping FunctionImportName="RemoveEmployeeEmail" FunctionName="db293_ActionTimeDbModel.Store.RemoveEmployeeEmail" />
+          <FunctionImportMapping FunctionImportName="RemoveEmployeePhone" FunctionName="db293_ActionTimeDbModel.Store.RemoveEmployeePhone" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

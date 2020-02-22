@@ -538,6 +538,11 @@ namespace ActionForce.Office.Controllers
 
                         Db.EmployeeEmails.Add(newmail);
                         Db.SaveChanges();
+
+                        if (newmail.IsMaster == true)
+                        {
+                            var makemaster = Db.MakeEmployeeMasterEmail(newmail.ID);
+                        }
                     }
 
                     // telefon güncellenir
@@ -561,6 +566,11 @@ namespace ActionForce.Office.Controllers
 
                         Db.EmployeePhones.Add(newphone);
                         Db.SaveChanges();
+
+                        if (newphone.IsMaster == true)
+                        {
+                            var makemaster = Db.MakeEmployeeMasterPhone(newphone.ID);
+                        }
                     }
 
                     // adres güncellenir
@@ -591,6 +601,11 @@ namespace ActionForce.Office.Controllers
 
                         Db.EmployeeAddress.Add(newadres);
                         Db.SaveChanges();
+
+                        if (newadres.IsMaster == true)
+                        {
+                            var makemaster = Db.MakeEmployeeMasterAdress(newadres.ID);
+                        }
                     }
 
                     // kontroller yapılır.
@@ -972,7 +987,6 @@ namespace ActionForce.Office.Controllers
             model.StateList = Db.State.Where(x => x.IsActive == true && x.CountryID == countryid).ToList();
             int stateid = model.Employee?.State ?? model.StateList.FirstOrDefault().ID;
             model.CityList = Db.City.Where(x => x.IsActive == true && x.StateID == stateid).ToList();
-
 
             return View(model);
         }
@@ -1675,18 +1689,21 @@ namespace ActionForce.Office.Controllers
 
                 // adresi eklenir.
 
-                EmployeeAddress adres = new EmployeeAddress();
-                adres.Address = empdoc.Address;
-                adres.AddressTypeID = 1;
-                adres.City = empdoc.City;
-                adres.Country = empdoc.Country;
-                adres.EmployeeID = empdoc.EmployeeID;
-                adres.IsActive = true;
-                adres.IsMaster = true;
-                adres.PostCode = empdoc.PostCode;
-                adres.State = empdoc.State;
-                Db.EmployeeAddress.Add(adres);
-                Db.SaveChanges();
+                if (!string.IsNullOrEmpty(empdoc.Address))
+                {
+                    EmployeeAddress adres = new EmployeeAddress();
+                    adres.Address = empdoc.Address;
+                    adres.AddressTypeID = 1;
+                    adres.City = empdoc.City;
+                    adres.Country = empdoc.Country;
+                    adres.EmployeeID = empdoc.EmployeeID;
+                    adres.IsActive = true;
+                    adres.IsMaster = true;
+                    adres.PostCode = empdoc.PostCode;
+                    adres.State = empdoc.State;
+                    Db.EmployeeAddress.Add(adres);
+                    Db.SaveChanges();
+                }
 
                 // log atılır
                 OfficeHelper.AddApplicationLog("Office", "Employee", "Insert", empdoc.EmployeeID.ToString(), "Employee", "AddEmployee", null, true, $"{result.Message}", string.Empty, empdoc.RecordDate.Value, model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, empdoc);
@@ -2343,7 +2360,7 @@ namespace ActionForce.Office.Controllers
 
             EmployeeControlModel model = new EmployeeControlModel();
 
-            if (newphone != null)
+            if (newphone != null && !string.IsNullOrEmpty(newphone.Mobile))
             {
                 var employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeID == newphone.EmployeeID);
 
@@ -2363,11 +2380,14 @@ namespace ActionForce.Office.Controllers
                 result.IsSuccess = true;
                 result.Message = $"{phone.PhoneNumber} nolu telefon eklendi";
 
-                //model.Employee = employee;
+                if (phone.IsMaster == true)
+                {
+                    var makemaster = Db.MakeEmployeeMasterPhone(phone.ID);
+                }
             }
             else
             {
-                result.Message = $"Form bilgisi boş olamaz";
+                result.Message = $"Form veya Telefon bilgisi boş olamaz";
             }
 
             TempData["result"] = result;
@@ -2394,7 +2414,7 @@ namespace ActionForce.Office.Controllers
 
             EmployeeControlModel model = new EmployeeControlModel();
 
-            if (newemail != null)
+            if (newemail != null && !string.IsNullOrEmpty(newemail.EMail))
             {
                 var employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeID == newemail.EmployeeID);
 
@@ -2412,10 +2432,15 @@ namespace ActionForce.Office.Controllers
 
                 result.IsSuccess = true;
                 result.Message = $"{newemail.EMail} e-posta adresi eklendi";
+
+                if (email.IsMaster == true)
+                {
+                    var makemaster = Db.MakeEmployeeMasterEmail(email.ID);
+                }
             }
             else
             {
-                result.Message = $"Form bilgisi boş olamaz";
+                result.Message = $"Form veya Email bilgisi boş olamaz";
             }
 
             TempData["result"] = result;
@@ -2426,6 +2451,277 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialEmployeeEmails", model);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult AddEmployeeAddress(NewAddress newaddress)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (newaddress != null && !string.IsNullOrEmpty(newaddress.Address))
+            {
+                var employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeID == newaddress.EmployeeID);
+
+                EmployeeAddress adres = new EmployeeAddress();
+
+                adres.Description = newaddress.Description;
+                adres.EmployeeID = newaddress.EmployeeID;
+                adres.IsMaster = !string.IsNullOrEmpty(newaddress.IsMaster) && newaddress.IsMaster == "1" ? true : false;
+                adres.IsActive = !string.IsNullOrEmpty(newaddress.IsActive) && newaddress.IsActive == "1" ? true : false;
+                adres.Address = newaddress.Address.Trim() ?? "";
+                adres.AddressTypeID = newaddress.AddressType;
+                adres.City = newaddress.City;
+                adres.Country = newaddress.Country;
+                adres.PostCode = newaddress.PostCode;
+                adres.State = newaddress.State;
+
+                Db.EmployeeAddress.Add(adres);
+                Db.SaveChanges();
+
+                result.IsSuccess = true;
+                result.Message = $"{newaddress.Address} posta adresi eklendi";
+
+                if (adres.IsMaster == true)
+                {
+                    var makemaster = Db.MakeEmployeeMasterAdress(adres.ID);
+                }
+            }
+            else
+            {
+                result.Message = $"Form bilgisi veya adres boş olamaz";
+            }
+
+            TempData["result"] = result;
+
+            model.Result = result;
+
+            model.EmployeeAddress = Db.VEmployeeAddress.Where(x => x.EmployeeID == newaddress.EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeeAddress", model);
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult MakeMasterEmployeePhone(int? ID, int? EmployeeID)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (ID != null && ID>0)
+            {
+                var makemaster = Db.MakeEmployeeMasterPhone(ID);
+
+                result.IsSuccess = true;
+                result.Message = $"Telefon numarası birincil yapıldı";
+            }
+            else
+            {
+                result.Message = $"Değer boş olamaz";
+            }
+
+            TempData["result"] = result;
+
+            model.Result = result;
+
+            model.EmployeePhones = Db.VEmployeePhones.Where(x => x.EmployeeID == EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeePhones", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult MakeMasterEmployeeEmail(int? ID, int? EmployeeID)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (ID != null && ID > 0)
+            {
+                var makemaster = Db.MakeEmployeeMasterEmail(ID);
+
+                result.IsSuccess = true;
+                result.Message = $"E-Posta adresi birincil yapıldı";
+            }
+            else
+            {
+                result.Message = $"Değer boş olamaz";
+            }
+
+            TempData["result"] = result;
+
+            model.Result = result;
+
+            model.EmployeeEmails = Db.VEmployeeEmails.Where(x => x.EmployeeID == EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeeEmails", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult MakeMasterEmployeeAddress(int? ID, int? EmployeeID)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (ID != null && ID > 0)
+            {
+                var makemaster = Db.MakeEmployeeMasterAdress(ID);
+
+                result.IsSuccess = true;
+                result.Message = $"Adres birincil yapıldı";
+            }
+            else
+            {
+                result.Message = $"Değer boş olamaz";
+            }
+
+            TempData["result"] = result;
+
+            model.Result = result;
+
+            model.EmployeeAddress = Db.VEmployeeAddress.Where(x => x.EmployeeID == EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeeAddress", model);
+        }
+
+
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult RemoveEmployeePhone(int? ID, int? EmployeeID)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (ID != null && ID > 0)
+            {
+                result.IsSuccess = true;
+                result.Message = $"Telefon numarası silindi";
+
+                var contact = Db.EmployeePhones.FirstOrDefault(x => x.ID == ID);
+                OfficeHelper.AddApplicationLog("Office", "EmployeePhones", "Delete", contact.ID.ToString(), "Employee", "RemoveEmployeePhone", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, contact);
+
+                var removecontact = Db.RemoveEmployeePhone(ID);
+            }
+            else
+            {
+                result.Message = $"Değer boş olamaz";
+            }
+
+            TempData["result"] = result;
+
+            model.Result = result;
+
+            model.EmployeePhones = Db.VEmployeePhones.Where(x => x.EmployeeID == EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeePhones", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult RemoveEmployeeEmail(int? ID, int? EmployeeID)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (ID != null && ID > 0)
+            {
+
+                result.IsSuccess = true;
+                result.Message = $"E-Posta adresi silindi";
+
+                var contact = Db.EmployeeEmails.FirstOrDefault(x => x.ID == ID);
+                OfficeHelper.AddApplicationLog("Office", "EmployeeEmails", "Delete", contact.ID.ToString(), "Employee", "RemoveEmployeeEmail", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, contact);
+
+                var removecontact = Db.RemoveEmployeeEmail(ID);
+
+            }
+            else
+            {
+                result.Message = $"Değer boş olamaz";
+            }
+
+            TempData["result"] = result;
+
+            model.Result = result;
+
+            model.EmployeeEmails = Db.VEmployeeEmails.Where(x => x.EmployeeID == EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeeEmails", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult RemoveEmployeeAddress(int? ID, int? EmployeeID)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (ID != null && ID > 0)
+            {
+                result.IsSuccess = true;
+                result.Message = $"Adres silindi";
+
+                var contact = Db.EmployeeAddress.FirstOrDefault(x => x.ID == ID);
+                OfficeHelper.AddApplicationLog("Office", "EmployeeAddress", "Delete", contact.ID.ToString(), "Employee", "RemoveEmployeeAddress", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, contact);
+
+                var removecontact = Db.RemoveEmployeeAddress(ID);
+            }
+            else
+            {
+                result.Message = $"Değer boş olamaz";
+            }
+
+            TempData["result"] = result;
+
+            model.Result = result;
+
+            model.EmployeeAddress = Db.VEmployeeAddress.Where(x => x.EmployeeID == EmployeeID).ToList();
+
+            return PartialView("_PartialEmployeeAddress", model);
+        }
+
+
+
+
 
 
 

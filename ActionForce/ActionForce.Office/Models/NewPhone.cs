@@ -25,4 +25,18 @@ namespace ActionForce.Office
         public string IsMaster { get; set; }
         public string IsActive { get; set; }
     }
+
+    public class NewAddress
+    {
+        public int EmployeeID { get; set; }
+        public string Address { get; set; }
+        public string PostCode { get; set; }
+        public int? AddressType { get; set; }
+        public int? Country { get; set; }
+        public int? State { get; set; }
+        public int? City { get; set; }
+        public string Description { get; set; }
+        public string IsMaster { get; set; }
+        public string IsActive { get; set; }
+    }
 }

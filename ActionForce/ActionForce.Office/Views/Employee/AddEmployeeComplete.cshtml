@@ -417,8 +417,10 @@
                         }),
                         success: function (data) {
 
-                            $("#State").empty();
+                            $("#City").empty();
+                            $("#City").append($('<option></option>', { "value": '', "text": 'Şehir Seçiminiz' }));
 
+                            $("#State").empty();
                             $("#State").append($('<option></option>', { "value": '', "text": 'Eyalet Seçiminiz' }));
 
                             $.each(data, function (index, label) {
@@ -448,7 +450,6 @@
                         success: function (data) {
 
                             $("#City").empty();
-
                             $("#City").append($('<option></option>', { "value": '', "text": 'Şehir Seçiminiz' }));
 
                             $.each(data, function (index, label) {

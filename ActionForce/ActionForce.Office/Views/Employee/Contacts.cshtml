@@ -242,10 +242,11 @@
                     @using (Ajax.BeginForm("AddEmployeeAddress", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "EmployeeAddress", InsertionMode = InsertionMode.Replace, OnSuccess = "OnAddressSuccess" }))
                     {
                         @Html.AntiForgeryToken()
-                        <div class="form-group row bg-gray-50 mg-b-5">
-                            <label for="Address" class="col-sm-3 col-form-label">Posta Adresi</label>
+
+                        <div class="form-group row">
+                            <label for="Description" class="col-sm-3 col-form-label">Tanımı</label>
                             <div class="col-sm-9">
-                                <input id="Address" name="Address" type="email" class="form-control" autocomplete="off" placeholder="Adres" required>
+                                <input id="Description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Açıklaması">
                             </div>
                         </div>
 
@@ -253,7 +254,7 @@
                             <label for="AddressType" class="col-sm-3 col-form-label">Adres Türü</label>
                             <div class="col-sm-9">
                                 <select class="form-control" id="AddressType" name="AddressType" required>
-                                    <option value="">E-Posta Türünü Seçiniz </option>
+                                    <option value="">Adres Türünü Seçiniz </option>
                                     @foreach (var item in Model.AddressTypes.OrderBy(x => x.SortBy))
                                     {
                                         <option value="@item.ID">@($"{item.TypeName}")</option>
@@ -261,14 +262,6 @@
                                 </select>
                             </div>
                         </div>
-
-
-
-
-
-
-
-
 
                         <div class="form-group row  mg-b-5  bg-gray-50">
                             <label for="Country" class="col-sm-3 col-form-label">Ülke / Eyalet / Şehir</label>
@@ -298,39 +291,24 @@
                                     }
                                 </select>
                             </div>
-                            
+
                         </div>
 
                         <div class="form-group row  mg-b-5  bg-gray-50">
                             <label for="Address" class="col-sm-3 col-form-label">Adres</label>
-                            <div class="col-sm-6">
+                            <div class="col-sm-9">
                                 <textarea id="Address" name="Address" rows="3" class="form-control" autocomplete="off" placeholder="Adres" style="width:100% !important;" required></textarea>
                             </div>
-                            <div class="col-sm-3">
-                            </div>
+                           
                         </div>
 
                         <div class="form-group row bg-gray-50">
                             <label for="PostCode" class="col-sm-3 col-form-label">Posta Kodu / ZIP Code</label>
-                            <div class="col-sm-6">
+                            <div class="col-sm-9">
                                 <input id="PostCode" name="PostCode" type="text" class="form-control postcode" autocomplete="off" placeholder="Posta Kodu" required>
                             </div>
-                            <div class="col-sm-3">
-                            </div>
                         </div>
 
-
-
-
-
-
-
-                        <div class="form-group row">
-                            <label for="Description" class="col-sm-3 col-form-label">Açıklaması</label>
-                            <div class="col-sm-9">
-                                <input id="Description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Açıklaması">
-                            </div>
-                        </div>
 
                         <div class="form-group row mg-b-0">
                             <label for="IsMaster" class="col-sm-3 col-form-label">Birincil mi?</label>
@@ -356,7 +334,7 @@
                             <div class="col-sm-3"></div>
                             <div class="col-sm-9">
                                 <input id="EmployeeID" name="EmployeeID" type="hidden" value="@(Model.Employee.EmployeeID)" />
-                                <button type="submit" class="btn btn-primary btn-block">E-Postayı Ekle</button>
+                                <button type="submit" class="btn btn-primary btn-block">Adresi Ekle</button>
                             </div>
                         </div>
 
@@ -378,15 +356,137 @@
 
         function OnPhoneSuccess(data) {
             $('#modalEmployeePhone').modal('hide');
-        } 
+        };
         
         function OnMailSuccess(data) {
             $('#modalEmployeeMail').modal('hide');
-        }
+        };
 
         function OnAddressSuccess(data) {
             $('#modalEmployeeAddress').modal('hide');
-        }
+        };
+
+        // MakeMasterEmployeePhone
+        function MakeMasterEmployeePhone(id, empid) {
+            var data = new FormData();
+            data.append('ID', id);
+            data.append('EmployeeID', empid);
+
+            $.ajax({
+                url: '@Url.Action("MakeMasterEmployeePhone", "Employee")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#EmployeePhones').html(d);
+            });
+        };
+
+        // MakeMasterEmployeeEmail
+        function MakeMasterEmployeeEmail(id, empid) {
+            var data = new FormData();
+            data.append('ID', id);
+            data.append('EmployeeID', empid);
+
+            $.ajax({
+                url: '@Url.Action("MakeMasterEmployeeEmail", "Employee")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#EmployeeEmails').html(d);
+            });
+        };
+
+        // MakeMasterEmployeeAddress
+        function MakeMasterEmployeeAddress(id, empid) {
+            var data = new FormData();
+            data.append('ID', id);
+            data.append('EmployeeID', empid);
+
+            $.ajax({
+                url: '@Url.Action("MakeMasterEmployeeAddress", "Employee")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#EmployeeAddress').html(d);
+            });
+
+        };
+
+        // remove bölümü
+
+        // RemoveEmployeePhone
+        function RemoveEmployeePhone(id, empid) {
+            var data = new FormData();
+            data.append('ID', id);
+            data.append('EmployeeID', empid);
+
+            $.ajax({
+                url: '@Url.Action("RemoveEmployeePhone", "Employee")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#EmployeePhones').html(d);
+            });
+        };
+
+        // RemoveEmployeeEmail
+        function RemoveEmployeeEmail(id, empid) {
+            var data = new FormData();
+            data.append('ID', id);
+            data.append('EmployeeID', empid);
+
+            $.ajax({
+                url: '@Url.Action("RemoveEmployeeEmail", "Employee")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#EmployeeEmails').html(d);
+            });
+        };
+
+        // RemoveEmployeeAddress
+        function RemoveEmployeeAddress(id, empid) {
+            var data = new FormData();
+            data.append('ID', id);
+            data.append('EmployeeID', empid);
+
+            $.ajax({
+                url: '@Url.Action("RemoveEmployeeAddress", "Employee")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#EmployeeAddress').html(d);
+            });
+
+        };
+
+
+
+
 
         $(document).ready(function () {
 
@@ -406,6 +506,8 @@
                         success: function (data) {
 
                             $("#State").empty();
+                            $("#City").empty();
+                            $("#City").append($('<option></option>', { "value": '', "text": 'Şehir Seçiminiz' }));
 
                             $("#State").append($('<option></option>', { "value": '', "text": 'Eyalet Seçiminiz' }));
 

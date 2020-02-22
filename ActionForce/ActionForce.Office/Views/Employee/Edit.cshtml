@@ -140,7 +140,7 @@
                                     <div class="form-group row  mg-b-5  bg-gray-50">
                                         <label for="Country" class="col-sm-3 col-form-label">Ülke / Eyalet / Şehir</label>
                                         <div class="col-sm-2">
-                                            <select class="form-control" id="Country" name="Country" required>
+                                            <select class="form-control" id="Country" name="Country">
                                                 @foreach (var item in Model.CountryList)
                                                 {
                                                     <option value="@item.ID" @(Model.Employee.Country == item.ID ? "selected" : "")>@($"{item.CountryName}")</option>
@@ -148,7 +148,7 @@
                                             </select>
                                         </div>
                                         <div class="col-sm-2">
-                                            <select class="form-control" id="State" name="State" required>
+                                            <select class="form-control" id="State" name="State">
                                                 <option value="">Eyalet Seçiminiz</option>
                                                 @foreach (var item in Model.StateList)
                                                 {
@@ -157,7 +157,7 @@
                                             </select>
                                         </div>
                                         <div class="col-sm-2">
-                                            <select class="form-control" id="City" name="City" required>
+                                            <select class="form-control" id="City" name="City">
                                                 <option value="">Şehir Seçiminiz</option>
                                                 @foreach (var item in Model.CityList)
                                                 {
@@ -172,7 +172,7 @@
                                     <div class="form-group row  mg-b-5  bg-gray-50">
                                         <label for="Address" class="col-sm-3 col-form-label">Adres</label>
                                         <div class="col-sm-6">
-                                            <textarea id="Address" name="Address" rows="3" class="form-control" autocomplete="off" placeholder="Adres" style="width:100% !important;" required>@(Model.Employee.Address)</textarea>
+                                            <textarea id="Address" name="Address" rows="3" class="form-control" autocomplete="off" placeholder="Adres" style="width:100% !important;">@(Model.Employee.Address)</textarea>
                                         </div>
                                         <div class="col-sm-3">
                                         </div>
@@ -181,7 +181,7 @@
                                     <div class="form-group row bg-gray-50">
                                         <label for="PostCode" class="col-sm-3 col-form-label">Posta Kodu / ZIP Code</label>
                                         <div class="col-sm-6">
-                                            <input id="PostCode" name="PostCode" type="text" class="form-control postcode" autocomplete="off" placeholder="Posta Kodu" value="@(Model.Employee.PostCode)" required>
+                                            <input id="PostCode" name="PostCode" type="text" class="form-control postcode" autocomplete="off" placeholder="Posta Kodu" value="@(Model.Employee.PostCode)">
                                         </div>
                                         <div class="col-sm-3">
                                         </div>
@@ -208,7 +208,7 @@
                                     <div class="form-group row bg-gray-50">
                                         <label for="RoleGroupID" class="col-sm-3 col-form-label">Yetki Rol Grubu</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" id="RoleGroupID" name="RoleGroupID" required>
+                                            <select class="form-control" id="RoleGroupID" name="RoleGroupID">
                                                 <option value="">Rol Seçiniz</option>
                                                 @foreach (var item in Model.RoleGroupList.OrderBy(x => x.RoleLevel))
                                                 {
@@ -224,7 +224,7 @@
                                     <div class="form-group row mg-b-5 bg-gray-50">
                                         <label for="AreaCategoryID" class="col-sm-3 col-form-label">Alan</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" id="AreaCategoryID" name="AreaCategoryID" required>
+                                            <select class="form-control" id="AreaCategoryID" name="AreaCategoryID">
                                                 <option value="">Alan Seçiniz</option>
                                                 @foreach (var item in Model.AreaCategoryList.OrderBy(x => x.SortBy))
                                                 {
@@ -238,7 +238,7 @@
                                     <div class="form-group row mg-b-5 bg-gray-50">
                                         <label for="DepartmentID" class="col-sm-3 col-form-label">Departman</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" id="DepartmentID" name="DepartmentID" required>
+                                            <select class="form-control" id="DepartmentID" name="DepartmentID">
                                                 <option value="">Departman Seçiniz</option>
                                                 @foreach (var item in Model.DepartmentList.OrderBy(x => x.SortBy))
                                                 {
@@ -252,7 +252,7 @@
                                     <div class="form-group row mg-b-5 bg-gray-50">
                                         <label for="PositionID" class="col-sm-3 col-form-label">Pozisyon</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" id="PositionID" name="PositionID" required>
+                                            <select class="form-control" id="PositionID" name="PositionID">
                                                 <option value="">Pozisyon Seçiniz</option>
                                                 @foreach (var item in Model.PositionList.OrderBy(x => x.SortBy))
                                                 {
@@ -266,7 +266,7 @@
                                     <div class="form-group row mg-b-5 bg-gray-50">
                                         <label for="StatusID" class="col-sm-3 col-form-label">Durum</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" id="StatusID" name="StatusID" required>
+                                            <select class="form-control" id="StatusID" name="StatusID">
                                                 <option value="">Durum Seçiniz</option>
                                                 @foreach (var item in Model.StatusList)
                                                 {
@@ -280,7 +280,7 @@
                                     <div class="form-group row mg-b-5 bg-gray-50">
                                         <label for="ShiftTypeID" class="col-sm-3 col-form-label">Çalışma Türü</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" id="ShiftTypeID" name="ShiftTypeID" required>
+                                            <select class="form-control" id="ShiftTypeID" name="ShiftTypeID">
                                                 <option value="">Çalışma Seçiniz</option>
                                                 @foreach (var item in Model.ShiftTypeList)
                                                 {
@@ -294,7 +294,7 @@
                                     <div class="form-group row mg-b-5 bg-gray-50">
                                         <label for="SalaryCategoryID" class="col-sm-3 col-form-label">Kategori</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" id="SalaryCategoryID" name="SalaryCategoryID" required>
+                                            <select class="form-control" id="SalaryCategoryID" name="SalaryCategoryID">
                                                 <option value="">Kategori Seçiniz</option>
                                                 @foreach (var item in Model.SalaryCategoryList)
                                                 {
@@ -308,7 +308,7 @@
                                     <div class="form-group row bg-gray-50">
                                         <label for="SequenceID" class="col-sm-3 col-form-label">Oryantasyon Seviyesi</label>
                                         <div class="col-sm-6">
-                                            <select class="form-control" id="SequenceID" name="SequenceID" required>
+                                            <select class="form-control" id="SequenceID" name="SequenceID">
                                                 <option value="">Oryantasyon Seçiniz</option>
                                                 @foreach (var item in Model.SequenceList)
                                                 {
@@ -505,6 +505,70 @@
         $('.TAXNUMBER').mask('00000000000');
         $('.postcode').mask('00000-000');
 
+        $(document).ready(function () {
+
+            $("#Country").change(function () {
+
+                var countryID = $("#Country").val();
+
+                $.ajax
+                    ({
+                        url: '/Employee/GetStateList',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            countryid: countryID
+                        }),
+                        success: function (data) {
+
+                            $("#City").empty();
+                            $("#City").append($('<option></option>', { "value": '', "text": 'Şehir Seçiminiz' }));
+
+                            $("#State").empty();
+                            $("#State").append($('<option></option>', { "value": '', "text": 'Eyalet Seçiminiz' }));
+
+                            $.each(data, function (index, label) {
+                                $("#State").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+                        },
+                        error: function () {
+                        },
+                    });
+            });
+
+
+
+            $("#State").change(function () {
+
+                var stateID = $("#State").val();
+
+                $.ajax
+                    ({
+                        url: '/Employee/GetCityList',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            stateid: stateID
+                        }),
+                        success: function (data) {
+
+                            $("#City").empty();
+
+                            $("#City").append($('<option></option>', { "value": '', "text": 'Şehir Seçiminiz' }));
+
+                            $.each(data, function (index, label) {
+                                $("#City").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+                        },
+                        error: function () {
+                        },
+                    });
+            });
+
+
+        });
 
     </script>
 

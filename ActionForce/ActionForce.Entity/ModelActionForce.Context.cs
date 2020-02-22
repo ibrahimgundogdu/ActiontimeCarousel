@@ -993,5 +993,59 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetEmployeeAll_Result3>("GetEmployeeAll", ourCompanyIDParameter, employeeUIDParameter, employeeIDParameter);
         }
+    
+        public virtual int MakeEmployeeMasterAdress(Nullable<int> addressID)
+        {
+            var addressIDParameter = addressID.HasValue ?
+                new ObjectParameter("AddressID", addressID) :
+                new ObjectParameter("AddressID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MakeEmployeeMasterAdress", addressIDParameter);
+        }
+    
+        public virtual int MakeEmployeeMasterEmail(Nullable<int> addressID)
+        {
+            var addressIDParameter = addressID.HasValue ?
+                new ObjectParameter("AddressID", addressID) :
+                new ObjectParameter("AddressID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MakeEmployeeMasterEmail", addressIDParameter);
+        }
+    
+        public virtual int MakeEmployeeMasterPhone(Nullable<int> addressID)
+        {
+            var addressIDParameter = addressID.HasValue ?
+                new ObjectParameter("AddressID", addressID) :
+                new ObjectParameter("AddressID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("MakeEmployeeMasterPhone", addressIDParameter);
+        }
+    
+        public virtual int RemoveEmployeeAddress(Nullable<int> addressID)
+        {
+            var addressIDParameter = addressID.HasValue ?
+                new ObjectParameter("AddressID", addressID) :
+                new ObjectParameter("AddressID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemoveEmployeeAddress", addressIDParameter);
+        }
+    
+        public virtual int RemoveEmployeeEmail(Nullable<int> addressID)
+        {
+            var addressIDParameter = addressID.HasValue ?
+                new ObjectParameter("AddressID", addressID) :
+                new ObjectParameter("AddressID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemoveEmployeeEmail", addressIDParameter);
+        }
+    
+        public virtual int RemoveEmployeePhone(Nullable<int> addressID)
+        {
+            var addressIDParameter = addressID.HasValue ?
+                new ObjectParameter("AddressID", addressID) :
+                new ObjectParameter("AddressID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemoveEmployeePhone", addressIDParameter);
+        }
     }
 }
