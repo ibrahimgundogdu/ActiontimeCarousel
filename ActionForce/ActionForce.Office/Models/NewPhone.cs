@@ -14,6 +14,19 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public string IsMaster { get; set; }
         public string IsActive { get; set; }
+
+    }
+    public class EditPhone
+    {
+        public int EEmployeeID { get; set; }
+        public string ECountryPhoneCode { get; set; }
+        public string EMobile { get; set; }
+        public int? EPhoneType { get; set; }
+        public string EDescription { get; set; }
+        public string EIsMaster { get; set; }
+        public string EIsActive { get; set; }
+        public int? ID { get; set; }
+
     }
 
     public class NewEmail
@@ -24,6 +37,19 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public string IsMaster { get; set; }
         public string IsActive { get; set; }
+
+    }
+
+    public class EditEmail
+    {
+        public int EEmployeeID { get; set; }
+        public string EEMail { get; set; }
+        public int? EEmailType { get; set; }
+        public string EDescription { get; set; }
+        public string EIsMaster { get; set; }
+        public string EIsActive { get; set; }
+        public int? ID { get; set; }
+
     }
 
     public class NewAddress
@@ -38,5 +64,22 @@ namespace ActionForce.Office
         public string Description { get; set; }
         public string IsMaster { get; set; }
         public string IsActive { get; set; }
+
+    }
+
+    public class EditAddress
+    {
+        public int EEmployeeID { get; set; }
+        public string EAddress { get; set; }
+        public string EPostCode { get; set; }
+        public int? EAddressType { get; set; }
+        public int? ECountry { get; set; }
+        public int? EState { get; set; }
+        public int? ECity { get; set; }
+        public string EDescription { get; set; }
+        public string EIsMaster { get; set; }
+        public string EIsActive { get; set; }
+        public int? ID { get; set; }
+
     }
 }

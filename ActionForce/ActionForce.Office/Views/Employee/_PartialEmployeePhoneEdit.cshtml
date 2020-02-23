@@ -1,0 +1,82 @@
+﻿@model EmployeeControlModel
+<a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</a>
+<div>
+    <h4>@Model.Employee.FullName  | <span class="font-weight-bold text-black-50">Telefon Güncelle</span></h4>
+
+    @using (Ajax.BeginForm("EditEmployeePhone", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "EmployeePhones", InsertionMode = InsertionMode.Replace, OnSuccess = "OnPhoneEditSuccess" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group row bg-gray-50 mg-b-5">
+            <label for="EMobile" class="col-sm-3 col-form-label">Telefonu</label>
+            <div class="col-sm-3">
+                <select class="form-control" id="ECountryPhoneCode" name="ECountryPhoneCode">
+                    @foreach (var item in Model.PhoneCodes)
+                    {
+                        <option value="@item.Code" @(Model.EmployeePhone.CountryPhoneCode == item.Code ? "selected" : "")>@($"{item.Code} {item.Country}")</option>
+                    }
+                </select>
+            </div>
+            <div class="col-sm-6">
+                <input id="EMobile" name="EMobile" type="text" class="form-control phone" autocomplete="off" placeholder="Telefon" value="@(Model.EmployeePhone.PhoneNumber)" required>
+            </div>
+
+        </div>
+
+        <div class="form-group row bg-gray-50 mg-b-5">
+            <label for="EPhoneType" class="col-sm-3 col-form-label">Telefon Türü</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="EPhoneType" name="EPhoneType" required>
+                    <option value="">Telefon Türünü Seçiniz </option>
+                    @foreach (var item in Model.PhoneTypes.OrderBy(x => x.SortBy))
+                    {
+                        <option value="@item.ID" @(Model.EmployeePhone.PhoneTypeID == item.ID ? "selected" : "")>@($"{item.TypeName}")</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="EDescription" class="col-sm-3 col-form-label">Açıklaması</label>
+            <div class="col-sm-9">
+                <input id="EDescription" name="EDescription" type="text" class="form-control" autocomplete="off" placeholder="Açıklaması" value="@(Model.EmployeePhone.Description)">
+            </div>
+        </div>
+
+        <div class="form-group row mg-b-0">
+            <label for="EIsMaster" class="col-sm-3 col-form-label">Birincil mi?</label>
+            <div class="col-sm-9">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="EIsMaster" name="EIsMaster" value="1" @(Model.EmployeePhone.IsMaster == true ? "checked" : "")>
+                    <label class="custom-control-label" for="EIsMaster">Birincil</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row mg-b-0">
+            <label for="EIsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+            <div class="col-sm-9">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="EIsActive" name="EIsActive" value="1" @(Model.EmployeePhone.IsActive == true ? "checked" : "")>
+                    <label class="custom-control-label" for="EIsActive">Aktif</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row mg-b-0">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9">
+                <input id="EEmployeeID" name="EEmployeeID" type="hidden" value="@(Model.EmployeePhone.EmployeeID)" />
+                <input id="ID" name="ID" type="hidden" value="@(Model.EmployeePhone.ID)" />
+                <button type="submit" class="btn btn-primary btn-block">Telefonu Güncelle</button>
+            </div>
+        </div>
+
+    }
+
+
+</div>
+<script>
+    $('.phone').mask('(000) 000 00 00');
+</script>

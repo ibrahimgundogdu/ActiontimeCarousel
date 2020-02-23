@@ -1,0 +1,70 @@
+﻿@model EmployeeControlModel
+<a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</a>
+<div>
+    <h4>@Model.Employee.FullName  | <span class="font-weight-bold text-black-50">E-Posta Güncelle</span></h4>
+
+    @using (Ajax.BeginForm("EditEmployeeMail", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "EmployeeEmails", InsertionMode = InsertionMode.Replace, OnSuccess = "OnMailEditSuccess" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group row bg-gray-50 mg-b-5">
+            <label for="EEMail" class="col-sm-3 col-form-label">E-Posta Adresi</label>
+            <div class="col-sm-9">
+                <input id="EEMail" name="EEMail" type="email" class="form-control" autocomplete="off" placeholder="E-Posta" value="@(Model.EmployeeEmail.EMail)" required>
+            </div>
+        </div>
+
+        <div class="form-group row bg-gray-50 mg-b-5">
+            <label for="EEmailType" class="col-sm-3 col-form-label">E-Posta Türü</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="EEmailType" name="EEmailType" required>
+                    <option value="">E-Posta Türünü Seçiniz </option>
+                    @foreach (var item in Model.EmailTypes.OrderBy(x => x.SortBy))
+                    {
+                        <option value="@item.ID" @(Model.EmployeeEmail.TypeID == item.ID ? "selected" : "")>@($"{item.TypeName}")</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label for="EDescription" class="col-sm-3 col-form-label">Açıklaması</label>
+            <div class="col-sm-9">
+                <input id="EDescription" name="EDescription" type="text" class="form-control" autocomplete="off" placeholder="Açıklaması" value="@(Model.EmployeeEmail.Description)">
+            </div>
+        </div>
+
+        <div class="form-group row mg-b-0">
+            <label for="EIsMaster" class="col-sm-3 col-form-label">Birincil mi?</label>
+            <div class="col-sm-9">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="EIsMaster" name="EIsMaster" value="1"  @(Model.EmployeeEmail.IsMaster == true ? "checked" : "")>
+                    <label class="custom-control-label" for="EIsMaster">Birincil</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row mg-b-0">
+            <label for="EIsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+            <div class="col-sm-9">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="EIsActive" name="EIsActive" value="1"   @(Model.EmployeeEmail.IsActive == true ? "checked" : "")>
+                    <label class="custom-control-label" for="EIsActive">Aktif</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row mg-b-0">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9">
+                <input id="EEmployeeID" name="EEmployeeID" type="hidden" value="@(Model.Employee.EmployeeID)" />
+                <input id="ID" name="ID" type="hidden" value="@(Model.EmployeeEmail.ID)" />
+                <button type="submit" class="btn btn-primary btn-block">E-Postayı Güncelle</button>
+            </div>
+        </div>
+
+    }
+
+
+</div>

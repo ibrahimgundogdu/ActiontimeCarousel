@@ -15,19 +15,19 @@
     <tbody>
         @foreach (var item in Model.EmployeePhones)
         {
-        <tr>
-            <td>@(item.CountryPhoneCode)</td>
-            <td class="tx-black tx-15">@(item.PhoneNumber)</td>
-            <td>@(item.PhoneTypeName)</td>
-            <td>@(item.Description)</td>
-            <td>@(item.IsMaster)</td>
-            <td>@(item.IsActive)</td>
-            <td class="tx-right">
-                <a href="#" class="link-03 lh-0 tx-primary btn-xxs btn-light" style="padding:10px 10px 5px 10px;" title="Güncelle"><i class="icon ion-md-checkmark-circle-outline tx-15"></i></a>
-                <a href="#" class="link-03 lh-0 tx-primary btn-xxs btn-light" style="padding:10px 10px 5px 10px;" title="Birincil Yap" onclick="return confirm('Birincil yapmak istediğinize emin misiniz?') ? MakeMasterEmployeePhone(@(item.ID),@(item.EmployeeID)):'';"><i class="icon ion-md-arrow-up tx-15"></i></a>
-                <a href="#" class="link-03 lh-0 tx-primary btn-xxs btn-light" style="padding:10px 10px 5px 10px;" title="Kaldır" onclick="return confirm('Kaldırmak istediğinize emin misiniz?') ? RemoveEmployeePhone(@(item.ID),@(item.EmployeeID)):'';"><i class="icon ion-md-close-circle-outline tx-15"></i></a>
-            </td>
-        </tr>
+            <tr>
+                <td>@(item.CountryPhoneCode)</td>
+                <td class="tx-black tx-15">@(item.PhoneNumber)</td>
+                <td>@(item.PhoneTypeName)</td>
+                <td>@(item.Description)</td>
+                <td>@(item.IsMaster)</td>
+                <td>@(item.IsActive)</td>
+                <td class="tx-right">
+                    <a href="#modalEmployeePhone" data-toggle="modal" class="link-03 lh-0 tx-primary btn-xxs btn-light" style="padding:10px 10px 5px 10px;" title="Güncelle" onclick="EditEmployeePhone(@(item.ID),@(item.EmployeeID));"><i class="icon ion-md-checkmark-circle-outline tx-15"></i></a>
+                    <a href="#" class="link-03 lh-0 tx-primary btn-xxs btn-light" style="padding:10px 10px 5px 10px;" title="Birincil Yap" onclick="return confirm('Birincil yapmak istediğinize emin misiniz?') ? MakeMasterEmployeePhone(@(item.ID),@(item.EmployeeID)):'';"><i class="icon ion-md-arrow-up tx-15"></i></a>
+                    <a href="#" class="link-03 lh-0 tx-primary btn-xxs btn-light" style="padding:10px 10px 5px 10px;" title="Kaldır" onclick="return confirm('Kaldırmak istediğinize emin misiniz?') ? RemoveEmployeePhone(@(item.ID),@(item.EmployeeID)):'';"><i class="icon ion-md-close-circle-outline tx-15"></i></a>
+                </td>
+            </tr>
         }
 
     </tbody>

@@ -2380,6 +2380,8 @@ namespace ActionForce.Office.Controllers
                 result.IsSuccess = true;
                 result.Message = $"{phone.PhoneNumber} nolu telefon eklendi";
 
+                OfficeHelper.AddApplicationLog("Office", "EmployeePhones", "Insert", phone.ID.ToString(), "Employee", "AddEmployeePhone", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, phone);
+
                 if (phone.IsMaster == true)
                 {
                     var makemaster = Db.MakeEmployeeMasterPhone(phone.ID);
@@ -2432,6 +2434,8 @@ namespace ActionForce.Office.Controllers
 
                 result.IsSuccess = true;
                 result.Message = $"{newemail.EMail} e-posta adresi eklendi";
+
+                OfficeHelper.AddApplicationLog("Office", "EmployeeEmails", "Insert", email.ID.ToString(), "Employee", "AddEmployeeMail", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, email);
 
                 if (email.IsMaster == true)
                 {
@@ -2486,6 +2490,8 @@ namespace ActionForce.Office.Controllers
 
                 result.IsSuccess = true;
                 result.Message = $"{newaddress.Address} posta adresi eklendi";
+
+                OfficeHelper.AddApplicationLog("Office", "EmployeeAddress", "Insert", adres.ID.ToString(), "Employee", "AddEmployeeAddress", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, adres);
 
                 if (adres.IsMaster == true)
                 {
@@ -2720,6 +2726,346 @@ namespace ActionForce.Office.Controllers
         }
 
 
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult EmployeePhone(int? ID, int? EmployeeID)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (ID != null && EmployeeID != null)
+            {
+                model.Employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeID == EmployeeID);
+                model.EmployeePhone = Db.VEmployeePhones.FirstOrDefault(x => x.EmployeeID == EmployeeID && x.ID == ID);
+                model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+                model.PhoneTypes = Db.PhoneType.Where(x => x.IsActive == true).ToList();
+            }
+            else
+            {
+                result.Message = $"Çalışan veya Telefon bilgisi boş olamaz";
+            }
+
+            TempData["result"] = result;
+
+            model.Result = result;
+
+            return PartialView("_PartialEmployeePhoneEdit", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult EditEmployeePhone(EditPhone phone)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (phone != null && !string.IsNullOrEmpty(phone.EMobile))
+            {
+                var employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeID == phone.EEmployeeID);
+                model.Employee = employee;
+
+                var currentphone = Db.EmployeePhones.FirstOrDefault(x=> x.ID == phone.ID && x.EmployeeID == phone.EEmployeeID);
+
+                EmployeePhones self = new EmployeePhones()
+                {
+                    CountryPhoneCode = currentphone.CountryPhoneCode,
+                    Description = currentphone.Description,
+                    EmployeeID = currentphone.EmployeeID,
+                    ID = currentphone.ID,
+                    IsActive = currentphone.IsActive,
+                    IsMaster = currentphone.IsMaster,
+                    PhoneNumber = currentphone.PhoneNumber,
+                    PhoneTypeID = currentphone.PhoneTypeID
+                };
+
+                currentphone.CountryPhoneCode = phone.ECountryPhoneCode.Trim();
+                currentphone.Description = phone.EDescription;
+                currentphone.EmployeeID = phone.EEmployeeID;
+                currentphone.IsMaster = !string.IsNullOrEmpty(phone.EIsMaster) && phone.EIsMaster == "1" ? true : false;
+                currentphone.IsActive = !string.IsNullOrEmpty(phone.EIsActive) && phone.EIsActive == "1" ? true : false;
+                currentphone.PhoneNumber = phone.EMobile.Replace("(", "").Replace(")", "").Replace(" ", "") ?? "";
+                currentphone.PhoneTypeID = phone.EPhoneType;
+
+                Db.SaveChanges();
+
+                result.IsSuccess = true;
+                result.Message = $"{currentphone.PhoneNumber} nolu telefon güncellendi";
+
+                var isequal = OfficeHelper.PublicInstancePropertiesEqual<EmployeePhones>(self, currentphone, OfficeHelper.getIgnorelist());
+                OfficeHelper.AddApplicationLog("Office", "EmployeePhones", "Update", currentphone.ID.ToString(), "Employee", "EditEmployeePhone", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+
+                if (currentphone.IsMaster == true)
+                {
+                    var makemaster = Db.MakeEmployeeMasterPhone(phone.ID);
+                }
+                else
+                {
+                    var masterphone = Db.EmployeePhones.FirstOrDefault(x => x.EmployeeID == phone.EEmployeeID && x.IsActive == true && x.IsMaster == true);
+                    if (masterphone != null)
+                    {
+                        var makemaster = Db.MakeEmployeeMasterPhone(masterphone.ID);
+                    }
+                    else
+                    {
+                        masterphone = Db.EmployeePhones.Where(x => x.EmployeeID == phone.EEmployeeID && x.IsActive == true && x.ID != currentphone.ID).OrderByDescending(x=> x.ID).FirstOrDefault();
+                        if (masterphone != null)
+                        {
+                            var makemaster = Db.MakeEmployeeMasterPhone(masterphone.ID);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                result.Message = $"Çalışan veya Telefon bilgisi boş olamaz";
+            }
+
+            TempData["result"] = result;
+            model.Result = result;
+
+            model.EmployeePhones = Db.VEmployeePhones.Where(x => x.EmployeeID == phone.EEmployeeID && x.IsActive == true).ToList();
+           
+            return PartialView("_PartialEmployeePhones", model);
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult EmployeeMail(int? ID, int? EmployeeID)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (ID != null && EmployeeID != null)
+            {
+                model.Employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeID == EmployeeID);
+                model.EmployeeEmail = Db.VEmployeeEmails.FirstOrDefault(x => x.EmployeeID == EmployeeID && x.ID == ID);
+                model.EmailTypes = Db.EmailType.Where(x => x.IsActive == true).ToList();
+            }
+            else
+            {
+                result.Message = $"Çalışan veya E-posta bilgisi boş olamaz";
+            }
+
+            TempData["result"] = result;
+
+            model.Result = result;
+
+            return PartialView("_PartialEmployeeEmailEdit", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult EditEmployeeMail(EditEmail email)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (email != null && !string.IsNullOrEmpty(email.EEMail))
+            {
+                model.Employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeID == email.EEmployeeID);
+
+                var currentemail = Db.EmployeeEmails.FirstOrDefault(x => x.ID == email.ID && x.EmployeeID == email.EEmployeeID);
+
+                EmployeeEmails self = new EmployeeEmails()
+                {
+                    Description = currentemail.Description,
+                    EmployeeID = currentemail.EmployeeID,
+                    ID = currentemail.ID,
+                    IsActive = currentemail.IsActive,
+                    IsMaster = currentemail.IsMaster,
+                    EMail = currentemail.EMail,
+                    TypeID = currentemail.TypeID
+                };
+
+                currentemail.Description = email.EDescription;
+                currentemail.EmployeeID = email.EEmployeeID;
+                currentemail.IsMaster = !string.IsNullOrEmpty(email.EIsMaster) && email.EIsMaster == "1" ? true : false;
+                currentemail.IsActive = !string.IsNullOrEmpty(email.EIsActive) && email.EIsActive == "1" ? true : false;
+                currentemail.EMail = email.EEMail.Trim() ?? "";
+                currentemail.TypeID = email.EEmailType;
+
+                Db.SaveChanges();
+
+                result.IsSuccess = true;
+                result.Message = $"{currentemail.EMail} eposta adresi güncellendi";
+
+                var isequal = OfficeHelper.PublicInstancePropertiesEqual<EmployeeEmails>(self, currentemail, OfficeHelper.getIgnorelist());
+                OfficeHelper.AddApplicationLog("Office", "EmployeeEmails", "Update", currentemail.ID.ToString(), "Employee", "EditEmployeeMail", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                if (currentemail.IsMaster == true)
+                {
+                    var makemaster = Db.MakeEmployeeMasterEmail(email.ID);
+                }
+                else
+                {
+                    var mastermail = Db.EmployeeEmails.FirstOrDefault(x => x.EmployeeID == email.EEmployeeID && x.IsActive == true && x.IsMaster == true);
+                    if (mastermail != null)
+                    {
+                        var makemaster = Db.MakeEmployeeMasterEmail(mastermail.ID);
+                    }
+                    else
+                    {
+                        mastermail = Db.EmployeeEmails.Where(x => x.EmployeeID == email.EEmployeeID && x.IsActive == true && x.ID != currentemail.ID).OrderByDescending(x => x.ID).FirstOrDefault();
+                        if (mastermail != null)
+                        {
+                            var makemaster = Db.MakeEmployeeMasterEmail(mastermail.ID);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                result.Message = $"Çalışan veya Eposta bilgisi boş olamaz";
+            }
+
+            TempData["result"] = result;
+            model.Result = result;
+
+            model.EmployeeEmails = Db.VEmployeeEmails.Where(x => x.EmployeeID == email.EEmployeeID && x.IsActive == true).ToList();
+
+            return PartialView("_PartialEmployeeEmails", model);
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult EmployeeAddress(int? ID, int? EmployeeID)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (ID != null && EmployeeID != null)
+            {
+                model.Employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeID == EmployeeID);
+                model.EmployeeAdres = Db.VEmployeeAddress.FirstOrDefault(x => x.EmployeeID == EmployeeID && x.ID == ID);
+                model.AddressTypes = Db.AddressType.Where(x => x.IsActive == true).ToList();
+                model.CountryList = Db.Country.Where(x => x.IsActive == true).ToList();
+                model.StateList = Db.State.Where(x => x.CountryID == model.EmployeeAdres.Country && x.IsActive == true).ToList();
+                model.CityList = Db.City.Where(x => x.StateID == model.EmployeeAdres.State && x.IsActive == true).ToList();
+            }
+            else
+            {
+                result.Message = $"Çalışan veya Adres bilgisi boş olamaz";
+            }
+
+            TempData["result"] = result;
+
+            model.Result = result;
+
+            return PartialView("_PartialEmployeeAddressEdit", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult EditEmployeeAddress(EditAddress address)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            EmployeeControlModel model = new EmployeeControlModel();
+
+            if (address != null && !string.IsNullOrEmpty(address.EAddress))
+            {
+                var employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeID == address.EEmployeeID);
+                var currentadres = Db.EmployeeAddress.FirstOrDefault(x => x.ID == address.ID && x.EmployeeID == address.EEmployeeID);
+
+                EmployeeAddress self = new EmployeeAddress()
+                {
+                    Description = currentadres.Description,
+                    EmployeeID = currentadres.EmployeeID,
+                    ID = currentadres.ID,
+                    IsActive = currentadres.IsActive,
+                    IsMaster = currentadres.IsMaster,
+                    Address = currentadres.Address,
+                    AddressTypeID = currentadres.AddressTypeID,
+                    City = currentadres.City,
+                    Country = currentadres.Country,
+                    PostCode = currentadres.PostCode,
+                    State = currentadres.State
+                };
+
+                currentadres.Description = address.EDescription;
+                currentadres.EmployeeID = address.EEmployeeID;
+                currentadres.IsMaster = !string.IsNullOrEmpty(address.EIsMaster) && address.EIsMaster == "1" ? true : false;
+                currentadres.IsActive = !string.IsNullOrEmpty(address.EIsActive) && address.EIsActive == "1" ? true : false;
+                currentadres.Address = address.EAddress.Trim() ?? "";
+                currentadres.AddressTypeID = address.EAddressType;
+                currentadres.City = address.ECity;
+                currentadres.Country = address.ECountry;
+                currentadres.PostCode = address.EPostCode;
+                currentadres.State = address.EState;
+
+                Db.SaveChanges();
+
+                result.IsSuccess = true;
+                result.Message = $"{address.EAddress} posta adresi eklendi";
+
+                var isequal = OfficeHelper.PublicInstancePropertiesEqual<EmployeeAddress>(self, currentadres, OfficeHelper.getIgnorelist());
+                OfficeHelper.AddApplicationLog("Office", "EmployeeAddress", "Update", currentadres.ID.ToString(), "Employee", "EditEmployeeAddress", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                if (currentadres.IsMaster == true)
+                {
+                    var makemaster = Db.MakeEmployeeMasterAdress(currentadres.ID);
+                }
+                else
+                {
+                    var masteradres = Db.EmployeeAddress.FirstOrDefault(x => x.EmployeeID == address.EEmployeeID && x.IsActive == true && x.IsMaster == true);
+                    if (masteradres != null)
+                    {
+                        var makemaster = Db.MakeEmployeeMasterAdress(masteradres.ID);
+                    }
+                    else
+                    {
+                        masteradres = Db.EmployeeAddress.Where(x => x.EmployeeID == address.EEmployeeID && x.IsActive == true && x.ID != currentadres.ID).OrderByDescending(x => x.ID).FirstOrDefault();
+                        if (masteradres != null)
+                        {
+                            var makemaster = Db.MakeEmployeeMasterAdress(masteradres.ID);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                result.Message = $"Form bilgisi veya adres boş olamaz";
+            }
+
+            TempData["result"] = result;
+            model.Result = result;
+
+            model.EmployeeAddress = Db.VEmployeeAddress.Where(x => x.EmployeeID == address.EEmployeeID).ToList();
+
+            return PartialView("_PartialEmployeeAddress", model);
+        }
 
 
 

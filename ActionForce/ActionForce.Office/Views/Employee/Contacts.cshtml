@@ -357,16 +357,24 @@
         function OnPhoneSuccess(data) {
             $('#modalEmployeePhone').modal('hide');
         };
-        
+        function OnPhoneEditSuccess(data) {
+            $('#modalEmployeePhone').modal('hide');
+        };
+
         function OnMailSuccess(data) {
+            $('#modalEmployeeMail').modal('hide');
+        };
+        function OnMailEditSuccess(data) {
             $('#modalEmployeeMail').modal('hide');
         };
 
         function OnAddressSuccess(data) {
             $('#modalEmployeeAddress').modal('hide');
         };
+        function OnAddressEditSuccess(data) {
+            $('#modalEmployeeAddress').modal('hide');
+        };
 
-        // MakeMasterEmployeePhone
         function MakeMasterEmployeePhone(id, empid) {
             var data = new FormData();
             data.append('ID', id);
@@ -385,7 +393,6 @@
             });
         };
 
-        // MakeMasterEmployeeEmail
         function MakeMasterEmployeeEmail(id, empid) {
             var data = new FormData();
             data.append('ID', id);
@@ -404,7 +411,6 @@
             });
         };
 
-        // MakeMasterEmployeeAddress
         function MakeMasterEmployeeAddress(id, empid) {
             var data = new FormData();
             data.append('ID', id);
@@ -424,9 +430,6 @@
 
         };
 
-        // remove bölümü
-
-        // RemoveEmployeePhone
         function RemoveEmployeePhone(id, empid) {
             var data = new FormData();
             data.append('ID', id);
@@ -445,7 +448,6 @@
             });
         };
 
-        // RemoveEmployeeEmail
         function RemoveEmployeeEmail(id, empid) {
             var data = new FormData();
             data.append('ID', id);
@@ -464,7 +466,6 @@
             });
         };
 
-        // RemoveEmployeeAddress
         function RemoveEmployeeAddress(id, empid) {
             var data = new FormData();
             data.append('ID', id);
@@ -484,8 +485,60 @@
 
         };
 
+        function EditEmployeePhone(id, empid) {
+            var data = new FormData();
+            data.append('ID', id);
+            data.append('EmployeeID', empid);
 
+            $.ajax({
+                url: '@Url.Action("EmployeePhone", "Employee")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#AddEmployeePhone').html(d);
+            });
+        };
 
+        function EditEmployeeEmail(id, empid) {
+            var data = new FormData();
+            data.append('ID', id);
+            data.append('EmployeeID', empid);
+
+            $.ajax({
+                url: '@Url.Action("EmployeeMail", "Employee")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#AddEmployeeMail').html(d);
+            });
+        };
+
+        function EditEmployeeAddress(id, empid) {
+            var data = new FormData();
+            data.append('ID', id);
+            data.append('EmployeeID', empid);
+
+            $.ajax({
+                url: '@Url.Action("EmployeeAddress", "Employee")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#AddEmployeeAddress').html(d);
+            });
+
+        };
 
 
         $(document).ready(function () {

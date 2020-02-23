@@ -2672,6 +2672,9 @@
     <Content Include="Views\Employee\_PartialEmployeePhones.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeEmails.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeAddress.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeePhoneEdit.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeEmailEdit.cshtml" />
+    <Content Include="Views\Employee\_PartialEmployeeAddressEdit.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

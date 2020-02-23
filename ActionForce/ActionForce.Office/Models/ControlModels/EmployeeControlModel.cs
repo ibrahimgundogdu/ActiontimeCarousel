@@ -137,6 +137,13 @@ namespace ActionForce.Office
         public IEnumerable<VEmployeeAddress> EmployeeAddress { get; set; }
         public IEnumerable<AddressType> AddressTypes { get; set; }
 
+
+        public VEmployeePhones EmployeePhone { get; set; }
+        public VEmployeeEmails EmployeeEmail { get; set; }
+        public VEmployeeAddress EmployeeAdres { get; set; }
+
+
+
     }
 
     public class EmployeeFilterModel
