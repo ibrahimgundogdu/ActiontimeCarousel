@@ -6,12 +6,15 @@ using System.Web.Mvc;
 
 namespace ActionForce.Location.Controllers
 {
-    public class EnvelopeController : Controller
+    public class EnvelopeController : BaseController
     {
         // GET: Envelope
+        [AllowAnonymous]
         public ActionResult Index()
         {
-            return View();
+            EnvelopeControlModel model = new EnvelopeControlModel();
+
+            return View(model);
         }
     }
 }

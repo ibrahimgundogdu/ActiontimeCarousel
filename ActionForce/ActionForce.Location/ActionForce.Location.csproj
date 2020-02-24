@@ -567,6 +567,7 @@
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\ControlModels\ActionControlModel.cs" />
     <Compile Include="Models\ControlModels\DefaultControlModel.cs" />
+    <Compile Include="Models\ControlModels\EnvelopeControlModel.cs" />
     <Compile Include="Models\ControlModels\LocationControlModel.cs" />
     <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\ControlModels\ScheduleControlModel.cs" />
@@ -786,6 +787,7 @@
     <Content Include="Views\Action\Index.cshtml" />
     <Content Include="Views\Schedule\Index.cshtml" />
     <Content Include="Views\Sale\Index.cshtml" />
+    <Content Include="Views\Envelope\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -798,7 +800,6 @@
     <Folder Include="libs\plyrist\dist\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Employee\" />
-    <Folder Include="Views\Envelope\" />
     <Folder Include="Views\Logout\" />
     <Folder Include="Views\Message\" />
     <Folder Include="Views\Shift\" />

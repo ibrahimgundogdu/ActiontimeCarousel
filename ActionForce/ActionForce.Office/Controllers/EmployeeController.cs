@@ -75,7 +75,7 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EmployeeFilter(EmployeeFilterModel filterModel)
         {
-            filterModel.SearchKey = filterModel.SearchKey.ToUpper();
+            filterModel.SearchKey = !string.IsNullOrEmpty(filterModel.SearchKey) ? filterModel.SearchKey.ToUpper() : string.Empty;
             TempData["EmployeeFilter"] = filterModel;
 
             return RedirectToAction("Index");
@@ -92,7 +92,8 @@ namespace ActionForce.Office.Controllers
 
             if (filterModel != null)
             {
-                filterModel.SearchKey = filterModel.SearchKey.ToUpper();
+                filterModel.SearchKey = !string.IsNullOrEmpty(filterModel.SearchKey) ? filterModel.SearchKey.ToUpper() : string.Empty;
+
 
                 model.FilterModel = filterModel;
 
@@ -2525,7 +2526,7 @@ namespace ActionForce.Office.Controllers
 
             EmployeeControlModel model = new EmployeeControlModel();
 
-            if (ID != null && ID>0)
+            if (ID != null && ID > 0)
             {
                 var makemaster = Db.MakeEmployeeMasterPhone(ID);
 
@@ -2774,7 +2775,7 @@ namespace ActionForce.Office.Controllers
                 var employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeID == phone.EEmployeeID);
                 model.Employee = employee;
 
-                var currentphone = Db.EmployeePhones.FirstOrDefault(x=> x.ID == phone.ID && x.EmployeeID == phone.EEmployeeID);
+                var currentphone = Db.EmployeePhones.FirstOrDefault(x => x.ID == phone.ID && x.EmployeeID == phone.EEmployeeID);
 
                 EmployeePhones self = new EmployeePhones()
                 {
@@ -2818,7 +2819,7 @@ namespace ActionForce.Office.Controllers
                     }
                     else
                     {
-                        masterphone = Db.EmployeePhones.Where(x => x.EmployeeID == phone.EEmployeeID && x.IsActive == true && x.ID != currentphone.ID).OrderByDescending(x=> x.ID).FirstOrDefault();
+                        masterphone = Db.EmployeePhones.Where(x => x.EmployeeID == phone.EEmployeeID && x.IsActive == true && x.ID != currentphone.ID).OrderByDescending(x => x.ID).FirstOrDefault();
                         if (masterphone != null)
                         {
                             var makemaster = Db.MakeEmployeeMasterPhone(masterphone.ID);
@@ -2835,7 +2836,7 @@ namespace ActionForce.Office.Controllers
             model.Result = result;
 
             model.EmployeePhones = Db.VEmployeePhones.Where(x => x.EmployeeID == phone.EEmployeeID && x.IsActive == true).ToList();
-           
+
             return PartialView("_PartialEmployeePhones", model);
         }
 
