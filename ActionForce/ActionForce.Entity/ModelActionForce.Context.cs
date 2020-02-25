@@ -123,23 +123,14 @@ namespace ActionForce.Entity
         public virtual DbSet<StatsOptions> StatsOptions { get; set; }
         public virtual DbSet<Task> Task { get; set; }
         public virtual DbSet<TaskCategory> TaskCategory { get; set; }
-        public virtual DbSet<TicketBasket> TicketBasket { get; set; }
         public virtual DbSet<TicketConfirm> TicketConfirm { get; set; }
-        public virtual DbSet<TicketConfirmRows> TicketConfirmRows { get; set; }
-        public virtual DbSet<TicketEmployee> TicketEmployee { get; set; }
         public virtual DbSet<TicketEnvironment> TicketEnvironment { get; set; }
-        public virtual DbSet<TicketPrice> TicketPrice { get; set; }
-        public virtual DbSet<TicketPriceCategory> TicketPriceCategory { get; set; }
         public virtual DbSet<TicketPromotion> TicketPromotion { get; set; }
         public virtual DbSet<TicketPromotionCalender> TicketPromotionCalender { get; set; }
         public virtual DbSet<TicketPromotionLocations> TicketPromotionLocations { get; set; }
         public virtual DbSet<TicketPromotionStatus> TicketPromotionStatus { get; set; }
         public virtual DbSet<Tickets> Tickets { get; set; }
-        public virtual DbSet<TicketSale> TicketSale { get; set; }
-        public virtual DbSet<TicketSaleLines> TicketSaleLines { get; set; }
-        public virtual DbSet<TicketSaleRefund> TicketSaleRefund { get; set; }
         public virtual DbSet<TicketSaleRowHistory> TicketSaleRowHistory { get; set; }
-        public virtual DbSet<TicketSaleRows> TicketSaleRows { get; set; }
         public virtual DbSet<TicketSaleTransfer> TicketSaleTransfer { get; set; }
         public virtual DbSet<TicketSaleType> TicketSaleType { get; set; }
         public virtual DbSet<TicketStatus> TicketStatus { get; set; }
@@ -278,6 +269,25 @@ namespace ActionForce.Entity
         public virtual DbSet<VEmployeeAddress> VEmployeeAddress { get; set; }
         public virtual DbSet<VEmployeeEmails> VEmployeeEmails { get; set; }
         public virtual DbSet<VEmployeePhones> VEmployeePhones { get; set; }
+        public virtual DbSet<CollectionType> CollectionType { get; set; }
+        public virtual DbSet<Company> Company { get; set; }
+        public virtual DbSet<CompanyCategory> CompanyCategory { get; set; }
+        public virtual DbSet<LocationPriceCategory> LocationPriceCategory { get; set; }
+        public virtual DbSet<Mall> Mall { get; set; }
+        public virtual DbSet<MallContact> MallContact { get; set; }
+        public virtual DbSet<MallLocationContract> MallLocationContract { get; set; }
+        public virtual DbSet<Price> Price { get; set; }
+        public virtual DbSet<PriceCategory> PriceCategory { get; set; }
+        public virtual DbSet<TicketProduct> TicketProduct { get; set; }
+        public virtual DbSet<TicketProductCategory> TicketProductCategory { get; set; }
+        public virtual DbSet<TicketSaleCollection> TicketSaleCollection { get; set; }
+        public virtual DbSet<TicketSaleStatus> TicketSaleStatus { get; set; }
+        public virtual DbSet<VPrice> VPrice { get; set; }
+        public virtual DbSet<VPriceCategory> VPriceCategory { get; set; }
+        public virtual DbSet<TicketBasket> TicketBasket { get; set; }
+        public virtual DbSet<TicketSale> TicketSale { get; set; }
+        public virtual DbSet<TicketSaleRefund> TicketSaleRefund { get; set; }
+        public virtual DbSet<TicketSaleRows> TicketSaleRows { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -1046,6 +1056,15 @@ namespace ActionForce.Entity
                 new ObjectParameter("AddressID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemoveEmployeePhone", addressIDParameter);
+        }
+    
+        public virtual ObjectResult<GetLocationEmployees_Result> GetLocationEmployees(Nullable<int> locationID)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationEmployees_Result>("GetLocationEmployees", locationIDParameter);
         }
     }
 }

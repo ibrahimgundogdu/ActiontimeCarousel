@@ -10,16 +10,14 @@
 namespace ActionForce.Entity
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class TicketSaleLines
+    public partial class GetLocationEmployees_Result
     {
-        public long ID { get; set; }
-        public Nullable<int> LocationID { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
-        public Nullable<int> SortBy { get; set; }
-        public Nullable<int> State { get; set; }
-        public string TicketNumber { get; set; }
-        public Nullable<bool> IsSuccess { get; set; }
+        public int EmployeeID { get; set; }
+        public Nullable<System.Guid> EmployeeUID { get; set; }
+        public string FullName { get; set; }
+        public string StatusName { get; set; }
+        public string PositionName { get; set; }
+        public Nullable<bool> IsActive { get; set; }
     }
 }

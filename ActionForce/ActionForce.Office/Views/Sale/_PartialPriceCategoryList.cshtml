@@ -1,0 +1,38 @@
+﻿@model SaleControlModel
+<div class="table-responsive">
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Our Company</th>
+                <th>Kod</th>
+                <th>Kategori</th>
+                <th>Sıra</th>
+                <th>Birincil</th>
+                <th>Aktif</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var cat in Model.PriceCategoryList)
+            {
+
+                <tr>
+
+                    <td>@cat.ID</td>
+                    <td>@cat.CompanyName</td>
+                    <td class="bg-primary-light font-weight-bold">@($"{cat.CategoryCode}")</td>
+                    <td class="tx-sm-13 bg-primary-light font-weight-bold">@(cat.CategoryName)</td>
+                    <td class="tx-sm-13"> @(cat.SortBy)</td>
+                    <td class="tx-sm-13">@(cat.IsMaster)</td>
+                    <td class="tx-sm-13">@(cat.IsActive)</td>
+                    <td class="tx-sm-13 bg-light font-weight-bold">
+                        <a href="#" onclick="return confirm('Kategoriyi Pasif Etmek İstediğinize Emin misiniz?') ? RemovePriceCategory(@(cat.ID)):''">Kaldır</a>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>

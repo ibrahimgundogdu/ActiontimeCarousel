@@ -14,19 +14,21 @@ namespace ActionForce.Entity
     
     public partial class TicketSale
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
+        public Nullable<int> StatusID { get; set; }
         public string OrderNumber { get; set; }
         public Nullable<int> SaleTypeID { get; set; }
         public string SaleDetail { get; set; }
         public Nullable<int> ActionRowID { get; set; }
         public Nullable<int> LocationID { get; set; }
+        public Nullable<int> LocationTypeID { get; set; }
         public Nullable<int> EmployeeID { get; set; }
         public string CustomerName { get; set; }
         public string CustomerData { get; set; }
         public string CustomerPhone { get; set; }
         public string IdentityCard { get; set; }
         public Nullable<int> SaleChannelD { get; set; }
-        public Nullable<int> PriceCatID { get; set; }
+        public Nullable<int> PriceCategoryID { get; set; }
         public Nullable<int> PaymethodID { get; set; }
         public Nullable<int> PrepaidCampaignID { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
@@ -34,8 +36,10 @@ namespace ActionForce.Entity
         public Nullable<double> Longitude { get; set; }
         public Nullable<int> RecordEmployeeID { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
+        public string RecordIP { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
+        public string UpdateIP { get; set; }
         public string Description { get; set; }
         public Nullable<double> Cash { get; set; }
         public Nullable<double> Credit { get; set; }
@@ -44,7 +48,10 @@ namespace ActionForce.Entity
         public Nullable<double> SaleCredit { get; set; }
         public Nullable<double> SaleTotal { get; set; }
         public string Money { get; set; }
+        public Nullable<bool> IsFinancialization { get; set; }
+        public Nullable<int> ReasonID { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<double> SalePrePaidTotal { get; set; }
+        public System.Guid UID { get; set; }
     }
 }

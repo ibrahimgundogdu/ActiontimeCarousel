@@ -171,6 +171,27 @@
                 <li class="nav-item"><a href="/Location" class="nav-link"><i data-feather="map-pin"></i> <span>Lokasyonlar</span></a></li>
                 <li class="nav-item"><a href="/Employee" class="nav-link"><i data-feather="users"></i> <span>Çalışanlar</span></a></li>
 
+
+
+                <li class="nav-label mg-t-10 active">Satış - Fiyat</li>
+
+
+                <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Sale" ? "show" : "")">
+                    <a href="/Sale/Price" class="nav-link"><i data-feather="dollar-sign"></i> <span>Fiyat Yönetimi</span></a>
+                    <ul>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Sale" && this.ViewContext.RouteData.Values["action"].ToString() == "Price" ? "class=active" : "")><a href="/Sale/Price">01 Fiyat Listesi</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Sale" && this.ViewContext.RouteData.Values["action"].ToString() == "PriceCategory" ? "class=active" : "")><a href="/Sale/PriceCategory">02 Fiyat Kategorileri</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Sale" && this.ViewContext.RouteData.Values["action"].ToString() == "TicketProduct" ? "class=active" : "")><a href="/Sale/TicketProduct">03 Bilet Ürünleri</a></li>
+                    </ul>
+                </li>
+
+                <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Sale" ? "show" : "")">
+                    <a href="/Sale/Price" class="nav-link"><i data-feather="clipboard"></i> <span>Satışlar</span></a>
+                    <ul>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Sale" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Sale/Index">01 Satış Listesi</a></li>
+                    </ul>
+                </li>
+
                 <li class="nav-label mg-t-10">Araçlar</li>
 
                 <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Compute" ? "show" : "")">
