@@ -1058,13 +1058,13 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemoveEmployeePhone", addressIDParameter);
         }
     
-        public virtual ObjectResult<GetLocationEmployees_Result> GetLocationEmployees(Nullable<int> locationID)
+        public virtual ObjectResult<GetLocationEmployees_Result1> GetLocationEmployees(Nullable<int> locationID)
         {
             var locationIDParameter = locationID.HasValue ?
                 new ObjectParameter("LocationID", locationID) :
                 new ObjectParameter("LocationID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationEmployees_Result>("GetLocationEmployees", locationIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationEmployees_Result1>("GetLocationEmployees", locationIDParameter);
         }
     }
 }

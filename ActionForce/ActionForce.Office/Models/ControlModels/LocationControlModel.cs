@@ -16,7 +16,7 @@ namespace ActionForce.Office
         public List<string> TypeList { get; set; }
         public LocationFilterModel FilterModel { get; set; }
         public List<ApplicationLog> LogList { get; set; }
-        public List<VEmployeeLocation> EmployeeLocationList { get; set; }
+        public List<LocationEmployeeModel> EmployeeLocationList { get; set; }
         public List<OurCompany> OurCompanyList { get; set; }
     }
 
@@ -48,5 +48,14 @@ namespace ActionForce.Office
         public string TypeName { get; set; }
         public string Currency { get; set; }
         public Nullable<System.Guid> LocationUID { get; set; }
+    }
+
+    public class LocationEmployeeModel
+    {
+        public int EmployeeID { get; set; }
+        public Guid EmployeeUID { get; set; }
+        public string FullName { get; set; }
+        public string PositionName { get; set; }
+        public bool Active { get; set; }
     }
 }
