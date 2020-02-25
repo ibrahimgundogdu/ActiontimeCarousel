@@ -8439,7 +8439,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="TicketSale" EntityType="db293_ActionTimeDbModel.TicketSale" />
           <EntitySet Name="TicketSaleRefund" EntityType="db293_ActionTimeDbModel.TicketSaleRefund" />
           <EntitySet Name="TicketSaleRows" EntityType="db293_ActionTimeDbModel.TicketSaleRows" />
-          <FunctionImport Name="GetLocationEmployees" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationEmployees_Result)">
+          <FunctionImport Name="GetLocationEmployees" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationEmployees_Result1)">
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
          
@@ -14334,6 +14334,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Type="String" Name="PositionName" Nullable="true" MaxLength="50" />
           <Property Type="Boolean" Name="IsActive" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="GetLocationEmployees_Result1">
+          <Property Type="Int32" Name="EmployeeID" Nullable="false" />
+          <Property Type="Guid" Name="EmployeeUID" Nullable="true" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="PositionName" Nullable="false" MaxLength="50" />
+          <Property Type="Boolean" Name="Active" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -20014,13 +20021,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetLocationEmployees" FunctionName="db293_ActionTimeDbModel.Store.GetLocationEmployees">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetLocationEmployees_Result">
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetLocationEmployees_Result1">
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="EmployeeUID" ColumnName="EmployeeUID" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
                 <ScalarProperty Name="PositionName" ColumnName="PositionName" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

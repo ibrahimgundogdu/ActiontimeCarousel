@@ -368,6 +368,9 @@
     <Compile Include="GetLocationEmployees_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetLocationEmployees_Result1.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="GetPersonList_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

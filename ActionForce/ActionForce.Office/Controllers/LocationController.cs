@@ -162,7 +162,13 @@ namespace ActionForce.Office.Controllers
             if (model.LocationModel != null)
             {
                 model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
-                model.EmployeeLocationList = Db.VEmployeeLocation.Where(x => x.LocationUID == id).ToList();
+                model.EmployeeLocationList = Db.GetLocationEmployees(model.LocationModel.LocationID).Select(x => new LocationEmployeeModel() {
+                    EmployeeID = x.EmployeeID,
+                    EmployeeUID = x.EmployeeUID ?? Guid.Empty,
+                    FullName = x.FullName,
+                    Active = x.Active ?? false,
+                    PositionName = x.PositionName
+                }).ToList();
             }
             else
             {
