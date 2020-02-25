@@ -40,6 +40,18 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
+        public ActionResult PartialAddPriceCategory()
+        {
+            SaleControlModel model = new SaleControlModel();
+
+            model.OurCompanyList = Db.OurCompany.ToList();
+
+            return PartialView("_PartialAddPriceCategory", model);
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
         public PartialViewResult AddPriceCategory(CUPriceCategory pricecategory)
         {
             SaleControlModel model = new SaleControlModel();
@@ -76,6 +88,18 @@ namespace ActionForce.Office.Controllers
             model.OurCompanyList = Db.OurCompany.ToList();
 
             return PartialView("_PartialPriceCategoryList", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult PartialEditPriceCategory(int? id)
+        {
+            SaleControlModel model = new SaleControlModel();
+
+            model.PriceCategory = Db.VPriceCategory.FirstOrDefault(x=> x.ID == id);
+            model.OurCompanyList = Db.OurCompany.ToList();
+
+            return PartialView("_PartialEditPriceCategory", model);
         }
 
         #endregion

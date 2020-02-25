@@ -23,7 +23,10 @@
                     <td>@cat.ID</td>
                     <td>@cat.CompanyName</td>
                     <td class="bg-primary-light font-weight-bold">@($"{cat.CategoryCode}")</td>
-                    <td class="tx-sm-13 bg-primary-light font-weight-bold">@(cat.CategoryName)</td>
+                    <td class="tx-sm-13 bg-primary-light font-weight-bold">
+                        <a href="#modalPriceCategory" data-toggle="modal" class="link-03 mg-l-10"><span class="d-none d-sm-inline" onclick="EditPriceCategory(@(cat.ID));"> @(cat.CategoryName)</span></a>
+                       
+                    </td>
                     <td class="tx-sm-13"> @(cat.SortBy)</td>
                     <td class="tx-sm-13">@(cat.IsMaster)</td>
                     <td class="tx-sm-13">@(cat.IsActive)</td>
