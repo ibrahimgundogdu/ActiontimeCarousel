@@ -788,6 +788,7 @@
     <Content Include="Views\Schedule\Index.cshtml" />
     <Content Include="Views\Sale\Index.cshtml" />
     <Content Include="Views\Envelope\Index.cshtml" />
+    <Content Include="Views\Sale\Detail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

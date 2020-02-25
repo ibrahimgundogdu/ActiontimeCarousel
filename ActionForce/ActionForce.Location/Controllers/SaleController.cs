@@ -12,7 +12,16 @@ namespace ActionForce.Location.Controllers
         public ActionResult Index()
         {
             SaleControlModel model = new SaleControlModel();
-            model.PageTitle = $"{DateTime.Now.ToLongDateString()} &nbsp; &nbsp; <span class='font-weight-bold'> Sales </span>";
+            model.PageTitle = $"{DateTime.Now.ToLongDateString()} &nbsp; &nbsp; <span class='font-weight-bold'> Siparişler </span>";
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult Detail(Guid? id)
+        {
+            SaleControlModel model = new SaleControlModel();
+            model.PageTitle = $"{DateTime.Now.ToLongDateString()} &nbsp; &nbsp; <span class='font-weight-bold'> Sipariş Detayı </span>";
 
             return View(model);
         }

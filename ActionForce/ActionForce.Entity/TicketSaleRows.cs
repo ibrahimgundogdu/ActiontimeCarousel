@@ -17,10 +17,12 @@ namespace ActionForce.Entity
         public int ID { get; set; }
         public int SaleID { get; set; }
         public Nullable<int> ActionRowID { get; set; }
+        public Nullable<int> LocationID { get; set; }
         public Nullable<long> TicketTripID { get; set; }
         public bool IsSale { get; set; }
         public Nullable<bool> IsCash { get; set; }
         public Nullable<int> PaymethodID { get; set; }
+        public Nullable<bool> UseImmediately { get; set; }
         public Nullable<bool> IsExtended { get; set; }
         public int TicketTypeID { get; set; }
         public string TicketNumber { get; set; }
@@ -29,6 +31,7 @@ namespace ActionForce.Entity
         public int Quantity { get; set; }
         public Nullable<int> Unit { get; set; }
         public Nullable<int> ExtraUnit { get; set; }
+        public Nullable<int> PriceCategoryID { get; set; }
         public int PriceID { get; set; }
         public double Price { get; set; }
         public Nullable<double> Discount { get; set; }

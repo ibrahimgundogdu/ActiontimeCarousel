@@ -12,20 +12,19 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class TicketPrice
+    public partial class TicketProduct
     {
         public int ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
-        public Nullable<int> PriceCatID { get; set; }
-        public Nullable<int> TicketTypeID { get; set; }
+        public Nullable<int> CategoryID { get; set; }
         public string Name { get; set; }
         public Nullable<int> Unit { get; set; }
-        public Nullable<double> Price { get; set; }
-        public Nullable<double> ExtraMultiple { get; set; }
-        public string Money { get; set; }
-        public Nullable<bool> IsSale { get; set; }
-        public Nullable<bool> AllowPrepaid { get; set; }
         public Nullable<bool> IsActive { get; set; }
-        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<System.DateTime> RecordDate { get; set; }
+        public Nullable<int> RecordEmployeeID { get; set; }
+        public string RecordIP { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
+        public Nullable<int> UpdateEmployeeID { get; set; }
+        public string UpdateIP { get; set; }
     }
 }

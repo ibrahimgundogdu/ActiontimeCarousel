@@ -2321,6 +2321,7 @@
     <Compile Include="Controllers\ResultController.cs" />
     <Compile Include="Controllers\RevenueController.cs" />
     <Compile Include="Controllers\SalaryController.cs" />
+    <Compile Include="Controllers\SaleController.cs" />
     <Compile Include="Controllers\ScheduleController.cs" />
     <Compile Include="Controllers\ShiftController.cs" />
     <Compile Include="Controllers\TicketSaleController.cs" />
@@ -2335,7 +2336,9 @@
     <Compile Include="Models\BankActionModel.cs" />
     <Compile Include="Models\ControlModels\ComputeControlModel.cs" />
     <Compile Include="Models\ControlModels\RevenueControlModel.cs" />
+    <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\CounterModel.cs" />
+    <Compile Include="Models\CUPriceCategory.cs" />
     <Compile Include="Models\Crypter.cs" />
     <Compile Include="Models\Document\EmployeesLocation.cs" />
     <Compile Include="Models\Document\EmployeePermit.cs" />
@@ -2675,6 +2678,12 @@
     <Content Include="Views\Employee\_PartialEmployeePhoneEdit.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeEmailEdit.cshtml" />
     <Content Include="Views\Employee\_PartialEmployeeAddressEdit.cshtml" />
+    <Content Include="Views\Sale\TicketProduct.cshtml" />
+    <Content Include="Views\Sale\PriceCategory.cshtml" />
+    <Content Include="Views\Sale\Price.cshtml" />
+    <Content Include="Views\Sale\_PartialPriceCategoryList.cshtml" />
+    <Content Include="Views\Sale\_PartialAddPriceCategory.cshtml" />
+    <Content Include="Views\Sale\_PartialEditPriceCategory.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
