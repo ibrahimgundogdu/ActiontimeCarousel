@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using ActionForce.Entity;
 
 namespace ActionForce.Office.Controllers
 {
@@ -263,65 +264,32 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditLocation(LocationModel location)
         {
-            Result result = new Result()
-            {
-                IsSuccess = false,
-                Message = string.Empty
-            };
+            Result result = new Result();
 
             LocationControlModel model = new LocationControlModel();
+            DateTime daterecord = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
+            var isLocation = Db.Location.FirstOrDefault(x => x.LocationID == location.LocationID && x.LocationUID == location.LocationUID);
 
-            if (location != null)
+            if (location != null && isLocation != null)
             {
-                //    EmployeePermit permitdoc = new EmployeePermit();
-
-                //    permitdoc.ActinTypeID = cashactType.ID;
-                //    permitdoc.ActionTypeName = cashactType.Name;
-                //    permitdoc.Date = docDate;
-                //    permitdoc.DateBegin = beginDatetime.Value;
-                //    permitdoc.DateEnd = endDatetime.Value;
-                //    permitdoc.Description = permit.Description;
-                //    permitdoc.EmployeeID = permit.EmployeeID;
-                //    permitdoc.IsActive = isActive;
-                //    permitdoc.LocationID = location.LocationID;
-                //    permitdoc.OurCompanyID = location.OurCompanyID;
-                //    permitdoc.PermitTypeID = permit.PermitTypeID;
-                //    permitdoc.ReturnWorkDate = returnWorkDate;
-                //    permitdoc.StatusID = permit.StatusID;
-                //    permitdoc.TimeZone = location.Timezone.Value;
-                //    permitdoc.UID = permit.UID;
-                //    permitdoc.ID = permit.ID;
-
-                //    DocumentManager documentManager = new DocumentManager();
-                //    var editresult = documentManager.EditEmployeePermit(permitdoc, model.Authentication);
-
-
-                //    TempData["result"] = new Result() { IsSuccess = editresult.IsSuccess, Message = editresult.Message };
-
-                //    if (result.IsSuccess == true)
-                //    {
-                //        return RedirectToAction("PermitDetail", "Salary", new { id = permitdoc.UID });
-                //    }
-                //    else
-                //    {
-                //        return RedirectToAction("AddPermit", "Salary");
-                //    }
-
-                //}
-                //else
-                //{
-                //    result.Message = $"Form bilgileri gelmedi.";
-                //}
-
-                //TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
-
+                try
+                {
+                    Location self = new Location() {
+                        
+                    };
+                }
+                catch (Exception ex)
+                {
+                    result.Message = ex.Message;
+                    result.IsSuccess = false;
+                }
             }
 
             return RedirectToAction("Index", "Location");
         }
 
     }
-
+    //SelectListItem MVC'den türediği için başka bir sınıfın içerisine alamadığımızdan dolayı OurCompanyModel sınıfı burada bulunmaktadır.
     public class OurCompanyModel
     {
         public List<SelectListItem> SelectList { get; set; }
