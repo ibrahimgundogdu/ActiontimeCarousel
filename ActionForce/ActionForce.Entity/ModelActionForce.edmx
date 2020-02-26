@@ -2986,7 +2986,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OurCompanyID" Type="int" />
           <Property Name="CategoryID" Type="int" />
-          <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Unit" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="RecordDate" Type="datetime" />
@@ -5397,27 +5397,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSystemCheckEmployeeRows' d
           <Property Name="Code" Type="nvarchar" MaxLength="10" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketProduct' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="VTicketProduct">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
-          <Property Name="OurCompanyID" Type="int" />
-          <Property Name="CategoryID" Type="int" />
-          <Property Name="Unit" Type="int" />
-          <Property Name="IsActive" Type="bit" />
-          <Property Name="RecordDate" Type="datetime" />
-          <Property Name="RecordEmployeeID" Type="int" />
-          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
-          <Property Name="UpdateDate" Type="datetime" />
-          <Property Name="UpdateEmployeeID" Type="int" />
-          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
-          <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
-          <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
-          <Property Name="ProductCategoryName" Type="nvarchar" MaxLength="50" />
-        </EntityType>
-        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="WeekList">
           <Key>
@@ -7813,24 +7792,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VSystemCheckEmployeeRows].[Code] AS [Code]
     FROM [dbo].[VSystemCheckEmployeeRows] AS [VSystemCheckEmployeeRows]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="VTicketProduct" EntityType="Self.VTicketProduct" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [VTicketProduct].[ID] AS [ID], 
-    [VTicketProduct].[OurCompanyID] AS [OurCompanyID], 
-    [VTicketProduct].[CategoryID] AS [CategoryID], 
-    [VTicketProduct].[Unit] AS [Unit], 
-    [VTicketProduct].[IsActive] AS [IsActive], 
-    [VTicketProduct].[RecordDate] AS [RecordDate], 
-    [VTicketProduct].[RecordEmployeeID] AS [RecordEmployeeID], 
-    [VTicketProduct].[RecordIP] AS [RecordIP], 
-    [VTicketProduct].[UpdateDate] AS [UpdateDate], 
-    [VTicketProduct].[UpdateEmployeeID] AS [UpdateEmployeeID], 
-    [VTicketProduct].[UpdateIP] AS [UpdateIP], 
-    [VTicketProduct].[CompanyName] AS [CompanyName], 
-    [VTicketProduct].[ProductName] AS [ProductName], 
-    [VTicketProduct].[ProductCategoryName] AS [ProductCategoryName]
-    FROM [dbo].[VTicketProduct] AS [VTicketProduct]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="WeekList" EntityType="Self.WeekList" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [WeekList].[Id] AS [Id], 
@@ -8394,11 +8355,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DocumentSalaryEarn" EntityType="db293_ActionTimeDbModel.DocumentSalaryEarn" />
           <EntitySet Name="VDocumentSalaryEarn" EntityType="db293_ActionTimeDbModel.VDocumentSalaryEarn" />
           <EntitySet Name="OurCompany" EntityType="db293_ActionTimeDbModel.OurCompany" />
-          <FunctionImport Name="GetLocationAll" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationAll_Result1)">
-            <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
-            <Parameter Name="LocationUID" Mode="In" Type="Guid" />
-            <Parameter Name="LocationID" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="GetSalaryMultiplier" ReturnType="Collection(Double)">
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
@@ -8481,7 +8437,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImport Name="GetLocationEmployees" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationEmployees_Result1)">
           <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="VTicketProduct" EntityType="db293_ActionTimeDbModel.VTicketProduct" />
+          <FunctionImport Name="GetLocationAll" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationAll_Result2)">
+            <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
+            <Parameter Name="LocationUID" Mode="In" Type="Guid" />
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+          </FunctionImport>
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -14136,7 +14096,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateEmployeeID" Type="Int32" />
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="TicketProductCategory">
           <Key>
@@ -14382,25 +14341,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Type="String" Name="PositionName" Nullable="false" MaxLength="50" />
           <Property Type="Boolean" Name="Active" Nullable="true" />
         </ComplexType>
-        <EntityType Name="VTicketProduct">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="CategoryID" Type="Int32" />
-          <Property Name="Unit" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateEmployeeID" Type="Int32" />
-          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProductCategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
+        <ComplexType Name="GetLocationAll_Result2">
+          <Property Type="Int32" Name="LocationID" Nullable="false" />
+          <Property Type="String" Name="LocationCode" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="LocationName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="LocationNameSearch" Nullable="true" MaxLength="4000" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="500" />
+          <Property Type="String" Name="State" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Latitude" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Longitude" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="Timezone" Nullable="true" />
+          <Property Type="String" Name="MapURL" Nullable="true" MaxLength="1000" />
+          <Property Type="Boolean" Name="IsHaveOperator" Nullable="true" />
+          <Property Type="String" Name="IP" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="SortBy" Nullable="true" MaxLength="10" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="String" Name="TypeName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Currency" Nullable="true" MaxLength="20" />
+          <Property Type="Guid" Name="LocationUID" Nullable="true" />
+          <Property Type="Int32" Name="OurCompanyID" Nullable="false" />
+          <Property Type="Int32" Name="PriceCatID" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -19152,30 +19113,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GetLocationAll" FunctionName="db293_ActionTimeDbModel.Store.GetLocationAll">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetLocationAll_Result1">
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="LocationCode" ColumnName="LocationCode" />
-                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
-                <ScalarProperty Name="LocationNameSearch" ColumnName="LocationNameSearch" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Timezone" ColumnName="Timezone" />
-                <ScalarProperty Name="MapURL" ColumnName="MapURL" />
-                <ScalarProperty Name="IsHaveOperator" ColumnName="IsHaveOperator" />
-                <ScalarProperty Name="IP" ColumnName="IP" />
-                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="LocationUID" ColumnName="LocationUID" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetSalaryMultiplier" FunctionName="db293_ActionTimeDbModel.Store.GetSalaryMultiplier" />
           <EntitySetMapping Name="SystemCheckEmployeeRows">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SystemCheckEmployeeRows">
@@ -19827,7 +19764,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketProduct">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketProduct">
               <MappingFragment StoreEntitySet="TicketProduct">
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
                 <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
@@ -19836,6 +19772,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -20090,26 +20027,31 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="VTicketProduct">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketProduct">
-              <MappingFragment StoreEntitySet="VTicketProduct">
-                <ScalarProperty Name="ProductCategoryName" ColumnName="ProductCategoryName" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+          <FunctionImportMapping FunctionImportName="GetLocationAll" FunctionName="db293_ActionTimeDbModel.Store.GetLocationAll">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetLocationAll_Result2">
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="LocationCode" ColumnName="LocationCode" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="LocationNameSearch" ColumnName="LocationNameSearch" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Timezone" ColumnName="Timezone" />
+                <ScalarProperty Name="MapURL" ColumnName="MapURL" />
+                <ScalarProperty Name="IsHaveOperator" ColumnName="IsHaveOperator" />
+                <ScalarProperty Name="IP" ColumnName="IP" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="LocationUID" ColumnName="LocationUID" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+                <ScalarProperty Name="PriceCatID" ColumnName="PriceCatID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

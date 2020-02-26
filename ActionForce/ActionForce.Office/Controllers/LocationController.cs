@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Script.Serialization;
+using ActionForce.Entity;
 
 namespace ActionForce.Office.Controllers
 {
@@ -162,7 +163,8 @@ namespace ActionForce.Office.Controllers
             if (model.LocationModel != null)
             {
                 model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
-                model.EmployeeLocationList = Db.GetLocationEmployees(model.LocationModel.LocationID).Select(x => new LocationEmployeeModel() {
+                model.EmployeeLocationList = Db.GetLocationEmployees(model.LocationModel.LocationID).Select(x => new LocationEmployeeModel()
+                {
                     EmployeeID = x.EmployeeID,
                     EmployeeUID = x.EmployeeUID ?? Guid.Empty,
                     FullName = x.FullName,
@@ -207,13 +209,15 @@ namespace ActionForce.Office.Controllers
                 State = x.State,
                 TypeName = x.TypeName,
                 Timezone = x.Timezone,
-                OurCompany = x.OurCompanyID
+                OurCompany = x.OurCompanyID,
+                PriceCatID = x.PriceCatID ?? -1
             }).FirstOrDefault();
 
             if (model.LocationModel != null)
             {
                 model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
                 model.OurCompanyList = Db.OurCompany.ToList();
+                model.PriceCategoryList = Db.PriceCategory.ToList();
             }
             else
             {
@@ -248,7 +252,8 @@ namespace ActionForce.Office.Controllers
             OurCompanyModel model = new OurCompanyModel()
             {
                 Currency = getOurCompany.Currency,
-                SelectList = list
+                SelectList = list,
+                PriceCategoryList = Db.PriceCategory.Where(x => x.OurCompanyID == ourCompanyId).ToList()
             };
 
             //JavaScriptSerializer javaScriptSerializer = new JavaScriptSerializer();
@@ -263,68 +268,37 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditLocation(LocationModel location)
         {
-            Result result = new Result()
-            {
-                IsSuccess = false,
-                Message = string.Empty
-            };
+            Result result = new Result();
 
             LocationControlModel model = new LocationControlModel();
+            DateTime daterecord = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
+            var isLocation = Db.Location.FirstOrDefault(x => x.LocationID == location.LocationID && x.LocationUID == location.LocationUID);
 
-            if (location != null)
+            if (location != null && isLocation != null)
             {
-                //    EmployeePermit permitdoc = new EmployeePermit();
+                try
+                {
+                    Location self = new Location()
+                    {
 
-                //    permitdoc.ActinTypeID = cashactType.ID;
-                //    permitdoc.ActionTypeName = cashactType.Name;
-                //    permitdoc.Date = docDate;
-                //    permitdoc.DateBegin = beginDatetime.Value;
-                //    permitdoc.DateEnd = endDatetime.Value;
-                //    permitdoc.Description = permit.Description;
-                //    permitdoc.EmployeeID = permit.EmployeeID;
-                //    permitdoc.IsActive = isActive;
-                //    permitdoc.LocationID = location.LocationID;
-                //    permitdoc.OurCompanyID = location.OurCompanyID;
-                //    permitdoc.PermitTypeID = permit.PermitTypeID;
-                //    permitdoc.ReturnWorkDate = returnWorkDate;
-                //    permitdoc.StatusID = permit.StatusID;
-                //    permitdoc.TimeZone = location.Timezone.Value;
-                //    permitdoc.UID = permit.UID;
-                //    permitdoc.ID = permit.ID;
-
-                //    DocumentManager documentManager = new DocumentManager();
-                //    var editresult = documentManager.EditEmployeePermit(permitdoc, model.Authentication);
-
-
-                //    TempData["result"] = new Result() { IsSuccess = editresult.IsSuccess, Message = editresult.Message };
-
-                //    if (result.IsSuccess == true)
-                //    {
-                //        return RedirectToAction("PermitDetail", "Salary", new { id = permitdoc.UID });
-                //    }
-                //    else
-                //    {
-                //        return RedirectToAction("AddPermit", "Salary");
-                //    }
-
-                //}
-                //else
-                //{
-                //    result.Message = $"Form bilgileri gelmedi.";
-                //}
-
-                //TempData["result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
-
+                    };
+                }
+                catch (Exception ex)
+                {
+                    result.Message = ex.Message;
+                    result.IsSuccess = false;
+                }
             }
 
             return RedirectToAction("Index", "Location");
         }
 
     }
-
+    //SelectListItem MVC'den türediği için başka bir sınıfın içerisine alamadığımızdan dolayı OurCompanyModel sınıfı burada bulunmaktadır.
     public class OurCompanyModel
     {
         public List<SelectListItem> SelectList { get; set; }
         public string Currency { get; set; }
+        public List<PriceCategory> PriceCategoryList { get; set; }
     }
 }

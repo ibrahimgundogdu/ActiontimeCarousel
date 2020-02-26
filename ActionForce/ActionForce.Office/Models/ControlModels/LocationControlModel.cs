@@ -18,6 +18,7 @@ namespace ActionForce.Office
         public List<ApplicationLog> LogList { get; set; }
         public List<LocationEmployeeModel> EmployeeLocationList { get; set; }
         public List<OurCompany> OurCompanyList { get; set; }
+        public List<PriceCategory> PriceCategoryList { get; set; }
     }
 
     public class LocationFilterModel
@@ -48,6 +49,7 @@ namespace ActionForce.Office
         public string TypeName { get; set; }
         public string Currency { get; set; }
         public Nullable<System.Guid> LocationUID { get; set; }
+        public int PriceCatID { get; set; }
     }
 
     public class LocationEmployeeModel
