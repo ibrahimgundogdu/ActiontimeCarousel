@@ -17,7 +17,7 @@
 
             @foreach (var cat in Model.TicketProductList)
             {
-                <tr>
+                @*<tr>
                     <td>@cat.ID</td>
                     <td>@cat.CompanyName</td>
                     <td class="bg-primary-light font-weight-bold">@($"{cat.CategoryCode}")</td>
@@ -30,7 +30,7 @@
                     <td class="tx-sm-13 bg-light font-weight-bold">
                         <a href="#" onclick="return confirm('Kategoriyi Silmek İstediğinize Emin misiniz?') ? RemovePriceCategory(@(cat.ID)):''">Kaldır</a>
                     </td>
-                </tr>
+                </tr>*@
             }
 
         </tbody>

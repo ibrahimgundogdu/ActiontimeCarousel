@@ -54,7 +54,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.InspectorReportEmployeeRows" Width="1.5" PointX="14.75" PointY="26.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.InspectorReportKey" Width="1.5" PointX="16.75" PointY="26.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.InspectorReportKeyCategory" Width="1.5" PointX="26.75" PointY="14.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Location" Width="1.5" PointX="26.75" PointY="17.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationAnimals" Width="1.5" PointX="18.75" PointY="27.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationCR" Width="1.5" PointX="26.75" PointY="25.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationParam" Width="1.5" PointX="27.75" PointY="1.75" />
@@ -276,8 +275,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.MallLocationContract" Width="1.5" PointX="33.375" PointY="57.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Price" Width="1.5" PointX="57.375" PointY="37.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PriceCategory" Width="1.5" PointX="39.375" PointY="57.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProduct" Width="1.5" PointX="41.375" PointY="57.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProductCategory" Width="1.5" PointX="57.375" PointY="18.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleCollection" Width="1.5" PointX="57.375" PointY="43.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleStatus" Width="1.5" PointX="57.375" PointY="47.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPrice" Width="1.5" PointX="57.375" PointY="50.75" />
@@ -287,6 +284,9 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRefund" Width="1.5" PointX="13.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRows" Width="1.5" PointX="58.375" PointY="0.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketProduct" Width="1.5" PointX="3.375" PointY="35.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProduct" Width="1.5" PointX="3.375" PointY="35.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProductCategory" Width="1.5" PointX="15.375" PointY="35.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Location" Width="1.5" PointX="41.375" PointY="57.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

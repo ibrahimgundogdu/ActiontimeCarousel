@@ -44,5 +44,6 @@ namespace ActionForce.Entity
         public Nullable<System.Guid> LocationUID { get; set; }
         public Nullable<int> POSAccountID { get; set; }
         public string LocationFullName { get; set; }
+        public Nullable<int> MallID { get; set; }
     }
 }

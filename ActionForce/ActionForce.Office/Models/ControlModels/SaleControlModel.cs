@@ -13,6 +13,6 @@ namespace ActionForce.Office
         public List<VPriceCategory> PriceCategoryList { get; set; }
         public List<OurCompany> OurCompanyList { get; set; }
         public List<TicketProductCategory> TicketProductCategoryList { get; set; }
-        public List<TicketProduct> TicketProductList { get; set; }
+        public List<VTicketProduct> TicketProductList { get; set; }
     }
 }

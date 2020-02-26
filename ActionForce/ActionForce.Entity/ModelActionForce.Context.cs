@@ -76,7 +76,6 @@ namespace ActionForce.Entity
         public virtual DbSet<InspectorReportEmployeeRows> InspectorReportEmployeeRows { get; set; }
         public virtual DbSet<InspectorReportKey> InspectorReportKey { get; set; }
         public virtual DbSet<InspectorReportKeyCategory> InspectorReportKeyCategory { get; set; }
-        public virtual DbSet<Location> Location { get; set; }
         public virtual DbSet<LocationAnimals> LocationAnimals { get; set; }
         public virtual DbSet<LocationCR> LocationCR { get; set; }
         public virtual DbSet<LocationParam> LocationParam { get; set; }
@@ -278,8 +277,6 @@ namespace ActionForce.Entity
         public virtual DbSet<MallLocationContract> MallLocationContract { get; set; }
         public virtual DbSet<Price> Price { get; set; }
         public virtual DbSet<PriceCategory> PriceCategory { get; set; }
-        public virtual DbSet<TicketProduct> TicketProduct { get; set; }
-        public virtual DbSet<TicketProductCategory> TicketProductCategory { get; set; }
         public virtual DbSet<TicketSaleCollection> TicketSaleCollection { get; set; }
         public virtual DbSet<TicketSaleStatus> TicketSaleStatus { get; set; }
         public virtual DbSet<VPrice> VPrice { get; set; }
@@ -288,7 +285,10 @@ namespace ActionForce.Entity
         public virtual DbSet<TicketSale> TicketSale { get; set; }
         public virtual DbSet<TicketSaleRefund> TicketSaleRefund { get; set; }
         public virtual DbSet<TicketSaleRows> TicketSaleRows { get; set; }
+        public virtual DbSet<TicketProduct> TicketProduct { get; set; }
+        public virtual DbSet<TicketProductCategory> TicketProductCategory { get; set; }
         public virtual DbSet<VTicketProduct> VTicketProduct { get; set; }
+        public virtual DbSet<Location> Location { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -1051,7 +1051,7 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationEmployees_Result1>("GetLocationEmployees", locationIDParameter);
         }
     
-        public virtual ObjectResult<GetLocationAll_Result2> GetLocationAll(Nullable<int> ourCompanyID, Nullable<System.Guid> locationUID, Nullable<int> locationID)
+        public virtual ObjectResult<GetLocationAll_Result> GetLocationAll(Nullable<int> ourCompanyID, Nullable<System.Guid> locationUID, Nullable<int> locationID)
         {
             var ourCompanyIDParameter = ourCompanyID.HasValue ?
                 new ObjectParameter("OurCompanyID", ourCompanyID) :
@@ -1065,7 +1065,7 @@ namespace ActionForce.Entity
                 new ObjectParameter("LocationID", locationID) :
                 new ObjectParameter("LocationID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationAll_Result2>("GetLocationAll", ourCompanyIDParameter, locationUIDParameter, locationIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationAll_Result>("GetLocationAll", ourCompanyIDParameter, locationUIDParameter, locationIDParameter);
         }
     }
 }

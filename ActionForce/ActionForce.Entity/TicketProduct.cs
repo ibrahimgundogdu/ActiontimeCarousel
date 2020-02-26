@@ -17,7 +17,7 @@ namespace ActionForce.Entity
         public int ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
         public Nullable<int> CategoryID { get; set; }
-        public string Name { get; set; }
+        public string ProductName { get; set; }
         public Nullable<int> Unit { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
@@ -26,6 +26,5 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public string UpdateIP { get; set; }
-        public string ProductName { get; set; }
     }
 }
