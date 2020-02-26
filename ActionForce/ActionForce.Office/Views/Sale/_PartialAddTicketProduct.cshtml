@@ -1,0 +1,77 @@
+﻿@model SaleControlModel
+
+<a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+</a>
+<div>
+    <h4><span class="font-weight-bold text-black-50">Bilet Ürünü Ekle</span></h4>
+
+    @using (Ajax.BeginForm("AddTicketProduct", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "TicketProductList", InsertionMode = InsertionMode.Replace, OnSuccess = "OnProductAddSuccess" }))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-group row">
+            <label for="OurCompanyID" class="col-sm-3 col-form-label">Our Company</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="OurCompanyID" name="OurCompanyID" required>
+                    @foreach (var item in Model.OurCompanyList)
+                    {
+                        <option value="@item.CompanyID" @(Model.Authentication.ActionEmployee.OurCompanyID == item.CompanyID ? "selected" : "")>@($"{item.Code} {item.CompanyName}")</option>
+                    }
+                </select>
+            </div>
+
+
+        </div>
+        <div class="form-group row bg-gray-50 mg-b-5">
+            <label for="CategoryCode" class="col-sm-3 col-form-label">Kategori Kodu</label>
+            <div class="col-sm-9">
+                <input id="CategoryCode" name="CategoryCode" type="text" class="form-control" autocomplete="off" placeholder="Kodu">
+            </div>
+        </div>
+
+        <div class="form-group row bg-gray-50 mg-b-5">
+            <label for="CategoryName" class="col-sm-3 col-form-label">Kategori Adı</label>
+            <div class="col-sm-9">
+                <input id="CategoryName" name="CategoryName" type="text" class="form-control" autocomplete="off" placeholder="Adı" required>
+            </div>
+        </div>
+
+        <div class="form-group row bg-gray-50">
+            <label for="SortBy" class="col-sm-3 col-form-label">Sırası</label>
+            <div class="col-sm-9">
+                <input id="SortBy" name="SortBy" type="text" class="form-control" autocomplete="off" placeholder="Sıra">
+            </div>
+        </div>
+
+        <div class="form-group row mg-b-0">
+            <label for="IsMaster" class="col-sm-3 col-form-label">Birincil mi?</label>
+            <div class="col-sm-9">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="IsMaster" name="IsMaster" value="1">
+                    <label class="custom-control-label" for="IsMaster">Birincil</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row mg-b-0">
+            <label for="IsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+            <div class="col-sm-9">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="IsActive" name="IsActive" value="1" checked>
+                    <label class="custom-control-label" for="IsActive">Aktif</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group row mg-b-0">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-9">
+                <button type="submit" class="btn btn-primary btn-block">Fiyat Kategorisi Ekle</button>
+            </div>
+        </div>
+
+    }
+
+
+</div>
+

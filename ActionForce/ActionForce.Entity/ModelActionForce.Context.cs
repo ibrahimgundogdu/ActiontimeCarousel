@@ -288,6 +288,7 @@ namespace ActionForce.Entity
         public virtual DbSet<TicketSale> TicketSale { get; set; }
         public virtual DbSet<TicketSaleRefund> TicketSaleRefund { get; set; }
         public virtual DbSet<TicketSaleRows> TicketSaleRows { get; set; }
+        public virtual DbSet<VTicketProduct> VTicketProduct { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

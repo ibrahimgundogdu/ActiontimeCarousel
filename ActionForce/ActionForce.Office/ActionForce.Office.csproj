@@ -2339,6 +2339,7 @@
     <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\CounterModel.cs" />
     <Compile Include="Models\CreateUpdateModels\CUPriceCategory.cs" />
+    <Compile Include="Models\CreateUpdateModels\CUTicketProduct.cs" />
     <Compile Include="Models\Crypter.cs" />
     <Compile Include="Models\Document\EmployeesLocation.cs" />
     <Compile Include="Models\Document\EmployeePermit.cs" />
@@ -2684,6 +2685,9 @@
     <Content Include="Views\Sale\_PartialPriceCategoryList.cshtml" />
     <Content Include="Views\Sale\_PartialAddPriceCategory.cshtml" />
     <Content Include="Views\Sale\_PartialEditPriceCategory.cshtml" />
+    <Content Include="Views\Sale\_PartialTicketProductList.cshtml" />
+    <Content Include="Views\Sale\_PartialAddTicketProduct.cshtml" />
+    <Content Include="Views\Sale\_PartialEditTicketProduct.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

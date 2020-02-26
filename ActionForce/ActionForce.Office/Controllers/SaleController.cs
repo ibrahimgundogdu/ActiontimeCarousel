@@ -213,13 +213,19 @@ namespace ActionForce.Office.Controllers
 
         #endregion
 
-
+        #region TicketProduct
         [AllowAnonymous]
         public ActionResult TicketProduct()
         {
             SaleControlModel model = new SaleControlModel();
 
+            model.TicketProductList = Db.TicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.TicketProductCategoryList = Db.TicketProductCategory.ToList();
+            model.OurCompanyList = Db.OurCompany.ToList();
+
             return View(model);
         }
+
+        #endregion
     }
 }

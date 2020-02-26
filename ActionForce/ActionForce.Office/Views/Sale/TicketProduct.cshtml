@@ -1,7 +1,158 @@
-﻿
+﻿@model SaleControlModel
 @{
-    ViewBag.Title = "TicketProduct";
+    ViewBag.Title = "Bilet Ürünleri";
 }
 
-<h2>TicketProduct</h2>
+@section style{
+    <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
+}
 
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">Bilet Ürünleri</span>
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div>
+<div class="content-body">
+    <div class="pd-x-0 tx-13">
+        <div class="media d-block d-lg-flex">
+            <div class="media-body mg-t-40 mg-lg-t-0">
+
+                <div class="card mg-b-20 mg-lg-b-25">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0"></h6>
+                        <nav class="nav">
+                            <a href="#modalAddTicketProduct" data-toggle="modal" class="link-03 mg-l-10"><span class="d-none d-sm-inline" onclick="AddTicketProduct();">Bilet Ürünü Ekle</span></a>
+                        </nav>
+                    </div><!-- card-header -->
+                    <div class="card-body pd-0" id="TicketProductList">
+                        @{Html.RenderPartial("_PartialTicketProductList", Model);}
+                    </div>
+
+                    <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
+                        <nav class="nav nav-with-icon tx-13">
+                            <a href="/Sale/ExportToExcel" class="nav-link"><i data-feather="download"></i> Excel Olarak İndir </a>
+                        </nav>
+                    </div><!-- card-footer -->
+                </div>
+
+                <footer class="content-footer">
+                    <div>
+                        <span>&copy; @DateTime.Now.Year UFE Group LLC </span>
+                    </div>
+
+                </footer>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalAddTicketProduct" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body pd-20 pd-sm-40" id="AddTicketProduct">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEditTicketProduct" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body pd-20 pd-sm-40" id="EditTicketProduct">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <script>
+        $(function () {
+            'use strict'
+            $("body").addClass("page-profile");
+        });
+
+        function OnProductAddSuccess(data) {
+            $('#modalAddTicketProduct').modal('hide');
+        };
+        function OnProductEditSuccess(data) {
+            $('#modalEditTicketProduct').modal('hide');
+        };
+
+        function AddTicketProduct() {
+
+            var data = new FormData();
+
+            $.ajax({
+                url: '@Url.Action("PartialAddTicketProduct", "Sale")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#AddTicketProduct').html(d);
+            });
+        };
+
+        function EditTicketProduct(id) {
+
+            var data = new FormData();
+            data.append('id', id);
+
+            $.ajax({
+                url: '@Url.Action("PartialEditTicketProduct", "Sale")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#EditTicketProduct').html(d);
+            });
+        };
+
+        function RemoveTicketProduct(id) {
+
+            var data = new FormData();
+            data.append('id', id);
+
+            $.ajax({
+                url: '@Url.Action("PartialRemoveTicketProduct", "Sale")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#TicketProductList').html(d);
+            });
+        };
+
+    </script>
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}

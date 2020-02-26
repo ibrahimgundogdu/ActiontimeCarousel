@@ -286,6 +286,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSale" Width="1.5" PointX="11.375" PointY="34.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRefund" Width="1.5" PointX="13.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRows" Width="1.5" PointX="58.375" PointY="0.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketProduct" Width="1.5" PointX="3.375" PointY="35.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
