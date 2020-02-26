@@ -935,23 +935,6 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetEmployeeScheduleMultiplier", locationIDParameter, dateParameter, unitPriceMultiplierParameter);
         }
     
-        public virtual ObjectResult<GetLocationAll_Result1> GetLocationAll(Nullable<int> ourCompanyID, Nullable<System.Guid> locationUID, Nullable<int> locationID)
-        {
-            var ourCompanyIDParameter = ourCompanyID.HasValue ?
-                new ObjectParameter("OurCompanyID", ourCompanyID) :
-                new ObjectParameter("OurCompanyID", typeof(int));
-    
-            var locationUIDParameter = locationUID.HasValue ?
-                new ObjectParameter("LocationUID", locationUID) :
-                new ObjectParameter("LocationUID", typeof(System.Guid));
-    
-            var locationIDParameter = locationID.HasValue ?
-                new ObjectParameter("LocationID", locationID) :
-                new ObjectParameter("LocationID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationAll_Result1>("GetLocationAll", ourCompanyIDParameter, locationUIDParameter, locationIDParameter);
-        }
-    
         public virtual ObjectResult<Nullable<double>> GetSalaryMultiplier(Nullable<int> locationID, Nullable<int> employeeID, Nullable<System.DateTime> date)
         {
             var locationIDParameter = locationID.HasValue ?
@@ -1065,6 +1048,23 @@ namespace ActionForce.Entity
                 new ObjectParameter("LocationID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationEmployees_Result1>("GetLocationEmployees", locationIDParameter);
+        }
+    
+        public virtual ObjectResult<GetLocationAll_Result2> GetLocationAll(Nullable<int> ourCompanyID, Nullable<System.Guid> locationUID, Nullable<int> locationID)
+        {
+            var ourCompanyIDParameter = ourCompanyID.HasValue ?
+                new ObjectParameter("OurCompanyID", ourCompanyID) :
+                new ObjectParameter("OurCompanyID", typeof(int));
+    
+            var locationUIDParameter = locationUID.HasValue ?
+                new ObjectParameter("LocationUID", locationUID) :
+                new ObjectParameter("LocationUID", typeof(System.Guid));
+    
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationAll_Result2>("GetLocationAll", ourCompanyIDParameter, locationUIDParameter, locationIDParameter);
         }
     }
 }

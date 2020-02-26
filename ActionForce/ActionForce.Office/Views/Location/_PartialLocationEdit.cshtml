@@ -99,6 +99,19 @@
                 </div>
             </div>
             <div class="form-group row mg-b-5">
+                <label for="priceCategory" class="col-sm-3 col-form-label">Fiyat Listesi</label>
+                <div class="col-sm-6">
+                    <select class="form-control" id="priceCategory" name="PriceCategory" required="">
+                        @foreach (var item in Model.PriceCategoryList)
+                        {
+                            <option value="@(item.ID)" @(Model.LocationModel.PriceCatID == item.ID ? "selected" : "")>@(item.CategoryName)</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
                 <label for="currency" class="col-sm-3 col-form-label">Para Birimi</label>
                 <div class="col-sm-6">
                     <input id="currency" name="Currency" type="text" class="form-control" autocomplete="off" placeholder="Para Birimi" value="@(Model.LocationModel.Currency)" readonly>

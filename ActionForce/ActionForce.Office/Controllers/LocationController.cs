@@ -163,7 +163,8 @@ namespace ActionForce.Office.Controllers
             if (model.LocationModel != null)
             {
                 model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
-                model.EmployeeLocationList = Db.GetLocationEmployees(model.LocationModel.LocationID).Select(x => new LocationEmployeeModel() {
+                model.EmployeeLocationList = Db.GetLocationEmployees(model.LocationModel.LocationID).Select(x => new LocationEmployeeModel()
+                {
                     EmployeeID = x.EmployeeID,
                     EmployeeUID = x.EmployeeUID ?? Guid.Empty,
                     FullName = x.FullName,
@@ -208,13 +209,15 @@ namespace ActionForce.Office.Controllers
                 State = x.State,
                 TypeName = x.TypeName,
                 Timezone = x.Timezone,
-                OurCompany = x.OurCompanyID
+                OurCompany = x.OurCompanyID,
+                PriceCatID = x.PriceCatID ?? -1
             }).FirstOrDefault();
 
             if (model.LocationModel != null)
             {
                 model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
                 model.OurCompanyList = Db.OurCompany.ToList();
+                model.PriceCategoryList = Db.PriceCategory.ToList();
             }
             else
             {
@@ -249,7 +252,8 @@ namespace ActionForce.Office.Controllers
             OurCompanyModel model = new OurCompanyModel()
             {
                 Currency = getOurCompany.Currency,
-                SelectList = list
+                SelectList = list,
+                PriceCategoryList = Db.PriceCategory.Where(x => x.OurCompanyID == ourCompanyId).ToList()
             };
 
             //JavaScriptSerializer javaScriptSerializer = new JavaScriptSerializer();
@@ -274,8 +278,9 @@ namespace ActionForce.Office.Controllers
             {
                 try
                 {
-                    Location self = new Location() {
-                        
+                    Location self = new Location()
+                    {
+
                     };
                 }
                 catch (Exception ex)
@@ -294,5 +299,6 @@ namespace ActionForce.Office.Controllers
     {
         public List<SelectListItem> SelectList { get; set; }
         public string Currency { get; set; }
+        public List<PriceCategory> PriceCategoryList { get; set; }
     }
 }
