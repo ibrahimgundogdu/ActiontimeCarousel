@@ -50,6 +50,8 @@ namespace ActionForce.Office
         public string Currency { get; set; }
         public Nullable<System.Guid> LocationUID { get; set; }
         public int PriceCatID { get; set; }
+        public int MallID { get; set; }
+       
     }
 
     public class LocationEmployeeModel

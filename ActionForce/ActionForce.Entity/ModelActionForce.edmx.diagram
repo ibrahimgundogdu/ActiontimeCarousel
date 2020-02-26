@@ -270,7 +270,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Company" Width="1.5" PointX="29.375" PointY="56.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CompanyCategory" Width="1.5" PointX="56.375" PointY="30.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationPriceCategory" Width="1.5" PointX="56.375" PointY="33.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Mall" Width="1.5" PointX="31.375" PointY="57.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.MallContact" Width="1.5" PointX="57.375" PointY="14.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.MallLocationContract" Width="1.5" PointX="33.375" PointY="57.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Price" Width="1.5" PointX="57.375" PointY="37.75" />
@@ -287,6 +286,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProduct" Width="1.5" PointX="3.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProductCategory" Width="1.5" PointX="15.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Location" Width="1.5" PointX="41.375" PointY="57.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Mall" Width="1.5" PointX="58.375" PointY="18.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

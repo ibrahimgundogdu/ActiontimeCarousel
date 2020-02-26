@@ -210,14 +210,15 @@ namespace ActionForce.Office.Controllers
                 TypeName = x.TypeName,
                 Timezone = x.Timezone,
                 OurCompany = x.OurCompanyID,
-                PriceCatID = x.PriceCatID ?? -1
+                PriceCatID = x.PriceCatID ?? -1,
+                MallID = x.MallID ?? -1
             }).FirstOrDefault();
 
             if (model.LocationModel != null)
             {
                 model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
                 model.OurCompanyList = Db.OurCompany.ToList();
-                model.PriceCategoryList = Db.PriceCategory.ToList();
+                model.PriceCategoryList = Db.PriceCategory.Where(x=>x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             }
             else
             {
@@ -234,6 +235,8 @@ namespace ActionForce.Office.Controllers
             var getOurCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == ourCompanyId);
 
             List<SelectListItem> list = new List<SelectListItem>();
+            List<SelectListItem> priceList = new List<SelectListItem>();
+            List<SelectListItem> mallList = new List<SelectListItem>();
 
             int start, finish = 0;
 
@@ -249,11 +252,14 @@ namespace ActionForce.Office.Controllers
                 });
             }
 
+            priceList = Db.PriceCategory.Where(x => x.OurCompanyID == ourCompanyId).Select(y => new SelectListItem() { Value = y.ID.ToString(), Text = y.CategoryName }).ToList();
+            mallList = Db.Mall.Where(x => x.OurCompanyID == ourCompanyId).Select(m => new SelectListItem() { Value = m.ID.ToString(), Text = m.FullName }).ToList();
+
             OurCompanyModel model = new OurCompanyModel()
             {
                 Currency = getOurCompany.Currency,
                 SelectList = list,
-                PriceCategoryList = Db.PriceCategory.Where(x => x.OurCompanyID == ourCompanyId).ToList()
+                PriceCategoryList = priceList
             };
 
             //JavaScriptSerializer javaScriptSerializer = new JavaScriptSerializer();
@@ -298,7 +304,8 @@ namespace ActionForce.Office.Controllers
     public class OurCompanyModel
     {
         public List<SelectListItem> SelectList { get; set; }
+        public List<SelectListItem> PriceCategoryList { get; set; }
+        public List<SelectListItem> MallList { get; set; }
         public string Currency { get; set; }
-        public List<PriceCategory> PriceCategoryList { get; set; }
     }
 }
