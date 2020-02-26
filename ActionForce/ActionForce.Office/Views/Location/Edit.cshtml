@@ -78,6 +78,11 @@
                                 $("#priceCategory").append($('<option></option>', { "value": label.Value, "text": label.Text }));
                             });
 
+                            $("#avm").empty();
+                            $.each(getList.MallList, function (index, label) {
+                                $("#avm").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+
                             $("#currency").val(getList.Currency);
                         },
                         error: function () {

@@ -211,14 +211,17 @@ namespace ActionForce.Office.Controllers
                 Timezone = x.Timezone,
                 OurCompany = x.OurCompanyID,
                 PriceCatID = x.PriceCatID ?? -1,
-                MallID = x.MallID ?? -1
+                MallID = x.MallID ?? -1,
+                POSAccountID = x.POSAccountID ?? -1
             }).FirstOrDefault();
 
             if (model.LocationModel != null)
             {
                 model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
                 model.OurCompanyList = Db.OurCompany.ToList();
-                model.PriceCategoryList = Db.PriceCategory.Where(x=>x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+                model.PriceCategoryList = Db.PriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+                model.MallList = Db.Mall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+                model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 2).ToList(); // TODO: AccountTypeID == 2 olmasının sebebi POS işlemlerinden dolayı
             }
             else
             {
@@ -259,7 +262,8 @@ namespace ActionForce.Office.Controllers
             {
                 Currency = getOurCompany.Currency,
                 SelectList = list,
-                PriceCategoryList = priceList
+                PriceCategoryList = priceList,
+                MallList = mallList
             };
 
             //JavaScriptSerializer javaScriptSerializer = new JavaScriptSerializer();

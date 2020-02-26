@@ -33,5 +33,6 @@ namespace ActionForce.Entity
         public int OurCompanyID { get; set; }
         public Nullable<int> PriceCatID { get; set; }
         public Nullable<int> MallID { get; set; }
+        public Nullable<int> POSAccountID { get; set; }
     }
 }

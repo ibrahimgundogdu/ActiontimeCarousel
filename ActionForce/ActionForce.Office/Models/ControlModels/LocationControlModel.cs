@@ -19,6 +19,8 @@ namespace ActionForce.Office
         public List<LocationEmployeeModel> EmployeeLocationList { get; set; }
         public List<OurCompany> OurCompanyList { get; set; }
         public List<PriceCategory> PriceCategoryList { get; set; }
+        public List<Mall> MallList { get; set; }
+        public List<VBankAccount> BankAccountList { get; set; }
     }
 
     public class LocationFilterModel
@@ -51,7 +53,8 @@ namespace ActionForce.Office
         public Nullable<System.Guid> LocationUID { get; set; }
         public int PriceCatID { get; set; }
         public int MallID { get; set; }
-       
+        public int POSAccountID { get; set; }
+
     }
 
     public class LocationEmployeeModel
