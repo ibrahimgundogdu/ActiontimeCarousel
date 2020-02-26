@@ -1,4 +1,6 @@
-﻿<a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
+﻿@model SaleControlModel
+
+<a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
     <span aria-hidden="true">&times;</span>
 </a>
 <div>
@@ -10,7 +12,7 @@
         <div class="form-group row">
             <label for="OurCompanyID" class="col-sm-3 col-form-label">Our Company</label>
             <div class="col-sm-9">
-                <select class="form-control" id="OurCompanyID" name="OurCompanyID">
+                <select class="form-control" id="OurCompanyID" name="OurCompanyID" required>
                     @foreach (var item in Model.OurCompanyList)
                     {
                         <option value="@item.CompanyID" @(Model.Authentication.ActionEmployee.OurCompanyID == item.CompanyID ? "selected" : "")>@($"{item.Code} {item.CompanyName}")</option>
@@ -30,7 +32,7 @@
         <div class="form-group row bg-gray-50 mg-b-5">
             <label for="CategoryName" class="col-sm-3 col-form-label">Kategori Adı</label>
             <div class="col-sm-9">
-                <input id="CategoryName" name="CategoryName" type="text" class="form-control" autocomplete="off" placeholder="Adı">
+                <input id="CategoryName" name="CategoryName" type="text" class="form-control" autocomplete="off" placeholder="Adı" required>
             </div>
         </div>
 
