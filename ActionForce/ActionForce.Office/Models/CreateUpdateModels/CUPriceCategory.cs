@@ -7,6 +7,7 @@ namespace ActionForce.Office
 {
     public class CUPriceCategory
     {
+        public int ID { get; set; }
         public int OurCompanyID { get; set; }
         public string CategoryCode { get; set; }
         public string CategoryName { get; set; }

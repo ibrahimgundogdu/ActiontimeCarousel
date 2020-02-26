@@ -17,21 +17,18 @@
 
             @foreach (var cat in Model.PriceCategoryList)
             {
-
                 <tr>
-
                     <td>@cat.ID</td>
                     <td>@cat.CompanyName</td>
                     <td class="bg-primary-light font-weight-bold">@($"{cat.CategoryCode}")</td>
                     <td class="tx-sm-13 bg-primary-light font-weight-bold">
-                        <a href="#modalPriceCategory" data-toggle="modal" class="link-03 mg-l-10"><span class="d-none d-sm-inline" onclick="EditPriceCategory(@(cat.ID));"> @(cat.CategoryName)</span></a>
-                       
+                        <a href="#modalEditPriceCategory" data-toggle="modal" class="link-03 mg-l-10"><span class="d-none d-sm-inline" onclick="EditPriceCategory(@(cat.ID));"> @(cat.CategoryName)</span></a>
                     </td>
                     <td class="tx-sm-13"> @(cat.SortBy)</td>
                     <td class="tx-sm-13">@(cat.IsMaster)</td>
                     <td class="tx-sm-13">@(cat.IsActive)</td>
                     <td class="tx-sm-13 bg-light font-weight-bold">
-                        <a href="#" onclick="return confirm('Kategoriyi Pasif Etmek İstediğinize Emin misiniz?') ? RemovePriceCategory(@(cat.ID)):''">Kaldır</a>
+                        <a href="#" onclick="return confirm('Kategoriyi Silmek İstediğinize Emin misiniz?') ? RemovePriceCategory(@(cat.ID)):''">Kaldır</a>
                     </td>
                 </tr>
             }
@@ -39,3 +36,16 @@
         </tbody>
     </table>
 </div>
+@if (Model.Result != null) //
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
+}

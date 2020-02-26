@@ -89,7 +89,7 @@ namespace ActionForce.Office.Controllers
 
                         }
 
-                        hubContext.Clients.All.AddMessageToPage("Hakediş", $"{location.SortBy.Trim()} {location.LocationName} lokasyonunda {datelist.DateKey.ToLongDateString()} günü için hakedişler hesaplandı");
+                        hubContext.Clients.All.AddMessageToPage("Hakediş", $"{location?.SortBy?.Trim()} {location.LocationName} lokasyonunda {datelist.DateKey.ToLongDateString()} günü için hakedişler hesaplandı");
 
                         // 02. hesaplanan hakedişler günsonu dosyasına yazılır
                         var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == locationid && x.Date == datelist.DateKey && x.IsActive == true);
@@ -103,7 +103,7 @@ namespace ActionForce.Office.Controllers
 
                                 var updresult = document.CheckResultBackward(dayresult.UID.Value, model.Authentication, islocal);
 
-                                hubContext.Clients.All.AddMessageToPage("Günsonu", $"{location.SortBy.Trim()} {location.LocationName} lokasyonunda {datelist.DateKey.ToLongDateString()} günü için günsonu dosyasına aktarım sonucu : {updresult.IsSuccess} : {updresult.Message}");
+                                hubContext.Clients.All.AddMessageToPage("Günsonu", $"{location?.SortBy?.Trim()} {location.LocationName} lokasyonunda {datelist.DateKey.ToLongDateString()} günü için günsonu dosyasına aktarım sonucu : {updresult.IsSuccess} : {updresult.Message}");
 
                             }
                         }
@@ -113,7 +113,7 @@ namespace ActionForce.Office.Controllers
                     var datelistone = model.DateLists.FirstOrDefault();
                     var resultrevenue = Db.ComputeLocationWeekRevenue(datelistone.WeekNumber, datelistone.WeekYear, location.LocationID);
 
-                    hubContext.Clients.All.AddMessageToPage("Rapor", $"{location.SortBy.Trim()} {location.LocationName} lokasyonunda hasılat raporu hesaplandı");
+                    hubContext.Clients.All.AddMessageToPage("Rapor", $"{location?.SortBy?.Trim()} {location.LocationName} lokasyonunda hasılat raporu hesaplandı");
 
                 }
 

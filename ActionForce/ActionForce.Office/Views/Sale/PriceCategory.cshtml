@@ -20,24 +20,20 @@
         <div class="media d-block d-lg-flex">
             <div class="media-body mg-t-40 mg-lg-t-0">
 
-
-
-
                 <div class="card mg-b-20 mg-lg-b-25">
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                         <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0"></h6>
                         <nav class="nav">
-                            <a href="#modalPriceCategory" data-toggle="modal" class="link-03 mg-l-10"><span class="d-none d-sm-inline" onclick="AddPriceCategory();">Fiyat Kategorisi Ekle</span></a>
+                            <a href="#modalAddPriceCategory" data-toggle="modal" class="link-03 mg-l-10"><span class="d-none d-sm-inline" onclick="AddPriceCategory();">Fiyat Kategorisi Ekle</span></a>
                         </nav>
                     </div><!-- card-header -->
                     <div class="card-body pd-0" id="PriceCategoryList">
                         @{Html.RenderPartial("_PartialPriceCategoryList", Model);}
                     </div>
 
-
                     <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
                         <nav class="nav nav-with-icon tx-13">
-                            <a href="/Sale/ExportToExcel" class="nav-link"><i data-feather="download"></i> Excel Olarak İndir</a>
+                            <a href="/Sale/ExportToExcel" class="nav-link"><i data-feather="download"></i> Excel Olarak İndir </a>
                         </nav>
                     </div><!-- card-footer -->
                 </div>
@@ -56,10 +52,20 @@
 </div>
 
 
-<div class="modal fade" id="modalPriceCategory" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modalAddPriceCategory" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-body pd-20 pd-sm-40" id="AddPriceCategory">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalEditPriceCategory" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-body pd-20 pd-sm-40" id="EditPriceCategory">
 
             </div>
         </div>
@@ -75,10 +81,10 @@
         });
 
         function OnCategoryAddSuccess(data) {
-            $('#modalPriceCategory').modal('hide');
+            $('#modalAddPriceCategory').modal('hide');
         };
         function OnCategoryEditSuccess(data) {
-            $('#modalPriceCategory').modal('hide');
+            $('#modalEditPriceCategory').modal('hide');
         };
 
         function AddPriceCategory() {
@@ -112,7 +118,25 @@
                 type: 'POST',
                 data: data
             }).done(function (d) {
-                $('#AddPriceCategory').html(d);
+                $('#EditPriceCategory').html(d);
+            });
+        };
+
+        function RemovePriceCategory(id) {
+
+            var data = new FormData();
+            data.append('id', id);
+
+            $.ajax({
+                url: '@Url.Action("PartialRemovePriceCategory", "Sale")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#PriceCategoryList').html(d);
             });
         };
 
