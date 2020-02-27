@@ -165,7 +165,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentPosCollection" Width="1.5" PointX="25.375" PointY="45.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationSchedule" Width="1.5" PointX="45.375" PointY="39.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.WeekList" Width="1.5" PointX="46.375" PointY="0.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationSchedule" Width="1.5" PointX="45.375" PointY="6.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSchedule" Width="1.5" PointX="29.375" PointY="46.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DayResult" Width="1.5" PointX="45.375" PointY="47" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DayResultDocuments" Width="1.5" PointX="47.375" PointY="3.75" />
@@ -285,8 +284,9 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Mall" Width="1.5" PointX="58.375" PointY="18.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProduct" Width="1.5" PointX="3.75" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketProduct" Width="1.5" PointX="0.75" PointY="36.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocation" Width="1.5" PointX="43.375" PointY="58.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Location" Width="1.5" PointX="58.375" PointY="26.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationSchedule" Width="1.5" PointX="41.375" PointY="57.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocation" Width="1.5" PointX="43.375" PointY="58.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

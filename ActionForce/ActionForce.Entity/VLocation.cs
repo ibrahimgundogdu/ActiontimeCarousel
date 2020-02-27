@@ -69,5 +69,10 @@ namespace ActionForce.Entity
         public Nullable<int> POSAccountID { get; set; }
         public Nullable<int> MallID { get; set; }
         public string LocationFullName { get; set; }
+        public string ERName { get; set; }
+        public string EUName { get; set; }
+        public Nullable<System.DateTime> RecordDate { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
+        public Nullable<System.TimeSpan> ScheduleDuration { get; set; }
     }
 }

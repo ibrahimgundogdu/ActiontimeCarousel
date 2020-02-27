@@ -41,5 +41,6 @@ namespace ActionForce.Entity
         public string WeekCode { get; set; }
         public Nullable<double> UnitPriceMultiplier { get; set; }
         public string ScheduleKey { get; set; }
+        public Nullable<System.TimeSpan> ShiftDuration { get; set; }
     }
 }

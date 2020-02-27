@@ -21,5 +21,12 @@ namespace ActionForce.Office
         public List<Mall> MallList { get; set; }
         public List<VBankAccount> BankAccountList { get; set; }
         public List<LocationType> LocationTypeList { get; set; }
+        public Nullable<int> RecordEmployeeID { get; set; }
+        public Nullable<System.DateTime> RecordDate { get; set; }
+        public Nullable<int> UpdateEmployeeID { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
+        public string ScheduleStart { get; set; }
+        public string ScheduleFinish { get; set; }
+        public string ScheduleTime{ get; set; }
     }
 }

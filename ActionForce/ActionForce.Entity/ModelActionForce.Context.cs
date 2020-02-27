@@ -173,7 +173,6 @@ namespace ActionForce.Entity
         public virtual DbSet<VDocumentPosCollection> VDocumentPosCollection { get; set; }
         public virtual DbSet<VLocationSchedule> VLocationSchedule { get; set; }
         public virtual DbSet<WeekList> WeekList { get; set; }
-        public virtual DbSet<LocationSchedule> LocationSchedule { get; set; }
         public virtual DbSet<VSchedule> VSchedule { get; set; }
         public virtual DbSet<DayResult> DayResult { get; set; }
         public virtual DbSet<DayResultDocuments> DayResultDocuments { get; set; }
@@ -287,8 +286,9 @@ namespace ActionForce.Entity
         public virtual DbSet<Mall> Mall { get; set; }
         public virtual DbSet<TicketProduct> TicketProduct { get; set; }
         public virtual DbSet<VTicketProduct> VTicketProduct { get; set; }
-        public virtual DbSet<VLocation> VLocation { get; set; }
         public virtual DbSet<Location> Location { get; set; }
+        public virtual DbSet<LocationSchedule> LocationSchedule { get; set; }
+        public virtual DbSet<VLocation> VLocation { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

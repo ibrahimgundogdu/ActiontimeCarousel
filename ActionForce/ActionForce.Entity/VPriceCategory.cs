@@ -28,5 +28,7 @@ namespace ActionForce.Entity
         public string SortBy { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public string CompanyName { get; set; }
+        public Nullable<int> TicketTypeID { get; set; }
+        public string TicketTypeName { get; set; }
     }
 }

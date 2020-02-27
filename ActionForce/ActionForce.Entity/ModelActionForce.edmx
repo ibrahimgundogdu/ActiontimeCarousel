@@ -2127,6 +2127,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
           <Property Name="ScheduleKey" Type="nvarchar" MaxLength="21" StoreGeneratedPattern="Computed" />
           <Property Name="UnitPriceMultiplier" Type="float" />
+          <Property Name="ShiftDuration" Type="time" Precision="0" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="LocationShift">
           <Key>
@@ -2563,6 +2564,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OurCompanyID" Type="int" Nullable="false" />
+          <Property Name="TicketTypeID" Type="int" />
           <Property Name="CategoryCode" Type="nvarchar" MaxLength="8" />
           <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
           <Property Name="IsMaster" Type="bit" />
@@ -5052,6 +5054,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
           <Property Name="POSAccountID" Type="int" />
           <Property Name="MallID" Type="int" />
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+          <Property Name="ERName" Type="nvarchar" MaxLength="150" />
+          <Property Name="EUName" Type="nvarchar" MaxLength="150" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="ScheduleDuration" Type="time" Precision="0" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPosTerminal' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5105,6 +5112,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationSchedule' does not
           <Property Name="WeekCode" Type="nvarchar" MaxLength="9" />
           <Property Name="UnitPriceMultiplier" Type="float" />
           <Property Name="ScheduleKey" Type="nvarchar" MaxLength="21" />
+          <Property Name="ShiftDuration" Type="time" Precision="0" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationShift' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5232,6 +5240,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPriceCategory' does not ha
           <Property Name="SortBy" Type="char" MaxLength="10" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
+          <Property Name="TicketTypeID" Type="int" />
+          <Property Name="TicketTypeName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VRevenue' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -7521,7 +7531,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocation].[CompanyName] AS [CompanyName], 
     [VLocation].[POSAccountID] AS [POSAccountID], 
     [VLocation].[MallID] AS [MallID], 
-    [VLocation].[LocationFullName] AS [LocationFullName]
+    [VLocation].[LocationFullName] AS [LocationFullName], 
+    [VLocation].[ERName] AS [ERName], 
+    [VLocation].[EUName] AS [EUName], 
+    [VLocation].[RecordDate] AS [RecordDate], 
+    [VLocation].[UpdateDate] AS [UpdateDate], 
+    [VLocation].[ScheduleDuration] AS [ScheduleDuration]
     FROM [dbo].[VLocation] AS [VLocation]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VLocationPosTerminal" EntityType="Self.VLocationPosTerminal" store:Type="Views" store:Schema="dbo">
@@ -7566,7 +7581,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocationSchedule].[OurCompanyID] AS [OurCompanyID], 
     [VLocationSchedule].[WeekCode] AS [WeekCode], 
     [VLocationSchedule].[UnitPriceMultiplier] AS [UnitPriceMultiplier], 
-    [VLocationSchedule].[ScheduleKey] AS [ScheduleKey]
+    [VLocationSchedule].[ScheduleKey] AS [ScheduleKey], 
+    [VLocationSchedule].[ShiftDuration] AS [ShiftDuration]
     FROM [dbo].[VLocationSchedule] AS [VLocationSchedule]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VLocationShift" EntityType="Self.VLocationShift" store:Type="Views" store:Schema="dbo">
@@ -7674,7 +7690,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VPriceCategory].[UpdateIP] AS [UpdateIP], 
     [VPriceCategory].[SortBy] AS [SortBy], 
     [VPriceCategory].[IsActive] AS [IsActive], 
-    [VPriceCategory].[CompanyName] AS [CompanyName]
+    [VPriceCategory].[CompanyName] AS [CompanyName], 
+    [VPriceCategory].[TicketTypeID] AS [TicketTypeID], 
+    [VPriceCategory].[TicketTypeName] AS [TicketTypeName]
     FROM [dbo].[VPriceCategory] AS [VPriceCategory]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VRevenue" EntityType="Self.VRevenue" store:Type="Views" store:Schema="dbo">
@@ -8186,7 +8204,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="UpdateEmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="UpdateDate" Mode="In" Type="DateTime" />
           </FunctionImport>
-          <EntitySet Name="LocationSchedule" EntityType="db293_ActionTimeDbModel.LocationSchedule" />
           <EntitySet Name="VSchedule" EntityType="db293_ActionTimeDbModel.VSchedule" />
           <EntitySet Name="DayResult" EntityType="db293_ActionTimeDbModel.DayResult" />
           <EntitySet Name="DayResultDocuments" EntityType="db293_ActionTimeDbModel.DayResultDocuments" />
@@ -8504,8 +8521,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="TicketProduct" EntityType="db293_ActionTimeDbModel.TicketProduct" />
           <EntitySet Name="VTicketProduct" EntityType="db293_ActionTimeDbModel.VTicketProduct" />
-          <EntitySet Name="VLocation" EntityType="db293_ActionTimeDbModel.VLocation" />
           <EntitySet Name="Location" EntityType="db293_ActionTimeDbModel.Location" />
+          <EntitySet Name="LocationSchedule" EntityType="db293_ActionTimeDbModel.LocationSchedule" />
+          <EntitySet Name="VLocation" EntityType="db293_ActionTimeDbModel.VLocation" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -11291,6 +11309,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="WeekCode" Type="String" MaxLength="9" FixedLength="false" Unicode="true" />
           <Property Name="UnitPriceMultiplier" Type="Double" />
           <Property Name="ScheduleKey" Type="String" MaxLength="21" FixedLength="false" Unicode="true" />
+          <Property Name="ShiftDuration" Type="Time" Precision="0" />
         </EntityType>
         <EntityType Name="WeekList">
           <Key>
@@ -11300,31 +11319,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="WeekCode" Type="String" MaxLength="9" FixedLength="false" Unicode="true" />
           <Property Name="Year" Type="Int32" />
           <Property Name="Week" Type="Int32" />
-        </EntityType>
-        <EntityType Name="LocationSchedule">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StatusID" Type="Int32" Nullable="false" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="ShiftDate" Type="DateTime" Precision="0" />
-          <Property Name="Year" Type="Int32" />
-          <Property Name="Month" Type="Int32" />
-          <Property Name="Week" Type="Int32" />
-          <Property Name="Day" Type="Int32" />
-          <Property Name="DayName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ShiftDateStart" Type="DateTime" Precision="3" />
-          <Property Name="ShiftdateEnd" Type="DateTime" Precision="3" />
-          <Property Name="DurationMinute" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="RecordEmployee" Type="Int32" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateEmployee" Type="Int32" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="ScheduleKey" Type="String" MaxLength="21" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="UnitPriceMultiplier" Type="Double" />
         </EntityType>
         <EntityType Name="VSchedule">
           <Key>
@@ -13980,6 +13974,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="SortBy" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
+          <Property Name="TicketTypeID" Type="Int32" />
         </EntityType>
         <EntityType Name="TicketSaleCollection">
           <Key>
@@ -14049,6 +14044,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SortBy" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="TicketTypeID" Type="Int32" />
+          <Property Name="TicketTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="TicketBasket">
           <Key>
@@ -14323,6 +14320,71 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TicketTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TicketTypeID" Type="Int32" />
         </EntityType>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="LocationID" />
+          </Key>
+          <Property Name="LocationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocationCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="LocationTypeID" Type="Int32" />
+          <Property Name="LocationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LocationNameSearch" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Longitude" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Timezone" Type="Int32" />
+          <Property Name="MapURL" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="ImageFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsHaveOperator" Type="Boolean" />
+          <Property Name="IP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="EnforcedWarning" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Currency" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PriceCatID" Type="Int32" />
+          <Property Name="Weight" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Distance" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="LocalDate" Type="DateTime" annotation:StoreGeneratedPattern="Computed" Precision="0" />
+          <Property Name="LocalDateTime" Type="DateTime" annotation:StoreGeneratedPattern="Computed" Precision="3" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="MallID" Type="Int32" />
+          <Property Name="POSAccountID" Type="Int32" />
+          <Property Name="LocationUID" Type="Guid" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="LocationSchedule">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusID" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="ShiftDate" Type="DateTime" Precision="0" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="Month" Type="Int32" />
+          <Property Name="Week" Type="Int32" />
+          <Property Name="Day" Type="Int32" />
+          <Property Name="DayName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ShiftDateStart" Type="DateTime" Precision="3" />
+          <Property Name="ShiftdateEnd" Type="DateTime" Precision="3" />
+          <Property Name="DurationMinute" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="RecordEmployee" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ScheduleKey" Type="String" MaxLength="21" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="UnitPriceMultiplier" Type="Double" />
+          <Property Name="ShiftDuration" Type="Time" annotation:StoreGeneratedPattern="Computed" Precision="0" />
+        </EntityType>
         <EntityType Name="VLocation">
           <Key>
             <PropertyRef Name="LocationID" />
@@ -14383,45 +14445,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="POSAccountID" Type="Int32" />
           <Property Name="MallID" Type="Int32" />
           <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Location">
-          <Key>
-            <PropertyRef Name="LocationID" />
-          </Key>
-          <Property Name="LocationID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LocationCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="LocationTypeID" Type="Int32" />
-          <Property Name="LocationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LocationNameSearch" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Latitude" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Longitude" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Timezone" Type="Int32" />
-          <Property Name="MapURL" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
-          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
-          <Property Name="ImageFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IsHaveOperator" Type="Boolean" />
-          <Property Name="IP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="EnforcedWarning" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="SortBy" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="Currency" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="PriceCatID" Type="Int32" />
-          <Property Name="Weight" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Distance" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="LocalDate" Type="DateTime" annotation:StoreGeneratedPattern="Computed" Precision="0" />
-          <Property Name="LocalDateTime" Type="DateTime" annotation:StoreGeneratedPattern="Computed" Precision="3" />
-          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="MallID" Type="Int32" />
-          <Property Name="POSAccountID" Type="Int32" />
-          <Property Name="LocationUID" Type="Guid" />
+          <Property Name="ERName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="EUName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordIP" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateEmployeeID" Type="Int32" />
-          <Property Name="UpdateIP" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="ScheduleDuration" Type="Time" Precision="0" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -17137,6 +17165,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VLocationSchedule">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationSchedule">
               <MappingFragment StoreEntitySet="VLocationSchedule">
+                <ScalarProperty Name="ShiftDuration" ColumnName="ShiftDuration" />
                 <ScalarProperty Name="ScheduleKey" ColumnName="ScheduleKey" />
                 <ScalarProperty Name="UnitPriceMultiplier" ColumnName="UnitPriceMultiplier" />
                 <ScalarProperty Name="WeekCode" ColumnName="WeekCode" />
@@ -17178,32 +17207,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="UpdateCashAction" FunctionName="db293_ActionTimeDbModel.Store.UpdateCashAction" />
-          <EntitySetMapping Name="LocationSchedule">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationSchedule">
-              <MappingFragment StoreEntitySet="LocationSchedule">
-                <ScalarProperty Name="UnitPriceMultiplier" ColumnName="UnitPriceMultiplier" />
-                <ScalarProperty Name="ScheduleKey" ColumnName="ScheduleKey" />
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="RecordEmployee" ColumnName="RecordEmployee" />
-                <ScalarProperty Name="DurationMinute" ColumnName="DurationMinute" />
-                <ScalarProperty Name="ShiftdateEnd" ColumnName="ShiftdateEnd" />
-                <ScalarProperty Name="ShiftDateStart" ColumnName="ShiftDateStart" />
-                <ScalarProperty Name="DayName" ColumnName="DayName" />
-                <ScalarProperty Name="Day" ColumnName="Day" />
-                <ScalarProperty Name="Week" ColumnName="Week" />
-                <ScalarProperty Name="Month" ColumnName="Month" />
-                <ScalarProperty Name="Year" ColumnName="Year" />
-                <ScalarProperty Name="ShiftDate" ColumnName="ShiftDate" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="VSchedule">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VSchedule">
               <MappingFragment StoreEntitySet="VSchedule">
@@ -19680,6 +19683,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="PriceCategory">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PriceCategory">
               <MappingFragment StoreEntitySet="PriceCategory">
+                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="SortBy" ColumnName="SortBy" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
@@ -19751,6 +19755,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VPriceCategory">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPriceCategory">
               <MappingFragment StoreEntitySet="VPriceCategory">
+                <ScalarProperty Name="TicketTypeName" ColumnName="TicketTypeName" />
+                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="SortBy" ColumnName="SortBy" />
@@ -20049,9 +20055,81 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Location">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Location">
+              <MappingFragment StoreEntitySet="Location">
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="LocationUID" ColumnName="LocationUID" />
+                <ScalarProperty Name="POSAccountID" ColumnName="POSAccountID" />
+                <ScalarProperty Name="MallID" ColumnName="MallID" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="LocalDateTime" ColumnName="LocalDateTime" />
+                <ScalarProperty Name="LocalDate" ColumnName="LocalDate" />
+                <ScalarProperty Name="Distance" ColumnName="Distance" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="PriceCatID" ColumnName="PriceCatID" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="EnforcedWarning" ColumnName="EnforcedWarning" />
+                <ScalarProperty Name="IP" ColumnName="IP" />
+                <ScalarProperty Name="IsHaveOperator" ColumnName="IsHaveOperator" />
+                <ScalarProperty Name="ImageFile" ColumnName="ImageFile" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="MapURL" ColumnName="MapURL" />
+                <ScalarProperty Name="Timezone" ColumnName="Timezone" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="LocationNameSearch" ColumnName="LocationNameSearch" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="LocationTypeID" ColumnName="LocationTypeID" />
+                <ScalarProperty Name="LocationCode" ColumnName="LocationCode" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LocationSchedule">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationSchedule">
+              <MappingFragment StoreEntitySet="LocationSchedule">
+                <ScalarProperty Name="ShiftDuration" ColumnName="ShiftDuration" />
+                <ScalarProperty Name="UnitPriceMultiplier" ColumnName="UnitPriceMultiplier" />
+                <ScalarProperty Name="ScheduleKey" ColumnName="ScheduleKey" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployee" ColumnName="RecordEmployee" />
+                <ScalarProperty Name="DurationMinute" ColumnName="DurationMinute" />
+                <ScalarProperty Name="ShiftdateEnd" ColumnName="ShiftdateEnd" />
+                <ScalarProperty Name="ShiftDateStart" ColumnName="ShiftDateStart" />
+                <ScalarProperty Name="DayName" ColumnName="DayName" />
+                <ScalarProperty Name="Day" ColumnName="Day" />
+                <ScalarProperty Name="Week" ColumnName="Week" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="ShiftDate" ColumnName="ShiftDate" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="VLocation">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocation">
               <MappingFragment StoreEntitySet="VLocation">
+                <ScalarProperty Name="ScheduleDuration" ColumnName="ScheduleDuration" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="EUName" ColumnName="EUName" />
+                <ScalarProperty Name="ERName" ColumnName="ERName" />
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
                 <ScalarProperty Name="MallID" ColumnName="MallID" />
                 <ScalarProperty Name="POSAccountID" ColumnName="POSAccountID" />
@@ -20104,46 +20182,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="LocationNameSearch" ColumnName="LocationNameSearch" />
                 <ScalarProperty Name="LocationName" ColumnName="LocationName" />
                 <ScalarProperty Name="LocationTypeName" ColumnName="LocationTypeName" />
-                <ScalarProperty Name="LocationTypeID" ColumnName="LocationTypeID" />
-                <ScalarProperty Name="LocationCode" ColumnName="LocationCode" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Location">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Location">
-              <MappingFragment StoreEntitySet="Location">
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="LocationUID" ColumnName="LocationUID" />
-                <ScalarProperty Name="POSAccountID" ColumnName="POSAccountID" />
-                <ScalarProperty Name="MallID" ColumnName="MallID" />
-                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
-                <ScalarProperty Name="LocalDateTime" ColumnName="LocalDateTime" />
-                <ScalarProperty Name="LocalDate" ColumnName="LocalDate" />
-                <ScalarProperty Name="Distance" ColumnName="Distance" />
-                <ScalarProperty Name="Weight" ColumnName="Weight" />
-                <ScalarProperty Name="PriceCatID" ColumnName="PriceCatID" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
-                <ScalarProperty Name="EnforcedWarning" ColumnName="EnforcedWarning" />
-                <ScalarProperty Name="IP" ColumnName="IP" />
-                <ScalarProperty Name="IsHaveOperator" ColumnName="IsHaveOperator" />
-                <ScalarProperty Name="ImageFile" ColumnName="ImageFile" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="MapURL" ColumnName="MapURL" />
-                <ScalarProperty Name="Timezone" ColumnName="Timezone" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="State" ColumnName="State" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="LocationNameSearch" ColumnName="LocationNameSearch" />
-                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
                 <ScalarProperty Name="LocationTypeID" ColumnName="LocationTypeID" />
                 <ScalarProperty Name="LocationCode" ColumnName="LocationCode" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
