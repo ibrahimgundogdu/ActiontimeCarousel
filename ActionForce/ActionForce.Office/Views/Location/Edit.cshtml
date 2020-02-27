@@ -10,7 +10,7 @@
 }
 <div class="content-header">
     <div class="content-search col-lg">
-        <span class="tx-20"> @(Model.LocationModel != null ? Model.LocationModel.LocationName + " " + Model.LocationModel.TypeName : "") - Lokasyon Güncelleme</span>
+        <span class="tx-20"> @(Model.LocationModel != null ? Model.LocationModel.LocationName + " " + Model.LocationModel.LocationTypeName : "") - Lokasyon Güncelleme</span>
     </div>
     <nav class="nav">
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
@@ -65,9 +65,9 @@
                             ourCompanyId: companyID
                         }),
                         success: function (data) {
-                            
+                            //TODO: OurCompanyID ye bağlı olarak değişiklik yapıldığı zaman onunla birlikte değişmesi gereken yerler. List<SelectListItem> tipinde olmalıdır.
                             var getList = data;
-
+                             
                             $("#timezone").empty();
                             $.each(getList.SelectList, function (index, label) {
                                 $("#timezone").append($('<option></option>', { "value": label.Value, "text":label.Text }));

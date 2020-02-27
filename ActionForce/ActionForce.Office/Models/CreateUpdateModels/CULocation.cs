@@ -13,6 +13,7 @@ namespace ActionForce.Office
         public string LocationName { get; set; }
         public string LocationNameSearch { get; set; }
         public string Description { get; set; }
+        public int LocationTypeID { get; set; }
         public string State { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }

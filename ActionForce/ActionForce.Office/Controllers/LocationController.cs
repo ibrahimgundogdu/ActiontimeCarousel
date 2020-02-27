@@ -16,10 +16,11 @@ namespace ActionForce.Office.Controllers
         {
             LocationControlModel model = new LocationControlModel();
 
-            model.LocationList = Db.VLocation.Where(x=> x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.LocationList = Db.VLocation.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
             model.StateList = model.LocationList.Select(x => x.State).Distinct().OrderBy(x => x).ToList();
-            model.TypeList = model.LocationList.Select(x => x.LocationTypeName).Distinct().OrderBy(x => x).ToList();
+            model.LocationTypeList = Db.LocationType.ToList();
+            //model.TypeList = model.LocationList.Select(x => x.LocationTypeName).Distinct().OrderBy(x => x).ToList();
 
             #region Filter
             if (TempData["LocationFilter"] != null)
@@ -120,7 +121,7 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
-        [AllowAnonymous] /* Sonrasında kaldırılacak yetkiye bağlanacak. [Permision] Tablosu ve [RoleGroupPermissions]*/
+        [AllowAnonymous] /* TODO: Sonrasında kaldırılacak yetkiye bağlanacak. [Permision] Tablosu ve [RoleGroupPermissions]*/
         public ActionResult Edit(Guid id)
         {
             LocationControlModel model = new LocationControlModel();
@@ -131,6 +132,7 @@ namespace ActionForce.Office.Controllers
             }
 
             model.LocationModel = Db.VLocation.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationUID == id);
+            model.LocationTypeList = Db.LocationType.ToList();
 
             if (model.LocationModel != null)
             {
@@ -207,8 +209,65 @@ namespace ActionForce.Office.Controllers
 
                     Location self = new Location()
                     {
-
+                        Currency = isLocation.Currency,
+                        Description = isLocation.Description,
+                        Distance = isLocation.Distance,
+                        EnforcedWarning = isLocation.EnforcedWarning,
+                        ImageFile = isLocation.ImageFile,
+                        IP = isLocation.IP,
+                        IsActive = isLocation.IsActive,
+                        IsHaveOperator = isLocation.IsHaveOperator,
+                        Latitude = isLocation.Latitude,
+                        LocalDate = isLocation.LocalDate,
+                        LocalDateTime = isLocation.LocalDateTime,
+                        LocationCode = isLocation.LocationCode,
+                        LocationFullName = isLocation.LocationFullName,
+                        LocationID = isLocation.LocationID,
+                        LocationName = isLocation.LocationName,
+                        LocationNameSearch = isLocation.LocationNameSearch,
+                        LocationTypeID = isLocation.LocationTypeID,
+                        LocationUID = isLocation.LocationUID,
+                        Longitude = isLocation.Longitude,
+                        MallID = isLocation.MallID,
+                        MapURL = isLocation.MapURL,
+                        OurCompanyID = isLocation.OurCompanyID,
+                        POSAccountID = isLocation.POSAccountID,
+                        PriceCatID = isLocation.PriceCatID,
+                        RecordDate = isLocation.RecordDate,
+                        RecordEmployeeID = isLocation.RecordEmployeeID,
+                        RecordIP = isLocation.RecordIP,
+                        SortBy = isLocation.SortBy,
+                        State = isLocation.State,
+                        Timezone = isLocation.Timezone,
+                        Weight = isLocation.Weight
                     };
+
+                    isLocation.Currency = location.Currency;
+                    isLocation.IP = location.IP;
+                    isLocation.IsActive = !String.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false; ;
+                    isLocation.IsHaveOperator = !String.IsNullOrEmpty(location.IsHaveOperator) && location.IsHaveOperator == "1" ? true : false; ;
+                    isLocation.Latitude = location.Latitude;
+                    isLocation.LocationCode = location.LocationCode;
+                    isLocation.LocationID = location.LocationID;
+                    isLocation.LocationName = location.LocationName;
+                    isLocation.LocationNameSearch = location.LocationNameSearch;
+                    isLocation.LocationTypeID = location.LocationTypeID;
+
+                    isLocation.Description = location.Description;
+
+                    isLocation.LocationUID = location.LocationUID;
+                    isLocation.Longitude = location.Longitude;
+                    isLocation.MallID = location.MallID;
+                    isLocation.MapURL = location.MapURL;
+                    isLocation.OurCompanyID = location.OurCompany;
+                    isLocation.POSAccountID = location.POSAccountID;
+                    isLocation.PriceCatID = location.PriceCatID;
+                    isLocation.UpdateDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
+                    isLocation.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    isLocation.UpdateIP = OfficeHelper.GetIPAddress();
+                    isLocation.SortBy = location.SortBy;
+                    isLocation.State = location.State;
+                    isLocation.Timezone = location.Timezone;
                 }
                 catch (Exception ex)
                 {
@@ -223,13 +282,13 @@ namespace ActionForce.Office.Controllers
     }
 
     #region OurCompanyModel
-    //SelectListItem MVC'den türediği için başka bir sınıfın içerisine alamadığımızdan dolayı OurCompanyModel sınıfı burada bulunmaktadır.
+    //TODO: SelectListItem MVC'den türediği için başka bir sınıfın içerisine alamadığımızdan dolayı OurCompanyModel sınıfı burada bulunmaktadır.
     public class OurCompanyModel
     {
         public List<SelectListItem> SelectList { get; set; }
         public List<SelectListItem> PriceCategoryList { get; set; }
         public List<SelectListItem> MallList { get; set; }
         public string Currency { get; set; }
-    } 
+    }
     #endregion
 }

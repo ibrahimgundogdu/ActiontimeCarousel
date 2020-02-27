@@ -38,12 +38,15 @@ namespace ActionForce.Entity
         public string Distance { get; set; }
         public Nullable<System.DateTime> LocalDate { get; set; }
         public Nullable<System.DateTime> LocalDateTime { get; set; }
+        public string LocationFullName { get; set; }
+        public Nullable<int> MallID { get; set; }
+        public Nullable<int> POSAccountID { get; set; }
+        public Nullable<System.Guid> LocationUID { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<int> RecordEmployeeID { get; set; }
         public string RecordIP { get; set; }
-        public Nullable<System.Guid> LocationUID { get; set; }
-        public Nullable<int> POSAccountID { get; set; }
-        public string LocationFullName { get; set; }
-        public Nullable<int> MallID { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
+        public Nullable<int> UpdateEmployeeID { get; set; }
+        public string UpdateIP { get; set; }
     }
 }

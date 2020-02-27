@@ -43,9 +43,9 @@
                     <div class="form-group col-md-2 d-flex align-items-end">
                         <select class="form-control" id="typeID" name="TypeName">
                             <option value="" label="Tür Seçiniz"></option>
-                            @foreach (var item in Model.TypeList)
+                            @foreach (var item in Model.LocationTypeList)
                             {
-                                <option value="@item" @(Model.FilterModel != null ? (Model.FilterModel?.TypeName == item ? "selected" : "") : "")>@Html.Raw($"<strong>{item}</strong>")</option>
+                                <option value="@item.ID" @(Model.FilterModel != null ? (Model.FilterModel?.TypeName == item.TypeName ? "selected" : "") : "")>@Html.Raw($"<strong>{item.TypeName}</strong>")</option>
                             }
                         </select>
                     </div>
