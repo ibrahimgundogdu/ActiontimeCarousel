@@ -158,7 +158,7 @@ namespace ActionForce.Office.Controllers
                     model.Result.Message = $"{cat.CategoryName} Fiyat kategorisi güncellendi.";
 
                     var isequal = OfficeHelper.PublicInstancePropertiesEqual<PriceCategory>(self, cat, OfficeHelper.getIgnorelist());
-                    OfficeHelper.AddApplicationLog("Office", "PriceCategory", "Update", cat.ID.ToString(), "Sale", "EditPriceCategory", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    OfficeHelper.AddApplicationLog("Office", "PriceCategory", "Update", cat.ID.ToString(), "Sale", "EditPriceCategory", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow, model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
                 }
                 else

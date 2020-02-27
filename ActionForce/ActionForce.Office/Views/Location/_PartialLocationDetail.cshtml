@@ -59,6 +59,10 @@
     <div class="col-sm-3 pd-t-10 pd-b-10">
         <b>Kayıt Tarihçesi</b>
     </div>
+
+    <div class="col-sm-4 pd-t-10">@(Html.Raw($"<b>Kaydeden </b> : {Model.LocationModel.ERName} {Model.LocationModel.RecordDate} ")) </div>
+    <div class="col-sm-4 pd-t-10">@(Model.LocationModel.UpdateDate != null ? Html.Raw($"<b>Güncelleyen </b> : {Model.LocationModel.EUName} {Model.LocationModel.UpdateDate} ") : Html.Raw("")) </div>
+
 </div>
 
 @if (Model.LogList != null && Model.LogList.Count() > 0)
@@ -81,17 +85,17 @@
             <tbody>
                 @foreach (var item in Model.LogList.OrderBy(x => x.RecordDate))
                 {
-                    <tr>
-                        <td>@(item.RecordDate)</td>
-                        <td>@(item.RecordEmployee)</td>
-                        <td>@(item.Environment)</td>
-                        <td>@(item.ProcessType)</td>
-                        <td>@(item.ResultMessage)</td>
-                        <td>@(item.FieldName)</td>
-                        <td>@(item.OldValue)</td>
-                        <td>@(item.NewValue)</td>
-                        <td>@(item.IsSuccess)</td>
-                    </tr>
+                <tr>
+                    <td>@(item.RecordDate)</td>
+                    <td>@(item.RecordEmployee)</td>
+                    <td>@(item.Environment)</td>
+                    <td>@(item.ProcessType)</td>
+                    <td>@(item.ResultMessage)</td>
+                    <td>@(item.FieldName)</td>
+                    <td>@(item.OldValue)</td>
+                    <td>@(item.NewValue)</td>
+                    <td>@Html.Raw(item.IsSuccess.Value == true ? "<i class='ion ion-md-checkmark-circle text-success'></i>" : "<i class='ion ion-md-close-circle'></i>")</td>
+                </tr>
                 }
             </tbody>
         </table>

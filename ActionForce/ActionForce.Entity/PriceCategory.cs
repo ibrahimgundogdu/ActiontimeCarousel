@@ -27,5 +27,6 @@ namespace ActionForce.Entity
         public string UpdateIP { get; set; }
         public string SortBy { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public Nullable<int> TicketTypeID { get; set; }
     }
 }

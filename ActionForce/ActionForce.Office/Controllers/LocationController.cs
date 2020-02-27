@@ -10,17 +10,14 @@ namespace ActionForce.Office.Controllers
 {
     public class LocationController : BaseController
     {
-        // GET: Location
         [AllowAnonymous]
         public ActionResult Index()
         {
             LocationControlModel model = new LocationControlModel();
 
             model.LocationList = Db.VLocation.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
-
             model.StateList = model.LocationList.Select(x => x.State).Distinct().OrderBy(x => x).ToList();
             model.LocationTypeList = Db.LocationType.ToList();
-            //model.TypeList = model.LocationList.Select(x => x.LocationTypeName).Distinct().OrderBy(x => x).ToList();
 
             #region Filter
             if (TempData["LocationFilter"] != null)
@@ -39,6 +36,14 @@ namespace ActionForce.Office.Controllers
                 {
                     model.LocationList = model.LocationList.Where(x => x.LocationTypeName == model.FilterModel.TypeName).OrderBy(x => x.SortBy).ToList();
                 }
+            }
+            #endregion
+
+            #region Result
+            //TODO: Lokasyon Update edildiği zaman buradaya gönderiliyor.
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result;
             }
             #endregion
 
@@ -112,6 +117,9 @@ namespace ActionForce.Office.Controllers
                     Active = x.Active ?? false,
                     PositionName = x.PositionName
                 }).ToList();
+                model.ScheduleStart = model.LocationModel.ScheduleStart?.ToShortTimeString();
+                model.ScheduleFinish = model.LocationModel.ScheduleEnd?.ToShortTimeString();
+                model.ScheduleTime = model.LocationModel.ScheduleDuration?.ToString("hh\\:mm");
             }
             else
             {
@@ -194,9 +202,9 @@ namespace ActionForce.Office.Controllers
         [AllowAnonymous]
         public ActionResult EditLocation(CULocation location)
         {
-            Result result = new Result();
-
             LocationControlModel model = new LocationControlModel();
+            model.Result = new Result();
+
             DateTime daterecord = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
             var isLocation = Db.Location.FirstOrDefault(x => x.LocationID == location.LocationID && x.LocationUID == location.LocationUID);
 
@@ -204,9 +212,7 @@ namespace ActionForce.Office.Controllers
             {
                 try
                 {
-                    //location.IsActive = !String.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false;
-                    //location.IsHaveOperator = !String.IsNullOrEmpty(location.GetFormIsHaveOperator) && location.GetFormIsHaveOperator == "1" ? true : false;
-
+                    #region SelfModel
                     Location self = new Location()
                     {
                         Currency = isLocation.Currency,
@@ -240,8 +246,9 @@ namespace ActionForce.Office.Controllers
                         State = isLocation.State,
                         Timezone = isLocation.Timezone,
                         Weight = isLocation.Weight
-                    };
-
+                    }; 
+                    #endregion
+                    #region UpdateModel
                     isLocation.Currency = location.Currency;
                     isLocation.IP = location.IP;
                     isLocation.IsActive = !String.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false; ;
@@ -252,9 +259,7 @@ namespace ActionForce.Office.Controllers
                     isLocation.LocationName = location.LocationName;
                     isLocation.LocationNameSearch = location.LocationNameSearch;
                     isLocation.LocationTypeID = location.LocationTypeID;
-
-                    isLocation.Description = location.Description;
-
+                    isLocation.Description = Db.LocationType.FirstOrDefault(x => x.ID == location.LocationTypeID).TypeName;
                     isLocation.LocationUID = location.LocationUID;
                     isLocation.Longitude = location.Longitude;
                     isLocation.MallID = location.MallID;
@@ -262,18 +267,32 @@ namespace ActionForce.Office.Controllers
                     isLocation.OurCompanyID = location.OurCompany;
                     isLocation.POSAccountID = location.POSAccountID;
                     isLocation.PriceCatID = location.PriceCatID;
-                    isLocation.UpdateDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
+                    isLocation.UpdateDate = DateTime.UtcNow.AddHours(location?.Timezone ?? 0);
                     isLocation.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                     isLocation.UpdateIP = OfficeHelper.GetIPAddress();
                     isLocation.SortBy = location.SortBy;
                     isLocation.State = location.State;
                     isLocation.Timezone = location.Timezone;
+                    #endregion
+
+                    Db.SaveChanges();
+
+                    #region ResultMessage
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = $"{isLocation.LocationName} Lokasyonu güncellendi.";
+                    #endregion
+                    #region AddLog
+                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<Location>(self, isLocation, OfficeHelper.getIgnorelist());
+                    OfficeHelper.AddApplicationLog("Office", "Location", "Update", isLocation.LocationID.ToString(), "Location", "EditLocation", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(isLocation?.Timezone ?? 0), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null); 
+                    #endregion
                 }
                 catch (Exception ex)
                 {
-                    result.Message = ex.Message;
-                    result.IsSuccess = false;
+                    model.Result.Message = ex.Message;
+                    model.Result.IsSuccess = false;
                 }
+
+                TempData["result"] = model.Result;
             }
 
             return RedirectToAction("Index", "Location");

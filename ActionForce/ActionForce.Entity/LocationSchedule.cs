@@ -34,5 +34,6 @@ namespace ActionForce.Entity
         public string UpdateIP { get; set; }
         public string ScheduleKey { get; set; }
         public Nullable<double> UnitPriceMultiplier { get; set; }
+        public Nullable<System.TimeSpan> ShiftDuration { get; set; }
     }
 }
