@@ -14,5 +14,6 @@ namespace ActionForce.Office
         public List<OurCompany> OurCompanyList { get; set; }
         public List<TicketProductCategory> TicketProductCategoryList { get; set; }
         public List<VTicketProduct> TicketProductList { get; set; }
+        public VTicketProduct TicketProduct { get; set; }
     }
 }

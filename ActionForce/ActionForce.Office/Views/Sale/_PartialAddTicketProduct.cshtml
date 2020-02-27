@@ -23,33 +23,28 @@
 
         </div>
         <div class="form-group row bg-gray-50 mg-b-5">
-            <label for="CategoryCode" class="col-sm-3 col-form-label">Kategori Kodu</label>
+            <label for="CategoryID" class="col-sm-3 col-form-label">Kategorisi</label>
             <div class="col-sm-9">
-                <input id="CategoryCode" name="CategoryCode" type="text" class="form-control" autocomplete="off" placeholder="Kodu">
+                <select class="form-control" id="CategoryID" name="CategoryID" required>
+                    @foreach (var item in Model.TicketProductCategoryList)
+                    {
+                        <option value="@item.ID">@($"{item.ProductCategoryName}")</option>
+                    }
+                </select>
             </div>
         </div>
 
         <div class="form-group row bg-gray-50 mg-b-5">
-            <label for="CategoryName" class="col-sm-3 col-form-label">Kategori Adı</label>
+            <label for="ProductName" class="col-sm-3 col-form-label">Bilet Ürünü Adı</label>
             <div class="col-sm-9">
-                <input id="CategoryName" name="CategoryName" type="text" class="form-control" autocomplete="off" placeholder="Adı" required>
+                <input id="ProductName" name="ProductName" type="text" class="form-control" autocomplete="off" placeholder="Ürün Adı" required>
             </div>
         </div>
 
         <div class="form-group row bg-gray-50">
-            <label for="SortBy" class="col-sm-3 col-form-label">Sırası</label>
+            <label for="Unit" class="col-sm-3 col-form-label">Birim (Dakika)</label>
             <div class="col-sm-9">
-                <input id="SortBy" name="SortBy" type="text" class="form-control" autocomplete="off" placeholder="Sıra">
-            </div>
-        </div>
-
-        <div class="form-group row mg-b-0">
-            <label for="IsMaster" class="col-sm-3 col-form-label">Birincil mi?</label>
-            <div class="col-sm-9">
-                <div class="custom-control custom-checkbox">
-                    <input type="checkbox" class="custom-control-input" id="IsMaster" name="IsMaster" value="1">
-                    <label class="custom-control-label" for="IsMaster">Birincil</label>
-                </div>
+                <input id="Unit" name="Unit" type="number" class="form-control" autocomplete="off" placeholder="Birim" required>
             </div>
         </div>
 
@@ -66,7 +61,7 @@
         <div class="form-group row mg-b-0">
             <div class="col-sm-3"></div>
             <div class="col-sm-9">
-                <button type="submit" class="btn btn-primary btn-block">Fiyat Kategorisi Ekle</button>
+                <button type="submit" class="btn btn-primary btn-block">Bilet Ürünü Ekle</button>
             </div>
         </div>
 
