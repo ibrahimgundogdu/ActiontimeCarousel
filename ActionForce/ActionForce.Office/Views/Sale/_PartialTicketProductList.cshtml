@@ -5,6 +5,7 @@
             <tr>
                 <th>#</th>
                 <th>Our Company</th>
+                <th>Türü</th>
                 <th>Kategori</th>
                 <th>Ürün Adı</th>
                 <th>Birimi</th>
@@ -13,12 +14,12 @@
             </tr>
         </thead>
         <tbody>
-
-            @foreach (var cat in Model.TicketProductList)
+            @foreach (var cat in Model.TicketProductList.OrderBy(x => x.ProductName))
             {
                 <tr>
                     <td>@cat.ID</td>
                     <td>@cat.CompanyName</td>
+                    <td class="tx-sm-13 bg-primary-light font-weight-bold">@($"{cat.TicketTypeName}")</td>
                     <td class="tx-sm-13 bg-primary-light font-weight-bold">@($"{cat.ProductCategoryName}")</td>
                     <td class="tx-sm-13 bg-primary-light font-weight-bold">
                         <a href="#modalEditTicketProduct" data-toggle="modal"><span class="d-none d-sm-inline" onclick="EditTicketProduct(@(cat.ID));"> @(cat.ProductName)</span></a>
@@ -30,7 +31,6 @@
                     </td>
                 </tr>
             }
-
         </tbody>
     </table>
 </div>

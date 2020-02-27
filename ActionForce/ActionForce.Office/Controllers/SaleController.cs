@@ -233,7 +233,8 @@ namespace ActionForce.Office.Controllers
         {
             SaleControlModel model = new SaleControlModel();
 
-            model.TicketProductCategoryList = Db.TicketProductCategory.ToList();
+            model.TicketProductCategoryList = Db.TicketProductCategory.Where(x=> x.IsActive == true).ToList();
+            model.TicketTypeList = Db.TicketType.Where(x => x.IsActive == true).ToList();
             model.OurCompanyList = Db.OurCompany.ToList();
 
             return PartialView("_PartialAddTicketProduct", model);
@@ -259,6 +260,7 @@ namespace ActionForce.Office.Controllers
                 prod.RecordDate = DateTime.Now;
                 prod.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                 prod.RecordIP = OfficeHelper.GetIPAddress();
+                prod.TicketTypeID = ticketproduct.TicketTypeID;
 
                 Db.TicketProduct.Add(prod);
                 Db.SaveChanges();
@@ -282,6 +284,7 @@ namespace ActionForce.Office.Controllers
 
             model.TicketProduct = Db.VTicketProduct.FirstOrDefault(x => x.ID == id);
             model.TicketProductCategoryList = Db.TicketProductCategory.ToList();
+            model.TicketTypeList = Db.TicketType.ToList();
             model.OurCompanyList = Db.OurCompany.ToList();
 
             return PartialView("_PartialEditTicketProduct", model);
@@ -315,9 +318,9 @@ namespace ActionForce.Office.Controllers
                         UpdateIP = prod.UpdateIP,
                         CategoryID = prod.CategoryID,
                         ProductName = prod.ProductName,
-                        Unit = prod.Unit
+                        Unit = prod.Unit,
+                        TicketTypeID = prod.TicketTypeID
                     };
-
 
                     prod.CategoryID = ticketproduct.CategoryID;
                     prod.ProductName = ticketproduct.ProductName;
@@ -327,7 +330,7 @@ namespace ActionForce.Office.Controllers
                     prod.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                     prod.UpdateIP = OfficeHelper.GetIPAddress();
                     prod.Unit = ticketproduct.Unit;
-
+                    prod.TicketTypeID = ticketproduct.TicketTypeID;
 
                     Db.SaveChanges();
 
