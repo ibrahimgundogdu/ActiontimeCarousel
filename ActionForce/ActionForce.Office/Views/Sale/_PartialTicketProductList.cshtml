@@ -8,7 +8,7 @@
                 <th>Türü</th>
                 <th>Kategori</th>
                 <th>Ürün Adı</th>
-                <th>Birimi</th>
+                <th class="tx-center">Birimi (Dk)</th>
                 <th>Aktif</th>
                 <th></th>
             </tr>
@@ -24,7 +24,7 @@
                     <td class="tx-sm-13 bg-primary-light font-weight-bold">
                         <a href="#modalEditTicketProduct" data-toggle="modal"><span class="d-none d-sm-inline" onclick="EditTicketProduct(@(cat.ID));"> @(cat.ProductName)</span></a>
                     </td>
-                    <td class="tx-sm-13 bg-primary-light font-weight-bold"> @(cat.Unit)</td>
+                    <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.Unit)</td>
                     <td class="tx-sm-13">@(cat.IsActive)</td>
                     <td class="tx-sm-13 bg-light font-weight-bold ">
                         <a href="#" onclick="return confirm('Ürünü Silmek İstediğinize Emin misiniz?') ? RemoveTicketProduct(@(cat.ID)):''">Kaldır</a>

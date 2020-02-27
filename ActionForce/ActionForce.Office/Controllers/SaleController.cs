@@ -45,6 +45,7 @@ namespace ActionForce.Office.Controllers
             SaleControlModel model = new SaleControlModel();
 
             model.OurCompanyList = Db.OurCompany.ToList();
+            model.TicketTypeList = Db.TicketType.Where(x => x.IsActive == true).ToList();
 
             return PartialView("_PartialAddPriceCategory", model);
         }
@@ -98,6 +99,8 @@ namespace ActionForce.Office.Controllers
 
             model.PriceCategory = Db.VPriceCategory.FirstOrDefault(x => x.ID == id);
             model.OurCompanyList = Db.OurCompany.ToList();
+            model.TicketTypeList = Db.TicketType.Where(x => x.IsActive == true).ToList();
+
 
             return PartialView("_PartialEditPriceCategory", model);
         }

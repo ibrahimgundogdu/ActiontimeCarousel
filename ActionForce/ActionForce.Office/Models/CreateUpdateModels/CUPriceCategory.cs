@@ -9,6 +9,7 @@ namespace ActionForce.Office
     {
         public int ID { get; set; }
         public int OurCompanyID { get; set; }
+        public int TicketTypeID { get; set; }
         public string CategoryCode { get; set; }
         public string CategoryName { get; set; }
         public string IsMaster { get; set; }
