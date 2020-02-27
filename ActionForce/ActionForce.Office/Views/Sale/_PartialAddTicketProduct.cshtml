@@ -19,8 +19,18 @@
                     }
                 </select>
             </div>
+        </div>
 
-
+        <div class="form-group row bg-gray-50 mg-b-5">
+            <label for="TicketTypeID" class="col-sm-3 col-form-label">Bilet Türü</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="TicketTypeID" name="TicketTypeID" required>
+                    @foreach (var item in Model.TicketTypeList)
+                    {
+                        <option value="@item.ID">@($"{item.TicketTypeName}")</option>
+                    }
+                </select>
+            </div>
         </div>
         <div class="form-group row bg-gray-50 mg-b-5">
             <label for="CategoryID" class="col-sm-3 col-form-label">Kategorisi</label>
@@ -33,7 +43,6 @@
                 </select>
             </div>
         </div>
-
         <div class="form-group row bg-gray-50 mg-b-5">
             <label for="ProductName" class="col-sm-3 col-form-label">Bilet Ürünü Adı</label>
             <div class="col-sm-9">
