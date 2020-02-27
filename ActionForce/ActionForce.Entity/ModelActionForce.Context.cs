@@ -144,7 +144,6 @@ namespace ActionForce.Entity
         public virtual DbSet<EmployeeShiftX> EmployeeShiftX { get; set; }
         public virtual DbSet<EmployeeX> EmployeeX { get; set; }
         public virtual DbSet<VEmployee> VEmployee { get; set; }
-        public virtual DbSet<VLocation> VLocation { get; set; }
         public virtual DbSet<DocumentCashCollections> DocumentCashCollections { get; set; }
         public virtual DbSet<DocumentCashExpense> DocumentCashExpense { get; set; }
         public virtual DbSet<DocumentCashPayments> DocumentCashPayments { get; set; }
@@ -272,7 +271,6 @@ namespace ActionForce.Entity
         public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<CompanyCategory> CompanyCategory { get; set; }
         public virtual DbSet<LocationPriceCategory> LocationPriceCategory { get; set; }
-        public virtual DbSet<Mall> Mall { get; set; }
         public virtual DbSet<MallContact> MallContact { get; set; }
         public virtual DbSet<MallLocationContract> MallLocationContract { get; set; }
         public virtual DbSet<Price> Price { get; set; }
@@ -285,10 +283,12 @@ namespace ActionForce.Entity
         public virtual DbSet<TicketSale> TicketSale { get; set; }
         public virtual DbSet<TicketSaleRefund> TicketSaleRefund { get; set; }
         public virtual DbSet<TicketSaleRows> TicketSaleRows { get; set; }
-        public virtual DbSet<TicketProduct> TicketProduct { get; set; }
         public virtual DbSet<TicketProductCategory> TicketProductCategory { get; set; }
-        public virtual DbSet<VTicketProduct> VTicketProduct { get; set; }
         public virtual DbSet<Location> Location { get; set; }
+        public virtual DbSet<Mall> Mall { get; set; }
+        public virtual DbSet<TicketProduct> TicketProduct { get; set; }
+        public virtual DbSet<VTicketProduct> VTicketProduct { get; set; }
+        public virtual DbSet<VLocation> VLocation { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

@@ -2338,6 +2338,7 @@
     <Compile Include="Models\ControlModels\RevenueControlModel.cs" />
     <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\CounterModel.cs" />
+    <Compile Include="Models\CreateUpdateModels\CULocation.cs" />
     <Compile Include="Models\CreateUpdateModels\CUPriceCategory.cs" />
     <Compile Include="Models\CreateUpdateModels\CUTicketProduct.cs" />
     <Compile Include="Models\Crypter.cs" />
@@ -2370,6 +2371,8 @@
     <Compile Include="Models\EmployeePeriotCheck.cs" />
     <Compile Include="Models\EmployeeShiftModel.cs" />
     <Compile Include="Models\CheckEmployee.cs" />
+    <Compile Include="Models\Location\LocationEmployeeModel.cs" />
+    <Compile Include="Models\Location\LocationFilterModel.cs" />
     <Compile Include="Models\NewEmployee.cs" />
     <Compile Include="Models\NewPhone.cs" />
     <Compile Include="Models\TotalFood.cs" />

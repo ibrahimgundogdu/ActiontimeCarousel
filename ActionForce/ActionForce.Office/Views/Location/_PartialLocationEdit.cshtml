@@ -65,9 +65,12 @@
                 <label for="ourCompany" class="col-sm-3 col-form-label">Firma</label>
                 <div class="col-sm-6">
                     <select class="form-control" id="ourCompany" name="OurCompany" required="">
-                        @foreach (var item in Model.OurCompanyList)
+                        @if (Model?.OurCompanyList?.Count > 0)
                         {
-                            <option value="@(item.CompanyID)" @(Model.LocationModel.OurCompany == item.CompanyID ? "selected" : "")>@(item.CompanyName)</option>
+                            foreach (var item in Model.OurCompanyList)
+                            {
+                                <option value="@(item.CompanyID)" @(Model.LocationModel.OurCompanyID == item.CompanyID ? "selected" : "")>@(item.CompanyName)</option>
+                            }
                         }
                     </select>
                 </div>
@@ -77,9 +80,14 @@
             <div class="form-group row mg-b-5">
                 <label for="avm" class="col-sm-3 col-form-label">AVM</label>
                 <div class="col-sm-6">
-                    @*<input id="sortBy" name="SortBy" type="text" class="form-control" autocomplete="off" placeholder="No" value="@(Model.LocationModel.SortBy)">*@
-                    <select class="form-control" id="avm" name="AVM" required="">
-                        <option value="Metrocity"> Metrocity</option>
+                    <select class="form-control" id="avm" name="MallID">
+                        @if (Model?.MallList?.Count > 0)
+                        {
+                            foreach (var item in Model.MallList)
+                            {
+                                <option value="@(item.ID)" @(Model.LocationModel.MallID == item.ID ? "selected" : "")>@(item.FullName)</option>
+                            }
+                        }
                     </select>
                 </div>
                 <div class="col-sm-3">
@@ -101,10 +109,29 @@
             <div class="form-group row mg-b-5">
                 <label for="priceCategory" class="col-sm-3 col-form-label">Fiyat Listesi</label>
                 <div class="col-sm-6">
-                    <select class="form-control" id="priceCategory" name="PriceCategory" required="">
-                        @foreach (var item in Model.PriceCategoryList)
+                    <select class="form-control" id="priceCategory" name="PriceCatID" required="">
+                        @if (Model?.PriceCategoryList?.Count > 0)
                         {
-                            <option value="@(item.ID)" @(Model.LocationModel.PriceCatID == item.ID ? "selected" : "")>@(item.CategoryName)</option>
+                            foreach (var item in Model.PriceCategoryList)
+                            {
+                                <option value="@(item.ID)" @(Model.LocationModel.PriceCatID == item.ID ? "selected" : "")>@(item.CategoryName)</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="bankAccount" class="col-sm-3 col-form-label">POS Listesi</label>
+                <div class="col-sm-6">
+                    <select class="form-control" id="bankAccount" name="POSAccountID" required="">
+                        @if (Model?.BankAccountList?.Count > 0)
+                        {
+                            foreach (var item in Model.BankAccountList)
+                            {
+                                <option value="@(item.ID)" @(Model.LocationModel.POSAccountID == item.ID ? "selected" : "")>@(item.AccountName)</option>
+                            }
                         }
                     </select>
                 </div>
@@ -130,7 +157,7 @@
             <div class="form-group row mg-b-5">
                 <label for="mapUrl" class="col-sm-3 col-form-label">Map URL</label>
                 <div class="col-sm-6">
-                    <input id="mapUrl" name="MapURL" type="text" class="form-control" autocomplete="off" placeholder="Map URL" value="@(Model.LocationModel.MapURL)">
+                    <input id="mapUrl" name="MapURL" type="text" class="form-control" autocomplete="off" placeholder="Map URL" value="@(Model.LocationModel.MapURL.ToString())">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -139,7 +166,7 @@
                 <label for="isHaveOperator" class="col-sm-3 col-form-label">Operatör var mı?</label>
                 <div class="col-sm-6">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="isHaveOperator" name="IsHaveOperator" value="1" @(Model.LocationModel.IsHaveOperator.Value == true ? "checked" : "")>
+                        <input type="checkbox" class="custom-control-input" id="isHaveOperator" name="GetFormIsHaveOperator" value="1" @(Model.LocationModel.IsHaveOperator.Value == true ? "checked" : "")>
                         <label class="custom-control-label" for="isHaveOperator">Operatör var mı?</label>
                     </div>
                 </div>
@@ -150,7 +177,7 @@
                 <label for="isActive" class="col-sm-3 col-form-label">Aktif mi?</label>
                 <div class="col-sm-6">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="isActive" name="IsActive" value="1" @(Model.LocationModel.IsActive.Value == true ? "checked" : "")>
+                        <input type="checkbox" class="custom-control-input" id="isActive" name="GetFormIsActive" value="1" @(Model.LocationModel.IsActive.Value == true ? "checked" : "")>
                         <label class="custom-control-label" for="isActive">Aktif</label>
                     </div>
                 </div>
@@ -161,6 +188,8 @@
                 <div class="col-sm-3">
                 </div>
                 <div class="col-sm-6">
+                    <input id="locationID" name="LocationID" type="hidden" value="@(Model.LocationModel.LocationID)" />
+                    <input id="locationUID" name="LocationUID" type="hidden" value="@(Model.LocationModel.LocationUID)" />
                     <button type="submit" class="btn btn-primary btn-block">Lokasyon Güncelle</button>
                 </div>
             </div>
@@ -173,7 +202,7 @@
     </div>
 </div>
 
-@if (Model.LogList != null && Model.LogList.Count() > 0)
+@if (Model?.LogList?.Count > 0)
 {
     <div class="row row-xs">
         <table class="table table-sm table-bordered">
@@ -191,19 +220,22 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.LogList.OrderBy(x => x.RecordDate))
+                @if (Model?.LogList?.Count > 0)
                 {
-                    <tr>
-                        <td>@(item.RecordDate)</td>
-                        <td>@(item.RecordEmployee)</td>
-                        <td>@(item.Environment)</td>
-                        <td>@(item.ProcessType)</td>
-                        <td>@(item.ResultMessage)</td>
-                        <td>@(item.FieldName)</td>
-                        <td>@(item.OldValue)</td>
-                        <td>@(item.NewValue)</td>
-                        <td>@(item.IsSuccess)</td>
-                    </tr>
+                    foreach (var item in Model.LogList.OrderBy(x => x.RecordDate))
+                    {
+                        <tr>
+                            <td>@(item.RecordDate)</td>
+                            <td>@(item.RecordEmployee)</td>
+                            <td>@(item.Environment)</td>
+                            <td>@(item.ProcessType)</td>
+                            <td>@(item.ResultMessage)</td>
+                            <td>@(item.FieldName)</td>
+                            <td>@(item.OldValue)</td>
+                            <td>@(item.NewValue)</td>
+                            <td>@(item.IsSuccess)</td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>

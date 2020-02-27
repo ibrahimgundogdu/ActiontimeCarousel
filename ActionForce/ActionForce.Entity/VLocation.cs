@@ -53,14 +53,21 @@ namespace ActionForce.Entity
         public Nullable<int> Quarter { get; set; }
         public Nullable<int> WeekYear { get; set; }
         public Nullable<int> WeekNumber { get; set; }
+        public Nullable<System.DateTime> ScheduleDate { get; set; }
+        public Nullable<System.DateTime> ScheduleStart { get; set; }
+        public Nullable<System.DateTime> ScheduleEnd { get; set; }
         public Nullable<System.DateTime> ShiftDate { get; set; }
         public Nullable<System.TimeSpan> ShiftStart { get; set; }
         public Nullable<System.TimeSpan> ShiftFinish { get; set; }
+        public Nullable<System.DateTime> ShiftDateStart { get; set; }
+        public Nullable<System.DateTime> ShiftDateFinish { get; set; }
         public string Duration { get; set; }
         public Nullable<int> Status { get; set; }
         public Nullable<int> TicketTypeID { get; set; }
         public Nullable<System.Guid> LocationUID { get; set; }
         public string CompanyName { get; set; }
         public Nullable<int> POSAccountID { get; set; }
+        public Nullable<int> MallID { get; set; }
+        public string LocationFullName { get; set; }
     }
 }

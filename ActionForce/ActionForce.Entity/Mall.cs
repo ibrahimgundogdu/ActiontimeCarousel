@@ -15,6 +15,7 @@ namespace ActionForce.Entity
     public partial class Mall
     {
         public int ID { get; set; }
+        public Nullable<int> OurCompanyID { get; set; }
         public string FullName { get; set; }
         public string Segment { get; set; }
         public string StructuralCondition { get; set; }

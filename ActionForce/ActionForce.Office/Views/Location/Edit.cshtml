@@ -73,6 +73,16 @@
                                 $("#timezone").append($('<option></option>', { "value": label.Value, "text":label.Text }));
                             });
 
+                            $("#priceCategory").empty();
+                            $.each(getList.PriceCategoryList, function (index, label) {
+                                $("#priceCategory").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+
+                            $("#avm").empty();
+                            $.each(getList.MallList, function (index, label) {
+                                $("#avm").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+
                             $("#currency").val(getList.Currency);
                         },
                         error: function () {
