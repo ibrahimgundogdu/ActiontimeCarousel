@@ -69,7 +69,7 @@
                         {
                             foreach (var item in Model.OurCompanyList)
                             {
-                                <option value="@(item.CompanyID)" @(Model.LocationModel.OurCompany == item.CompanyID ? "selected" : "")>@(item.CompanyName)</option>
+                                <option value="@(item.CompanyID)" @(Model.LocationModel.OurCompanyID == item.CompanyID ? "selected" : "")>@(item.CompanyName)</option>
                             }
                         }
                     </select>
@@ -80,7 +80,7 @@
             <div class="form-group row mg-b-5">
                 <label for="avm" class="col-sm-3 col-form-label">AVM</label>
                 <div class="col-sm-6">
-                    <select class="form-control" id="avm" name="AVM" required="">
+                    <select class="form-control" id="avm" name="MallID">
                         @if (Model?.MallList?.Count > 0)
                         {
                             foreach (var item in Model.MallList)
@@ -109,7 +109,7 @@
             <div class="form-group row mg-b-5">
                 <label for="priceCategory" class="col-sm-3 col-form-label">Fiyat Listesi</label>
                 <div class="col-sm-6">
-                    <select class="form-control" id="priceCategory" name="PriceCategory" required="">
+                    <select class="form-control" id="priceCategory" name="PriceCatID" required="">
                         @if (Model?.PriceCategoryList?.Count > 0)
                         {
                             foreach (var item in Model.PriceCategoryList)
@@ -125,7 +125,7 @@
             <div class="form-group row mg-b-5">
                 <label for="bankAccount" class="col-sm-3 col-form-label">POS Listesi</label>
                 <div class="col-sm-6">
-                    <select class="form-control" id="bankAccount" name="BankAccount" required="">
+                    <select class="form-control" id="bankAccount" name="POSAccountID" required="">
                         @if (Model?.BankAccountList?.Count > 0)
                         {
                             foreach (var item in Model.BankAccountList)
@@ -157,7 +157,7 @@
             <div class="form-group row mg-b-5">
                 <label for="mapUrl" class="col-sm-3 col-form-label">Map URL</label>
                 <div class="col-sm-6">
-                    <input id="mapUrl" name="MapURL" type="text" class="form-control" autocomplete="off" placeholder="Map URL" value="@(Model.LocationModel.MapURL)">
+                    <input id="mapUrl" name="MapURL" type="text" class="form-control" autocomplete="off" placeholder="Map URL" value="@(Model.LocationModel.MapURL.ToString())">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -166,7 +166,7 @@
                 <label for="isHaveOperator" class="col-sm-3 col-form-label">Operatör var mı?</label>
                 <div class="col-sm-6">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="isHaveOperator" name="IsHaveOperator" value="1" @(Model.LocationModel.IsHaveOperator.Value == true ? "checked" : "")>
+                        <input type="checkbox" class="custom-control-input" id="isHaveOperator" name="GetFormIsHaveOperator" value="1" @(Model.LocationModel.IsHaveOperator.Value == true ? "checked" : "")>
                         <label class="custom-control-label" for="isHaveOperator">Operatör var mı?</label>
                     </div>
                 </div>
@@ -177,7 +177,7 @@
                 <label for="isActive" class="col-sm-3 col-form-label">Aktif mi?</label>
                 <div class="col-sm-6">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="isActive" name="IsActive" value="1" @(Model.LocationModel.IsActive.Value == true ? "checked" : "")>
+                        <input type="checkbox" class="custom-control-input" id="isActive" name="GetFormIsActive" value="1" @(Model.LocationModel.IsActive.Value == true ? "checked" : "")>
                         <label class="custom-control-label" for="isActive">Aktif</label>
                     </div>
                 </div>
@@ -188,6 +188,8 @@
                 <div class="col-sm-3">
                 </div>
                 <div class="col-sm-6">
+                    <input id="locationID" name="LocationID" type="hidden" value="@(Model.LocationModel.LocationID)" />
+                    <input id="locationUID" name="LocationUID" type="hidden" value="@(Model.LocationModel.LocationUID)" />
                     <button type="submit" class="btn btn-primary btn-block">Lokasyon Güncelle</button>
                 </div>
             </div>

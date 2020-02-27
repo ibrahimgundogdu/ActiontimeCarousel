@@ -122,7 +122,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeShiftX" Width="1.5" PointX="36.75" PointY="11.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeX" Width="1.5" PointX="36.75" PointY="18.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployee" Width="1.5" PointX="36.75" PointY="24.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocation" Width="1.5" PointX="36.75" PointY="32.75" />
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_Action_ResultState" />
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_ActionRow_Action" />
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_ActionRow_ResultState" />
@@ -282,11 +281,12 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSale" Width="1.5" PointX="11.375" PointY="34.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRefund" Width="1.5" PointX="13.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRows" Width="1.5" PointX="58.375" PointY="0.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketProduct" Width="1.5" PointX="3.375" PointY="35.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProduct" Width="1.5" PointX="3.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProductCategory" Width="1.5" PointX="15.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Location" Width="1.5" PointX="41.375" PointY="57.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Mall" Width="1.5" PointX="58.375" PointY="18.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocation" Width="1.5" PointX="43.375" PointY="58.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProduct" Width="1.5" PointX="3.75" PointY="35.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketProduct" Width="1.5" PointX="0.75" PointY="36.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

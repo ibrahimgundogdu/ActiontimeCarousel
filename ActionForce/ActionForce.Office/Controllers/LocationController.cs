@@ -16,30 +16,10 @@ namespace ActionForce.Office.Controllers
         {
             LocationControlModel model = new LocationControlModel();
 
-            model.LocationList = Db.GetLocationAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).Select(x => new LocationModel()
-            {
-                Currency = x.Currency,
-                Description = x.Description,
-                IP = x.IP,
-                IsActive = x.IsActive,
-                IsHaveOperator = x.IsHaveOperator,
-                Latitude = x.Latitude,
-                LocationCode = x.LocationCode,
-                LocationID = x.LocationID,
-                LocationName = x.LocationName,
-                LocationNameSearch = x.LocationNameSearch,
-                LocationUID = x.LocationUID,
-                Longitude = x.Longitude,
-                MapURL = x.MapURL,
-                SortBy = x.SortBy,
-                State = x.State,
-                TypeName = x.TypeName,
-                Timezone = x.Timezone,
-                OurCompany = x.OurCompanyID
-            }).ToList();
+            model.LocationList = Db.VLocation.Where(x=> x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
             model.StateList = model.LocationList.Select(x => x.State).Distinct().OrderBy(x => x).ToList();
-            model.TypeList = model.LocationList.Select(x => x.TypeName).Distinct().OrderBy(x => x).ToList();
+            model.TypeList = model.LocationList.Select(x => x.LocationTypeName).Distinct().OrderBy(x => x).ToList();
 
             #region Filter
             if (TempData["LocationFilter"] != null)
@@ -56,7 +36,7 @@ namespace ActionForce.Office.Controllers
                 }
                 if (!String.IsNullOrEmpty(model.FilterModel.TypeName))
                 {
-                    model.LocationList = model.LocationList.Where(x => x.TypeName == model.FilterModel.TypeName).OrderBy(x => x.SortBy).ToList();
+                    model.LocationList = model.LocationList.Where(x => x.LocationTypeName == model.FilterModel.TypeName).OrderBy(x => x.SortBy).ToList();
                 }
             }
             #endregion
@@ -80,27 +60,7 @@ namespace ActionForce.Office.Controllers
         {
             LocationControlModel model = new LocationControlModel();
 
-            model.LocationList = Db.GetLocationAll(model.Authentication.ActionEmployee.OurCompanyID, null, 0).Select(x => new LocationModel()
-            {
-                Currency = x.Currency,
-                Description = x.Description,
-                IP = x.IP,
-                IsActive = x.IsActive,
-                IsHaveOperator = x.IsHaveOperator,
-                Latitude = x.Latitude,
-                LocationCode = x.LocationCode,
-                LocationID = x.LocationID,
-                LocationName = x.LocationName,
-                LocationNameSearch = x.LocationNameSearch,
-                LocationUID = x.LocationUID,
-                Longitude = x.Longitude,
-                MapURL = x.MapURL,
-                SortBy = x.SortBy,
-                State = x.State,
-                TypeName = x.TypeName,
-                Timezone = x.Timezone,
-                OurCompany = x.OurCompanyID
-            }).ToList();
+            model.LocationList = Db.VLocation.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
             #region Filter
             if (!String.IsNullOrEmpty(getModel.LocationName))
@@ -113,7 +73,7 @@ namespace ActionForce.Office.Controllers
             }
             if (!String.IsNullOrEmpty(getModel.TypeName))
             {
-                model.LocationList = model.LocationList.Where(x => x.TypeName == getModel.TypeName).OrderBy(x => x.SortBy).ToList();
+                model.LocationList = model.LocationList.Where(x => x.LocationTypeName == getModel.TypeName).OrderBy(x => x.SortBy).ToList();
             }
 
             bool? isActive = getModel.IsActive == 0 ? false : getModel.IsActive == 1 ? true : (bool?)null;
@@ -138,27 +98,7 @@ namespace ActionForce.Office.Controllers
                 return RedirectToAction("Index");
             }
 
-            model.LocationModel = Db.GetLocationAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).Select(x => new LocationModel()
-            {
-                Currency = x.Currency,
-                Description = x.Description,
-                IP = x.IP,
-                IsActive = x.IsActive,
-                IsHaveOperator = x.IsHaveOperator,
-                Latitude = x.Latitude,
-                LocationCode = x.LocationCode,
-                LocationID = x.LocationID,
-                LocationName = x.LocationName,
-                LocationNameSearch = x.LocationNameSearch,
-                LocationUID = x.LocationUID,
-                Longitude = x.Longitude,
-                MapURL = x.MapURL,
-                SortBy = x.SortBy,
-                State = x.State,
-                TypeName = x.TypeName,
-                Timezone = x.Timezone,
-                OurCompany = x.OurCompanyID
-            }).FirstOrDefault();
+            model.LocationModel = Db.VLocation.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationUID == id);
 
             if (model.LocationModel != null)
             {
@@ -190,30 +130,7 @@ namespace ActionForce.Office.Controllers
                 return RedirectToAction("Index");
             }
 
-            model.LocationModel = Db.GetLocationAll(model.Authentication.ActionEmployee.OurCompanyID, id, 0).Select(x => new LocationModel()
-            {
-                Currency = x.Currency,
-                Description = x.Description,
-                IP = x.IP,
-                IsActive = x.IsActive,
-                IsHaveOperator = x.IsHaveOperator,
-                Latitude = x.Latitude,
-                LocationCode = x.LocationCode,
-                LocationID = x.LocationID,
-                LocationName = x.LocationName,
-                LocationNameSearch = x.LocationNameSearch,
-                LocationUID = x.LocationUID,
-                Longitude = x.Longitude,
-                MapURL = x.MapURL,
-                SortBy = x.SortBy,
-                State = x.State,
-                TypeName = x.TypeName,
-                Timezone = x.Timezone,
-                OurCompany = x.OurCompanyID,
-                PriceCatID = x.PriceCatID ?? -1,
-                MallID = x.MallID ?? -1,
-                POSAccountID = x.POSAccountID ?? -1
-            }).FirstOrDefault();
+            model.LocationModel = Db.VLocation.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationUID == id);
 
             if (model.LocationModel != null)
             {
@@ -266,17 +183,14 @@ namespace ActionForce.Office.Controllers
                 MallList = mallList
             };
 
-            //JavaScriptSerializer javaScriptSerializer = new JavaScriptSerializer();
-            //string result = javaScriptSerializer.Serialize(model);
-
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
         [AllowAnonymous]
-        public ActionResult EditLocation(LocationModel location)
+        public ActionResult EditLocation(CULocation location)
         {
             Result result = new Result();
 
@@ -288,6 +202,9 @@ namespace ActionForce.Office.Controllers
             {
                 try
                 {
+                    //location.IsActive = !String.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false;
+                    //location.IsHaveOperator = !String.IsNullOrEmpty(location.GetFormIsHaveOperator) && location.GetFormIsHaveOperator == "1" ? true : false;
+
                     Location self = new Location()
                     {
 
@@ -304,6 +221,8 @@ namespace ActionForce.Office.Controllers
         }
 
     }
+
+    #region OurCompanyModel
     //SelectListItem MVC'den türediği için başka bir sınıfın içerisine alamadığımızdan dolayı OurCompanyModel sınıfı burada bulunmaktadır.
     public class OurCompanyModel
     {
@@ -311,5 +230,6 @@ namespace ActionForce.Office.Controllers
         public List<SelectListItem> PriceCategoryList { get; set; }
         public List<SelectListItem> MallList { get; set; }
         public string Currency { get; set; }
-    }
+    } 
+    #endregion
 }
