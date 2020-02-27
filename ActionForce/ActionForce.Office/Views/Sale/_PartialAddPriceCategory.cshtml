@@ -9,6 +9,7 @@
     @using (Ajax.BeginForm("AddPriceCategory", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "PriceCategoryList", InsertionMode = InsertionMode.Replace, OnSuccess = "OnCategoryAddSuccess" }))
     {
         @Html.AntiForgeryToken()
+
         <div class="form-group row">
             <label for="OurCompanyID" class="col-sm-3 col-form-label">Our Company</label>
             <div class="col-sm-9">

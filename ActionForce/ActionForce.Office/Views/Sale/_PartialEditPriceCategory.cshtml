@@ -3,7 +3,7 @@
     <span aria-hidden="true">&times;</span>
 </a>
 <div>
-    <h4><span class="font-weight-bold text-black-50">Fiyat Kategorisi Ekle</span></h4>
+    <h4><span class="font-weight-bold text-black-50">Fiyat Kategorisi Güncelle</span></h4>
 
     @using (Ajax.BeginForm("EditPriceCategory", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "PriceCategoryList", InsertionMode = InsertionMode.Replace, OnSuccess = "OnCategoryEditSuccess" }))
     {
@@ -27,7 +27,7 @@
                 <select class="form-control" id="TicketTypeID" name="TicketTypeID" required>
                     @foreach (var item in Model.TicketTypeList)
                     {
-                        <option value="@item.ID">@($"{item.TicketTypeName}")</option>
+                        <option value="@item.ID" @(Model.PriceCategory.TicketTypeID == item.ID ? "selected" : "")>@($"{item.TicketTypeName}")</option>
                     }
                 </select>
             </div>
