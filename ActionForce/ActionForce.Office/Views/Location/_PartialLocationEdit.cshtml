@@ -24,7 +24,16 @@
             <div class="form-group row mg-b-5">
                 <label for="description" class="col-sm-3 col-form-label">Türü</label>
                 <div class="col-sm-6">
-                    <input id="description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Türü" value="@(Model.LocationModel.Description)">
+                    @*<input id="description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Türü" value="@(Model.LocationModel.Description)">*@
+                    <select class="form-control" id="locationTypeID" name="LocationTypeID" required="">
+                        @if (Model?.LocationTypeList?.Count > 0)
+                        {
+                            foreach (var item in Model.LocationTypeList)
+                            {
+                                <option value="@(item.ID)" @(Model.LocationModel.LocationTypeID == item.ID ? "selected" : "")>@(item.TypeName)</option>
+                            }
+                        }
+                    </select>
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -166,7 +175,7 @@
                 <label for="isHaveOperator" class="col-sm-3 col-form-label">Operatör var mı?</label>
                 <div class="col-sm-6">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="isHaveOperator" name="GetFormIsHaveOperator" value="1" @(Model.LocationModel.IsHaveOperator.Value == true ? "checked" : "")>
+                        <input type="checkbox" class="custom-control-input" id="isHaveOperator" name="IsHaveOperator" value="1" @(Model.LocationModel.IsHaveOperator.Value == true ? "checked" : "")>
                         <label class="custom-control-label" for="isHaveOperator">Operatör var mı?</label>
                     </div>
                 </div>
@@ -177,7 +186,7 @@
                 <label for="isActive" class="col-sm-3 col-form-label">Aktif mi?</label>
                 <div class="col-sm-6">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="isActive" name="GetFormIsActive" value="1" @(Model.LocationModel.IsActive.Value == true ? "checked" : "")>
+                        <input type="checkbox" class="custom-control-input" id="isActive" name="IsActive" value="1" @(Model.LocationModel.IsActive.Value == true ? "checked" : "")>
                         <label class="custom-control-label" for="isActive">Aktif</label>
                     </div>
                 </div>

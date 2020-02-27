@@ -12,7 +12,7 @@ namespace ActionForce.Office
         public List<VLocation> LocationList { get; set; }
         public VLocation LocationModel { get; set; }
         public List<string> StateList { get; set; }
-        public List<string> TypeList { get; set; }
+        //public List<string> TypeList { get; set; }
         public LocationFilterModel FilterModel { get; set; }
         public List<ApplicationLog> LogList { get; set; }
         public List<LocationEmployeeModel> EmployeeLocationList { get; set; }
@@ -20,5 +20,6 @@ namespace ActionForce.Office
         public List<PriceCategory> PriceCategoryList { get; set; }
         public List<Mall> MallList { get; set; }
         public List<VBankAccount> BankAccountList { get; set; }
+        public List<LocationType> LocationTypeList { get; set; }
     }
 }
