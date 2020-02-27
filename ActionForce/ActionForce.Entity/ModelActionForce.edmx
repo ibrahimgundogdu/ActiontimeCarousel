@@ -5037,8 +5037,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
           <Property Name="ScheduleStart" Type="datetime" />
           <Property Name="ScheduleEnd" Type="datetime" />
           <Property Name="ShiftDate" Type="date" />
-          <Property Name="ShiftStart" Type="datetime" />
-          <Property Name="ShiftFinish" Type="datetime" />
+          <Property Name="ShiftStart" Type="time" Precision="0" />
+          <Property Name="ShiftFinish" Type="time" Precision="0" />
+          <Property Name="ShiftDateStart" Type="datetime" />
+          <Property Name="ShiftDateFinish" Type="datetime" />
           <Property Name="Duration" Type="varchar" MaxLength="17" />
           <Property Name="Status" Type="int" />
           <Property Name="TicketTypeID" Type="int" />
@@ -7507,6 +7509,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocation].[ShiftDate] AS [ShiftDate], 
     [VLocation].[ShiftStart] AS [ShiftStart], 
     [VLocation].[ShiftFinish] AS [ShiftFinish], 
+    [VLocation].[ShiftDateStart] AS [ShiftDateStart], 
+    [VLocation].[ShiftDateFinish] AS [ShiftDateFinish], 
     [VLocation].[Duration] AS [Duration], 
     [VLocation].[Status] AS [Status], 
     [VLocation].[TicketTypeID] AS [TicketTypeID], 
@@ -14361,8 +14365,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ScheduleStart" Type="DateTime" Precision="3" />
           <Property Name="ScheduleEnd" Type="DateTime" Precision="3" />
           <Property Name="ShiftDate" Type="DateTime" Precision="0" />
-          <Property Name="ShiftStart" Type="DateTime" Precision="3" />
-          <Property Name="ShiftFinish" Type="DateTime" Precision="3" />
+          <Property Name="ShiftStart" Type="DateTime" Precision="0" />
+          <Property Name="ShiftFinish" Type="DateTime" Precision="0" />
           <Property Name="Duration" Type="String" MaxLength="17" FixedLength="false" Unicode="false" />
           <Property Name="Status" Type="Int32" />
           <Property Name="TicketTypeID" Type="Int32" />
@@ -14371,6 +14375,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="POSAccountID" Type="Int32" />
           <Property Name="MallID" Type="Int32" />
           <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="ShiftDateStart" Type="DateTime" Precision="3" />
+          <Property Name="ShiftDateFinish" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="TicketProduct">
           <Key>
@@ -20036,6 +20042,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VLocation">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocation">
               <MappingFragment StoreEntitySet="VLocation">
+                <ScalarProperty Name="ShiftDateFinish" ColumnName="ShiftDateFinish" />
+                <ScalarProperty Name="ShiftDateStart" ColumnName="ShiftDateStart" />
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
                 <ScalarProperty Name="MallID" ColumnName="MallID" />
                 <ScalarProperty Name="POSAccountID" ColumnName="POSAccountID" />

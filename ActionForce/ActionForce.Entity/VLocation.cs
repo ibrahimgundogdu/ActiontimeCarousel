@@ -67,5 +67,7 @@ namespace ActionForce.Entity
         public Nullable<int> POSAccountID { get; set; }
         public Nullable<int> MallID { get; set; }
         public string LocationFullName { get; set; }
+        public Nullable<System.DateTime> ShiftDateStart { get; set; }
+        public Nullable<System.DateTime> ShiftDateFinish { get; set; }
     }
 }
