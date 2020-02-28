@@ -2101,7 +2101,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="UpdateEmployeeID" Type="int" />
-          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="LocationSchedule">
           <Key>
@@ -2545,6 +2545,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="PriceCategoryID" Type="int" />
           <Property Name="TicketTypeID" Type="int" />
           <Property Name="ProductID" Type="int" />
+          <Property Name="Unit" Type="int" />
           <Property Name="Price" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="5" />
           <Property Name="ExtraMultiple" Type="float" />
@@ -5059,6 +5060,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="ScheduleDuration" Type="time" Precision="0" />
+          <Property Name="WeekKey" Type="nvarchar" MaxLength="9" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPosTerminal' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -7536,7 +7538,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocation].[EUName] AS [EUName], 
     [VLocation].[RecordDate] AS [RecordDate], 
     [VLocation].[UpdateDate] AS [UpdateDate], 
-    [VLocation].[ScheduleDuration] AS [ScheduleDuration]
+    [VLocation].[ScheduleDuration] AS [ScheduleDuration], 
+    [VLocation].[WeekKey] AS [WeekKey]
     FROM [dbo].[VLocation] AS [VLocation]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VLocationPosTerminal" EntityType="Self.VLocationPosTerminal" store:Type="Views" store:Schema="dbo">
@@ -13900,7 +13903,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateEmployeeID" Type="Int32" />
-          <Property Name="UpdateIP" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="MallContact">
           <Key>
@@ -13956,6 +13959,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateEmployeeID" Type="Int32" />
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Unit" Type="Int32" />
         </EntityType>
         <EntityType Name="PriceCategory">
           <Key>
@@ -14450,6 +14454,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="ScheduleDuration" Type="Time" Precision="0" />
+          <Property Name="WeekKey" Type="String" MaxLength="9" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -19660,6 +19665,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="Price">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Price">
               <MappingFragment StoreEntitySet="Price">
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
                 <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
@@ -20125,6 +20131,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VLocation">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocation">
               <MappingFragment StoreEntitySet="VLocation">
+                <ScalarProperty Name="WeekKey" ColumnName="WeekKey" />
                 <ScalarProperty Name="ScheduleDuration" ColumnName="ScheduleDuration" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
                 <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />

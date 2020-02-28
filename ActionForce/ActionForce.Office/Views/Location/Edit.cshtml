@@ -21,26 +21,8 @@
         <div class="media d-block d-lg-flex">
             <div class="profile-sidebar profile-sidebar-two pd-lg-r-15">
                 <div class="row">
-                    <div class="col-sm-12 col-md-12 col-lg mg-t-20 mg-sm-t-0">
-                        <nav class="nav nav-classic tx-13">
-                            <a href="/Location/Action" class="nav-link"><i data-feather="layers"></i> Cari Hesap</a>
-                            <a href="/Location/Goal" class="nav-link"><i data-feather="target"></i> Hedefler</a>
-                            <a href="/Location/Employee" class="nav-link"><i data-feather="users"></i> Çalışanlar</a>
-                            <a href="/Location/Contract" class="nav-link"><i data-feather="file"></i> Sözleşmeler</a>
-                            <a href="/Location/Period" class="nav-link"><i data-feather="git-commit"></i> Periyotlar</a>
-                            <a href="/Location/PosTerminal" class="nav-link"><i data-feather="credit-card"></i> Pos Cihazları</a>
-                            <a href="/Location/Schedule" class="nav-link"><i data-feather="calendar"></i> Schedule (Takvim)</a>
-                            <a href="/Location/Shift" class="nav-link"><i data-feather="clock"></i> Shift (Mesai)</a>
-                            <a href="/Location/Stat" class="nav-link"><i data-feather="check-square"></i> İstatistik</a>
-                            <a href="/Location/Part" class="nav-link"><i data-feather="grid"></i> Animals/Trambolines</a>
-                            <a href="/Location/Sale" class="nav-link"><i data-feather="dollar-sign"></i> Satışlar</a>
-                            <a href="/Location/Cash" class="nav-link"><i data-feather="file-text"></i> Yazar Kasalar</a>
-                            <a href="/Location/Result" class="nav-link"><i data-feather="moon"></i> Gün Sonları</a>
-                            <a href="/Location/Warehouse" class="nav-link"><i data-feather="truck"></i> Depolar</a>
-                            <a href="/Location/Mall" class="nav-link"><i data-feather="shopping-bag"></i> AVM</a>
-                            <a href="/Location/Edit/@(Model.LocationModel.LocationUID)" class="nav-link"><i data-feather="edit"></i> Güncelle</a>
-                        </nav>
-                    </div>
+                    @{Html.RenderPartial("_PartialLocationInformation", Model);}
+                    @{Html.RenderPartial("_PartialLocationSideBar", Model);}
                 </div>
             </div>
             <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">

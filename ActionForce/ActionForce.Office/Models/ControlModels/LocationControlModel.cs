@@ -28,5 +28,11 @@ namespace ActionForce.Office
         public string ScheduleStart { get; set; }
         public string ScheduleFinish { get; set; }
         public string ScheduleTime{ get; set; }
+        public string ShiftStart { get; set; }
+        public string ShiftFinish { get; set; }
+        public string ShiftTime { get; set; }
+        public string StatusName{ get; set; }
+        public string StatusClass { get; set; }
+        public string StatusIcon { get; set; }
     }
 }
