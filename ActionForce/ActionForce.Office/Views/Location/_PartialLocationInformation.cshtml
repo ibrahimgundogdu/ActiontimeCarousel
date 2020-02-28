@@ -1,0 +1,60 @@
+﻿@model LocationControlModel
+<div class="col-sm-3 col-md-2 col-lg">
+    <h5 class="mg-b-2 tx-spacing--1">@(Model.LocationModel.LocationName)  @Html.Raw(Model.LocationModel?.IsActive == true ? "<span class='text-success'>(Aktif)</span>" : "<span class='text-danger'>(Pasif)</span>")</h5>
+    <p class="tx-color-03 mg-b-0">@(Model.LocationModel.LocationTypeName)</p>
+    <p class="tx-color-03 mg-b-25">@(Model.LocationModel.SortBy?.Trim())</p>
+</div><!-- col -->
+<div class="col-sm-8 col-md-7 col-lg mg-t-20 mg-sm-t-0 mg-lg-t-0">
+    <div class="d-flex mg-b-25">
+        <a class="btn btn-xs btn-white flex-fill" href="/Location/Edit/@(Model.LocationModel.LocationUID)">Düzenle</a>
+        <span class="btn btn-xs bg-@Model.StatusClass flex-fill mg-l-10 text-white"><i data-feather="@Model.StatusIcon"></i> @Model.StatusName</span>
+    </div>
+    @*<div class="card-header d-flex justify-content-between mb-2">
+        <h6 class="mg-b-0">SCHEDULE (TAKVİM)</h6>
+    </div>*@
+    <div class="d-flex mb-2">
+        <div class="profile-skillset flex-fill">
+            <label class="text-center mb-1">Takvim</label>
+            <h4 class="text-center"><a href="@Url.Action("Location","Schedule")" target="_blank" class="link-01">@(Model.ScheduleStart)</a></h4>
+        </div>
+        <div class="profile-skillset flex-fill">
+            <label class="pd-l-15 mb-1 text-center">Bitiş</label>
+            <h4 class="text-center"><a href="@Url.Action("Location","Schedule")" target="_blank" class="link-01">@(Model.ScheduleFinish)</a></h4>
+        </div>
+        <div class="profile-skillset flex-fill">
+            <label class="pd-l-10 mb-1 text-center">Süre</label>
+            <h4 class="text-center"><a href="@Url.Action("Location","Schedule")" target="_blank" class="link-01">@(Model.ScheduleTime)</a></h4>
+        </div>
+    </div>
+
+
+    @if (!String.IsNullOrEmpty(Model.ShiftStart) || !String.IsNullOrEmpty(Model.ShiftFinish) || !String.IsNullOrEmpty(Model.ShiftTime))
+    {
+        @*<div class="card-header d-flex justify-content-between mb-2">
+            <h6 class="mg-b-0">SHİFT (MESAİ)</h6>
+        </div>*@
+        <div class="d-flex">
+            <div class="profile-skillset flex-fill">
+                <label class="mb-1 text-center">Mesai</label>
+                <h4 class="text-center"><a href="@Url.Action("Index", "Shift")" target="_blank" class="link-01">@(Model.ShiftStart ?? "-")</a></h4>
+            </div>
+            <div class="profile-skillset flex-fill">
+                <label class="pd-l-15 mb-1 text-center">Kapanış</label>
+                <h4 class="text-center"><a href="@Url.Action("Index", "Shift")" target="_blank" class="link-01">@(Model.ShiftFinish ?? "-")</a></h4>
+            </div>
+            <div class="profile-skillset flex-fill">
+                <label class="pd-l-10 mb-1 text-center">Süre</label>
+                <h4 class="text-center"><a href="@Url.Action("Index", "Shift")" target="_blank" class="link-01">@(Model.ShiftTime ?? "-")</a></h4>
+            </div>
+        </div>
+    }
+</div><!-- col -->
+<div class="col-sm-6 col-md-5 col-lg mg-t-20">
+    <ul class="list-unstyled profile-info-list">
+        <li><i data-feather="briefcase"></i> <span class="tx-color-03">Bay Area, San Francisco, CA</span></li>
+        <li><i data-feather="home"></i> <span class="tx-color-03">Westfield, Oakland, CA</span></li>
+        <li><i data-feather="smartphone"></i> <a href="">(+1) 012 345 6789</a></li>
+        <li><i data-feather="phone"></i> <a href="">(+1) 987 654 3201</a></li>
+        <li><i data-feather="mail"></i> <a href="">me@fenchiumao.me</a></li>
+    </ul>
+</div>

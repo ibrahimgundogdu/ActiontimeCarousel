@@ -34,7 +34,8 @@ namespace ActionForce.Office.Controllers
                 }
                 if (!String.IsNullOrEmpty(model.FilterModel.TypeName))
                 {
-                    model.LocationList = model.LocationList.Where(x => x.LocationTypeName == model.FilterModel.TypeName).OrderBy(x => x.SortBy).ToList();
+                    int locationTypeID = Convert.ToInt32(model.FilterModel.TypeName);
+                    model.LocationList = model.LocationList.Where(x => x.LocationTypeID == locationTypeID).OrderBy(x => x.SortBy).ToList();
                 }
             }
             #endregion
@@ -117,9 +118,29 @@ namespace ActionForce.Office.Controllers
                     Active = x.Active ?? false,
                     PositionName = x.PositionName
                 }).ToList();
+                #region Schedule
                 model.ScheduleStart = model.LocationModel.ScheduleStart?.ToShortTimeString();
                 model.ScheduleFinish = model.LocationModel.ScheduleEnd?.ToShortTimeString();
                 model.ScheduleTime = model.LocationModel.ScheduleDuration?.ToString("hh\\:mm");
+                #endregion
+                #region Shift
+                model.ShiftStart = model.LocationModel.ShiftStart?.ToString("hh\\:mm");
+                model.ShiftFinish = model.LocationModel.ShiftFinish?.ToString("hh\\:mm");
+                model.ShiftTime = model.LocationModel.Duration;
+                #endregion
+                #region Status
+                model.StatusName = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "Beklemede" : (model.LocationModel.Status == 1 ? "Açık" : (model.LocationModel.Status == 2 ? "Kapalı" : ""))) : "");
+                model.StatusClass = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "warning" : (model.LocationModel.Status == 1 ? "success" : (model.LocationModel.Status == 2 ? "danger" : "danger"))) : "danger");
+                model.StatusIcon = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "clock" : (model.LocationModel.Status == 1 ? "sun" : (model.LocationModel.Status == 2 ? "moon" : "moon"))) : "moon");
+                #endregion
+                #region ScheduleLocation
+                model.WeekCode = model.LocationModel.WeekKey.Trim();
+                model.LocationScheduleList = Db.VLocationSchedule.Where(x => x.WeekCode.Trim() == model.WeekCode && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID).ToList();
+                #endregion
+                #region ShiftLocation
+                model.WeekList = Db.DateList.Where(x => x.WeekKey == model.LocationModel.WeekKey).ToList();
+                model.LocationShiftList = Db.VLocationShift.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID && x.WeekKey == model.LocationModel.WeekKey).ToList();
+                #endregion
             }
             else
             {
@@ -149,6 +170,21 @@ namespace ActionForce.Office.Controllers
                 model.PriceCategoryList = Db.PriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
                 model.MallList = Db.Mall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
                 model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 2).ToList(); // TODO: AccountTypeID == 2 olmasının sebebi POS işlemlerinden dolayı
+                #region Schedule
+                model.ScheduleStart = model.LocationModel.ScheduleStart?.ToShortTimeString();
+                model.ScheduleFinish = model.LocationModel.ScheduleEnd?.ToShortTimeString();
+                model.ScheduleTime = model.LocationModel.ScheduleDuration?.ToString("hh\\:mm");
+                #endregion
+                #region Shift
+                model.ShiftStart = model.LocationModel.ShiftStart?.ToString("hh\\:mm");
+                model.ShiftFinish = model.LocationModel.ShiftFinish?.ToString("hh\\:mm");
+                model.ShiftTime = model.LocationModel.Duration;
+                #endregion
+                #region Status
+                model.StatusName = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "Beklemede" : (model.LocationModel.Status == 1 ? "Açık" : (model.LocationModel.Status == 2 ? "Kapalı" : ""))) : "");
+                model.StatusClass = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "warning" : (model.LocationModel.Status == 1 ? "success" : (model.LocationModel.Status == 2 ? "danger" : "danger"))) : "danger");
+                model.StatusIcon = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "clock" : (model.LocationModel.Status == 1 ? "sun" : (model.LocationModel.Status == 2 ? "moon" : "moon"))) : "moon"); 
+                #endregion
             }
             else
             {
@@ -246,7 +282,7 @@ namespace ActionForce.Office.Controllers
                         State = isLocation.State,
                         Timezone = isLocation.Timezone,
                         Weight = isLocation.Weight
-                    }; 
+                    };
                     #endregion
                     #region UpdateModel
                     isLocation.Currency = location.Currency;
@@ -283,7 +319,7 @@ namespace ActionForce.Office.Controllers
                     #endregion
                     #region AddLog
                     var isequal = OfficeHelper.PublicInstancePropertiesEqual<Location>(self, isLocation, OfficeHelper.getIgnorelist());
-                    OfficeHelper.AddApplicationLog("Office", "Location", "Update", isLocation.LocationID.ToString(), "Location", "EditLocation", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(isLocation?.Timezone ?? 0), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null); 
+                    OfficeHelper.AddApplicationLog("Office", "Location", "Update", isLocation.LocationID.ToString(), "Location", "EditLocation", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(isLocation?.Timezone ?? 0), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     #endregion
                 }
                 catch (Exception ex)

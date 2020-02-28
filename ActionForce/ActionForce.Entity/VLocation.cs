@@ -74,5 +74,6 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<System.TimeSpan> ScheduleDuration { get; set; }
+        public string WeekKey { get; set; }
     }
 }
