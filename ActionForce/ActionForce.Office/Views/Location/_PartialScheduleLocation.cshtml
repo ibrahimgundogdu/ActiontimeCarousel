@@ -15,13 +15,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var location in Model.LocationScheduleList.ToList())
+                    @foreach (var weekDay in Model.WeekList.OrderBy(x => x.DateKey))
                     {
+                        var location = Model.LocationScheduleList.FirstOrDefault(x => x.ShiftDate == weekDay.DateKey);
+
                         <tr class="font-weight-bold">
-                            <td>@(location.ShiftDateStart?.ToLongDateString())</td>
-                            <td>@location.ShiftDateStart</td>
-                            <td>@location.ShiftdateEnd</td>
-                            <td>@location.ShiftDuration</td>
+                            <td>@(weekDay?.DateKey.ToLongDateString())</td>
+                            <td>@(location?.ShiftDateStart)</td>
+                            <td>@(location?.ShiftdateEnd)</td>
+                            <td>@(location?.ShiftDuration)</td>
                         </tr>
                     }
                 </tbody>

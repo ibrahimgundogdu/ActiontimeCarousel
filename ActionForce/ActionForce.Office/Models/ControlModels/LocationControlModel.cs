@@ -44,6 +44,7 @@ namespace ActionForce.Office
         public string WeekCode { get; set; }
         #endregion
         #region ShiftLocation
+        public List<DateList> WeekList { get; set; }
         public List<VLocationShift> LocationShiftList { get; set; }
         #endregion
     }
