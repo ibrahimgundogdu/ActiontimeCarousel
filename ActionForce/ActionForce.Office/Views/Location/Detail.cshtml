@@ -47,66 +47,19 @@
                 </div><!-- card -->
                 <div class="card mg-b-20 mg-lg-b-25">
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Schedule (Takvim) @*Bulunduğu haftadaki*@</h6>
-                        <nav class="nav nav-with-icon tx-13">
-                            <a href="" class="nav-link"><i data-feather="plus"></i> Add New</a>
-                        </nav>
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Schedule (Takvim)</h6>
                     </div><!-- card-header -->
                     <div class="card-body pd-25">
-                        <div class="media d-block d-sm-flex">
-                            <div class="wd-80 ht-80 bg-ui-04 rounded d-flex align-items-center justify-content-center">
-                                <i data-feather="briefcase" class="tx-white-7 wd-40 ht-40"></i>
-                            </div>
-                            <div class="media-body pd-t-25 pd-sm-t-0 pd-sm-l-25">
-                                <h5 class="mg-b-5">Area Sales Manager</h5>
-                                <p class="mg-b-3 tx-color-02"><span class="tx-medium tx-color-01">ThemePixels, Inc.</span>, Bay Area, San Francisco, CA</p>
-                                <span class="d-block tx-13 tx-color-03">December 2016 - Present</span>
-                                <ul class="pd-l-10 mg-0 mg-t-20 tx-13">
-                                    <li>Reaching the targets and goals set for my area.</li>
-                                    <li>Servicing the needs of my existing customers.</li>
-                                    <li>Maintaining the relationships with existing customers for repeat business.</li>
-                                    <li>Reporting to top managers.</li>
-                                    <li>Keeping up to date with the products.</li>
-                                </ul>
-                            </div>
-                        </div><!-- media -->
+                        @{Html.RenderPartial("_PartialScheduleLocation", Model);}
                     </div>
-                    <div class="card-footer bg-transparent pd-y-15 pd-x-20">
-                        <nav class="nav nav-with-icon tx-13">
-                            <a href="" class="nav-link">
-                                Show More Experiences (4)
-                                <i data-feather="chevron-down" class="mg-l-2 mg-r-0 mg-t-2"></i>
-                            </a>
-                        </nav>
-                    </div><!-- card-footer -->
                 </div><!-- card -->
                 <div class="card mg-b-20 mg-lg-b-25">
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                         <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Shift (Mesai)</h6>
-                        <nav class="nav nav-with-icon tx-13">
-                            <a href="" class="nav-link"><i data-feather="plus"></i> Add New</a>
-                        </nav>
                     </div><!-- card-header -->
                     <div class="card-body pd-25">
-                        <div class="media">
-                            <div class="wd-80 ht-80 bg-ui-04 rounded d-flex align-items-center justify-content-center">
-                                <i data-feather="book-open" class="tx-white-7 wd-40 ht-40"></i>
-                            </div>
-                            <div class="media-body pd-l-25">
-                                <h5 class="mg-b-5">BS in Computer Science</h5>
-                                <p class="mg-b-3"><span class="tx-medium tx-color-02">Holy Name University</span>,  Tagbilaran City, Bohol</p>
-                                <span class="d-block tx-13 tx-color-03">2002-2006</span>
-                            </div>
-                        </div><!-- media -->
+                        @{Html.RenderPartial("_PartialShiftLocation", Model);}
                     </div>
-                    <div class="card-footer bg-transparent pd-y-15 pd-x-20">
-                        <nav class="nav nav-with-icon tx-13">
-                            <a href="" class="nav-link">
-                                Show More Education (2)
-                                <i data-feather="chevron-down" class="mg-l-2 mg-r-0 mg-t-2"></i>
-                            </a>
-                        </nav>
-                    </div><!-- card-footer -->
                 </div><!-- card -->
             </div><!-- media-body -->
             <div class="profile-sidebar profile-sidebar-two mg-t-40 mg-lg-t-0 pd-lg-l-15">

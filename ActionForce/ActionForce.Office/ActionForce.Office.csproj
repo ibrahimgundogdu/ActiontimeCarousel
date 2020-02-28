@@ -2693,6 +2693,8 @@
     <Content Include="Views\Sale\_PartialEditTicketProduct.cshtml" />
     <Content Include="Views\Location\_PartialLocationInformation.cshtml" />
     <Content Include="Views\Location\_PartialLocationSideBar.cshtml" />
+    <Content Include="Views\Location\_PartialScheduleLocation.cshtml" />
+    <Content Include="Views\Location\_PartialShiftLocation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

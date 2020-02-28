@@ -1,0 +1,39 @@
+﻿@model LocationControlModel
+
+
+<div class="card mg-b-20 mg-lg-b-25">
+    <div class="card-body pd-0">
+        <div class="table-responsive">
+            <table class="table table-warning table-hover table-striped mg-b-0">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width:25%;">Mesai Tarihi</th>
+                        <th scope="col" style="width:25%;">Başlangıç Tarihi</th>
+                        <th scope="col" style="width:25%;">Bitiş Tarihi</th>
+                        <th scope="col" style="width:25%;">Süre</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var shift in Model.LocationShiftList.OrderByDescending(x => x.ShiftDateStart))
+                    {
+                        <tr class="font-weight-bold">
+                            <td>@(shift.ShiftDateStart?.ToLongDateString())</td>
+                            <td>@shift.ShiftDateStart</td>
+                            <td>@shift.ShiftDateFinish</td>
+                            <td>@shift.Duration</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+

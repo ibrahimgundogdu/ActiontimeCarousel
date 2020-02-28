@@ -1,0 +1,31 @@
+﻿@model LocationControlModel
+<div class="card mg-b-20 mg-lg-b-25">
+    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.WeekCode). Hafta</h6>
+    </div>
+    <div class="card-body pd-0">
+        <div class="table-responsive">
+            <table class="table table-primary table-hover table-striped mg-b-0">
+                <thead>
+                    <tr>
+                        <th scope="col" style="width:25%;">Mesai Tarihi</th>
+                        <th scope="col" style="width:25%;">Başlangıç Tarihi</th>
+                        <th scope="col" style="width:25%;">Bitiş Tarihi</th>
+                        <th scope="col" style="width:25%;">Süre</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var location in Model.LocationScheduleList.ToList())
+                    {
+                        <tr class="font-weight-bold">
+                            <td>@(location.ShiftDateStart?.ToLongDateString())</td>
+                            <td>@location.ShiftDateStart</td>
+                            <td>@location.ShiftdateEnd</td>
+                            <td>@location.ShiftDuration</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

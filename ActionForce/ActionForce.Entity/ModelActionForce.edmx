@@ -5150,6 +5150,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationShift' does not ha
           <Property Name="CloseEnvironmentID" Type="int" />
           <Property Name="OurCompanyID" Type="int" Nullable="false" />
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+          <Property Name="WeekKey" Type="nvarchar" MaxLength="9" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPersonalDocument' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -7614,7 +7615,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocationShift].[EnvironmentID] AS [EnvironmentID], 
     [VLocationShift].[CloseEnvironmentID] AS [CloseEnvironmentID], 
     [VLocationShift].[OurCompanyID] AS [OurCompanyID], 
-    [VLocationShift].[LocationFullName] AS [LocationFullName]
+    [VLocationShift].[LocationFullName] AS [LocationFullName], 
+    [VLocationShift].[WeekKey] AS [WeekKey]
     FROM [dbo].[VLocationShift] AS [VLocationShift]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VPersonalDocument" EntityType="Self.VPersonalDocument" store:Type="Views" store:Schema="dbo">
@@ -11576,6 +11578,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CloseEnvironmentID" Type="Int32" />
           <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
           <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="WeekKey" Type="String" MaxLength="9" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="DocumentPosCancel">
           <Key>
@@ -17412,6 +17415,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VLocationShift">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationShift">
               <MappingFragment StoreEntitySet="VLocationShift">
+                <ScalarProperty Name="WeekKey" ColumnName="WeekKey" />
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="CloseEnvironmentID" ColumnName="CloseEnvironmentID" />

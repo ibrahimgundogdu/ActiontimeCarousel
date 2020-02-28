@@ -39,5 +39,6 @@ namespace ActionForce.Entity
         public Nullable<int> CloseEnvironmentID { get; set; }
         public int OurCompanyID { get; set; }
         public string LocationFullName { get; set; }
+        public string WeekKey { get; set; }
     }
 }
