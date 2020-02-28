@@ -9,6 +9,7 @@
     @using (Ajax.BeginForm("AddPriceCategory", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "PriceCategoryList", InsertionMode = InsertionMode.Replace, OnSuccess = "OnCategoryAddSuccess" }))
     {
         @Html.AntiForgeryToken()
+
         <div class="form-group row">
             <label for="OurCompanyID" class="col-sm-3 col-form-label">Our Company</label>
             <div class="col-sm-9">
@@ -18,10 +19,21 @@
                         <option value="@item.CompanyID" @(Model.Authentication.ActionEmployee.OurCompanyID == item.CompanyID ? "selected" : "")>@($"{item.Code} {item.CompanyName}")</option>
                     }
                 </select>
-            </div>
-
-
+            </div>  
         </div>
+
+        <div class="form-group row bg-gray-50 mg-b-5">
+            <label for="TicketTypeID" class="col-sm-3 col-form-label">Bilet Türü</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="TicketTypeID" name="TicketTypeID" required>
+                    @foreach (var item in Model.TicketTypeList)
+                    {
+                        <option value="@item.ID">@($"{item.TicketTypeName}")</option>
+                    }
+                </select>
+            </div>
+        </div>
+
         <div class="form-group row bg-gray-50 mg-b-5">
             <label for="CategoryCode" class="col-sm-3 col-form-label">Kategori Kodu</label>
             <div class="col-sm-9">
@@ -63,16 +75,12 @@
             </div>
         </div>
 
-
-
-
         <div class="form-group row mg-b-0">
             <div class="col-sm-3"></div>
             <div class="col-sm-9">
                 <button type="submit" class="btn btn-primary btn-block">Fiyat Kategorisi Ekle</button>
             </div>
         </div>
-
     }
 
 

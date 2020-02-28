@@ -45,6 +45,7 @@ namespace ActionForce.Office.Controllers
             SaleControlModel model = new SaleControlModel();
 
             model.OurCompanyList = Db.OurCompany.ToList();
+            model.TicketTypeList = Db.TicketType.Where(x => x.IsActive == true).ToList();
 
             return PartialView("_PartialAddPriceCategory", model);
         }
@@ -72,7 +73,8 @@ namespace ActionForce.Office.Controllers
                 cat.RecordDate = DateTime.Now;
                 cat.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                 cat.RecordIP = OfficeHelper.GetIPAddress();
-                cat.SortBy = pricecategory.SortBy;
+                cat.SortBy = pricecategory.SortBy.Trim();
+                cat.TicketTypeID = pricecategory.TicketTypeID;
 
                 Db.PriceCategory.Add(cat);
                 Db.SaveChanges();
@@ -98,6 +100,8 @@ namespace ActionForce.Office.Controllers
 
             model.PriceCategory = Db.VPriceCategory.FirstOrDefault(x => x.ID == id);
             model.OurCompanyList = Db.OurCompany.ToList();
+            model.TicketTypeList = Db.TicketType.Where(x => x.IsActive == true).ToList();
+
 
             return PartialView("_PartialEditPriceCategory", model);
         }
@@ -135,7 +139,8 @@ namespace ActionForce.Office.Controllers
                         SortBy = cat.SortBy,
                         UpdateDate = cat.UpdateDate,
                         UpdateEmployeeID = cat.UpdateEmployeeID,
-                        UpdateIP = cat.UpdateIP
+                        UpdateIP = cat.UpdateIP,
+                        TicketTypeID = cat.TicketTypeID
                     };
 
 
@@ -147,7 +152,9 @@ namespace ActionForce.Office.Controllers
                     cat.UpdateDate = DateTime.Now;
                     cat.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                     cat.UpdateIP = OfficeHelper.GetIPAddress();
-                    cat.SortBy = pricecategory.SortBy;
+                    cat.SortBy = pricecategory.SortBy.Trim();
+                    cat.TicketTypeID = pricecategory.TicketTypeID;
+
 
                     Db.SaveChanges();
 
