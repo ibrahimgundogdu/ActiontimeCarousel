@@ -4868,6 +4868,7 @@ namespace ActionForce.Office
                         emp.PositionID = location.PositionID;
                         emp.IsMaster = location.IsMaster;
                         emp.IsActive = location.IsActive;
+                        emp.RoleID = 1;
 
                         Db.EmployeeLocation.Add(emp);
                         Db.SaveChanges();
@@ -4913,12 +4914,14 @@ namespace ActionForce.Office
                             EmployeeID = isEmployee.EmployeeID,
                             LocationID = isEmployee.LocationID,
                             IsActive = isEmployee.IsActive,
-                            IsMaster = isEmployee.IsMaster
+                            IsMaster = isEmployee.IsMaster,
+                            RoleID = isEmployee.RoleID
                         };
 
                         isEmployee.LocationID = location.LocationID;
                         isEmployee.IsMaster = location.IsMaster;
                         isEmployee.IsActive = location.IsActive;
+                        isEmployee.RoleID = emp.RoleID == null ? 1 : emp.RoleID;
 
                         Db.SaveChanges();
 

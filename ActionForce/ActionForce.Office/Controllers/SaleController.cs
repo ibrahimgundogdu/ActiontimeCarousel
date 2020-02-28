@@ -17,6 +17,8 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+        #region Price
+
         [AllowAnonymous]
         public ActionResult Price()
         {
@@ -24,6 +26,8 @@ namespace ActionForce.Office.Controllers
 
             return View(model);
         }
+
+        #endregion
 
         #region PriceCategory
 

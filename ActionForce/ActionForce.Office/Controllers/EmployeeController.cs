@@ -2094,6 +2094,7 @@ namespace ActionForce.Office.Controllers
                 empdoc.PositionID = location.PositionID;
                 empdoc.IsMaster = isMaster;
                 empdoc.IsActive = isActive;
+               
 
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.AddEmployeeLocation(empdoc, model.Authentication);
