@@ -1,0 +1,216 @@
+﻿@model SaleControlModel
+@{
+    ViewBag.Title = "Bilet Ürünleri";
+}
+
+@section style{
+    <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
+}
+
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">Fiyat Listesi</span>
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div>
+<div class="content-body">
+    <div class="pd-x-0 tx-13">
+        <div class="media d-block d-lg-flex">
+            <div class="media-body mg-t-40 mg-lg-t-0">
+
+
+
+                <div class="card mg-b-20 mg-lg-b-25">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.Price != null ? $"#{Model.Price.ID} - {Model.Price.ProductName} Fiyat Detayı" : "Fiyat Detayı")</h6>
+                        <nav class="nav">
+                            @*<a href="/Sale/AddPrice" data-toggle="modal" class="link-03 mg-l-10"><span class="d-none d-sm-inline">Toplu Fiyat Ekle</span></a>*@
+                        </nav>
+                    </div>
+                    <div class="card-body pd-10" id="PriceDetail">
+                        @using (Ajax.BeginForm("EditPrice", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "PriceList", InsertionMode = InsertionMode.Replace}))
+                        {
+                            <div class="col-lg-12">
+                                <div class="form-group row">
+                                    <label for="CompanyName" class="col-sm-3 col-form-label">Our Company</label>
+                                    <div class="col-sm-6">
+                                        <input id="CompanyName" name="CompanyName" type="text" class="form-control" autocomplete="off" value="@(Model.Price.CompanyName)" readonly>
+                                    </div>
+                                    <div class="col-sm-3"></div>
+                                </div>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="TicketTypeName" class="col-sm-3 col-form-label">Bilet Tipi</label>
+                                    <div class="col-sm-6">
+                                        <input id="TicketTypeName" name="TicketTypeName" type="text" class="form-control" autocomplete="off" value="@(Model.Price.TicketTypeName)" readonly>
+                                    </div>
+                                    <div class="col-sm-3"></div>
+                                </div>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="CategoryName" class="col-sm-3 col-form-label">Fiyat Kategorisi</label>
+                                    <div class="col-sm-6">
+                                        <input id="CategoryName" name="CategoryName" type="text" class="form-control" autocomplete="off" value="@(Model.Price.CategoryName)" readonly>
+                                    </div>
+                                    <div class="col-sm-3"></div>
+                                </div>
+                                <div class="form-group row mg-b-5 bg-gray-50">
+                                    <label for="ProductName" class="col-sm-3 col-form-label">Bilet Ürünü</label>
+                                    <div class="col-sm-6">
+                                        <input id="ProductName" name="ProductName" type="text" class="form-control" autocomplete="off" value="@(Model.Price.ProductCategoryName) - @(Model.Price.ProductName)" readonly>
+                                    </div>
+                                    <div class="col-sm-3"></div>
+                                </div>
+                                <div class="form-group row bg-gray-50">
+                                    <label for="Unit" class="col-sm-3 col-form-label">Bilet Birim Süresi (Dakika)</label>
+                                    <div class="col-sm-6 tx-right">
+                                        <input id="Unit" name="Unit" type="text" class="form-control" autocomplete="off" value="@(Model.Price.Unit)" readonly>
+                                    </div>
+                                    <div class="col-sm-3"></div>
+                                </div>
+                                <div class="form-group row mg-b-5 bg-gray-100">
+                                    <label for="Price" class="col-sm-3 col-form-label">Fiyatı</label>
+                                    <div class="col-sm-6 tx-right">
+                                        <input id="Price" name="Price" type="text" class="form-control money" autocomplete="off" placeholder="Fiyatı" value="@(Model.Price.Price?.ToString("N2"))" required>
+                                    </div>
+                                    <label for="Price" class="col-sm-3 col-form-label">@(Model.Price.Currency)</label>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="DateBegin" class="col-sm-3 col-form-label">Fiyat Başlangıç Tarih Saati</label>
+                                    <div class="col-sm-3">
+                                        <input id="DateBegin" name="DateBegin" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(Model.Price.StartDate?.ToString("yyyy-MM-dd"))" required>
+                                    </div>
+                                    <div class="col-sm-3">
+                                        <input id="DateBeginHour" name="DateBeginHour" type="text" class="form-control hourfull" autocomplete="off" placeholder="Saat" value="@(Model.Price.StartDate?.ToString("HH\\:mm\\:ss"))" required>
+                                    </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group row mg-b-0">
+                                    <label for="UseSale" class="col-sm-3 col-form-label">Satışta Kullanılacak ?</label>
+                                    <div class="col-sm-6">
+                                        <div class="custom-control custom-checkbox form-control bd-0">
+                                            <input type="checkbox" class="custom-control-input" id="UseSale" name="UseSale" value="1" @(Model.Price.UseToSale == true ? "checked" : "")>
+                                            <label class="custom-control-label" for="UseSale"> Kullanılacak</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="Active" class="col-sm-3 col-form-label">Aktif ?</label>
+                                    <div class="col-sm-6">
+                                        <div class="custom-control custom-checkbox form-control bd-0">
+                                            <input type="checkbox" class="custom-control-input" id="Active" name="Active" value="1" @(Model.Price.IsActive == true ? "checked" : "")>
+                                            <label class="custom-control-label" for="Active"> Aktif</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+
+                                <div class="form-group row mg-b-0">
+                                    <div class="col-sm-3"></div>
+                                    <div class="col-sm-6">
+                                        <input id="ID" name="ID" type="hidden" value="@(Model.Price.ID)" />
+                                        <button type="submit" class="btn btn-primary btn-block">Fiyat Güncelle</button>
+                                    </div>
+                                    <div class="col-sm-3">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        }
+                    </div>
+                    <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
+                        <nav class="nav nav-with-icon tx-13">
+                            @*<a href="/Sale/ExportToExcel" class="nav-link"><i data-feather="download"></i> Excel Olarak İndir </a>*@
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="card mg-b-20 mg-lg-b-25">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.Price != null ? $"{Model.Price.ProductName} Ürünü Tüm Fiyatları" : "Ürün Fiyatları")</h6>
+                        <nav class="nav">
+                            <a href="/Sale/AddPrice" data-toggle="modal" class="link-03 mg-l-10"><span class="d-none d-sm-inline">Toplu Fiyat Ekle</span></a>
+                        </nav>
+                    </div>
+                    <div class="card-body pd-0" id="PriceList">
+                        @{Html.RenderPartial("_PartialPriceList", Model);}
+                    </div>
+                    <div class="card-footer bg-transparent pd-y-10 pd-sm-y-15 pd-x-10 pd-sm-x-20">
+                        <nav class="nav nav-with-icon tx-13">
+                            <a href="/Sale/ExportToExcel" class="nav-link"><i data-feather="download"></i> Excel Olarak İndir </a>
+                        </nav>
+                    </div>
+                </div>
+
+                <footer class="content-footer">
+                    <div>
+                        <span>&copy; @DateTime.Now.Year UFE Group LLC </span>
+                    </div>
+                </footer>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts {
+
+    <script>
+        $(function () {
+            'use strict'
+            $("body").addClass("page-profile");
+        });
+
+        $(function () {
+            $('.hourfull').mask('00:00:00');
+            $('.shiftdate').mask('0000-00-00');
+            $('.money').mask("#.##0,00", { reverse: true });
+        });
+
+        @*function RemovePrice(id) {
+
+            var data = new FormData();
+            data.append('id', id);
+
+            $.ajax({
+                url: '@Url.Action("PartialRemoveTicketProduct", "Sale")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#TicketProductList').html(d);
+            });
+        };*@
+
+    </script>
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}

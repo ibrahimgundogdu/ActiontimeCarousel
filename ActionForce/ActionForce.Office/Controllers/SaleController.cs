@@ -1,6 +1,7 @@
 ﻿using ActionForce.Entity;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -125,7 +126,8 @@ namespace ActionForce.Office.Controllers
             }
             else
             {
-                model.Result = new Result() {
+                model.Result = new Result()
+                {
                     IsSuccess = false,
                     Message = "Geçerli bir fiyat seçilmesi gerekir."
                 };
@@ -144,7 +146,66 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult EditPrice(CUPrice frmprice)
+        {
+            SaleControlModel model = new SaleControlModel();
+            model.Result = new Result();
 
+            if (frmprice != null)
+            {
+                var isPrice = Db.Price.FirstOrDefault(x => x.ID == frmprice.ID);
+
+                if (isPrice != null)
+                {
+                    Price self = new Price()
+                    {
+                        Currency = isPrice.Currency,
+                        ExtraMultiple = isPrice.ExtraMultiple,
+                        ID = isPrice.ID,
+                        IsActive = isPrice.IsActive,
+                        OurCompanyID = isPrice.OurCompanyID,
+                        Price1 = isPrice.Price1,
+                        PriceCategoryID = isPrice.PriceCategoryID,
+                        ProductID = isPrice.ProductID,
+                        RecordDate = isPrice.RecordDate,
+                        RecordEmployeeID = isPrice.RecordEmployeeID,
+                        RecordIP = isPrice.RecordIP,
+                        StartDate = isPrice.StartDate,
+                        TicketTypeID = isPrice.TicketTypeID,
+                        Unit = isPrice.Unit,
+                        UpdateDate = isPrice.UpdateDate,
+                        UpdateEmployeeID = isPrice.UpdateEmployeeID,
+                        UpdateIP = isPrice.UpdateIP,
+                        UseToSale = isPrice.UseToSale
+                    };
+
+                    double? price1 = Convert.ToDouble(frmprice.Price.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                    DateTime? date = Convert.ToDateTime(frmprice.DateBegin);
+                    TimeSpan? time = Convert.ToDateTime(frmprice.DateBeginHour).TimeOfDay;
+                    DateTime? startdatetime = date.Value.Add(time.Value);
+
+                    isPrice.IsActive = !string.IsNullOrEmpty(frmprice.Active) && frmprice.Active == "1" ? true : false;
+                    isPrice.UseToSale = !string.IsNullOrEmpty(frmprice.UseSale) && frmprice.UseSale == "1" ? true : false;
+                    isPrice.StartDate = startdatetime;
+                    isPrice.Price1 = price1;
+
+                    Db.SaveChanges();
+
+                    model.Result = new Result() { IsSuccess = true, Message = $"{isPrice.ID} Id'li fiyat başarı ile güncellendi" };
+
+                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<Price>(self, isPrice, OfficeHelper.getIgnorelist());
+                    OfficeHelper.AddApplicationLog("Office", "Price", "Update", isPrice.ID.ToString(), "Sale", "EditPrice", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow, model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+
+                    model.PriceList = Db.VPrice.Where(x => x.ProductID == isPrice.ProductID).ToList();
+
+                }
+            }
+
+            return PartialView("_PartialPriceList", model);
+        }
 
 
 

@@ -19,7 +19,7 @@
         @if (Model.PriceLastList != null)
         {
             <tbody>
-                @foreach (var cat in Model.PriceLastList.OrderBy(x => x.ProductName))
+                @foreach (var cat in Model.PriceLastList.OrderByDescending(x => x.StartDate))
                 {
                     <tr>
                         <td>@(cat.ID)</td>
@@ -41,7 +41,7 @@
         else if (Model.PriceList != null)
         {
             <tbody>
-                @foreach (var cat in Model.PriceList.OrderBy(x => x.ProductName))
+                @foreach (var cat in Model.PriceList.OrderByDescending(x => x.StartDate))
                 {
                     <tr>
                         <td>@(cat.ID)</td>
