@@ -870,6 +870,9 @@
     <Compile Include="VPriceCategory.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VPriceLastList.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VRevenue.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

@@ -12,13 +12,14 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class VPrice
+    public partial class VPriceLastList
     {
         public int ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
         public Nullable<int> PriceCategoryID { get; set; }
         public Nullable<int> TicketTypeID { get; set; }
         public Nullable<int> ProductID { get; set; }
+        public Nullable<int> Unit { get; set; }
         public Nullable<double> Price { get; set; }
         public string Currency { get; set; }
         public Nullable<double> ExtraMultiple { get; set; }
@@ -31,12 +32,11 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public string UpdateIP { get; set; }
-        public string ProductName { get; set; }
-        public Nullable<int> Unit { get; set; }
-        public string ProductCategoryName { get; set; }
         public string TicketTypeName { get; set; }
-        public string CategoryName { get; set; }
-        public Nullable<bool> IsMaster { get; set; }
         public string CompanyName { get; set; }
+        public string CategoryCode { get; set; }
+        public string CategoryName { get; set; }
+        public string ProductCategoryName { get; set; }
+        public string ProductName { get; set; }
     }
 }

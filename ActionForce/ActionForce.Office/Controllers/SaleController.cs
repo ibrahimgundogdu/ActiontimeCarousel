@@ -24,8 +24,129 @@ namespace ActionForce.Office.Controllers
         {
             SaleControlModel model = new SaleControlModel();
 
+
+            model.OurCompanyList = Db.OurCompany.ToList();
+            model.TicketTypeList = Db.TicketType.ToList();
+            model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.TicketProductList = Db.VTicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            if (TempData["PriceFilter"] != null)
+            {
+                model.FilterModel = TempData["PriceFilter"] as PriceFilterModel;
+
+                if (model.FilterModel.ListType == 1)
+                {
+                    model.PriceLastList = Db.VPriceLastList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+                    if (model.FilterModel.PriceCategoryID != null)
+                    {
+                        model.PriceLastList = model.PriceLastList.Where(x => x.PriceCategoryID == model.FilterModel.PriceCategoryID).ToList();
+                    }
+
+                    if (model.FilterModel.TicketTypeID != null)
+                    {
+                        model.PriceLastList = model.PriceLastList.Where(x => x.TicketTypeID == model.FilterModel.TicketTypeID).ToList();
+                    }
+
+                    if (model.FilterModel.ProductID != null)
+                    {
+                        model.PriceLastList = model.PriceLastList.Where(x => x.ProductID == model.FilterModel.ProductID).ToList();
+                    }
+
+                }
+                else if (model.FilterModel.ListType == 2)
+                {
+                    model.PriceList = Db.VPrice.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+                    if (model.FilterModel.PriceCategoryID != null)
+                    {
+                        model.PriceList = model.PriceList.Where(x => x.PriceCategoryID == model.FilterModel.PriceCategoryID).ToList();
+                    }
+
+                    if (model.FilterModel.TicketTypeID != null)
+                    {
+                        model.PriceList = model.PriceList.Where(x => x.TicketTypeID == model.FilterModel.TicketTypeID).ToList();
+                    }
+
+                    if (model.FilterModel.ProductID != null)
+                    {
+                        model.PriceList = model.PriceList.Where(x => x.ProductID == model.FilterModel.ProductID).ToList();
+                    }
+
+                    if (model.FilterModel.IsActive != null)
+                    {
+                        model.PriceList = model.PriceList.Where(x => x.IsActive == model.FilterModel.IsActive).ToList();
+                    }
+
+                }
+            }
+            else
+            {
+                model.PriceLastList = Db.VPriceLastList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            }
+
+            TempData["PriceFilter"] = model.FilterModel;
+
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [AllowAnonymous]
+        public ActionResult PriceFilter(PriceFilterModel filterModel)
+        {
+            filterModel.IsActive = !string.IsNullOrEmpty(filterModel.Active) && filterModel.Active == "1" ? true : false;
+            TempData["PriceFilter"] = filterModel;
+
+            return RedirectToAction("Price");
+        }
+
+        [AllowAnonymous]
+        public ActionResult PriceDetail(int? id)
+        {
+            SaleControlModel model = new SaleControlModel();
+
+            if (id != null)
+            {
+                model.Price = Db.VPrice.FirstOrDefault(x => x.ID == id);
+                if (model.Price != null)
+                {
+
+                    model.PriceList = Db.VPrice.Where(x => x.OurCompanyID == model.Price.OurCompanyID && x.PriceCategoryID == model.Price.PriceCategoryID && x.TicketTypeID == model.Price.TicketTypeID && x.ProductID == model.Price.ProductID).ToList();
+                }
+                else
+                {
+                    model.Result = new Result()
+                    {
+                        IsSuccess = false,
+                        Message = "Geçerli bir fiyat seçilmesi gerekir."
+                    };
+                }
+            }
+            else
+            {
+                model.Result = new Result() {
+                    IsSuccess = false,
+                    Message = "Geçerli bir fiyat seçilmesi gerekir."
+                };
+            }
+
+            model.OurCompanyList = Db.OurCompany.ToList();
+            model.TicketTypeList = Db.TicketType.ToList();
+            model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.TicketProductList = Db.VTicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            if (TempData["PriceFilter"] != null)
+            {
+                model.FilterModel = TempData["PriceFilter"] as PriceFilterModel;
+            }
+
+            return View(model);
+        }
+
+
+
+
 
         #endregion
 
@@ -244,7 +365,7 @@ namespace ActionForce.Office.Controllers
         {
             SaleControlModel model = new SaleControlModel();
 
-            model.TicketProductCategoryList = Db.TicketProductCategory.Where(x=> x.IsActive == true).ToList();
+            model.TicketProductCategoryList = Db.TicketProductCategory.Where(x => x.IsActive == true).ToList();
             model.TicketTypeList = Db.TicketType.Where(x => x.IsActive == true).ToList();
             model.OurCompanyList = Db.OurCompany.ToList();
 

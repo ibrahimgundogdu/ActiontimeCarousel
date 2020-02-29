@@ -2375,6 +2375,7 @@
     <Compile Include="Models\Location\LocationFilterModel.cs" />
     <Compile Include="Models\NewEmployee.cs" />
     <Compile Include="Models\NewPhone.cs" />
+    <Compile Include="Models\Sale\PriceFilterModel.cs" />
     <Compile Include="Models\TotalFood.cs" />
     <Compile Include="Models\WeekModel.cs" />
     <Compile Include="Models\WizardModel.cs" />
@@ -2695,6 +2696,8 @@
     <Content Include="Views\Location\_PartialLocationSideBar.cshtml" />
     <Content Include="Views\Location\_PartialScheduleLocation.cshtml" />
     <Content Include="Views\Location\_PartialShiftLocation.cshtml" />
+    <Content Include="Views\Sale\_PartialPriceList.cshtml" />
+    <Content Include="Views\Sale\_PartialPriceDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

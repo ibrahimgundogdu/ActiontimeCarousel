@@ -1,0 +1,81 @@
+﻿@model SaleControlModel
+<div class="table-responsive">
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Our Company</th>
+                <th>Bilet Türü</th>
+                <th>Fiyat Kategorisi</th>
+                <th>Bilet Ürün Adı</th>
+                <th class="tx-center">Birimi (Dk)</th>
+                <th class="tx-right">Fiyatı</th>
+                <th class="tx-center">Geçerlilik Tarihi</th>
+                <th class="tx-center">Satışta Kullan</th>
+                <th>Aktif</th>
+
+            </tr>
+        </thead>
+        @if (Model.PriceLastList != null)
+        {
+            <tbody>
+                @foreach (var cat in Model.PriceLastList.OrderBy(x => x.ProductName))
+                {
+                    <tr>
+                        <td>@(cat.ID)</td>
+                        <td>@(cat.CompanyName)</td>
+                        <td>@($"{cat.TicketTypeName}")</td>
+                        <td>@($"{cat.CategoryName}")</td>
+                        <td>@(cat.ProductName)</td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.Unit)</td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right">
+                            <a href="/Sale/PriceDetail/@(cat.ID)"><span class="d-none d-sm-inline"> @($"{cat.Price?.ToString("N2")}")</span> @(cat.Currency)</a>
+                        </td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.StartDate?.ToShortDateString())</td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.UseToSale)</td>
+                        <td class="tx-sm-13">@(cat.IsActive)</td>
+                    </tr>
+                }
+            </tbody>
+        }
+        else if (Model.PriceList != null)
+        {
+            <tbody>
+                @foreach (var cat in Model.PriceList.OrderBy(x => x.ProductName))
+                {
+                    <tr>
+                        <td>@(cat.ID)</td>
+                        <td>@(cat.CompanyName)</td>
+                        <td>@($"{cat.TicketTypeName}")</td>
+                        <td>@($"{cat.CategoryName}")</td>
+                        <td>@(cat.ProductName)</td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.Unit)</td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right">
+                            <a href="/Sale/PriceDetail/@(cat.ID)"><span class="d-none d-sm-inline"> @($"{cat.Price?.ToString("N2")}")</span> @(cat.Currency)</a>
+                        </td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.StartDate?.ToShortDateString())</td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.UseToSale)</td>
+                        <td class="tx-sm-13">@(cat.IsActive)</td>
+                    </tr>
+                }
+            </tbody>
+        }
+
+
+    </table>
+</div>
+
+@if (Model.Result != null) //
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
+}
+
