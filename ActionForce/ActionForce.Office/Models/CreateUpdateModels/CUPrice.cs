@@ -19,4 +19,17 @@ namespace ActionForce.Office
         public string Unit { get; set; }
         public int? ID { get; set; }
     }
+
+    public class CUAjPrice
+    {
+        public string _price { get; set; }
+        public string _datebegin { get; set; }
+        public string _datebeginhour { get; set; }
+        public int? _usesale { get; set; }
+        public int? _isactive { get; set; }
+        public int? id { get; set; }
+        public int? _typeid { get; set; }
+        public int? _catid { get; set; }
+    }
+
 }

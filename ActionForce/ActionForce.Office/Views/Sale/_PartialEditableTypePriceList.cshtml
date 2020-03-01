@@ -1,0 +1,69 @@
+﻿@model SaleControlModel
+<div class="table-responsive">
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Bilet Türü</th>
+                <th>Fiyat Kategorisi</th>
+                <th>Bilet Ürün Adı</th>
+                <th class="tx-center">Birimi (Dk)</th>
+                <th class="tx-right">Fiyatı</th>
+                <th></th>
+                <th>Geçerlilik Tarihi</th>
+                <th>Geçerlilik Saati</th>
+                <th class="tx-center">Satışta Kullan</th>
+                <th class="tx-center">Aktif</th>
+                <th>Güncelleme</th>
+                <th></th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cat in Model.PriceList.OrderByDescending(x => x.StartDate))
+            {
+                <tr>
+                    <td>@(cat.ID)</td>
+                    <td><a href="/Sale/PriceTypeDetail/@(cat.TicketTypeID)"><span class="d-none d-sm-inline"> @($"{cat.TicketTypeName}")</span></a> </td>
+                    <td><a href="/Sale/PriceCategoryDetail/@(cat.PriceCategoryID)"><span class="d-none d-sm-inline"> @($"{cat.CategoryName}")</span></a> </td>
+                    <td><a href="/Sale/PriceDetail/@(cat.ID)"><span class="d-none d-sm-inline"> @(cat.ProductName)</span> </a></td>
+                    <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.Unit)</td>
+                    <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right wd-10p">
+                        <input id="Price_@(cat.ID)" name="Price" type="text" class="form-control money tx-right" autocomplete="off" placeholder="Fiyatı" value="@(cat.Price?.ToString("N2"))" required>
+                    </td>
+                    <td>@(cat.Currency)</td>
+                    <td class="tx-sm-13 bg-primary-light font-weight-bold wd-10p">
+                        <input id="DateBegin_@(cat.ID)" name="DateBegin" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(cat.StartDate?.ToString("yyyy-MM-dd"))" required>
+                    </td>
+                    <td class="tx-sm-13 bg-primary-light font-weight-bold wd-10p">
+                        <input id="DateBeginHour_@(cat.ID)" name="DateBeginHour" type="text" class="form-control hourfull" autocomplete="off" placeholder="Saat" value="@(cat.StartDate?.ToString("HH\\:mm\\:ss"))" required>
+                    </td>
+                    <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center">
+                        <input type="checkbox" class="" id="UseSale_@(cat.ID)" name="UseSale" value="1" @(cat.UseToSale == true ? "checked" : "")>
+                    </td>
+                    <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center">
+                        <input type="checkbox" class="" id="IsActive_@(cat.ID)" name="IsActive" value="1" @(cat.IsActive == true ? "checked" : "")>
+                    </td>
+                    <td class="tx-sm-13">@(cat.UpdateDate)</td>
+                    <td class="tx-right"><a href="#" class="btn btn-primary" onclick="PriceTypeEdit(@(cat.ID))"><span class="d-none d-sm-inline">Güncelle</span> </a></td>
+                </tr>
+            }
+        </tbody>
+
+    </table>
+</div>
+<script>
+    $(function () {
+        $('.hourfull').mask('00:00:00');
+        $('.shiftdate').mask('0000-00-00');
+        $('.money').mask("#.##0,00", { reverse: true });
+
+        $('.shiftdate').datepicker({
+            dateFormat: "yy-mm-dd",
+            dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+            monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+            firstDay: 1
+        });
+    });
+</script>
+

@@ -178,25 +178,16 @@
             $('.hourfull').mask('00:00:00');
             $('.shiftdate').mask('0000-00-00');
             $('.money').mask("#.##0,00", { reverse: true });
+
+            $('#DateBegin').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
         });
 
-        @*function RemovePrice(id) {
-
-            var data = new FormData();
-            data.append('id', id);
-
-            $.ajax({
-                url: '@Url.Action("PartialRemoveTicketProduct", "Sale")',
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                data: data
-            }).done(function (d) {
-                $('#TicketProductList').html(d);
-            });
-        };*@
+       
 
     </script>
 

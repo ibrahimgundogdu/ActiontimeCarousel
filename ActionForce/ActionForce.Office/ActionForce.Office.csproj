@@ -2699,6 +2699,10 @@
     <Content Include="Views\Location\_PartialShiftLocation.cshtml" />
     <Content Include="Views\Sale\_PartialPriceList.cshtml" />
     <Content Include="Views\Sale\PriceDetail.cshtml" />
+    <Content Include="Views\Sale\PriceCategoryDetail.cshtml" />
+    <Content Include="Views\Sale\PriceTypeDetail.cshtml" />
+    <Content Include="Views\Sale\_PartialEditablePriceList.cshtml" />
+    <Content Include="Views\Sale\_PartialEditableTypePriceList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

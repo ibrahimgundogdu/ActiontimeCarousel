@@ -146,6 +146,68 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        public ActionResult PriceCategoryDetail(int? id)
+        {
+            SaleControlModel model = new SaleControlModel();
+
+            if (id != null)
+            {
+                model.PriceList = Db.VPrice.Where(x => x.PriceCategoryID == id).ToList();
+            }
+            else
+            {
+                model.Result = new Result()
+                {
+                    IsSuccess = false,
+                    Message = "Geçerli bir kategori seçilmesi gerekir."
+                };
+            }
+
+            model.OurCompanyList = Db.OurCompany.ToList();
+            model.TicketTypeList = Db.TicketType.ToList();
+            model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.TicketProductList = Db.VTicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            if (TempData["PriceFilter"] != null)
+            {
+                model.FilterModel = TempData["PriceFilter"] as PriceFilterModel;
+            }
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult PriceTypeDetail(int? id)
+        {
+            SaleControlModel model = new SaleControlModel();
+
+            if (id != null)
+            {
+                model.PriceList = Db.VPrice.Where(x => x.TicketTypeID == id).ToList();
+            }
+            else
+            {
+                model.Result = new Result()
+                {
+                    IsSuccess = false,
+                    Message = "Geçerli bir bilet türü seçilmesi gerekir."
+                };
+            }
+
+            //model.OurCompanyList = Db.OurCompany.ToList();
+            //model.TicketTypeList = Db.TicketType.ToList();
+            //model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            //model.TicketProductList = Db.VTicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            if (TempData["PriceFilter"] != null)
+            {
+                model.FilterModel = TempData["PriceFilter"] as PriceFilterModel;
+            }
+
+            return View(model);
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public ActionResult EditPrice(CUPrice frmprice)
@@ -190,6 +252,9 @@ namespace ActionForce.Office.Controllers
                     isPrice.UseToSale = !string.IsNullOrEmpty(frmprice.UseSale) && frmprice.UseSale == "1" ? true : false;
                     isPrice.StartDate = startdatetime;
                     isPrice.Price1 = price1;
+                    isPrice.UpdateDate = DateTime.UtcNow;
+                    isPrice.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    isPrice.UpdateIP = OfficeHelper.GetIPAddress();
 
                     Db.SaveChanges();
 
@@ -207,8 +272,133 @@ namespace ActionForce.Office.Controllers
             return PartialView("_PartialPriceList", model);
         }
 
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult CatPriceEdit(CUAjPrice ajPrice) // ajaxtan gelen edit
+        {
+            SaleControlModel model = new SaleControlModel();
+            model.Result = new Result();
+
+            if (ajPrice != null)
+            {
+                var isPrice = Db.Price.FirstOrDefault(x => x.ID == ajPrice.id);
+
+                if (isPrice != null)
+                {
+                    Price self = new Price()
+                    {
+                        Currency = isPrice.Currency,
+                        ExtraMultiple = isPrice.ExtraMultiple,
+                        ID = isPrice.ID,
+                        IsActive = isPrice.IsActive,
+                        OurCompanyID = isPrice.OurCompanyID,
+                        Price1 = isPrice.Price1,
+                        PriceCategoryID = isPrice.PriceCategoryID,
+                        ProductID = isPrice.ProductID,
+                        RecordDate = isPrice.RecordDate,
+                        RecordEmployeeID = isPrice.RecordEmployeeID,
+                        RecordIP = isPrice.RecordIP,
+                        StartDate = isPrice.StartDate,
+                        TicketTypeID = isPrice.TicketTypeID,
+                        Unit = isPrice.Unit,
+                        UpdateDate = isPrice.UpdateDate,
+                        UpdateEmployeeID = isPrice.UpdateEmployeeID,
+                        UpdateIP = isPrice.UpdateIP,
+                        UseToSale = isPrice.UseToSale
+                    };
+
+                    double? price1 = Convert.ToDouble(ajPrice._price.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                    DateTime? date = Convert.ToDateTime(ajPrice._datebegin);
+                    TimeSpan? time = Convert.ToDateTime(ajPrice._datebeginhour).TimeOfDay;
+                    DateTime? startdatetime = date.Value.Add(time.Value);
+
+                    isPrice.IsActive = ajPrice._isactive != null && ajPrice._isactive == 1 ? true : false;
+                    isPrice.UseToSale = ajPrice._usesale != null && ajPrice._usesale == 1 ? true : false;
+                    isPrice.StartDate = startdatetime;
+                    isPrice.Price1 = price1;
+                    isPrice.UpdateDate = DateTime.UtcNow;
+                    isPrice.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    isPrice.UpdateIP = OfficeHelper.GetIPAddress();
+
+                    Db.SaveChanges();
+
+                    model.Result = new Result() { IsSuccess = true, Message = $"{isPrice.ID} Id'li fiyat başarı ile güncellendi" };
+
+                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<Price>(self, isPrice, OfficeHelper.getIgnorelist());
+                    OfficeHelper.AddApplicationLog("Office", "Price", "Update", isPrice.ID.ToString(), "Sale", "PriceEdit", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow, model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
 
+                    model.PriceList = Db.VPrice.Where(x => x.PriceCategoryID == isPrice.PriceCategoryID).ToList();
+
+                }
+            }
+
+            return PartialView("_PartialEditablePriceList", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult TypePriceEdit(CUAjPrice ajPrice) // ajaxtan gelen edit
+        {
+            SaleControlModel model = new SaleControlModel();
+            model.Result = new Result();
+
+            if (ajPrice != null)
+            {
+                var isPrice = Db.Price.FirstOrDefault(x => x.ID == ajPrice.id);
+
+                if (isPrice != null)
+                {
+                    Price self = new Price()
+                    {
+                        Currency = isPrice.Currency,
+                        ExtraMultiple = isPrice.ExtraMultiple,
+                        ID = isPrice.ID,
+                        IsActive = isPrice.IsActive,
+                        OurCompanyID = isPrice.OurCompanyID,
+                        Price1 = isPrice.Price1,
+                        PriceCategoryID = isPrice.PriceCategoryID,
+                        ProductID = isPrice.ProductID,
+                        RecordDate = isPrice.RecordDate,
+                        RecordEmployeeID = isPrice.RecordEmployeeID,
+                        RecordIP = isPrice.RecordIP,
+                        StartDate = isPrice.StartDate,
+                        TicketTypeID = isPrice.TicketTypeID,
+                        Unit = isPrice.Unit,
+                        UpdateDate = isPrice.UpdateDate,
+                        UpdateEmployeeID = isPrice.UpdateEmployeeID,
+                        UpdateIP = isPrice.UpdateIP,
+                        UseToSale = isPrice.UseToSale
+                    };
+
+                    double? price1 = Convert.ToDouble(ajPrice._price.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                    DateTime? date = Convert.ToDateTime(ajPrice._datebegin);
+                    TimeSpan? time = Convert.ToDateTime(ajPrice._datebeginhour).TimeOfDay;
+                    DateTime? startdatetime = date.Value.Add(time.Value);
+
+                    isPrice.IsActive = ajPrice._isactive != null && ajPrice._isactive == 1 ? true : false;
+                    isPrice.UseToSale = ajPrice._usesale != null && ajPrice._usesale == 1 ? true : false;
+                    isPrice.StartDate = startdatetime;
+                    isPrice.Price1 = price1;
+                    isPrice.UpdateDate = DateTime.UtcNow;
+                    isPrice.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    isPrice.UpdateIP = OfficeHelper.GetIPAddress();
+
+                    Db.SaveChanges();
+
+                    model.Result = new Result() { IsSuccess = true, Message = $"{isPrice.ID} Id'li fiyat başarı ile güncellendi" };
+
+                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<Price>(self, isPrice, OfficeHelper.getIgnorelist());
+                    OfficeHelper.AddApplicationLog("Office", "Price", "Update", isPrice.ID.ToString(), "Sale", "PriceEdit", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow, model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+
+                    model.PriceList = Db.VPrice.Where(x => x.TicketTypeID == isPrice.TicketTypeID).ToList();
+
+                }
+            }
+
+            return PartialView("_PartialEditableTypePriceList", model);
+        }
         #endregion
 
         #region PriceCategory
