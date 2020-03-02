@@ -310,23 +310,24 @@ namespace ActionForce.Office.Controllers
                     isLocation.State = location.State;
                     isLocation.Timezone = location.Timezone;
                     #endregion
-                    
+                    #region PriceCategoryCheck
                     if (self.PriceCatID != isLocation.PriceCatID)
                     {
-                        LocationPriceCategory priceCat = new LocationPriceCategory() {
+                        LocationPriceCategory priceCat = new LocationPriceCategory()
+                        {
                             LocationID = isLocation?.LocationID,
                             PriceCategoryID = isLocation?.PriceCatID,
-                            StartDate = isLocation?.LocalDateTime,
+                            StartDate = DateTime.UtcNow.AddHours(isLocation?.Timezone ?? 0),
                             RecordDate = DateTime.UtcNow.AddHours(isLocation?.Timezone ?? 0),
                             RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
                             RecordIP = OfficeHelper.GetIPAddress()
                         };
 
                         Db.LocationPriceCategory.Add(priceCat);
-                    }
+                    } 
+                    #endregion
 
                     Db.SaveChanges();
-
 
                     #region ResultMessage
                     model.Result.IsSuccess = true;
