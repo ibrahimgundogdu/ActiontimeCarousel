@@ -91,6 +91,44 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        public ActionResult AddPrice()
+        {
+            SaleControlModel model = new SaleControlModel();
+
+            model.TicketTypeList = Db.TicketType.ToList();
+            model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.TicketProductList = Db.VTicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.PriceLastList = Db.VPriceLastList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult FillPriceList(int? TicketTypeID, int? CategoryID)
+        {
+            SaleControlModel model = new SaleControlModel();
+
+            model.TicketProductList = Db.VTicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            if (TicketTypeID > 0)
+            {
+                model.TicketProductList = model.TicketProductList.Where(x => x.TicketTypeID == TicketTypeID).ToList();
+            }
+
+            model.PriceLastList = Db.VPriceLastList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            if (CategoryID > 0 && TicketTypeID > 0)
+            {
+                model.PriceLastList = model.PriceLastList.Where(x => x.PriceCategoryID == CategoryID && x.TicketTypeID == TicketTypeID).ToList();
+            }
+            else if (CategoryID > 0 && TicketTypeID == null)
+            {
+                model.PriceLastList = model.PriceLastList.Where(x => x.PriceCategoryID == CategoryID).ToList();
+            }
+
+            return PartialView("_PartialAddPriceList", model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
@@ -399,6 +437,7 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialEditableTypePriceList", model);
         }
+
         #endregion
 
         #region PriceCategory
