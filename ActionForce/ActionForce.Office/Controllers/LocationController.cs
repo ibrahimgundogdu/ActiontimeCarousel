@@ -167,7 +167,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
                 model.OurCompanyList = Db.OurCompany.ToList();
-                model.PriceCategoryList = Db.PriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+                model.PriceCategoryList = Db.PriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.TicketTypeID == model.LocationModel.TicketTypeID).ToList();
                 model.MallList = Db.Mall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
                 model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 2).ToList(); // TODO: AccountTypeID == 2 olmasının sebebi POS işlemlerinden dolayı
                 #region Schedule
@@ -183,7 +183,7 @@ namespace ActionForce.Office.Controllers
                 #region Status
                 model.StatusName = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "Beklemede" : (model.LocationModel.Status == 1 ? "Açık" : (model.LocationModel.Status == 2 ? "Kapalı" : ""))) : "");
                 model.StatusClass = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "warning" : (model.LocationModel.Status == 1 ? "success" : (model.LocationModel.Status == 2 ? "danger" : "danger"))) : "danger");
-                model.StatusIcon = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "clock" : (model.LocationModel.Status == 1 ? "sun" : (model.LocationModel.Status == 2 ? "moon" : "moon"))) : "moon"); 
+                model.StatusIcon = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "clock" : (model.LocationModel.Status == 1 ? "sun" : (model.LocationModel.Status == 2 ? "moon" : "moon"))) : "moon");
                 #endregion
             }
             else
@@ -310,8 +310,20 @@ namespace ActionForce.Office.Controllers
                     isLocation.State = location.State;
                     isLocation.Timezone = location.Timezone;
                     #endregion
+                    
+                    if (self.PriceCatID != isLocation.PriceCatID)
+                    {
+                        LocationPriceCategory priceCat = new LocationPriceCategory() {
+                            LocationID = isLocation.LocationID,
+                            PriceCategoryID = isLocation.PriceCatID,
+                            StartDate = isLocation.LocalDateTime
+                        };
+
+                        Db.LocationPriceCategory.Add(priceCat);
+                    }
 
                     Db.SaveChanges();
+
 
                     #region ResultMessage
                     model.Result.IsSuccess = true;
@@ -334,6 +346,23 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Index", "Location");
         }
 
+        [AllowAnonymous]
+        public ActionResult Add()
+        {
+            LocationControlModel model = new LocationControlModel();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult LocationCheck()
+        {
+
+            LocationControlModel model = new LocationControlModel();
+
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
     }
 
     #region OurCompanyModel
