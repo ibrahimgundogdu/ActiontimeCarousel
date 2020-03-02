@@ -96,35 +96,35 @@ namespace ActionForce.Office.Controllers
         {
             SaleControlModel model = new SaleControlModel();
 
-            model.TicketTypeList = Db.TicketType.ToList();
+            //model.TicketTypeList = Db.TicketType.ToList();
             model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
-            model.TicketProductList = Db.VTicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
-            model.PriceLastList = Db.VPriceLastList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            //model.TicketProductList = Db.VTicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            //model.PriceLastList = Db.VPriceLastList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
             return View(model);
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult FillPriceList(int? TicketTypeID, int? CategoryID)
+        public ActionResult FillPriceList( int? CategoryID)//int? TicketTypeID
         {
             SaleControlModel model = new SaleControlModel();
-
+            model.TicketTypeList = Db.TicketType.ToList();
+            model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.TicketProductList = Db.VTicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
-            if (TicketTypeID > 0)
-            {
-                model.TicketProductList = model.TicketProductList.Where(x => x.TicketTypeID == TicketTypeID).ToList();
-            }
+
+            
 
             model.PriceLastList = Db.VPriceLastList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
-            if (CategoryID > 0 && TicketTypeID > 0)
+            if (CategoryID > 0)
             {
-                model.PriceLastList = model.PriceLastList.Where(x => x.PriceCategoryID == CategoryID && x.TicketTypeID == TicketTypeID).ToList();
+                model.CurrentPriceCategory = model.PriceCategoryList.FirstOrDefault(x => x.ID == CategoryID);
+                model.PriceLastList = model.PriceLastList.Where(x => x.PriceCategoryID == CategoryID && x.TicketTypeID == model.CurrentPriceCategory.TicketTypeID).ToList();
+                model.PriceCategoryList = model.PriceCategoryList.Where(x => x.TicketTypeID == model.CurrentPriceCategory.TicketTypeID && x.ID == CategoryID).ToList();
+                model.TicketProductList = model.TicketProductList.Where(x => x.TicketTypeID == model.CurrentPriceCategory.TicketTypeID).ToList();
+
             }
-            else if (CategoryID > 0 && TicketTypeID == null)
-            {
-                model.PriceLastList = model.PriceLastList.Where(x => x.PriceCategoryID == CategoryID).ToList();
-            }
+
 
             return PartialView("_PartialAddPriceList", model);
         }

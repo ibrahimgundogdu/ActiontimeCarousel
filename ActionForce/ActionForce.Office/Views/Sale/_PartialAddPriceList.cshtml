@@ -17,17 +17,17 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var prod in Model.TicketProductList.OrderByDescending(x => x.ProductName))
-            {
-                foreach (var pricecat in Model.PriceCategoryList.OrderByDescending(x => x.SortBy))
-                {
 
-                    var lastprice = Model.PriceLastList.FirstOrDefault(x => x.ProductID == prod.ID && x.PriceCategoryID == pricecat .ID && x.TicketTypeID == prod.TicketTypeID);
+            @foreach (var pricecat in Model.PriceCategoryList.OrderBy(x => x.SortBy))
+            {
+                foreach (var prod in Model.TicketProductList.OrderBy(x => x.ProductName))
+                {
+                    var lastprice = Model.PriceLastList.FirstOrDefault(x => x.ProductID == prod.ID && x.PriceCategoryID == pricecat.ID && x.TicketTypeID == prod.TicketTypeID);
 
                     <tr>
                         <td>@(prod.ID)</td>
                         <td><a href="/Sale/PriceTypeDetail/@(prod.TicketTypeID)"><span class="d-none d-sm-inline"> @($"{prod.TicketTypeName}")</span></a> </td>
-                        <td><a href="/Sale/PriceCategoryDetail/@(pricecat?.ID)"><span class="d-none d-sm-inline"> @($"{pricecat?.CategoryName}")</span></a> </td>
+                        <td><a href="/Sale/PriceCategoryDetail/@(pricecat?.ID)"><span class="d-none d-sm-inline"> @($"{pricecat?.TicketTypeName} - {pricecat?.CategoryName}")</span></a> </td>
                         <td><a href="/Sale/PriceDetail/@(prod.ID)"><span class="d-none d-sm-inline"> @(prod.ProductName)</span> </a></td>
                         <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(prod.Unit)</td>
                         <td class="tx-right">@(lastprice?.StartDate?.ToString("yyyy-MM-dd")) @(lastprice?.StartDate?.ToString("HH\\:mm\\:ss"))</td>
@@ -38,10 +38,10 @@
                         </td>
                         <td>@(lastprice?.Currency)</td>
                         <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center">
-                            <input type="checkbox" class="" id="UseSale_@(prod.ID)" name="UseSale" value="1" checked>
+                            <input type="checkbox" class="" id="UseSale_@(prod.ID)" name="UseSale" value="1" @(lastprice != null && lastprice.UseToSale == true ? "checked":"")>
                         </td>
                         <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center">
-                            <input type="checkbox" class="" id="IsActive_@(prod.ID)" name="IsActive" value="1" checked>
+                            <input type="checkbox" class="" id="IsActive_@(prod.ID)" name="IsActive" value="1"  @(lastprice != null && lastprice.IsActive == true ? "checked":"")>
                         </td>
                     </tr>
                 }

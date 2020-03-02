@@ -20,5 +20,8 @@ namespace ActionForce.Office
         public List<VTicketProduct> TicketProductList { get; set; }
         public VTicketProduct TicketProduct { get; set; }
         public PriceFilterModel FilterModel { get; set; }
+
+        public VPriceCategory CurrentPriceCategory { get; set; }
+        public TicketType CurrentTicketType { get; set; }
     }
 }
