@@ -314,9 +314,12 @@ namespace ActionForce.Office.Controllers
                     if (self.PriceCatID != isLocation.PriceCatID)
                     {
                         LocationPriceCategory priceCat = new LocationPriceCategory() {
-                            LocationID = isLocation.LocationID,
-                            PriceCategoryID = isLocation.PriceCatID,
-                            StartDate = isLocation.LocalDateTime
+                            LocationID = isLocation?.LocationID,
+                            PriceCategoryID = isLocation?.PriceCatID,
+                            StartDate = isLocation?.LocalDateTime,
+                            RecordDate = DateTime.UtcNow.AddHours(isLocation?.Timezone ?? 0),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = OfficeHelper.GetIPAddress()
                         };
 
                         Db.LocationPriceCategory.Add(priceCat);
