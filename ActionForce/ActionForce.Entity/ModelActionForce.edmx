@@ -2095,7 +2095,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LocationID" Type="int" />
           <Property Name="PriceCategoryID" Type="int" />
-          <Property Name="StartDate" Type="date" />
+          <Property Name="StartDate" Type="datetime" />
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="RecordEmployeeID" Type="int" />
           <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
@@ -13962,7 +13962,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="LocationID" Type="Int32" />
           <Property Name="PriceCategoryID" Type="Int32" />
-          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
           <Property Name="RecordEmployeeID" Type="Int32" />
           <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
