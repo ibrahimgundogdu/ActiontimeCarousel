@@ -61,7 +61,7 @@
                 <label for="state" class="col-sm-3 col-form-label">Şehir</label>
                 <div class="col-sm-6">
                     @*<input id="state" name="State" type="text" class="form-control" autocomplete="off" placeholder="Şehir" value="@(Model.LocationModel.State)">*@
-                    <select class="form-control" id="state" name="State">
+                    <select class="form-control" id="state" name="CityID">
                         @if (Model?.CityList?.Count > 0)
                         {
                             foreach (var item in Model.CityList)
@@ -101,7 +101,7 @@
             <div class="form-group row mg-b-5">
                 <label for="avm" class="col-sm-3 col-form-label">AVM</label>
                 <div class="col-sm-6">
-                    <select class="form-control" id="avm" name="MallID">
+                    <select class="form-control" id="avm" name="MallID" required>
                         @if (Model?.MallList?.Count > 0)
                         {
                             <option value="">Seçiniz</option>

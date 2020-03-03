@@ -29,5 +29,6 @@ namespace ActionForce.Office
         public int PriceCatID { get; set; }
         public int MallID { get; set; }
         public int POSAccountID { get; set; }
+        public int CityID { get; set; }
     }
 }

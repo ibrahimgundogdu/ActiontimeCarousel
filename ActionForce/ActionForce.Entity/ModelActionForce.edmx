@@ -5068,6 +5068,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
           <Property Name="CountryID" Type="int" />
           <Property Name="StateID" Type="int" />
           <Property Name="CityID" Type="int" />
+          <Property Name="CityName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPosTerminal' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -7582,7 +7583,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocation].[WeekKey] AS [WeekKey], 
     [VLocation].[CountryID] AS [CountryID], 
     [VLocation].[StateID] AS [StateID], 
-    [VLocation].[CityID] AS [CityID]
+    [VLocation].[CityID] AS [CityID], 
+    [VLocation].[CityName] AS [CityName]
     FROM [dbo].[VLocation] AS [VLocation]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VLocationPosTerminal" EntityType="Self.VLocationPosTerminal" store:Type="Views" store:Schema="dbo">
@@ -14567,6 +14569,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CountryID" Type="Int32" />
           <Property Name="StateID" Type="Int32" />
           <Property Name="CityID" Type="Int32" />
+          <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -20279,6 +20282,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VLocation">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocation">
               <MappingFragment StoreEntitySet="VLocation">
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
                 <ScalarProperty Name="CityID" ColumnName="CityID" />
                 <ScalarProperty Name="StateID" ColumnName="StateID" />
                 <ScalarProperty Name="CountryID" ColumnName="CountryID" />

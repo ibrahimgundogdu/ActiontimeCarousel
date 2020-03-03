@@ -256,6 +256,7 @@ namespace ActionForce.Office.Controllers
 
             DateTime daterecord = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
             var isLocation = Db.Location.FirstOrDefault(x => x.LocationID == location.LocationID && x.LocationUID == location.LocationUID);
+            var getCity = Db.City.FirstOrDefault(x => x.ID == location.CityID);
 
             if (location != null && isLocation != null)
             {
@@ -294,7 +295,10 @@ namespace ActionForce.Office.Controllers
                         SortBy = isLocation.SortBy,
                         State = isLocation.State,
                         Timezone = isLocation.Timezone,
-                        Weight = isLocation.Weight
+                        Weight = isLocation.Weight,
+                        CityID = isLocation.CityID,
+                        CountryID = isLocation.CountryID,
+                        StateID = isLocation.StateID
                     };
                     #endregion
                     #region UpdateModel
@@ -322,6 +326,11 @@ namespace ActionForce.Office.Controllers
                     isLocation.SortBy = location.SortBy;
                     isLocation.State = location.State;
                     isLocation.Timezone = location.Timezone;
+                    isLocation.CityID = location.CityID;
+                    isLocation.CountryID = getCity?.CountryID;
+                    isLocation.StateID = getCity?.StateID;
+
+
                     #endregion
                     #region PriceCategoryCheck
                     if (self.PriceCatID != isLocation.PriceCatID)
