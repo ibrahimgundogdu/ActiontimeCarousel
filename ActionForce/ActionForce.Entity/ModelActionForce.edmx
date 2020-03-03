@@ -3738,6 +3738,28 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashRecorders' does not ha
           <Property Name="ID" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCity' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VCity">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="CountryID" Type="int" />
+          <Property Name="StateID" Type="int" />
+          <Property Name="Code" Type="nvarchar" MaxLength="20" />
+          <Property Name="CityName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="3" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="StateName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="20" />
+          <Property Name="TimeZone" Type="int" />
+          <Property Name="TimeZoneTo" Type="int" />
+          <Property Name="Culture" Type="nvarchar" MaxLength="10" />
+          <Property Name="OurCompanyID" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDayResult' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VDayResult">
           <Key>
@@ -6375,6 +6397,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VCashRecorders].[ID] AS [ID]
     FROM [dbo].[VCashRecorders] AS [VCashRecorders]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VCity" EntityType="Self.VCity" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VCity].[ID] AS [ID], 
+    [VCity].[CountryID] AS [CountryID], 
+    [VCity].[StateID] AS [StateID], 
+    [VCity].[Code] AS [Code], 
+    [VCity].[CityName] AS [CityName], 
+    [VCity].[SortBy] AS [SortBy], 
+    [VCity].[IsActive] AS [IsActive], 
+    [VCity].[StateName] AS [StateName], 
+    [VCity].[CountryName] AS [CountryName], 
+    [VCity].[CompanyName] AS [CompanyName], 
+    [VCity].[Currency] AS [Currency], 
+    [VCity].[TimeZone] AS [TimeZone], 
+    [VCity].[TimeZoneTo] AS [TimeZoneTo], 
+    [VCity].[Culture] AS [Culture], 
+    [VCity].[OurCompanyID] AS [OurCompanyID]
+    FROM [dbo].[VCity] AS [VCity]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VDayResult" EntityType="Self.VDayResult" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VDayResult].[ID] AS [ID], 
@@ -8603,6 +8644,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VPriceLastList" EntityType="db293_ActionTimeDbModel.VPriceLastList" />
           <EntitySet Name="Location" EntityType="db293_ActionTimeDbModel.Location" />
           <EntitySet Name="VLocation" EntityType="db293_ActionTimeDbModel.VLocation" />
+          <EntitySet Name="VCity" EntityType="db293_ActionTimeDbModel.VCity" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -14571,6 +14613,26 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CityID" Type="Int32" />
           <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="VCity">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="CountryID" Type="Int32" />
+          <Property Name="StateID" Type="Int32" />
+          <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Currency" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TimeZone" Type="Int32" />
+          <Property Name="TimeZoneTo" Type="Int32" />
+          <Property Name="Culture" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -20347,6 +20409,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="LocationTypeID" ColumnName="LocationTypeID" />
                 <ScalarProperty Name="LocationCode" ColumnName="LocationCode" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VCity">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCity">
+              <MappingFragment StoreEntitySet="VCity">
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="Culture" ColumnName="Culture" />
+                <ScalarProperty Name="TimeZoneTo" ColumnName="TimeZoneTo" />
+                <ScalarProperty Name="TimeZone" ColumnName="TimeZone" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

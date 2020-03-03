@@ -750,6 +750,9 @@
     <Compile Include="VCashRecorders.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VCity.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VDayResult.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

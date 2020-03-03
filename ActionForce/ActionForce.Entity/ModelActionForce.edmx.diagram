@@ -288,6 +288,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPriceLastList" Width="1.5" PointX="0.75" PointY="59.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Location" Width="1.5" PointX="58.375" PointY="26.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocation" Width="1.5" PointX="43.375" PointY="58.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCity" Width="1.5" PointX="59.375" PointY="11.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

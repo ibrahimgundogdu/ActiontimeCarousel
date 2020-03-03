@@ -19,7 +19,7 @@
                 <td><span class="@(item.IsActive == true ? "tx-success":"tx-danger")">&#8226;</span></td>
                 <td class="tx-sm-13 bold">@item.SortBy</td>
                 <td class="tx-sm-13"><a href="@("/Location/Detail/" + @item.LocationUID)">@($"{item.LocationName} {item.Description}")</a></td>
-                <td class="tx-sm-13">@item.State</td>
+                <td class="tx-sm-13">@(!String.IsNullOrEmpty(item.State) ? item.State : item.CityName)</td>
                 <td class="tx-sm-13">@item.LocationTypeName</td>
                 <td class="tx-sm-13 text-center">@item.Currency</td>
                 <td class="tx-sm-13 text-center">@item.Timezone</td>

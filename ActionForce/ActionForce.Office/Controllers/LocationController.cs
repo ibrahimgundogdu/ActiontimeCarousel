@@ -170,7 +170,7 @@ namespace ActionForce.Office.Controllers
                 model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.TicketTypeID == model.LocationModel.TicketTypeID).ToList();
                 model.MallList = Db.Mall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
                 model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 2).ToList(); // TODO: AccountTypeID == 2 olmasının sebebi POS işlemlerinden dolayı
-                model.CityList = Db.City.Where(x => x.CountryID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+                model.CityList = Db.VCity.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
                 #region Schedule
                 model.ScheduleStart = model.LocationModel.ScheduleStart?.ToShortTimeString();
                 model.ScheduleFinish = model.LocationModel.ScheduleEnd?.ToShortTimeString();
@@ -204,12 +204,13 @@ namespace ActionForce.Office.Controllers
             List<SelectListItem> priceList = new List<SelectListItem>();
             List<SelectListItem> mallList = new List<SelectListItem>();
             List<SelectListItem> posList = new List<SelectListItem>();
+            List<SelectListItem> cityList = new List<SelectListItem>();
             int start, finish = 0;
 
             ourCompanyId = (ourCompanyId ?? model.Authentication.ActionEmployee.OurCompanyID);
 
             var getOurCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == ourCompanyId);
-            
+
             start = getOurCompany.TimeZone.Value > getOurCompany.TimeZoneTo.Value ? getOurCompany.TimeZone.Value : getOurCompany.TimeZoneTo.Value;
             finish = getOurCompany.TimeZone.Value < getOurCompany.TimeZoneTo.Value ? getOurCompany.TimeZone.Value : getOurCompany.TimeZoneTo.Value;
 
@@ -231,7 +232,8 @@ namespace ActionForce.Office.Controllers
 
             priceList = getPriceList.Select(y => new SelectListItem() { Value = y.ID.ToString(), Text = y.TicketTypeName + " " + y.CategoryName }).ToList();
             mallList = Db.Mall.Where(x => x.OurCompanyID == ourCompanyId).Select(m => new SelectListItem() { Value = m.ID.ToString(), Text = m.FullName }).ToList();
-            posList = Db.VBankAccount.Where(x => x.OurCompanyID == ourCompanyId && x.AccountTypeID == 2).Select(m=> new SelectListItem() { Value = m.ID.ToString(), Text = m.AccountName}).ToList(); // TODO: AccountTypeID == 2 olmasının sebebi POS işlemlerinden dolayı
+            posList = Db.VBankAccount.Where(x => x.OurCompanyID == ourCompanyId && x.AccountTypeID == 2).Select(m => new SelectListItem() { Value = m.ID.ToString(), Text = m.AccountName }).ToList(); // TODO: AccountTypeID == 2 olmasının sebebi POS işlemlerinden dolayı
+            cityList = Db.VCity.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).Select(m => new SelectListItem() { Value = m.ID.ToString(), Text = m.CityName }).ToList();
 
             OurCompanyModel getModel = new OurCompanyModel()
             {
@@ -239,7 +241,8 @@ namespace ActionForce.Office.Controllers
                 SelectList = list,
                 PriceCategoryList = priceList,
                 MallList = mallList,
-                PosList = posList
+                PosList = posList,
+                CityList = cityList
             };
 
             return Json(getModel, JsonRequestBehavior.AllowGet);
@@ -377,7 +380,7 @@ namespace ActionForce.Office.Controllers
         {
             LocationControlModel model = new LocationControlModel();
             model.OurCompanyList = Db.OurCompany.ToList();
-            model.CityList = Db.City.Where(x => x.CountryID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.CityList = Db.VCity.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.MallList = Db.Mall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.LocationTypeList = Db.LocationType.Where(x => x.IsActive == true).ToList();
             model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
@@ -404,6 +407,7 @@ namespace ActionForce.Office.Controllers
         public List<SelectListItem> PriceCategoryList { get; set; }
         public List<SelectListItem> MallList { get; set; }
         public List<SelectListItem> PosList { get; set; }
+        public List<SelectListItem> CityList { get; set; }
         public string Currency { get; set; }
     }
     #endregion
