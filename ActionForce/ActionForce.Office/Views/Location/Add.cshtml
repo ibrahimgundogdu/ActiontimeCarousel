@@ -33,6 +33,24 @@
                                 <div class="row row-xs">
                                     <div class="col-lg-12">
                                         <div class="form-group row mg-b-5">
+                                            <label for="ourCompany" class="col-sm-3 col-form-label">Firma</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="ourCompany" name="OurCompany">
+                                                    @if (Model?.OurCompanyList?.Count > 0)
+                                                    {
+                                                        <option value="">Seçiniz</option>
+
+                                                        foreach (var item in Model.OurCompanyList)
+                                                        {
+                                                            <option value="@(item.CompanyID)" @(item.CompanyID == Model.Authentication.ActionEmployee.OurCompanyID ? "selected" : "")>@(item.CompanyName)</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
                                             <label for="locationCode" class="col-sm-3 col-form-label">Lokasyon Kodu</label>
                                             <div class="col-sm-6">
                                                 <input id="locationCode" name="LocationCode" type="text" class="form-control" autocomplete="off" placeholder="Lokasyon Kodu">
@@ -102,24 +120,6 @@
                                             <label for="iP" class="col-sm-3 col-form-label">IP</label>
                                             <div class="col-sm-6">
                                                 <input id="iP" name="IP" type="text" class="form-control" autocomplete="off" placeholder="IP">
-                                            </div>
-                                            <div class="col-sm-3">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row mg-b-5">
-                                            <label for="ourCompany" class="col-sm-3 col-form-label">Firma</label>
-                                            <div class="col-sm-6">
-                                                <select class="form-control" id="ourCompany" name="OurCompany" disabled>
-                                                    @if (Model?.OurCompanyList?.Count > 0)
-                                                    {
-                                                        <option value="">Seçiniz</option>
-
-                                                        foreach (var item in Model.OurCompanyList)
-                                                        {
-                                                            <option value="@(item.CompanyID)" @(item.CompanyID == Model.Authentication.ActionEmployee.OurCompanyID ? "selected" : "")>@(item.CompanyName)</option>
-                                                        }
-                                                    }
-                                                </select>
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -265,31 +265,59 @@
 @section scripts {
     <script type="text/javascript">
         $(document).ready(function () {
-            $("#locationTypeID").change(function () {
+            $("#ourCompany").change(function () {
+                var companyID = $("#ourCompany").val();
                 var locationTypeID = $("#locationTypeID").val();
+                GetChange(companyID, locationTypeID);
+            });
+            $("#locationTypeID").change(function () {
+                var companyID = $("#ourCompany").val();
+                var locationTypeID = $("#locationTypeID").val();
+                GetChange(companyID, locationTypeID);
+            });
+            function GetChange(ourCompany, locationTypeID) {
+                var companyID = ourCompany;
+                var locationTypeID = locationTypeID;
                 $.ajax
                     ({
-                        url: '/Location/ChangeLocation',
+                        url: '/Location/GetTimezoneList',
                         type: 'POST',
                         datatype: 'application/json',
                         contentType: 'application/json',
                         data: JSON.stringify({
-                            locationTypeId: locationTypeID,
+                            ourCompanyId: companyID,
+                            locationTypeId: locationTypeID
                         }),
-                        success: function (datas) {
-                            console.log("DATA: ", datas);
-                            //TODO: LocationTypeID ye bağlı olarak değişiklik yapıldığı zaman onunla birlikte değişmesi gereken yerler. List<SelectListItem> tipinde olmalıdır.
-                            var getList = datas;
-                            
+                        success: function (data) {
+                            //TODO: OurCompanyID ye bağlı olarak değişiklik yapıldığı zaman onunla birlikte değişmesi gereken yerler. List<SelectListItem> tipinde olmalıdır.
+                            var getList = data;
+
+                            $("#timezone").empty();
+                            $.each(getList.SelectList, function (index, label) {
+                                $("#timezone").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+
                             $("#priceCategory").empty();
                             $.each(getList.PriceCategoryList, function (index, label) {
                                 $("#priceCategory").append($('<option></option>', { "value": label.Value, "text": label.Text }));
                             });
+
+                            $("#avm").empty();
+                            $.each(getList.MallList, function (index, label) {
+                                $("#avm").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+
+                            $("#bankAccount").empty();
+                            $.each(getList.PosList, function (index, label) {
+                                $("#bankAccount").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+
+                            $("#currency").val(getList.Currency);
                         },
                         error: function () {
                         },
                     });
-            });
+            }
         });
     </script>
 }

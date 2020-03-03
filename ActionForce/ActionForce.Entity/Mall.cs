@@ -45,5 +45,6 @@ namespace ActionForce.Entity
         public string UpdateIP { get; set; }
         public int TimeZone { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public Nullable<bool> IsLeasingInHouse { get; set; }
     }
 }

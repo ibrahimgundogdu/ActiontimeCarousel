@@ -20,6 +20,9 @@ namespace ActionForce.Entity
         public string LocationName { get; set; }
         public string LocationNameSearch { get; set; }
         public string Description { get; set; }
+        public Nullable<int> CountryID { get; set; }
+        public Nullable<int> StateID { get; set; }
+        public Nullable<int> CityID { get; set; }
         public string State { get; set; }
         public string Latitude { get; set; }
         public string Longitude { get; set; }

@@ -37,6 +37,17 @@
         $(document).ready(function () {
             $("#ourCompany").change(function () {
                 var companyID = $("#ourCompany").val();
+                var locationTypeID = $("#locationTypeID").val();
+                GetChange(companyID, locationTypeID);
+            });
+            $("#locationTypeID").change(function () {
+                var companyID = $("#ourCompany").val();
+                var locationTypeID = $("#locationTypeID").val();
+                GetChange(companyID, locationTypeID);
+            });
+            function GetChange(ourCompany, locationTypeID) {
+                var companyID = ourCompany;
+                var locationTypeID = locationTypeID;
                 $.ajax
                     ({
                         url: '/Location/GetTimezoneList',
@@ -44,15 +55,16 @@
                         datatype: 'application/json',
                         contentType: 'application/json',
                         data: JSON.stringify({
-                            ourCompanyId: companyID
+                            ourCompanyId: companyID,
+                            locationTypeId: locationTypeID
                         }),
                         success: function (data) {
                             //TODO: OurCompanyID ye bağlı olarak değişiklik yapıldığı zaman onunla birlikte değişmesi gereken yerler. List<SelectListItem> tipinde olmalıdır.
                             var getList = data;
-                             
+
                             $("#timezone").empty();
                             $.each(getList.SelectList, function (index, label) {
-                                $("#timezone").append($('<option></option>', { "value": label.Value, "text":label.Text }));
+                                $("#timezone").append($('<option></option>', { "value": label.Value, "text": label.Text }));
                             });
 
                             $("#priceCategory").empty();
@@ -65,12 +77,17 @@
                                 $("#avm").append($('<option></option>', { "value": label.Value, "text": label.Text }));
                             });
 
+                            $("#bankAccount").empty();
+                            $.each(getList.PosList, function (index, label) {
+                                $("#bankAccount").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+
                             $("#currency").val(getList.Currency);
                         },
                         error: function () {
                         },
                     });
-            });
+            }
         });
     </script>
 }
