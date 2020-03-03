@@ -82,6 +82,12 @@
                                 $("#bankAccount").append($('<option></option>', { "value": label.Value, "text": label.Text }));
                             });
 
+                            $("#state").empty();
+                            $.each(getList.CityList, function (index, label) {
+                                $("#state").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+
+
                             $("#currency").val(getList.Currency);
                         },
                         error: function () {

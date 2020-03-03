@@ -233,7 +233,7 @@ namespace ActionForce.Office.Controllers
             priceList = getPriceList.Select(y => new SelectListItem() { Value = y.ID.ToString(), Text = y.TicketTypeName + " " + y.CategoryName }).ToList();
             mallList = Db.Mall.Where(x => x.OurCompanyID == ourCompanyId).Select(m => new SelectListItem() { Value = m.ID.ToString(), Text = m.FullName }).ToList();
             posList = Db.VBankAccount.Where(x => x.OurCompanyID == ourCompanyId && x.AccountTypeID == 2).Select(m => new SelectListItem() { Value = m.ID.ToString(), Text = m.AccountName }).ToList(); // TODO: AccountTypeID == 2 olmasının sebebi POS işlemlerinden dolayı
-            cityList = Db.VCity.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).Select(m => new SelectListItem() { Value = m.ID.ToString(), Text = m.CityName }).ToList();
+            cityList = Db.VCity.Where(x => x.OurCompanyID == ourCompanyId).Select(m => new SelectListItem() { Value = m.ID.ToString(), Text = m.CityName }).ToList();
 
             OurCompanyModel getModel = new OurCompanyModel()
             {

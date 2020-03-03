@@ -5101,7 +5101,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPosTerminal' does 
           </Key>
           <Property Name="LocationID" Type="int" Nullable="false" />
           <Property Name="OurCompanyID" Type="int" Nullable="false" />
-          <Property Name="LocationFullName" Type="nvarchar" MaxLength="602" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="BrandName" Type="nvarchar" MaxLength="50" />
           <Property Name="ClientID" Type="nvarchar" MaxLength="50" />
           <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
@@ -11985,7 +11985,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </Key>
           <Property Name="LocationID" Type="Int32" Nullable="false" />
           <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
-          <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="BrandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ClientID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
