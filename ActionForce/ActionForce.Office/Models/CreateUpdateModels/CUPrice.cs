@@ -32,4 +32,13 @@ namespace ActionForce.Office
         public int? _catid { get; set; }
     }
 
+    public class CUNewPrice
+    {
+        public string IsSelected { get; set; }
+        public int? productID { get; set; }
+        public int? categoryID { get; set; }
+        public string Price { get; set; }
+        public string UseSale { get; set; }
+        public string IsActive { get; set; }
+    }
 }

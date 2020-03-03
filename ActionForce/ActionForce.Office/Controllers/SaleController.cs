@@ -96,24 +96,19 @@ namespace ActionForce.Office.Controllers
         {
             SaleControlModel model = new SaleControlModel();
 
-            //model.TicketTypeList = Db.TicketType.ToList();
             model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
-            //model.TicketProductList = Db.VTicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
-            //model.PriceLastList = Db.VPriceLastList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
             return View(model);
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult FillPriceList( int? CategoryID)//int? TicketTypeID
+        public ActionResult FillPriceList(int? CategoryID)//int? TicketTypeID
         {
             SaleControlModel model = new SaleControlModel();
             model.TicketTypeList = Db.TicketType.ToList();
             model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.TicketProductList = Db.VTicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
-
-            
 
             model.PriceLastList = Db.VPriceLastList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             if (CategoryID > 0)
@@ -122,11 +117,64 @@ namespace ActionForce.Office.Controllers
                 model.PriceLastList = model.PriceLastList.Where(x => x.PriceCategoryID == CategoryID && x.TicketTypeID == model.CurrentPriceCategory.TicketTypeID).ToList();
                 model.PriceCategoryList = model.PriceCategoryList.Where(x => x.TicketTypeID == model.CurrentPriceCategory.TicketTypeID && x.ID == CategoryID).ToList();
                 model.TicketProductList = model.TicketProductList.Where(x => x.TicketTypeID == model.CurrentPriceCategory.TicketTypeID).ToList();
-
             }
 
-
             return PartialView("_PartialAddPriceList", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddNewPrice(CUNewPrice[] pricelist, int? CategoryID, string DateBegin, string DateBeginHour)
+        {
+            SaleControlModel model = new SaleControlModel();
+            model.Result = new Result();
+
+            //double? price1 = Convert.ToDouble(ajPrice._price.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+            DateTime? date = Convert.ToDateTime(DateBegin);
+            TimeSpan? time = Convert.ToDateTime(DateBeginHour).TimeOfDay;
+            DateTime? startdatetime = date.Value.Add(time.Value);
+
+            foreach (var item in pricelist)
+            {
+                if (!string.IsNullOrEmpty(item.IsSelected) && !string.IsNullOrEmpty(item.Price))
+                {
+
+                    var isSelected = item.IsSelected != null && item.IsSelected == "1" ? true : false;
+                    var isUseSale = item.UseSale != null && item.UseSale == "1" ? true : false;
+                    var isActive = item.IsActive != null && item.IsActive == "1" ? true : false;
+                    double? price = Convert.ToDouble(item.Price.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                    int? productID = item.productID;
+                    var product = Db.TicketProduct.FirstOrDefault(x => x.ID == productID);
+                    int? categoryID = item.categoryID;
+
+                    Price newprice = new Price();
+
+                    newprice.Currency = model.Authentication.ActionEmployee.OurCompany.Currency;
+                    newprice.ExtraMultiple = 1;
+                    newprice.IsActive = isActive;
+                    newprice.OurCompanyID = model.Authentication.ActionEmployee.OurCompany.CompanyID;
+                    newprice.Price1 = price;
+                    newprice.PriceCategoryID = categoryID;
+                    newprice.ProductID = productID;
+                    newprice.TicketTypeID = product.TicketTypeID;
+                    newprice.Unit = product.Unit;
+                    newprice.UseToSale = isUseSale;
+                    newprice.RecordDate = DateTime.UtcNow;
+                    newprice.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    newprice.RecordIP = OfficeHelper.GetIPAddress();
+                    newprice.StartDate = startdatetime;
+
+                    Db.Price.Add(newprice);
+                    Db.SaveChanges();
+
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = $"İlgili kategoriye {product.Unit} Dk. için fiyat eklendi.";
+
+                    OfficeHelper.AddApplicationLog("Office", "Price", "Insert", newprice.ID.ToString(), "Sale", "AddNewPrice", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow, model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newprice);
+                }
+            }
+
+            return RedirectToAction("PriceCategoryDetail", "Sale", new { id = CategoryID });
         }
 
         [HttpPost]
@@ -144,6 +192,11 @@ namespace ActionForce.Office.Controllers
         public ActionResult PriceDetail(int? id)
         {
             SaleControlModel model = new SaleControlModel();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
 
             if (id != null)
             {
@@ -188,6 +241,11 @@ namespace ActionForce.Office.Controllers
         public ActionResult PriceCategoryDetail(int? id)
         {
             SaleControlModel model = new SaleControlModel();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
 
             if (id != null)
             {
@@ -437,6 +495,45 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialEditableTypePriceList", model);
         }
+
+        [AllowAnonymous]
+        public ActionResult DeletePrice(int? id)
+        {
+            SaleControlModel model = new SaleControlModel();
+
+            model.Result = new Result();
+            int? catid = 0;
+
+            if (id != null)
+            {
+                var price = Db.Price.FirstOrDefault(x => x.ID == id);
+                catid = price.PriceCategoryID;
+
+                model.Result.IsSuccess = true;
+                model.Result.Message = $"{price.Unit} Dk. lı {price.PriceCategoryID} kategorisinden silindi.";
+
+                OfficeHelper.AddApplicationLog("Office", "Price", "Delete", price.ID.ToString(), "Sale", "DeletePrice", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow, model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, price);
+
+                Db.Price.Remove(price);
+                Db.SaveChanges();
+
+                TempData["Result"] = model.Result;
+
+                return RedirectToAction("PriceCategoryDetail", "Sale", new { id = catid });
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Geçerli bir fiyat seçilmesi gerekir.";
+
+                TempData["Result"] = model.Result;
+
+                return RedirectToAction("PriceDetail","Sale",new { id });
+            }
+
+            
+        }
+
 
         #endregion
 

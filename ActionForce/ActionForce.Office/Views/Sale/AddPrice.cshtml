@@ -26,7 +26,7 @@
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                         <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Yeni Fiyat Ekleme Sihirbazı</h6>
                         <nav class="nav">
-                            <a href="/Sale/Price" class="link-03 mg-l-10"><span class="d-none d-sm-inline">Fiyat Listesi</span></a>
+                            <a href="/Sale/Price" class="btn btn-primary mg-l-10"><span class="d-none d-sm-inline">Fiyat Listesi</span></a>
                         </nav>
                     </div>
                     <div class="card-body pd-10" id="PriceDetail">
@@ -41,19 +41,6 @@
                                     </div>
                                     <div class="col-sm-3"></div>
                                 </div>
-                                @*<div class="form-group row mg-b-5 bg-gray-50">
-                                    <label for="TicketTypeName" class="col-sm-3 col-form-label">Bilet Tipi</label>
-                                    <div class="col-sm-6">
-                                        <select class="form-control" id="TicketTypeID" name="TicketTypeID" required>
-                                            <option value="">Bilet Türünü Seçiniz</option>
-                                            @foreach (var item in Model.TicketTypeList)
-                                            {
-                                                <option value="@item.ID">@($"{item.TicketTypeName}")</option>
-                                            }
-                                        </select>
-                                    </div>
-                                    <div class="col-sm-3"></div>
-                                </div>*@
                                 <div class="form-group row mg-b-5 bg-gray-50">
                                     <label for="CategoryName" class="col-sm-3 col-form-label">Fiyat Kategorisi</label>
                                     <div class="col-sm-6">
@@ -131,13 +118,9 @@
                 firstDay: 1,
             });
 
-
         });
 
-        //$('#TicketTypeID').on('change', function () {
-
-        //    FillPriceList();
-        //});
+       
 
         $('#CategoryID').on('change', function () {
             FillPriceList();
@@ -145,14 +128,10 @@
 
         function FillPriceList() {
 
-            //var tickettypeid = $('#TicketTypeID').val();
             var pricecategoryid = $('#CategoryID').val();
-           
 
             var data = new FormData();
-            //data.append('TicketTypeID', tickettypeid);
             data.append('CategoryID', pricecategoryid);
-
 
             $.ajax({
                 url: '@Url.Action("FillPriceList", "Sale")',

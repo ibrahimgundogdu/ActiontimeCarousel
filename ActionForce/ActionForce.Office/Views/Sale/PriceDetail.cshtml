@@ -30,7 +30,7 @@
                         </nav>
                     </div>
                     <div class="card-body pd-10" id="PriceDetail">
-                        @using (Ajax.BeginForm("EditPrice", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "PriceList", InsertionMode = InsertionMode.Replace}))
+                        @using (Ajax.BeginForm("EditPrice", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "PriceList", InsertionMode = InsertionMode.Replace }))
                         {
                             <div class="col-lg-12">
                                 <div class="form-group row">
@@ -120,6 +120,7 @@
                                         <button type="submit" class="btn btn-primary btn-block">Fiyat Güncelle</button>
                                     </div>
                                     <div class="col-sm-3">
+                                        <a href="#" class="btn btn-danger" onclick="return confirm('Fiyatı silmek istediğinize emin misiniz?') ? RemovePrice(@(Model.Price.ID)):''"><i data-feather="delete"></i> Fiyatı Sil </a>
                                     </div>
                                 </div>
 
@@ -138,7 +139,7 @@
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                         <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.Price != null ? $"{Model.Price.ProductName} Ürünü Tüm Fiyatları" : "Ürün Fiyatları")</h6>
                         <nav class="nav">
-                            <a href="/Sale/AddPrice" data-toggle="modal" class="link-03 mg-l-10"><span class="d-none d-sm-inline">Toplu Fiyat Ekle</span></a>
+                            <a href="/Sale/AddPrice" data-toggle="modal" class="btn btn-success mg-l-10"><span class="d-none d-sm-inline">Toplu Fiyat Ekle</span></a>
                         </nav>
                     </div>
                     <div class="card-body pd-0" id="PriceList">
@@ -187,7 +188,9 @@
             });
         });
 
-       
+        function RemovePrice(id) {
+            window.location.href = "/Sale/DeletePrice/" + id;
+        };
 
     </script>
 

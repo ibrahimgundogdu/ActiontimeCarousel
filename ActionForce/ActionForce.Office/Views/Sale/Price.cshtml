@@ -86,7 +86,7 @@
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                         <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.PriceLastList != null ? "Güncel Fiyatlar" : "Tüm Fiyatlar")</h6>
                         <nav class="nav">
-                            <a href="/Sale/AddPrice" class="link-03 mg-l-10"><span class="d-none d-sm-inline">Fiyat Ekle</span></a>
+                            <a href="/Sale/AddPrice" class="btn btn-success mg-l-10"><span class="d-none d-sm-inline">Fiyat Ekle</span></a>
                         </nav>
                     </div>
                     <div class="card-body pd-0" id="TicketProductList">
@@ -123,23 +123,7 @@
         });
 
 
-        function RemovePrice(id) {
-
-            var data = new FormData();
-            data.append('id', id);
-
-            $.ajax({
-                url: '@Url.Action("PartialRemoveTicketProduct", "Sale")',
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                data: data
-            }).done(function (d) {
-                $('#TicketProductList').html(d);
-            });
-        };
+        
 
     </script>
 
