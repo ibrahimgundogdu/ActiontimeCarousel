@@ -171,6 +171,7 @@ namespace ActionForce.Office.Controllers
                 model.MallList = Db.Mall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
                 model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 2).ToList(); // TODO: AccountTypeID == 2 olmasının sebebi POS işlemlerinden dolayı
                 model.CityList = Db.VCity.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+                model.LocationPosTerminalList = Db.VLocationPosTerminal.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID).ToList();
                 #region Schedule
                 model.ScheduleStart = model.LocationModel.ScheduleStart?.ToShortTimeString();
                 model.ScheduleFinish = model.LocationModel.ScheduleEnd?.ToShortTimeString();
@@ -227,7 +228,8 @@ namespace ActionForce.Office.Controllers
 
             if (locationTypeId != null && locationTypeId > 0)
             {
-                getPriceList = getPriceList.Where(x => x.TicketTypeID == locationTypeId).ToList();
+                var ticketTypeId = Db.LocationType.FirstOrDefault(x=> x.ID == locationTypeId).TicketTypeID; 
+                getPriceList = getPriceList.Where(x => x.TicketTypeID == ticketTypeId).ToList();
             }
 
             priceList = getPriceList.Select(y => new SelectListItem() { Value = y.ID.ToString(), Text = y.TicketTypeName + " " + y.CategoryName }).ToList();
@@ -315,7 +317,7 @@ namespace ActionForce.Office.Controllers
                     isLocation.LocationName = location.LocationName;
                     isLocation.LocationNameSearch = location.LocationNameSearch;
                     isLocation.LocationTypeID = location.LocationTypeID;
-                    isLocation.Description = Db.LocationType.FirstOrDefault(x => x.ID == location.LocationTypeID).TypeName;
+                    isLocation.Description = location.Description;
                     isLocation.LocationUID = location.LocationUID;
                     isLocation.Longitude = location.Longitude;
                     isLocation.MallID = location.MallID;
@@ -332,6 +334,7 @@ namespace ActionForce.Office.Controllers
                     isLocation.CityID = location.CityID;
                     isLocation.CountryID = getCity?.CountryID;
                     isLocation.StateID = getCity?.StateID;
+                    isLocation.EnforcedWarning = location.EnforcedWarning;
 
 
                     #endregion

@@ -49,7 +49,7 @@
 
                             foreach (var item in Model.LocationTypeList)
                             {
-                                <option value="@(item.TicketTypeID)" @(Model.LocationModel.LocationTypeID == item.ID ? "selected" : "")>@(item.TypeName)</option>
+                                <option value="@(item.ID)" @(Model.LocationModel.LocationTypeID == item.ID ? "selected" : "")>@(item.TypeName)</option>
                             }
                         }
                     </select>
@@ -149,7 +149,7 @@
                 </div>
             </div>
             <div class="form-group row mg-b-5">
-                <label for="bankAccount" class="col-sm-3 col-form-label">POS Listesi</label>
+                <label for="bankAccount" class="col-sm-3 col-form-label">POS Hesabı</label>
                 <div class="col-sm-6">
                     <select class="form-control" id="bankAccount" name="POSAccountID" required="">
                         @if (Model?.BankAccountList?.Count > 0)
@@ -190,9 +190,17 @@
                 </div>
             </div>
             <div class="form-group row mg-b-5">
-                <label for="description" class="col-sm-3 col-form-label">Açıklama</label>
+                <label for="description" class="col-sm-3 col-form-label">Description</label>
                 <div class="col-sm-6">
-                    <textarea id="description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Açıklama" style="height:150px"></textarea>
+                    <input id="description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="No" value="@(Model.LocationModel.Description)">
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <label for="enforcedWarning" class="col-sm-3 col-form-label">Açıklama</label>
+                <div class="col-sm-6">
+                    <textarea id="enforcedWarning" name="EnforcedWarning" type="text" class="form-control" autocomplete="off" placeholder="Açıklama" style="height:150px">@Model.LocationModel.EnforcedWarning</textarea>
                 </div>
                 <div class="col-sm-3">
                 </div>

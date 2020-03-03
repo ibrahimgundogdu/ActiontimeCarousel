@@ -25,6 +25,7 @@ namespace ActionForce.Office
         public string IsActive { get; set; }
         public string TypeName { get; set; }
         public string Currency { get; set; }
+        public string EnforcedWarning { get; set; }
         public Nullable<System.Guid> LocationUID { get; set; }
         public int PriceCatID { get; set; }
         public int MallID { get; set; }
