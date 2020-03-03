@@ -170,6 +170,8 @@ namespace ActionForce.Office.Controllers
                 model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.TicketTypeID == model.LocationModel.TicketTypeID).ToList();
                 model.MallList = Db.Mall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
                 model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 2).ToList(); // TODO: AccountTypeID == 2 olmasının sebebi POS işlemlerinden dolayı
+                model.CityList = Db.VCity.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+                model.LocationPosTerminalList = Db.VLocationPosTerminal.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID).ToList();
                 #region Schedule
                 model.ScheduleStart = model.LocationModel.ScheduleStart?.ToShortTimeString();
                 model.ScheduleFinish = model.LocationModel.ScheduleEnd?.ToShortTimeString();
@@ -196,18 +198,19 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult GetTimezoneList(int? locationTypeId)
+        public ActionResult GetTimezoneList(int? ourCompanyId, int? locationTypeId)
         {
             LocationControlModel model = new LocationControlModel();
-
-
-            var getOurCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
-
             List<SelectListItem> list = new List<SelectListItem>();
             List<SelectListItem> priceList = new List<SelectListItem>();
             List<SelectListItem> mallList = new List<SelectListItem>();
-
+            List<SelectListItem> posList = new List<SelectListItem>();
+            List<SelectListItem> cityList = new List<SelectListItem>();
             int start, finish = 0;
+
+            ourCompanyId = (ourCompanyId ?? model.Authentication.ActionEmployee.OurCompanyID);
+
+            var getOurCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == ourCompanyId);
 
             start = getOurCompany.TimeZone.Value > getOurCompany.TimeZoneTo.Value ? getOurCompany.TimeZone.Value : getOurCompany.TimeZoneTo.Value;
             finish = getOurCompany.TimeZone.Value < getOurCompany.TimeZoneTo.Value ? getOurCompany.TimeZone.Value : getOurCompany.TimeZoneTo.Value;
@@ -221,62 +224,27 @@ namespace ActionForce.Office.Controllers
                 });
             }
 
-            var getPriceList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            var getPriceList = Db.VPriceCategory.Where(x => x.OurCompanyID == ourCompanyId).ToList();
 
             if (locationTypeId != null && locationTypeId > 0)
             {
-                getPriceList = getPriceList.Where(x => x.TicketTypeID == locationTypeId).ToList();
+                var ticketTypeId = Db.LocationType.FirstOrDefault(x=> x.ID == locationTypeId).TicketTypeID; 
+                getPriceList = getPriceList.Where(x => x.TicketTypeID == ticketTypeId).ToList();
             }
 
             priceList = getPriceList.Select(y => new SelectListItem() { Value = y.ID.ToString(), Text = y.TicketTypeName + " " + y.CategoryName }).ToList();
-            mallList = Db.Mall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).Select(m => new SelectListItem() { Value = m.ID.ToString(), Text = m.FullName }).ToList();
+            mallList = Db.Mall.Where(x => x.OurCompanyID == ourCompanyId).Select(m => new SelectListItem() { Value = m.ID.ToString(), Text = m.FullName }).ToList();
+            posList = Db.VBankAccount.Where(x => x.OurCompanyID == ourCompanyId && x.AccountTypeID == 2).Select(m => new SelectListItem() { Value = m.ID.ToString(), Text = m.AccountName }).ToList(); // TODO: AccountTypeID == 2 olmasının sebebi POS işlemlerinden dolayı
+            cityList = Db.VCity.Where(x => x.OurCompanyID == ourCompanyId).Select(m => new SelectListItem() { Value = m.ID.ToString(), Text = m.CityName }).ToList();
 
             OurCompanyModel getModel = new OurCompanyModel()
             {
                 Currency = getOurCompany.Currency,
                 SelectList = list,
                 PriceCategoryList = priceList,
-                MallList = mallList
-            };
-
-            return Json(getModel, JsonRequestBehavior.AllowGet);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult ChangeLocation(int locationTypeId)
-        {
-            LocationControlModel model = new LocationControlModel();
-
-            var getOurCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
-
-            List<SelectListItem> list = new List<SelectListItem>();
-            List<SelectListItem> priceList = new List<SelectListItem>();
-            List<SelectListItem> mallList = new List<SelectListItem>();
-
-            int start, finish = 0;
-
-            start = getOurCompany.TimeZone.Value > getOurCompany.TimeZoneTo.Value ? getOurCompany.TimeZone.Value : getOurCompany.TimeZoneTo.Value;
-            finish = getOurCompany.TimeZone.Value < getOurCompany.TimeZoneTo.Value ? getOurCompany.TimeZone.Value : getOurCompany.TimeZoneTo.Value;
-
-            for (int i = start; i >= finish; i--)
-            {
-                list.Add(new SelectListItem()
-                {
-                    Value = i.ToString(),
-                    Text = i > 0 ? "+" + i : i.ToString()
-                });
-            }
-            
-            priceList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.TicketTypeID == locationTypeId).Select(y => new SelectListItem() { Value = y.ID.ToString(), Text = y.TicketTypeName + " " + y.CategoryName }).ToList();
-            mallList = Db.Mall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).Select(m => new SelectListItem() { Value = m.ID.ToString(), Text = m.FullName }).ToList();
-
-            OurCompanyModel getModel = new OurCompanyModel()
-            {
-                Currency = getOurCompany.Currency,
-                SelectList = list,
-                PriceCategoryList = priceList,
-                MallList = mallList
+                MallList = mallList,
+                PosList = posList,
+                CityList = cityList
             };
 
             return Json(getModel, JsonRequestBehavior.AllowGet);
@@ -293,6 +261,7 @@ namespace ActionForce.Office.Controllers
 
             DateTime daterecord = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
             var isLocation = Db.Location.FirstOrDefault(x => x.LocationID == location.LocationID && x.LocationUID == location.LocationUID);
+            var getCity = Db.City.FirstOrDefault(x => x.ID == location.CityID);
 
             if (location != null && isLocation != null)
             {
@@ -331,7 +300,10 @@ namespace ActionForce.Office.Controllers
                         SortBy = isLocation.SortBy,
                         State = isLocation.State,
                         Timezone = isLocation.Timezone,
-                        Weight = isLocation.Weight
+                        Weight = isLocation.Weight,
+                        CityID = isLocation.CityID,
+                        CountryID = isLocation.CountryID,
+                        StateID = isLocation.StateID
                     };
                     #endregion
                     #region UpdateModel
@@ -345,7 +317,7 @@ namespace ActionForce.Office.Controllers
                     isLocation.LocationName = location.LocationName;
                     isLocation.LocationNameSearch = location.LocationNameSearch;
                     isLocation.LocationTypeID = location.LocationTypeID;
-                    isLocation.Description = Db.LocationType.FirstOrDefault(x => x.ID == location.LocationTypeID).TypeName;
+                    isLocation.Description = location.Description;
                     isLocation.LocationUID = location.LocationUID;
                     isLocation.Longitude = location.Longitude;
                     isLocation.MallID = location.MallID;
@@ -359,6 +331,12 @@ namespace ActionForce.Office.Controllers
                     isLocation.SortBy = location.SortBy;
                     isLocation.State = location.State;
                     isLocation.Timezone = location.Timezone;
+                    isLocation.CityID = location.CityID;
+                    isLocation.CountryID = getCity?.CountryID;
+                    isLocation.StateID = getCity?.StateID;
+                    isLocation.EnforcedWarning = location.EnforcedWarning;
+
+
                     #endregion
                     #region PriceCategoryCheck
                     if (self.PriceCatID != isLocation.PriceCatID)
@@ -405,7 +383,7 @@ namespace ActionForce.Office.Controllers
         {
             LocationControlModel model = new LocationControlModel();
             model.OurCompanyList = Db.OurCompany.ToList();
-            model.CityList = Db.City.Where(x => x.CountryID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.CityList = Db.VCity.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.MallList = Db.Mall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.LocationTypeList = Db.LocationType.Where(x => x.IsActive == true).ToList();
             model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
@@ -431,6 +409,8 @@ namespace ActionForce.Office.Controllers
         public List<SelectListItem> SelectList { get; set; }
         public List<SelectListItem> PriceCategoryList { get; set; }
         public List<SelectListItem> MallList { get; set; }
+        public List<SelectListItem> PosList { get; set; }
+        public List<SelectListItem> CityList { get; set; }
         public string Currency { get; set; }
     }
     #endregion

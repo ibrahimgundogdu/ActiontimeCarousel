@@ -17,10 +17,11 @@ namespace ActionForce.Office
         public List<LocationEmployeeModel> EmployeeLocationList { get; set; }
         public List<OurCompany> OurCompanyList { get; set; }
         public List<VPriceCategory> PriceCategoryList { get; set; }
-        public List<City> CityList { get; set; }
+        public List<VCity> CityList { get; set; }
         public List<Mall> MallList { get; set; }
         public List<VBankAccount> BankAccountList { get; set; }
         public List<LocationType> LocationTypeList { get; set; }
+        public List<VLocationPosTerminal> LocationPosTerminalList { get; set; }
         public Nullable<int> RecordEmployeeID { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
