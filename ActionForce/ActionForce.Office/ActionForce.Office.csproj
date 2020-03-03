@@ -2703,6 +2703,8 @@
     <Content Include="Views\Sale\PriceTypeDetail.cshtml" />
     <Content Include="Views\Sale\_PartialEditablePriceList.cshtml" />
     <Content Include="Views\Sale\_PartialEditableTypePriceList.cshtml" />
+    <Content Include="Views\Sale\AddPrice.cshtml" />
+    <Content Include="Views\Sale\_PartialAddPriceList.cshtml" />
     <Content Include="Views\Location\Add.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

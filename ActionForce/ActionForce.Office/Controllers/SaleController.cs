@@ -91,6 +91,44 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        public ActionResult AddPrice()
+        {
+            SaleControlModel model = new SaleControlModel();
+
+            //model.TicketTypeList = Db.TicketType.ToList();
+            model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            //model.TicketProductList = Db.VTicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            //model.PriceLastList = Db.VPriceLastList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult FillPriceList( int? CategoryID)//int? TicketTypeID
+        {
+            SaleControlModel model = new SaleControlModel();
+            model.TicketTypeList = Db.TicketType.ToList();
+            model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.TicketProductList = Db.VTicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            
+
+            model.PriceLastList = Db.VPriceLastList.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            if (CategoryID > 0)
+            {
+                model.CurrentPriceCategory = model.PriceCategoryList.FirstOrDefault(x => x.ID == CategoryID);
+                model.PriceLastList = model.PriceLastList.Where(x => x.PriceCategoryID == CategoryID && x.TicketTypeID == model.CurrentPriceCategory.TicketTypeID).ToList();
+                model.PriceCategoryList = model.PriceCategoryList.Where(x => x.TicketTypeID == model.CurrentPriceCategory.TicketTypeID && x.ID == CategoryID).ToList();
+                model.TicketProductList = model.TicketProductList.Where(x => x.TicketTypeID == model.CurrentPriceCategory.TicketTypeID).ToList();
+
+            }
+
+
+            return PartialView("_PartialAddPriceList", model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
@@ -399,6 +437,7 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialEditableTypePriceList", model);
         }
+
         #endregion
 
         #region PriceCategory
