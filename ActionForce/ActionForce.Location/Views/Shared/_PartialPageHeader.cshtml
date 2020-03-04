@@ -1,5 +1,4 @@
-﻿@model LayoutControlModel
-<div class="navbar navbar-expand-lg">
+﻿<div class="navbar navbar-expand-lg">
     <a href="/" class="navbar-brand d-lg-none">
         <svg width="32" height="32" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
             <g class="loading-spin" style="transform-origin: 256px 256px">
@@ -9,7 +8,7 @@
         <span class="hidden-folded d-inline l-s-n-1x d-lg-none">UFE</span>
     </a>
     <div class=" navbar-collapse order-2 order-lg-1" id="navbarToggler">
-        @(Html.Raw(Model.PageTitle))
+        <h4>@(Html.Raw(Model.Authentication.CurrentLocation.FullName))</h4>
     </div>
     <ul class="nav navbar-menu order-1 order-lg-2">
         <li class="nav-item d-none d-sm-block">

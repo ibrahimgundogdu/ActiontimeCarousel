@@ -64,9 +64,8 @@ namespace ActionForce.Location.Controllers
         [AllowAnonymous]
         public ActionResult InitSelectedLocation(Guid? id)
         {
-            LocationControlModel model = new LocationControlModel() {
-                Result = new Result()
-            };
+            LocationControlModel model = new LocationControlModel();
+            model.Result = new Result();
 
             if (id != null)
             {

@@ -8,5 +8,6 @@ namespace ActionForce.Location
     public class LocationControlModel : LayoutControlModel
     {
         public IEnumerable<mLocation> Locations { get; set; }
+        public Result Result { get; set; }
     }
 }

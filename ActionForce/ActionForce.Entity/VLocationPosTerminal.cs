@@ -24,5 +24,8 @@ namespace ActionForce.Entity
         public Nullable<int> TerminalID { get; set; }
         public string AccountName { get; set; }
         public Nullable<int> BankAccountID { get; set; }
+        public int ID { get; set; }
+        public Nullable<bool> IsActive { get; set; }
+        public Nullable<bool> IsMaster { get; set; }
     }
 }

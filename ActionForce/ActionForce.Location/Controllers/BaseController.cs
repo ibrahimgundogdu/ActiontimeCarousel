@@ -11,7 +11,7 @@ namespace ActionForce.Location.Controllers
 {
     public class BaseController : Controller
     {
-        public ActionTimeEntities Db { get; set; }
+        public ActionTimeEntities Db { get; set; } = new ActionTimeEntities();
 
 
         public BaseController()

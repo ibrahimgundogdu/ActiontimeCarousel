@@ -55,7 +55,7 @@
                                     <option value="" label="Fiyat Kategorisi Seçiminiz"></option>
                                     @foreach (var item in Model.PriceCategoryList.OrderBy(x=> x.SortBy))
                                     {
-                                        <option value="@item.ID" @(Model.FilterModel?.PriceCategoryID == item.ID ? "selected" : "")>@(Html.Raw($"{item.CategoryName}"))</option>
+                                        <option value="@item.ID" @(Model.FilterModel?.PriceCategoryID == item.ID ? "selected" : "")>@(Html.Raw($"{item.TicketTypeName} - {item.CategoryName}"))</option>
                                     }
                                 </select>
                             </div>

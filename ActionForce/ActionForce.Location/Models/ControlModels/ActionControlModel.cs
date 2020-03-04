@@ -7,6 +7,7 @@ namespace ActionForce.Location
 {
     public class ActionControlModel : LayoutControlModel
     {
+        public Result Result { get; set; }
 
     }
 }

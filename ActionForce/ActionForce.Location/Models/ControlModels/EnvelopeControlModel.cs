@@ -7,5 +7,7 @@ namespace ActionForce.Location
 {
     public class EnvelopeControlModel : LayoutControlModel
     {
+        public Result Result { get; set; }
+
     }
 }

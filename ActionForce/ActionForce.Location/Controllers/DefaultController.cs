@@ -12,8 +12,6 @@ namespace ActionForce.Location.Controllers
         public ActionResult Index()
         {
             DefaultControlModel model = new DefaultControlModel();
-            model.Result = new Result() {IsSuccess = true, Message = $"{DateTime.Now.ToString()} deneme test hede höde deneme <b>ddd</b> deemljlj" };
-            model.PageTitle = $"{DateTime.Now.ToLongDateString()} &nbsp; &nbsp; <span class='font-weight-bold'> POS </span>";
 
             return View(model);
         }

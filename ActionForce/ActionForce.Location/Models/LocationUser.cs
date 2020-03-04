@@ -6,15 +6,6 @@ using System.Web;
 
 namespace ActionForce.Location
 {
-    //public class LocationUser
-    //{
-    //    public virtual LocationEmployee CurrentEmployee { get; set; }
-    //    public virtual LocationInfo CurrentLocation { get; set; }
-    //    public virtual LocationOurCompany CurrentOurCompany { get; set; }
-    //    public virtual LocationRoleGroup CurrentRoleGroup { get; set; }
-
-    //}
-
     public class LocationEmployee
     {
         public int EmployeeID { get; set; }

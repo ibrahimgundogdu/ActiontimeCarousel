@@ -4302,6 +4302,7 @@ namespace ActionForce.Office
                                 actionrowresult.LaborPayed = hakedis;
                                 actionrowresult.LaborPayedPayed = maastotal * -1;
                                 actionrowresult.Expense = expensetotal * -1;
+                                actionrowresult.CashIN = cashtotal - hakedis - (expensetotal * -1);
 
                                 actionrowresult.ZTime = cashrecorder != null ? cashrecorder.SlipDate : null;
                                 actionrowresult.ZNumber = cashrecorder != null ? cashrecorder.SlipNumber : null;
