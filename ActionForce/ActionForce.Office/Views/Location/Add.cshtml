@@ -27,7 +27,7 @@
                 <div id="employeeStatus">
                     <div class="row no-gutters">
                         <div class="col-lg-12">
-                            @using (Html.BeginForm("LocationCheck", "Location", FormMethod.Post))
+                            @using (Html.BeginForm("AddLocation", "Location", FormMethod.Post))
                             {
                                 @Html.AntiForgeryToken()
                                 <div class="row row-xs">
@@ -35,14 +35,14 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="ourCompany" class="col-sm-3 col-form-label">Firma</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="ourCompany" name="OurCompany">
+                                                <select class="form-control" id="ourCompany" name="OurCompany" required>
                                                     @if (Model?.OurCompanyList?.Count > 0)
                                                     {
                                                         <option value="">Seçiniz</option>
 
                                                         foreach (var item in Model.OurCompanyList)
                                                         {
-                                                            <option value="@(item.CompanyID)" @(item.CompanyID == Model.Authentication.ActionEmployee.OurCompanyID ? "selected" : "")>@(item.CompanyName)</option>
+                                                            <option value="@(item.CompanyID)" @(Model.Authentication.ActionEmployee.OurCompanyID == item.CompanyID ? "selected" : "")>@(item.CompanyName)</option>
                                                         }
                                                     }
                                                 </select>
@@ -53,7 +53,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="locationCode" class="col-sm-3 col-form-label">Lokasyon Kodu</label>
                                             <div class="col-sm-6">
-                                                <input id="locationCode" name="LocationCode" type="text" class="form-control" autocomplete="off" placeholder="Lokasyon Kodu">
+                                                <input id="locationCode" name="LocationCode" type="text" class="form-control" autocomplete="off" placeholder="Lokasyon Kodu" value="@(Model?.CheckLocation?.LocationCode)">
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -61,7 +61,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="locationName" class="col-sm-3 col-form-label">Adı</label>
                                             <div class="col-sm-6">
-                                                <input id="locationName" name="LocationName" type="text" class="form-control" autocomplete="off" placeholder="Adı" required>
+                                                <input id="locationName" name="LocationName" type="text" class="form-control" autocomplete="off" placeholder="Adı" value="@(Model?.CheckLocation?.LocationName)">
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -69,14 +69,14 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="locationTypeID" class="col-sm-3 col-form-label">Türü</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="locationTypeID" name="LocationTypeID" required>
+                                                <select class="form-control" id="locationTypeID" name="LocationTypeID" required="">
                                                     @if (Model?.LocationTypeList?.Count > 0)
                                                     {
                                                         <option value="">Seçiniz</option>
 
                                                         foreach (var item in Model.LocationTypeList)
                                                         {
-                                                            <option value="@(item.TicketTypeID)">@(item.TypeName)</option>
+                                                            <option value="@(item.ID)" @(Model?.CheckLocation?.LocationTypeID == item.ID ? "selected" : "")>@(item.TypeName)</option>
                                                         }
                                                     }
                                                 </select>
@@ -87,12 +87,13 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="state" class="col-sm-3 col-form-label">Şehir</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="state" name="State">
+                                                @*<input id="state" name="State" type="text" class="form-control" autocomplete="off" placeholder="Şehir" value="@(Model.LocationModel.State)">*@
+                                                <select class="form-control" id="state" name="CityID">
                                                     @if (Model?.CityList?.Count > 0)
                                                     {
                                                         foreach (var item in Model.CityList)
                                                         {
-                                                            <option value="@(item.ID)">@(item.CityName)</option>
+                                                            <option value="@(item.ID)" @(Model?.CheckLocation?.CityID == item.ID ? "selected" : "")>@(item.CityName)</option>
                                                         }
                                                     }
                                                 </select>
@@ -103,7 +104,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="latitude" class="col-sm-3 col-form-label">Enlem</label>
                                             <div class="col-sm-6">
-                                                <input id="latitude" name="Latitude" type="text" class="form-control" autocomplete="off" placeholder="Enlem">
+                                                <input id="latitude" name="Latitude" type="text" class="form-control" autocomplete="off" placeholder="Enlem" value="@(Model?.CheckLocation?.Latitude)">
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -111,7 +112,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="longitude" class="col-sm-3 col-form-label">Boylam</label>
                                             <div class="col-sm-6">
-                                                <input id="longitude" name="Longitude" type="text" class="form-control" autocomplete="off" placeholder="Boylam">
+                                                <input id="longitude" name="Longitude" type="text" class="form-control" autocomplete="off" placeholder="Boylam" value="@(Model?.CheckLocation?.Longitude)">
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -119,7 +120,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="iP" class="col-sm-3 col-form-label">IP</label>
                                             <div class="col-sm-6">
-                                                <input id="iP" name="IP" type="text" class="form-control" autocomplete="off" placeholder="IP">
+                                                <input id="iP" name="IP" type="text" class="form-control" autocomplete="off" placeholder="IP" value="@(Model?.CheckLocation?.IP)">
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -131,9 +132,10 @@
                                                     @if (Model?.MallList?.Count > 0)
                                                     {
                                                         <option value="">Seçiniz</option>
+
                                                         foreach (var item in Model.MallList)
                                                         {
-                                                            <option value="@(item.ID)">@(item.FullName)</option>
+                                                            <option value="@(item.ID)" @(Model?.CheckLocation?.MallID == item.ID ? "selected" : "")>@(item.FullName)</option>
                                                         }
                                                     }
                                                 </select>
@@ -144,11 +146,12 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="timezone" class="col-sm-3 col-form-label">Time Zone</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="timezone" name="Timezone" required>
+                                                <select class="form-control" id="timezone" name="Timezone" required="">
                                                     <option value="">Seçiniz</option>
+
                                                     @for (int i = 3; i >= -13; i--)
                                                     {
-                                                        <option value="@i" @(Model.Authentication.ActionEmployee.OurCompany.TimeZone == i ? "selected" : "")>@( i > 0 ? "+" + i : i.ToString())</option>
+                                                        <option value="@i" @(Model?.CheckLocation?.Timezone == i ? "selected" : "")>@( i > 0 ? "+" + i : i.ToString())</option>
                                                     }
                                                 </select>
                                             </div>
@@ -158,13 +161,13 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="priceCategory" class="col-sm-3 col-form-label">Fiyat Listesi</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="priceCategory" name="PriceCatID" required>
+                                                <select class="form-control" id="priceCategory" name="PriceCatID" required="">
                                                     @if (Model?.PriceCategoryList?.Count > 0)
                                                     {
                                                         <option value="">Seçiniz</option>
                                                         foreach (var item in Model.PriceCategoryList)
                                                         {
-                                                            <option value="@(item.ID)">@(item.TicketTypeName + "  " + item.CategoryName)</option>
+                                                            <option value="@(item.ID)" @(Model?.CheckLocation?.PriceCatID == item.ID ? "selected" : "")>@(item.TicketTypeName + " " + item.CategoryName)</option>
                                                         }
                                                     }
                                                 </select>
@@ -173,14 +176,15 @@
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
-                                            <label for="bankAccount" class="col-sm-3 col-form-label">POS Listesi</label>
+                                            <label for="bankAccount" class="col-sm-3 col-form-label">POS Hesabı</label>
                                             <div class="col-sm-6">
                                                 <select class="form-control" id="bankAccount" name="POSAccountID" required="">
                                                     @if (Model?.BankAccountList?.Count > 0)
                                                     {
+                                                        <option value="">Seçiniz</option>
                                                         foreach (var item in Model.BankAccountList)
                                                         {
-                                                            <option value="@(item.ID)">@(item.AccountName)</option>
+                                                            <option value="@(item.ID)" @(Model?.CheckLocation?.POSAccountID == item.ID ? "selected" : "")>@(item.AccountName)</option>
                                                         }
                                                     }
                                                 </select>
@@ -199,7 +203,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="sortBy" class="col-sm-3 col-form-label">No</label>
                                             <div class="col-sm-6">
-                                                <input id="sortBy" name="SortBy" type="text" class="form-control" autocomplete="off" placeholder="No" required>
+                                                <input id="sortBy" name="SortBy" type="text" class="form-control" autocomplete="off" placeholder="No" value="@(Model?.CheckLocation?.SortBy)">
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -207,15 +211,23 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="mapUrl" class="col-sm-3 col-form-label">Map URL</label>
                                             <div class="col-sm-6">
-                                                <input id="mapUrl" name="MapURL" type="text" class="form-control" autocomplete="off" placeholder="Map URL">
+                                                <input id="mapUrl" name="MapURL" type="text" class="form-control" autocomplete="off" placeholder="Map URL" value="@(Model?.CheckLocation?.MapURL)">
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
-                                            <label for="description" class="col-sm-3 col-form-label">Açıklama</label>
+                                            <label for="description" class="col-sm-3 col-form-label">Description</label>
                                             <div class="col-sm-6">
-                                                <textarea id="description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Açıklama" style="height:150px"></textarea>
+                                                <input id="description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Description" value="@(Model?.CheckLocation?.Description)">
+                                            </div>
+                                            <div class="col-sm-3">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="enforcedWarning" class="col-sm-3 col-form-label">Açıklama</label>
+                                            <div class="col-sm-6">
+                                                <textarea id="enforcedWarning" name="EnforcedWarning" type="text" class="form-control" autocomplete="off" placeholder="Açıklama" style="height:150px">@(Model?.CheckLocation?.EnforcedWarning)</textarea>
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -224,7 +236,7 @@
                                             <label for="isHaveOperator" class="col-sm-3 col-form-label">Operatör var mı?</label>
                                             <div class="col-sm-6">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="isHaveOperator" name="IsHaveOperator" value="1">
+                                                    <input type="checkbox" class="custom-control-input" id="isHaveOperator" name="IsHaveOperator" value="1" @(Model?.CheckLocation?.IsHaveOperator == "1" ? "checked" : "")>
                                                     <label class="custom-control-label" for="isHaveOperator">Operatör var mı?</label>
                                                 </div>
                                             </div>
@@ -235,7 +247,7 @@
                                             <label for="isActive" class="col-sm-3 col-form-label">Aktif mi?</label>
                                             <div class="col-sm-6">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="isActive" name="IsActive" value="1">
+                                                    <input type="checkbox" class="custom-control-input" id="isActive" name="IsActive" value="1" @(Model?.CheckLocation?.IsActive == "1" ? "checked" : "")>
                                                     <label class="custom-control-label" for="isActive">Aktif</label>
                                                 </div>
                                             </div>
@@ -246,8 +258,6 @@
                                             <div class="col-sm-3">
                                             </div>
                                             <div class="col-sm-6">
-                                                <input id="locationID" name="LocationID" type="hidden" />
-                                                <input id="locationUID" name="LocationUID" type="hidden" />
                                                 <button type="submit" class="btn btn-primary btn-block">Lokasyon Ekle</button>
                                             </div>
                                         </div>
@@ -312,6 +322,12 @@
                                 $("#bankAccount").append($('<option></option>', { "value": label.Value, "text": label.Text }));
                             });
 
+                            $("#state").empty();
+                            $.each(getList.CityList, function (index, label) {
+                                $("#state").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+
+
                             $("#currency").val(getList.Currency);
                         },
                         error: function () {
@@ -320,4 +336,17 @@
             }
         });
     </script>
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
 }

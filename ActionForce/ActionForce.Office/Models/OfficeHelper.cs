@@ -138,6 +138,22 @@ namespace ActionForce.Office
             return currList;
         }
 
+        public static void AddCashes(int locationID)
+        {
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                var currencyList = db.Currency.ToList();
+
+                if (currencyList != null && currencyList.Count >0)
+                {
+                    foreach (var item in currencyList)
+                    {
+                        CreateCash(locationID, item.Code);
+                    }   
+                }
+            }
+        }
+
         public static Cash GetCash(int locationID, string currency)
         {
             Cash cash = new Cash();
@@ -151,22 +167,47 @@ namespace ActionForce.Office
                 }
                 else
                 {
-                    Cash newcash = new Cash();
-
-                    newcash.BlockedAmount = 100;
-                    newcash.CashName = $"Lokasyon Kasası";
-                    newcash.Currency = currency;
-                    newcash.IsActive = true;
-                    newcash.LocationID = locationID;
-                    newcash.SortBy = "01";
-
-                    db.Cash.Add(newcash);
-                    db.SaveChanges();
-
-                    return newcash;
+                    return CreateCash(locationID,currency);
                 }
             }
 
+        }
+
+        public static Cash CreateCash(int locationID, string currency)
+        {
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                var location = db.Location.FirstOrDefault(x => x.LocationID == locationID);
+
+                Cash newcash = new Cash();
+
+                if (currency == "USD")
+                {
+                    newcash.CashName = $"Location Cash";
+                    newcash.BlockedAmount = location.Currency == currency ? 100 : 0;
+                }
+                else if (currency == "TRL")
+                {
+                    newcash.CashName = $"Lokasyon Kasası";
+                    newcash.BlockedAmount = location.Currency == currency ? 280 : 0;
+                }
+                else
+                {
+                    newcash.CashName = $"Location Cash";
+                    newcash.BlockedAmount = 0;
+                }
+
+                newcash.Currency = currency;
+                newcash.IsActive = true;
+                newcash.LocationID = locationID;
+                newcash.SortBy = "01";
+                newcash.IsMaster = location.Currency == currency ? true : false;
+
+                db.Cash.Add(newcash);
+                db.SaveChanges();
+
+                return newcash;
+            }
         }
 
         public static int GetTimeZone(int locationID)
