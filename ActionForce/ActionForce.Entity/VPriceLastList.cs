@@ -38,5 +38,6 @@ namespace ActionForce.Entity
         public string CategoryName { get; set; }
         public string ProductCategoryName { get; set; }
         public string ProductName { get; set; }
+        public string Style { get; set; }
     }
 }

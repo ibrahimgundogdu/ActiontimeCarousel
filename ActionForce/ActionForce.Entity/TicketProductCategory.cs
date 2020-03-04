@@ -18,5 +18,6 @@ namespace ActionForce.Entity
         public string ProductCategoryName { get; set; }
         public string SortBy { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public string Style { get; set; }
     }
 }

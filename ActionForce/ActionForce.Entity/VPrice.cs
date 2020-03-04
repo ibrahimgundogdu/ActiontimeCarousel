@@ -38,5 +38,6 @@ namespace ActionForce.Entity
         public string CategoryName { get; set; }
         public Nullable<bool> IsMaster { get; set; }
         public string CompanyName { get; set; }
+        public string Style { get; set; }
     }
 }

@@ -13,6 +13,8 @@ namespace ActionForce.Location.Controllers
         {
             DefaultControlModel model = new DefaultControlModel();
 
+            model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
+
             return View(model);
         }
     }

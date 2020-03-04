@@ -1070,13 +1070,22 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationAll_Result>("GetLocationAll", ourCompanyIDParameter, locationUIDParameter, locationIDParameter);
         }
     
-        public virtual ObjectResult<GetLocationCurrentPrices_Result> GetLocationCurrentPrices(Nullable<int> locationID)
+        public virtual ObjectResult<VPriceLastList> GetLocationCurrentPrices(Nullable<int> locationID)
         {
             var locationIDParameter = locationID.HasValue ?
                 new ObjectParameter("LocationID", locationID) :
                 new ObjectParameter("LocationID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationCurrentPrices_Result>("GetLocationCurrentPrices", locationIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VPriceLastList>("GetLocationCurrentPrices", locationIDParameter);
+        }
+    
+        public virtual ObjectResult<VPriceLastList> GetLocationCurrentPrices(Nullable<int> locationID, MergeOption mergeOption)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VPriceLastList>("GetLocationCurrentPrices", mergeOption, locationIDParameter);
         }
     }
 }
