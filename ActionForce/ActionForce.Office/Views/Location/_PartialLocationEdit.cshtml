@@ -26,7 +26,7 @@
             <div class="form-group row mg-b-5">
                 <label for="locationCode" class="col-sm-3 col-form-label">Lokasyon Kodu</label>
                 <div class="col-sm-6">
-                    <input id="locationCode" name="LocationCode" type="text" class="form-control" autocomplete="off" placeholder="Lokasyon Kodu" value="@(Model.LocationModel.LocationCode)">
+                    <input id="locationCode" name="LocationCode" type="text" class="form-control" autocomplete="off" placeholder="Lokasyon Kodu" value="@(Model?.CheckLocation?.LocationCode ?? Model.LocationModel.LocationCode)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -34,7 +34,7 @@
             <div class="form-group row mg-b-5">
                 <label for="locationName" class="col-sm-3 col-form-label">Adı</label>
                 <div class="col-sm-6">
-                    <input id="locationName" name="LocationName" type="text" class="form-control" autocomplete="off" placeholder="Adı" value="@(Model.LocationModel.LocationName)">
+                    <input id="locationName" name="LocationName" type="text" class="form-control" autocomplete="off" placeholder="Adı" value="@(Model?.CheckLocation?.LocationName ?? Model.LocationModel.LocationName)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -77,7 +77,7 @@
             <div class="form-group row mg-b-5">
                 <label for="latitude" class="col-sm-3 col-form-label">Enlem</label>
                 <div class="col-sm-6">
-                    <input id="latitude" name="Latitude" type="text" class="form-control" autocomplete="off" placeholder="Enlem" value="@(Model.LocationModel.Latitude)">
+                    <input id="latitude" name="Latitude" type="text" class="form-control" autocomplete="off" placeholder="Enlem" value="@(Model?.CheckLocation?.Latitude ?? Model.LocationModel.Latitude)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -85,7 +85,7 @@
             <div class="form-group row mg-b-5">
                 <label for="longitude" class="col-sm-3 col-form-label">Boylam</label>
                 <div class="col-sm-6">
-                    <input id="longitude" name="Longitude" type="text" class="form-control" autocomplete="off" placeholder="Boylam" value="@(Model.LocationModel.Longitude)">
+                    <input id="longitude" name="Longitude" type="text" class="form-control" autocomplete="off" placeholder="Boylam" value="@(Model?.CheckLocation?.Longitude ?? Model.LocationModel.Longitude)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -93,7 +93,7 @@
             <div class="form-group row mg-b-5">
                 <label for="iP" class="col-sm-3 col-form-label">IP</label>
                 <div class="col-sm-6">
-                    <input id="iP" name="IP" type="text" class="form-control" autocomplete="off" placeholder="IP" value="@(Model.LocationModel.IP)">
+                    <input id="iP" name="IP" type="text" class="form-control" autocomplete="off" placeholder="IP" value="@(Model?.CheckLocation?.IP ?? Model.LocationModel.IP)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -176,7 +176,7 @@
             <div class="form-group row mg-b-5">
                 <label for="sortBy" class="col-sm-3 col-form-label">No</label>
                 <div class="col-sm-6">
-                    <input id="sortBy" name="SortBy" type="text" class="form-control" autocomplete="off" placeholder="No" value="@(Model.LocationModel.SortBy.Trim())">
+                    <input id="sortBy" name="SortBy" type="text" class="form-control" autocomplete="off" placeholder="No" value="@(Model?.CheckLocation?.SortBy.Trim() ?? Model.LocationModel.SortBy.Trim())">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -184,7 +184,7 @@
             <div class="form-group row mg-b-5">
                 <label for="mapUrl" class="col-sm-3 col-form-label">Map URL</label>
                 <div class="col-sm-6">
-                    <input id="mapUrl" name="MapURL" type="text" class="form-control" autocomplete="off" placeholder="Map URL" value="@(Model.LocationModel.MapURL)">
+                    <input id="mapUrl" name="MapURL" type="text" class="form-control" autocomplete="off" placeholder="Map URL" value="@(Model?.CheckLocation?.MapURL ?? Model.LocationModel.MapURL)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -192,7 +192,7 @@
             <div class="form-group row mg-b-5">
                 <label for="description" class="col-sm-3 col-form-label">Description</label>
                 <div class="col-sm-6">
-                    <input id="description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="No" value="@(Model.LocationModel.Description)">
+                    <input id="description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Description" value="@(Model?.CheckLocation?.Description ?? Model.LocationModel.Description)">
                 </div>
                 <div class="col-sm-3">
                 </div>
@@ -200,7 +200,7 @@
             <div class="form-group row mg-b-5">
                 <label for="enforcedWarning" class="col-sm-3 col-form-label">Açıklama</label>
                 <div class="col-sm-6">
-                    <textarea id="enforcedWarning" name="EnforcedWarning" type="text" class="form-control" autocomplete="off" placeholder="Açıklama" style="height:150px">@Model.LocationModel.EnforcedWarning</textarea>
+                    <textarea id="enforcedWarning" name="EnforcedWarning" type="text" class="form-control" autocomplete="off" placeholder="Açıklama" style="height:150px">@(Model?.CheckLocation?.EnforcedWarning ?? Model.LocationModel.EnforcedWarning)</textarea>
                 </div>
                 <div class="col-sm-3">
                 </div>

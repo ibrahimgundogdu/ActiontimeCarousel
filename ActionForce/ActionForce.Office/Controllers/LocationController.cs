@@ -193,6 +193,18 @@ namespace ActionForce.Office.Controllers
                 return RedirectToAction("Index", "Location");
             }
 
+            if (TempData["checkLocation"] != null)
+            {
+                model.CheckLocation = TempData["checkLocation"] as CULocation;
+
+                var ticketTypeId = Db.LocationType.FirstOrDefault(x => x.ID == model.CheckLocation.LocationTypeID).TicketTypeID;
+                model.PriceCategoryList = model.PriceCategoryList.Where(x => x.TicketTypeID == ticketTypeId).ToList();
+            }
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result;
+            }
             return View(model);
         }
 
@@ -228,7 +240,7 @@ namespace ActionForce.Office.Controllers
 
             if (locationTypeId != null && locationTypeId > 0)
             {
-                var ticketTypeId = Db.LocationType.FirstOrDefault(x=> x.ID == locationTypeId).TicketTypeID; 
+                var ticketTypeId = Db.LocationType.FirstOrDefault(x => x.ID == locationTypeId).TicketTypeID;
                 getPriceList = getPriceList.Where(x => x.TicketTypeID == ticketTypeId).ToList();
             }
 
@@ -259,120 +271,159 @@ namespace ActionForce.Office.Controllers
             LocationControlModel model = new LocationControlModel();
             model.Result = new Result();
 
-            DateTime daterecord = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
-            var isLocation = Db.Location.FirstOrDefault(x => x.LocationID == location.LocationID && x.LocationUID == location.LocationUID);
-            var getCity = Db.City.FirstOrDefault(x => x.ID == location.CityID);
-
-            if (location != null && isLocation != null)
+            if (location != null)
             {
-                try
+                DateTime daterecord = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
+                var isLocation = Db.Location.FirstOrDefault(x => x.LocationID == location.LocationID && x.LocationUID == location.LocationUID);
+
+                if (isLocation != null)
                 {
-                    #region SelfModel
-                    Location self = new Location()
-                    {
-                        Currency = isLocation.Currency,
-                        Description = isLocation.Description,
-                        Distance = isLocation.Distance,
-                        EnforcedWarning = isLocation.EnforcedWarning,
-                        ImageFile = isLocation.ImageFile,
-                        IP = isLocation.IP,
-                        IsActive = isLocation.IsActive,
-                        IsHaveOperator = isLocation.IsHaveOperator,
-                        Latitude = isLocation.Latitude,
-                        LocalDate = isLocation.LocalDate,
-                        LocalDateTime = isLocation.LocalDateTime,
-                        LocationCode = isLocation.LocationCode,
-                        LocationFullName = isLocation.LocationFullName,
-                        LocationID = isLocation.LocationID,
-                        LocationName = isLocation.LocationName,
-                        LocationNameSearch = isLocation.LocationNameSearch,
-                        LocationTypeID = isLocation.LocationTypeID,
-                        LocationUID = isLocation.LocationUID,
-                        Longitude = isLocation.Longitude,
-                        MallID = isLocation.MallID,
-                        MapURL = isLocation.MapURL,
-                        OurCompanyID = isLocation.OurCompanyID,
-                        POSAccountID = isLocation.POSAccountID,
-                        PriceCatID = isLocation.PriceCatID,
-                        RecordDate = isLocation.RecordDate,
-                        RecordEmployeeID = isLocation.RecordEmployeeID,
-                        RecordIP = isLocation.RecordIP,
-                        SortBy = isLocation.SortBy,
-                        State = isLocation.State,
-                        Timezone = isLocation.Timezone,
-                        Weight = isLocation.Weight,
-                        CityID = isLocation.CityID,
-                        CountryID = isLocation.CountryID,
-                        StateID = isLocation.StateID
-                    };
-                    #endregion
-                    #region UpdateModel
-                    isLocation.Currency = location.Currency;
-                    isLocation.IP = location.IP;
-                    isLocation.IsActive = !String.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false; ;
-                    isLocation.IsHaveOperator = !String.IsNullOrEmpty(location.IsHaveOperator) && location.IsHaveOperator == "1" ? true : false; ;
-                    isLocation.Latitude = location.Latitude;
-                    isLocation.LocationCode = location.LocationCode;
-                    isLocation.LocationID = location.LocationID;
-                    isLocation.LocationName = location.LocationName;
-                    isLocation.LocationNameSearch = location.LocationNameSearch;
-                    isLocation.LocationTypeID = location.LocationTypeID;
-                    isLocation.Description = location.Description;
-                    isLocation.LocationUID = location.LocationUID;
-                    isLocation.Longitude = location.Longitude;
-                    isLocation.MallID = location.MallID;
-                    isLocation.MapURL = location.MapURL;
-                    isLocation.OurCompanyID = location.OurCompany;
-                    isLocation.POSAccountID = location.POSAccountID;
-                    isLocation.PriceCatID = location.PriceCatID;
-                    isLocation.UpdateDate = DateTime.UtcNow.AddHours(location?.Timezone ?? 0);
-                    isLocation.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                    isLocation.UpdateIP = OfficeHelper.GetIPAddress();
-                    isLocation.SortBy = location.SortBy;
-                    isLocation.State = location.State;
-                    isLocation.Timezone = location.Timezone;
-                    isLocation.CityID = location.CityID;
-                    isLocation.CountryID = getCity?.CountryID;
-                    isLocation.StateID = getCity?.StateID;
-                    isLocation.EnforcedWarning = location.EnforcedWarning;
+                    var isCheck = Db.Location.Where(x => (x.LocationName.Trim().ToUpper() == location.LocationName || x.SortBy.Trim().ToUpper() == location.SortBy.Trim().ToUpper()) && x.LocationID != isLocation.LocationID).ToList();
+                    var getCity = Db.City.FirstOrDefault(x => x.ID == location.CityID);
 
-
-                    #endregion
-                    #region PriceCategoryCheck
-                    if (self.PriceCatID != isLocation.PriceCatID)
+                    if (isCheck.Count == 0)
                     {
-                        LocationPriceCategory priceCat = new LocationPriceCategory()
+                        if (isLocation != null)
                         {
-                            LocationID = isLocation?.LocationID,
-                            PriceCategoryID = isLocation?.PriceCatID,
-                            StartDate = DateTime.UtcNow.AddHours(isLocation?.Timezone ?? 0),
-                            RecordDate = DateTime.UtcNow.AddHours(isLocation?.Timezone ?? 0),
-                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
-                            RecordIP = OfficeHelper.GetIPAddress()
-                        };
+                            try
+                            {
+                                #region SelfModel
+                                Location self = new Location()
+                                {
+                                    Currency = isLocation.Currency,
+                                    Description = isLocation.Description,
+                                    Distance = isLocation.Distance,
+                                    EnforcedWarning = isLocation.EnforcedWarning,
+                                    ImageFile = isLocation.ImageFile,
+                                    IP = isLocation.IP,
+                                    IsActive = isLocation.IsActive,
+                                    IsHaveOperator = isLocation.IsHaveOperator,
+                                    Latitude = isLocation.Latitude,
+                                    LocalDate = isLocation.LocalDate,
+                                    LocalDateTime = isLocation.LocalDateTime,
+                                    LocationCode = isLocation.LocationCode,
+                                    LocationFullName = isLocation.LocationFullName,
+                                    LocationID = isLocation.LocationID,
+                                    LocationName = isLocation.LocationName,
+                                    LocationNameSearch = isLocation.LocationNameSearch,
+                                    LocationTypeID = isLocation.LocationTypeID,
+                                    LocationUID = isLocation.LocationUID,
+                                    Longitude = isLocation.Longitude,
+                                    MallID = isLocation.MallID,
+                                    MapURL = isLocation.MapURL,
+                                    OurCompanyID = isLocation.OurCompanyID,
+                                    POSAccountID = isLocation.POSAccountID,
+                                    PriceCatID = isLocation.PriceCatID,
+                                    RecordDate = isLocation.RecordDate,
+                                    RecordEmployeeID = isLocation.RecordEmployeeID,
+                                    RecordIP = isLocation.RecordIP,
+                                    SortBy = isLocation.SortBy,
+                                    State = isLocation.State,
+                                    Timezone = isLocation.Timezone,
+                                    Weight = isLocation.Weight,
+                                    CityID = isLocation.CityID,
+                                    CountryID = isLocation.CountryID,
+                                    StateID = isLocation.StateID
+                                };
+                                #endregion
+                                #region UpdateModel
+                                isLocation.Currency = location.Currency;
+                                isLocation.IP = location.IP;
+                                isLocation.IsActive = !String.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false; ;
+                                isLocation.IsHaveOperator = !String.IsNullOrEmpty(location.IsHaveOperator) && location.IsHaveOperator == "1" ? true : false; ;
+                                isLocation.Latitude = location.Latitude;
+                                isLocation.LocationCode = location.LocationCode;
+                                isLocation.LocationID = location.LocationID;
+                                isLocation.LocationName = location.LocationName;
+                                isLocation.LocationNameSearch = location.LocationNameSearch;
+                                isLocation.LocationTypeID = location.LocationTypeID;
+                                isLocation.Description = location.Description;
+                                isLocation.LocationUID = location.LocationUID;
+                                isLocation.Longitude = location.Longitude;
+                                isLocation.MallID = location.MallID;
+                                isLocation.MapURL = location.MapURL;
+                                isLocation.OurCompanyID = location.OurCompany;
+                                isLocation.POSAccountID = location.POSAccountID;
+                                isLocation.PriceCatID = location.PriceCatID;
+                                isLocation.UpdateDate = DateTime.UtcNow.AddHours(location?.Timezone ?? 0);
+                                isLocation.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                                isLocation.UpdateIP = OfficeHelper.GetIPAddress();
+                                isLocation.SortBy = location.SortBy;
+                                isLocation.State = location.State;
+                                isLocation.Timezone = location.Timezone;
+                                isLocation.CityID = location.CityID;
+                                isLocation.CountryID = getCity?.CountryID;
+                                isLocation.StateID = getCity?.StateID;
+                                isLocation.EnforcedWarning = location.EnforcedWarning;
 
-                        Db.LocationPriceCategory.Add(priceCat);
+
+                                #endregion
+                                #region PriceCategoryCheck
+                                if (self.PriceCatID != isLocation.PriceCatID)
+                                {
+                                    LocationPriceCategory priceCat = new LocationPriceCategory()
+                                    {
+                                        LocationID = isLocation?.LocationID,
+                                        PriceCategoryID = isLocation?.PriceCatID,
+                                        StartDate = DateTime.UtcNow.AddHours(isLocation?.Timezone ?? 0),
+                                        RecordDate = DateTime.UtcNow.AddHours(isLocation?.Timezone ?? 0),
+                                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                                        RecordIP = OfficeHelper.GetIPAddress()
+                                    };
+
+                                    Db.LocationPriceCategory.Add(priceCat);
+                                }
+                                #endregion
+
+                                Db.SaveChanges();
+
+                                #region ResultMessage
+                                model.Result.IsSuccess = true;
+                                model.Result.Message = $"{isLocation.LocationName} Lokasyonu güncellendi.";
+                                #endregion
+                                #region AddLog
+                                var isequal = OfficeHelper.PublicInstancePropertiesEqual<Location>(self, isLocation, OfficeHelper.getIgnorelist());
+                                OfficeHelper.AddApplicationLog("Office", "Location", "Update", isLocation.LocationID.ToString(), "Location", "EditLocation", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(isLocation?.Timezone ?? 0), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                                #endregion
+                            }
+                            catch (Exception ex)
+                            {
+                                model.Result.Message = ex.Message;
+                                model.Result.IsSuccess = false;
+                            }
+
+                            TempData["result"] = model.Result;
+                        }
                     }
-                    #endregion
+                    else
+                    {
+                        var message = "";
+                        if (isCheck.Count >0  && isCheck != null)
+                        {
+                            foreach (var item in isCheck)
+                            {
+                                message += $"{item.LocationName} {item.SortBy} <br/>";
+                            }
+                        }
 
-                    Db.SaveChanges();
+                        model.Result.IsSuccess = false;
+                        model.Result.Message = $"{message} benzer kayıtlar bulundu.";
 
-                    #region ResultMessage
-                    model.Result.IsSuccess = true;
-                    model.Result.Message = $"{isLocation.LocationName} Lokasyonu güncellendi.";
-                    #endregion
-                    #region AddLog
-                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<Location>(self, isLocation, OfficeHelper.getIgnorelist());
-                    OfficeHelper.AddApplicationLog("Office", "Location", "Update", isLocation.LocationID.ToString(), "Location", "EditLocation", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(isLocation?.Timezone ?? 0), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                    #endregion
+                        TempData["checkLocation"] = location;
+                        TempData["result"] = model.Result;
+
+                        return RedirectToAction("Edit", "Location", new { id = location.LocationUID });
+                    }
                 }
-                catch (Exception ex)
-                {
-                    model.Result.Message = ex.Message;
-                    model.Result.IsSuccess = false;
-                }
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "İşlem sırasında hata oluştu. Lütfen bilgileri kontrol ediniz";
 
                 TempData["result"] = model.Result;
+
+                return RedirectToAction("Edit", "Location", new { id = location.LocationUID });
             }
 
             return RedirectToAction("Index", "Location");
@@ -388,7 +439,131 @@ namespace ActionForce.Office.Controllers
             model.LocationTypeList = Db.LocationType.Where(x => x.IsActive == true).ToList();
             model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 2).ToList(); // TODO: AccountTypeID == 2 olmasının sebebi POS işlemlerinden dolayı
+
+            if (TempData["checkLocation"] != null)
+            {
+                model.CheckLocation = TempData["checkLocation"] as CULocation;
+
+                var ticketTypeId = Db.LocationType.FirstOrDefault(x => x.ID == model.CheckLocation.LocationTypeID).TicketTypeID;
+                model.PriceCategoryList = model.PriceCategoryList.Where(x => x.TicketTypeID == ticketTypeId).ToList();
+            }
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result;
+            }
+
             return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
+        [AllowAnonymous]
+        public ActionResult AddLocation(CULocation location)
+        {
+            LocationControlModel model = new LocationControlModel();
+            model.Result = new Result();
+            Guid locationUID = Guid.Empty;
+            var isLocation = Db.Location.FirstOrDefault(x => x.LocationName.Trim().ToUpper() == location.LocationName.Trim().ToUpper() || x.SortBy.Trim().ToUpper() == location.SortBy.Trim().ToUpper());
+            var getCity = Db.City.FirstOrDefault(x => x.ID == location.CityID);
+
+            if (location != null && isLocation == null)
+            {
+                try
+                {
+                    locationUID = Guid.NewGuid();
+
+                    Location locationModel = new Location()
+                    {
+                        OurCompanyID = location.OurCompany,
+                        CityID = location.CityID,
+                        CountryID = getCity.CountryID,
+                        StateID = getCity.StateID,
+                        Currency = location.Currency,
+                        Description = location.Description,
+                        EnforcedWarning = location.EnforcedWarning,
+                        IP = location.IP,
+                        IsActive = location.IsActive == "1" ? true : false,
+                        IsHaveOperator = location.IsHaveOperator == "1" ? true : false,
+                        Latitude = location.Latitude,
+                        Longitude = location.Longitude,
+                        LocalDate = DateTime.UtcNow.AddHours(location.Timezone ?? 0).Date,
+                        LocalDateTime = DateTime.UtcNow.AddHours(location.Timezone ?? 0),
+                        LocationCode = location.LocationCode,
+                        LocationName = location.LocationName,
+                        LocationTypeID = location.LocationTypeID,
+                        MallID = location.MallID,
+                        MapURL = location.MapURL,
+                        POSAccountID = location.POSAccountID,
+                        PriceCatID = location.PriceCatID,
+                        RecordDate = DateTime.UtcNow.AddHours(location.Timezone ?? 0),
+                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                        RecordIP = OfficeHelper.GetIPAddress(),
+                        SortBy = location.SortBy,
+                        Timezone = location.Timezone,
+                        LocationUID = locationUID
+                    };
+
+                    Db.Location.Add(locationModel);
+                    Db.SaveChanges();
+                    #region LocationPeriodsInsert
+                    LocationPeriods locationPeriods = new LocationPeriods() {
+                        OurCompanyID = locationModel.OurCompanyID,
+                        LocationID = locationModel.LocationID,
+                        ContractStartDate = locationModel.LocalDate,
+                        RecordDate = DateTime.UtcNow.AddHours(locationModel.Timezone ?? 0),
+                        RecordIP = OfficeHelper.GetIPAddress(),
+                        RecordedEmployeeID = model.Authentication.ActionEmployee.EmployeeID
+                    };
+                    Db.LocationPeriods.Add(locationPeriods);
+                    #endregion
+                    #region CashInsert
+                    OfficeHelper.AddCashes(locationModel.LocationID);
+                    #endregion
+                    #region PriceCategoryInsert
+                    LocationPriceCategory priceCat = new LocationPriceCategory()
+                    {
+                        LocationID = locationModel?.LocationID,
+                        PriceCategoryID = locationModel?.PriceCatID,
+                        StartDate = DateTime.UtcNow.AddHours(locationModel?.Timezone ?? 0),
+                        RecordDate = DateTime.UtcNow.AddHours(locationModel?.Timezone ?? 0),
+                        RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                        RecordIP = OfficeHelper.GetIPAddress()
+                    };
+                    Db.LocationPriceCategory.Add(priceCat);
+                    #endregion
+
+                    Db.SaveChanges();
+
+                    #region ResultMessage
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = $"{locationModel.LocationName} Lokasyonu eklendi.";
+                    #endregion
+                    #region AddLog
+                    OfficeHelper.AddApplicationLog("Office", "Location", "Insert", locationModel.LocationID.ToString(), "Location", "AddLocation", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(location?.Timezone ?? 0), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, locationModel);
+                    #endregion
+                }
+                catch (Exception ex)
+                {
+                    model.Result.Message = ex.Message;
+                    model.Result.IsSuccess = false;
+                }
+
+                TempData["result"] = model.Result;
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = $"{location.LocationName} {location.SortBy} benzer bir kayıt vardır.";
+
+                TempData["checkLocation"] = location;
+                TempData["result"] = model.Result;
+
+                return RedirectToAction("Add", "Location");
+            }
+
+            return RedirectToAction("Detail", "Location", new { id = locationUID });
         }
 
         [HttpPost]
