@@ -3,7 +3,7 @@
     <table class="table table-sm table-hover">
         <thead>
             <tr>
-                <th>#</th>
+                <th class="tx-center">Seçili</th>
                 <th>Bilet Türü</th>
                 <th>Fiyat Kategorisi</th>
                 <th>Bilet Ürün Adı</th>
@@ -17,15 +17,22 @@
             </tr>
         </thead>
         <tbody>
-
+            @{ int index = 0;}
             @foreach (var pricecat in Model.PriceCategoryList.OrderBy(x => x.SortBy))
             {
                 foreach (var prod in Model.TicketProductList.OrderBy(x => x.ProductName))
                 {
                     var lastprice = Model.PriceLastList.FirstOrDefault(x => x.ProductID == prod.ID && x.PriceCategoryID == pricecat.ID && x.TicketTypeID == prod.TicketTypeID);
 
-                    <tr>
-                        <td>@(prod.ID)</td>
+                    <tr class="@(lastprice != null ? "bg-gray-100":"")">
+                        <td>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" id="customSwitch@(index)" class="custom-control-input" name="pricelist[@index].IsSelected" value="1" @(lastprice != null && lastprice.IsActive == true ? "checked" : "")>
+                                <label class="custom-control-label" for="customSwitch@(index)"></label>
+                            </div>
+                            <input id="ProductID" name="pricelist[@index].productID" type="hidden" value="@(prod.ID)" />
+                            <input id="CategoryID" name="pricelist[@index].categoryID" type="hidden" value="@(pricecat.ID)" />
+                        </td>
                         <td><a href="/Sale/PriceTypeDetail/@(prod.TicketTypeID)"><span class="d-none d-sm-inline"> @($"{prod.TicketTypeName}")</span></a> </td>
                         <td><a href="/Sale/PriceCategoryDetail/@(pricecat?.ID)"><span class="d-none d-sm-inline"> @($"{pricecat?.TicketTypeName} - {pricecat?.CategoryName}")</span></a> </td>
                         <td><a href="/Sale/PriceDetail/@(prod.ID)"><span class="d-none d-sm-inline"> @(prod.ProductName)</span> </a></td>
@@ -34,16 +41,23 @@
                         <td class="tx-right">@(lastprice?.Price?.ToString("N2")) @(lastprice?.Currency)</td>
 
                         <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right wd-10p">
-                            <input id="Price_@(prod.ID)" name="Price" type="text" class="form-control money tx-right" autocomplete="off" placeholder="0,00" required>
+                            <input name="pricelist[@index].Price" type="text" class="form-control money tx-right" autocomplete="off" placeholder="0,00">
                         </td>
                         <td>@(lastprice?.Currency)</td>
-                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center">
-                            <input type="checkbox" class="" id="UseSale_@(prod.ID)" name="UseSale" value="1" @(lastprice != null && lastprice.UseToSale == true ? "checked":"")>
+                        <td class="tx-sm-13 font-weight-bold tx-center">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customCheck@(index)" name="pricelist[@index].UseSale" value="1" @(lastprice != null && lastprice.UseToSale == true ? "checked" : "")>
+                                <label class="custom-control-label" for="customCheck@(index)"></label>
+                            </div>
                         </td>
                         <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center">
-                            <input type="checkbox" class="" id="IsActive_@(prod.ID)" name="IsActive" value="1"  @(lastprice != null && lastprice.IsActive == true ? "checked":"")>
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="customChecka@(index)" name="pricelist[@index].IsActive" value="1" @(lastprice != null && lastprice.IsActive == true ? "checked" : "")>
+                                <label class="custom-control-label" for="customChecka@(index)"></label>
+                            </div>
                         </td>
                     </tr>
+                    index++;
                 }
             }
         </tbody>
