@@ -5286,9 +5286,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPriceCategory' does not ha
           <Property Name="TicketTypeName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6013: The table/view 'db293_ActionTimeDb.dbo.VPriceLastList' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPriceLastList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VPriceLastList">
-          <Property Name="ID" Type="int" />
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="OurCompanyID" Type="int" />
           <Property Name="PriceCategoryID" Type="int" />
           <Property Name="TicketTypeID" Type="int" />
@@ -5314,7 +5317,7 @@ warning 6013: The table/view 'db293_ActionTimeDb.dbo.VPriceLastList' does not ha
           <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
           <Property Name="Style" Type="nvarchar" MaxLength="50" />
           <Property Name="Sign" Type="nvarchar" MaxLength="1" />
-        </EntityType>-->
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VRevenue' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VRevenue">
@@ -7801,6 +7804,36 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VPriceCategory].[TicketTypeName] AS [TicketTypeName]
     FROM [dbo].[VPriceCategory] AS [VPriceCategory]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VPriceLastList" EntityType="Self.VPriceLastList" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VPriceLastList].[ID] AS [ID], 
+    [VPriceLastList].[OurCompanyID] AS [OurCompanyID], 
+    [VPriceLastList].[PriceCategoryID] AS [PriceCategoryID], 
+    [VPriceLastList].[TicketTypeID] AS [TicketTypeID], 
+    [VPriceLastList].[ProductID] AS [ProductID], 
+    [VPriceLastList].[Unit] AS [Unit], 
+    [VPriceLastList].[Price] AS [Price], 
+    [VPriceLastList].[Currency] AS [Currency], 
+    [VPriceLastList].[ExtraMultiple] AS [ExtraMultiple], 
+    [VPriceLastList].[StartDate] AS [StartDate], 
+    [VPriceLastList].[UseToSale] AS [UseToSale], 
+    [VPriceLastList].[IsActive] AS [IsActive], 
+    [VPriceLastList].[RecordDate] AS [RecordDate], 
+    [VPriceLastList].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VPriceLastList].[RecordIP] AS [RecordIP], 
+    [VPriceLastList].[UpdateDate] AS [UpdateDate], 
+    [VPriceLastList].[UpdateEmployeeID] AS [UpdateEmployeeID], 
+    [VPriceLastList].[UpdateIP] AS [UpdateIP], 
+    [VPriceLastList].[TicketTypeName] AS [TicketTypeName], 
+    [VPriceLastList].[CompanyName] AS [CompanyName], 
+    [VPriceLastList].[CategoryCode] AS [CategoryCode], 
+    [VPriceLastList].[CategoryName] AS [CategoryName], 
+    [VPriceLastList].[ProductCategoryName] AS [ProductCategoryName], 
+    [VPriceLastList].[ProductName] AS [ProductName], 
+    [VPriceLastList].[Style] AS [Style], 
+    [VPriceLastList].[Sign] AS [Sign]
+    FROM [dbo].[VPriceLastList] AS [VPriceLastList]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VRevenue" EntityType="Self.VRevenue" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VRevenue].[ID] AS [ID], 
@@ -8628,13 +8661,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VTicketProduct" EntityType="db293_ActionTimeDbModel.VTicketProduct" />
           <EntitySet Name="LocationSchedule" EntityType="db293_ActionTimeDbModel.LocationSchedule" />
           <EntitySet Name="VPrice" EntityType="db293_ActionTimeDbModel.VPrice" />
-          <EntitySet Name="VPriceLastList" EntityType="db293_ActionTimeDbModel.VPriceLastList" />
           <EntitySet Name="Location" EntityType="db293_ActionTimeDbModel.Location" />
           <EntitySet Name="VLocation" EntityType="db293_ActionTimeDbModel.VLocation" />
           <EntitySet Name="VCity" EntityType="db293_ActionTimeDbModel.VCity" />
-          <FunctionImport Name="GetLocationCurrentPrices" EntitySet="VPriceLastList" ReturnType="Collection(db293_ActionTimeDbModel.VPriceLastList)">
+          <FunctionImport Name="GetLocationCurrentPrices">
           <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="VPriceLastList" EntityType="db293_ActionTimeDbModel.VPriceLastList" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -14469,36 +14502,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Style" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="VPriceLastList">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="PriceCategoryID" Type="Int32" />
-          <Property Name="TicketTypeID" Type="Int32" />
-          <Property Name="ProductID" Type="Int32" />
-          <Property Name="Unit" Type="Int32" />
-          <Property Name="Price" Type="Double" />
-          <Property Name="Currency" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
-          <Property Name="ExtraMultiple" Type="Double" />
-          <Property Name="StartDate" Type="DateTime" Precision="3" />
-          <Property Name="UseToSale" Type="Boolean" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateEmployeeID" Type="Int32" />
-          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="TicketTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
-          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProductCategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Style" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="Location">
           <Key>
             <PropertyRef Name="LocationID" />
@@ -14631,6 +14634,37 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TimeZoneTo" Type="Int32" />
           <Property Name="Culture" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="OurCompanyID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="VPriceLastList">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="PriceCategoryID" Type="Int32" />
+          <Property Name="TicketTypeID" Type="Int32" />
+          <Property Name="ProductID" Type="Int32" />
+          <Property Name="Unit" Type="Int32" />
+          <Property Name="Price" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="ExtraMultiple" Type="Double" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="UseToSale" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TicketTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryCode" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductCategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Style" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -20411,6 +20445,38 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetLocationCurrentPrices" FunctionName="db293_ActionTimeDbModel.Store.GetLocationCurrentPrices">
           </FunctionImportMapping>
+          <EntitySetMapping Name="VPriceLastList">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPriceLastList">
+              <MappingFragment StoreEntitySet="VPriceLastList">
+                <ScalarProperty Name="Sign" ColumnName="Sign" />
+                <ScalarProperty Name="Style" ColumnName="Style" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="ProductCategoryName" ColumnName="ProductCategoryName" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="TicketTypeName" ColumnName="TicketTypeName" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UseToSale" ColumnName="UseToSale" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="ExtraMultiple" ColumnName="ExtraMultiple" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
+                <ScalarProperty Name="PriceCategoryID" ColumnName="PriceCategoryID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
