@@ -291,6 +291,7 @@ namespace ActionForce.Entity
         public virtual DbSet<VLocation> VLocation { get; set; }
         public virtual DbSet<VCity> VCity { get; set; }
         public virtual DbSet<VPriceLastList> VPriceLastList { get; set; }
+        public virtual DbSet<VLocationPriceCategory> VLocationPriceCategory { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

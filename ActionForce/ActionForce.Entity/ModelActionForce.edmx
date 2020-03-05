@@ -3017,6 +3017,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ProductCategoryName" Type="nvarchar" MaxLength="50" />
           <Property Name="Style" Type="nvarchar" MaxLength="50" />
+          <Property Name="BackStyle" Type="nvarchar" MaxLength="50" />
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
@@ -5117,6 +5118,28 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPosTerminal' does 
           <Property Name="IsMaster" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPriceCategory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VLocationPriceCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="PriceCategoryID" Type="int" />
+          <Property Name="StartDate" Type="datetime" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
+          <Property Name="REmployeeName" Type="nvarchar" MaxLength="150" />
+          <Property Name="UEmployeeName" Type="nvarchar" MaxLength="150" />
+          <Property Name="TicketTypeID" Type="int" />
+          <Property Name="TicketTypeName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationSchedule' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VLocationSchedule">
           <Key>
@@ -5260,6 +5283,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPrice' does not have a pri
           <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
           <Property Name="Style" Type="nvarchar" MaxLength="50" />
           <Property Name="Sign" Type="nvarchar" MaxLength="1" />
+          <Property Name="BackStyle" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPriceCategory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5317,6 +5341,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPriceLastList' does not ha
           <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
           <Property Name="Style" Type="nvarchar" MaxLength="50" />
           <Property Name="Sign" Type="nvarchar" MaxLength="1" />
+          <Property Name="BackStyle" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VRevenue' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -7658,6 +7683,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocationPosTerminal].[IsMaster] AS [IsMaster]
     FROM [dbo].[VLocationPosTerminal] AS [VLocationPosTerminal]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VLocationPriceCategory" EntityType="Self.VLocationPriceCategory" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VLocationPriceCategory].[ID] AS [ID], 
+    [VLocationPriceCategory].[LocationID] AS [LocationID], 
+    [VLocationPriceCategory].[PriceCategoryID] AS [PriceCategoryID], 
+    [VLocationPriceCategory].[StartDate] AS [StartDate], 
+    [VLocationPriceCategory].[RecordIP] AS [RecordIP], 
+    [VLocationPriceCategory].[RecordDate] AS [RecordDate], 
+    [VLocationPriceCategory].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VLocationPriceCategory].[UpdateDate] AS [UpdateDate], 
+    [VLocationPriceCategory].[UpdateEmployeeID] AS [UpdateEmployeeID], 
+    [VLocationPriceCategory].[UpdateIP] AS [UpdateIP], 
+    [VLocationPriceCategory].[CategoryName] AS [CategoryName], 
+    [VLocationPriceCategory].[REmployeeName] AS [REmployeeName], 
+    [VLocationPriceCategory].[UEmployeeName] AS [UEmployeeName], 
+    [VLocationPriceCategory].[TicketTypeID] AS [TicketTypeID], 
+    [VLocationPriceCategory].[TicketTypeName] AS [TicketTypeName]
+    FROM [dbo].[VLocationPriceCategory] AS [VLocationPriceCategory]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VLocationSchedule" EntityType="Self.VLocationSchedule" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VLocationSchedule].[ID] AS [ID], 
@@ -7781,7 +7825,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VPrice].[IsMaster] AS [IsMaster], 
     [VPrice].[CompanyName] AS [CompanyName], 
     [VPrice].[Style] AS [Style], 
-    [VPrice].[Sign] AS [Sign]
+    [VPrice].[Sign] AS [Sign], 
+    [VPrice].[BackStyle] AS [BackStyle]
     FROM [dbo].[VPrice] AS [VPrice]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VPriceCategory" EntityType="Self.VPriceCategory" store:Type="Views" store:Schema="dbo">
@@ -7831,7 +7876,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VPriceLastList].[ProductCategoryName] AS [ProductCategoryName], 
     [VPriceLastList].[ProductName] AS [ProductName], 
     [VPriceLastList].[Style] AS [Style], 
-    [VPriceLastList].[Sign] AS [Sign]
+    [VPriceLastList].[Sign] AS [Sign], 
+    [VPriceLastList].[BackStyle] AS [BackStyle]
     FROM [dbo].[VPriceLastList] AS [VPriceLastList]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VRevenue" EntityType="Self.VRevenue" store:Type="Views" store:Schema="dbo">
@@ -8668,6 +8714,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="VPriceLastList" EntityType="db293_ActionTimeDbModel.VPriceLastList" />
+          <EntitySet Name="VLocationPriceCategory" EntityType="db293_ActionTimeDbModel.VLocationPriceCategory" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -14345,6 +14392,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="Style" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BackStyle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Mall">
           <Key>
@@ -14501,6 +14549,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Style" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="BackStyle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -14665,6 +14714,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Style" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="BackStyle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VLocationPriceCategory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="PriceCategoryID" Type="Int32" />
+          <Property Name="StartDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="REmployeeName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="UEmployeeName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="TicketTypeID" Type="Int32" />
+          <Property Name="TicketTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -20135,6 +20205,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketProductCategory">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketProductCategory">
               <MappingFragment StoreEntitySet="TicketProductCategory">
+                <ScalarProperty Name="BackStyle" ColumnName="BackStyle" />
                 <ScalarProperty Name="Style" ColumnName="Style" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="SortBy" ColumnName="SortBy" />
@@ -20279,6 +20350,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VPrice">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPrice">
               <MappingFragment StoreEntitySet="VPrice">
+                <ScalarProperty Name="BackStyle" ColumnName="BackStyle" />
                 <ScalarProperty Name="Sign" ColumnName="Sign" />
                 <ScalarProperty Name="Style" ColumnName="Style" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
@@ -20448,6 +20520,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VPriceLastList">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPriceLastList">
               <MappingFragment StoreEntitySet="VPriceLastList">
+                <ScalarProperty Name="BackStyle" ColumnName="BackStyle" />
                 <ScalarProperty Name="Sign" ColumnName="Sign" />
                 <ScalarProperty Name="Style" ColumnName="Style" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
@@ -20473,6 +20546,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
                 <ScalarProperty Name="PriceCategoryID" ColumnName="PriceCategoryID" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VLocationPriceCategory">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationPriceCategory">
+              <MappingFragment StoreEntitySet="VLocationPriceCategory">
+                <ScalarProperty Name="TicketTypeName" ColumnName="TicketTypeName" />
+                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
+                <ScalarProperty Name="UEmployeeName" ColumnName="UEmployeeName" />
+                <ScalarProperty Name="REmployeeName" ColumnName="REmployeeName" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="PriceCategoryID" ColumnName="PriceCategoryID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
