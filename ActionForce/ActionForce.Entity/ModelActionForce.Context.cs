@@ -287,10 +287,10 @@ namespace ActionForce.Entity
         public virtual DbSet<VTicketProduct> VTicketProduct { get; set; }
         public virtual DbSet<LocationSchedule> LocationSchedule { get; set; }
         public virtual DbSet<VPrice> VPrice { get; set; }
-        public virtual DbSet<VPriceLastList> VPriceLastList { get; set; }
         public virtual DbSet<Location> Location { get; set; }
         public virtual DbSet<VLocation> VLocation { get; set; }
         public virtual DbSet<VCity> VCity { get; set; }
+        public virtual DbSet<VPriceLastList> VPriceLastList { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -1070,22 +1070,13 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationAll_Result>("GetLocationAll", ourCompanyIDParameter, locationUIDParameter, locationIDParameter);
         }
     
-        public virtual ObjectResult<VPriceLastList> GetLocationCurrentPrices(Nullable<int> locationID)
+        public virtual int GetLocationCurrentPrices(Nullable<int> locationID)
         {
             var locationIDParameter = locationID.HasValue ?
                 new ObjectParameter("LocationID", locationID) :
                 new ObjectParameter("LocationID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VPriceLastList>("GetLocationCurrentPrices", locationIDParameter);
-        }
-    
-        public virtual ObjectResult<VPriceLastList> GetLocationCurrentPrices(Nullable<int> locationID, MergeOption mergeOption)
-        {
-            var locationIDParameter = locationID.HasValue ?
-                new ObjectParameter("LocationID", locationID) :
-                new ObjectParameter("LocationID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VPriceLastList>("GetLocationCurrentPrices", mergeOption, locationIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("GetLocationCurrentPrices", locationIDParameter);
         }
     }
 }
