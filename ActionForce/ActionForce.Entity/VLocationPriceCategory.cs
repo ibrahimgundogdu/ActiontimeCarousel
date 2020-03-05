@@ -12,34 +12,22 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class VPriceLastList
+    public partial class VLocationPriceCategory
     {
         public int ID { get; set; }
-        public Nullable<int> OurCompanyID { get; set; }
+        public Nullable<int> LocationID { get; set; }
         public Nullable<int> PriceCategoryID { get; set; }
-        public Nullable<int> TicketTypeID { get; set; }
-        public Nullable<int> ProductID { get; set; }
-        public Nullable<int> Unit { get; set; }
-        public Nullable<double> Price { get; set; }
-        public string Currency { get; set; }
-        public Nullable<double> ExtraMultiple { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
-        public Nullable<bool> UseToSale { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public string RecordIP { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<int> RecordEmployeeID { get; set; }
-        public string RecordIP { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public string UpdateIP { get; set; }
-        public string TicketTypeName { get; set; }
-        public string CompanyName { get; set; }
-        public string CategoryCode { get; set; }
         public string CategoryName { get; set; }
-        public string ProductCategoryName { get; set; }
-        public string ProductName { get; set; }
-        public string Style { get; set; }
-        public string Sign { get; set; }
-        public string BackStyle { get; set; }
+        public string REmployeeName { get; set; }
+        public string UEmployeeName { get; set; }
+        public Nullable<int> TicketTypeID { get; set; }
+        public string TicketTypeName { get; set; }
     }
 }

@@ -22,6 +22,8 @@ namespace ActionForce.Office
         public List<VBankAccount> BankAccountList { get; set; }
         public List<LocationType> LocationTypeList { get; set; }
         public List<VLocationPosTerminal> LocationPosTerminalList { get; set; }
+        public List<VPriceLastList> LocationPriceLastList { get; set; }
+        public List<LocationPriceCategory> LocationPriceCategoryList { get; set; }
         public Nullable<int> RecordEmployeeID { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }

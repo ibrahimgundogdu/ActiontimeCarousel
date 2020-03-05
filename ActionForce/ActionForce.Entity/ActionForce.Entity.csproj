@@ -855,6 +855,9 @@
     <Compile Include="VLocationPosTerminal.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VLocationPriceCategory.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VLocationSchedule.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

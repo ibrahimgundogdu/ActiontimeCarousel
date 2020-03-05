@@ -68,12 +68,20 @@
                         <div class="d-flex align-items-center justify-content-between mg-b-20">
                             <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Güncel Fiyat Listesi</h6>
                         </div>
-                        <div class="col-12 tx-12 mg-t-40">
-                            <div class="d-flex align-items-center">
-                                <span class="tx-medium mg-l-10">2</span>
-                                <span class="tx-medium mg-l-15">Dakika</span>
-                                <span class="tx-right tx-medium mg-l-50">15 ₺</span>
-                            </div>
+                        <div class="col-12 tx-12 mg-t-10">
+                            @if (Model.LocationPriceLastList?.Count > 0)
+                            {
+                                <h6 class="tx-12 tx-lg-14 tx-medium tx-uppercase tx-spacing-1 mg-b-5 border-bottom mb-2">@($"{Model?.LocationPriceLastList?.FirstOrDefault().TicketTypeName} {Model?.LocationPriceLastList?.FirstOrDefault().CategoryName}")</h6>
+
+                                foreach (var item in Model.LocationPriceLastList)
+                                {
+                                    <div class="d-flex align-items-center">
+                                        <span class="tx-medium mg-l-10">@((item.Unit.ToString()).PadLeft(2,'0'))</span>
+                                        <span class="tx-medium mg-l-15">Dakika</span>
+                                        <span class="tx-right tx-medium mg-r-0 mg-l-auto">@item.Price @item.Sign</span>
+                                    </div>
+                                }
+                            }
                         </div>
                     </div>
                     <div class="col-sm-6 col-md-5 col-lg  mg-t-40 mg-sm-t-0 mg-lg-t-40">
