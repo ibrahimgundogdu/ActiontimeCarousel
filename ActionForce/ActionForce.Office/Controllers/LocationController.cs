@@ -232,6 +232,9 @@ namespace ActionForce.Office.Controllers
                     Active = x.Active ?? false,
                     PositionName = x.PositionName
                 }).ToList();
+                model.LocationPriceLastList = Db.GetLocationCurrentPrices(model.LocationModel.LocationID).ToList();
+                model.LocationPriceCategoryList = Db.VLocationPriceCategory.Where(x => x.LocationID == model.LocationModel.LocationID).ToList();
+                model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.TicketTypeID == model.LocationModel.TicketTypeID).ToList();
                 #region Schedule
                 model.ScheduleStart = model.LocationModel.ScheduleStart?.ToShortTimeString();
                 model.ScheduleFinish = model.LocationModel.ScheduleEnd?.ToShortTimeString();
@@ -454,7 +457,7 @@ namespace ActionForce.Office.Controllers
                     else
                     {
                         var message = "";
-                        if (isCheck.Count >0  && isCheck != null)
+                        if (isCheck.Count > 0 && isCheck != null)
                         {
                             foreach (var item in isCheck)
                             {
@@ -564,7 +567,8 @@ namespace ActionForce.Office.Controllers
                     Db.Location.Add(locationModel);
                     Db.SaveChanges();
                     #region LocationPeriodsInsert
-                    LocationPeriods locationPeriods = new LocationPeriods() {
+                    LocationPeriods locationPeriods = new LocationPeriods()
+                    {
                         OurCompanyID = locationModel.OurCompanyID,
                         LocationID = locationModel.LocationID,
                         ContractStartDate = locationModel.LocalDate,
@@ -630,6 +634,36 @@ namespace ActionForce.Office.Controllers
             LocationControlModel model = new LocationControlModel();
 
             return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult EditPriceCat(int? ID)
+        {
+            Result result = new Result();
+
+            LocationControlModel model = new LocationControlModel();
+
+            if (ID != null)
+            {
+                model.LocationPriceCategory = Db.VLocationPriceCategory.FirstOrDefault(x => x.ID == ID);
+
+                if (model.LocationPriceCategory != null)
+                {
+                    model.LocationModel = Db.VLocation.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationPriceCategory.LocationID);
+                    model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.TicketTypeID == model.LocationModel.TicketTypeID).ToList();
+                }
+            }
+            else
+            {
+                result.Message = $"Fiyat kategorisi bilgisi boş olamaz";
+            }
+
+            TempData["result"] = result;
+
+            model.Result = result;
+
+            return PartialView("_PartialPriceCatEdit", model);
         }
     }
 
