@@ -9,6 +9,8 @@ namespace ActionForce.Location
     public class DefaultControlModel : LayoutControlModel
     {
         public IEnumerable<VPriceLastList> PriceList { get; set; }
-        //public VPriceLastList Price { get; set; }
+        public IEnumerable<VTicketBasket> BasketList { get; set; }
+        public VPriceLastList Price { get; set; }
+        public VTicketBasket BasketItem { get; set; }
     }
 }

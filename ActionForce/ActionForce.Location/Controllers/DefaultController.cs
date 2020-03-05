@@ -14,8 +14,38 @@ namespace ActionForce.Location.Controllers
             DefaultControlModel model = new DefaultControlModel();
 
             model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
+            model.BasketList = Db.GetLocationCurrentBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).ToList();
 
             return View(model);
+        }
+
+        [AllowAnonymous]
+        public PartialViewResult AddBasket(int id)
+        {
+            DefaultControlModel model = new DefaultControlModel();
+
+            model.Price = Db.VPriceLastList.FirstOrDefault(x => x.ID == id);
+
+            if (model.Price != null)
+            {
+                var added = Db.AddBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID, id, null, null, null);
+            }
+
+            model.BasketList = Db.GetLocationCurrentBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).ToList();
+            model.Result.IsSuccess = true;
+            model.Result.Message = $"{model.Price.ProductName} sepete eklendi.";
+
+            return PartialView("_PartialBasketList", model);
+        }
+
+        [AllowAnonymous]
+        public PartialViewResult BasketItemDetail(int id)
+        {
+            DefaultControlModel model = new DefaultControlModel();
+
+            model.BasketItem = Db.VTicketBasket.FirstOrDefault(x => x.ID == id);
+
+            return PartialView("_PartialBasketItemDetail", model);
         }
     }
 }

@@ -21,7 +21,7 @@
                     <a href="#" class="btn btn-md btn-white">
                         Sipariş No &nbsp;&nbsp;&nbsp;  <span class="font-weight-bold">001</span>
                     </a>
-                    
+
                     <button data-toggle="modal" data-target="#content-aside" data-modal class="btn btn-md ml-auto btn-white">
                         <i data-feather="download"></i> &nbsp;&nbsp;&nbsp; Bilet Ekle
                     </button>
@@ -60,127 +60,8 @@
                         <div class="p-2">
                             <span class="text-md"> Sepet</span>
                             <span class="mr-2 float-right"><i data-feather="shopping-cart"></i></span>
-                            <div class="table-responsive">
-                                <table class="table table-theme table-row v-middle">
-                                    
-                                    <tbody>
-
-                                        <tr class=" v-middle shadow-sm">
-                                           
-                                            <td class="flex">
-                                                <a href="#" class="item-title text-color font-weight-bold">1</a>
-                                                <div class="item-except text-muted text-sm h-1x font-weight-100">Normal Bilet</div>
-                                            </td>
-                                            <td>
-                                                <span class="item-amount d-none d-sm-block text-sm ">3 Dk</span>
-                                            </td>
-                                            <td>
-                                                <span class="item-amount d-none d-sm-block text-sm">
-                                                    20,00 ₺
-                                                </span>
-                                            </td>
-                                            <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
-                                                <div class="item-action dropdown text-center">
-                                                    <a href="#" class="text-muted"><i data-feather="more-vertical"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr class=" v-middle shadow-sm">
-
-                                            <td class="flex">
-                                                <a href="#" class="item-title text-color font-weight-bold">2</a>
-                                                <div class="item-except text-muted text-sm h-1x font-weight-100">Normal Bilet</div>
-                                            </td>
-                                            <td>
-                                                <span class="item-amount d-none d-sm-block text-sm ">
-                                                    5 Dk
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="item-amount d-none d-sm-block text-sm">
-                                                    30,00 ₺
-                                                </span>
-                                            </td>
-                                            <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
-                                                <div class="item-action dropdown text-center">
-                                                    <a href="#" class="text-muted"><i data-feather="more-vertical"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr class=" v-middle shadow-sm">
-
-                                            <td class="flex">
-                                                <a href="#" class="item-title text-color font-weight-bold">3</a>
-                                                <div class="item-except text-muted text-sm h-1x font-weight-100">
-                                                    Normal Bilet
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="item-amount d-none d-sm-block text-sm ">
-                                                    7 Dk
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="item-amount d-none d-sm-block text-sm">
-                                                    40,00 ₺
-                                                </span>
-                                            </td>
-                                            <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
-                                                <div class="item-action dropdown text-center">
-                                                    <a href="#" class="text-muted"><i data-feather="more-vertical"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr class=" v-middle shadow-sm">
-
-                                            <td class="flex">
-                                                <a href="#" class="item-title text-color font-weight-bold">1</a>
-                                                <div class="item-except text-muted text-sm text-warning h-1x font-weight-100">
-                                                    Promosyon Bilet
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="item-amount d-none d-sm-block text-sm ">
-                                                    12 Dk
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="item-amount d-none d-sm-block text-sm">
-                                                    50,00 ₺
-                                                </span>
-                                            </td>
-                                            <td class="bg-warning--lt" style="border-left:dotted 1px #d8d6d6 !important;">
-                                                <div class="item-action dropdown text-center">
-                                                    <a href="#" class="text-muted"><i data-feather="more-vertical"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr class=" v-middle shadow-sm b-t-2x b-t-warning">
-
-                                            <td class="flex">
-                                                <a href="#" class="item-title text-color font-weight-bold">1</a>
-                                                <div class="item-except text-muted text-sm text-danger h-1x font-weight-100">
-                                                     Aile Boyu Bilet
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="item-amount d-none d-sm-block text-sm ">
-                                                    10 Dk
-                                                </span>
-                                            </td>
-                                            <td>
-                                                <span class="item-amount d-none d-sm-block text-sm">
-                                                    40,00 ₺
-                                                </span>
-                                            </td>
-                                            <td class="bg-danger--lt" style="border-left:dotted 1px #d8d6d6 !important;">
-                                                <div class="item-action dropdown text-center">
-                                                    <a href="#" class="text-muted"><i data-feather="more-vertical"></i></a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="table-responsive" id="BasketList">
+                                @{ Html.RenderPartial("_PartialBasketList", Model);}
                             </div>
                         </div>
                     </div>
@@ -196,7 +77,7 @@
                     <button data-toggle="dropdown" class="btn btn-sm btn-icon no-bg no-shadow">
                         ₺
                     </button>
-                    
+
                 </div>
             </div>
             <div class="scrollable hover">
@@ -294,8 +175,50 @@
     </div>
 </div>
 
+<div id="BasketItemDetail" class="modal fade" data-backdrop="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" id="BasketItemDetailContent">
+           
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
+
 @section scripts {
-    @if (Model.Result != null) //
+
+    <script type="text/javascript">
+        function OnItemEditSuccess(data) {
+            $('#BasketItemDetail').modal('hide');
+        };
+
+        function AddBasket(priceid) {
+            $.ajax({
+                method: "GET",
+                url: "/Default/AddBasket",
+                data: { id: priceid }
+            }).done(function (d) {
+                $("#BasketList").html(d);
+            });
+        };
+
+        function BasketItemDetail(itemid) {
+            $.ajax({
+                method: "GET",
+                url: "/Default/BasketItemDetail",
+                data: { id: itemid }
+            }).done(function (d) {
+                $("#BasketItemDetailContent").html(d);
+            });
+        };
+        
+    </script>
+
+
+
+
+
+
+    @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
     {
         <script>
             $(function () {

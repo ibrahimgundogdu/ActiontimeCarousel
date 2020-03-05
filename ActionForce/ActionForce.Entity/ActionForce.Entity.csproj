@@ -894,6 +894,9 @@
     <Compile Include="VSystemCheckEmployeeRows.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VTicketBasket.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VTicketProduct.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

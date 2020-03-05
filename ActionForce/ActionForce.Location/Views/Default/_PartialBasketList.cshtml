@@ -1,0 +1,47 @@
+﻿@model DefaultControlModel
+<table class="table table-theme table-row v-middle">
+    <tbody>
+        @foreach (var item in Model.BasketList.OrderBy(x => x.RecordDate))
+        {
+            <tr class=" v-middle shadow-sm">
+
+                <td class="flex">
+                    <a href="#" class="item-title text-color font-weight-bold"><span class="badge badge-circle @(item?.UseImmediately == true ? "text-primary":"text-light")"></span> @(item.Quantity)</a>
+                    <div class="item-except text-muted text-sm h-1x font-weight-100">@(item.ProductName)</div>
+                </td>
+                <td>
+                    <span class="item-amount d-none d-sm-block text-sm ">@(item.Unit) Dk</span>
+                </td>
+                <td>
+                    <span class="item-amount d-none d-sm-block text-sm">
+                        @(item.Price.ToString("N2")) @(item.Sign)
+                    </span>
+                </td>
+                <td class="@($"bg-{item.BackStyle}--lt")" style="border-left:dotted 1px #d8d6d6 !important;">
+                    <div class="item-action dropdown text-center">
+                        <a href="#" class="text-muted"  data-toggle="modal" data-target="#BasketItemDetail" onclick="BasketItemDetail(@(item.ID))"><i data-feather="more-vertical"></i></a>
+                    </div>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+    $(function () {
+        feather.replace();
+    });
+</script>
+
+@if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
+{
+    <script type="text/javascript">
+            $(function () {
+                notie.setOptions({
+                    alertTime: 5
+                })
+                notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
+                noticed = true;
+            });
+    </script>
+}

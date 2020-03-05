@@ -789,6 +789,8 @@
     <Content Include="Views\Sale\Index.cshtml" />
     <Content Include="Views\Envelope\Index.cshtml" />
     <Content Include="Views\Sale\Detail.cshtml" />
+    <Content Include="Views\Default\_PartialBasketList.cshtml" />
+    <Content Include="Views\Default\_PartialBasketItemDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

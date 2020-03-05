@@ -292,6 +292,7 @@ namespace ActionForce.Entity
         public virtual DbSet<VCity> VCity { get; set; }
         public virtual DbSet<VPriceLastList> VPriceLastList { get; set; }
         public virtual DbSet<VLocationPriceCategory> VLocationPriceCategory { get; set; }
+        public virtual DbSet<VTicketBasket> VTicketBasket { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -1087,6 +1088,61 @@ namespace ActionForce.Entity
                 new ObjectParameter("LocationID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VPriceLastList>("GetLocationCurrentPrices", mergeOption, locationIDParameter);
+        }
+    
+        public virtual int AddBasket(Nullable<int> locationID, Nullable<int> employeeID, Nullable<int> priceID, Nullable<int> promotionID, Nullable<bool> isPromotion, string ticketNumber)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            var priceIDParameter = priceID.HasValue ?
+                new ObjectParameter("PriceID", priceID) :
+                new ObjectParameter("PriceID", typeof(int));
+    
+            var promotionIDParameter = promotionID.HasValue ?
+                new ObjectParameter("PromotionID", promotionID) :
+                new ObjectParameter("PromotionID", typeof(int));
+    
+            var isPromotionParameter = isPromotion.HasValue ?
+                new ObjectParameter("IsPromotion", isPromotion) :
+                new ObjectParameter("IsPromotion", typeof(bool));
+    
+            var ticketNumberParameter = ticketNumber != null ?
+                new ObjectParameter("TicketNumber", ticketNumber) :
+                new ObjectParameter("TicketNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddBasket", locationIDParameter, employeeIDParameter, priceIDParameter, promotionIDParameter, isPromotionParameter, ticketNumberParameter);
+        }
+    
+        public virtual ObjectResult<VTicketBasket> GetLocationCurrentBasket(Nullable<int> locationID, Nullable<int> employeeID)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VTicketBasket>("GetLocationCurrentBasket", locationIDParameter, employeeIDParameter);
+        }
+    
+        public virtual ObjectResult<VTicketBasket> GetLocationCurrentBasket(Nullable<int> locationID, Nullable<int> employeeID, MergeOption mergeOption)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VTicketBasket>("GetLocationCurrentBasket", mergeOption, locationIDParameter, employeeIDParameter);
         }
     }
 }
