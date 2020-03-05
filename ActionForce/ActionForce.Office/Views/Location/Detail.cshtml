@@ -66,11 +66,58 @@
                 <div class="row">
                     <div class="col-sm-6 col-md-5 col-lg">
                         <div class="d-flex align-items-center justify-content-between mg-b-20">
+                            <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Güncel Fiyat Listesi</h6>
+                        </div>
+                        <div class="col-12 tx-12 mg-t-40">
+                            <div class="d-flex align-items-center">
+                                <span class="tx-medium mg-l-10">2</span>
+                                <span class="tx-medium mg-l-15">Dakika</span>
+                                <span class="tx-right tx-medium mg-l-50">15 ₺</span>
+                            </div>
+                            <div class="d-flex align-items-center mg-t-10">
+                                <div class="wd-10 ht-10 bg-teal rounded-circle pos-relative t--1"></div>
+                                <span class="tx-medium mg-l-10">EUR</span>
+                                <span class="tx-rubik mg-l-auto">3,539.23</span>
+                                <span class="wd-60 tx-right tx-rubik mg-l-5 tx-success">0.75% <i class="icon ion-md-arrow-up"></i></span>
+                            </div>
+                            <div class="d-flex align-items-center mg-t-10">
+                                <div class="wd-10 ht-10 bg-warning rounded-circle pos-relative t--1"></div>
+                                <span class="tx-medium mg-l-10">CNY</span>
+                                <span class="tx-rubik mg-l-auto">27,499.4</span>
+                                <span class="wd-60 tx-right tx-rubik mg-l-5 tx-danger">-0.58% <i class="icon ion-md-arrow-down"></i></span>
+                            </div>
+                            <div class="d-flex align-items-center mg-t-10">
+                                <div class="wd-10 ht-10 bg-pink rounded-circle pos-relative t--1"></div>
+                                <span class="tx-medium mg-l-10">GBP</span>
+                                <span class="tx-rubik mg-l-auto">3,022.90</span>
+                                <span class="wd-60 tx-right tx-rubik mg-l-5 tx-danger">-0.69% <i class="icon ion-md-arrow-down"></i></span>
+                            </div>
+                            <div class="d-flex align-items-center mg-t-10">
+                                <div class="wd-10 ht-10 bg-success rounded-circle pos-relative t--1"></div>
+                                <span class="tx-medium mg-l-10">JPY</span>
+                                <span class="tx-rubik mg-l-auto">444,814.7</span>
+                                <span class="wd-60 tx-right tx-rubik mg-l-5 tx-success">0.82% <i class="icon ion-md-arrow-up"></i></span>
+                            </div>
+                            <div class="d-flex align-items-center mg-t-10">
+                                <div class="wd-10 ht-10 bg-lightblue rounded-circle pos-relative t--1"></div>
+                                <span class="tx-medium mg-l-10">KRW</span>
+                                <span class="tx-rubik mg-l-auto">4,491,099.6</span>
+                                <span class="wd-60 tx-right tx-rubik mg-l-5 tx-danger">-1.11% <i class="icon ion-md-arrow-down"></i></span>
+                            </div>
+                            <div class="d-flex align-items-center mg-t-10">
+                                <div class="wd-10 ht-10 bg-brand-02 op-2 rounded-circle pos-relative t--1"></div>
+                                <span class="tx-medium mg-l-10">SGD</span>
+                                <span class="tx-rubik mg-l-auto">5,393.0</span>
+                                <span class="wd-60 tx-right tx-rubik mg-l-5 tx-success">0.66% <i class="icon ion-md-arrow-up"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-5 col-lg  mg-t-40 mg-sm-t-0 mg-lg-t-40">
+                        <div class="d-flex align-items-center justify-content-between mg-b-20">
                             <h6 class="tx-13 tx-spacng-1 tx-uppercase tx-semibold mg-b-0">Çalışanlar</h6>
-                            @*<a href="" class="link-03">Watch All</a>*@
                         </div>
                         <ul class="list-unstyled media-list mg-b-15">
-                            @foreach (var item in Model.EmployeeLocationList.OrderByDescending(x=>x.Active))
+                            @foreach (var item in Model.EmployeeLocationList.OrderByDescending(x => x.Active))
                             {
                                 <li class="media align-items-center">
                                     <a href=""><div class="avatar @(item?.Active == true ? "avatar-online":"avatar-offline")"><span class="avatar-initial rounded-circle bg-dark">@(item.FullName.Substring(0, 1))</span></div></a>

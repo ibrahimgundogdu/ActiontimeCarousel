@@ -1,0 +1,33 @@
+﻿@model LocationControlModel
+
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th>No</th>
+            <th>Adı</th>
+            <th>Şehir</th>
+            <th>Türü</th>
+            <th class="text-center">Para Birimi</th>
+            <th class="text-center">Time Zone</th>
+            <th class="text-center">Aktif mi?</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.LocationList.OrderBy(x => x.SortBy))
+        {
+            <tr style='@(item.IsActive == false ? "color: red" : "")'>
+                <td><span class="@(item.IsActive == true ? "tx-success":"tx-danger")">&#8226;</span></td>
+                <td class="tx-sm-13 bold">@item.SortBy</td>
+                <td class="tx-sm-13"><a href="@("/Location/Detail/" + @item.LocationUID)">@($"{item.LocationName} {item.Description}")</a></td>
+                <td class="tx-sm-13">@(!String.IsNullOrEmpty(item.State) ? item.State : item.CityName)</td>
+                <td class="tx-sm-13">@item.LocationTypeName</td>
+                <td class="tx-sm-13 text-center">@item.Currency</td>
+                <td class="tx-sm-13 text-center">@item.Timezone</td>
+                <td class="tx-sm-13 text-center">
+                    @Html.Raw(item.IsActive.Value == true ? "<i class='ion ion-md-checkmark-circle text-success'></i>" : "<i class='ion ion-md-close-circle'></i>")
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -39,5 +39,6 @@ namespace ActionForce.Entity
         public Nullable<bool> IsMaster { get; set; }
         public string CompanyName { get; set; }
         public string Style { get; set; }
+        public string Sign { get; set; }
     }
 }

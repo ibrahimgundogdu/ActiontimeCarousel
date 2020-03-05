@@ -5259,6 +5259,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPrice' does not have a pri
           <Property Name="IsMaster" Type="bit" />
           <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
           <Property Name="Style" Type="nvarchar" MaxLength="50" />
+          <Property Name="Sign" Type="nvarchar" MaxLength="1" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPriceCategory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5285,12 +5286,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPriceCategory' does not ha
           <Property Name="TicketTypeName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPriceLastList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6013: The table/view 'db293_ActionTimeDb.dbo.VPriceLastList' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
         <EntityType Name="VPriceLastList">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="ID" Type="int" />
           <Property Name="OurCompanyID" Type="int" />
           <Property Name="PriceCategoryID" Type="int" />
           <Property Name="TicketTypeID" Type="int" />
@@ -5315,7 +5313,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPriceLastList' does not ha
           <Property Name="ProductCategoryName" Type="nvarchar" MaxLength="50" />
           <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
           <Property Name="Style" Type="nvarchar" MaxLength="50" />
-        </EntityType>
+          <Property Name="Sign" Type="nvarchar" MaxLength="1" />
+        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VRevenue' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VRevenue">
@@ -7778,7 +7777,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VPrice].[CategoryName] AS [CategoryName], 
     [VPrice].[IsMaster] AS [IsMaster], 
     [VPrice].[CompanyName] AS [CompanyName], 
-    [VPrice].[Style] AS [Style]
+    [VPrice].[Style] AS [Style], 
+    [VPrice].[Sign] AS [Sign]
     FROM [dbo].[VPrice] AS [VPrice]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VPriceCategory" EntityType="Self.VPriceCategory" store:Type="Views" store:Schema="dbo">
@@ -7800,35 +7800,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VPriceCategory].[TicketTypeID] AS [TicketTypeID], 
     [VPriceCategory].[TicketTypeName] AS [TicketTypeName]
     FROM [dbo].[VPriceCategory] AS [VPriceCategory]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="VPriceLastList" EntityType="Self.VPriceLastList" store:Type="Views" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [VPriceLastList].[ID] AS [ID], 
-    [VPriceLastList].[OurCompanyID] AS [OurCompanyID], 
-    [VPriceLastList].[PriceCategoryID] AS [PriceCategoryID], 
-    [VPriceLastList].[TicketTypeID] AS [TicketTypeID], 
-    [VPriceLastList].[ProductID] AS [ProductID], 
-    [VPriceLastList].[Unit] AS [Unit], 
-    [VPriceLastList].[Price] AS [Price], 
-    [VPriceLastList].[Currency] AS [Currency], 
-    [VPriceLastList].[ExtraMultiple] AS [ExtraMultiple], 
-    [VPriceLastList].[StartDate] AS [StartDate], 
-    [VPriceLastList].[UseToSale] AS [UseToSale], 
-    [VPriceLastList].[IsActive] AS [IsActive], 
-    [VPriceLastList].[RecordDate] AS [RecordDate], 
-    [VPriceLastList].[RecordEmployeeID] AS [RecordEmployeeID], 
-    [VPriceLastList].[RecordIP] AS [RecordIP], 
-    [VPriceLastList].[UpdateDate] AS [UpdateDate], 
-    [VPriceLastList].[UpdateEmployeeID] AS [UpdateEmployeeID], 
-    [VPriceLastList].[UpdateIP] AS [UpdateIP], 
-    [VPriceLastList].[TicketTypeName] AS [TicketTypeName], 
-    [VPriceLastList].[CompanyName] AS [CompanyName], 
-    [VPriceLastList].[CategoryCode] AS [CategoryCode], 
-    [VPriceLastList].[CategoryName] AS [CategoryName], 
-    [VPriceLastList].[ProductCategoryName] AS [ProductCategoryName], 
-    [VPriceLastList].[ProductName] AS [ProductName], 
-    [VPriceLastList].[Style] AS [Style]
-    FROM [dbo].[VPriceLastList] AS [VPriceLastList]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VRevenue" EntityType="Self.VRevenue" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -14496,6 +14467,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsMaster" Type="Boolean" />
           <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="Style" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VPriceLastList">
           <Key>
@@ -20273,6 +20245,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VPrice">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPrice">
               <MappingFragment StoreEntitySet="VPrice">
+                <ScalarProperty Name="Sign" ColumnName="Sign" />
                 <ScalarProperty Name="Style" ColumnName="Style" />
                 <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
                 <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
@@ -20293,37 +20266,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="ExtraMultiple" ColumnName="ExtraMultiple" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
-                <ScalarProperty Name="PriceCategoryID" ColumnName="PriceCategoryID" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="VPriceLastList">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPriceLastList">
-              <MappingFragment StoreEntitySet="VPriceLastList">
-                <ScalarProperty Name="Style" ColumnName="Style" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="ProductCategoryName" ColumnName="ProductCategoryName" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
-                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
-                <ScalarProperty Name="TicketTypeName" ColumnName="TicketTypeName" />
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="UseToSale" ColumnName="UseToSale" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="ExtraMultiple" ColumnName="ExtraMultiple" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
                 <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
                 <ScalarProperty Name="PriceCategoryID" ColumnName="PriceCategoryID" />

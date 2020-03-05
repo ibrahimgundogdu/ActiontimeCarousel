@@ -208,6 +208,61 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        public ActionResult PriceCategory(Guid id)
+        {
+            LocationControlModel model = new LocationControlModel();
+
+            if (id == Guid.Empty)
+            {
+                return RedirectToAction("Index");
+            }
+
+            model.LocationModel = Db.VLocation.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationUID == id);
+
+            if (model.LocationModel != null)
+            {
+                model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
+                model.EmployeeLocationList = Db.GetLocationEmployees(model.LocationModel.LocationID).Select(x => new LocationEmployeeModel()
+                {
+                    EmployeeID = x.EmployeeID,
+                    EmployeeUID = x.EmployeeUID ?? Guid.Empty,
+                    FullName = x.FullName,
+                    Active = x.Active ?? false,
+                    PositionName = x.PositionName
+                }).ToList();
+                #region Schedule
+                model.ScheduleStart = model.LocationModel.ScheduleStart?.ToShortTimeString();
+                model.ScheduleFinish = model.LocationModel.ScheduleEnd?.ToShortTimeString();
+                model.ScheduleTime = model.LocationModel.ScheduleDuration?.ToString("hh\\:mm");
+                #endregion
+                #region Shift
+                model.ShiftStart = model.LocationModel.ShiftStart?.ToString("hh\\:mm");
+                model.ShiftFinish = model.LocationModel.ShiftFinish?.ToString("hh\\:mm");
+                model.ShiftTime = model.LocationModel.Duration;
+                #endregion
+                #region Status
+                model.StatusName = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "Beklemede" : (model.LocationModel.Status == 1 ? "Açık" : (model.LocationModel.Status == 2 ? "Kapalı" : ""))) : "");
+                model.StatusClass = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "warning" : (model.LocationModel.Status == 1 ? "success" : (model.LocationModel.Status == 2 ? "danger" : "danger"))) : "danger");
+                model.StatusIcon = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "clock" : (model.LocationModel.Status == 1 ? "sun" : (model.LocationModel.Status == 2 ? "moon" : "moon"))) : "moon");
+                #endregion
+                #region ScheduleLocation
+                model.WeekCode = model.LocationModel.WeekKey.Trim();
+                model.LocationScheduleList = Db.VLocationSchedule.Where(x => x.WeekCode.Trim() == model.WeekCode && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID).ToList();
+                #endregion
+                #region ShiftLocation
+                model.WeekList = Db.DateList.Where(x => x.WeekKey == model.LocationModel.WeekKey).ToList();
+                model.LocationShiftList = Db.VLocationShift.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID && x.WeekKey == model.LocationModel.WeekKey).ToList();
+                #endregion
+            }
+            else
+            {
+                return RedirectToAction("Index", "Location");
+            }
+
+            return View(model);
+        }
+
         [HttpPost]
         [AllowAnonymous]
         public ActionResult GetTimezoneList(int? ourCompanyId, int? locationTypeId)
