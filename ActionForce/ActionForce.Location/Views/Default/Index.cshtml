@@ -33,104 +33,26 @@
                     <div class="col-md-6 b-r bg-light--lt">
                         <div class="p-2">
                             <div class="row row-xs">
+                                @foreach (var price in Model.PriceList)
+                                {
+                                    <div class="col-sm-6">
+                                        <div class="card shadow-sm mb-3">
+                                            <div class="media media-21x9 @(price.Style)">
 
-                                <div class="col-sm-6">
-                                    <div class="card shadow-sm mb-3">
-                                        <div class="media media-21x9 gd-primary">
-                                            
-                                            <a href="#" class="media-content" >
-                                                <h3 class="text-fade text-white">3 Dk</h3><br />
-                                            </a>
+                                                <a href="#" class="media-content" onclick="AddBasket(@(price.ID))">
+                                                    <h3 class="text-fade text-white">@(price.Unit) Dk</h3><br />
+                                                </a>
 
-                                        </div>
-                                        <div class="p-2 text-center">
-                                            <h5 class="card-title mb-0">20,00 ₺</h5>
-                                            <span class="item-amount d-none d-sm-block text-sm">
-                                                Tramboline 3
-                                            </span>
+                                            </div>
+                                            <div class="p-2 text-center">
+                                                <h5 class="card-title mb-0">@(price.Price?.ToString("N2")) @(price.Sign)</h5>
+                                                <span class="item-amount d-none d-sm-block text-sm">
+                                                    @(price.ProductName)
+                                                </span>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="card shadow-sm mb-3">
-                                        <div class="media media-21x9 gd-primary">
-                                            <a class="media-content" >
-                                                <h3 class="text-fade text-white">5 Dk</h3>
-                                            </a>
-                                        </div>
-                                        <div class="p-2 text-center">
-                                            <h5 class="card-title mb-0">30,00 ₺</h5>
-                                            <span class="item-amount d-none d-sm-block text-sm">
-                                                Standart bilet
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="card shadow-sm mb-3">
-                                        <div class="media media-21x9 gd-primary">
-                                            <a class="media-content" >
-                                                <h3 class="text-fade text-white">7 Dk</h3>
-                                            </a>
-                                        </div>
-                                        <div class="p-2 text-center">
-                                            <h5 class="card-title mb-0">40,00 ₺</h5>
-                                            <span class="item-amount d-none d-sm-block text-sm">
-                                                Standart bilet
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="card shadow-sm mb-3">
-                                        <div class="media media-21x9 gd-warning">
-                                            <a class="media-content" >
-                                                <h3 class="text-fade text-white">3 Dk</h3>
-                                            </a>
-                                        </div>
-                                        <div class="p-2 text-center">
-                                            <h5 class="card-title mb-0">20,00 ₺</h5>
-                                            <span class="item-amount d-none d-sm-block text-sm text-warning">
-                                                Promosyonlu Bilet
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="card shadow-sm mb-3">
-                                        <div class="media media-21x9 gd-danger">
-                                            <a class="media-content">
-                                                <h3 class="text-fade text-white">3 Dk</h3>
-                                            </a>
-                                        </div>
-                                        <div class="p-2 text-center">
-                                            <h5 class="card-title mb-0">20,00 ₺</h5>
-                                            <span class="item-amount d-none d-sm-block text-sm text-danger">
-                                                Aile Boyu Bilet
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="card shadow-sm mb-3">
-                                        <div class="media media-21x9 gd-info">
-                                            <a class="media-content" >
-                                                <h3 class="text-fade text-white">  3 Dk</h3>
-                                            </a>
-                                        </div>
-                                        <div class="p-2 text-center">
-                                            <h5 class="card-title mb-0">20,00 ₺</h5>
-                                            <span class="item-amount d-none d-sm-block text-sm text-info">
-                                                Standart bilet
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -142,6 +64,7 @@
                                 <table class="table table-theme table-row v-middle">
                                     
                                     <tbody>
+
                                         <tr class=" v-middle shadow-sm">
                                            
                                             <td class="flex">
