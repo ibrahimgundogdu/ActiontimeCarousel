@@ -8664,7 +8664,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Location" EntityType="db293_ActionTimeDbModel.Location" />
           <EntitySet Name="VLocation" EntityType="db293_ActionTimeDbModel.VLocation" />
           <EntitySet Name="VCity" EntityType="db293_ActionTimeDbModel.VCity" />
-          <FunctionImport Name="GetLocationCurrentPrices">
+          <FunctionImport Name="GetLocationCurrentPrices" EntitySet="VPriceLastList" ReturnType="Collection(db293_ActionTimeDbModel.VPriceLastList)">
           <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="VPriceLastList" EntityType="db293_ActionTimeDbModel.VPriceLastList" />
