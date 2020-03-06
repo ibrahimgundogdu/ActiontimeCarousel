@@ -29,7 +29,8 @@ namespace ActionForce.Office
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
-        public CULocation CheckLocation { get; set; }
+        public int LocationPriceCategoryID { get; set; }
+        public FormLocation CheckLocation { get; set; }
         #region Schedule
         public string ScheduleStart { get; set; }
         public string ScheduleFinish { get; set; }

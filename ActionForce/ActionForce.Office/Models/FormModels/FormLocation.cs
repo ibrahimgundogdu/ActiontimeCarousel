@@ -5,7 +5,7 @@ using System.Web;
 
 namespace ActionForce.Office
 {
-    public class CULocation
+    public class FormLocation
     {
         public int LocationID { get; set; }
         public int OurCompany { get; set; }

@@ -33,7 +33,7 @@
                             <a href="#modelLocationPriceCategory" data-toggle="modal" class="link-03 lh-0 tx-primary">@*<i class="icon ion-md-add-circle-outline tx-15"></i>*@<i class="wd-15" data-feather="plus-circle"></i> &nbsp; Fiyat Kategorisi Ekle</a>
                         </div>
                     </div>
-                    <div class="card-body pd-20 pd-lg-25">
+                    <div class="card-body pd-20 pd-lg-25" id="locationPriceLists">
                         @{Html.RenderPartial("_PartialLocationPriceList", Model);}
                     </div>
                 </div>
@@ -140,7 +140,9 @@
 
         });
 
-        
+        function OnLocationPriceCategorySuccess(data) {
+            $('#modelLocationPriceCategoryEdit').modal('hide');
+        };
 
         function EditPriceCat(id) {
             var data = new FormData();

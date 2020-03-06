@@ -16,9 +16,9 @@
     <tbody>
         @if (Model.LocationPriceCategoryList != null)
         {
-            foreach (var item in Model.LocationPriceCategoryList.OrderByDescending(x => x.RecordDate))
+            foreach (var item in Model.LocationPriceCategoryList.OrderByDescending(x => x.StartDate))
             {
-                <tr class="@(Model?.LocationModel.PriceCatID == item.PriceCategoryID ? "selected":"")">
+                <tr>
                     <td class="tx-sm-13 bold">@($"{item.TicketTypeName} {item.CategoryName}")</td>
                     <td class="tx-sm-13">@(item.StartDate)</td>
                     <td class="tx-sm-13">@(item.RecordDate)</td>
@@ -32,3 +32,21 @@
         }
     </tbody>
 </table>
+<script>
+    $(function () {
+        feather.replace();
+    });
+</script>
+@if (Model.Result != null) //
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
+}

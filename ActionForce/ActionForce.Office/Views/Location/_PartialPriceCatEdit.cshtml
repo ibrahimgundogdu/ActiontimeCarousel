@@ -3,35 +3,50 @@
     <span aria-hidden="true">&times;</span>
 </a>
 <div>
-    <h4>@(Model?.LocationModel?.LocationName + " " + Model?.LocationModel?.LocationTypeName) | <span class="font-weight-bold text-black-50">Fiyat Kategori Güncelle</span></h4>
-    <div class="form-group row bg-gray-50 mg-b-5">
-        <label for="Mobile" class="col-sm-3 col-form-label">Fiyat Listesi</label>
-        <div class="col-sm-6">
-            <select class="form-control" id="priceCategory" name="PriceCatID">
-                @if (Model?.PriceCategoryList?.Count > 0)
-                {
-                    <option value="">Seçiniz</option>
-                    foreach (var item in Model.PriceCategoryList)
+    @using (Ajax.BeginForm("UpdatePriceCat", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "locationPriceLists", InsertionMode = InsertionMode.Replace, OnSuccess = "OnLocationPriceCategorySuccess" }))
+    {
+        @Html.AntiForgeryToken()
+        <h4>@(Model?.LocationModel?.LocationName + " " + Model?.LocationModel?.LocationTypeName) | <span class="font-weight-bold text-black-50">Fiyat Kategori Güncelle</span></h4>
+        <div class="form-group row bg-gray-50 mg-b-5">
+            <label for="Mobile" class="col-sm-3 col-form-label">Fiyat Listesi</label>
+            <div class="col-sm-6">
+                <select class="form-control" id="priceCategory" name="PriceCategoryID">
+                    @if (Model?.PriceCategoryList?.Count > 0)
                     {
-                        <option value="@(item.ID)" @(Model.LocationPriceCategory.PriceCategoryID == item.ID ? "selected" : "")>@(item.TicketTypeName + " " + item.CategoryName)</option>
+                        <option value="">Seçiniz</option>
+                        foreach (var item in Model.PriceCategoryList)
+                        {
+                            <option value="@(item.ID)" @(Model.LocationPriceCategory.PriceCategoryID == item.ID ? "selected" : "")>@(item.TicketTypeName + " " + item.CategoryName)</option>
+                        }
                     }
-                }
-            </select>
+                </select>
+            </div>
+            <div class="col-sm-3"></div>
         </div>
-        <div class="col-sm-3"></div>
-    </div>
-    <div class="form-group row bg-gray-50 mg-b-5">
-        <label for="Mobile" class="col-sm-3 col-form-label">Başlangıç Tarihi</label>
-        <div class="col-sm-6">
-            <input id="pricedatepicker" type="text" class="form-control form-control-sm shiftdate" placeholder="Başlangıç Tarihi" value="@(Model?.LocationPriceCategory.StartDate?.ToString("yyyy-MM-dd"))">
+        <div class="form-group row bg-gray-50 mg-b-5">
+            <label for="Mobile" class="col-sm-3 col-form-label">Başlangıç Tarihi</label>
+            <div class="col-sm-6">
+                <input id="pricedatepicker" type="text" class="form-control form-control-sm shiftdate" placeholder="Başlangıç Tarihi" name="StartDate" value="@(Model?.LocationPriceCategory.StartDate?.ToString("yyyy-MM-dd"))">
+            </div>
+            <div class="col-sm-3"></div>
         </div>
-        <div class="col-sm-3"></div>
-    </div>
+        <div class="form-group row mg-b-0">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <input name="LocationID" type="hidden" value="@(Model.LocationModel.LocationID)" />
+                <input name="ID" type="hidden" value="@(Model.LocationPriceCategoryID)" />
+                <button type="submit" class="btn btn-primary btn-block tx-15">Fiyat Kategori Güncelle</button>
+            </div>
+            <div class="col-sm-3">
+            </div>
+        </div>
+    }
 </div>
 
 
-<script type="text/javascript">
 
+<script type="text/javascript">
+    
     $('#pricedatepicker').datepicker({
         showOtherMonths: true,
         selectOtherMonths: true,
