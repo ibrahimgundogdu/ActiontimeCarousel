@@ -1184,5 +1184,14 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CleanBasket", locationIDParameter, employeeIDParameter);
         }
+    
+        public virtual int CheckLocationPriceCategory(Nullable<int> locationID)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CheckLocationPriceCategory", locationIDParameter);
+        }
     }
 }

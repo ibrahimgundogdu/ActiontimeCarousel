@@ -13,7 +13,7 @@
                     <option value="">Seçiniz</option>
                     foreach (var item in Model.PriceCategoryList)
                     {
-                        <option value="@(item.ID)" @(Model.LocationModel.PriceCatID == item.ID ? "selected" : "")>@(item.TicketTypeName + " " + item.CategoryName)</option>
+                        <option value="@(item.ID)" @(Model.LocationPriceCategory.PriceCategoryID == item.ID ? "selected" : "")>@(item.TicketTypeName + " " + item.CategoryName)</option>
                     }
                 }
             </select>
