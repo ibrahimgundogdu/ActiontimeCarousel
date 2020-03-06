@@ -61,5 +61,25 @@ namespace ActionForce.Location.Controllers
 
             return PartialView("_PartialBasketItemDetail", model);
         }
+
+        [AllowAnonymous]
+        public PartialViewResult CheckImmediately(int id, int ischecked)
+        {
+            DefaultControlModel model = new DefaultControlModel();
+
+            var basketitem = Db.TicketBasket.FirstOrDefault(x => x.ID == id);
+
+            if (basketitem != null)
+            {
+                bool isChecked = ischecked == 1 ? true : false;
+                var added = Db.AddBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID, id, null, null, null);
+            }
+
+            model.BasketList = Db.GetLocationCurrentBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).ToList();
+            model.Result.IsSuccess = true;
+            model.Result.Message = $"{model.Price.ProductName} kullanım durumu güncellendi.";
+
+            return PartialView("_PartialBasketList", model);
+        }
     }
 }
