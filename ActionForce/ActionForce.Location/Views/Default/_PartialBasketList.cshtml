@@ -4,21 +4,21 @@
         @foreach (var item in Model.BasketList.OrderBy(x => x.RecordDate))
         {
             <tr class=" v-middle shadow-sm">
-                <td class="flex" style="border-right:dotted 1px #d8d6d6 !important;width:10%;">
+                <td class="flex" style="border-right:dotted 1px #d8d6d6 !important;">
                     <label class="ui-switch dark" style="vertical-align:middle;">
                         <input type="checkbox" value="1" id="UseImmediately_@(item.ID)" @(item.UseImmediately == true ? "checked" : "") onchange="CheckImmediately(@(item.ID));">
                         <i></i>
                     </label>
                 </td>
-                <td class="flex">
-                    <a href="#" class="item-title text-color font-weight-bold"> @(item.Quantity)</a>
-                    @*<div class="item-except text-muted text-sm h-1x font-weight-100">@(item.ProductName)</div>*@
+                @*<td class="flex">
+                    <a href="#" class="item-title text-color font-weight-bold"> @(item.Quantity) Ad.</a>
+                    <div class="item-except text-muted text-sm h-1x font-weight-100">@(item.ProductName)</div>
+                </td>*@
+                <td>
+                    <span class="item-amount d-none d-sm-block text-sm font-weight-bold">@(item.Unit) Dk</span>
                 </td>
                 <td>
-                    <span class="item-amount d-none d-sm-block text-sm ">@(item.Unit) Dk</span>
-                </td>
-                <td>
-                    <span class="item-amount d-none d-sm-block text-sm">
+                    <span class="item-amount d-none d-sm-block text-sm font-weight-bold">
                         @(item.Price.ToString("N2")) @(item.Sign)
                     </span>
                 </td>

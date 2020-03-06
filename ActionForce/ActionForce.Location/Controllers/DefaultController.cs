@@ -68,16 +68,20 @@ namespace ActionForce.Location.Controllers
             DefaultControlModel model = new DefaultControlModel();
 
             var basketitem = Db.TicketBasket.FirstOrDefault(x => x.ID == id);
+            string usinginfo = string.Empty;
 
             if (basketitem != null)
             {
                 bool isChecked = ischecked == 1 ? true : false;
+
                 var added = Db.SetBasketItemUseImmediately(id, isChecked);
+
+                usinginfo = isChecked == true ? "Hemen kullanılacak": "Daha sonra kullanılacak";
             }
 
             model.BasketList = Db.GetLocationCurrentBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).ToList();
             model.Result.IsSuccess = true;
-            model.Result.Message = $"{model.Price.ProductName} kullanım durumu güncellendi.";
+            model.Result.Message = $"Bilet kullanım durumu : {usinginfo} olarak güncellendi.";
 
             return PartialView("_PartialBasketList", model);
         }
