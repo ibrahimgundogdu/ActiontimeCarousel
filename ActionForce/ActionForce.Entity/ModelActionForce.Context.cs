@@ -1193,5 +1193,18 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CheckLocationPriceCategory", locationIDParameter);
         }
+    
+        public virtual int SetBasketItemUseImmediately(Nullable<int> iD, Nullable<bool> @checked)
+        {
+            var iDParameter = iD.HasValue ?
+                new ObjectParameter("ID", iD) :
+                new ObjectParameter("ID", typeof(int));
+    
+            var checkedParameter = @checked.HasValue ?
+                new ObjectParameter("Checked", @checked) :
+                new ObjectParameter("Checked", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetBasketItemUseImmediately", iDParameter, checkedParameter);
+        }
     }
 }

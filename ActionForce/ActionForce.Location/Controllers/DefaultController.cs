@@ -72,7 +72,7 @@ namespace ActionForce.Location.Controllers
             if (basketitem != null)
             {
                 bool isChecked = ischecked == 1 ? true : false;
-                var added = Db.AddBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID, id, null, null, null);
+                var added = Db.SetBasketItemUseImmediately(id, isChecked);
             }
 
             model.BasketList = Db.GetLocationCurrentBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).ToList();
