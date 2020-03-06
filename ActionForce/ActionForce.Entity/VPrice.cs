@@ -41,5 +41,6 @@ namespace ActionForce.Entity
         public string Style { get; set; }
         public string Sign { get; set; }
         public string BackStyle { get; set; }
+        public string Description { get; set; }
     }
 }

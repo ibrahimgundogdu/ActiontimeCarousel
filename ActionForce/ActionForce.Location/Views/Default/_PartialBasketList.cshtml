@@ -11,9 +11,9 @@
                     </label>
                 </td>
                 @*<td class="flex">
-                    <a href="#" class="item-title text-color font-weight-bold"> @(item.Quantity) Ad.</a>
-                    <div class="item-except text-muted text-sm h-1x font-weight-100">@(item.ProductName)</div>
-                </td>*@
+                        <a href="#" class="item-title text-color font-weight-bold"> @(item.Quantity) Ad.</a>
+                        <div class="item-except text-muted text-sm h-1x font-weight-100">@(item.ProductName)</div>
+                    </td>*@
                 <td>
                     <span class="item-amount d-none d-sm-block text-sm font-weight-bold">@(item.Unit) Dk</span>
                 </td>
@@ -24,7 +24,7 @@
                 </td>
                 <td class="@($"bg-{item.BackStyle}--lt")" style="border-left:dotted 1px #d8d6d6 !important;">
                     <div class="item-action dropdown text-center">
-                        <a href="#" class="text-muted" data-toggle="modal" data-target="#BasketItemDetail" onclick="BasketItemDetail(@(item.ID))"><i data-feather="more-vertical"></i></a>
+                        <a href="#" class="text-muted" data-toggle="modal" data-target="#BasketItemDetail" onclick="BasketItemDetail(@(item.ID))"><i  data-feather="more-vertical"></i></a>
                     </div>
                 </td>
             </tr>
@@ -37,6 +37,9 @@
 @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
 {
     <script type="text/javascript">
+
+        feather.replace({ 'width': 16, 'height': 16 });
+
             $(function () {
                 notie.setOptions({
                     alertTime: 5
@@ -45,8 +48,6 @@
                 noticed = true;
             });
 
-            $(function () {
-                feather.replace();
-            });
     </script>
+
 }

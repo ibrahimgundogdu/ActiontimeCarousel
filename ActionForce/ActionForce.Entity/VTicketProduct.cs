@@ -30,5 +30,6 @@ namespace ActionForce.Entity
         public string ProductCategoryName { get; set; }
         public string TicketTypeName { get; set; }
         public Nullable<int> TicketTypeID { get; set; }
+        public string Description { get; set; }
     }
 }

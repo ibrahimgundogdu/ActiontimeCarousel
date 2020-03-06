@@ -2953,7 +2953,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="PromotionID" Type="int" />
           <Property Name="IsPromotion" Type="bit" />
           <Property Name="IsApprove" Type="bit" />
-          <Property Name="Description" Type="nvarchar" MaxLength="150" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
           <Property Name="RecordEmployeeID" Type="int" />
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="SaleTypeID" Type="int" />
@@ -3012,6 +3012,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="CategoryID" Type="int" />
           <Property Name="TicketTypeID" Type="int" />
           <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
           <Property Name="Unit" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="RecordDate" Type="datetime" />
@@ -5296,6 +5297,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPrice' does not have a pri
           <Property Name="Style" Type="nvarchar" MaxLength="50" />
           <Property Name="Sign" Type="nvarchar" MaxLength="1" />
           <Property Name="BackStyle" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPriceCategory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5354,6 +5356,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPriceLastList' does not ha
           <Property Name="Style" Type="nvarchar" MaxLength="50" />
           <Property Name="Sign" Type="nvarchar" MaxLength="1" />
           <Property Name="BackStyle" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VRevenue' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5564,7 +5567,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketBasket' does not hav
           <Property Name="PromotionID" Type="int" />
           <Property Name="IsPromotion" Type="bit" />
           <Property Name="IsApprove" Type="bit" />
-          <Property Name="Description" Type="nvarchar" MaxLength="150" />
           <Property Name="RecordEmployeeID" Type="int" />
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="SaleTypeID" Type="int" />
@@ -5578,6 +5580,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketBasket' does not hav
           <Property Name="Style" Type="nvarchar" MaxLength="50" />
           <Property Name="BackStyle" Type="nvarchar" MaxLength="50" />
           <Property Name="Sign" Type="nvarchar" MaxLength="1" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketProduct' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5601,6 +5604,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketProduct' does not ha
           <Property Name="ProductCategoryName" Type="nvarchar" MaxLength="50" />
           <Property Name="TicketTypeName" Type="nvarchar" MaxLength="50" />
           <Property Name="TicketTypeID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -7919,7 +7923,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VPrice].[CompanyName] AS [CompanyName], 
     [VPrice].[Style] AS [Style], 
     [VPrice].[Sign] AS [Sign], 
-    [VPrice].[BackStyle] AS [BackStyle]
+    [VPrice].[BackStyle] AS [BackStyle], 
+    [VPrice].[Description] AS [Description]
     FROM [dbo].[VPrice] AS [VPrice]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VPriceCategory" EntityType="Self.VPriceCategory" store:Type="Views" store:Schema="dbo">
@@ -7970,7 +7975,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VPriceLastList].[ProductName] AS [ProductName], 
     [VPriceLastList].[Style] AS [Style], 
     [VPriceLastList].[Sign] AS [Sign], 
-    [VPriceLastList].[BackStyle] AS [BackStyle]
+    [VPriceLastList].[BackStyle] AS [BackStyle], 
+    [VPriceLastList].[Description] AS [Description]
     FROM [dbo].[VPriceLastList] AS [VPriceLastList]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VRevenue" EntityType="Self.VRevenue" store:Type="Views" store:Schema="dbo">
@@ -8153,7 +8159,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketBasket].[PromotionID] AS [PromotionID], 
     [VTicketBasket].[IsPromotion] AS [IsPromotion], 
     [VTicketBasket].[IsApprove] AS [IsApprove], 
-    [VTicketBasket].[Description] AS [Description], 
     [VTicketBasket].[RecordEmployeeID] AS [RecordEmployeeID], 
     [VTicketBasket].[RecordDate] AS [RecordDate], 
     [VTicketBasket].[SaleTypeID] AS [SaleTypeID], 
@@ -8166,7 +8171,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketBasket].[ProductCategoryName] AS [ProductCategoryName], 
     [VTicketBasket].[Style] AS [Style], 
     [VTicketBasket].[BackStyle] AS [BackStyle], 
-    [VTicketBasket].[Sign] AS [Sign]
+    [VTicketBasket].[Sign] AS [Sign], 
+    [VTicketBasket].[Description] AS [Description]
     FROM [dbo].[VTicketBasket] AS [VTicketBasket]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VTicketProduct" EntityType="Self.VTicketProduct" store:Type="Views" store:Schema="dbo">
@@ -8186,7 +8192,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketProduct].[ProductName] AS [ProductName], 
     [VTicketProduct].[ProductCategoryName] AS [ProductCategoryName], 
     [VTicketProduct].[TicketTypeName] AS [TicketTypeName], 
-    [VTicketProduct].[TicketTypeID] AS [TicketTypeID]
+    [VTicketProduct].[TicketTypeID] AS [TicketTypeID], 
+    [VTicketProduct].[Description] AS [Description]
     FROM [dbo].[VTicketProduct] AS [VTicketProduct]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="WeekList" EntityType="Self.WeekList" store:Type="Views" store:Schema="dbo">
@@ -8820,7 +8827,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="TicketSaleCollection" EntityType="db293_ActionTimeDbModel.TicketSaleCollection" />
           <EntitySet Name="TicketSaleStatus" EntityType="db293_ActionTimeDbModel.TicketSaleStatus" />
           <EntitySet Name="VPriceCategory" EntityType="db293_ActionTimeDbModel.VPriceCategory" />
-          <EntitySet Name="TicketBasket" EntityType="db293_ActionTimeDbModel.TicketBasket" />
           <EntitySet Name="TicketSale" EntityType="db293_ActionTimeDbModel.TicketSale" />
           <EntitySet Name="TicketSaleRefund" EntityType="db293_ActionTimeDbModel.TicketSaleRefund" />
           <EntitySet Name="TicketSaleRows" EntityType="db293_ActionTimeDbModel.TicketSaleRows" />
@@ -8846,7 +8852,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="VPriceLastList" EntityType="db293_ActionTimeDbModel.VPriceLastList" />
           <EntitySet Name="VLocationPriceCategory" EntityType="db293_ActionTimeDbModel.VLocationPriceCategory" />
-          <EntitySet Name="VTicketBasket" EntityType="db293_ActionTimeDbModel.VTicketBasket" />
           <FunctionImport Name="AddBasket">
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
@@ -8879,6 +8884,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="ID" Mode="In" Type="Int32" />
             <Parameter Name="Checked" Mode="In" Type="Boolean" />
           </FunctionImport>
+          <EntitySet Name="TicketBasket" EntityType="db293_ActionTimeDbModel.TicketBasket" />
+          <EntitySet Name="VTicketBasket" EntityType="db293_ActionTimeDbModel.VTicketBasket" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -14380,37 +14387,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TicketTypeID" Type="Int32" />
           <Property Name="TicketTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="TicketBasket">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="PriceCategoryID" Type="Int32" />
-          <Property Name="PriceID" Type="Int32" Nullable="false" />
-          <Property Name="TicketProductID" Type="Int32" />
-          <Property Name="TicketTypeID" Type="Int32" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TicketNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="IsSale" Type="Boolean" Nullable="false" />
-          <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="Unit" Type="Int32" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <Property Name="Total" Type="Double" Nullable="false" />
-          <Property Name="Money" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="PromotionID" Type="Int32" />
-          <Property Name="IsPromotion" Type="Boolean" />
-          <Property Name="IsApprove" Type="Boolean" />
-          <Property Name="Description" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="SaleTypeID" Type="Int32" />
-          <Property Name="PrePaid" Type="Double" />
-          <Property Name="PrePaidCampaignID" Type="Int32" />
-          <Property Name="EmployeeID" Type="Int32" />
-          <Property Name="UseImmediately" Type="Boolean" />
-        </EntityType>
         <EntityType Name="TicketSale">
           <Key>
             <PropertyRef Name="ID" />
@@ -14636,6 +14612,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateEmployeeID" Type="Int32" />
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VTicketProduct">
           <Key>
@@ -14657,6 +14634,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ProductCategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TicketTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TicketTypeID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="LocationSchedule">
           <Key>
@@ -14715,6 +14693,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Style" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
           <Property Name="BackStyle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Location">
           <Key>
@@ -14881,6 +14860,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Style" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
           <Property Name="BackStyle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VLocationPriceCategory">
           <Key>
@@ -14902,6 +14882,47 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TicketTypeID" Type="Int32" />
           <Property Name="TicketTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="TicketBasketCounter">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="Count" Type="Int32" />
+        </EntityType>
+        <EntityType Name="TicketBasket">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="PriceCategoryID" Type="Int32" />
+          <Property Name="PriceID" Type="Int32" Nullable="false" />
+          <Property Name="TicketProductID" Type="Int32" />
+          <Property Name="TicketTypeID" Type="Int32" />
+          <Property Name="UseImmediately" Type="Boolean" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TicketNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="IsSale" Type="Boolean" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <Property Name="Unit" Type="Int32" />
+          <Property Name="Price" Type="Double" Nullable="false" />
+          <Property Name="Total" Type="Double" Nullable="false" />
+          <Property Name="Money" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="PromotionID" Type="Int32" />
+          <Property Name="IsPromotion" Type="Boolean" />
+          <Property Name="IsApprove" Type="Boolean" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="SaleTypeID" Type="Int32" />
+          <Property Name="PrePaid" Type="Double" />
+          <Property Name="PrePaidCampaignID" Type="Int32" />
+        </EntityType>
         <EntityType Name="VTicketBasket">
           <Key>
             <PropertyRef Name="ID" />
@@ -14920,6 +14941,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="PriceID" Type="Int32" Nullable="false" />
           <Property Name="TicketProductID" Type="Int32" />
           <Property Name="TicketTypeID" Type="Int32" />
+          <Property Name="UseImmediately" Type="Boolean" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="TicketNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
@@ -14932,7 +14954,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="PromotionID" Type="Int32" />
           <Property Name="IsPromotion" Type="Boolean" />
           <Property Name="IsApprove" Type="Boolean" />
-          <Property Name="Description" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="RecordEmployeeID" Type="Int32" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
           <Property Name="SaleTypeID" Type="Int32" />
@@ -14946,17 +14967,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Style" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BackStyle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-          <Property Name="UseImmediately" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="TicketBasketCounter">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="EmployeeID" Type="Int32" />
-          <Property Name="Date" Type="DateTime" Precision="0" />
-          <Property Name="Count" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -20257,38 +20268,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="TicketBasket">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketBasket">
-              <MappingFragment StoreEntitySet="TicketBasket">
-                <ScalarProperty Name="UseImmediately" ColumnName="UseImmediately" />
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-                <ScalarProperty Name="PrePaidCampaignID" ColumnName="PrePaidCampaignID" />
-                <ScalarProperty Name="PrePaid" ColumnName="PrePaid" />
-                <ScalarProperty Name="SaleTypeID" ColumnName="SaleTypeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="IsApprove" ColumnName="IsApprove" />
-                <ScalarProperty Name="IsPromotion" ColumnName="IsPromotion" />
-                <ScalarProperty Name="PromotionID" ColumnName="PromotionID" />
-                <ScalarProperty Name="Money" ColumnName="Money" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="IsSale" ColumnName="IsSale" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="TicketNumber" ColumnName="TicketNumber" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
-                <ScalarProperty Name="TicketProductID" ColumnName="TicketProductID" />
-                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
-                <ScalarProperty Name="PriceCategoryID" ColumnName="PriceCategoryID" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="TicketSale">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketSale">
               <MappingFragment StoreEntitySet="TicketSale">
@@ -20505,6 +20484,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketProduct">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketProduct">
               <MappingFragment StoreEntitySet="TicketProduct">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
                 <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
@@ -20524,6 +20504,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VTicketProduct">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketProduct">
               <MappingFragment StoreEntitySet="VTicketProduct">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
                 <ScalarProperty Name="TicketTypeName" ColumnName="TicketTypeName" />
                 <ScalarProperty Name="ProductCategoryName" ColumnName="ProductCategoryName" />
@@ -20573,6 +20554,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VPrice">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPrice">
               <MappingFragment StoreEntitySet="VPrice">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="BackStyle" ColumnName="BackStyle" />
                 <ScalarProperty Name="Sign" ColumnName="Sign" />
                 <ScalarProperty Name="Style" ColumnName="Style" />
@@ -20744,6 +20726,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VPriceLastList">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPriceLastList">
               <MappingFragment StoreEntitySet="VPriceLastList">
+                <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="BackStyle" ColumnName="BackStyle" />
                 <ScalarProperty Name="Sign" ColumnName="Sign" />
                 <ScalarProperty Name="Style" ColumnName="Style" />
@@ -20795,46 +20778,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="VTicketBasket">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketBasket">
-              <MappingFragment StoreEntitySet="VTicketBasket">
-                <ScalarProperty Name="UseImmediately" ColumnName="UseImmediately" />
-                <ScalarProperty Name="Sign" ColumnName="Sign" />
-                <ScalarProperty Name="BackStyle" ColumnName="BackStyle" />
-                <ScalarProperty Name="Style" ColumnName="Style" />
-                <ScalarProperty Name="ProductCategoryName" ColumnName="ProductCategoryName" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="TicketTypeName" ColumnName="TicketTypeName" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
-                <ScalarProperty Name="PrePaidCampaignID" ColumnName="PrePaidCampaignID" />
-                <ScalarProperty Name="PrePaid" ColumnName="PrePaid" />
-                <ScalarProperty Name="SaleTypeID" ColumnName="SaleTypeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="IsApprove" ColumnName="IsApprove" />
-                <ScalarProperty Name="IsPromotion" ColumnName="IsPromotion" />
-                <ScalarProperty Name="PromotionID" ColumnName="PromotionID" />
-                <ScalarProperty Name="Money" ColumnName="Money" />
-                <ScalarProperty Name="Total" ColumnName="Total" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="IsSale" ColumnName="IsSale" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="TicketNumber" ColumnName="TicketNumber" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
-                <ScalarProperty Name="TicketProductID" ColumnName="TicketProductID" />
-                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
-                <ScalarProperty Name="PriceCategoryID" ColumnName="PriceCategoryID" />
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddBasket" FunctionName="db293_ActionTimeDbModel.Store.AddBasket" />
           <FunctionImportMapping FunctionImportName="GetLocationCurrentBasket" FunctionName="db293_ActionTimeDbModel.Store.GetLocationCurrentBasket">
           </FunctionImportMapping>
@@ -20854,6 +20797,78 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImportMapping FunctionImportName="CleanBasket" FunctionName="db293_ActionTimeDbModel.Store.CleanBasket" />
           <FunctionImportMapping FunctionImportName="CheckLocationPriceCategory" FunctionName="db293_ActionTimeDbModel.Store.CheckLocationPriceCategory" />
           <FunctionImportMapping FunctionImportName="SetBasketItemUseImmediately" FunctionName="db293_ActionTimeDbModel.Store.SetBasketItemUseImmediately" />
+          <EntitySetMapping Name="TicketBasket">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketBasket">
+              <MappingFragment StoreEntitySet="TicketBasket">
+                <ScalarProperty Name="PrePaidCampaignID" ColumnName="PrePaidCampaignID" />
+                <ScalarProperty Name="PrePaid" ColumnName="PrePaid" />
+                <ScalarProperty Name="SaleTypeID" ColumnName="SaleTypeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsApprove" ColumnName="IsApprove" />
+                <ScalarProperty Name="IsPromotion" ColumnName="IsPromotion" />
+                <ScalarProperty Name="PromotionID" ColumnName="PromotionID" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="IsSale" ColumnName="IsSale" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="TicketNumber" ColumnName="TicketNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UseImmediately" ColumnName="UseImmediately" />
+                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
+                <ScalarProperty Name="TicketProductID" ColumnName="TicketProductID" />
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+                <ScalarProperty Name="PriceCategoryID" ColumnName="PriceCategoryID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VTicketBasket">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketBasket">
+              <MappingFragment StoreEntitySet="VTicketBasket">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Sign" ColumnName="Sign" />
+                <ScalarProperty Name="BackStyle" ColumnName="BackStyle" />
+                <ScalarProperty Name="Style" ColumnName="Style" />
+                <ScalarProperty Name="ProductCategoryName" ColumnName="ProductCategoryName" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="TicketTypeName" ColumnName="TicketTypeName" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="CategoryCode" ColumnName="CategoryCode" />
+                <ScalarProperty Name="PrePaidCampaignID" ColumnName="PrePaidCampaignID" />
+                <ScalarProperty Name="PrePaid" ColumnName="PrePaid" />
+                <ScalarProperty Name="SaleTypeID" ColumnName="SaleTypeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="IsApprove" ColumnName="IsApprove" />
+                <ScalarProperty Name="IsPromotion" ColumnName="IsPromotion" />
+                <ScalarProperty Name="PromotionID" ColumnName="PromotionID" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="IsSale" ColumnName="IsSale" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="TicketNumber" ColumnName="TicketNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UseImmediately" ColumnName="UseImmediately" />
+                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
+                <ScalarProperty Name="TicketProductID" ColumnName="TicketProductID" />
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+                <ScalarProperty Name="PriceCategoryID" ColumnName="PriceCategoryID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

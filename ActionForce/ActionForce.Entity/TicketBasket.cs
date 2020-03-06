@@ -16,10 +16,12 @@ namespace ActionForce.Entity
     {
         public long ID { get; set; }
         public Nullable<int> LocationID { get; set; }
+        public Nullable<int> EmployeeID { get; set; }
         public Nullable<int> PriceCategoryID { get; set; }
         public int PriceID { get; set; }
         public Nullable<int> TicketProductID { get; set; }
         public Nullable<int> TicketTypeID { get; set; }
+        public Nullable<bool> UseImmediately { get; set; }
         public string Name { get; set; }
         public string TicketNumber { get; set; }
         public System.DateTime Date { get; set; }
@@ -38,7 +40,5 @@ namespace ActionForce.Entity
         public Nullable<int> SaleTypeID { get; set; }
         public Nullable<double> PrePaid { get; set; }
         public Nullable<int> PrePaidCampaignID { get; set; }
-        public Nullable<int> EmployeeID { get; set; }
-        public Nullable<bool> UseImmediately { get; set; }
     }
 }

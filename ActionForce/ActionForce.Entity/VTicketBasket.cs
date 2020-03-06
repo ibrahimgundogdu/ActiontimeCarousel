@@ -21,6 +21,7 @@ namespace ActionForce.Entity
         public int PriceID { get; set; }
         public Nullable<int> TicketProductID { get; set; }
         public Nullable<int> TicketTypeID { get; set; }
+        public Nullable<bool> UseImmediately { get; set; }
         public string Name { get; set; }
         public string TicketNumber { get; set; }
         public System.DateTime Date { get; set; }
@@ -33,7 +34,6 @@ namespace ActionForce.Entity
         public Nullable<int> PromotionID { get; set; }
         public Nullable<bool> IsPromotion { get; set; }
         public Nullable<bool> IsApprove { get; set; }
-        public string Description { get; set; }
         public Nullable<int> RecordEmployeeID { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<int> SaleTypeID { get; set; }
@@ -47,6 +47,6 @@ namespace ActionForce.Entity
         public string Style { get; set; }
         public string BackStyle { get; set; }
         public string Sign { get; set; }
-        public Nullable<bool> UseImmediately { get; set; }
+        public string Description { get; set; }
     }
 }

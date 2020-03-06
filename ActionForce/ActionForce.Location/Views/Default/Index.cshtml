@@ -19,7 +19,7 @@
                         <i class="text-primary font-weight-bold" data-feather="list"></i>
                     </a>
                     <a href="#" class="btn btn-md btn-white">
-                        Sipariş No &nbsp;&nbsp;&nbsp;  <span class="font-weight-bold">@(Model.EmployeeBasketCount.Value.ToString().PadLeft(3, '0'))</span>
+                        Sipariş No &nbsp;&nbsp;&nbsp;  <span class="font-weight-bold">@((Model.EmployeeBasketCount.Value + 1).ToString().PadLeft(3, '0'))</span>
                     </a>
 
                     <button data-toggle="modal" data-target="#content-aside" data-modal class="btn btn-md ml-auto btn-white">
@@ -74,9 +74,7 @@
             <div class="navbar">
                 <span class="text-md mx-2">  &nbsp; </span>
                 <div class="dropdown dropright">
-                    <button data-toggle="dropdown" class="btn btn-sm btn-icon no-bg no-shadow">
-                        
-                    </button>
+                    <button data-toggle="dropdown" class="btn btn-sm btn-icon no-bg no-shadow"></button>
 
                 </div>
             </div>
@@ -143,30 +141,30 @@
                     <div class="">
 
                         @*<div class="form-group">
-                            <div class="col-sm-12">
-                                <label class="col-form-label h-25" for="usingnow" style="vertical-align:middle;">Hemen Kullanılacak</label> &nbsp;&nbsp;&nbsp;&nbsp;
-                                <label class="ui-switch ui-switch-lg dark" style="vertical-align:middle;">
-                                    <input type="checkbox" value="1" id="usingnow" name="usingnow" checked>
-                                    <i></i>
-                                </label>
+                                <div class="col-sm-12">
+                                    <label class="col-form-label h-25" for="usingnow" style="vertical-align:middle;">Hemen Kullanılacak</label> &nbsp;&nbsp;&nbsp;&nbsp;
+                                    <label class="ui-switch ui-switch-lg dark" style="vertical-align:middle;">
+                                        <input type="checkbox" value="1" id="usingnow" name="usingnow" checked>
+                                        <i></i>
+                                    </label>
+                                </div>
                             </div>
-                        </div>
-                        <div class="mb-1">
-                            <input type="text" class="form-control" placeholder="Adı Soyadı" required>
-                        </div>
-                        <div class="mb-1">
-                            <input type="text" class="form-control" placeholder="Cep Telefonu">
-                        </div>
-                        <div class="mb-1">
-                            <input type="text" class="form-control" placeholder="Kimlik Numarası">
-                        </div>
-                        <div class="mb-1">
-                            <input type="text" class="form-control" placeholder="Detay" required>
-                        </div>*@
+                            <div class="mb-1">
+                                <input type="text" class="form-control" placeholder="Adı Soyadı" required>
+                            </div>
+                            <div class="mb-1">
+                                <input type="text" class="form-control" placeholder="Cep Telefonu">
+                            </div>
+                            <div class="mb-1">
+                                <input type="text" class="form-control" placeholder="Kimlik Numarası">
+                            </div>
+                            <div class="mb-1">
+                                <input type="text" class="form-control" placeholder="Detay" required>
+                            </div>*@
 
 
                         <div class="mt-2 mb-1">
-                            <button class="btn btn-warning btn-block btn-md">Satışı Tamamla</button>
+                            <button class="btn btn-dark btn-block btn-md">Satışı Tamamla</button>
                         </div>
                     </div>
                 </div>
@@ -225,7 +223,7 @@
 
             var ischecked = 0;
 
-            if ($("#UseImmediately_"+id).is(':checked')) {
+            if ($("#UseImmediately_" + id).is(':checked')) {
                 ischecked = 1;
             }
 
