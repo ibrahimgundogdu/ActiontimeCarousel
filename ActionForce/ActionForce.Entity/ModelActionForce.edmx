@@ -6063,6 +6063,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
         </Function>
+        <Function Name="SetBasketItemUseImmediately" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+          <Parameter Name="Checked" Type="bit" Mode="In" />
+        </Function>
         <Function Name="SetEmployeeScheduleMultiplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="Date" Type="date" Mode="In" />
@@ -8870,6 +8874,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <FunctionImport Name="CheckLocationPriceCategory">
           <Parameter Name="LocationID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SetBasketItemUseImmediately">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="Checked" Mode="In" Type="Boolean" />
           </FunctionImport>
          
           </EntityContainer>
@@ -20845,6 +20853,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImportMapping FunctionImportName="SetBasketCount" FunctionName="db293_ActionTimeDbModel.Store.SetBasketCount" />
           <FunctionImportMapping FunctionImportName="CleanBasket" FunctionName="db293_ActionTimeDbModel.Store.CleanBasket" />
           <FunctionImportMapping FunctionImportName="CheckLocationPriceCategory" FunctionName="db293_ActionTimeDbModel.Store.CheckLocationPriceCategory" />
+          <FunctionImportMapping FunctionImportName="SetBasketItemUseImmediately" FunctionName="db293_ActionTimeDbModel.Store.SetBasketItemUseImmediately" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
