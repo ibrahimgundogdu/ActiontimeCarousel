@@ -10,6 +10,7 @@ namespace ActionForce.Office.Controllers
 {
     public class LocationController : BaseController
     {
+        #region Location
         [AllowAnonymous]
         public ActionResult Index()
         {
@@ -196,7 +197,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["checkLocation"] != null)
             {
-                model.CheckLocation = TempData["checkLocation"] as CULocation;
+                model.CheckLocation = TempData["checkLocation"] as FormLocation;
 
                 var ticketTypeId = Db.LocationType.FirstOrDefault(x => x.ID == model.CheckLocation.LocationTypeID).TicketTypeID;
                 model.PriceCategoryList = model.PriceCategoryList.Where(x => x.TicketTypeID == ticketTypeId).ToList();
@@ -206,64 +207,6 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result;
             }
-            return View(model);
-        }
-
-        [AllowAnonymous]
-        public ActionResult PriceCategory(Guid id)
-        {
-            LocationControlModel model = new LocationControlModel();
-
-            if (id == Guid.Empty)
-            {
-                return RedirectToAction("Index");
-            }
-
-            model.LocationModel = Db.VLocation.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationUID == id);
-
-            if (model.LocationModel != null)
-            {
-                model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
-                model.EmployeeLocationList = Db.GetLocationEmployees(model.LocationModel.LocationID).Select(x => new LocationEmployeeModel()
-                {
-                    EmployeeID = x.EmployeeID,
-                    EmployeeUID = x.EmployeeUID ?? Guid.Empty,
-                    FullName = x.FullName,
-                    Active = x.Active ?? false,
-                    PositionName = x.PositionName
-                }).ToList();
-                model.LocationPriceLastList = Db.GetLocationCurrentPrices(model.LocationModel.LocationID).ToList();
-                model.LocationPriceCategoryList = Db.VLocationPriceCategory.Where(x => x.LocationID == model.LocationModel.LocationID).ToList();
-                model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.TicketTypeID == model.LocationModel.TicketTypeID).ToList();
-                #region Schedule
-                model.ScheduleStart = model.LocationModel.ScheduleStart?.ToShortTimeString();
-                model.ScheduleFinish = model.LocationModel.ScheduleEnd?.ToShortTimeString();
-                model.ScheduleTime = model.LocationModel.ScheduleDuration?.ToString("hh\\:mm");
-                #endregion
-                #region Shift
-                model.ShiftStart = model.LocationModel.ShiftStart?.ToString("hh\\:mm");
-                model.ShiftFinish = model.LocationModel.ShiftFinish?.ToString("hh\\:mm");
-                model.ShiftTime = model.LocationModel.Duration;
-                #endregion
-                #region Status
-                model.StatusName = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "Beklemede" : (model.LocationModel.Status == 1 ? "Açık" : (model.LocationModel.Status == 2 ? "Kapalı" : ""))) : "");
-                model.StatusClass = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "warning" : (model.LocationModel.Status == 1 ? "success" : (model.LocationModel.Status == 2 ? "danger" : "danger"))) : "danger");
-                model.StatusIcon = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "clock" : (model.LocationModel.Status == 1 ? "sun" : (model.LocationModel.Status == 2 ? "moon" : "moon"))) : "moon");
-                #endregion
-                #region ScheduleLocation
-                model.WeekCode = model.LocationModel.WeekKey.Trim();
-                model.LocationScheduleList = Db.VLocationSchedule.Where(x => x.WeekCode.Trim() == model.WeekCode && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID).ToList();
-                #endregion
-                #region ShiftLocation
-                model.WeekList = Db.DateList.Where(x => x.WeekKey == model.LocationModel.WeekKey).ToList();
-                model.LocationShiftList = Db.VLocationShift.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID && x.WeekKey == model.LocationModel.WeekKey).ToList();
-                #endregion
-            }
-            else
-            {
-                return RedirectToAction("Index", "Location");
-            }
-
             return View(model);
         }
 
@@ -325,7 +268,7 @@ namespace ActionForce.Office.Controllers
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
         [AllowAnonymous]
-        public ActionResult EditLocation(CULocation location)
+        public ActionResult EditLocation(FormLocation location)
         {
             LocationControlModel model = new LocationControlModel();
             model.Result = new Result();
@@ -501,7 +444,7 @@ namespace ActionForce.Office.Controllers
 
             if (TempData["checkLocation"] != null)
             {
-                model.CheckLocation = TempData["checkLocation"] as CULocation;
+                model.CheckLocation = TempData["checkLocation"] as FormLocation;
 
                 var ticketTypeId = Db.LocationType.FirstOrDefault(x => x.ID == model.CheckLocation.LocationTypeID).TicketTypeID;
                 model.PriceCategoryList = model.PriceCategoryList.Where(x => x.TicketTypeID == ticketTypeId).ToList();
@@ -519,7 +462,7 @@ namespace ActionForce.Office.Controllers
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
         [AllowAnonymous]
-        public ActionResult AddLocation(CULocation location)
+        public ActionResult AddLocation(FormLocation location)
         {
             LocationControlModel model = new LocationControlModel();
             model.Result = new Result();
@@ -625,15 +568,64 @@ namespace ActionForce.Office.Controllers
 
             return RedirectToAction("Detail", "Location", new { id = locationUID });
         }
-
-        [HttpPost]
+        #endregion
+        #region PriceCategory
         [AllowAnonymous]
-        public ActionResult LocationCheck()
+        public ActionResult PriceCategory(Guid id)
         {
-
             LocationControlModel model = new LocationControlModel();
 
-            return Json(model, JsonRequestBehavior.AllowGet);
+            if (id == Guid.Empty)
+            {
+                return RedirectToAction("Index");
+            }
+
+            model.LocationModel = Db.VLocation.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationUID == id);
+
+            if (model.LocationModel != null)
+            {
+                model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
+                model.EmployeeLocationList = Db.GetLocationEmployees(model.LocationModel.LocationID).Select(x => new LocationEmployeeModel()
+                {
+                    EmployeeID = x.EmployeeID,
+                    EmployeeUID = x.EmployeeUID ?? Guid.Empty,
+                    FullName = x.FullName,
+                    Active = x.Active ?? false,
+                    PositionName = x.PositionName
+                }).ToList();
+                model.LocationPriceLastList = Db.GetLocationCurrentPrices(model.LocationModel.LocationID).ToList();
+                model.LocationPriceCategoryList = Db.VLocationPriceCategory.Where(x => x.LocationID == model.LocationModel.LocationID).ToList();
+                model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.TicketTypeID == model.LocationModel.TicketTypeID).ToList();
+                #region Schedule
+                model.ScheduleStart = model.LocationModel.ScheduleStart?.ToShortTimeString();
+                model.ScheduleFinish = model.LocationModel.ScheduleEnd?.ToShortTimeString();
+                model.ScheduleTime = model.LocationModel.ScheduleDuration?.ToString("hh\\:mm");
+                #endregion
+                #region Shift
+                model.ShiftStart = model.LocationModel.ShiftStart?.ToString("hh\\:mm");
+                model.ShiftFinish = model.LocationModel.ShiftFinish?.ToString("hh\\:mm");
+                model.ShiftTime = model.LocationModel.Duration;
+                #endregion
+                #region Status
+                model.StatusName = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "Beklemede" : (model.LocationModel.Status == 1 ? "Açık" : (model.LocationModel.Status == 2 ? "Kapalı" : ""))) : "");
+                model.StatusClass = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "warning" : (model.LocationModel.Status == 1 ? "success" : (model.LocationModel.Status == 2 ? "danger" : "danger"))) : "danger");
+                model.StatusIcon = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "clock" : (model.LocationModel.Status == 1 ? "sun" : (model.LocationModel.Status == 2 ? "moon" : "moon"))) : "moon");
+                #endregion
+                #region ScheduleLocation
+                model.WeekCode = model.LocationModel.WeekKey.Trim();
+                model.LocationScheduleList = Db.VLocationSchedule.Where(x => x.WeekCode.Trim() == model.WeekCode && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID).ToList();
+                #endregion
+                #region ShiftLocation
+                model.WeekList = Db.DateList.Where(x => x.WeekKey == model.LocationModel.WeekKey).ToList();
+                model.LocationShiftList = Db.VLocationShift.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID && x.WeekKey == model.LocationModel.WeekKey).ToList();
+                #endregion
+            }
+            else
+            {
+                return RedirectToAction("Index", "Location");
+            }
+
+            return View(model);
         }
 
         [HttpPost]
@@ -647,7 +639,7 @@ namespace ActionForce.Office.Controllers
             if (ID != null)
             {
                 model.LocationPriceCategory = Db.VLocationPriceCategory.FirstOrDefault(x => x.ID == ID);
-
+                model.LocationPriceCategoryID = ID ?? 0;
                 if (model.LocationPriceCategory != null)
                 {
                     model.LocationModel = Db.VLocation.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationPriceCategory.LocationID);
@@ -665,6 +657,92 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialPriceCatEdit", model);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult UpdatePriceCat(FormLocationPriceCategory getModel)
+        {
+            LocationControlModel model = new LocationControlModel();
+            model.Result = new Result();
+
+            if (getModel != null)
+            {
+                if (getModel.LocationID > 0)
+                {
+                    DateTime daterecord = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
+                    var isLocationPrice = Db.LocationPriceCategory.FirstOrDefault(x => x.ID == getModel.ID);
+
+                    if (isLocationPrice != null)
+                    {
+                        var isCheck = Db.LocationPriceCategory.Where(x => (x.PriceCategoryID == getModel.PriceCategoryID) && x.ID != isLocationPrice.ID && x.LocationID == getModel.LocationID).ToList();
+
+                        if (isCheck.Count == 0)
+                        {
+                            if (isLocationPrice != null)
+                            {
+                                try
+                                {
+                                    #region SelfModel
+                                    LocationPriceCategory self = new LocationPriceCategory()
+                                    {
+                                        LocationID = isLocationPrice.LocationID,
+                                        PriceCategoryID = isLocationPrice.PriceCategoryID,
+                                        StartDate = isLocationPrice.StartDate,
+                                        RecordDate = isLocationPrice.RecordDate,
+                                        RecordEmployeeID = isLocationPrice.RecordEmployeeID,
+                                        RecordIP = isLocationPrice.RecordIP
+                                    };
+                                    #endregion
+                                    #region UpdateModel
+                                    isLocationPrice.LocationID = getModel.LocationID;
+                                    isLocationPrice.PriceCategoryID = getModel.PriceCategoryID;
+                                    isLocationPrice.StartDate = getModel.StartDate;
+                                    isLocationPrice.UpdateDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 0);
+                                    isLocationPrice.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                                    isLocationPrice.UpdateIP = OfficeHelper.GetIPAddress();
+                                    #endregion
+
+                                    Db.SaveChanges();
+
+                                    Db.CheckLocationPriceCategory(getModel.LocationID);
+
+                                    #region ResultMessage
+                                    model.Result.IsSuccess = true;
+                                    model.Result.Message = $"Lokasyon fiyat kategorisi güncellendi.";
+                                    #endregion
+                                    #region AddLog
+                                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<LocationPriceCategory>(self, isLocationPrice, OfficeHelper.getIgnorelist());
+                                    OfficeHelper.AddApplicationLog("Office", "LocationPriceCategory", "Update", isLocationPrice.LocationID.ToString(), "Location", "UpdatePriceCat", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 0), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                                    #endregion
+                                }
+                                catch (Exception ex)
+                                {
+                                    model.Result.Message = ex.Message;
+                                    model.Result.IsSuccess = false;
+                                }
+
+                                TempData["result"] = model.Result;
+                            }
+                        }
+                        else
+                        {
+                            model.Result.IsSuccess = false;
+                            model.Result.Message = $"Benzer kayıtlar bulundu.";
+
+                            //TempData["checkLocation"] = location;
+                            TempData["result"] = model.Result;
+
+                            //return RedirectToAction("Edit", "Location", new { id = location.LocationUID });
+                        }
+                    }
+
+                    model.LocationPriceCategoryList = Db.VLocationPriceCategory.Where(x => x.LocationID == getModel.LocationID).ToList();
+                }
+            }
+
+            return PartialView("_PartialLocationPriceList", model);
+        }
+        #endregion
     }
 
     #region OurCompanyModel
