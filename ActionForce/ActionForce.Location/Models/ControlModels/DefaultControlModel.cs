@@ -12,5 +12,6 @@ namespace ActionForce.Location
         public IEnumerable<VTicketBasket> BasketList { get; set; }
         public VPriceLastList Price { get; set; }
         public VTicketBasket BasketItem { get; set; }
+        public int? EmployeeBasketCount { get; set; }
     }
 }
