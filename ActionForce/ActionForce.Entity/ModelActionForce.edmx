@@ -5966,6 +5966,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="DocumentNumber" Type="nvarchar" Mode="In" />
           <Parameter Name="SalaryCategoryID" Type="int" Mode="In" />
         </Function>
+        <Function Name="CleanBasket" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+        </Function>
         <Function Name="ComputeLocationWeekRevenue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Week" Type="int" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
@@ -8854,6 +8858,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SetBasketCount">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="CleanBasket">
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -20829,6 +20837,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetBasketCount" FunctionName="db293_ActionTimeDbModel.Store.GetBasketCount" />
           <FunctionImportMapping FunctionImportName="SetBasketCount" FunctionName="db293_ActionTimeDbModel.Store.SetBasketCount" />
+          <FunctionImportMapping FunctionImportName="CleanBasket" FunctionName="db293_ActionTimeDbModel.Store.CleanBasket" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

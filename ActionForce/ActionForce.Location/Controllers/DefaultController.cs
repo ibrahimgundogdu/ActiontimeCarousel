@@ -15,7 +15,7 @@ namespace ActionForce.Location.Controllers
 
             model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
             model.BasketList = Db.GetLocationCurrentBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).ToList();
-
+            model.EmployeeBasketCount = Db.GetBasketCount(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID)?.FirstOrDefault().Value ?? 0;
             return View(model);
         }
 
@@ -34,6 +34,20 @@ namespace ActionForce.Location.Controllers
             model.BasketList = Db.GetLocationCurrentBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).ToList();
             model.Result.IsSuccess = true;
             model.Result.Message = $"{model.Price.ProductName} sepete eklendi.";
+
+            return PartialView("_PartialBasketList", model);
+        }
+
+        [AllowAnonymous]
+        public PartialViewResult ClearBasket()
+        {
+            DefaultControlModel model = new DefaultControlModel();
+
+            var clean = Db.CleanBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID);
+
+            model.BasketList = Db.GetLocationCurrentBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).ToList();
+            model.Result.IsSuccess = true;
+            model.Result.Message = $"Sepet temizlendi.";
 
             return PartialView("_PartialBasketList", model);
         }

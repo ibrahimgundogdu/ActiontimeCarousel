@@ -1171,5 +1171,18 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetBasketCount", locationIDParameter, employeeIDParameter);
         }
+    
+        public virtual int CleanBasket(Nullable<int> locationID, Nullable<int> employeeID)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CleanBasket", locationIDParameter, employeeIDParameter);
+        }
     }
 }

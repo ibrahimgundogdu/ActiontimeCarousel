@@ -12,14 +12,14 @@
         <div class="d-flex flex-column flex" data-plugin="user">
             <div class="p-3">
                 <div class="toolbar">
-                    <a href="/" class="btn btn-md btn-white" title="Yeni Satış">
+                    <a href="javascript:;" class="btn btn-md btn-white" title="Yeni Satış" onclick="return confirm('Yeni Sepet Oluşturmak istediğinize Emin misiniz? ') ? ClearBasket():''">
                         <i class="text-primary font-weight-bold" data-feather="plus"></i>
                     </a>
                     <a href="/" class="btn btn-md btn-white">
                         <i class="text-primary font-weight-bold" data-feather="list"></i>
                     </a>
                     <a href="#" class="btn btn-md btn-white">
-                        Sipariş No &nbsp;&nbsp;&nbsp;  <span class="font-weight-bold">001</span>
+                        Sipariş No &nbsp;&nbsp;&nbsp;  <span class="font-weight-bold">@(Model.EmployeeBasketCount.Value.ToString().PadLeft(3,'0'))</span>
                     </a>
 
                     <button data-toggle="modal" data-target="#content-aside" data-modal class="btn btn-md ml-auto btn-white">
@@ -210,7 +210,15 @@
                 $("#BasketItemDetailContent").html(d);
             });
         };
-        
+
+        function ClearBasket() {
+            $.ajax({
+                method: "GET",
+                url: "/Default/ClearBasket"
+            }).done(function (d) {
+                $("#BasketList").html(d);
+            });
+        };
     </script>
 
 
