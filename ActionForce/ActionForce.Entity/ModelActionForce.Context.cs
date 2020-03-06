@@ -293,6 +293,7 @@ namespace ActionForce.Entity
         public virtual DbSet<VPriceLastList> VPriceLastList { get; set; }
         public virtual DbSet<VLocationPriceCategory> VLocationPriceCategory { get; set; }
         public virtual DbSet<VTicketBasket> VTicketBasket { get; set; }
+        public virtual DbSet<TicketBasketCounter> TicketBasketCounter { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -1143,6 +1144,32 @@ namespace ActionForce.Entity
                 new ObjectParameter("EmployeeID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VTicketBasket>("GetLocationCurrentBasket", mergeOption, locationIDParameter, employeeIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> GetBasketCount(Nullable<int> locationID, Nullable<int> employeeID)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("GetBasketCount", locationIDParameter, employeeIDParameter);
+        }
+    
+        public virtual int SetBasketCount(Nullable<int> locationID, Nullable<int> employeeID)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetBasketCount", locationIDParameter, employeeIDParameter);
         }
     }
 }

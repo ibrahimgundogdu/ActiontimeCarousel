@@ -654,6 +654,9 @@
     <Compile Include="TicketBasket.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="TicketBasketCounter.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="TicketConfirm.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

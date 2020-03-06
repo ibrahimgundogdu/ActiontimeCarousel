@@ -2960,6 +2960,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="PrePaid" Type="float" />
           <Property Name="PrePaidCampaignID" Type="int" />
         </EntityType>
+        <EntityType Name="TicketBasketCounter">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="Date" Type="date" />
+          <Property Name="Count" Type="int" />
+        </EntityType>
         <EntityType Name="TicketConfirm">
           <Key>
             <PropertyRef Name="ID" />
@@ -5095,6 +5105,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
           <Property Name="StateID" Type="int" />
           <Property Name="CityID" Type="int" />
           <Property Name="CityName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPosTerminal' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5960,6 +5971,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="Year" Type="int" Mode="In" />
           <Parameter Name="LocationID" Type="int" Mode="In" />
         </Function>
+        <Function Name="GetBasketCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+        </Function>
         <Function Name="GetCashBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="CashID" Type="int" Mode="In" />
@@ -6036,6 +6051,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         </Function>
         <Function Name="RemoveEmployeePhone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AddressID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SetBasketCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
         </Function>
         <Function Name="SetEmployeeScheduleMultiplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -6249,6 +6268,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Task" EntityType="Self.Task" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TaskCategory" EntityType="Self.TaskCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TicketBasket" EntityType="Self.TicketBasket" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TicketBasketCounter" EntityType="Self.TicketBasketCounter" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TicketConfirm" EntityType="Self.TicketConfirm" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TicketEnvironment" EntityType="Self.TicketEnvironment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TicketProduct" EntityType="Self.TicketProduct" Schema="dbo" store:Type="Tables" />
@@ -7724,7 +7744,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocation].[CountryID] AS [CountryID], 
     [VLocation].[StateID] AS [StateID], 
     [VLocation].[CityID] AS [CityID], 
-    [VLocation].[CityName] AS [CityName]
+    [VLocation].[CityName] AS [CityName], 
+    [VLocation].[CategoryName] AS [CategoryName]
     FROM [dbo].[VLocation] AS [VLocation]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VLocationPosTerminal" EntityType="Self.VLocationPosTerminal" store:Type="Views" store:Schema="dbo">
@@ -8824,6 +8845,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="TicketNumber" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetLocationCurrentBasket" EntitySet="VTicketBasket" ReturnType="Collection(db293_ActionTimeDbModel.VTicketBasket)">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="TicketBasketCounter" EntityType="db293_ActionTimeDbModel.TicketBasketCounter" />
+          <FunctionImport Name="GetBasketCount" ReturnType="Collection(Int32)">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SetBasketCount">
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -14776,6 +14806,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="StateID" Type="Int32" />
           <Property Name="CityID" Type="Int32" />
           <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VCity">
           <Key>
@@ -14894,6 +14925,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="BackStyle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
           <Property Name="UseImmediately" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="TicketBasketCounter">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="Count" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -20586,6 +20627,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VLocation">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocation">
               <MappingFragment StoreEntitySet="VLocation">
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
                 <ScalarProperty Name="CityName" ColumnName="CityName" />
                 <ScalarProperty Name="CityID" ColumnName="CityID" />
                 <ScalarProperty Name="StateID" ColumnName="StateID" />
@@ -20774,6 +20816,19 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImportMapping FunctionImportName="AddBasket" FunctionName="db293_ActionTimeDbModel.Store.AddBasket" />
           <FunctionImportMapping FunctionImportName="GetLocationCurrentBasket" FunctionName="db293_ActionTimeDbModel.Store.GetLocationCurrentBasket">
           </FunctionImportMapping>
+          <EntitySetMapping Name="TicketBasketCounter">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketBasketCounter">
+              <MappingFragment StoreEntitySet="TicketBasketCounter">
+                <ScalarProperty Name="Count" ColumnName="Count" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetBasketCount" FunctionName="db293_ActionTimeDbModel.Store.GetBasketCount" />
+          <FunctionImportMapping FunctionImportName="SetBasketCount" FunctionName="db293_ActionTimeDbModel.Store.SetBasketCount" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
