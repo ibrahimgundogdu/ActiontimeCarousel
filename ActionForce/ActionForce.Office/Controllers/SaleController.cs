@@ -124,7 +124,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult AddNewPrice(CUNewPrice[] pricelist, int? CategoryID, string DateBegin, string DateBeginHour)
+        public ActionResult AddNewPrice(FormNewPrice[] pricelist, int? CategoryID, string DateBegin, string DateBeginHour)
         {
             SaleControlModel model = new SaleControlModel();
             model.Result = new Result();
@@ -306,7 +306,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult EditPrice(CUPrice frmprice)
+        public ActionResult EditPrice(FormPrice frmprice)
         {
             SaleControlModel model = new SaleControlModel();
             model.Result = new Result();
@@ -370,7 +370,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult CatPriceEdit(CUAjPrice ajPrice) // ajaxtan gelen edit
+        public ActionResult CatPriceEdit(FormAjaxPrice ajPrice) // ajaxtan gelen edit
         {
             SaleControlModel model = new SaleControlModel();
             model.Result = new Result();
@@ -434,7 +434,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult TypePriceEdit(CUAjPrice ajPrice) // ajaxtan gelen edit
+        public ActionResult TypePriceEdit(FormAjaxPrice ajPrice) // ajaxtan gelen edit
         {
             SaleControlModel model = new SaleControlModel();
             model.Result = new Result();
@@ -564,7 +564,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public PartialViewResult AddPriceCategory(CUPriceCategory pricecategory)
+        public PartialViewResult AddPriceCategory(FormPriceCategory pricecategory)
         {
             SaleControlModel model = new SaleControlModel();
             model.Result = new Result()
@@ -620,7 +620,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public PartialViewResult EditPriceCategory(CUPriceCategory pricecategory)
+        public PartialViewResult EditPriceCategory(FormPriceCategory pricecategory)
         {
             SaleControlModel model = new SaleControlModel();
 
@@ -761,7 +761,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public PartialViewResult AddTicketProduct(CUTicketProduct ticketproduct)
+        public PartialViewResult AddTicketProduct(FormTicketProduct ticketproduct)
         {
             SaleControlModel model = new SaleControlModel();
 
@@ -780,6 +780,7 @@ namespace ActionForce.Office.Controllers
                 prod.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                 prod.RecordIP = OfficeHelper.GetIPAddress();
                 prod.TicketTypeID = ticketproduct.TicketTypeID;
+                prod.Description = ticketproduct.Description;
 
                 Db.TicketProduct.Add(prod);
                 Db.SaveChanges();
@@ -811,7 +812,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public PartialViewResult EditTicketProduct(CUTicketProduct ticketproduct)
+        public PartialViewResult EditTicketProduct(FormTicketProduct ticketproduct)
         {
             SaleControlModel model = new SaleControlModel();
 
@@ -838,7 +839,8 @@ namespace ActionForce.Office.Controllers
                         CategoryID = prod.CategoryID,
                         ProductName = prod.ProductName,
                         Unit = prod.Unit,
-                        TicketTypeID = prod.TicketTypeID
+                        TicketTypeID = prod.TicketTypeID,
+                        Description = prod.Description
                     };
 
                     prod.CategoryID = ticketproduct.CategoryID;
@@ -850,6 +852,7 @@ namespace ActionForce.Office.Controllers
                     prod.UpdateIP = OfficeHelper.GetIPAddress();
                     prod.Unit = ticketproduct.Unit;
                     prod.TicketTypeID = ticketproduct.TicketTypeID;
+                    prod.Description = ticketproduct.Description;
 
                     Db.SaveChanges();
 

@@ -52,10 +52,17 @@
             </div>
         </div>
 
-        <div class="form-group row bg-gray-50">
+        <div class="form-group row bg-gray-50 mg-b-5">
             <label for="Unit" class="col-sm-3 col-form-label">Birim (Dakika)</label>
             <div class="col-sm-9">
                 <input id="Unit" name="Unit" type="text" class="form-control" autocomplete="off" placeholder="Birim" value="@(Model.TicketProduct.Unit)" required>
+            </div>
+        </div>
+
+        <div class="form-group row bg-gray-50">
+            <label for="Description" class="col-sm-3 col-form-label">Açıklaması</label>
+            <div class="col-sm-9">
+                <textarea id="Description" name="Description" type="text" class="form-control" autocomplete="off" placeholder="Açıklama" rows="3">@(Model.TicketProduct.Description)</textarea>
             </div>
         </div>
 

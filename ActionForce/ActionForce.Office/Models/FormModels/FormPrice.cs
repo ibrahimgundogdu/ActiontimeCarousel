@@ -5,7 +5,7 @@ using System.Web;
 
 namespace ActionForce.Office
 {
-    public class CUPrice
+    public class FormPrice
     {
         public string Price { get; set; }
         public string DateBegin { get; set; }
@@ -20,7 +20,7 @@ namespace ActionForce.Office
         public int? ID { get; set; }
     }
 
-    public class CUAjPrice
+    public class FormAjaxPrice
     {
         public string _price { get; set; }
         public string _datebegin { get; set; }
@@ -32,7 +32,7 @@ namespace ActionForce.Office
         public int? _catid { get; set; }
     }
 
-    public class CUNewPrice
+    public class FormNewPrice
     {
         public string IsSelected { get; set; }
         public int? productID { get; set; }

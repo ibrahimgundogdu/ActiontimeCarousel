@@ -2339,9 +2339,9 @@
     <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\CounterModel.cs" />
     <Compile Include="Models\FormModels\FormLocation.cs" />
-    <Compile Include="Models\FormModels\CUPrice.cs" />
-    <Compile Include="Models\FormModels\CUPriceCategory.cs" />
-    <Compile Include="Models\FormModels\CUTicketProduct.cs" />
+    <Compile Include="Models\FormModels\FormPrice.cs" />
+    <Compile Include="Models\FormModels\FormPriceCategory.cs" />
+    <Compile Include="Models\FormModels\FormTicketProduct.cs" />
     <Compile Include="Models\Crypter.cs" />
     <Compile Include="Models\Document\EmployeesLocation.cs" />
     <Compile Include="Models\Document\EmployeePermit.cs" />
