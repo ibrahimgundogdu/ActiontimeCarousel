@@ -104,7 +104,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketEnvironment" Width="1.5" PointX="32.75" PointY="25.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketPromotion" Width="1.5" PointX="28.75" PointY="33.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketPromotionCalender" Width="1.5" PointX="30.75" PointY="33.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketPromotionLocations" Width="1.5" PointX="32.75" PointY="32.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketPromotionStatus" Width="1.5" PointX="33.75" PointY="1.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Tickets" Width="1.5" PointX="33.75" PointY="4.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRowHistory" Width="1.5" PointX="34.75" PointY="11.75" />
@@ -292,6 +291,8 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketBasketCounter" Width="1.5" PointX="25.375" PointY="17.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketBasket" Width="1.5" PointX="7.375" PointY="33.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketBasket" Width="1.5" PointX="59.375" PointY="35.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketPromotion" Width="1.5" PointX="45.375" PointY="59.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketBasketTotal" Width="1.5" PointX="35.375" PointY="39.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -356,6 +356,12 @@
     <Compile Include="GetLocationAll_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetLocationCurrentBasketTotal_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetLocationCurrentPromotions_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="GetLocationCurrentSchedule_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -675,9 +681,6 @@
     <Compile Include="TicketPromotionCalender.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
-    <Compile Include="TicketPromotionLocations.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
     <Compile Include="TicketPromotionStatus.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -900,7 +903,13 @@
     <Compile Include="VTicketBasket.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VTicketBasketTotal.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VTicketProduct.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VTicketPromotion.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="WeekList.cs">

@@ -40,5 +40,8 @@ namespace ActionForce.Entity
         public Nullable<int> SaleTypeID { get; set; }
         public Nullable<double> PrePaid { get; set; }
         public Nullable<int> PrePaidCampaignID { get; set; }
+        public Nullable<double> TaxRate { get; set; }
+        public Nullable<double> Tax { get; set; }
+        public Nullable<double> Discount { get; set; }
     }
 }

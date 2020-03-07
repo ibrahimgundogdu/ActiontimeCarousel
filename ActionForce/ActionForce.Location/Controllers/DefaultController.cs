@@ -14,8 +14,21 @@ namespace ActionForce.Location.Controllers
             DefaultControlModel model = new DefaultControlModel();
 
             model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
+            model.PromotionList = Db.GetLocationCurrentPromotions(model.Authentication.CurrentLocation.ID).ToList();
             model.BasketList = Db.GetLocationCurrentBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).ToList();
             model.EmployeeBasketCount = Db.GetBasketCount(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID)?.FirstOrDefault().Value ?? 0;
+            var currentBasketTotal = Db.GetLocationCurrentBasketTotal(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).FirstOrDefault(x => x.Money == model.Authentication.CurrentOurCompany.Currency);
+            model.BasketTotal = new BasketTotal()
+            {
+                Total = currentBasketTotal?.Total ?? 0,
+                Discount = currentBasketTotal?.Discount ?? 0,
+                SubTotal = currentBasketTotal?.SubTotal ?? 0,
+                TaxTotal = currentBasketTotal?.TaxTotal ?? 0,
+                GeneralTotal = currentBasketTotal?.GeneralTotal ?? 0,
+                Currency = currentBasketTotal?.Money,
+                Sign = currentBasketTotal?.Sign
+            };
+
             return View(model);
         }
 
@@ -34,6 +47,38 @@ namespace ActionForce.Location.Controllers
             model.BasketList = Db.GetLocationCurrentBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).ToList();
             model.Result.IsSuccess = true;
             model.Result.Message = $"{model.Price.ProductName} sepete eklendi.";
+
+            return PartialView("_PartialBasketList", model);
+        }
+
+        [AllowAnonymous]
+        public PartialViewResult RemoveBasketItem(int id)
+        {
+            DefaultControlModel model = new DefaultControlModel();
+
+            var removed = Db.RemoveBasketItem(id);
+
+            model.BasketList = Db.GetLocationCurrentBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).ToList();
+            model.Result.IsSuccess = true;
+            model.Result.Message = $"Bilet sepetten kaldırıldı.";
+
+            return PartialView("_PartialBasketList", model);
+        }
+        [AllowAnonymous]
+        public PartialViewResult AddBasketPromotion(int id)
+        {
+            DefaultControlModel model = new DefaultControlModel();
+
+            model.Promotion = Db.VTicketPromotion.FirstOrDefault(x => x.ID == id);
+
+            if (model.Promotion != null)
+            {
+                var added = Db.AddBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID, model.Promotion.MainPriceID, id, null, null);
+            }
+
+            model.BasketList = Db.GetLocationCurrentBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).ToList();
+            model.Result.IsSuccess = true;
+            model.Result.Message = $"{model.Promotion.ProductName} sepete eklendi.";
 
             return PartialView("_PartialBasketList", model);
         }
@@ -76,7 +121,7 @@ namespace ActionForce.Location.Controllers
 
                 var added = Db.SetBasketItemUseImmediately(id, isChecked);
 
-                usinginfo = isChecked == true ? "Hemen kullanılacak": "Daha sonra kullanılacak";
+                usinginfo = isChecked == true ? "Hemen kullanılacak" : "Daha sonra kullanılacak";
             }
 
             model.BasketList = Db.GetLocationCurrentBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).ToList();
@@ -84,6 +129,26 @@ namespace ActionForce.Location.Controllers
             model.Result.Message = $"Bilet kullanım durumu : {usinginfo} olarak güncellendi.";
 
             return PartialView("_PartialBasketList", model);
+        }
+
+        [AllowAnonymous]
+        public PartialViewResult BasketTotal()
+        {
+            DefaultControlModel model = new DefaultControlModel();
+
+            var currentBasketTotal = Db.GetLocationCurrentBasketTotal(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).FirstOrDefault(x => x.Money == model.Authentication.CurrentOurCompany.Currency);
+            model.BasketTotal = new BasketTotal()
+            {
+                Total = currentBasketTotal?.Total ?? 0,
+                Discount = currentBasketTotal?.Discount ?? 0,
+                SubTotal = currentBasketTotal?.SubTotal ?? 0,
+                TaxTotal = currentBasketTotal?.TaxTotal ?? 0,
+                GeneralTotal = currentBasketTotal?.GeneralTotal ?? 0,
+                Currency = currentBasketTotal?.Money,
+                Sign = currentBasketTotal?.Sign
+            };
+
+            return PartialView("_PartialBasketTotal", model);
         }
     }
 }

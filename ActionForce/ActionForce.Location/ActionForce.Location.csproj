@@ -538,6 +538,7 @@
     <Content Include="libs\wavesurfer.js\dist\wavesurfer.min.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -571,8 +572,9 @@
     <Compile Include="Models\ControlModels\LocationControlModel.cs" />
     <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\ControlModels\ScheduleControlModel.cs" />
+    <Compile Include="Models\DefaultModels\BasketTotal.cs" />
     <Compile Include="Models\DifferentList.cs" />
-    <Compile Include="Models\LayoutControlModel.cs" />
+    <Compile Include="Models\ControlModels\LayoutControlModel.cs" />
     <Compile Include="Models\LocationHelper.cs" />
     <Compile Include="Models\LocationModels\LocationStatus.cs" />
     <Compile Include="Models\LocationModels\mLocation.cs" />
@@ -791,6 +793,7 @@
     <Content Include="Views\Sale\Detail.cshtml" />
     <Content Include="Views\Default\_PartialBasketList.cshtml" />
     <Content Include="Views\Default\_PartialBasketItemDetail.cshtml" />
+    <Content Include="Views\Default\_PartialBasketTotal.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -801,6 +804,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="libs\plyrist\dist\" />
+    <Folder Include="Models\FormModels\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Employee\" />
     <Folder Include="Views\Logout\" />

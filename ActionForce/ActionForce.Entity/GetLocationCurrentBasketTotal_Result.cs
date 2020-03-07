@@ -10,14 +10,17 @@
 namespace ActionForce.Entity
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class TicketPromotionLocations
+    public partial class GetLocationCurrentBasketTotal_Result
     {
-        public int ID { get; set; }
-        public Nullable<int> PromotionID { get; set; }
-        public Nullable<int> OurCompanyID { get; set; }
         public Nullable<int> LocationID { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public Nullable<int> EmployeeID { get; set; }
+        public System.DateTime Date { get; set; }
+        public double Total { get; set; }
+        public double Discount { get; set; }
+        public double SubTotal { get; set; }
+        public double TaxTotal { get; set; }
+        public double GeneralTotal { get; set; }
+        public string Money { get; set; }
     }
 }

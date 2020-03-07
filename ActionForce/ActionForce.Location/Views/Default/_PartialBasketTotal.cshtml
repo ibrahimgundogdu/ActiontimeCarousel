@@ -1,0 +1,57 @@
+﻿@model DefaultControlModel
+<table class="table v-middle">
+
+    <tbody>
+        <tr class="v-middle">
+            <td class="flex">
+                <span class="item-amount text-sm ">Tutar</span>
+            </td>
+            <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
+                <span class="item-amount d-none d-sm-block text-md float-right">
+                    @(Model.BasketTotal.Total.ToString("N2")) @(Model.BasketTotal.Sign)
+                </span>
+            </td>
+        </tr>
+        <tr class=" v-middle">
+            <td class="flex">
+                <span class="item-amount text-sm ">İskonto</span>
+            </td>
+            <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
+                <span class="item-amount d-none d-sm-block text-md float-right">
+                    @(Model.BasketTotal.Discount.ToString("N2")) @(Model.BasketTotal.Sign)
+                </span>
+            </td>
+        </tr>
+        <tr class=" v-middle">
+            <td class="flex">
+                <span class="item-amount text-sm ">Ara Toplam</span>
+            </td>
+            <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
+                <span class="item-amount d-none d-sm-block text-md float-right">
+                    @(Model.BasketTotal.SubTotal.ToString("N2")) @(Model.BasketTotal.Sign)
+                </span>
+            </td>
+        </tr>
+        <tr class="v-middle">
+            <td class="flex">
+                <span class="item-amount text-sm ">KDV (18)</span>
+            </td>
+            <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
+                <span class="item-amount d-none d-sm-block text-md text-secondary float-right">
+                    @(Model.BasketTotal.TaxTotal.ToString("N2")) @(Model.BasketTotal.Sign)
+                </span>
+            </td>
+        </tr>
+        <tr class=" v-middle shadow-sm">
+            <td class="flex">
+                <span class="item-amount text-md text-primary ">Bakiye</span>
+            </td>
+            <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
+                <span class="item-amount d-none d-sm-block text-md font-weight-bold text-primary float-right">
+                    @(Model.BasketTotal.GeneralTotal.ToString("N2")) @(Model.BasketTotal.Sign)
+                </span>
+            </td>
+        </tr>
+
+    </tbody>
+</table>

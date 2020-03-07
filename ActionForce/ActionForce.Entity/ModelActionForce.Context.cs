@@ -126,7 +126,6 @@ namespace ActionForce.Entity
         public virtual DbSet<TicketEnvironment> TicketEnvironment { get; set; }
         public virtual DbSet<TicketPromotion> TicketPromotion { get; set; }
         public virtual DbSet<TicketPromotionCalender> TicketPromotionCalender { get; set; }
-        public virtual DbSet<TicketPromotionLocations> TicketPromotionLocations { get; set; }
         public virtual DbSet<TicketPromotionStatus> TicketPromotionStatus { get; set; }
         public virtual DbSet<Tickets> Tickets { get; set; }
         public virtual DbSet<TicketSaleRowHistory> TicketSaleRowHistory { get; set; }
@@ -294,6 +293,8 @@ namespace ActionForce.Entity
         public virtual DbSet<TicketBasketCounter> TicketBasketCounter { get; set; }
         public virtual DbSet<TicketBasket> TicketBasket { get; set; }
         public virtual DbSet<VTicketBasket> VTicketBasket { get; set; }
+        public virtual DbSet<VTicketPromotion> VTicketPromotion { get; set; }
+        public virtual DbSet<VTicketBasketTotal> VTicketBasketTotal { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -1205,6 +1206,59 @@ namespace ActionForce.Entity
                 new ObjectParameter("Checked", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetBasketItemUseImmediately", iDParameter, checkedParameter);
+        }
+    
+        public virtual ObjectResult<VTicketPromotion> GetLocationCurrentPromotions(Nullable<int> locationID)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VTicketPromotion>("GetLocationCurrentPromotions", locationIDParameter);
+        }
+    
+        public virtual ObjectResult<VTicketPromotion> GetLocationCurrentPromotions(Nullable<int> locationID, MergeOption mergeOption)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VTicketPromotion>("GetLocationCurrentPromotions", mergeOption, locationIDParameter);
+        }
+    
+        public virtual ObjectResult<VTicketBasketTotal> GetLocationCurrentBasketTotal(Nullable<int> locationID, Nullable<int> employeeID)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VTicketBasketTotal>("GetLocationCurrentBasketTotal", locationIDParameter, employeeIDParameter);
+        }
+    
+        public virtual ObjectResult<VTicketBasketTotal> GetLocationCurrentBasketTotal(Nullable<int> locationID, Nullable<int> employeeID, MergeOption mergeOption)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VTicketBasketTotal>("GetLocationCurrentBasketTotal", mergeOption, locationIDParameter, employeeIDParameter);
+        }
+    
+        public virtual int RemoveBasketItem(Nullable<int> iD)
+        {
+            var iDParameter = iD.HasValue ?
+                new ObjectParameter("ID", iD) :
+                new ObjectParameter("ID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemoveBasketItem", iDParameter);
         }
     }
 }

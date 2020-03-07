@@ -51,5 +51,6 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public string UpdateIP { get; set; }
+        public Nullable<double> TaxRate { get; set; }
     }
 }

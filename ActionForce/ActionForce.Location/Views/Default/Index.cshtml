@@ -12,8 +12,8 @@
         <div class="d-flex flex-column flex" data-plugin="user">
             <div class="p-3">
                 <div class="toolbar">
-                    <a href="javascript:;" class="btn btn-md btn-white" title="Yeni Satış" onclick="return confirm('Yeni Sepet Oluşturmak istediğinize Emin misiniz? ') ? ClearBasket():''">
-                        <i class="text-primary font-weight-bold" data-feather="plus"></i>
+                    <a href="javascript:;" class="btn btn-md btn-white" title="Sepeti Boşalt" onclick="return confirm('Sepeti silmek istediğinize Emin misiniz? ') ? ClearBasket():''">
+                        <i class="text-primary font-weight-bold" data-feather="trash-2"></i>
                     </a>
                     <a href="/Sale" class="btn btn-md btn-white">
                         <i class="text-primary font-weight-bold" data-feather="list"></i>
@@ -23,7 +23,7 @@
                     </a>
 
                     <button data-toggle="modal" data-target="#content-aside" data-modal class="btn btn-md ml-auto btn-white">
-                        <i data-feather="download"></i> &nbsp;&nbsp;&nbsp; Bilet Ekle
+                        <i data-feather="download"></i> &nbsp;&nbsp;&nbsp; Açık Bilet Ekle
                     </button>
                 </div>
             </div>
@@ -40,7 +40,27 @@
                                             <div class="media media-21x9 @(price.Style)">
 
                                                 <a href="#" class="media-content" onclick="AddBasket(@(price.ID))">
-                                                    <h3 class="text-fade text-white">@(price.Unit) Dk</h3><br />
+                                                    <h2 class="text-fade text-white">@(price.Unit) Dk</h2><br />
+                                                </a>
+
+                                            </div>
+                                            <div class="p-2 text-center">
+                                                <h5 class="card-title mb-0">@(price.Price?.ToString("N2")) @(price.Sign)</h5>
+                                                <span class="item-amount d-none d-sm-block text-sm">
+                                                    @(price.ProductName)
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                @foreach (var price in Model.PromotionList)
+                                {
+                                    <div class="col-sm-6">
+                                        <div class="card shadow-sm mb-3">
+                                            <div class="media media-21x9 @(price.Style)">
+
+                                                <a href="#" class="media-content" onclick="AddBasketPromotion(@(price.ID))">
+                                                    <h2 class="text-fade text-white">@(price.Unit) Dk</h2><br />
                                                 </a>
 
                                             </div>
@@ -80,63 +100,8 @@
             </div>
             <div class="scrollable hover">
                 <div class="sidenav p-2">
-                    <div class="table-responsive">
-                        <table class="table v-middle">
-
-                            <tbody>
-                                <tr class="v-middle">
-                                    <td class="flex">
-                                        <span class="item-amount text-sm ">Tutar</span>
-                                    </td>
-                                    <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
-                                        <span class="item-amount d-none d-sm-block text-sm float-right">
-                                            20,00 ₺
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr class=" v-middle">
-                                    <td class="flex">
-                                        <span class="item-amount text-sm ">İskonto</span>
-                                    </td>
-                                    <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
-                                        <span class="item-amount d-none d-sm-block text-sm float-right">
-                                            20,00 ₺
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr class=" v-middle">
-                                    <td class="flex">
-                                        <span class="item-amount text-sm ">Ara Toplam</span>
-                                    </td>
-                                    <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
-                                        <span class="item-amount d-none d-sm-block text-sm float-right">
-                                            20,00 ₺
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr class="v-middle">
-                                    <td class="flex">
-                                        <span class="item-amount text-sm ">KDV (18)</span>
-                                    </td>
-                                    <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
-                                        <span class="item-amount d-none d-sm-block text-sm float-right">
-                                            20,00 ₺
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr class=" v-middle shadow-sm">
-                                    <td class="flex">
-                                        <span class="item-amount text-md text-primary ">Bakiye</span>
-                                    </td>
-                                    <td class="bg-light--lt" style="border-left:dotted 1px #d8d6d6 !important;">
-                                        <span class="item-amount d-none d-sm-block text-md font-weight-bold text-dark float-right">
-                                            20,00 ₺
-                                        </span>
-                                    </td>
-                                </tr>
-
-                            </tbody>
-                        </table>
+                    <div class="table-responsive" id="BasketTotal">
+                        @{ Html.RenderPartial("_PartialBasketTotal", Model);}
                     </div>
                     <div class="">
 
@@ -174,12 +139,10 @@
     </div>
 </div>
 
-<div id="BasketItemDetail" class="modal fade" data-backdrop="true">
-    <div class="modal-dialog modal-lg">
+<div id="BasketItemDetail" class="modal fade" data-backdrop="static" data-keyboard="false" >
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content" id="BasketItemDetailContent">
-
         </div>
-        <!-- /.modal-content -->
     </div>
 </div>
 
@@ -196,6 +159,30 @@
                 url: "/Default/AddBasket",
                 data: { id: priceid }
             }).done(function (d) {
+                GetBasketTotal();
+                $("#BasketList").html(d);
+            });
+        };
+
+        function AddBasketPromotion(promotionid) {
+            $.ajax({
+                method: "GET",
+                url: "/Default/AddBasketPromotion",
+                data: { id: promotionid }
+            }).done(function (d) {
+                GetBasketTotal();
+                $("#BasketList").html(d);
+            });
+        };
+
+        function RemoveBasketItem(id) {
+            $.ajax({
+                method: "GET",
+                url: "/Default/RemoveBasketItem",
+                data: { id: id }
+            }).done(function (d) {
+                $('#BasketItemDetail').modal('hide');
+                GetBasketTotal();
                 $("#BasketList").html(d);
             });
         };
@@ -215,7 +202,17 @@
                 method: "GET",
                 url: "/Default/ClearBasket"
             }).done(function (d) {
+                GetBasketTotal();
                 $("#BasketList").html(d);
+            });
+        };
+
+        function GetBasketTotal() {
+            $.ajax({
+                method: "GET",
+                url: "/Default/BasketTotal"
+            }).done(function (d) {
+                $("#BasketTotal").html(d);
             });
         };
 
