@@ -22,7 +22,7 @@
                         Sipariş No &nbsp;&nbsp;&nbsp;  <span class="font-weight-bold">@((Model.EmployeeBasketCount.Value + 1).ToString().PadLeft(3, '0'))</span>
                     </a>
 
-                    <button data-toggle="modal" data-target="#content-aside" data-modal class="btn btn-md ml-auto btn-white">
+                    <button data-toggle="modal" data-target="#AddBasketTicket" id="btnAddBasketTicket" data-modal class="btn btn-md ml-auto btn-white">
                         <i data-feather="download"></i> &nbsp;&nbsp;&nbsp; Açık Bilet Ekle
                     </button>
                 </div>
@@ -139,9 +139,26 @@
     </div>
 </div>
 
-<div id="BasketItemDetail" class="modal fade" data-backdrop="static" data-keyboard="false" >
+<div id="BasketItemDetail" class="modal fade" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content" id="BasketItemDetailContent">
+        </div>
+    </div>
+</div>
+
+<div id="AddBasketTicket" class="modal bg-white fade">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" id="BasketItemTicketContent">
+            <div class="modal-header">
+                <h5 class="modal-title">Bileti Okutunuz</h5>
+                <button class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body p-2">
+                <div class="input-group input-group-lg mb-3">
+                    <input id="InputTicketNumber" name="TicketNumber" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <button type="submit" class="btn btn-primary btn-md btn-block mb-4">Bileti Kontrol Ediniz</button>
+            </div>
         </div>
     </div>
 </div>
@@ -196,6 +213,20 @@
                 $("#BasketItemDetailContent").html(d);
             });
         };
+
+        $("#btnAddBasketTicket").click(function () {
+            $("#InputTicketNumber").focus();
+        });
+
+        //function AddBasketTicket() {
+        //    $.ajax({
+        //        method: "GET",
+        //        url: "/Default/BasketItemDetail",
+        //        data: { id: itemid }
+        //    }).done(function (d) {
+        //        $("#BasketItemDetailContent").html(d);
+        //    });
+        //};
 
         function ClearBasket() {
             $.ajax({
