@@ -1261,5 +1261,18 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemoveBasketItem", iDParameter);
         }
+    
+        public virtual ObjectResult<GetLocationPrice_Result> GetLocationPrice(Nullable<int> locationID, Nullable<System.DateTime> date)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationPrice_Result>("GetLocationPrice", locationIDParameter, dateParameter);
+        }
     }
 }

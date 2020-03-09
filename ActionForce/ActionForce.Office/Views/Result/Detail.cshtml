@@ -1126,6 +1126,28 @@
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
 
+        function CheckPrice(id) {
+
+            var quantity = $('#Quantity_' + id).val();
+
+            var data = new FormData();
+            data.append('id', id);
+            data.append('quantity', quantity);
+
+            $.ajax({
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                url: "/Result/CheckPrice",
+                data: data
+            }).done(function (d) {
+                $("#Sum" + id).html(d);
+            });
+        }
+
+
     </script>
 
     <script src="~/assets/js/ActionForceScript.js"></script>

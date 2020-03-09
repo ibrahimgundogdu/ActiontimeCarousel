@@ -1,0 +1,27 @@
+﻿@model ResultControlModel
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Adet</th>
+                <th class="text-right">Birim</th>
+                <th class="text-right">Fiyat</th>
+                <th class="text-right">Toplam</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.PriceLastList?.Count > 0)
+            {
+                foreach (var item in Model.PriceLastList)
+                {
+                    <tr class="table-light">
+                        <td><input id="Quantity_@(item.ID)" type="text" class="form-control form-control-sm money4 text-left" placeholder="Adet" onchange="CheckPrice(@(item.ID))"></td>
+                        <td class="text-right">@item.Unit Dk</td>
+                        <td class="text-right">@(item.Price?.ToString("N2")) @(item.Currency)</td>
+                        <td class="text-right" id="Sum_@(item.ID)"></td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
