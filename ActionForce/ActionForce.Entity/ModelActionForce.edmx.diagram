@@ -294,6 +294,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketBasketTotal" Width="1.5" PointX="35.375" PointY="39.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketProduct" Width="1.5" PointX="0.75" PointY="36.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Tax" Width="1.5" PointX="27.375" PointY="22.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCashRecorderMuhasebe" Width="1.5" PointX="47.375" PointY="59.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

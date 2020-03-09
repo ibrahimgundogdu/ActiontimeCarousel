@@ -329,5 +329,51 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Detail", new { id = id });
 
         }
+
+        [AllowAnonymous]
+        public ActionResult Report()
+        {
+            CashRecorderControlModel model = new CashRecorderControlModel();
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel
+                {
+                    DateBegin = DateTime.Now.AddMonths(-1).Date,
+                    DateEnd = DateTime.Now.Date
+                };
+                model.Filters = filterModel;
+            }
+
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CashRecorderMuhasebeList = Db.VCashRecorderMuhasebe.Where(x=>x.OurCompanyID==model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            if (model.Filters.LocationID > 0)
+            {
+                model.CashRecorderMuhasebeList = model.CashRecorderMuhasebeList.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            }
+            
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult ReportFilter(int? locationId)
+        {
+            FilterModel model = new FilterModel
+            {
+                LocationID = locationId
+            };
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("Report", "CashRecorder");
+        }
+
     }
 }

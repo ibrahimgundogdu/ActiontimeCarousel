@@ -759,6 +759,9 @@
     <Compile Include="VCashBankActions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VCashRecorderMuhasebe.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VCashRecorders.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

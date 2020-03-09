@@ -1,0 +1,102 @@
+﻿@model CashRecorderControlModel
+@{
+    ViewBag.Title = "Report";
+}
+
+@section style{
+    <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
+}
+
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">Yazarkasa İşlemleri</span>
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div>
+<div class="content-body">
+    <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+        <div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb breadcrumb-style1 mg-b-10">
+                    <li class="breadcrumb-item"><a href="/">Anasayfa</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Yazarkasa İşlemleri</li>
+                </ol>
+            </nav>
+            <h4 class="mg-b-0 tx-spacing--1">Yazarkasa Raporları</h4>
+        </div>
+    </div>
+    <div class="pd-x-0 tx-13">
+        <div class="media d-block d-lg-flex">
+            <div class="media-body mg-t-40 mg-lg-t-0">
+                <div class="card mg-b-20 mg-lg-b-25">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <div class="col-10">
+                            @using (Html.BeginForm("ReportFilter", "CashRecorder", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="form-row align-items-end">
+                                    <div class="form-group col-md-3 d-flex align-items-end">
+                                        <select class="form-control select2" id="locationId" name="locationId">
+                                            <option value="" label="Lokasyon Seçiminiz"></option>
+                                            @foreach (var item in Model.LocationList)
+                                            {
+                                                <option value="@item.LocationID" @(Model.Filters.LocationID == item.LocationID ? "selected" : "")>@(Html.Raw($"<strong>{item.SortBy}</strong> {item.LocationName} {item.Description} {item.State}"))</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-1 d-flex align-items-end ">
+                                        <button class="btn btn-primary btn-block" type="submit" id="btnsearch">Ara</button>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <nav class="nav">
+                            <a href="" class="btn btn-success mg-l-10"><span class="d-none d-sm-inline">Excel İndir</span></a>
+                        </nav>
+                    </div>
+
+                    <div class="card-body pd-0" id="TicketProductList">
+                        @{Html.RenderPartial("_PartialCashRecorderList", Model);}
+                    </div>
+
+                </div>
+
+                <footer class="content-footer">
+                    <div>
+                        <span>&copy; @DateTime.Now.Year UFE Group LLC </span>
+                    </div>
+                </footer>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+@section scripts {
+    <script>
+        $(function () {
+            'use strict'
+            $("body").addClass("page-profile");
+        });
+    </script>
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}
