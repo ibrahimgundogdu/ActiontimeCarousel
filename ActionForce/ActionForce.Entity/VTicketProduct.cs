@@ -31,6 +31,5 @@ namespace ActionForce.Entity
         public string TicketTypeName { get; set; }
         public Nullable<int> TicketTypeID { get; set; }
         public string Description { get; set; }
-        public Nullable<double> Tax { get; set; }
     }
 }
