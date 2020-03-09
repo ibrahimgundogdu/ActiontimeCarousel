@@ -31,5 +31,6 @@ namespace ActionForce.Office
         public int MallID { get; set; }
         public int POSAccountID { get; set; }
         public int CityID { get; set; }
+        public int TaxRate { get; set; }
     }
 }

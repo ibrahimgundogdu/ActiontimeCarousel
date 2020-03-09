@@ -657,6 +657,9 @@
     <Compile Include="TaskCategory.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="Tax.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="TicketBasket.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

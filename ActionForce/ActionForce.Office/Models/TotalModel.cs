@@ -9,6 +9,7 @@ namespace ActionForce.Office
     {
         public string Type { get; set; }
         public double Total { get; set; }
+        public double CiroTotal { get; set; }
         public string Currency { get; set; }
     }
 }

@@ -174,6 +174,7 @@ namespace ActionForce.Office.Controllers
                 model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 2).ToList(); // TODO: AccountTypeID == 2 olmasının sebebi POS işlemlerinden dolayı
                 model.CityList = Db.VCity.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
                 model.LocationPosTerminalList = Db.VLocationPosTerminal.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID).ToList();
+                model.TaxList = Db.Tax.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
                 #region Schedule
                 model.ScheduleStart = model.LocationModel.ScheduleStart?.ToShortTimeString();
                 model.ScheduleFinish = model.LocationModel.ScheduleEnd?.ToShortTimeString();
@@ -325,7 +326,8 @@ namespace ActionForce.Office.Controllers
                                     Weight = isLocation.Weight,
                                     CityID = isLocation.CityID,
                                     CountryID = isLocation.CountryID,
-                                    StateID = isLocation.StateID
+                                    StateID = isLocation.StateID,
+                                    TaxRate = isLocation.TaxRate
                                 };
                                 #endregion
                                 #region UpdateModel
@@ -357,8 +359,7 @@ namespace ActionForce.Office.Controllers
                                 isLocation.CountryID = getCity?.CountryID;
                                 isLocation.StateID = getCity?.StateID;
                                 isLocation.EnforcedWarning = location.EnforcedWarning;
-
-
+                                isLocation.TaxRate = location.TaxRate;
                                 #endregion
                                 #region PriceCategoryCheck
                                 if (self.PriceCatID != isLocation.PriceCatID)

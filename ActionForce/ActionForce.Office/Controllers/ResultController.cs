@@ -207,7 +207,8 @@ namespace ActionForce.Office.Controllers
                 devirtotals.Add(new TotalModel()
                 {
                     Currency = "TRL",
-                    Total = Db.GetCashBalance(model.DayResult.LocationID, trlCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0
+                    Total = Db.GetCashBalance(model.DayResult.LocationID, trlCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0,
+                    //CiroTotal
                 });
                 devirtotals.Add(new TotalModel()
                 {
@@ -221,6 +222,9 @@ namespace ActionForce.Office.Controllers
                 });
 
                 model.DevirTotal = devirtotals;
+
+               
+
 
             }
             else

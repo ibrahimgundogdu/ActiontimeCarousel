@@ -177,12 +177,12 @@
                 <label for="currency" class="col-sm-3 col-form-label">Vergi Oranı</label>
                 <div class="col-sm-6">
                     <select class="form-control" id="bankAccount" name="TaxRate" required="">
-                        @if (Model?.BankAccountList?.Count > 0)
+                        @if (Model?.TaxList?.Count > 0)
                         {
                             <option value="">Seçiniz</option>
-                            foreach (var item in Model.BankAccountList)
+                            foreach (var item in Model.TaxList)
                             {
-                                <option value="@(item.ID)" @(Model.LocationModel.POSAccountID == item.ID ? "selected" : "")>@(item.AccountName)</option>
+                                <option value="@(item.Rate)" @(Model?.LocationModel?.TaxRate == item.Rate ? "selected" : "")>@(item.Code)</option>
                             }
                         }
                     </select>
