@@ -10,7 +10,7 @@
     List<int> cashexchange = new int[] { 25 }.ToList();
     List<int> bankeft = new int[] { 11, 30 }.ToList();
     var blockedamount = Model.CurrentCash.BlockedAmount?.ToString("N2");
-    var usdBlockedamount = (Model.CurrentCash.Currency == "USD" ? Model.CurrentCash.BlockedAmount : 0);
+    //var usdBlockedamount = (Model.CurrentCash.Currency == "USD" ? Model.CurrentCash.BlockedAmount : 0);
 }
 <div class="card ht-100p">
     <div class="card-header d-flex align-items-center justify-content-between">
@@ -42,12 +42,12 @@
                     <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;" class="text-right">@(Model.DevirTotal.Where(x => x.Currency == "EUR").Sum(x => x.Total).ToString("N2"))</td>
                     <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;" class="text-right">@(Model.DevirTotal.Where(x => x.Currency == "TRL").Sum(x => x.Total).ToString("N2"))</td>
                 </tr>
-                <tr class="table-warning">
+                @*<tr class="table-warning">
                     <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;">Ciro Devir</td>
                     <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;" class="text-right">@(((Model.DevirTotal.Where(x => x.Currency == "USD")?.Sum(x => x.Total) ?? 0) - (Model.CurrentCash?.BlockedAmount ?? 0)).ToString("N2"))</td>
                     <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;" class="text-right">@(((Model.DevirTotal.Where(x => x.Currency == "EUR")?.Sum(x => x.Total) ?? 0) - (Model.CurrentCash?.BlockedAmount ?? 0)).ToString("N2"))</td>
                     <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;" class="text-right">@(((Model.DevirTotal.Where(x => x.Currency == "TRL")?.Sum(x => x.Total) ?? 0) - (Model.CurrentCash?.BlockedAmount ?? 0)).ToString("N2"))</td>
-                </tr>
+                </tr>*@
                 <tr>
                     <td>Nakit Satış</td>
                     <td class="text-right">@(Model.CashActions.Where(x => cashsales.Contains(x.CashActionTypeID.Value) && x.Currency == "USD").Sum(x => x.Amount)?.ToString("N2"))</td>
