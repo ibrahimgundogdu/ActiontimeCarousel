@@ -61,7 +61,7 @@ namespace ActionForce.Office.Controllers
                 datekey = Convert.ToDateTime(Date).Date;
             }
 
-            if (LocationID >0)
+            if (LocationID > 0)
             {
                 // dayresult ve itemsler kontrol edilir
 
@@ -193,7 +193,7 @@ namespace ActionForce.Office.Controllers
                 model.ResultStates = Db.ResultState.Where(x => x.IsActive == true).ToList();
                 model.Resultstatus = Db.Resultstatus.Where(x => x.IsActive == true).ToList();
 
-                model.PriceLastList = Db.GetLocationCurrentPrices(model.DayResult.LocationID).ToList();
+                model.PriceList = Db.GetLocationPrice(model.DayResult.LocationID, model.DayResult.Date).ToList();
 
                 model.CurrencyList = OfficeHelper.GetCurrency();
 
@@ -228,7 +228,7 @@ namespace ActionForce.Office.Controllers
 
                 model.DevirTotal = devirtotals;
 
-               
+
 
 
             }
@@ -1156,10 +1156,12 @@ namespace ActionForce.Office.Controllers
             return PartialView("_PartialResultSummary", model);
         }
 
-        public JsonResult CheckPrice(int id, int quantity)
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult CheckPrice(int id, int quantity, string startDate)
         {
             double sum = 0;
-            var getPriceLastList = Db.VPriceLastList.FirstOrDefault(x => x.ID == id);
+            var getPriceLastList = Db.VPrice.FirstOrDefault(x => x.ID == id);
 
             if (getPriceLastList != null && quantity > 0)
             {

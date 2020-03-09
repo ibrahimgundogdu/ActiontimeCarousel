@@ -10,18 +10,26 @@
             </tr>
         </thead>
         <tbody>
-            @if (Model.PriceLastList?.Count > 0)
+            @if (Model.PriceList?.Count > 0)
             {
-                foreach (var item in Model.PriceLastList)
+                foreach (var item in Model.PriceList)
                 {
-                    <tr class="table-light">
-                        <td><input id="Quantity_@(item.ID)" type="text" class="form-control form-control-sm money4 text-left" placeholder="Adet" onchange="CheckPrice(@(item.ID))"></td>
+                    <tr class="table-light" >
+                        <td><input id="Quantity_@(item.ID)" type="text" class="form-control form-control-sm money4 text-left" placeholder="Adet" onchange="CheckPrice(@(item.ID),@(item.Price ?? 0))"></td>
                         <td class="text-right">@item.Unit Dk</td>
                         <td class="text-right">@(item.Price?.ToString("N2")) @(item.Currency)</td>
-                        <td class="text-right" id="Sum_@(item.ID)"></td>
+                        <td class="text-right a" data-price="@(item.Price ?? 0)" id="Sum_@(item.ID)"></td>
                     </tr>
                 }
             }
+            <tr>
+                <td colspan="3">Bilet Toplamı:</td>
+                <td id="SumTotal"></td>
+            </tr>
         </tbody>
     </table>
 </div>
+
+<input id="sumHidden" type="hidden" />
+
+@*@(Model.CurrentDate?.DateKey.ToShortDateString())*@

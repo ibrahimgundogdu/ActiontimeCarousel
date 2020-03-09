@@ -9043,7 +9043,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="VTicketProduct" EntityType="db293_ActionTimeDbModel.VTicketProduct" />
           <EntitySet Name="Tax" EntityType="db293_ActionTimeDbModel.Tax" />
-          <FunctionImport Name="GetLocationPrice" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationPrice_Result)">
+          <FunctionImport Name="GetLocationPrice" EntitySet="VPrice" ReturnType="Collection(db293_ActionTimeDbModel.VPrice)">
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
             <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
@@ -21253,42 +21253,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetLocationPrice" FunctionName="db293_ActionTimeDbModel.Store.GetLocationPrice">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetLocationPrice_Result">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="PriceCategoryID" ColumnName="PriceCategoryID" />
-                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="ExtraMultiple" ColumnName="ExtraMultiple" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="UseToSale" ColumnName="UseToSale" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
-                <ScalarProperty Name="Unit" ColumnName="Unit" />
-                <ScalarProperty Name="ProductCategoryName" ColumnName="ProductCategoryName" />
-                <ScalarProperty Name="TicketTypeName" ColumnName="TicketTypeName" />
-                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
-                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
-                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
-                <ScalarProperty Name="Style" ColumnName="Style" />
-                <ScalarProperty Name="Sign" ColumnName="Sign" />
-                <ScalarProperty Name="BackStyle" ColumnName="BackStyle" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="PriceCategoryID1" ColumnName="PriceCategoryID1" />
-                <ScalarProperty Name="TicketTypeID1" ColumnName="TicketTypeID1" />
-                <ScalarProperty Name="ProductID1" ColumnName="ProductID1" />
-                <ScalarProperty Name="StartDate1" ColumnName="StartDate1" />
-              </ComplexTypeMapping>
-            </ResultMapping>
           </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>

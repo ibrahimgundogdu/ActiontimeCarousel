@@ -37,11 +37,9 @@ namespace ActionForce.Office
         public IEnumerable<DocumentCashRecorderSlip> CashRecorderSlips { get; set; }
         public IEnumerable<VDayResultDocuments> DayResultDocuments { get; set; }
 
-        public List<VPriceLastList> PriceLastList { get; set; }
+        public List<VPrice> PriceList { get; set; }
         
-
-
-
+        
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }
         public Location CurrentLocation { get; set; }
