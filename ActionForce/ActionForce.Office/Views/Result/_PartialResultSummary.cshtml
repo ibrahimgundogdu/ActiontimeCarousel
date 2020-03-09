@@ -42,12 +42,12 @@
                     <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;" class="text-right">@(Model.DevirTotal.Where(x => x.Currency == "EUR").Sum(x => x.Total).ToString("N2"))</td>
                     <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;" class="text-right">@(Model.DevirTotal.Where(x => x.Currency == "TRL").Sum(x => x.Total).ToString("N2"))</td>
                 </tr>
-                @*<tr class="table-warning">
+                <tr class="table-warning">
                     <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;">Ciro Devir</td>
-                    <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;" class="text-right">@(((Model.DevirTotal.Where(x => x.Currency == "USD")?.Sum(x => x.Total) ?? 0) - (Model.CurrentCash?.BlockedAmount ?? 0)).ToString("N2"))</td>
-                    <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;" class="text-right">@(((Model.DevirTotal.Where(x => x.Currency == "EUR")?.Sum(x => x.Total) ?? 0) - (Model.CurrentCash?.BlockedAmount ?? 0)).ToString("N2"))</td>
-                    <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;" class="text-right">@(((Model.DevirTotal.Where(x => x.Currency == "TRL")?.Sum(x => x.Total) ?? 0) - (Model.CurrentCash?.BlockedAmount ?? 0)).ToString("N2"))</td>
-                </tr>*@
+                    <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;" class="text-right">@(Model.DevirTotal.Where(x => x.Currency == "USD").Sum(x => x.CiroTotal).ToString("N2"))</td>
+                    <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;" class="text-right">@(Model.DevirTotal.Where(x => x.Currency == "EUR").Sum(x => x.CiroTotal).ToString("N2"))</td>
+                    <td style="border-top: 2px solid orange;border-bottom: 2px solid #004db9;" class="text-right">@(Model.DevirTotal.Where(x => x.Currency == "TRL").Sum(x => x.CiroTotal).ToString("N2"))</td>
+                </tr>
                 <tr>
                     <td>Nakit Satış</td>
                     <td class="text-right">@(Model.CashActions.Where(x => cashsales.Contains(x.CashActionTypeID.Value) && x.Currency == "USD").Sum(x => x.Amount)?.ToString("N2"))</td>
@@ -124,6 +124,9 @@
 
         </table>
     </div>
+
+    @{Html.RenderPartial("_PartialCheckPrice", Model);}
+
     @using (Html.BeginForm("SetResultState", "Result", FormMethod.Post))
     {
         <input name="DayresultID" type="hidden" value="@(Model.DayResult.ID)" />

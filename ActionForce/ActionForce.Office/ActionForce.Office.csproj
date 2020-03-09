@@ -2710,6 +2710,7 @@
     <Content Include="Views\Location\PriceCategory.cshtml" />
     <Content Include="Views\Location\_PartialLocationPriceList.cshtml" />
     <Content Include="Views\Location\_PartialPriceCatEdit.cshtml" />
+    <Content Include="Views\Result\_PartialCheckPrice.cshtml" />
     <Content Include="Views\CashRecorder\Report.cshtml" />
     <Content Include="Views\CashRecorder\_PartialCashRecorderList.cshtml" />
     <None Include="Web.Debug.config">
