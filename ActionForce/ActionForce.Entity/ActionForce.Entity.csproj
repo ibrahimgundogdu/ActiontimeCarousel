@@ -657,6 +657,9 @@
     <Compile Include="TaskCategory.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="Tax.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="TicketBasket.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -751,6 +754,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VCashBankActions.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VCashRecorderMuhasebe.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VCashRecorders.cs">

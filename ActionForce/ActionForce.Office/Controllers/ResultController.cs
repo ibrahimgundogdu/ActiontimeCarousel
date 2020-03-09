@@ -61,7 +61,7 @@ namespace ActionForce.Office.Controllers
                 datekey = Convert.ToDateTime(Date).Date;
             }
 
-            if (LocationID >0)
+            if (LocationID > 0)
             {
                 // dayresult ve itemsler kontrol edilir
 
@@ -193,6 +193,8 @@ namespace ActionForce.Office.Controllers
                 model.ResultStates = Db.ResultState.Where(x => x.IsActive == true).ToList();
                 model.Resultstatus = Db.Resultstatus.Where(x => x.IsActive == true).ToList();
 
+                model.PriceList = Db.GetLocationPrice(model.DayResult.LocationID, model.DayResult.Date).ToList();
+
                 model.CurrencyList = OfficeHelper.GetCurrency();
 
                 model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
@@ -207,20 +209,27 @@ namespace ActionForce.Office.Controllers
                 devirtotals.Add(new TotalModel()
                 {
                     Currency = "TRL",
-                    Total = Db.GetCashBalance(model.DayResult.LocationID, trlCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0
+                    Total = Db.GetCashBalance(model.DayResult.LocationID, trlCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0,
+                    CiroTotal = model.CurrentCash.Currency == "TRL" ? ((Db.GetCashBalance(model.DayResult.LocationID, trlCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0) - model.CurrentCash.BlockedAmount) ?? 0 : 0
                 });
                 devirtotals.Add(new TotalModel()
                 {
                     Currency = "USD",
-                    Total = Db.GetCashBalance(model.DayResult.LocationID, usdCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0
+                    Total = Db.GetCashBalance(model.DayResult.LocationID, usdCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0,
+                    CiroTotal = model.CurrentCash.Currency == "USD" ? ((Db.GetCashBalance(model.DayResult.LocationID, usdCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0) - model.CurrentCash.BlockedAmount) ?? 0 : 0
                 });
                 devirtotals.Add(new TotalModel()
                 {
                     Currency = "EUR",
-                    Total = Db.GetCashBalance(model.DayResult.LocationID, eurCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0
+                    Total = Db.GetCashBalance(model.DayResult.LocationID, eurCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0,
+                    CiroTotal = model.CurrentCash.Currency == "USD" ? ((Db.GetCashBalance(model.DayResult.LocationID, eurCash.ID, model.DayResult.Date.AddDays(-1)).FirstOrDefault() ?? 0) - model.CurrentCash.BlockedAmount) ?? 0 : 0
+
                 });
 
                 model.DevirTotal = devirtotals;
+
+
+
 
             }
             else
@@ -1145,6 +1154,21 @@ namespace ActionForce.Office.Controllers
             model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
 
             return PartialView("_PartialResultSummary", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public JsonResult CheckPrice(int id, int quantity, string startDate)
+        {
+            double sum = 0;
+            var getPriceLastList = Db.VPrice.FirstOrDefault(x => x.ID == id);
+
+            if (getPriceLastList != null && quantity > 0)
+            {
+                sum = quantity * (getPriceLastList.Price ?? 0);
+            }
+
+            return Json(1, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

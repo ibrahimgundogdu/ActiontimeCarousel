@@ -1,0 +1,63 @@
+﻿@model CashRecorderControlModel
+<div class="table-responsive">
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Tarih</th>
+                <th>Belge No</th>
+                <th>Belge Tarih / Saat</th>
+                <th>Nakit Tahsilat</th>
+                <th>Kredi Tahsilatı</th>
+                <th>Net Tahsilat</th>
+                <th class="tx-right">Matrah</th>
+                <th class="tx-right">KDV %</th>
+                <th class="tx-right">Toplam Tahsilat</th>
+                <th class="tx-center">Para Br.</th>
+                <th class="tx-center">Belge Türü</th>
+                <th>Lokasyon</th>
+                <th class="tx-center">Kaydeden</th>
+            </tr>
+        </thead>
+        @if (Model.CashRecorderMuhasebeList != null)
+        {
+            <tbody>
+                @foreach (var vCash in Model.CashRecorderMuhasebeList)
+                {
+                <tr>
+                    <td>@(vCash.ID)</td>
+                    <td>@(vCash.SlipDateDate)</td>
+                    <td><a href="/Sale/PriceTypeDetail/@(vCash.DocumentNumber)"><span class="d-none d-sm-inline"> @($"{vCash.DocumentNumber}")</span></a> </td>
+                    <td>@(vCash.SlipDate)</td>
+                    <td>@(vCash.CashAmount)</td>
+                    <td>@(vCash.CreditAmount)</td>
+                    <td>@(vCash.NetAmount)</td>
+                    <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right"> @(vCash.Matrah != null ? vCash.Matrah.Value.ToString("N2") : "")</td>
+                    <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right"> @(vCash.KDV != null ? vCash.KDV.Value.ToString("N2") : "")</td>
+                    <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right"> @(vCash.TotalAmount != null ? vCash.TotalAmount.Value.ToString("N2") : "")</td>
+                    <td class="tx-center"> @(vCash.Currency)</td>
+                    <td class="tx-center"> @(vCash.BelgeTuru)</td>
+                    <td>@(vCash.LocationFullName)</td>
+                    <td class="tx-center"> @(vCash.RecorderFullName)</td>
+                </tr>
+                }
+            </tbody>
+        }
+    </table>
+</div>
+
+@if (Model.Result != null) 
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
+}
+
+

@@ -76,7 +76,7 @@
                                             <h6 class="mg-b-0">Nakit Satış / İade İşlemleri</h6>
                                             <div class="d-flex tx-18">
                                                 @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
+                                                    <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -197,7 +197,7 @@
                                                                 <input type="text" id="I5AEUR" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="I5DEUR" class="form-control" autocomplete="off" placeholder=""/>
+                                                                <input type="text" id="I5DEUR" class="form-control" autocomplete="off" placeholder="" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCashSaleRefund(@Model.CurrentDayResult.ID,'EUR'):false;">
@@ -226,11 +226,11 @@
                                                             <td class="bd-l text-right" style="width:100px; padding:1px !important;">
                                                                 <input type="text" id="I5QUSD" class="form-control font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0" value="1">
                                                             </td>
-                                                            <td class="text-right" style="width:100px; padding:1px !important;"> 
+                                                            <td class="text-right" style="width:100px; padding:1px !important;">
                                                                 <input type="text" id="I5AUSD" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="I5DUSD" class="form-control" placeholder=""/>
+                                                                <input type="text" id="I5DUSD" class="form-control" placeholder="" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCashSaleRefund(@Model.CurrentDayResult.ID,'USD'):false;">
@@ -257,7 +257,7 @@
                                             <h6 class="mg-b-0">Kart Satış / İade İşlemleri</h6>
                                             <div class="d-flex tx-18">
                                                 @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
+                                                    <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -292,7 +292,7 @@
                                                             <input type="text" id="S10CSA" class="form-control money font-weight-bold text-right tx-orange" autocomplete="off" min="0" placeholder="0,00">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" id="S10CSD" class="form-control" autocomplete="off" placeholder=""/>
+                                                            <input type="text" id="S10CSD" class="form-control" autocomplete="off" placeholder="" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCardSale(@Model.CurrentDayResult.ID,'@(defaultCurrency)'):false;">
@@ -306,7 +306,7 @@
                                                             <input type="text" id="R11CRA" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00">
                                                         </td>
                                                         <td style="padding:1px !important;">
-                                                            <input type="text" id="R11CRD" class="form-control" autocomplete="off" placeholder=""/>
+                                                            <input type="text" id="R11CRD" class="form-control" autocomplete="off" placeholder="" />
                                                         </td>
                                                         <td class="text-center" style="width:50px; padding:1px !important;">
                                                             <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCardRefund(@Model.CurrentDayResult.ID,'@(defaultCurrency)'):false;">
@@ -331,7 +331,7 @@
                                             <h6 class="mg-b-0">Nakit Tahsilat / Ödeme İşlemleri</h6>
                                             <div class="d-flex tx-18">
                                                 @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
+                                                    <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -361,7 +361,7 @@
                                                                 <input type="text" id="T1USD" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T1DUSD" class="form-control" autocomplete="off" placeholder=""/>
+                                                                <input type="text" id="T1DUSD" class="form-control" autocomplete="off" placeholder="" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCollect(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD")?.ID),'USD'):false;">
@@ -372,7 +372,7 @@
                                                                 <input type="text" id="T4USD" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T4DUSD" class="form-control" autocomplete="off" placeholder=""/>
+                                                                <input type="text" id="T4DUSD" class="form-control" autocomplete="off" placeholder="" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddPayment(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD")?.ID),'USD'):false;">
@@ -389,7 +389,7 @@
                                                                 <input type="text" id="T1TRL" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T1DTRL" class="form-control" autocomplete="off" placeholder=""/>
+                                                                <input type="text" id="T1DTRL" class="form-control" autocomplete="off" placeholder="" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCollect(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "TRL")?.ID),'TRL'):false;">
@@ -400,7 +400,7 @@
                                                                 <input type="text" id="T4TRL" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T4DTRL" class="form-control" autocomplete="off" placeholder=""/>
+                                                                <input type="text" id="T4DTRL" class="form-control" autocomplete="off" placeholder="" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddPayment(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "TRL")?.ID),'TRL'):false;">
@@ -414,7 +414,7 @@
                                                                 <input type="text" id="T1USD" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T1DUSD" class="form-control" autocomplete="off" placeholder=""/>
+                                                                <input type="text" id="T1DUSD" class="form-control" autocomplete="off" placeholder="" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCollect(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "USD")?.ID),'USD'):false;">
@@ -425,7 +425,7 @@
                                                                 <input type="text" id="T4USD" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T4DUSD" class="form-control" autocomplete="off" placeholder=""/>
+                                                                <input type="text" id="T4DUSD" class="form-control" autocomplete="off" placeholder="" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddPayment(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "USD")?.ID),'USD'):false;">
@@ -440,7 +440,7 @@
                                                                 <input type="text" id="T1EUR" class="form-control money font-weight-bold text-right text-info" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T1DEUR" class="form-control" autocomplete="off" placeholder=""/>
+                                                                <input type="text" id="T1DEUR" class="form-control" autocomplete="off" placeholder="" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddCollect(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 1 && x.Currency == "EUR")?.ID),'EUR'):false;">
@@ -451,7 +451,7 @@
                                                                 <input type="text" id="T4EUR" class="form-control money font-weight-bold text-right text-danger" autocomplete="off" min="0" placeholder="0,00">
                                                             </td>
                                                             <td style="padding:1px !important;">
-                                                                <input type="text" id="T4DEUR" class="form-control" autocomplete="off" placeholder=""/>
+                                                                <input type="text" id="T4DEUR" class="form-control" autocomplete="off" placeholder="" />
                                                             </td>
                                                             <td class="text-center" style="width:50px; padding:1px !important;">
                                                                 <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddPayment(@Model.CurrentDayResult.ID,@(Model.DayResultItemList.FirstOrDefault(x => x.ResultItemID == 4 && x.Currency == "EUR")?.ID),'EUR'):false;">
@@ -476,7 +476,7 @@
                                             <h6 class="mg-b-0">Döviz Satış İşlemleri</h6>
                                             <div class="d-flex tx-18">
                                                 @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
+                                                    <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -631,7 +631,7 @@
                                             <h6 class="mg-b-0">Masraflar</h6>
                                             <div class="d-flex tx-18">
                                                 @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
+                                                    <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -722,7 +722,7 @@
                                             <h6 class="mg-b-0">Havale / EFT</h6>
                                             <div class="d-flex tx-18">
                                                 @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
+                                                    <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -896,7 +896,7 @@
                                             <h6 class="mg-b-0">Yazarkasa</h6>
                                             <div class="d-flex tx-18">
                                                 @*<a href="" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
-                                                <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
+                                                    <a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -972,7 +972,7 @@
                                         <div class="card-header d-flex align-items-center justify-content-between">
                                             <h6 class="mg-b-0">Dosyalar </h6>
                                             <div class="d-flex tx-18">
-                                               
+
                                             </div>
                                         </div>
                                         <div class="table-responsive">
@@ -1125,6 +1125,37 @@
             $('.money').mask("#.##0,00", { reverse: true });
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
+
+        function CheckPrice(id, price) {
+
+            var firstSum = $("#sumHidden").val();
+
+            var quantity = $('#Quantity_' + id).val();
+            var toplam = price * quantity;
+
+            $("#Sum_" + id).html(toplam);
+
+            $("#sumHidden").val(Number(toplam));
+
+            firstSum += parseInt(toplam);
+
+           //var temp = 0;
+
+            //console.log("d: ", temp);
+
+
+            //console.log("id: ", id);
+            //console.log("price: ", price);
+            //console.log("quantity: ", quantity);
+            //console.log("toplam: ", toplam);
+
+            
+
+            //firstSum += toplam;
+
+            $("#SumTotal").html(firstSum);
+        }
+
 
     </script>
 

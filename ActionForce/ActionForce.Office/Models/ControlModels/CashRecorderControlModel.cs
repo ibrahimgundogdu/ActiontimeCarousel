@@ -9,7 +9,7 @@ namespace ActionForce.Office
     public class CashRecorderControlModel : LayoutControlModel
     {
         public IEnumerable<VDocumentCashRecorderSlip> CashRecorder { get; set; }
-
+        public IEnumerable<VCashRecorderMuhasebe> CashRecorderMuhasebeList { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
         public IEnumerable<Currency> CurrencyList { get; set; }
 

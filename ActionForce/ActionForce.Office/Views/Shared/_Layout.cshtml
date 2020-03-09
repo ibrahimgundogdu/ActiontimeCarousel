@@ -150,6 +150,9 @@
                     <ul>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "CashRecorder" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/CashRecorder">01 Yazarkasa Fişleri</a></li>
                     </ul>
+                    <ul>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "CashRecorder" && this.ViewContext.RouteData.Values["action"].ToString() == "Report" ? "class=active" : "")><a href="/CashRecorder/Report">02 Yazarkasa Raporu</a></li>
+                    </ul>
                 </li>
                 <li class="nav-item with-sub  @(this.ViewContext.RouteData.Values["controller"].ToString() == "Result" ? "show" : "")">
                     <a href="/Employee" class="nav-link"><i data-feather="moon"></i> <span>Gün Sonu İşlemleri</span></a>

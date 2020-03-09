@@ -36,10 +36,10 @@ namespace ActionForce.Office
         public IEnumerable<VDocumentBankTransfer> BankTransfers { get; set; }
         public IEnumerable<DocumentCashRecorderSlip> CashRecorderSlips { get; set; }
         public IEnumerable<VDayResultDocuments> DayResultDocuments { get; set; }
+
+        public List<VPrice> PriceList { get; set; }
         
-
-
-
+        
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }
         public Location CurrentLocation { get; set; }

@@ -14,6 +14,7 @@ namespace ActionForce.Office
         public List<string> StateList { get; set; }
         public LocationFilterModel FilterModel { get; set; }
         public List<ApplicationLog> LogList { get; set; }
+        public List<Tax> TaxList { get; set; }
         public List<LocationEmployeeModel> EmployeeLocationList { get; set; }
         public List<OurCompany> OurCompanyList { get; set; }
         public List<VPriceCategory> PriceCategoryList { get; set; }

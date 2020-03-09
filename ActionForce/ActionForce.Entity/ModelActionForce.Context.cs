@@ -295,6 +295,8 @@ namespace ActionForce.Entity
         public virtual DbSet<VTicketPromotion> VTicketPromotion { get; set; }
         public virtual DbSet<VTicketBasketTotal> VTicketBasketTotal { get; set; }
         public virtual DbSet<VTicketProduct> VTicketProduct { get; set; }
+        public virtual DbSet<Tax> Tax { get; set; }
+        public virtual DbSet<VCashRecorderMuhasebe> VCashRecorderMuhasebe { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -1259,6 +1261,32 @@ namespace ActionForce.Entity
                 new ObjectParameter("ID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemoveBasketItem", iDParameter);
+        }
+    
+        public virtual ObjectResult<VPrice> GetLocationPrice(Nullable<int> locationID, Nullable<System.DateTime> date)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VPrice>("GetLocationPrice", locationIDParameter, dateParameter);
+        }
+    
+        public virtual ObjectResult<VPrice> GetLocationPrice(Nullable<int> locationID, Nullable<System.DateTime> date, MergeOption mergeOption)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VPrice>("GetLocationPrice", mergeOption, locationIDParameter, dateParameter);
         }
     }
 }
