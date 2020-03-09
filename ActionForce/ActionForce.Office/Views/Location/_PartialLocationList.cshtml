@@ -9,6 +9,7 @@
             <th>Türü</th>
             <th>Fiyat Kategorisi</th>
             <th class="text-center">Para Birimi</th>
+            <th class="text-center">Vergi Oranı</th>
             <th class="text-center">Time Zone</th>
             <th class="text-center">Aktif mi?</th>
         </tr>
@@ -24,6 +25,7 @@
                 <td class="tx-sm-13">@item.LocationTypeName</td>
                 <td class="tx-sm-13">@(!String.IsNullOrEmpty(item.CategoryName) ? item.CategoryName : "")</td>
                 <td class="tx-sm-13 text-center">@item.Currency</td>
+                <td class="tx-sm-13 text-center">% @item.TaxRate</td>
                 <td class="tx-sm-13 text-center">@item.Timezone</td>
                 <td class="tx-sm-13 text-center">
                     @Html.Raw(item.IsActive.Value == true ? "<i class='ion ion-md-checkmark-circle text-success'></i>" : "<i class='ion ion-md-close-circle'></i>")
