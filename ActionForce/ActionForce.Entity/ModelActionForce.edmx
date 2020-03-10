@@ -772,6 +772,29 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Property Name="IsActive" Type="bit" />
           <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
+        <EntityType Name="DayResultCheckPrice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="Date" Type="date" />
+          <Property Name="PriceID" Type="int" />
+          <Property Name="PriceCategoryID" Type="int" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Unit" Type="int" />
+          <Property Name="Price" Type="float" />
+          <Property Name="Total" Type="float" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="Sign" Type="nvarchar" MaxLength="1" />
+        </EntityType>
         <EntityType Name="DayResultDocuments">
           <Key>
             <PropertyRef Name="ID" />
@@ -2696,26 +2719,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="SortBy" Type="char" MaxLength="2" />
           <Property Name="IsActive" Type="bit" />
-        </EntityType>
-        <EntityType Name="ResultCheckPrice">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ResultID" Type="bigint" />
-          <Property Name="Date" Type="date" />
-          <Property Name="PriceID" Type="int" />
-          <Property Name="PriceCategoryID" Type="int" />
-          <Property Name="Quantity" Type="int" />
-          <Property Name="Unit" Type="int" />
-          <Property Name="Price" Type="float" />
-          <Property Name="Total" Type="float" />
-          <Property Name="RecordDate" Type="datetime" />
-          <Property Name="RecordEmployeeID" Type="int" />
-          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
-          <Property Name="UpdateDate" Type="datetime" />
-          <Property Name="UpdateEmployeeID" Type="int" />
-          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="ResultState">
           <Key>
@@ -6308,6 +6311,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="CustomerActions" EntityType="Self.CustomerActions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DateList" EntityType="Self.DateList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DayResult" EntityType="Self.DayResult" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DayResultCheckPrice" EntityType="Self.DayResultCheckPrice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DayResultDocuments" EntityType="Self.DayResultDocuments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DayResultItemList" EntityType="Self.DayResultItemList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DayResultItems" EntityType="Self.DayResultItems" Schema="dbo" store:Type="Tables" />
@@ -6412,7 +6416,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Promotions" EntityType="Self.Promotions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RecordNumber" EntityType="Self.RecordNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RefundTypes" EntityType="Self.RefundTypes" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ResultCheckPrice" EntityType="Self.ResultCheckPrice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResultState" EntityType="Self.ResultState" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Resultstatus" EntityType="Self.Resultstatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
@@ -9155,7 +9158,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="VCashRecorderMuhasebe" EntityType="db293_ActionTimeDbModel.VCashRecorderMuhasebe" />
           <FunctionImport Name="GetMonthList" ReturnType="Collection(db293_ActionTimeDbModel.GetMonthList_Result)" />
-          <EntitySet Name="ResultCheckPrice" EntityType="db293_ActionTimeDbModel.ResultCheckPrice" />
+          <EntitySet Name="DayResultCheckPrice" EntityType="db293_ActionTimeDbModel.DayResultCheckPrice" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -15405,12 +15408,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Type="Int32" Name="Month" Nullable="true" />
           <Property Type="String" Name="MonthNameTR" Nullable="true" MaxLength="50" />
         </ComplexType>
-        <EntityType Name="ResultCheckPrice">
+        <EntityType Name="DayResultCheckPrice">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ResultID" Type="Int64" />
+          <Property Name="LocationID" Type="Int32" />
           <Property Name="Date" Type="DateTime" Precision="0" />
           <Property Name="PriceID" Type="Int32" />
           <Property Name="PriceCategoryID" Type="Int32" />
@@ -15424,6 +15428,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateEmployeeID" Type="Int32" />
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -21449,9 +21455,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="ResultCheckPrice">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ResultCheckPrice">
-              <MappingFragment StoreEntitySet="ResultCheckPrice">
+          <EntitySetMapping Name="DayResultCheckPrice">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DayResultCheckPrice">
+              <MappingFragment StoreEntitySet="DayResultCheckPrice">
+                <ScalarProperty Name="Sign" ColumnName="Sign" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
                 <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
@@ -21465,6 +21473,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="PriceCategoryID" ColumnName="PriceCategoryID" />
                 <ScalarProperty Name="PriceID" ColumnName="PriceID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
