@@ -772,6 +772,29 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Property Name="IsActive" Type="bit" />
           <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
+        <EntityType Name="DayResultCheckPrice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="Date" Type="date" />
+          <Property Name="PriceID" Type="int" />
+          <Property Name="PriceCategoryID" Type="int" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Unit" Type="int" />
+          <Property Name="Price" Type="float" />
+          <Property Name="Total" Type="float" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="Sign" Type="nvarchar" MaxLength="1" />
+        </EntityType>
         <EntityType Name="DayResultDocuments">
           <Key>
             <PropertyRef Name="ID" />
@@ -2696,26 +2719,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="SortBy" Type="char" MaxLength="2" />
           <Property Name="IsActive" Type="bit" />
-        </EntityType>
-        <EntityType Name="ResultCheckPrice">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ResultID" Type="bigint" />
-          <Property Name="Date" Type="date" />
-          <Property Name="PriceID" Type="int" />
-          <Property Name="PriceCategoryID" Type="int" />
-          <Property Name="Quantity" Type="int" />
-          <Property Name="Unit" Type="int" />
-          <Property Name="Price" Type="float" />
-          <Property Name="Total" Type="float" />
-          <Property Name="RecordDate" Type="datetime" />
-          <Property Name="RecordEmployeeID" Type="int" />
-          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
-          <Property Name="UpdateDate" Type="datetime" />
-          <Property Name="UpdateEmployeeID" Type="int" />
-          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="ResultState">
           <Key>
@@ -5293,6 +5296,55 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationShift' does not ha
           <Property Name="WeekKey" Type="nvarchar" MaxLength="9" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VMall' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VMall">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="TimeZone" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Segment" Type="nvarchar" MaxLength="20" />
+          <Property Name="StructuralCondition" Type="nvarchar" MaxLength="40" />
+          <Property Name="Address" Type="nvarchar" MaxLength="350" />
+          <Property Name="Country" Type="int" />
+          <Property Name="State" Type="int" />
+          <Property Name="City" Type="int" />
+          <Property Name="County" Type="int" />
+          <Property Name="PostCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="PhoneCountryCode" Type="nvarchar" MaxLength="5" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="10" />
+          <Property Name="Latitude" Type="float" />
+          <Property Name="Longitude" Type="float" />
+          <Property Name="Map" Type="nvarchar" MaxLength="500" />
+          <Property Name="InvestorCompanyID" Type="int" />
+          <Property Name="LeasingCompanyID" Type="int" />
+          <Property Name="IsLeasingInHouse" Type="bit" />
+          <Property Name="ContactName" Type="nvarchar" MaxLength="150" />
+          <Property Name="ContactTitle" Type="nvarchar" MaxLength="50" />
+          <Property Name="ContactPhoneCode" Type="nvarchar" MaxLength="5" />
+          <Property Name="ContactPhone" Type="nvarchar" MaxLength="10" />
+          <Property Name="ContactEmail" Type="nvarchar" MaxLength="110" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="TimeZone" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="20" />
+          <Property Name="InvestorCompanyName" Type="nvarchar" MaxLength="150" />
+          <Property Name="LeasingCompanyName" Type="nvarchar" MaxLength="150" />
+          <Property Name="RecorderEmployeeName" Type="nvarchar" MaxLength="150" />
+          <Property Name="UpdaterEmployeeName" Type="nvarchar" MaxLength="150" />
+          <Property Name="CityName" Type="nvarchar" MaxLength="50" />
+          <Property Name="StateName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CountryName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPersonalDocument' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VPersonalDocument">
           <Key>
@@ -6308,6 +6360,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="CustomerActions" EntityType="Self.CustomerActions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DateList" EntityType="Self.DateList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DayResult" EntityType="Self.DayResult" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DayResultCheckPrice" EntityType="Self.DayResultCheckPrice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DayResultDocuments" EntityType="Self.DayResultDocuments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DayResultItemList" EntityType="Self.DayResultItemList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DayResultItems" EntityType="Self.DayResultItems" Schema="dbo" store:Type="Tables" />
@@ -6412,7 +6465,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Promotions" EntityType="Self.Promotions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RecordNumber" EntityType="Self.RecordNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RefundTypes" EntityType="Self.RefundTypes" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ResultCheckPrice" EntityType="Self.ResultCheckPrice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResultState" EntityType="Self.ResultState" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Resultstatus" EntityType="Self.Resultstatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
@@ -8055,6 +8107,51 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocationShift].[WeekKey] AS [WeekKey]
     FROM [dbo].[VLocationShift] AS [VLocationShift]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VMall" EntityType="Self.VMall" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VMall].[ID] AS [ID], 
+    [VMall].[OurCompanyID] AS [OurCompanyID], 
+    [VMall].[FullName] AS [FullName], 
+    [VMall].[Segment] AS [Segment], 
+    [VMall].[StructuralCondition] AS [StructuralCondition], 
+    [VMall].[Address] AS [Address], 
+    [VMall].[Country] AS [Country], 
+    [VMall].[State] AS [State], 
+    [VMall].[City] AS [City], 
+    [VMall].[County] AS [County], 
+    [VMall].[PostCode] AS [PostCode], 
+    [VMall].[PhoneCountryCode] AS [PhoneCountryCode], 
+    [VMall].[PhoneNumber] AS [PhoneNumber], 
+    [VMall].[Latitude] AS [Latitude], 
+    [VMall].[Longitude] AS [Longitude], 
+    [VMall].[Map] AS [Map], 
+    [VMall].[InvestorCompanyID] AS [InvestorCompanyID], 
+    [VMall].[LeasingCompanyID] AS [LeasingCompanyID], 
+    [VMall].[IsLeasingInHouse] AS [IsLeasingInHouse], 
+    [VMall].[ContactName] AS [ContactName], 
+    [VMall].[ContactTitle] AS [ContactTitle], 
+    [VMall].[ContactPhoneCode] AS [ContactPhoneCode], 
+    [VMall].[ContactPhone] AS [ContactPhone], 
+    [VMall].[ContactEmail] AS [ContactEmail], 
+    [VMall].[RecordDate] AS [RecordDate], 
+    [VMall].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [VMall].[RecordIP] AS [RecordIP], 
+    [VMall].[UpdateDate] AS [UpdateDate], 
+    [VMall].[UpdateEmployeeID] AS [UpdateEmployeeID], 
+    [VMall].[UpdateIP] AS [UpdateIP], 
+    [VMall].[TimeZone] AS [TimeZone], 
+    [VMall].[IsActive] AS [IsActive], 
+    [VMall].[CompanyName] AS [CompanyName], 
+    [VMall].[Currency] AS [Currency], 
+    [VMall].[InvestorCompanyName] AS [InvestorCompanyName], 
+    [VMall].[LeasingCompanyName] AS [LeasingCompanyName], 
+    [VMall].[RecorderEmployeeName] AS [RecorderEmployeeName], 
+    [VMall].[UpdaterEmployeeName] AS [UpdaterEmployeeName], 
+    [VMall].[CityName] AS [CityName], 
+    [VMall].[StateName] AS [StateName], 
+    [VMall].[CountryName] AS [CountryName]
+    FROM [dbo].[VMall] AS [VMall]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VPersonalDocument" EntityType="Self.VPersonalDocument" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VPersonalDocument].[ID] AS [ID], 
@@ -9155,7 +9252,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="VCashRecorderMuhasebe" EntityType="db293_ActionTimeDbModel.VCashRecorderMuhasebe" />
           <FunctionImport Name="GetMonthList" ReturnType="Collection(db293_ActionTimeDbModel.GetMonthList_Result)" />
-          <EntitySet Name="ResultCheckPrice" EntityType="db293_ActionTimeDbModel.ResultCheckPrice" />
+          <EntitySet Name="DayResultCheckPrice" EntityType="db293_ActionTimeDbModel.DayResultCheckPrice" />
+          <EntitySet Name="VMall" EntityType="db293_ActionTimeDbModel.VMall" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -15405,12 +15503,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Type="Int32" Name="Month" Nullable="true" />
           <Property Type="String" Name="MonthNameTR" Nullable="true" MaxLength="50" />
         </ComplexType>
-        <EntityType Name="ResultCheckPrice">
+        <EntityType Name="DayResultCheckPrice">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ResultID" Type="Int64" />
+          <Property Name="LocationID" Type="Int32" />
           <Property Name="Date" Type="DateTime" Precision="0" />
           <Property Name="PriceID" Type="Int32" />
           <Property Name="PriceCategoryID" Type="Int32" />
@@ -15424,6 +15523,55 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateEmployeeID" Type="Int32" />
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VMall">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="TimeZone" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Segment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="StructuralCondition" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="Int32" />
+          <Property Name="State" Type="Int32" />
+          <Property Name="City" Type="Int32" />
+          <Property Name="County" Type="Int32" />
+          <Property Name="PostCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneCountryCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="Map" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="InvestorCompanyID" Type="Int32" />
+          <Property Name="LeasingCompanyID" Type="Int32" />
+          <Property Name="IsLeasingInHouse" Type="Boolean" />
+          <Property Name="ContactName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ContactTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPhoneCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPhone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ContactEmail" Type="String" MaxLength="110" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TimeZone" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Currency" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="InvestorCompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="LeasingCompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="RecorderEmployeeName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="UpdaterEmployeeName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -21449,9 +21597,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <EntitySetMapping Name="ResultCheckPrice">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ResultCheckPrice">
-              <MappingFragment StoreEntitySet="ResultCheckPrice">
+          <EntitySetMapping Name="DayResultCheckPrice">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DayResultCheckPrice">
+              <MappingFragment StoreEntitySet="DayResultCheckPrice">
+                <ScalarProperty Name="Sign" ColumnName="Sign" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
                 <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
@@ -21465,7 +21615,55 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="PriceCategoryID" ColumnName="PriceCategoryID" />
                 <ScalarProperty Name="PriceID" ColumnName="PriceID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VMall">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VMall">
+              <MappingFragment StoreEntitySet="VMall">
+                <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+                <ScalarProperty Name="StateName" ColumnName="StateName" />
+                <ScalarProperty Name="CityName" ColumnName="CityName" />
+                <ScalarProperty Name="UpdaterEmployeeName" ColumnName="UpdaterEmployeeName" />
+                <ScalarProperty Name="RecorderEmployeeName" ColumnName="RecorderEmployeeName" />
+                <ScalarProperty Name="LeasingCompanyName" ColumnName="LeasingCompanyName" />
+                <ScalarProperty Name="InvestorCompanyName" ColumnName="InvestorCompanyName" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="TimeZone" ColumnName="TimeZone" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="ContactEmail" ColumnName="ContactEmail" />
+                <ScalarProperty Name="ContactPhone" ColumnName="ContactPhone" />
+                <ScalarProperty Name="ContactPhoneCode" ColumnName="ContactPhoneCode" />
+                <ScalarProperty Name="ContactTitle" ColumnName="ContactTitle" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="IsLeasingInHouse" ColumnName="IsLeasingInHouse" />
+                <ScalarProperty Name="LeasingCompanyID" ColumnName="LeasingCompanyID" />
+                <ScalarProperty Name="InvestorCompanyID" ColumnName="InvestorCompanyID" />
+                <ScalarProperty Name="Map" ColumnName="Map" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="PhoneCountryCode" ColumnName="PhoneCountryCode" />
+                <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+                <ScalarProperty Name="County" ColumnName="County" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Country" ColumnName="Country" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="StructuralCondition" ColumnName="StructuralCondition" />
+                <ScalarProperty Name="Segment" ColumnName="Segment" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

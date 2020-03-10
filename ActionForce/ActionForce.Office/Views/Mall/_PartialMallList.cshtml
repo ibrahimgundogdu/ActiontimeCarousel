@@ -1,0 +1,33 @@
+﻿@model MallControlModel
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th></th>
+            <th>AVM Adı</th>
+            <th>Ülke</th>
+            <th>Eyalet</th>
+            <th>Şehir</th>
+            <th>AVM Segmenti</th>
+            <th>Fiziki Durumu</th>
+            <th class="text-center">Aktif mi?</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.MallList)
+        {
+        <tr style='@(item.IsActive == false ? "color: red" : "")'>
+            <td><span class="@(item.IsActive == true ? "tx-success":"tx-danger")">&#8226;</span></td>
+            <td class="tx-sm-13 bold"><a href="">@($"{item.FullName}")</a></td>
+            <td class="tx-sm-13">@item.CountryName</td>
+            <td class="tx-sm-13">@item.StateName</td>
+            <td class="tx-sm-13">@item.CityName</td>
+            <td class="tx-sm-13">@item.Segment</td>
+            <td class="tx-sm-13">@item.StructuralCondition</td>
+            <td class="tx-sm-13 text-center">
+                @Html.Raw(item.IsActive.Value == true ? "<i class='ion ion-md-checkmark-circle text-success'></i>" : "<i class='ion ion-md-close-circle'></i>")
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
++
