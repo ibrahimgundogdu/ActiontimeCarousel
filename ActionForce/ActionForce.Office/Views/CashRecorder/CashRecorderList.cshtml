@@ -1,5 +1,7 @@
 ﻿@model CashRecorderControlModel
-
+@{
+    Layout = null;
+}
 
 <div class="table-responsive">
     <table class="table table-sm table-hover">
@@ -39,7 +41,7 @@
                             <tr>
                                 <td>@(vCash.ID)</td>
                                 <td>@(vCash.SlipDateDate)</td>
-                                <td><a href="/CashRecorder/Detail/@(vCash.UID)" target="_blank"><span class="d-none d-sm-inline"> @($"{vCash.DocumentNumber}")</span></a> </td>
+                                <td><a href="/Sale/PriceTypeDetail/@(vCash.DocumentNumber)"><span class="d-none d-sm-inline"> @($"{vCash.DocumentNumber}")</span></a> </td>
                                 <td>@(vCash.SlipDate)</td>
                                 <td>@(vCash.CashAmount)</td>
                                 <td>@(vCash.CreditAmount)</td>
@@ -73,5 +75,6 @@
         });
     </script>
 }
+
 
 
