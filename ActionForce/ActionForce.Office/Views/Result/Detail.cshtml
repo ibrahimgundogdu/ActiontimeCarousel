@@ -1128,10 +1128,31 @@
 
         function CheckPrice(id, price) {
 
+
             var firstSum = $("#sumHidden").val();
 
             var quantity = $('#Quantity_' + id).val();
             var toplam = price * quantity;
+
+
+            var data = new FormData();
+            data.append('id', id);
+            data.append('quantity', quantity);
+
+            $.ajax({
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                url: "/Result/CheckPrice",
+                data: data
+            }).done(function (d) {
+                $("#Sum" + id).html(d);
+            });
+
+
+
 
             $("#Sum_" + id).html(toplam);
 
@@ -1139,21 +1160,10 @@
 
             firstSum += parseInt(toplam);
 
-           //var temp = 0;
-
-            //console.log("d: ", temp);
-
-
-            //console.log("id: ", id);
-            //console.log("price: ", price);
-            //console.log("quantity: ", quantity);
-            //console.log("toplam: ", toplam);
-
             
 
-            //firstSum += toplam;
 
-            $("#SumTotal").html(firstSum);
+            //$("#SumTotal").html(firstSum);
         }
 
 
