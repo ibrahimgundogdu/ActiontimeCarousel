@@ -1289,5 +1289,10 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VPrice>("GetLocationPrice", mergeOption, locationIDParameter, dateParameter);
         }
+    
+        public virtual ObjectResult<GetMonthList_Result> GetMonthList()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMonthList_Result>("GetMonthList");
+        }
     }
 }

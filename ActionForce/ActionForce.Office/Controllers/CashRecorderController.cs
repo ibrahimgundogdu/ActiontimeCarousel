@@ -46,7 +46,7 @@ namespace ActionForce.Office.Controllers
                 model.CashRecorder = model.CashRecorder.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
 
             }
-           
+
 
             return View(model);
         }
@@ -87,7 +87,7 @@ namespace ActionForce.Office.Controllers
                 model.Result = TempData["result"] as Result<CashActions> ?? null;
             }
 
-            
+
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -116,7 +116,7 @@ namespace ActionForce.Office.Controllers
             if (cashRecord != null)
             {
 
-                
+
                 var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashRecord.ActinTypeID);
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashRecord.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
@@ -191,9 +191,9 @@ namespace ActionForce.Office.Controllers
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
 
-                
+
+
 
             }
 
@@ -266,7 +266,7 @@ namespace ActionForce.Office.Controllers
                     record.SlipNumber = cashRecord.SlipNumber;
                     record.SlipDate = sDatetime;
                     record.UID = cashRecord.UID;
-                  
+
 
                     if (documentFile != null && documentFile.ContentLength > 0)
                     {
@@ -291,8 +291,8 @@ namespace ActionForce.Office.Controllers
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-                
+
+
 
             }
 
@@ -343,36 +343,108 @@ namespace ActionForce.Office.Controllers
             {
                 FilterModel filterModel = new FilterModel
                 {
-                    DateBegin = DateTime.Now.AddMonths(-1).Date,
-                    DateEnd = DateTime.Now.Date
+                    LocationID = null,
+                    Date = DateTime.Now.Date
                 };
+
                 model.Filters = filterModel;
             }
 
-            model.CurrencyList = OfficeHelper.GetCurrency();
-            model.CashRecorderMuhasebeList = Db.VCashRecorderMuhasebe.Where(x=>x.OurCompanyID==model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            var dateList = Db.GetMonthList().ToList();
+
+            model.MonthList = dateList.Select(x => new MonthList()
+            {
+                DateKey = x.DateKey?.ToString("yyyy-MM-dd"),
+                MonthName = $"{x.Year} {x.MonthNameTR}"
+            });
+
+            model.CashRecorderMuhasebeList = Db.VCashRecorderMuhasebe.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            model.LocationListItems = model.LocationList.Select(x => new LocationList() { LocationID = x.LocationID, LocationName = x.LocationFullName }).ToList();
+            model.MonthListItems = dateList.Select(x => new MonthList() { DateKey = x.DateKey?.ToString("yyyy-MM-dd"), MonthName = x.MonthNameTR }).Distinct().ToList();
 
             if (model.Filters.LocationID > 0)
             {
                 model.CashRecorderMuhasebeList = model.CashRecorderMuhasebeList.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+                model.LocationListItems = model.LocationList.Where(x => x.LocationID == model.Filters.LocationID).Select(x => new LocationList() { LocationID = x.LocationID, LocationName = x.LocationName }).ToList();
             }
-            
+
+            if (model.Filters.Date != null)
+            {
+                int? year = model.Filters.Date?.Year;
+                int? month = model.Filters.Date?.Month;
+                DateTime? datedate = new  DateTime(  model.Filters.Date.Value.Year, model.Filters.Date.Value.Month,1) ;
+
+                model.CashRecorderMuhasebeList = model.CashRecorderMuhasebeList.Where(x => x.SlipYear == year && x.SlipMonth == month).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+                model.MonthListItems = dateList.Where(x => x.DateKey == datedate).Select(x => new MonthList() { DateKey = x.DateKey?.ToString("yyyy-MM-dd"), MonthName = x.MonthNameTR }).Distinct().ToList();
+            }
+
+            TempData["model"] = model;
+
             return View(model);
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult ReportFilter(int? locationId)
+        public ActionResult ReportFilter(int? locationId, string filterDate)
         {
+            DateTime? date = null;
+
+            if (!string.IsNullOrEmpty(filterDate))
+            {
+                date = DateTime.Parse(filterDate);
+            }
+
             FilterModel model = new FilterModel
             {
-                LocationID = locationId
+                LocationID = locationId,
+                Date = date
             };
 
             TempData["filter"] = model;
 
             return RedirectToAction("Report", "CashRecorder");
+        }
+
+        [AllowAnonymous]
+        public void ExportReport()
+        {
+            CashRecorderControlModel model = new CashRecorderControlModel();
+
+            if (TempData["model"]!=null)
+            {
+                model=TempData["model"] as CashRecorderControlModel;
+            }
+
+            Response.ClearContent();
+
+            Response.ContentType = "application/force-download";
+            Response.AddHeader("content-disposition",
+                "attachment; filename=" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
+            Response.Write("<html xmlns:x=\"urn:schemas-microsoft-com:office:excel\">");
+            Response.Write("<head>");
+            Response.Write("<META http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+            Response.Write("<!--[if gte mso 9]><xml>");
+            Response.Write("<x:ExcelWorkbook>");
+            Response.Write("<x:ExcelWorksheets>");
+            Response.Write("<x:ExcelWorksheet>");
+            Response.Write("<x:Name>Report Data</x:Name>");
+            Response.Write("<x:WorksheetOptions>");
+            Response.Write("<x:Print>");
+            Response.Write("<x:ValidPrinterInfo/>");
+            Response.Write("</x:Print>");
+            Response.Write("</x:WorksheetOptions>");
+            Response.Write("</x:ExcelWorksheet>");
+            Response.Write("</x:ExcelWorksheets>");
+            Response.Write("</x:ExcelWorkbook>");
+            Response.Write("</xml>");
+            Response.Write("<![endif]--> ");
+
+
+            View("~/Views/CashRecorder/CashRecorderList.cshtml", model).ExecuteResult(this.ControllerContext);
+            Response.Flush();
+            Response.End();
         }
 
     }

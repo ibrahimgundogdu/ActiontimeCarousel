@@ -13,6 +13,7 @@ namespace ActionForce.Office
         public int? TypeID { get; set; }
         public int? DepartmentID { get; set; }
         public int? PositionID { get; set; }
+        public DateTime? Date { get; set; }
         public DateTime? DateBegin { get; set; }
         public DateTime? DateEnd { get; set; }
         public string IsActive { get; set; }
