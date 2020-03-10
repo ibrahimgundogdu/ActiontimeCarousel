@@ -169,11 +169,17 @@
                     </ul>
                 </li>
 
-                <li class="nav-item"><a href="/Location" class="nav-link"><i data-feather="map-pin"></i> <span>Lokasyonlar</span></a></li>
+                
+                <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Location" ? "show" : "")">
+                    <a href="/Employee" class="nav-link"><i data-feather="file-text"></i> <span>Lokasyonlar - AVMLER</span></a>
+                    <ul>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Location" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Location">01 Lokasyonlar</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Mall" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Mall/Index">02 AVM</a></li>
+                    </ul>
+                </li>
+
                 <li class="nav-item"><a href="/Employee" class="nav-link"><i data-feather="users"></i> <span>Çalışanlar</span></a></li>
-
-
-
+                             
                 <li class="nav-label mg-t-10 active">Satış - Fiyat</li>
 
 
