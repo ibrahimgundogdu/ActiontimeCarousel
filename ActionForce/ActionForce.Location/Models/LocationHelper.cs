@@ -103,5 +103,83 @@ namespace ActionForce.Location
             }
         }
 
+        public Result GetScannedTicketInfo(string scannedNumber)  //   0083|UFE2L154FSFBHR5K2ZIEG|2019-10-01|S191001637055373703567587
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            //if (!string.IsNullOrEmpty(scannedNumber))
+            //{
+            //    TicketInfo model = new TicketInfo();
+
+            //    string[] scannedParts = scannedNumber.Split('|');
+
+            //    if (scannedParts.Count() == 4)
+            //    {
+            //        int locationID = Convert.ToInt32(scannedParts[0]);
+            //        string ticketUID = scannedParts[1];
+            //        DateTime orderDate = Convert.ToDateTime(scannedParts[2]);
+            //        string orderNumber = scannedParts[3];
+
+            //        using (ActionTimeEntities db = new ActionTimeEntities())
+            //        {
+            //            var isexists = db.VTicketSaleRowCheck.FirstOrDefault(x => x.LocationID == locationID && x.UID.ToString() == ticketUID && x.OrderNumber == orderNumber && x.SaleDate == orderDate);
+
+            //            if (isexists != null)
+            //            {
+            //                model.TicketUID = isexists.UID.ToString();
+            //                model.SaleID = isexists.OrderID;
+            //                model.SaleRowID = isexists.ID;
+            //                model.TicketMask = isexists.TicketNumberMasked;
+            //                result.Data = model;
+
+            //                if (isexists.IsBlocked == false && isexists.IsActive == true && isexists.Status == 2 && isexists.StatusID == 2)
+            //                {
+            //                    result.IsSuccess = true;
+            //                    result.Message = "Bilet bilgisine ulaşıldı";
+            //                }
+            //                else if (isexists.IsBlocked)
+            //                {
+            //                    result.IsSuccess = false;
+            //                    result.Message = "Bilet Bloke Edilmiş";
+            //                }
+            //                else if (isexists.Status != 1 && isexists.StatusID != 1)
+            //                {
+            //                    result.IsSuccess = false;
+            //                    result.Message = "Bilet aşaması uygun değil : " + isexists.StatusName;
+            //                }
+            //                else if (isexists.IsActive == false || isexists.IsActive == null)
+            //                {
+            //                    result.IsSuccess = false;
+            //                    result.Message = "Bilet siparişi pasif edilmiş";
+            //                }
+            //            }
+            //            else
+            //            {
+            //                result.IsSuccess = false;
+            //                result.Message = "Bilet bilgisine ulaşılamadı";
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        result.IsSuccess = false;
+            //        result.Message = "Okunan seri doğru formatta değil";
+            //    }
+
+            //}
+            //else
+            //{
+            //    result.Message = "Okunan alan boş olamaz ";
+            //}
+
+            return result;
+        }
+
+
+
     }
 }

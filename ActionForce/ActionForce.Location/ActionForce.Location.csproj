@@ -573,6 +573,7 @@
     <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\ControlModels\ScheduleControlModel.cs" />
     <Compile Include="Models\DefaultModels\BasketTotal.cs" />
+    <Compile Include="Models\DefaultModels\TicketInfo.cs" />
     <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\ControlModels\LayoutControlModel.cs" />
     <Compile Include="Models\LocationHelper.cs" />
