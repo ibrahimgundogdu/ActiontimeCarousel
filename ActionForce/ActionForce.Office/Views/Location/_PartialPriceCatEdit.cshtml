@@ -3,14 +3,14 @@
     <span aria-hidden="true">&times;</span>
 </a>
 <div>
-    @using (Ajax.BeginForm("UpdatePriceCat", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "locationPriceLists", InsertionMode = InsertionMode.Replace, OnSuccess = "OnLocationPriceCategorySuccess" }))
+    @using (Ajax.BeginForm("UpdatePriceCat", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "locationPriceLists", InsertionMode = InsertionMode.Replace, OnSuccess = "OnLocationPriceCategoryEditSuccess" }))
     {
         @Html.AntiForgeryToken()
         <h4>@(Model?.LocationModel?.LocationName + " " + Model?.LocationModel?.LocationTypeName) | <span class="font-weight-bold text-black-50">Fiyat Kategori Güncelle</span></h4>
         <div class="form-group row bg-gray-50 mg-b-5">
             <label for="Mobile" class="col-sm-3 col-form-label">Fiyat Listesi</label>
             <div class="col-sm-6">
-                <select class="form-control" id="priceCategory" name="PriceCategoryID">
+                <select class="form-control" id="priceCategory" name="PriceCategoryID" required>
                     @if (Model?.PriceCategoryList?.Count > 0)
                     {
                         <option value="">Seçiniz</option>
@@ -26,7 +26,7 @@
         <div class="form-group row bg-gray-50 mg-b-5">
             <label for="Mobile" class="col-sm-3 col-form-label">Başlangıç Tarihi</label>
             <div class="col-sm-6">
-                <input id="pricedatepicker" type="text" class="form-control form-control-sm shiftdate" placeholder="Başlangıç Tarihi" name="StartDate" value="@(Model?.LocationPriceCategory.StartDate?.ToString("yyyy-MM-dd"))">
+                <input id="pricedatepicker" type="text" class="form-control form-control-sm shiftdate" placeholder="Başlangıç Tarihi" name="StartDate" value="@(Model?.LocationPriceCategory.StartDate?.ToString("yyyy-MM-dd"))" required>
             </div>
             <div class="col-sm-3"></div>
         </div>
@@ -43,8 +43,6 @@
     }
 </div>
 
-
-
 <script type="text/javascript">
     
     $('#pricedatepicker').datepicker({
@@ -59,6 +57,3 @@
     $('.shiftdate').mask('0000-00-00');
 
 </script>
-
-@*<input id="Date_@(param.ID)" type="text" class="form-control form-control-sm datepicker" placeholder="Başlangıç Tarihi" value="@(param.DateStart?.ToString("yyyy-MM-dd"))" onchange="EditLocationParameter(@(param.ID),@(param.LocationID))">*@
-

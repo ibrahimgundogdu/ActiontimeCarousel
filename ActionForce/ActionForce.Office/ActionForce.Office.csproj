@@ -2716,6 +2716,7 @@
     <Content Include="Views\CashRecorder\Report.cshtml" />
     <Content Include="Views\CashRecorder\_PartialCashRecorderList.cshtml" />
     <Content Include="Views\CashRecorder\CashRecorderList.cshtml" />
+    <Content Include="Views\Location\_PartialLocationLogList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -585,7 +585,7 @@ namespace ActionForce.Office.Controllers
 
             if (model.LocationModel != null)
             {
-                model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
+                model.LogList = Db.ApplicationLog.Where(x => x.Modul == "LocationPriceCategor" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
                 model.EmployeeLocationList = Db.GetLocationEmployees(model.LocationModel.LocationID).Select(x => new LocationEmployeeModel()
                 {
                     EmployeeID = x.EmployeeID,
@@ -657,6 +657,59 @@ namespace ActionForce.Office.Controllers
             model.Result = result;
 
             return PartialView("_PartialPriceCatEdit", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult CreatePriceCat(FormLocationPriceCategory getModel)
+        {
+            LocationControlModel model = new LocationControlModel();
+            model.Result = new Result();
+
+            if (getModel != null)
+            {
+                if (getModel.LocationID > 0)
+                {
+                    try
+                    {
+                        #region AddModel
+                        LocationPriceCategory locationPriceCategory = new LocationPriceCategory()
+                        {
+                            LocationID = getModel.LocationID,
+                            PriceCategoryID = getModel.PriceCategoryID,
+                            StartDate = getModel.StartDate,
+                            RecordDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 0),
+                            RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
+                            RecordIP = OfficeHelper.GetIPAddress()
+                        };
+                        #endregion
+
+                        Db.LocationPriceCategory.Add(locationPriceCategory);
+                        Db.SaveChanges();
+
+                        Db.CheckLocationPriceCategory(getModel.LocationID);
+
+                        #region ResultMessage
+                        model.Result.IsSuccess = true;
+                        model.Result.Message = $"Lokasyon fiyat kategorisi eklendi.";
+                        #endregion
+                        #region AddLog
+                        OfficeHelper.AddApplicationLog("Office", "LocationPriceCategory", "Insert", locationPriceCategory.LocationID.ToString(), "Location", "CreatePriceCat", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 0), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, locationPriceCategory);
+                        #endregion
+                    }
+                    catch (Exception ex)
+                    {
+                        model.Result.Message = ex.Message;
+                        model.Result.IsSuccess = false;
+                    }
+
+                    TempData["result"] = model.Result;
+
+                    model.LocationPriceCategoryList = Db.VLocationPriceCategory.Where(x => x.LocationID == getModel.LocationID).ToList();
+                }
+            }
+
+            return PartialView("_PartialLocationPriceList", model);
         }
 
         [HttpPost]
@@ -743,6 +796,50 @@ namespace ActionForce.Office.Controllers
 
             return PartialView("_PartialLocationPriceList", model);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult DeletePriceCat(int? ID)
+        {
+            LocationControlModel model = new LocationControlModel();
+            model.Result = new Result();
+
+            if (ID != null && ID > 0)
+            {
+                try
+                {
+                    var isLocationPriceCategory = Db.LocationPriceCategory.FirstOrDefault(x => x.ID == ID);
+
+                    if (isLocationPriceCategory != null)
+                    {
+                        #region ResultMessage
+                        model.Result.IsSuccess = true;
+                        model.Result.Message = $"Lokasyon fiyat kategorisi silindi.";
+                        #endregion
+                        #region AddLog
+                        OfficeHelper.AddApplicationLog("Office", "LocationPriceCategory", "Delete", isLocationPriceCategory.LocationID.ToString(), "Location", "DeletePriceCat", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 0), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isLocationPriceCategory);
+                        #endregion
+
+                        Db.LocationPriceCategory.Remove(isLocationPriceCategory);
+                        Db.SaveChanges();
+
+                        Db.CheckLocationPriceCategory(isLocationPriceCategory.LocationID);
+
+                        model.LocationPriceCategoryList = Db.VLocationPriceCategory.Where(x => x.LocationID == isLocationPriceCategory.LocationID).ToList();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    model.Result.Message = ex.Message;
+                    model.Result.IsSuccess = false;
+                }
+
+                TempData["result"] = model.Result;
+            }
+
+            return PartialView("_PartialLocationPriceList", model);
+        }
+
         #endregion
     }
 
