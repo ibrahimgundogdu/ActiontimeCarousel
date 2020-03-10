@@ -170,10 +170,10 @@
                 </li>
 
                 
-                <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Location" ? "show" : "")">
-                    <a href="/Employee" class="nav-link"><i data-feather="file-text"></i> <span>Lokasyonlar - AVMLER</span></a>
+                <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Location" || this.ViewContext.RouteData.Values["controller"].ToString() == "Mall"  ? "show" : "")">
+                    <a href="/Employee" class="nav-link"><i data-feather="file-text"></i> <span>Lokasyon - AVM</span></a>
                     <ul>
-                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Location" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Location">01 Lokasyonlar</a></li>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Location" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Location">01 Lokasyon</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Mall" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Mall/Index">02 AVM</a></li>
                     </ul>
                 </li>
