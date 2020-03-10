@@ -2697,6 +2697,26 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="SortBy" Type="char" MaxLength="2" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="ResultCheckPrice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="Date" Type="date" />
+          <Property Name="PriceID" Type="int" />
+          <Property Name="PriceCategoryID" Type="int" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Unit" Type="int" />
+          <Property Name="Price" Type="float" />
+          <Property Name="Total" Type="float" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="ResultState">
           <Key>
             <PropertyRef Name="StateID" />
@@ -3751,6 +3771,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashRecorderMuhasebe' does
           <Property Name="Date" Type="date" />
           <Property Name="SlipDate" Type="datetime" />
           <Property Name="SlipDateDate" Type="varchar" MaxLength="10" />
+          <Property Name="SlipYear" Type="int" />
+          <Property Name="SlipMonth" Type="int" />
           <Property Name="CashAmount" Type="float" />
           <Property Name="CreditAmount" Type="float" />
           <Property Name="NetAmount" Type="float" />
@@ -6389,6 +6411,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Promotions" EntityType="Self.Promotions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RecordNumber" EntityType="Self.RecordNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RefundTypes" EntityType="Self.RefundTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ResultCheckPrice" EntityType="Self.ResultCheckPrice" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ResultState" EntityType="Self.ResultState" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Resultstatus" EntityType="Self.Resultstatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
@@ -6656,6 +6679,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VCashRecorderMuhasebe].[Date] AS [Date], 
     [VCashRecorderMuhasebe].[SlipDate] AS [SlipDate], 
     [VCashRecorderMuhasebe].[SlipDateDate] AS [SlipDateDate], 
+    [VCashRecorderMuhasebe].[SlipYear] AS [SlipYear], 
+    [VCashRecorderMuhasebe].[SlipMonth] AS [SlipMonth], 
     [VCashRecorderMuhasebe].[CashAmount] AS [CashAmount], 
     [VCashRecorderMuhasebe].[CreditAmount] AS [CreditAmount], 
     [VCashRecorderMuhasebe].[NetAmount] AS [NetAmount], 
@@ -9128,6 +9153,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <EntitySet Name="VCashRecorderMuhasebe" EntityType="db293_ActionTimeDbModel.VCashRecorderMuhasebe" />
+          <EntitySet Name="ResultCheckPrice" EntityType="db293_ActionTimeDbModel.ResultCheckPrice" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -15368,6 +15394,28 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="ResultID" Type="Int64" />
+          <Property Name="SlipYear" Type="Int32" />
+          <Property Name="SlipMonth" Type="Int32" />
+        </EntityType>
+        <EntityType Name="ResultCheckPrice">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="PriceID" Type="Int32" />
+          <Property Name="PriceCategoryID" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Unit" Type="Int32" />
+          <Property Name="Price" Type="Double" />
+          <Property Name="Total" Type="Double" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -21344,6 +21392,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VCashRecorderMuhasebe">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCashRecorderMuhasebe">
               <MappingFragment StoreEntitySet="VCashRecorderMuhasebe">
+                <ScalarProperty Name="SlipMonth" ColumnName="SlipMonth" />
+                <ScalarProperty Name="SlipYear" ColumnName="SlipYear" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
@@ -21377,6 +21427,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResultCheckPrice">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ResultCheckPrice">
+              <MappingFragment StoreEntitySet="ResultCheckPrice">
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="PriceCategoryID" ColumnName="PriceCategoryID" />
+                <ScalarProperty Name="PriceID" ColumnName="PriceID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
