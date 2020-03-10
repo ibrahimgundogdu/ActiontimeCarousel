@@ -3751,6 +3751,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashRecorderMuhasebe' does
           <Property Name="Date" Type="date" />
           <Property Name="SlipDate" Type="datetime" />
           <Property Name="SlipDateDate" Type="varchar" MaxLength="10" />
+          <Property Name="SlipYear" Type="int" />
+          <Property Name="SlipMonth" Type="int" />
           <Property Name="CashAmount" Type="float" />
           <Property Name="CreditAmount" Type="float" />
           <Property Name="NetAmount" Type="float" />
@@ -6152,6 +6154,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
         </Function>
+        <Function Name="GetMonthList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetPersonList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
         </Function>
@@ -6656,6 +6659,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VCashRecorderMuhasebe].[Date] AS [Date], 
     [VCashRecorderMuhasebe].[SlipDate] AS [SlipDate], 
     [VCashRecorderMuhasebe].[SlipDateDate] AS [SlipDateDate], 
+    [VCashRecorderMuhasebe].[SlipYear] AS [SlipYear], 
+    [VCashRecorderMuhasebe].[SlipMonth] AS [SlipMonth], 
     [VCashRecorderMuhasebe].[CashAmount] AS [CashAmount], 
     [VCashRecorderMuhasebe].[CreditAmount] AS [CreditAmount], 
     [VCashRecorderMuhasebe].[NetAmount] AS [NetAmount], 
@@ -9128,6 +9133,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <EntitySet Name="VCashRecorderMuhasebe" EntityType="db293_ActionTimeDbModel.VCashRecorderMuhasebe" />
+          <FunctionImport Name="GetMonthList" ReturnType="Collection(db293_ActionTimeDbModel.GetMonthList_Result)" />
          
           </EntityContainer>
         <EntityType Name="Action">
@@ -15368,7 +15374,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="LocationFullName" Type="String" MaxLength="602" FixedLength="false" Unicode="true" />
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="ResultID" Type="Int64" />
+          <Property Name="SlipYear" Type="Int32" />
+          <Property Name="SlipMonth" Type="Int32" />
         </EntityType>
+        <ComplexType Name="GetMonthList_Result">
+          <Property Type="DateTime" Name="DateKey" Nullable="true" />
+          <Property Type="Int32" Name="Year" Nullable="true" />
+          <Property Type="Int32" Name="Month" Nullable="true" />
+          <Property Type="String" Name="MonthNameTR" Nullable="true" MaxLength="50" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -21344,6 +21358,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VCashRecorderMuhasebe">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCashRecorderMuhasebe">
               <MappingFragment StoreEntitySet="VCashRecorderMuhasebe">
+                <ScalarProperty Name="SlipMonth" ColumnName="SlipMonth" />
+                <ScalarProperty Name="SlipYear" ColumnName="SlipYear" />
                 <ScalarProperty Name="ResultID" ColumnName="ResultID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
@@ -21381,6 +21397,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetMonthList" FunctionName="db293_ActionTimeDbModel.Store.GetMonthList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetMonthList_Result">
+                <ScalarProperty Name="DateKey" ColumnName="DateKey" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="Month" ColumnName="Month" />
+                <ScalarProperty Name="MonthNameTR" ColumnName="MonthNameTR" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

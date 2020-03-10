@@ -2329,6 +2329,8 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="Models\CashRecorder\LocationList.cs" />
+    <Compile Include="Models\CashRecorder\MonthList.cs" />
     <Compile Include="Models\ControlModels\ActionControlModel.cs" />
     <Compile Include="Models\ActionEmployee.cs" />
     <Compile Include="Models\AuditTrail.cs" />
@@ -2713,6 +2715,7 @@
     <Content Include="Views\Result\_PartialCheckPrice.cshtml" />
     <Content Include="Views\CashRecorder\Report.cshtml" />
     <Content Include="Views\CashRecorder\_PartialCashRecorderList.cshtml" />
+    <Content Include="Views\CashRecorder\CashRecorderList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

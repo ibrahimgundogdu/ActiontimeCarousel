@@ -149,8 +149,6 @@
                     <a href="/Employee" class="nav-link"><i data-feather="file-text"></i> <span>Yazarkasa İşlemleri</span></a>
                     <ul>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "CashRecorder" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/CashRecorder">01 Yazarkasa Fişleri</a></li>
-                    </ul>
-                    <ul>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "CashRecorder" && this.ViewContext.RouteData.Values["action"].ToString() == "Report" ? "class=active" : "")><a href="/CashRecorder/Report">02 Yazarkasa Raporu</a></li>
                     </ul>
                 </li>

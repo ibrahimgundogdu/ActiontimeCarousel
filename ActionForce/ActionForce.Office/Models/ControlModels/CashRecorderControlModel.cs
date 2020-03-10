@@ -12,6 +12,10 @@ namespace ActionForce.Office
         public IEnumerable<VCashRecorderMuhasebe> CashRecorderMuhasebeList { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
         public IEnumerable<Currency> CurrencyList { get; set; }
+        public IEnumerable<MonthList> MonthList { get; set; }
+        public IEnumerable<LocationList> LocationListItems { get; set; }
+        public IEnumerable<MonthList> MonthListItems { get; set; }
+        public DateTime SelectedDate { get; set; }
 
         public VDocumentCashRecorderSlip Detail { get; set; }
 
