@@ -297,8 +297,7 @@ namespace ActionForce.Entity
         public virtual DbSet<VTicketProduct> VTicketProduct { get; set; }
         public virtual DbSet<Tax> Tax { get; set; }
         public virtual DbSet<VCashRecorderMuhasebe> VCashRecorderMuhasebe { get; set; }
-        public virtual DbSet<ResultCheckPrice> ResultCheckPrice { get; set; }
-        public virtual DbSet<VMall> VMall { get; set; }
+        public virtual DbSet<DayResultCheckPrice> DayResultCheckPrice { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

@@ -362,6 +362,7 @@ namespace ActionForce.Office
             //12  Bank NULL    Pos(Kredi Kartı)  Satış İadesi
             //13  CashRecorder NULL    Yazarkasa Fişi
             //14  File NULL    Dosyalar
+            //15  Price Check
 
             Result<DayResult> result = new Result<DayResult>()
             {
@@ -1396,6 +1397,34 @@ namespace ActionForce.Office
                             SlipTotalAmount = 0
 
                         }).FirstOrDefault());
+
+                    }
+
+                    // 15 fiyat kontrol bölümü
+
+                    var pricelist = db.GetLocationPrice(dayresult.LocationID, dayresult.Date);
+
+                    foreach (var item in pricelist)
+                    {
+                        DayResultCheckPrice cp = new DayResultCheckPrice();
+
+                        cp.Date = dayresult.Date;
+                        cp.LocationID = dayresult.LocationID;
+                        cp.Price = item.Price;
+                        cp.PriceCategoryID = item.PriceCategoryID;
+                        cp.PriceID = item.ID;
+                        cp.Quantity = 0;
+                        cp.RecordDate = location.LocalDateTime;
+                        cp.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                        cp.RecordIP = OfficeHelper.GetIPAddress();
+                        cp.ResultID = dayresult.ID;
+                        cp.Total = (cp.Quantity * cp.Price);
+                        cp.Unit = item.Unit;
+
+                        db.DayResultCheckPrice.Add(cp);
+                        db.SaveChanges();
+
+                        OfficeHelper.AddApplicationLog("Office", "DayResultCheckPrice", "Insert", cp.ID.ToString(), "Result", "AddItemsToResultEnvelope", null, true, $"{cp.Unit} - {cp.Price} {item.Currency}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), $"{model.Authentication.ActionEmployee.EmployeeID} {model.Authentication.ActionEmployee.FullName}", OfficeHelper.GetIPAddress(), string.Empty, cp);
 
                     }
 

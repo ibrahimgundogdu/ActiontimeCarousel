@@ -197,6 +197,9 @@
     <Compile Include="DayResult.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="DayResultCheckPrice.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="DayResultDocuments.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -577,9 +580,6 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="RefundTypes.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ResultCheckPrice.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="ResultState.cs">
