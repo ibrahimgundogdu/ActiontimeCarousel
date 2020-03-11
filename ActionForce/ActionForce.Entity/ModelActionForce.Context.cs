@@ -280,7 +280,6 @@ namespace ActionForce.Entity
         public virtual DbSet<TicketSaleRefund> TicketSaleRefund { get; set; }
         public virtual DbSet<TicketSaleRows> TicketSaleRows { get; set; }
         public virtual DbSet<TicketProductCategory> TicketProductCategory { get; set; }
-        public virtual DbSet<Mall> Mall { get; set; }
         public virtual DbSet<TicketProduct> TicketProduct { get; set; }
         public virtual DbSet<LocationSchedule> LocationSchedule { get; set; }
         public virtual DbSet<VPrice> VPrice { get; set; }
@@ -298,7 +297,10 @@ namespace ActionForce.Entity
         public virtual DbSet<Tax> Tax { get; set; }
         public virtual DbSet<VCashRecorderMuhasebe> VCashRecorderMuhasebe { get; set; }
         public virtual DbSet<DayResultCheckPrice> DayResultCheckPrice { get; set; }
+        public virtual DbSet<MallSegment> MallSegment { get; set; }
         public virtual DbSet<VMall> VMall { get; set; }
+        public virtual DbSet<Mall> Mall { get; set; }
+        public virtual DbSet<County> County { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

@@ -385,6 +385,7 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+        [ValidateAntiForgeryToken]
         [HttpPost]
         [AllowAnonymous]
         public ActionResult ReportFilter(int? locationId, string filterDate)

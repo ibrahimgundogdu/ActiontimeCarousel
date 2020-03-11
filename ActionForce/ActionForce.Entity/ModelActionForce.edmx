@@ -680,6 +680,19 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="County">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CountryID" Type="int" />
+          <Property Name="StateID" Type="int" />
+          <Property Name="CityID" Type="int" />
+          <Property Name="Code" Type="nvarchar" MaxLength="20" />
+          <Property Name="CountyName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="3" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="Currency">
           <Key>
             <PropertyRef Name="ID" />
@@ -2350,6 +2363,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ContractDateBegin" Type="date" />
           <Property Name="ContractDateEnd" Type="date" />
           <Property Name="ContractFile" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="MallSegment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Code" Type="nvarchar" MaxLength="1" />
+          <Property Name="SegmentName" Type="nvarchar" MaxLength="40" />
+          <Property Name="SortBy" Type="char" MaxLength="2" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="MobileLog">
@@ -6357,6 +6380,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="CostumeType" EntityType="Self.CostumeType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CountryPhoneCode" EntityType="Self.CountryPhoneCode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="County" EntityType="Self.County" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerActions" EntityType="Self.CustomerActions" Schema="dbo" store:Type="Tables" />
@@ -6439,6 +6463,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Mall" EntityType="Self.Mall" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MallContact" EntityType="Self.MallContact" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MallLocationContract" EntityType="Self.MallLocationContract" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MallSegment" EntityType="Self.MallSegment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MobileLog" EntityType="Self.MobileLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MobileLoginLog" EntityType="Self.MobileLoginLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OurCompany" EntityType="Self.OurCompany" Schema="dbo" store:Type="Tables" />
@@ -9184,7 +9209,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="TicketProductCategory" EntityType="db293_ActionTimeDbModel.TicketProductCategory" />
-          <EntitySet Name="Mall" EntityType="db293_ActionTimeDbModel.Mall" />
           <FunctionImport Name="GetLocationAll" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationAll_Result)">
             <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
             <Parameter Name="LocationUID" Mode="In" Type="Guid" />
@@ -9256,7 +9280,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VCashRecorderMuhasebe" EntityType="db293_ActionTimeDbModel.VCashRecorderMuhasebe" />
           <FunctionImport Name="GetMonthList" ReturnType="Collection(db293_ActionTimeDbModel.GetMonthList_Result)" />
           <EntitySet Name="DayResultCheckPrice" EntityType="db293_ActionTimeDbModel.DayResultCheckPrice" />
+          <EntitySet Name="MallSegment" EntityType="db293_ActionTimeDbModel.MallSegment" />
           <EntitySet Name="VMall" EntityType="db293_ActionTimeDbModel.VMall" />
+          <EntitySet Name="Mall" EntityType="db293_ActionTimeDbModel.Mall" />
+          <EntitySet Name="County" EntityType="db293_ActionTimeDbModel.County" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -14896,49 +14923,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Style" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="BackStyle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="Mall">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Segment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="StructuralCondition" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="Address" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
-          <Property Name="Country" Type="Int32" />
-          <Property Name="State" Type="Int32" />
-          <Property Name="City" Type="Int32" />
-          <Property Name="County" Type="Int32" />
-          <Property Name="PostCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneCountryCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="Latitude" Type="Double" />
-          <Property Name="Longitude" Type="Double" />
-          <Property Name="Map" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="InvestorCompanyID" Type="Int32" />
-          <Property Name="LeasingCompanyID" Type="Int32" />
-          <Property Name="ContactName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ContactTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ContactPhoneCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
-          <Property Name="ContactPhone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
-          <Property Name="ContactEmail" Type="String" MaxLength="110" FixedLength="false" Unicode="true" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
-          <Property Name="UpdateEmployeeID" Type="Int32" />
-          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="TimeZone" Type="Int32" Nullable="false" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="IsLeasingInHouse" Type="Boolean" />
-          <Property Name="MallSegmentID" Type="Int32" />
-          <Property Name="CountryID" Type="Int32" />
-          <Property Name="StateID" Type="Int32" />
-          <Property Name="CityID" Type="Int32" />
-          <Property Name="CountyID" Type="Int32" />
-          <Property Name="MallUID" Type="Guid" />
-        </EntityType>
         <ComplexType Name="GetLocationAll_Result">
           <Property Type="Int32" Name="LocationID" Nullable="false" />
           <Property Type="String" Name="LocationCode" Nullable="true" MaxLength="20" />
@@ -15535,6 +15519,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="MallSegment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Code" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="SegmentName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
         <EntityType Name="VMall">
           <Key>
             <PropertyRef Name="ID" />
@@ -15543,13 +15537,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="OurCompanyID" Type="Int32" />
           <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="Segment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MallSegmentID" Type="Int32" />
           <Property Name="StructuralCondition" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="Address" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
-          <Property Name="Country" Type="Int32" />
-          <Property Name="State" Type="Int32" />
-          <Property Name="City" Type="Int32" />
-          <Property Name="County" Type="Int32" />
           <Property Name="PostCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="PhoneCountryCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
           <Property Name="PhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
@@ -15581,12 +15571,62 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CityName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="StateName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="MallSegmentID" Type="Int32" />
           <Property Name="SegmentName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="CountryID" Type="Int32" />
           <Property Name="StateID" Type="Int32" />
           <Property Name="CityID" Type="Int32" />
           <Property Name="CountyID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="Mall">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="MallSegmentID" Type="Int32" />
+          <Property Name="StructuralCondition" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+          <Property Name="CountryID" Type="Int32" />
+          <Property Name="StateID" Type="Int32" />
+          <Property Name="CityID" Type="Int32" />
+          <Property Name="CountyID" Type="Int32" />
+          <Property Name="PostCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneCountryCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Latitude" Type="Double" />
+          <Property Name="Longitude" Type="Double" />
+          <Property Name="Map" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="InvestorCompanyID" Type="Int32" />
+          <Property Name="LeasingCompanyID" Type="Int32" />
+          <Property Name="IsLeasingInHouse" Type="Boolean" />
+          <Property Name="ContactName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ContactTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPhoneCode" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="ContactPhone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ContactEmail" Type="String" MaxLength="110" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MallUID" Type="Guid" />
+          <Property Name="TimeZone" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="County">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CountryID" Type="Int32" />
+          <Property Name="StateID" Type="Int32" />
+          <Property Name="CityID" Type="Int32" />
+          <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CountyName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -21024,45 +21064,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Mall">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Mall">
-              <MappingFragment StoreEntitySet="Mall">
-                <ScalarProperty Name="MallUID" ColumnName="MallUID" />
-                <ScalarProperty Name="CountyID" ColumnName="CountyID" />
-                <ScalarProperty Name="CityID" ColumnName="CityID" />
-                <ScalarProperty Name="StateID" ColumnName="StateID" />
-                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
-                <ScalarProperty Name="MallSegmentID" ColumnName="MallSegmentID" />
-                <ScalarProperty Name="IsLeasingInHouse" ColumnName="IsLeasingInHouse" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="TimeZone" ColumnName="TimeZone" />
-                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
-                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
-                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="ContactEmail" ColumnName="ContactEmail" />
-                <ScalarProperty Name="ContactPhone" ColumnName="ContactPhone" />
-                <ScalarProperty Name="ContactPhoneCode" ColumnName="ContactPhoneCode" />
-                <ScalarProperty Name="ContactTitle" ColumnName="ContactTitle" />
-                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
-                <ScalarProperty Name="LeasingCompanyID" ColumnName="LeasingCompanyID" />
-                <ScalarProperty Name="InvestorCompanyID" ColumnName="InvestorCompanyID" />
-                <ScalarProperty Name="Map" ColumnName="Map" />
-                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
-                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="PhoneCountryCode" ColumnName="PhoneCountryCode" />
-                <ScalarProperty Name="PostCode" ColumnName="PostCode" />
-                <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="StructuralCondition" ColumnName="StructuralCondition" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetLocationAll" FunctionName="db293_ActionTimeDbModel.Store.GetLocationAll">
             <ResultMapping>
               <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetLocationAll_Result">
@@ -21637,6 +21638,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="MallSegment">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.MallSegment">
+              <MappingFragment StoreEntitySet="MallSegment">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="SegmentName" ColumnName="SegmentName" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="VMall">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VMall">
               <MappingFragment StoreEntitySet="VMall">
@@ -21645,7 +21657,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="StateID" ColumnName="StateID" />
                 <ScalarProperty Name="CountryID" ColumnName="CountryID" />
                 <ScalarProperty Name="SegmentName" ColumnName="SegmentName" />
-                <ScalarProperty Name="MallSegmentID" ColumnName="MallSegmentID" />
                 <ScalarProperty Name="CountryName" ColumnName="CountryName" />
                 <ScalarProperty Name="StateName" ColumnName="StateName" />
                 <ScalarProperty Name="CityName" ColumnName="CityName" />
@@ -21679,8 +21690,62 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="PostCode" ColumnName="PostCode" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="StructuralCondition" ColumnName="StructuralCondition" />
+                <ScalarProperty Name="MallSegmentID" ColumnName="MallSegmentID" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mall">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Mall">
+              <MappingFragment StoreEntitySet="Mall">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="TimeZone" ColumnName="TimeZone" />
+                <ScalarProperty Name="MallUID" ColumnName="MallUID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="ContactEmail" ColumnName="ContactEmail" />
+                <ScalarProperty Name="ContactPhone" ColumnName="ContactPhone" />
+                <ScalarProperty Name="ContactPhoneCode" ColumnName="ContactPhoneCode" />
+                <ScalarProperty Name="ContactTitle" ColumnName="ContactTitle" />
+                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+                <ScalarProperty Name="IsLeasingInHouse" ColumnName="IsLeasingInHouse" />
+                <ScalarProperty Name="LeasingCompanyID" ColumnName="LeasingCompanyID" />
+                <ScalarProperty Name="InvestorCompanyID" ColumnName="InvestorCompanyID" />
+                <ScalarProperty Name="Map" ColumnName="Map" />
+                <ScalarProperty Name="Longitude" ColumnName="Longitude" />
+                <ScalarProperty Name="Latitude" ColumnName="Latitude" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="PhoneCountryCode" ColumnName="PhoneCountryCode" />
+                <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+                <ScalarProperty Name="CountyID" ColumnName="CountyID" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="StructuralCondition" ColumnName="StructuralCondition" />
+                <ScalarProperty Name="MallSegmentID" ColumnName="MallSegmentID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="County">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.County">
+              <MappingFragment StoreEntitySet="County">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="CountyName" ColumnName="CountyName" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="CityID" ColumnName="CityID" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="CountryID" ColumnName="CountryID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

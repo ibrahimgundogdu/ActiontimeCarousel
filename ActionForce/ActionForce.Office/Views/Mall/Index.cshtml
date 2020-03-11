@@ -22,7 +22,7 @@
             </nav>
         </div>
         <div class="d-none d-md-block">
-            <a href="@("")" class="btn btn-primary btn-uppercase"><i data-feather="plus-square"></i> &nbsp; AVM Ekle</a>
+            <a href="@("/Mall/Add/")" class="btn btn-primary btn-uppercase"><i data-feather="plus-square"></i> &nbsp; AVM Ekle</a>
         </div>
     </div>
     <div class="row">
@@ -35,29 +35,20 @@
                     <input id="mallName" name="MallName" type="text" class="form-control" autocomplete="off" placeholder="AVM Adı" value="@(Model.FilterModel?.MallName?? "")">
                 </div>
                 <div class="form-group col-md-2 d-flex align-items-end">
-                    <select class="form-control" id="countryID" name="Country">
-                        <option value="" label="Ülke Seçiniz"></option>
-                        @foreach (var item in Model.CountryList)
-                        {
-                            <option value="@item" @(Model.FilterModel != null ? (Model.FilterModel?.CountryName == item ? "selected" : "") : "")>@Html.Raw($"<strong>{item}</strong>")</option>
-                        }
-                    </select>
-                </div>
-                <div class="form-group col-md-2 d-flex align-items-end">
-                    <select class="form-control" id="stateID" name="State">
+                    <select class="form-control" id="stateID" name="StateName">
                         <option value="" label="Eyalet Seçiniz"></option>
                         @foreach (var item in Model.StateList)
                         {
-                            <option value="@item" @(Model.FilterModel != null ? (Model.FilterModel?.StateName == item ? "selected" : "") : "")>@Html.Raw($"<strong>{item}</strong>")</option>
+                            <option value="@item.StateName" @(Model.FilterModel != null ? (Model.FilterModel?.StateName == item.StateName ? "selected" : "") : "")>@Html.Raw($"<strong>{item.StateName}</strong>")</option>
                         }
                     </select>
                 </div>
                 <div class="form-group col-md-2 d-flex align-items-end">
-                    <select class="form-control" id="cityID" name="City">
+                    <select class="form-control" id="cityID" name="CityName">
                         <option value="" label="Şehir Seçiniz"></option>
                         @foreach (var item in Model.CityList)
                         {
-                            <option value="@item" @(Model.FilterModel != null ? (Model.FilterModel?.CityName == item ? "selected" : "") : "")>@Html.Raw($"<strong>{item}</strong>")</option>
+                            <option value="@item.CityName" @(Model.FilterModel != null ? (Model.FilterModel?.CityName == item.CityName ? "selected" : "") : "")>@Html.Raw($"<strong>{item.CityName}</strong>")</option>
                         }
                     </select>
                 </div>
@@ -69,31 +60,32 @@
         </div>
         <div class="col-3">
             <div class="btn-group btn-group-sm float-right" role="group">
-                <button type="button" class="btn btn-light" onclick="LocationSearch('-1');">Tümü</button>
-                <button type="button" class="btn btn-primary" onclick="LocationSearch('1');">Aktifler</button>
-                <button type="button" class="btn btn-secondary" onclick="LocationSearch('0');">Pasifler</button>
+                <button type="button" class="btn btn-light" onclick="MallSearch('-1');">Tümü</button>
+                <button type="button" class="btn btn-primary" onclick="MallSearch('1');">Aktifler</button>
+                <button type="button" class="btn btn-secondary" onclick="MallSearch('0');">Pasifler</button>
             </div>
         </div>
     </div>
     <div>
-        <div class="table" id="LocationList">
+        <div class="table" id="MallList">
             @Html.Partial("_PartialMallList", Model)
         </div>
     </div>
 </div>
 @section scripts {
     <script>
-        function LocationSearch(active) {
+        function MallSearch(active) {
 
             var data = new FormData();
 
-            data.append('LocationName', $("#locationName").val());
-            data.append('State', $("#stateID").val());
-            data.append('TypeName', $("#typeID").val());
+            data.append('MallName', $("#mallName").val());
+            data.append('CountryName', $("#countryID").val());
+            data.append('StateName', $("#stateID").val());
+            data.append('CityName', $("#cityID").val());
             data.append('IsActive', active);
 
             $.ajax({
-                url: '@Url.Action("LocationSearch","Location")',
+                url: '@Url.Action("MallSearch", "Mall")',
                 cache: false,
                 contentType: false,
                 processData: false,
@@ -101,7 +93,7 @@
                 type: 'POST',
                 data: data
             }).done(function (res) {
-                $('#LocationList').html(res);
+                $('#MallList').html(res);
             });
         }
     </script>
