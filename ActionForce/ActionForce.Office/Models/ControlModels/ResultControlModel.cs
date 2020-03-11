@@ -38,8 +38,9 @@ namespace ActionForce.Office
         public IEnumerable<VDayResultDocuments> DayResultDocuments { get; set; }
 
         public List<VPrice> PriceList { get; set; }
-        
-        
+        public List<DayResultCheckPrice> CheckPriceList { get; set; }
+
+
         public FilterModel Filters { get; set; }
         public OurCompany CurrentCompany { get; set; }
         public Location CurrentLocation { get; set; }
@@ -50,7 +51,8 @@ namespace ActionForce.Office
         public IEnumerable<TotalModel> CurrentDayTotal { get; set; }
 
 
-
+        public double? CashCiro { get; set; } = 0;
+        public double? CardCiro { get; set; } = 0;
 
         public string TodayDateCode { get; set; }
         public string CurrentDateCode { get; set; }

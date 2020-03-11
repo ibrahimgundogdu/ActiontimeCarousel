@@ -119,7 +119,7 @@ namespace ActionForce.Office.Controllers
                     Active = x.Active ?? false,
                     PositionName = x.PositionName
                 }).ToList();
-                model.LocationPriceLastList = Db.GetLocationCurrentPrices(model.LocationModel.LocationID).ToList();
+                model.LocationPriceLastList = Db.GetLocationPrice(model.LocationModel.LocationID,model.LocationModel.LocalDateTime).ToList();
                 #region Schedule
                 model.ScheduleStart = model.LocationModel.ScheduleStart?.ToShortTimeString();
                 model.ScheduleFinish = model.LocationModel.ScheduleEnd?.ToShortTimeString();
@@ -594,7 +594,7 @@ namespace ActionForce.Office.Controllers
                     Active = x.Active ?? false,
                     PositionName = x.PositionName
                 }).ToList();
-                model.LocationPriceLastList = Db.GetLocationCurrentPrices(model.LocationModel.LocationID).ToList();
+                model.LocationPriceLastList = Db.GetLocationPrice(model.LocationModel.LocationID,model.LocationModel.LocalDateTime).ToList();
                 model.LocationPriceCategoryList = Db.VLocationPriceCategory.Where(x => x.LocationID == model.LocationModel.LocationID).ToList();
                 model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.TicketTypeID == model.LocationModel.TicketTypeID).ToList();
                 #region Schedule

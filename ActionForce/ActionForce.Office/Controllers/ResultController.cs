@@ -193,7 +193,13 @@ namespace ActionForce.Office.Controllers
                 model.ResultStates = Db.ResultState.Where(x => x.IsActive == true).ToList();
                 model.Resultstatus = Db.Resultstatus.Where(x => x.IsActive == true).ToList();
 
-                model.PriceList = Db.GetLocationPrice(model.DayResult.LocationID, model.DayResult.Date).ToList();
+                //model.PriceList = Db.GetLocationPrice(model.DayResult.LocationID, model.DayResult.Date).ToList();
+                model.CheckPriceList = Db.DayResultCheckPrice.Where(x => x.ResultID == model.DayResult.ID).ToList();
+                // cirosu nedir
+                List<int> cashsales = new int[] { 10, 21, 24, 28 }.ToList();
+                List<int> cardsales = new int[] { 1, 3, 5 }.ToList();
+                model.CashCiro = model.CashActions.Where(x => cashsales.Contains(x.CashActionTypeID.Value) && x.Currency == model.CurrentLocation.Currency).Sum(x => x.Amount);
+                model.CardCiro = model.BankActions.Where(x => cardsales.Contains(x.BankActionTypeID.Value) && x.Currency == model.CurrentLocation.Currency).Sum(x => x.Amount);
 
                 model.CurrencyList = OfficeHelper.GetCurrency();
 
@@ -1153,23 +1159,108 @@ namespace ActionForce.Office.Controllers
 
             model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
 
+            model.CheckPriceList = Db.DayResultCheckPrice.Where(x => x.ResultID == dayresult.ID).ToList();
+
+            List<int> cashsales = new int[] { 10, 21, 24, 28 }.ToList();
+            List<int> cardsales = new int[] { 1, 3, 5 }.ToList();
+            model.DayResult = dayresult;
+
+            model.CashCiro = Db.VCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date && cashsales.Contains(x.CashActionTypeID.Value) && x.Currency == location.Currency).Sum(x => x.Amount);
+            model.CardCiro = Db.VBankActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date && cardsales.Contains(x.BankActionTypeID.Value) && x.Currency == location.Currency).Sum(x => x.Amount);
+
             return PartialView("_PartialResultSummary", model);
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public JsonResult CheckPrice(int id, int quantity, string startDate)
+        public PartialViewResult CheckPrice(int id, int quantity)
         {
-            double sum = 0;
-            var getPriceLastList = Db.VPrice.FirstOrDefault(x => x.ID == id);
+            ResultControlModel model = new ResultControlModel();
 
-            if (getPriceLastList != null && quantity > 0)
+            var checkprice = Db.DayResultCheckPrice.FirstOrDefault(x => x.ID == id);
+
+            if (checkprice != null)
             {
-                sum = quantity * (getPriceLastList.Price ?? 0);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == checkprice.LocationID);
+                var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == checkprice.ResultID);
+
+                DayResultCheckPrice self = new DayResultCheckPrice()
+                {
+                    Currency = checkprice.Currency,
+                    RecordEmployeeID = checkprice.RecordEmployeeID,
+                    RecordDate = checkprice.RecordDate,
+                    Quantity = checkprice.Quantity,
+                    Total = checkprice.Total,
+                    Date = checkprice.Date,
+                    ID = checkprice.ID,
+                    LocationID = checkprice.LocationID,
+                    Price = checkprice.Price,
+                    PriceCategoryID = checkprice.PriceCategoryID,
+                    PriceID = checkprice.PriceID,
+                    RecordIP = checkprice.RecordIP,
+                    ResultID = checkprice.ResultID,
+                    Sign = checkprice.Sign,
+                    Unit = checkprice.Unit,
+                    UpdateDate = checkprice.UpdateDate,
+                    UpdateEmployeeID = checkprice.UpdateEmployeeID,
+                    UpdateIP = checkprice.UpdateIP
+                };
+
+                checkprice.Quantity = quantity;
+                checkprice.Total = (quantity * checkprice.Price);
+                checkprice.UpdateDate = location.LocalDateTime;
+                checkprice.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                checkprice.UpdateIP = OfficeHelper.GetIPAddress();
+
+                Db.SaveChanges();
+
+                var isequal = OfficeHelper.PublicInstancePropertiesEqual<DayResultCheckPrice>(self, checkprice, OfficeHelper.getIgnorelist());
+                OfficeHelper.AddApplicationLog("Office", "DayResultCheckPrice", "Update", checkprice.ID.ToString(), "Result", "CheckPrice", isequal, true, $"{checkprice.Unit} - {checkprice.Price} {checkprice.Currency} güncellendi.", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), $"{model.Authentication.ActionEmployee.EmployeeID} {model.Authentication.ActionEmployee.FullName}", OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                model.CheckPriceList = Db.DayResultCheckPrice.Where(x => x.ResultID == checkprice.ResultID).ToList();
+
+                List<int> cashsales = new int[] { 10, 21, 24, 28 }.ToList();
+                List<int> cardsales = new int[] { 1, 3, 5 }.ToList();
+                model.DayResult = dayresult;
+
+                model.CashCiro = Db.VCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date && cashsales.Contains(x.CashActionTypeID.Value) && x.Currency == location.Currency).Sum(x => x.Amount);
+                model.CardCiro = Db.VBankActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date && cardsales.Contains(x.BankActionTypeID.Value) && x.Currency == location.Currency).Sum(x => x.Amount);
+
+
             }
 
-            return Json(1, JsonRequestBehavior.AllowGet);
+
+
+            return PartialView("_PartialCheckPrice", model);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult ReCheckPrice(long id)
+        {
+            ResultControlModel model = new ResultControlModel();
+
+            var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == id);
+            if (dayresult != null)
+            {
+
+                OfficeHelper.CheckDayResultPriceList(id);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
+
+                model.CheckPriceList = Db.DayResultCheckPrice.Where(x => x.ResultID == id).ToList();
+
+                List<int> cashsales = new int[] { 10, 21, 24, 28 }.ToList();
+                List<int> cardsales = new int[] { 1, 3, 5 }.ToList();
+
+                model.DayResult = dayresult;
+                model.CashCiro = Db.VCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date && cashsales.Contains(x.CashActionTypeID.Value) && x.Currency == location.Currency).Sum(x => x.Amount);
+                model.CardCiro = Db.VBankActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date && cardsales.Contains(x.BankActionTypeID.Value) && x.Currency == location.Currency).Sum(x => x.Amount);
+
+            }
+            return PartialView("_PartialCheckPrice", model);
+        }
+
+
 
         [HttpPost]
         [AllowAnonymous]

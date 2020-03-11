@@ -124,8 +124,9 @@
 
         </table>
     </div>
-
-    @{Html.RenderPartial("_PartialCheckPrice", Model);}
+    <div id="CheckPriceList">
+        @{Html.RenderPartial("_PartialCheckPrice", Model);}
+    </div>
 
     @using (Html.BeginForm("SetResultState", "Result", FormMethod.Post))
     {

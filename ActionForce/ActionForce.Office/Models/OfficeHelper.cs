@@ -144,12 +144,12 @@ namespace ActionForce.Office
             {
                 var currencyList = db.Currency.ToList();
 
-                if (currencyList != null && currencyList.Count >0)
+                if (currencyList != null && currencyList.Count > 0)
                 {
                     foreach (var item in currencyList)
                     {
                         CreateCash(locationID, item.Code);
-                    }   
+                    }
                 }
             }
         }
@@ -167,7 +167,7 @@ namespace ActionForce.Office
                 }
                 else
                 {
-                    return CreateCash(locationID,currency);
+                    return CreateCash(locationID, currency);
                 }
             }
 
@@ -378,7 +378,6 @@ namespace ActionForce.Office
 
                 if (dayresult != null)
                 {
-
                     List<DayResultItemList> itemlist = new List<DayResultItemList>();
 
                     var items = db.DayResultItems.ToList();
@@ -970,6 +969,9 @@ namespace ActionForce.Office
 
                         }).FirstOrDefault());
 
+
+                        
+
                     }
                     else if (location.OurCompanyID == 1)  // ülke amerika ise
                     {
@@ -1402,41 +1404,12 @@ namespace ActionForce.Office
 
                     // 15 fiyat kontrol bölümü
 
-                    var pricelist = db.GetLocationPrice(dayresult.LocationID, dayresult.Date);
-
-                    foreach (var item in pricelist)
-                    {
-                        DayResultCheckPrice cp = new DayResultCheckPrice();
-
-                        cp.Date = dayresult.Date;
-                        cp.LocationID = dayresult.LocationID;
-                        cp.Price = item.Price;
-                        cp.PriceCategoryID = item.PriceCategoryID;
-                        cp.PriceID = item.ID;
-                        cp.Quantity = 0;
-                        cp.RecordDate = location.LocalDateTime;
-                        cp.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                        cp.RecordIP = OfficeHelper.GetIPAddress();
-                        cp.ResultID = dayresult.ID;
-                        cp.Total = (cp.Quantity * cp.Price);
-                        cp.Unit = item.Unit;
-
-                        db.DayResultCheckPrice.Add(cp);
-                        db.SaveChanges();
-
-                        OfficeHelper.AddApplicationLog("Office", "DayResultCheckPrice", "Insert", cp.ID.ToString(), "Result", "AddItemsToResultEnvelope", null, true, $"{cp.Unit} - {cp.Price} {item.Currency}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), $"{model.Authentication.ActionEmployee.EmployeeID} {model.Authentication.ActionEmployee.FullName}", OfficeHelper.GetIPAddress(), string.Empty, cp);
-
-                    }
-
                     db.DayResultItemList.AddRange(itemlist);
                     db.SaveChanges();
+
+                    CheckDayResultPriceList(dayresult.ID);
                 }
-
             }
-
-
-
-
             return result;
 
         }
@@ -2283,5 +2256,102 @@ namespace ActionForce.Office
 
             return issuccess;
         }
+
+        public static void CheckDayResultPriceList(long? id)
+        {
+            Result<DayResult> result = new Result<DayResult>()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                ResultControlModel model = new ResultControlModel();
+
+                var dayresult = db.DayResult.FirstOrDefault(x => x.ID == id);
+
+                if (dayresult != null)
+                {
+                    List<DayResultCheckPrice> cplist = new List<DayResultCheckPrice>();
+
+                    var location = db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
+                    var pricelist = db.GetLocationPrice(dayresult.LocationID, dayresult.Date);
+
+                    foreach (var item in pricelist)
+                    {
+                        var checkprice = db.DayResultCheckPrice.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.Date == dayresult.Date && x.PriceCategoryID == item.PriceCategoryID && x.PriceID == item.ProductID && x.ResultID == dayresult.ID && x.Unit == item.Unit);
+                        if (checkprice != null)
+                        {
+                            DayResultCheckPrice self = new DayResultCheckPrice()
+                            {
+                                Currency = checkprice.Currency,
+                                RecordEmployeeID = checkprice.RecordEmployeeID,
+                                RecordDate = checkprice.RecordDate,
+                                Quantity = checkprice.Quantity,
+                                Total = checkprice.Total,
+                                Date = checkprice.Date,
+                                ID = checkprice.ID,
+                                LocationID = checkprice.LocationID,
+                                Price = checkprice.Price,
+                                PriceCategoryID = checkprice.PriceCategoryID,
+                                PriceID = checkprice.PriceID,
+                                RecordIP = checkprice.RecordIP,
+                                ResultID = checkprice.ResultID,
+                                Sign = checkprice.Sign,
+                                Unit = checkprice.Unit,
+                                UpdateDate = checkprice.UpdateDate,
+                                UpdateEmployeeID = checkprice.UpdateEmployeeID,
+                                UpdateIP = checkprice.UpdateIP
+                            };
+
+                            checkprice.Currency = item.Currency;
+                            checkprice.Price = item.Price;
+                            checkprice.Total = (checkprice.Total * checkprice.Price);
+                            checkprice.UpdateDate = location.LocalDateTime;
+                            checkprice.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                            checkprice.UpdateIP = GetIPAddress();
+
+                            db.SaveChanges();
+
+                            var isequal = PublicInstancePropertiesEqual<DayResultCheckPrice>(self, checkprice, getIgnorelist());
+                            AddApplicationLog("Office", "DayResultCheckPrice", "Update", checkprice.ID.ToString(), "Result", "CheckDayResultPriceList", isequal, true, $"{checkprice.Unit} - {checkprice.Price} {item.Currency}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), $"{model.Authentication.ActionEmployee.EmployeeID} {model.Authentication.ActionEmployee.FullName}", GetIPAddress(), string.Empty, null);
+
+                        }
+                        else
+                        {
+                            DayResultCheckPrice cp = new DayResultCheckPrice();
+
+                            cp.Date = dayresult.Date;
+                            cp.LocationID = dayresult.LocationID;
+                            cp.Price = item.Price;
+                            cp.PriceCategoryID = item.PriceCategoryID;
+                            cp.PriceID = item.ID;
+                            cp.Quantity = 0;
+                            cp.RecordDate = location.LocalDateTime;
+                            cp.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                            cp.RecordIP = GetIPAddress();
+                            cp.ResultID = dayresult.ID;
+                            cp.Total = (cp.Quantity * cp.Price);
+                            cp.Unit = item.Unit;
+                            cp.Currency = item.Currency;
+                            cp.Sign = item.Sign;
+
+                            cplist.Add(cp);
+                            
+
+                            AddApplicationLog("Office", "DayResultCheckPrice", "Insert", cp.ID.ToString(), "Result", "AddItemsToResultEnvelope", null, true, $"{cp.Unit} - {cp.Price} {item.Currency}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), $"{model.Authentication.ActionEmployee.EmployeeID} {model.Authentication.ActionEmployee.FullName}", OfficeHelper.GetIPAddress(), string.Empty, cp);
+
+                        }
+                    }
+
+                    db.DayResultCheckPrice.AddRange(cplist);
+                    db.SaveChanges();
+
+                }
+            }
+        }
+
+
     }
 }

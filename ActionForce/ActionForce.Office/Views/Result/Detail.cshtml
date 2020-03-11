@@ -1126,14 +1126,9 @@
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
 
-        function CheckPrice(id, price) {
-
-
-            var firstSum = $("#sumHidden").val();
+        function CheckPrice(id) {
 
             var quantity = $('#Quantity_' + id).val();
-            var toplam = price * quantity;
-
 
             var data = new FormData();
             data.append('id', id);
@@ -1148,24 +1143,27 @@
                 url: "/Result/CheckPrice",
                 data: data
             }).done(function (d) {
-                $("#Sum" + id).html(d);
+                $("#CheckPriceList").html(d);
             });
-
-
-
-
-            $("#Sum_" + id).html(toplam);
-
-            $("#sumHidden").val(Number(toplam));
-
-            firstSum += parseInt(toplam);
-
-            
-
-
-            //$("#SumTotal").html(firstSum);
         }
 
+        function ReCheckPrice(id) {
+
+            var data = new FormData();
+            data.append('id', id);
+
+            $.ajax({
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                url: "/Result/ReCheckPrice",
+                data: data
+            }).done(function (d) {
+                $("#CheckPriceList").html(d);
+            });
+        }
 
     </script>
 

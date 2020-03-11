@@ -23,7 +23,7 @@ namespace ActionForce.Office
         public List<VBankAccount> BankAccountList { get; set; }
         public List<LocationType> LocationTypeList { get; set; }
         public List<VLocationPosTerminal> LocationPosTerminalList { get; set; }
-        public List<VPriceLastList> LocationPriceLastList { get; set; }
+        public List<VPrice> LocationPriceLastList { get; set; }
         public List<VLocationPriceCategory> LocationPriceCategoryList { get; set; }
         public VLocationPriceCategory LocationPriceCategory { get; set; }
         public Nullable<int> RecordEmployeeID { get; set; }
