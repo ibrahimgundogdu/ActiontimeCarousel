@@ -50,6 +50,22 @@ namespace ActionForce.Office
         #region ScheduleLocation
         public List<VLocationSchedule> LocationScheduleList { get; set; }
         public string WeekCode { get; set; }
+        public DateList CurrentDate { get; set; }
+                
+        public string NextWeekCode { get; set; }
+        public string PrevWeekCode { get; set; }
+        public string TodayWeekCode { get; set; }
+
+        public string MoonCode { get; set; }
+        public string NextMoonCode { get; set; }
+        public string PrevMoonCode { get; set; }
+
+
+        public DateList FirstWeekDay { get; set; }
+        public DateList LastWeekDay { get; set; }
+
+        public DateList FirstMoonDay { get; set; }
+        public DateList LastMoonDay { get; set; }
         #endregion
         #region ShiftLocation
         public List<DateList> WeekList { get; set; }
