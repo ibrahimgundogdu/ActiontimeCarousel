@@ -30,11 +30,19 @@
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                         <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Fiyat Kategorileri Detayı</h6>
                         <div class="d-flex tx-13">
-                            <a href="#modelLocationPriceCategory" data-toggle="modal" class="link-03 lh-0 tx-primary">@*<i class="icon ion-md-add-circle-outline tx-15"></i>*@<i class="wd-15" data-feather="plus-circle"></i> &nbsp; Fiyat Kategorisi Ekle</a>
+                            <a href="#modelLocationPriceCategoryAdd" data-toggle="modal" class="link-03 lh-0 tx-primary"><i class="wd-15" data-feather="plus-circle"></i> &nbsp; Fiyat Kategorisi Ekle</a>
                         </div>
                     </div>
                     <div class="card-body pd-20 pd-lg-25" id="locationPriceLists">
                         @{Html.RenderPartial("_PartialLocationPriceList", Model);}
+                    </div>
+                </div>
+                <div class="card mg-b-20 mg-lg-b-25">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Kayıt Tarihçesi</h6>
+                    </div>
+                    <div class="card-body pd-25">
+                        @{Html.RenderPartial("_PartialLocationLogList", Model);}
                     </div>
                 </div>
             </div>
@@ -42,7 +50,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modelLocationPriceCategory" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="modelLocationPriceCategoryAdd" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-body pd-20 pd-sm-40" id="AddLocationPriceCategory">
@@ -50,31 +58,43 @@
                     <span aria-hidden="true">&times;</span>
                 </a>
                 <div>
-                    <h4>@(Model?.LocationModel?.LocationName + " " + Model?.LocationModel?.LocationTypeName) | <span class="font-weight-bold text-black-50">Fiyat Kategorileri Ekle</span></h4>
-
-                    @*@using (Ajax.BeginForm("AddEmployeePhone", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "EmployeePhones", InsertionMode = InsertionMode.Replace, OnSuccess = "OnPhoneSuccess" }))
-                        {
-                            @Html.AntiForgeryToken()
-                    *@
-
-                    <div class="form-group row bg-gray-50 mg-b-5">
-                        <label for="Mobile" class="col-sm-3 col-form-label">Fiyat Listesi</label>
-                        <div class="col-sm-6">
-                            <select class="form-control" id="priceCategory" name="PriceCatID">
-                                @if (Model?.PriceCategoryList?.Count > 0)
-                                {
-                                    <option value="">Seçiniz</option>
-                                    foreach (var item in Model.PriceCategoryList)
+                    @using (Ajax.BeginForm("CreatePriceCat", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "locationPriceLists", InsertionMode = InsertionMode.Replace, OnSuccess = "OnLocationPriceCategoryAddSuccess" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        <h4>@(Model?.LocationModel?.LocationName + " " + Model?.LocationModel?.LocationTypeName) | <span class="font-weight-bold text-black-50">Fiyat Kategori Ekle</span></h4>
+                        <div class="form-group row bg-gray-50 mg-b-5">
+                            <label for="Mobile" class="col-sm-3 col-form-label">Fiyat Listesi</label>
+                            <div class="col-sm-6">
+                                <select class="form-control" id="priceCategory" name="PriceCategoryID" required>
+                                    @if (Model?.PriceCategoryList?.Count > 0)
                                     {
-                                        <option value="@(item.ID)" @(Model.LocationModel.PriceCatID == item.ID ? "selected" : "")>@(item.TicketTypeName + " " + item.CategoryName)</option>
+                                        <option value="">Seçiniz</option>
+                                        foreach (var item in Model.PriceCategoryList)
+                                        {
+                                            <option value="@(item.ID)">@(item.TicketTypeName + " " + item.CategoryName)</option>
+                                        }
                                     }
-                                }
-                            </select>
+                                </select>
+                            </div>
+                            <div class="col-sm-3"></div>
                         </div>
-                        <div class="col-sm-3">
+                        <div class="form-group row bg-gray-50 mg-b-5">
+                            <label for="Mobile" class="col-sm-3 col-form-label">Başlangıç Tarihi</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control form-control-sm shiftdateAdd" placeholder="Başlangıç Tarihi" name="StartDate" autocomplete="off" required>
+                            </div>
+                            <div class="col-sm-3"></div>
                         </div>
-                    </div>
-                    @*   }*@
+                        <div class="form-group row mg-b-0">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-6">
+                                <input name="LocationID" type="hidden" value="@(Model?.LocationModel?.LocationID)" />
+                                <button type="submit" class="btn btn-primary btn-block tx-15">Fiyat Kategori Ekle</button>
+                            </div>
+                            <div class="col-sm-3">
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
@@ -85,36 +105,7 @@
     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-body pd-20 pd-sm-40" id="EditLocationPriceCategory">
-                <a href="" role="button" class="close pos-absolute t-15 r-15" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </a>
-                <div>
-                    <h4>@(Model?.LocationModel?.LocationName + " " + Model?.LocationModel?.LocationTypeName) | <span class="font-weight-bold text-black-50">Fiyat Kategorileri Ekle</span></h4>
 
-                    @*@using (Ajax.BeginForm("AddEmployeePhone", new AjaxOptions() { HttpMethod = "POST", UpdateTargetId = "EmployeePhones", InsertionMode = InsertionMode.Replace, OnSuccess = "OnPhoneSuccess" }))
-                        {
-                            @Html.AntiForgeryToken()
-                    *@
-
-                    <div class="form-group row bg-gray-50 mg-b-5">
-                        <label for="Mobile" class="col-sm-3 col-form-label">Fiyat Listesi</label>
-                        <div class="col-sm-6">
-                            <select class="form-control" id="priceCategory" name="PriceCatID">
-                                @if (Model?.PriceCategoryList?.Count > 0)
-                                {
-                                    <option value="">Seçiniz</option>
-                                    foreach (var item in Model.PriceCategoryList)
-                                    {
-                                        <option value="@(item.ID)" @(Model.LocationModel.PriceCatID == item.ID ? "selected" : "")>@(item.TicketTypeName + " " + item.CategoryName)</option>
-                                    }
-                                }
-                            </select>
-                        </div>
-                        <div class="col-sm-3">
-                        </div>
-                    </div>
-                    @*   }*@
-                </div>
             </div>
         </div>
     </div>
@@ -126,22 +117,14 @@
         $(function () {
             'use strict'
             $("body").addClass("page-profile");
-
-            $('#pricedatepicker').datepicker({
-                showOtherMonths: true,
-                selectOtherMonths: true,
-                dateFormat: "yyyy-mm-dd",
-                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                firstDay: 1
-            });
-
-            $('.shiftdate').mask('0000-00-00');
-
         });
 
-        function OnLocationPriceCategorySuccess(data) {
+        function OnLocationPriceCategoryEditSuccess(data) {
             $('#modelLocationPriceCategoryEdit').modal('hide');
+        };
+
+        function OnLocationPriceCategoryAddSuccess(data) {
+            $('#modelLocationPriceCategoryAdd').modal('hide');
         };
 
         function EditPriceCat(id) {
@@ -157,11 +140,48 @@
                 type: 'POST',
                 data: data
             }).done(function (d) {
-                console.log(d);
                 $('#EditLocationPriceCategory').html(d);
             });
         };
+
+        function DeletePriceCat(id) {
+            var data = new FormData();
+            data.append('ID', id);
+
+            $.ajax({
+                url: '@Url.Action("DeletePriceCat", "Location")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#locationPriceLists').html(d);
+            });
+        };
+
+        //function DeletePriceCat(id) {
+        //    window.location.href = "/Location/DeletePriceCat/" + id;
+
+
+        //}
     </script>
+    <script type="text/javascript">
+
+        $('.shiftdateAdd').datepicker({
+            showOtherMonths: true,
+            selectOtherMonths: true,
+            dateFormat: "yy-mm-dd",
+            dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+            monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+            firstDay: 1
+        });
+
+        $('.shiftdateAdd').mask('0000-00-00');
+
+    </script>
+
     @if (Model.Result != null) //
     {
         <script type="text/javascript">

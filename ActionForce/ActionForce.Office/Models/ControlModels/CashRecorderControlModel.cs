@@ -24,6 +24,5 @@ namespace ActionForce.Office
         public VLocation CurrentLocation { get; set; }
         public Result<CashActions> Result { get; set; }
         public IEnumerable<ApplicationLog> History { get; set; }
-
     }
 }

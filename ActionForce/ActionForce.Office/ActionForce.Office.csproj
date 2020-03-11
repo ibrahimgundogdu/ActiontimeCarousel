@@ -2318,6 +2318,7 @@
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LogoutController.cs" />
+    <Compile Include="Controllers\MallController.cs" />
     <Compile Include="Controllers\ResultController.cs" />
     <Compile Include="Controllers\RevenueController.cs" />
     <Compile Include="Controllers\SalaryController.cs" />
@@ -2337,6 +2338,7 @@
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\BankActionModel.cs" />
     <Compile Include="Models\ControlModels\ComputeControlModel.cs" />
+    <Compile Include="Models\ControlModels\MallControlModel.cs" />
     <Compile Include="Models\ControlModels\RevenueControlModel.cs" />
     <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\CounterModel.cs" />
@@ -2377,6 +2379,7 @@
     <Compile Include="Models\FormModels\FormLocationPriceCategory.cs" />
     <Compile Include="Models\Location\LocationEmployeeModel.cs" />
     <Compile Include="Models\Location\LocationFilterModel.cs" />
+    <Compile Include="Models\Mall\MallFilterModel.cs" />
     <Compile Include="Models\NewEmployee.cs" />
     <Compile Include="Models\NewPhone.cs" />
     <Compile Include="Models\Sale\PriceFilterModel.cs" />
@@ -2716,6 +2719,9 @@
     <Content Include="Views\CashRecorder\Report.cshtml" />
     <Content Include="Views\CashRecorder\_PartialCashRecorderList.cshtml" />
     <Content Include="Views\CashRecorder\CashRecorderList.cshtml" />
+    <Content Include="Views\Mall\Index.cshtml" />
+    <Content Include="Views\Mall\_PartialMallList.cshtml" />
+    <Content Include="Views\Location\_PartialLocationLogList.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

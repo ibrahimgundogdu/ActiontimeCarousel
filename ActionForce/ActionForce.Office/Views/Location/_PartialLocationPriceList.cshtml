@@ -26,7 +26,7 @@
                     <td class="tx-sm-13">@(item.UpdateDate)</td>
                     <td class="tx-sm-13">@(item.UEmployeeName)</td>
                     <td class="tx-sm-13 text-center"><a href="#modelLocationPriceCategoryEdit" data-toggle="modal" class="text-primary" onclick="EditPriceCat(@(item.ID));"><i class="wd-15" data-feather="edit"></i></a></td>
-                    <td class="tx-sm-13 text-center"><a href="@(Model.LocationPriceCategoryList.IndexOf(item))" class="text-danger"><i class="wd-15" data-feather="trash"></i></a></td>
+                    <td class="tx-sm-13 text-center"><a href="javascript:void(0)" data-toggle="modal" class="text-danger" onclick="return confirm('Silmek istediğinize emin misiniz ?') ? DeletePriceCat(@item.ID):false;"><i class="wd-15" data-feather="trash"></i></a></td>
                 </tr>
             }
         }

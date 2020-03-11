@@ -882,6 +882,9 @@
     <Compile Include="VLocationShift.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VMall.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VPersonalDocument.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
