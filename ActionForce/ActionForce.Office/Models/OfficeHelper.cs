@@ -2280,7 +2280,7 @@ namespace ActionForce.Office
 
                     foreach (var item in pricelist)
                     {
-                        var checkprice = db.DayResultCheckPrice.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.Date == dayresult.Date && x.PriceCategoryID == item.PriceCategoryID && x.PriceID == item.ProductID && x.ResultID == dayresult.ID && x.Unit == item.Unit);
+                        var checkprice = db.DayResultCheckPrice.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.Date == dayresult.Date && x.PriceCategoryID == item.PriceCategoryID && x.PriceID == item.ID && x.ResultID == dayresult.ID && x.Unit == item.Unit);
                         if (checkprice != null)
                         {
                             DayResultCheckPrice self = new DayResultCheckPrice()
