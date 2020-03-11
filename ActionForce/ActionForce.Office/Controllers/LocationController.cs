@@ -841,6 +841,77 @@ namespace ActionForce.Office.Controllers
         }
 
         #endregion
+        #region Schedule
+        [AllowAnonymous]
+        public ActionResult Schedule(Guid? id, string week)
+        {
+            LocationControlModel model = new LocationControlModel();
+
+            if (id != null)
+            {
+                model.LocationModel = Db.VLocation.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationUID == id);
+            }
+
+            #region WeekDate
+            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
+
+            if (!string.IsNullOrEmpty(week))
+            {
+                var weekparts = week.Split('-');
+                int _year = Convert.ToInt32(weekparts[0]);
+                int _week = Convert.ToInt32(weekparts[1]);
+                datekey = Db.DateList.Where(x => x.WeekYear == _year && x.WeekNumber == _week).OrderBy(x => x.DateKey).FirstOrDefault();
+            }
+
+            string weekcode = $"{datekey.WeekYear}-{datekey.WeekNumber}";
+            var weekdatekeys = Db.DateList.Where(x => x.WeekYear == datekey.WeekYear && x.WeekNumber == datekey.WeekNumber).ToList();
+
+            model.WeekCode = weekcode;
+
+            model.CurrentDate = datekey;
+            model.WeekList = weekdatekeys;
+            model.FirstWeekDay = weekdatekeys.OrderBy(x => x.DateKey).FirstOrDefault();
+            model.LastWeekDay = weekdatekeys.OrderByDescending(x => x.DateKey).FirstOrDefault();
+
+            var prevdate = model.FirstWeekDay.DateKey.AddDays(-1).Date;
+            var nextdate = model.LastWeekDay.DateKey.AddDays(1).Date;
+
+            var prevday = Db.DateList.FirstOrDefault(x => x.DateKey == prevdate);
+            var nextday = Db.DateList.FirstOrDefault(x => x.DateKey == nextdate);
+
+            model.NextWeekCode = $"{nextday.WeekYear}-{nextday.WeekNumber}";
+            model.PrevWeekCode = $"{prevday.WeekYear}-{prevday.WeekNumber}";
+
+            List<DateTime> datelist = model.WeekList.Select(x => x.DateKey).Distinct().ToList(); 
+            #endregion
+            #region Schedule
+            model.ScheduleStart = model.LocationModel.ScheduleStart?.ToShortTimeString();
+            model.ScheduleFinish = model.LocationModel.ScheduleEnd?.ToShortTimeString();
+            model.ScheduleTime = model.LocationModel.ScheduleDuration?.ToString("hh\\:mm");
+            #endregion
+            #region Shift
+            model.ShiftStart = model.LocationModel.ShiftStart?.ToString("hh\\:mm");
+            model.ShiftFinish = model.LocationModel.ShiftFinish?.ToString("hh\\:mm");
+            model.ShiftTime = model.LocationModel.Duration;
+            #endregion
+            #region Status
+            model.StatusName = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "Beklemede" : (model.LocationModel.Status == 1 ? "Açık" : (model.LocationModel.Status == 2 ? "Kapalı" : ""))) : "");
+            model.StatusClass = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "warning" : (model.LocationModel.Status == 1 ? "success" : (model.LocationModel.Status == 2 ? "danger" : "danger"))) : "danger");
+            model.StatusIcon = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "clock" : (model.LocationModel.Status == 1 ? "sun" : (model.LocationModel.Status == 2 ? "moon" : "moon"))) : "moon");
+            #endregion
+            #region ScheduleLocation
+            model.WeekCode = model.LocationModel.WeekKey.Trim();
+            model.LocationScheduleList = Db.VLocationSchedule.Where(x => x.WeekCode.Trim() == model.WeekCode && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID).ToList();
+            #endregion
+            #region ShiftLocation
+            model.WeekList = Db.DateList.Where(x => x.WeekKey == model.LocationModel.WeekKey).ToList();
+            model.LocationShiftList = Db.VLocationShift.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID && x.WeekKey == model.LocationModel.WeekKey).ToList();
+            #endregion
+
+            return View(model);
+        }
+        #endregion
     }
 
     #region OurCompanyModel
