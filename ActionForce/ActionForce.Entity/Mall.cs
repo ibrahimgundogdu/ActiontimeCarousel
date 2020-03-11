@@ -46,5 +46,11 @@ namespace ActionForce.Entity
         public int TimeZone { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<bool> IsLeasingInHouse { get; set; }
+        public Nullable<int> MallSegmentID { get; set; }
+        public Nullable<int> CountryID { get; set; }
+        public Nullable<int> StateID { get; set; }
+        public Nullable<int> CityID { get; set; }
+        public Nullable<int> CountyID { get; set; }
+        public Nullable<System.Guid> MallUID { get; set; }
     }
 }

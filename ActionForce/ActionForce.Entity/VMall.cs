@@ -55,5 +55,11 @@ namespace ActionForce.Entity
         public string CityName { get; set; }
         public string StateName { get; set; }
         public string CountryName { get; set; }
+        public Nullable<int> MallSegmentID { get; set; }
+        public string SegmentName { get; set; }
+        public Nullable<int> CountryID { get; set; }
+        public Nullable<int> StateID { get; set; }
+        public Nullable<int> CityID { get; set; }
+        public Nullable<int> CountyID { get; set; }
     }
 }
