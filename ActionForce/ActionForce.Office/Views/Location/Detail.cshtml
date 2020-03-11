@@ -76,11 +76,11 @@
 
                                 @foreach (var item in Model.LocationPriceLastList)
                                 {
-                                <div class="d-flex align-items-center">
-                                    <span class="tx-medium mg-l-10">@((item.Unit.ToString()).PadLeft(2, '0'))</span>
-                                    <span class="tx-medium mg-l-15">Dakika</span>
-                                    <span class="tx-right tx-medium mg-r-0 mg-l-auto">@item.Price @item.Sign</span>
-                                </div>
+                                    <div class="d-flex align-items-center @(item.UseToSale == false ? "bg-light" : "")">
+                                        <span class="tx-medium mg-l-10">@((item.Unit.ToString()).PadLeft(2, '0'))</span>
+                                        <span class="tx-medium mg-l-15">Dakika</span>
+                                        <span class="tx-right tx-medium mg-r-0 mg-l-auto">@item.Price @item.Sign</span>
+                                    </div>
                                 }
 
                             </div>
