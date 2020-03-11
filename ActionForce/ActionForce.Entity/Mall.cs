@@ -17,13 +17,13 @@ namespace ActionForce.Entity
         public int ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
         public string FullName { get; set; }
-        public string Segment { get; set; }
+        public Nullable<int> MallSegmentID { get; set; }
         public string StructuralCondition { get; set; }
         public string Address { get; set; }
-        public Nullable<int> Country { get; set; }
-        public Nullable<int> State { get; set; }
-        public Nullable<int> City { get; set; }
-        public Nullable<int> County { get; set; }
+        public Nullable<int> CountryID { get; set; }
+        public Nullable<int> StateID { get; set; }
+        public Nullable<int> CityID { get; set; }
+        public Nullable<int> CountyID { get; set; }
         public string PostCode { get; set; }
         public string PhoneCountryCode { get; set; }
         public string PhoneNumber { get; set; }
@@ -32,6 +32,7 @@ namespace ActionForce.Entity
         public string Map { get; set; }
         public Nullable<int> InvestorCompanyID { get; set; }
         public Nullable<int> LeasingCompanyID { get; set; }
+        public Nullable<bool> IsLeasingInHouse { get; set; }
         public string ContactName { get; set; }
         public string ContactTitle { get; set; }
         public string ContactPhoneCode { get; set; }
@@ -43,8 +44,8 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public string UpdateIP { get; set; }
+        public Nullable<System.Guid> MallUID { get; set; }
         public int TimeZone { get; set; }
         public Nullable<bool> IsActive { get; set; }
-        public Nullable<bool> IsLeasingInHouse { get; set; }
     }
 }

@@ -10,11 +10,15 @@ namespace ActionForce.Office
     {
         public List<VMall> MallList { get; set; }
         public List<MallLocationContract> LocationContracts { get; set; }
-        public List<string> StateList { get; set; }
-        public List<string> CityList { get; set; }
-        public List<string> CountryList { get; set; }
+        public Country RelatedCountry { get; set; }
+        public List<State> StateList { get; set; }
+        public List<City> CityList { get; set; }
+        public List<County> CountyList { get; set; }
+        public List<VCity> ExistingCities { get; set; }
+        public List<OurCompany> OurCompanyList { get; set; }
+        public List<MallSegment> MallSegmentList { get; set; }
         public Result Result { get; set; }
         public MallFilterModel FilterModel { get; set; }
-
+        public FormMall CheckMall { get; set; }
     }
 }

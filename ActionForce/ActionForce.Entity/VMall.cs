@@ -17,13 +17,9 @@ namespace ActionForce.Entity
         public int ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
         public string FullName { get; set; }
-        public string Segment { get; set; }
+        public Nullable<int> MallSegmentID { get; set; }
         public string StructuralCondition { get; set; }
         public string Address { get; set; }
-        public Nullable<int> Country { get; set; }
-        public Nullable<int> State { get; set; }
-        public Nullable<int> City { get; set; }
-        public Nullable<int> County { get; set; }
         public string PostCode { get; set; }
         public string PhoneCountryCode { get; set; }
         public string PhoneNumber { get; set; }
@@ -55,5 +51,10 @@ namespace ActionForce.Entity
         public string CityName { get; set; }
         public string StateName { get; set; }
         public string CountryName { get; set; }
+        public string SegmentName { get; set; }
+        public Nullable<int> CountryID { get; set; }
+        public Nullable<int> StateID { get; set; }
+        public Nullable<int> CityID { get; set; }
+        public Nullable<int> CountyID { get; set; }
     }
 }

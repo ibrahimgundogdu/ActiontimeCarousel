@@ -171,7 +171,7 @@
 
                 
                 <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Location" || this.ViewContext.RouteData.Values["controller"].ToString() == "Mall"  ? "show" : "")">
-                    <a href="/Employee" class="nav-link"><i data-feather="file-text"></i> <span>Lokasyon - AVM</span></a>
+                    <a href="/Employee" class="nav-link"><i data-feather="map-pin"></i> <span>AVM - Lokasyon</span></a>
                     <ul>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Location" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Location">01 Lokasyon</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Mall" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Mall/Index">02 AVM</a></li>

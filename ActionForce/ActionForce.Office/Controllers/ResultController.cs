@@ -1159,6 +1159,15 @@ namespace ActionForce.Office.Controllers
 
             model.Result = new Result<DayResult>() { IsSuccess = result.IsSuccess, Message = result.Message };
 
+            model.CheckPriceList = Db.DayResultCheckPrice.Where(x => x.ResultID == dayresult.ID).ToList();
+
+            List<int> cashsales = new int[] { 10, 21, 24, 28 }.ToList();
+            List<int> cardsales = new int[] { 1, 3, 5 }.ToList();
+            model.DayResult = dayresult;
+
+            model.CashCiro = Db.VCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date && cashsales.Contains(x.CashActionTypeID.Value) && x.Currency == location.Currency).Sum(x => x.Amount);
+            model.CardCiro = Db.VBankActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date && cardsales.Contains(x.BankActionTypeID.Value) && x.Currency == location.Currency).Sum(x => x.Amount);
+
             return PartialView("_PartialResultSummary", model);
         }
 
