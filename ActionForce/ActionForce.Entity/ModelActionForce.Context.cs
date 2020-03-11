@@ -301,6 +301,7 @@ namespace ActionForce.Entity
         public virtual DbSet<VMall> VMall { get; set; }
         public virtual DbSet<Mall> Mall { get; set; }
         public virtual DbSet<County> County { get; set; }
+        public virtual DbSet<VTicketSaleRowCheck> VTicketSaleRowCheck { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

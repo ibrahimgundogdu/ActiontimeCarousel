@@ -299,6 +299,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VMall" Width="1.5" PointX="49.375" PointY="59.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Mall" Width="1.5" PointX="59.375" PointY="16.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.County" Width="1.5" PointX="51.375" PointY="59.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowCheck" Width="1.5" PointX="53.375" PointY="59.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

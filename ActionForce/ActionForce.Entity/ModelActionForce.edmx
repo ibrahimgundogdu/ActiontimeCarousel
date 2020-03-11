@@ -5821,6 +5821,36 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketPromotion' does not 
           <Property Name="ProductDescription" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleRowCheck' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VTicketSaleRowCheck">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="IsBlocked" />
+            <PropertyRef Name="TicketNumber" />
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="TicketTypeID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="OrderID" Type="bigint" Nullable="false" />
+          <Property Name="OrderNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="SaleDate" Type="date" />
+          <Property Name="StatusID" Type="int" />
+          <Property Name="Status" Type="int" Nullable="false" />
+          <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="LocationIDCode" Type="nvarchar" MaxLength="4" />
+          <Property Name="IsBlocked" Type="bit" Nullable="false" />
+          <Property Name="TicketNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="LocationID" Type="int" Nullable="false" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
+          <Property Name="TicketNumberMasked" Type="nvarchar" MaxLength="18" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+          <Property Name="TicketTypeID" Type="int" Nullable="false" />
+          <Property Name="TicketTypeName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="WeekList">
           <Key>
@@ -8572,6 +8602,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketPromotion].[ProductDescription] AS [ProductDescription]
     FROM [dbo].[VTicketPromotion] AS [VTicketPromotion]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VTicketSaleRowCheck" EntityType="Self.VTicketSaleRowCheck" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VTicketSaleRowCheck].[ID] AS [ID], 
+    [VTicketSaleRowCheck].[OrderID] AS [OrderID], 
+    [VTicketSaleRowCheck].[OrderNumber] AS [OrderNumber], 
+    [VTicketSaleRowCheck].[SaleDate] AS [SaleDate], 
+    [VTicketSaleRowCheck].[StatusID] AS [StatusID], 
+    [VTicketSaleRowCheck].[Status] AS [Status], 
+    [VTicketSaleRowCheck].[UID] AS [UID], 
+    [VTicketSaleRowCheck].[LocationIDCode] AS [LocationIDCode], 
+    [VTicketSaleRowCheck].[IsBlocked] AS [IsBlocked], 
+    [VTicketSaleRowCheck].[TicketNumber] AS [TicketNumber], 
+    [VTicketSaleRowCheck].[LocationID] AS [LocationID], 
+    [VTicketSaleRowCheck].[IsActive] AS [IsActive], 
+    [VTicketSaleRowCheck].[StatusName] AS [StatusName], 
+    [VTicketSaleRowCheck].[TicketNumberMasked] AS [TicketNumberMasked], 
+    [VTicketSaleRowCheck].[LocationFullName] AS [LocationFullName], 
+    [VTicketSaleRowCheck].[TicketTypeID] AS [TicketTypeID], 
+    [VTicketSaleRowCheck].[TicketTypeName] AS [TicketTypeName]
+    FROM [dbo].[VTicketSaleRowCheck] AS [VTicketSaleRowCheck]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="WeekList" EntityType="Self.WeekList" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [WeekList].[Id] AS [Id], 
@@ -9284,6 +9335,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VMall" EntityType="db293_ActionTimeDbModel.VMall" />
           <EntitySet Name="Mall" EntityType="db293_ActionTimeDbModel.Mall" />
           <EntitySet Name="County" EntityType="db293_ActionTimeDbModel.County" />
+          <EntitySet Name="VTicketSaleRowCheck" EntityType="db293_ActionTimeDbModel.VTicketSaleRowCheck" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -15628,6 +15680,34 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SortBy" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
+        <EntityType Name="VTicketSaleRowCheck">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="OrderID" />
+            <PropertyRef Name="Status" />
+            <PropertyRef Name="IsBlocked" />
+            <PropertyRef Name="TicketNumber" />
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="TicketTypeID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="OrderID" Type="Int64" Nullable="false" />
+          <Property Name="OrderNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SaleDate" Type="DateTime" Precision="0" />
+          <Property Name="StatusID" Type="Int32" />
+          <Property Name="Status" Type="Int32" Nullable="false" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="LocationIDCode" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="IsBlocked" Type="Boolean" Nullable="false" />
+          <Property Name="TicketNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TicketNumberMasked" Type="String" MaxLength="18" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="TicketTypeID" Type="Int32" Nullable="false" />
+          <Property Name="TicketTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -21746,6 +21826,29 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="CityID" ColumnName="CityID" />
                 <ScalarProperty Name="StateID" ColumnName="StateID" />
                 <ScalarProperty Name="CountryID" ColumnName="CountryID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VTicketSaleRowCheck">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketSaleRowCheck">
+              <MappingFragment StoreEntitySet="VTicketSaleRowCheck">
+                <ScalarProperty Name="TicketTypeName" ColumnName="TicketTypeName" />
+                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="TicketNumberMasked" ColumnName="TicketNumberMasked" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="TicketNumber" ColumnName="TicketNumber" />
+                <ScalarProperty Name="IsBlocked" ColumnName="IsBlocked" />
+                <ScalarProperty Name="LocationIDCode" ColumnName="LocationIDCode" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+                <ScalarProperty Name="SaleDate" ColumnName="SaleDate" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

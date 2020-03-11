@@ -14,7 +14,7 @@ namespace ActionForce.Office.Controllers
         {
             MallControlModel model = new MallControlModel();
 
-            model.MallList = Db.VMall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();           
+            model.MallList = Db.VMall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.RelatedCountry = Db.Country.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.StateList = Db.State.Where(x => x.CountryID == model.RelatedCountry.ID).ToList();
             model.CityList = Db.City.Where(x => x.CountryID == model.RelatedCountry.ID).ToList();
@@ -81,19 +81,19 @@ namespace ActionForce.Office.Controllers
 
             bool? isActive = getModel.IsActive == 0 ? false : getModel.IsActive == 1 ? true : (bool?)null;
 
-            if (isActive!=null)
+            if (isActive != null)
             {
                 model.MallList = model.MallList.Where(x => x.IsActive == isActive.Value).ToList();
             }
 
-            return PartialView("_PartialMallList",model);
+            return PartialView("_PartialMallList", model);
         }
 
         [AllowAnonymous]
         public ActionResult Add()
         {
             MallControlModel model = new MallControlModel();
-            model.ExistingCities= Db.VCity.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.ExistingCities = Db.VCity.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.OurCompanyList = Db.OurCompany.Where(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.MallSegmentList = Db.MallSegment.ToList();
             model.RelatedCountry = Db.Country.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID);
@@ -112,7 +112,7 @@ namespace ActionForce.Office.Controllers
             Guid mallUID = Guid.Empty;
             var isMall = Db.Mall.FirstOrDefault(x => x.FullName.Trim().ToUpper() == mall.FullName.Trim().ToUpper());
 
-            if (mall!=null)
+            if (mall != null)
             {
                 try
                 {
@@ -132,6 +132,20 @@ namespace ActionForce.Office.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult GetCountyList(int? id)
+        {
+            MallControlModel model = new MallControlModel();
+            model.Result = new Result();
+
+            List<SelectListItem> countylist = new List<SelectListItem>();
+
+            countylist = Db.County.Where(x => x.CityID == id).Select(x => new SelectListItem() { Value = x.ID.ToString(), Text = x.CountyName }).ToList();
+
+            return Json(countylist, JsonRequestBehavior.AllowGet);
         }
     }
 }

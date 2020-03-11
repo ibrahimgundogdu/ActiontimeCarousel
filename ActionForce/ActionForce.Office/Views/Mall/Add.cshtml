@@ -110,7 +110,7 @@
 
                                                         foreach (var item in Model.StateList)
                                                         {
-                                                            <option value="@(item.StateName)" @(Model?.CheckMall?.State == item.ID ? "selected" : "")>@(item.StateName)</option>
+                                                            <option value="@(item.ID)" @(Model?.CheckMall?.State == item.ID ? "selected" : "")>@(item.StateName)</option>
                                                         }
                                                     }
                                                 </select>
@@ -128,7 +128,25 @@
 
                                                         foreach (var item in Model.CityList)
                                                         {
-                                                            <option value="@(item.CityName)" @(Model?.CheckMall?.City == item.ID ? "selected" : "")>@(item.CityName)</option>
+                                                            <option value="@(item.ID)" @(Model?.CheckMall?.City == item.ID ? "selected" : "")>@(item.CityName)</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="mallCity" class="col-sm-3 col-form-label">İlçe</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="mallCountyID" name="MallCountyID" required="">
+                                                    @if (Model?.CountyList?.Count > 0)
+                                                    {
+                                                        <option value="">İlçe Seçiniz</option>
+
+                                                        foreach (var item in Model.CountyList)
+                                                        {
+                                                            <option value="@(item.ID)" @(Model?.CheckMall?.County == item.ID ? "selected" : "")>@(item.CountyName)</option>
                                                         }
                                                     }
                                                 </select>
@@ -146,3 +164,50 @@
         </div>
     </div>
 </div>
+@section scripts {
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#mallCityID").change(function () {
+
+                var cityID = $("#mallCityID").val();
+                console.log(cityID);
+                $.ajax
+                    ({
+                        url: '/Mall/GetCountyList',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            id: cityID,
+                        }),
+                        success: function (data) {
+
+                            $("#mallCountyID").empty();
+                            $("#mallCountyID").append($('<option></option>', { "value": "", "text": "İlçe Seçiminiz" }));
+                            $.each(data, function (index, label) {
+                                $("#mallCountyID").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+                        },
+                        error: function () {
+                        },
+                    });
+
+            });
+        });
+    </script>
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}
