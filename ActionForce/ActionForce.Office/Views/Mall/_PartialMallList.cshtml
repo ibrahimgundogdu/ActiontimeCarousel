@@ -10,24 +10,46 @@
             <th>AVM Segmenti</th>
             <th>Fiziki Durumu</th>
             <th class="text-center">Aktif mi?</th>
+            <th class="text-center">Düzenle</th>
+            <th class="text-center">Sil</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model.MallList)
         {
-        <tr style='@(item.IsActive == false ? "color: red" : "")'>
-            <td><span class="@(item.IsActive == true ? "tx-success":"tx-danger")">&#8226;</span></td>
-            <td class="tx-sm-13 bold"><a href="">@($"{item.FullName}")</a></td>
-            <td class="tx-sm-13">@item.CountryName</td>
-            <td class="tx-sm-13">@item.StateName</td>
-            <td class="tx-sm-13">@item.CityName</td>
-            <td class="tx-sm-13">@item.Segment</td>
-            <td class="tx-sm-13">@item.StructuralCondition</td>
-            <td class="tx-sm-13 text-center">
-                @Html.Raw(item.IsActive.Value == true ? "<i class='ion ion-md-checkmark-circle text-success'></i>" : "<i class='ion ion-md-close-circle'></i>")
-            </td>
-        </tr>
+            <tr style='@(item.IsActive == false ? "color: red" : "")'>
+                <td><span class="@(item.IsActive == true ? "tx-success":"tx-danger")">&#8226;</span></td>
+                <td class="tx-sm-13 bold"><a href="">@($"{item.FullName}")</a></td>
+                <td class="tx-sm-13">@item.CountryName</td>
+                <td class="tx-sm-13">@item.StateName</td>
+                <td class="tx-sm-13">@item.CityName</td>
+                <td class="tx-sm-13">@item.SegmentName</td>
+                <td class="tx-sm-13">@item.StructuralCondition</td>
+                <td class="tx-sm-13 text-center">
+                    @Html.Raw(item.IsActive.Value == true ? "<i class='ion ion-md-checkmark-circle text-success'></i>" : "<i class='ion ion-md-close-circle'></i>")
+                </td>
+                <td class="tx-sm-13 text-center"><a href="#modelLocationPriceCategoryEdit" data-toggle="modal" class="text-primary" onclick="EditPriceCat(@(item.ID));"><i class="wd-15" data-feather="edit"></i></a></td>
+                <td class="tx-sm-13 text-center"><a href="javascript:void(0)" data-toggle="modal" class="text-danger" onclick="return confirm('Silmek istediğinize emin misiniz ?') ? DeletePriceCat(@item.ID):false;"><i class="wd-15" data-feather="trash"></i></a></td>
+            </tr>
         }
     </tbody>
 </table>
-+
+
+<script>
+    $(function () {
+        feather.replace();
+    });
+</script>
+@if (Model.Result != null) //
+{
+    <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+    </script>
+}

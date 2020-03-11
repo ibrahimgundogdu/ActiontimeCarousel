@@ -2343,6 +2343,7 @@
     <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\CounterModel.cs" />
     <Compile Include="Models\FormModels\FormLocation.cs" />
+    <Compile Include="Models\FormModels\FormMall.cs" />
     <Compile Include="Models\FormModels\FormPrice.cs" />
     <Compile Include="Models\FormModels\FormPriceCategory.cs" />
     <Compile Include="Models\FormModels\FormTicketProduct.cs" />
@@ -2722,6 +2723,7 @@
     <Content Include="Views\Mall\Index.cshtml" />
     <Content Include="Views\Mall\_PartialMallList.cshtml" />
     <Content Include="Views\Location\_PartialLocationLogList.cshtml" />
+    <Content Include="Views\Mall\Add.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
