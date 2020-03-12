@@ -150,5 +150,19 @@ namespace ActionForce.Location.Controllers
 
             return PartialView("_PartialBasketTotal", model);
         }
+
+        [AllowAnonymous]
+        public PartialViewResult ReadTicketDetail(string qcode)
+        {
+            DefaultControlModel model = new DefaultControlModel();
+
+            if (!string.IsNullOrEmpty(qcode))
+            {
+                model.TicketInfo = LocationHelper.GetScannedTicketInfo(qcode);
+            }
+
+
+            return PartialView("_PartialBasketItemDetail", model);
+        }
     }
 }

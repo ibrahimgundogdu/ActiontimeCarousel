@@ -162,54 +162,12 @@
                     </div>
                 </div>
 
-
-                @*<div id="ReadTicketDetail">
-                    <div class="form-group row mb-1 bg-light--lt">
-                        <label class="col-sm-3 pt-1">Bilet Numarası</label>
-                        <label class="col-sm-9 pt-1">@(Model.BasketItem.TicketTypeName)</label>
-                    </div>
-                    <div class="form-group row mb-1 bg-light--lt">
-                        <label class="col-sm-3 pt-1">Bilet Adı</label>
-                        <label class="col-sm-9 pt-1">@(Model.BasketItem.ProductName)</label>
-                    </div>
-                    <div class="form-group row mb-1 bg-light--lt">
-                        <label class="col-sm-3 pt-1">Fiyat Kategorisi</label>
-                        <label class="col-sm-9 pt-1">@(Model.BasketItem.CategoryName)</label>
-                    </div>
-                    <div class="form-group row mb-1 bg-light--lt">
-                        <label class="col-sm-3 pt-1">Süresi</label>
-                        <label class="col-sm-9 pt-1">@(Model.BasketItem.Unit) Dk.</label>
-                    </div>
-                    <div class="form-group row mb-1 bg-light--lt">
-                        <label class="col-sm-3 pt-1">Fiyatı</label>
-                        <label class="col-sm-9 pt-1">@(Model.BasketItem.Price.ToString("N2")) @(Model.BasketItem.Money)</label>
-                    </div>
-                    <div class="form-group row mb-1 bg-light--lt">
-                        <label class="col-sm-3 pt-1">İskonto</label>
-                        <label class="col-sm-9 pt-1">@(Model.BasketItem.Discount?.ToString("N2")) @(Model.BasketItem.Money)</label>
-                    </div>
-                    <div class="form-group row mb-1 bg-light--lt">
-                        <label class="col-sm-3 pt-1">Vergi (%@(Model.BasketItem.TaxRate))</label>
-                        <label class="col-sm-9 pt-1">@(Model.BasketItem.Tax?.ToString("N2")) @(Model.BasketItem.Money)</label>
-                    </div>
-                    <div class="form-group row mb-1 bg-light--lt">
-                        <label class="col-sm-3 pt-1">Promosyon Biletmi</label>
-                        <label class="col-sm-9 pt-1">@(Model.BasketItem.PromotionID > 0 ? "Evet Promosyon" : "Hayır")</label>
-                    </div>
-                    <div class="form-group row mb-1 bg-light--lt">
-                        <label class="col-sm-3 pt-1">Kullanım Durumu</label>
-                        <label class="col-sm-9 pt-1">@(Model.BasketItem.UseImmediately == true ? "Hemen Kullanılacak" : "Daha Sonra Kullanılacak")</label>
-                    </div>
-                    <div class="form-group row mb-1 bg-light--lt">
-                        <label class="col-sm-3 pt-1">Açıklama</label>
-                        <label class="col-sm-9 pt-1">@(Model.BasketItem.Description)</label>
-                    </div>
-                </div>*@
-
-                <button type="submit" class="btn btn-primary btn-md btn-block mb-4">Bileti Ekle</button>
+                <div id="ReadTicketDetail">
+                   
+                </div>
 
             </div>
-           
+
         </div>
     </div>
 </div>
@@ -229,8 +187,22 @@
         }
 
         function barcodeScanned(barcodeValue) {
+
             $("#InputTicketNumber").val(barcodeValue);
+
+            GetReadTicketDetail(qcode);
+
         }
+
+        function GetReadTicketDetail(qcode) {
+            $.ajax({
+                method: "GET",
+                url: "/Default/ReadTicketDetail",
+                data: { qcode: qcode }
+            }).done(function (d) {
+                $("#ReadTicketDetail").html(d);
+            });
+        };
 
         function OnItemEditSuccess(data) {
             $('#BasketItemDetail').modal('hide');
