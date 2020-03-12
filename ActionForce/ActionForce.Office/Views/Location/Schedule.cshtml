@@ -25,33 +25,8 @@
                 </div>
             </div>
             <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
-                @*<div class="profile-update-option bg-white ht-50 bd d-flex justify-content-end mg-b-20 mg-lg-b-20 rounded">
-            <div class="d-flex align-items-center pd-x-5 mg-r-auto">
-
-            </div>
-            <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                <a href="#" id="EmployeeScheduleDate" class="link-03" title="Tarih Seç">
-                    <i class="fa fa-calendar"></i>
-                    <input type="hidden" id="DatePicker" />
-                    <div></div>
-                </a>
-                <input id="EmployeeID" type="hidden" value="@Model.LocationModel.LocationID" />
-                <input id="WeekCode" type="hidden" value="@Model.WeekCode" />
-            </div>
-            <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                <a href="/Employee/Schedule?week=@(Model.PrevWeekCode)&id=@(Model.LocationModel.LocationUID)" class="link-03" title="Bir Önceki Hafta"><i class="fa fa-arrow-left"></i></a>
-            </div>
-            <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                <a href="/Employee/Schedule?date=@(DateTime.Now.ToString("yyyy-MM-dd"))&id=@(Model.LocationModel.LocationUID)" class="link-03" title="Bu Hafta"><i class="fa fa-bullseye"></i></a>
-            </div>
-            <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                <a href="/Employee/Schedule?week=@(Model.NextWeekCode)&id=@(Model.LocationModel.LocationUID)" class="link-03" title="Bir Sonraki Hafta"><i class="fa fa-arrow-right"></i></a>
-            </div>
-
-        </div>*@
                 <div class="profile-update-option bg-light ht-50 bd d-flex justify-content-end mg-b-20 mg-lg-b-20 rounded">
                     <div class="d-flex align-items-center pd-x-5 mg-r-auto">
-                        0
                     </div>
                     <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
                         <a href="#" id="LocationResultDate" class="link-03" title="Tarih Seç">
@@ -73,60 +48,17 @@
 
                 </div>
                 <div class="card mg-b-20 mg-lg-b-25">
-                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                    @*<div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                         <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.WeekCode). Hafta</h6>
                         <nav class="nav">
                             <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.FirstWeekDay.DateKey.ToLongDateString())</span> <i data-feather="more-horizontal"></i> @(Model.LastWeekDay.DateKey.ToLongDateString())</a>
                         </nav>
-                    </div>
+                    </div>*@
                     <div class="card-body pd-0">
+                        @{Html.RenderPartial("_PartialScheduleLocation", Model);}
                     </div>
-
                 </div>
             </div>
-
-
-
-            @*<div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
-                    <div class="profile-update-option bg-white ht-50 bd d-flex justify-content-end mg-b-20 mg-lg-b-20 rounded">
-                        <div class="d-flex align-items-center pd-x-5 mg-r-auto">
-
-
-                            <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                                <a href="#" id="EmployeeScheduleDate" class="link-03" title="Tarih Seç">
-                                    <i class="fa fa-calendar"></i>
-                                    <input type="hidden" id="DatePicker" />
-                                    <div></div>
-                                </a>
-                                <input id="LocationID" type="hidden" value="@Model.LocationModel.LocationID" />
-                                <input id="WeekCode" type="hidden" value="@Model.WeekCode" />
-                            </div>
-                            <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                                <a href="/Employee/Schedule?week=@(Model.PrevWeekCode)&id=@(Model.LocationModel.LocationUID)" class="link-03" title="Bir Önceki Hafta"><i class="fa fa-arrow-left"></i></a>
-                            </div>
-                            <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                                <a href="/Employee/Schedule?date=@(DateTime.Now.ToString("yyyy-MM-dd"))&id=@(Model.LocationModel.LocationUID)" class="link-03" title="Bu Hafta"><i class="fa fa-bullseye"></i></a>
-                            </div>
-                            <div class="wd-50 bd-l d-flex align-items-center justify-content-center">
-                                <a href="/Employee/Schedule?week=@(Model.NextWeekCode)&id=@(Model.LocationModel.LocationUID)" class="link-03" title="Bir Sonraki Hafta"><i class="fa fa-arrow-right"></i></a>
-                            </div>
-
-                        </div>
-                        <div class="card mg-b-20 mg-lg-b-25">
-                            <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                                <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.WeekCode). Hafta</h6>
-                                <nav class="nav">
-                                    <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.FirstWeekDay.DateKey.ToLongDateString())</span> <i data-feather="more-horizontal"></i> @(Model.LastWeekDay.DateKey.ToLongDateString())</a>
-                                </nav>
-                            </div>
-                            <div class="card-body pd-0">
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                </div>*@
         </div>
     </div>
 </div>
@@ -145,7 +77,7 @@
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1,
                 onSelect: function (dateText, inst) {
-                    window.location.href = "/Result/Envelope?date=" + dateText;
+                    window.location.href = "/Location/Schedule?date=" + dateText+"&id=@(Model.LocationModel.LocationUID)";
                 },
                 beforeShow: function (event, ui) {
                     var $link = $("#LocationResultDate");
@@ -162,10 +94,5 @@
 
 
         });
-
-        function RemoveDayResult(id, date) {
-            window.location.href = "/Result/ResetEnvelope?LocationID=" + id + "&Date=" + date;
-        }
-
     </script>
 }

@@ -56,5 +56,6 @@ namespace ActionForce.Entity
         public Nullable<int> StateID { get; set; }
         public Nullable<int> CityID { get; set; }
         public Nullable<int> CountyID { get; set; }
+        public string CompanyFullName { get; set; }
     }
 }

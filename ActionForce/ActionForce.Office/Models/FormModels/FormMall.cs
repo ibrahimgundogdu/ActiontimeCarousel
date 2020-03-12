@@ -42,4 +42,34 @@ namespace ActionForce.Office
         public Nullable<int> Timezone { get; set; }
         public bool IsActive { get; set; }
     }
+
+    public class FormMallContact
+    {
+        public int ID { get; set; }
+        public string Title { get; set; }
+        public string FullName { get; set; }
+        public string PhoneCode { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public bool IsMaster { get; set; }
+        public bool IsActive { get; set; }
+    }
+
+    public class FormMallLocationContract
+    {
+        public int ID { get; set; }
+        public int MallID { get; set; }
+        public int LocationID { get; set; }
+        public string LocationDescription { get; set; }
+        public decimal RentAmount { get; set; }
+        public string Currency { get; set; }
+        public decimal CommonExpenseAmount { get; set; }
+        public decimal GuaranteeAmount { get; set; }
+        public decimal StampDutyAmount { get; set; }
+        public string ContractDuration { get; set; }
+        public DateTime ContractDateBegin { get; set; }
+        public DateTime ContractDateEnd { get; set; }
+        public string ContractFile { get; set; }
+        public bool IsActive { get; set; }
+    }
 }

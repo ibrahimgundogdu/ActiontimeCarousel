@@ -672,13 +672,15 @@ namespace ActionForce.Office.Controllers
                 {
                     try
                     {
+                        var getLocation = Db.Location.FirstOrDefault(x => x.LocationID == getModel.LocationID);
+                        DateTime daterecord = DateTime.UtcNow.AddHours(getLocation?.Timezone ?? (model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 0));
                         #region AddModel
                         LocationPriceCategory locationPriceCategory = new LocationPriceCategory()
                         {
                             LocationID = getModel.LocationID,
                             PriceCategoryID = getModel.PriceCategoryID,
                             StartDate = getModel.StartDate,
-                            RecordDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 0),
+                            RecordDate = daterecord,
                             RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
                             RecordIP = OfficeHelper.GetIPAddress()
                         };
@@ -723,7 +725,9 @@ namespace ActionForce.Office.Controllers
             {
                 if (getModel.LocationID > 0)
                 {
-                    DateTime daterecord = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value);
+                    var getLocation = Db.Location.FirstOrDefault(x => x.LocationID == getModel.LocationID);
+                    DateTime daterecord = DateTime.UtcNow.AddHours(getLocation?.Timezone ?? (model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 0));
+                    
                     var isLocationPrice = Db.LocationPriceCategory.FirstOrDefault(x => x.ID == getModel.ID);
 
                     if (isLocationPrice != null)
@@ -751,7 +755,7 @@ namespace ActionForce.Office.Controllers
                                     isLocationPrice.LocationID = getModel.LocationID;
                                     isLocationPrice.PriceCategoryID = getModel.PriceCategoryID;
                                     isLocationPrice.StartDate = getModel.StartDate;
-                                    isLocationPrice.UpdateDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 0);
+                                    isLocationPrice.UpdateDate = daterecord;
                                     isLocationPrice.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                                     isLocationPrice.UpdateIP = OfficeHelper.GetIPAddress();
                                     #endregion
@@ -766,7 +770,7 @@ namespace ActionForce.Office.Controllers
                                     #endregion
                                     #region AddLog
                                     var isequal = OfficeHelper.PublicInstancePropertiesEqual<LocationPriceCategory>(self, isLocationPrice, OfficeHelper.getIgnorelist());
-                                    OfficeHelper.AddApplicationLog("Office", "LocationPriceCategory", "Update", isLocationPrice.LocationID.ToString(), "Location", "UpdatePriceCat", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 0), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                                    OfficeHelper.AddApplicationLog("Office", "LocationPriceCategory", "Update", isLocationPrice.LocationID.ToString(), "Location", "UpdatePriceCat", isequal, true, $"{model.Result.Message}", string.Empty, daterecord, model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                                     #endregion
                                 }
                                 catch (Exception ex)
@@ -812,12 +816,16 @@ namespace ActionForce.Office.Controllers
 
                     if (isLocationPriceCategory != null)
                     {
+
+                        var getLocation = Db.Location.FirstOrDefault(x => x.LocationID == isLocationPriceCategory.LocationID);
+                        DateTime daterecord = DateTime.UtcNow.AddHours(getLocation?.Timezone ?? (model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 0));
+
                         #region ResultMessage
                         model.Result.IsSuccess = true;
                         model.Result.Message = $"Lokasyon fiyat kategorisi silindi.";
                         #endregion
                         #region AddLog
-                        OfficeHelper.AddApplicationLog("Office", "LocationPriceCategory", "Delete", isLocationPriceCategory.LocationID.ToString(), "Location", "DeletePriceCat", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 0), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isLocationPriceCategory);
+                        OfficeHelper.AddApplicationLog("Office", "LocationPriceCategory", "Delete", isLocationPriceCategory.LocationID.ToString(), "Location", "DeletePriceCat", null, true, $"{model.Result.Message}", string.Empty, daterecord, model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isLocationPriceCategory);
                         #endregion
 
                         Db.LocationPriceCategory.Remove(isLocationPriceCategory);
@@ -843,7 +851,7 @@ namespace ActionForce.Office.Controllers
         #endregion
         #region Schedule
         [AllowAnonymous]
-        public ActionResult Schedule(Guid? id, string week)
+        public ActionResult Schedule(Guid? id, string week, string date)
         {
             LocationControlModel model = new LocationControlModel();
 
@@ -853,7 +861,7 @@ namespace ActionForce.Office.Controllers
             }
 
             #region WeekDate
-            var _date = DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).Date;
+            var _date = model?.LocationModel?.LocalDate ?? DateTime.Now.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 0).Date;
             var datekey = Db.DateList.FirstOrDefault(x => x.DateKey == _date);
 
             if (!string.IsNullOrEmpty(week))
@@ -862,6 +870,16 @@ namespace ActionForce.Office.Controllers
                 int _year = Convert.ToInt32(weekparts[0]);
                 int _week = Convert.ToInt32(weekparts[1]);
                 datekey = Db.DateList.Where(x => x.WeekYear == _year && x.WeekNumber == _week).OrderBy(x => x.DateKey).FirstOrDefault();
+            }
+
+            if (!string.IsNullOrEmpty(date))
+            {
+                var weekparts = date.Split('-');
+                if (weekparts.Count() > 2)
+                {
+                    var getWeekDate = Convert.ToDateTime(date);
+                    datekey = Db.DateList.FirstOrDefault(x => x.DateKey == getWeekDate);
+                }
             }
 
             string weekcode = $"{datekey.WeekYear}-{datekey.WeekNumber}";
@@ -901,11 +919,11 @@ namespace ActionForce.Office.Controllers
             model.StatusIcon = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "clock" : (model.LocationModel.Status == 1 ? "sun" : (model.LocationModel.Status == 2 ? "moon" : "moon"))) : "moon");
             #endregion
             #region ScheduleLocation
-            model.WeekCode = model.LocationModel.WeekKey.Trim();
+            //model.WeekCode = model.LocationModel.WeekKey.Trim();
             model.LocationScheduleList = Db.VLocationSchedule.Where(x => x.WeekCode.Trim() == model.WeekCode && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID).ToList();
             #endregion
             #region ShiftLocation
-            model.WeekList = Db.DateList.Where(x => x.WeekKey == model.LocationModel.WeekKey).ToList();
+            //model.WeekList = Db.DateList.Where(x => x.WeekKey == model.LocationModel.WeekKey).ToList();
             model.LocationShiftList = Db.VLocationShift.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID && x.WeekKey == model.LocationModel.WeekKey).ToList();
             #endregion
 

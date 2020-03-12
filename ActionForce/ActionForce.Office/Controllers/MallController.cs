@@ -17,7 +17,7 @@ namespace ActionForce.Office.Controllers
             model.MallList = Db.VMall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.RelatedCountry = Db.Country.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.StateList = Db.State.Where(x => x.CountryID == model.RelatedCountry.ID).ToList();
-            model.CityList = Db.City.Where(x => x.CountryID == model.RelatedCountry.ID).ToList();
+            model.CityList = Db.VCity.Where(x => x.CountryID == model.RelatedCountry.ID).ToList();
 
             if (TempData["MallFilter"] != null)
             {
@@ -93,13 +93,15 @@ namespace ActionForce.Office.Controllers
         public ActionResult Add()
         {
             MallControlModel model = new MallControlModel();
-            model.ExistingCities = Db.VCity.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.OurCompanyList = Db.OurCompany.Where(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.MallSegmentList = Db.MallSegment.ToList();
             model.RelatedCountry = Db.Country.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.StateList = Db.State.Where(x => x.CountryID == model.RelatedCountry.ID).ToList();
-            model.CityList = Db.City.Where(x => x.CountryID == model.RelatedCountry.ID).ToList();
+            model.CityList = Db.VCity.Where(x => x.CountryID == model.RelatedCountry.ID).ToList();
             model.CountyList = Db.County.ToList();
+            model.InvestorCompanyList = Db.Company.Where(x => x.CategoryID == 2).ToList();
+            model.LeasingCompanyList = Db.Company.Where(x => x.CategoryID == 3).ToList();
+
             return View(model);
         }
 
@@ -138,14 +140,22 @@ namespace ActionForce.Office.Controllers
         [HttpPost]
         public ActionResult GetCountyList(int? id)
         {
-            MallControlModel model = new MallControlModel();
-            model.Result = new Result();
-
             List<SelectListItem> countylist = new List<SelectListItem>();
 
             countylist = Db.County.Where(x => x.CityID == id).Select(x => new SelectListItem() { Value = x.ID.ToString(), Text = x.CountyName }).ToList();
 
             return Json(countylist, JsonRequestBehavior.AllowGet);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult GetCityList(int? id)
+        {
+            List<SelectListItem> citylist = new List<SelectListItem>();
+
+            citylist = Db.City.Where(x => x.StateID == id).Select(x => new SelectListItem() { Value = x.ID.ToString(), Text = x.CityName }).ToList();
+
+            return Json(citylist, JsonRequestBehavior.AllowGet);
         }
     }
 }
