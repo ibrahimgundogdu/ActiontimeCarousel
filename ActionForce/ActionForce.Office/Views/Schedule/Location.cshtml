@@ -7,14 +7,17 @@
     <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
 }
 
-    <div class="content-header">
-        <div class="content-search">
-            <span class="tx-20">Lokasyon Mesai Takvimleri</span>
-        </div>
-        <nav class="nav">
-            @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
-        </nav>
-    </div><!-- content-header -->
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">Lokasyon Mesai Takvimleri</span>
+        <input type="hidden" id="CurrentLocationID" value="@(Model.LocationID)" />
+        <input type="hidden" id="CurrentWeekCode" value="@(Model.WeekCode)" />
+
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div><!-- content-header -->
 <div class="content-body">
     <div class="pd-x-0 tx-13">
         <div class="media d-block d-lg-flex">
@@ -168,8 +171,35 @@
             $('.shifttime').mask('00:00');
             $('.shiftdate').mask('0000-00-00');
 
+            var _locationid = $('#CurrentLocationID').val();
+            var locationid = parseInt(_locationid);
 
+            var weekcode = $('#CurrentWeekCode').val();
 
+            if (locationid != null && locationid > 0) {
+
+                console.log(locationid);
+                console.log(weekcode);
+
+                $('#modalLocationSchedule').modal('show');
+                AddLocationSchedule(locationid, weekcode);
+
+            }
+
+            //if (window.location.href.indexOf("?") > -1) {
+
+            //var url = window.location.href;
+            //var vars = {};
+            //var hashes = url.split("?")[1];
+            //var hash = hashes.split('&');
+            //var params;
+
+            //for (var i = 0; i < hash.length; i++) {
+            //    params = hash[i].split("=");
+            //    vars[params[0]] = params[1];
+            //}
+
+            //}
         });
 
 

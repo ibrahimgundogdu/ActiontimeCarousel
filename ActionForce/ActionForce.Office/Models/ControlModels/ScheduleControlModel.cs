@@ -38,6 +38,7 @@ namespace ActionForce.Office
         public string WeekCode { get; set; }
         public string NextWeekCode { get; set; }
         public string PrevWeekCode { get; set; }
+        public int? LocationID { get; set; }
 
         public int SuccessCount { get; set; }
         public int WaitingCount { get; set; }

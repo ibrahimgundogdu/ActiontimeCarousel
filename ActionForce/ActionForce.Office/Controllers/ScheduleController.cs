@@ -60,7 +60,7 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Index", "Schedule");
         }
 
-        public ActionResult Location(string week, string date)
+        public ActionResult Location(string week, string date, int? id)
         {
             ScheduleControlModel model = new ScheduleControlModel();
 
@@ -90,6 +90,10 @@ namespace ActionForce.Office.Controllers
             var weekdatekeys = Db.DateList.Where(x => x.WeekYear == datekey.WeekYear && x.WeekNumber == datekey.WeekNumber).ToList();
 
             model.WeekCode = weekcode;
+            if (id > 0)
+            {
+                model.LocationID = id;
+            }
 
             model.CurrentDate = datekey;
             model.WeekList = weekdatekeys;
@@ -242,7 +246,7 @@ namespace ActionForce.Office.Controllers
                         result.Message += $"{locschedule.LocationID} ID li lokasyonun {locschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi güncellendi.";
 
                         var isequal = OfficeHelper.PublicInstancePropertiesEqual<LocationSchedule>(self, locschedule, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Schedule", "Update", locschedule.ID.ToString(), "Schedule", "AddUpdateLocationSchedule", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty,null);
+                        OfficeHelper.AddApplicationLog("Office", "Schedule", "Update", locschedule.ID.ToString(), "Schedule", "AddUpdateLocationSchedule", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
 
                     }
@@ -257,7 +261,7 @@ namespace ActionForce.Office.Controllers
                         Db.LocationSchedule.Remove(locschedule);
                         Db.SaveChanges();
 
-                        
+
                     }
                 }
                 else
@@ -392,7 +396,7 @@ namespace ActionForce.Office.Controllers
             model.EmployeeSchedule = Db.VSchedule.Where(x => x.WeekCode.Trim() == weekcode && x.LocationID == model.CurrentLocation.LocationID).ToList();
 
             List<int> employeeids = model.EmployeeSchedule.Select(x => x.EmployeeID.Value).Distinct().ToList();
-            List<int> employeeids2 = Db.EmployeeLocation.Where(x => x.LocationID == model.CurrentLocation.LocationID && x.IsActive == true && x.Employee.IsActive == true).Select(x=> x.EmployeeID).Distinct().ToList();
+            List<int> employeeids2 = Db.EmployeeLocation.Where(x => x.LocationID == model.CurrentLocation.LocationID && x.IsActive == true && x.Employee.IsActive == true).Select(x => x.EmployeeID).Distinct().ToList();
 
             employeeids.AddRange(employeeids2);
             employeeids = employeeids.Distinct().ToList();
@@ -521,7 +525,7 @@ namespace ActionForce.Office.Controllers
                         result.Message += $"{empschedule.EmployeeID} ID li çalışanın {empschedule.LocationID} ID li lokasyonda {empschedule.ShiftDate.Value.ToShortDateString()} tarihli takvimi güncellendi.";
 
                         var isequal = OfficeHelper.PublicInstancePropertiesEqual<Schedule>(self, empschedule, OfficeHelper.getIgnorelist());
-                        OfficeHelper.AddApplicationLog("Office", "Schedule", "Update", empschedule.Id.ToString(), "Schedule", "AddUpdateEmployeeSchedule", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty,null);
+                        OfficeHelper.AddApplicationLog("Office", "Schedule", "Update", empschedule.Id.ToString(), "Schedule", "AddUpdateEmployeeSchedule", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
                     }
                     else
@@ -647,7 +651,7 @@ namespace ActionForce.Office.Controllers
 
             Response.ClearContent();
             Response.Buffer = true;
-            Response.AddHeader("content-disposition", "attachment; filename="+ fileName + ".xls");
+            Response.AddHeader("content-disposition", "attachment; filename=" + fileName + ".xls");
             Response.ContentType = "application/ms-excel";
             Response.ContentEncoding = System.Text.Encoding.Unicode;
             Response.BinaryWrite(System.Text.Encoding.Unicode.GetPreamble());
@@ -672,8 +676,8 @@ namespace ActionForce.Office.Controllers
 
             string weekkey = $"{Year}-{WeekNumber}";
 
-            return RedirectToAction("Location","Schedule",new { week = weekkey });
+            return RedirectToAction("Location", "Schedule", new { week = weekkey });
         }
-        
+
     }
 }
