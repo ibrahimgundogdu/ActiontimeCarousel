@@ -6,7 +6,7 @@ using System.Web;
 
 namespace ActionForce.Office
 {
-    public class MallControlModel:LayoutControlModel
+    public class MallControlModel : LayoutControlModel
     {
         public List<VMall> MallList { get; set; }
         public List<MallLocationContract> LocationContracts { get; set; }
@@ -18,10 +18,11 @@ namespace ActionForce.Office
         public List<Company> LeasingCompanyList { get; set; }
         public List<OurCompany> OurCompanyList { get; set; }
         public List<MallSegment> MallSegmentList { get; set; }
+        public IEnumerable<CountryPhoneCode> PhoneCodes { get; set; }
+        public IEnumerable<Currency> CurrencyList { get; set; }
+        public List<VLocation> LocationList { get; set; }
         public Result Result { get; set; }
         public MallFilterModel FilterModel { get; set; }
         public FormMall CheckMall { get; set; }
-        public FormMallContact CheckMallContact { get; set; }
-        public FormMallLocationContract CheckMallContract { get; set; }
     }
 }

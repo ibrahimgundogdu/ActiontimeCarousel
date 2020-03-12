@@ -10,7 +10,6 @@ namespace ActionForce.Office
         public string MallName { get; set; }
         public string CityName { get; set; }
         public string StateName { get; set; }
-        public string CountryName { get; set; }
         public int IsActive { get; set; }
     }
 }
