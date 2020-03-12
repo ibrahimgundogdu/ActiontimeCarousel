@@ -16,5 +16,6 @@ namespace ActionForce.Location
         public VTicketBasket BasketItem { get; set; }
         public BasketTotal BasketTotal { get; set; }
         public int? EmployeeBasketCount { get; set; }
+        public TicketInfo TicketInfo { get; set; }
     }
 }

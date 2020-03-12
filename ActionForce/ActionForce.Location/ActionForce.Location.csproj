@@ -795,6 +795,7 @@
     <Content Include="Views\Default\_PartialBasketList.cshtml" />
     <Content Include="Views\Default\_PartialBasketItemDetail.cshtml" />
     <Content Include="Views\Default\_PartialBasketTotal.cshtml" />
+    <Content Include="Views\Default\_PartialReadTicketDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
