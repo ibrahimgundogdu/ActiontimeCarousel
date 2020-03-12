@@ -859,6 +859,11 @@ namespace ActionForce.Office.Controllers
             if (!string.IsNullOrEmpty(week))
             {
                 var weekparts = week.Split('-');
+                if (weekparts.Count() > 2)
+                {
+                    var getWeekDate = Convert.ToDateTime(week);
+                    datekey = Db.DateList.FirstOrDefault(x => x.DateKey == getWeekDate);
+                }
                 int _year = Convert.ToInt32(weekparts[0]);
                 int _week = Convert.ToInt32(weekparts[1]);
                 datekey = Db.DateList.Where(x => x.WeekYear == _year && x.WeekNumber == _week).OrderBy(x => x.DateKey).FirstOrDefault();
@@ -901,11 +906,11 @@ namespace ActionForce.Office.Controllers
             model.StatusIcon = (model.LocationModel.Status != null ? (model.LocationModel.Status == 0 ? "clock" : (model.LocationModel.Status == 1 ? "sun" : (model.LocationModel.Status == 2 ? "moon" : "moon"))) : "moon");
             #endregion
             #region ScheduleLocation
-            model.WeekCode = model.LocationModel.WeekKey.Trim();
+            //model.WeekCode = model.LocationModel.WeekKey.Trim();
             model.LocationScheduleList = Db.VLocationSchedule.Where(x => x.WeekCode.Trim() == model.WeekCode && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID).ToList();
             #endregion
             #region ShiftLocation
-            model.WeekList = Db.DateList.Where(x => x.WeekKey == model.LocationModel.WeekKey).ToList();
+            //model.WeekList = Db.DateList.Where(x => x.WeekKey == model.LocationModel.WeekKey).ToList();
             model.LocationShiftList = Db.VLocationShift.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == model.LocationModel.LocationID && x.WeekKey == model.LocationModel.WeekKey).ToList();
             #endregion
 

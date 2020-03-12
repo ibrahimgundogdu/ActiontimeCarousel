@@ -124,7 +124,7 @@
 
                         @for (int i = 3; i >= -13; i--)
                         {
-                            <option value="@i" @(Model.Authentication.ActionEmployee.OurCompany.TimeZone == i ? "selected" : "")>@( i > 0 ? "+" + i : i.ToString())</option>
+                            <option value="@i" @(Model.LocationModel.Timezone == i ? "selected" : "")>@( i > 0 ? "+" + i : i.ToString())</option>
                         }
                     </select>
                 </div>
