@@ -77,7 +77,7 @@
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
                 firstDay: 1,
                 onSelect: function (dateText, inst) {
-                    window.location.href = "/Location/Schedule?week=" + dateText+"&id=@(Model.LocationModel.LocationUID)";
+                    window.location.href = "/Location/Schedule?date=" + dateText+"&id=@(Model.LocationModel.LocationUID)";
                 },
                 beforeShow: function (event, ui) {
                     var $link = $("#LocationResultDate");
