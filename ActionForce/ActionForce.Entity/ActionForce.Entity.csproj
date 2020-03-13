@@ -482,6 +482,9 @@
     <Compile Include="MallContact.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="MallLocationContract.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="MallSegment.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

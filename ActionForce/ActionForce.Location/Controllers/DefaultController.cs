@@ -172,7 +172,7 @@ namespace ActionForce.Location.Controllers
 
             if (!string.IsNullOrEmpty(TicketNumber))
             {
-                
+                 
             }
 
             return PartialView("_PartialBasketList", model);

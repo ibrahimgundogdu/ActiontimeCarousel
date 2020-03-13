@@ -346,7 +346,7 @@ namespace ActionForce.Office.Controllers
             model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
             model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
-            
+            model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
             model.Employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeUID == id);
             model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Employee" && x.ProcessID == model.Employee.EmployeeID.ToString()).ToList();
