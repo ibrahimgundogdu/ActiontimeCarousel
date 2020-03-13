@@ -14,7 +14,7 @@ namespace ActionForce.Entity
     
     public partial class VTicketSaleRowCheck
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
         public long OrderID { get; set; }
         public string OrderNumber { get; set; }
         public Nullable<System.DateTime> SaleDate { get; set; }
@@ -31,5 +31,6 @@ namespace ActionForce.Entity
         public string LocationFullName { get; set; }
         public int TicketTypeID { get; set; }
         public string TicketTypeName { get; set; }
+        public string Currency { get; set; }
     }
 }

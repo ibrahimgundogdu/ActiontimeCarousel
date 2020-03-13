@@ -14,7 +14,7 @@ namespace ActionForce.Entity
     
     public partial class TicketSaleRows
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
         public int SaleID { get; set; }
         public Nullable<int> ActionRowID { get; set; }
         public Nullable<int> LocationID { get; set; }

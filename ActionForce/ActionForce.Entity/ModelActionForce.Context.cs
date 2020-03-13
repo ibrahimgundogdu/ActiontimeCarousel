@@ -276,7 +276,6 @@ namespace ActionForce.Entity
         public virtual DbSet<VPriceCategory> VPriceCategory { get; set; }
         public virtual DbSet<TicketSale> TicketSale { get; set; }
         public virtual DbSet<TicketSaleRefund> TicketSaleRefund { get; set; }
-        public virtual DbSet<TicketSaleRows> TicketSaleRows { get; set; }
         public virtual DbSet<TicketProductCategory> TicketProductCategory { get; set; }
         public virtual DbSet<TicketProduct> TicketProduct { get; set; }
         public virtual DbSet<LocationSchedule> LocationSchedule { get; set; }
@@ -298,10 +297,11 @@ namespace ActionForce.Entity
         public virtual DbSet<MallSegment> MallSegment { get; set; }
         public virtual DbSet<Mall> Mall { get; set; }
         public virtual DbSet<County> County { get; set; }
-        public virtual DbSet<VTicketSaleRowCheck> VTicketSaleRowCheck { get; set; }
         public virtual DbSet<MallLocationContract> MallLocationContract { get; set; }
         public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<VMall> VMall { get; set; }
+        public virtual DbSet<TicketSaleRows> TicketSaleRows { get; set; }
+        public virtual DbSet<VTicketSaleRowCheck> VTicketSaleRowCheck { get; set; }
         public virtual DbSet<VTicketSaleRowsAll> VTicketSaleRowsAll { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
@@ -1298,6 +1298,41 @@ namespace ActionForce.Entity
         public virtual ObjectResult<GetMonthList_Result> GetMonthList()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetMonthList_Result>("GetMonthList");
+        }
+    
+        public virtual ObjectResult<VTicketSaleRowsAll> GetTicketDetail(string ticketNumber)
+        {
+            var ticketNumberParameter = ticketNumber != null ?
+                new ObjectParameter("TicketNumber", ticketNumber) :
+                new ObjectParameter("TicketNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VTicketSaleRowsAll>("GetTicketDetail", ticketNumberParameter);
+        }
+    
+        public virtual ObjectResult<VTicketSaleRowsAll> GetTicketDetail(string ticketNumber, MergeOption mergeOption)
+        {
+            var ticketNumberParameter = ticketNumber != null ?
+                new ObjectParameter("TicketNumber", ticketNumber) :
+                new ObjectParameter("TicketNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VTicketSaleRowsAll>("GetTicketDetail", mergeOption, ticketNumberParameter);
+        }
+    
+        public virtual int AddBasketTicket(Nullable<int> locationID, Nullable<int> employeeID, string ticketNumber)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            var ticketNumberParameter = ticketNumber != null ?
+                new ObjectParameter("TicketNumber", ticketNumber) :
+                new ObjectParameter("TicketNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddBasketTicket", locationIDParameter, employeeIDParameter, ticketNumberParameter);
         }
     }
 }

@@ -103,7 +103,7 @@ namespace ActionForce.Location
             }
         }
 
-        public static TicketInfo GetScannedTicketInfo(string scannedNumber)  //   0083|UFE2L154FSFBHR5K2ZIEG|2019-10-01|S191001637055373703567587
+        public static TicketInfo GetScannedTicketInfo(string scannedNumber, VLocation location)  //   0083|UFE2L154FSFBHR5K2ZIEG|2019-10-01|S191001637055373703567587
         {
             TicketInfo model = new TicketInfo();
 
@@ -132,7 +132,7 @@ namespace ActionForce.Location
                         {
                             model.Info = isexists;
                            
-                            if (isexists.IsBlocked == false && isexists.IsActive == true && isexists.Status == 2 && isexists.StatusID == 2)
+                            if (isexists.IsBlocked == false && isexists.IsActive == true && isexists.Status == 2 && isexists.StatusID == 2 && isexists.Currency == location.Currency && isexists.TicketTypeID == location.TicketTypeID)
                             {
                                 result.IsSuccess = true;
                                 result.Message = "Bilet Kullanılabilir";
@@ -146,6 +146,16 @@ namespace ActionForce.Location
                             {
                                 result.IsSuccess = false;
                                 result.Message = "Bilet aşaması uygun değil : " + isexists.StatusName;
+                            }
+                            else if (isexists.Currency != location.Currency)
+                            {
+                                result.IsSuccess = false;
+                                result.Message = "Bilet para birimi lokasyonun para biriminden farklı";
+                            }
+                            else if (isexists.TicketTypeID != location.TicketTypeID)
+                            {
+                                result.IsSuccess = false;
+                                result.Message = "Bilet türü lokasyonun türünden farklı";
                             }
                             else if (isexists.IsActive == false || isexists.IsActive == null)
                             {
@@ -175,5 +185,6 @@ namespace ActionForce.Location
 
             return model;
         }
+
     }
 }

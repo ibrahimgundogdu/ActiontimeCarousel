@@ -12,6 +12,7 @@ namespace ActionForce.Location
         public IEnumerable<VTicketPromotion> PromotionList { get; set; }
         public IEnumerable<VTicketBasket> BasketList { get; set; }
         public VPriceLastList Price { get; set; }
+        public VPrice VPrice { get; set; }
         public VTicketPromotion Promotion { get; set; }
         public VTicketBasket BasketItem { get; set; }
         public BasketTotal BasketTotal { get; set; }

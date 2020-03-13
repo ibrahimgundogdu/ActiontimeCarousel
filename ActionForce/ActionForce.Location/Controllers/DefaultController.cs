@@ -158,7 +158,7 @@ namespace ActionForce.Location.Controllers
 
             if (!string.IsNullOrEmpty(qcode))
             {
-                model.TicketInfo = LocationHelper.GetScannedTicketInfo(qcode);
+                model.TicketInfo = LocationHelper.GetScannedTicketInfo(qcode, model.Location);
             }
 
             return PartialView("_PartialReadTicketDetail", model);
@@ -172,8 +172,32 @@ namespace ActionForce.Location.Controllers
 
             if (!string.IsNullOrEmpty(TicketNumber))
             {
-                 
+                var detail = Db.GetTicketDetail(TicketNumber).FirstOrDefault();
+
+                if (detail != null)
+                {
+                    model.VPrice = Db.VPrice.FirstOrDefault(x => x.ID == detail.PriceID);
+
+                    if (model.VPrice != null)
+                    {
+                        var added = Db.AddBasketTicket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID, TicketNumber);
+                    }
+                }
+                else
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = $"Bilet bulunamadı.";
+                }
             }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = $"Bilet bilgisi boş olamaz.";
+            }
+
+            model.BasketList = Db.GetLocationCurrentBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).ToList();
+            model.Result.IsSuccess = true;
+            model.Result.Message = $"Açık Bilet Sepete Eklendi.";
 
             return PartialView("_PartialBasketList", model);
         }
