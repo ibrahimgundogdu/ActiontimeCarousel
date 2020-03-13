@@ -2694,18 +2694,21 @@ namespace ActionForce.Office
 
                         // hareketler eklenir
 
-                        if (payment.FromCashID > 0)
+                        if (payment.IsActive == true)
                         {
-                            OfficeHelper.AddCashAction(isPayment.FromCashID, isPayment.LocationID, isPayment.ToEmployeeID, isPayment.ActionTypeID, isPayment.Date, isPayment.ActionTypeName, isPayment.ID, isPayment.Date, isPayment.DocumentNumber, isPayment.Description, -1, 0, isPayment.Amount, isPayment.Currency, null, null, isPayment.UpdateEmployee, isPayment.UpdateDate, isPayment.UID.Value);
-                        }
+                            if (payment.FromCashID > 0)
+                            {
+                                OfficeHelper.AddCashAction(isPayment.FromCashID, isPayment.LocationID, isPayment.ToEmployeeID, isPayment.ActionTypeID, isPayment.Date, isPayment.ActionTypeName, isPayment.ID, isPayment.Date, isPayment.DocumentNumber, isPayment.Description, -1, 0, isPayment.Amount, isPayment.Currency, null, null, isPayment.UpdateEmployee, isPayment.UpdateDate, isPayment.UID.Value);
+                            }
 
-                        if (payment.FromBankID > 0)
-                        {
-                            var bankactiontype = Db.BankActionType.FirstOrDefault(x => x.ID == 8);
-                            OfficeHelper.AddBankAction(isPayment.LocationID, isPayment.ToEmployeeID, isPayment.FromBankAccountID, null, bankactiontype.ID, isPayment.Date, bankactiontype.Name, isPayment.ID, isPayment.Date, isPayment.DocumentNumber, isPayment.Description, -1, 0, isPayment.Amount, isPayment.Currency, null, null, isPayment.UpdateEmployee, isPayment.UpdateDate, isPayment.UID.Value);
-                        }
+                            if (payment.FromBankID > 0)
+                            {
+                                var bankactiontype = Db.BankActionType.FirstOrDefault(x => x.ID == 8);
+                                OfficeHelper.AddBankAction(isPayment.LocationID, isPayment.ToEmployeeID, isPayment.FromBankAccountID, null, bankactiontype.ID, isPayment.Date, bankactiontype.Name, isPayment.ID, isPayment.Date, isPayment.DocumentNumber, isPayment.Description, -1, 0, isPayment.Amount, isPayment.Currency, null, null, isPayment.UpdateEmployee, isPayment.UpdateDate, isPayment.UID.Value);
+                            }
 
-                        OfficeHelper.AddEmployeeAction(isPayment.ToEmployeeID, isPayment.LocationID, isPayment.ActionTypeID, isPayment.ActionTypeName, isPayment.ID, isPayment.Date, isPayment.Description, 1, 0, isPayment.Amount, isPayment.Currency, null, null, isPayment.SalaryTypeID, isPayment.UpdateEmployee, isPayment.UpdateDate, isPayment.UID.Value, isPayment.DocumentNumber, isPayment.CategoryID.Value);
+                            OfficeHelper.AddEmployeeAction(isPayment.ToEmployeeID, isPayment.LocationID, isPayment.ActionTypeID, isPayment.ActionTypeName, isPayment.ID, isPayment.Date, isPayment.Description, 1, 0, isPayment.Amount, isPayment.Currency, null, null, isPayment.SalaryTypeID, isPayment.UpdateEmployee, isPayment.UpdateDate, isPayment.UID.Value, isPayment.DocumentNumber, isPayment.CategoryID.Value);
+                        }
 
                         result.IsSuccess = true;
                         result.Message = "Maaş Avans ödemesi başarı ile güncellendi";
