@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9994b25f60eb42c19af558a806d4e321" Name="Diagram1" ZoomLevel="74">
+      <Diagram DiagramId="9994b25f60eb42c19af558a806d4e321" Name="Diagram1" ZoomLevel="55">
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Action" Width="1.5" PointX="10" PointY="20.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionAccounts" Width="1.5" PointX="2.75" PointY="16.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRow" Width="1.5" PointX="12.25" PointY="18.375" />
@@ -264,7 +264,6 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeEmails" Width="1.5" PointX="56.375" PointY="26.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeePhones" Width="1.5" PointX="27.375" PointY="56.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CollectionType" Width="1.5" PointX="56.375" PointY="4.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Company" Width="1.5" PointX="29.375" PointY="56.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CompanyCategory" Width="1.5" PointX="56.375" PointY="30.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationPriceCategory" Width="1.5" PointX="56.375" PointY="33.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.MallContact" Width="1.5" PointX="57.375" PointY="14.75" />
@@ -298,8 +297,9 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Mall" Width="1.5" PointX="59.375" PointY="16.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.County" Width="1.5" PointX="51.375" PointY="59.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowCheck" Width="1.5" PointX="53.375" PointY="59.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowsAll" Width="1.5" PointX="19.375" PointY="60.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VMall" Width="1.5" PointX="59.375" PointY="58.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.MallLocationContract" Width="1.5" PointX="31.375" PointY="57.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Company" Width="1.5" PointX="59.375" PointY="58.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VMall" Width="1.5" PointX="33.375" PointY="57.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

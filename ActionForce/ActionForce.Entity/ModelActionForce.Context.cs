@@ -266,7 +266,6 @@ namespace ActionForce.Entity
         public virtual DbSet<VEmployeeEmails> VEmployeeEmails { get; set; }
         public virtual DbSet<VEmployeePhones> VEmployeePhones { get; set; }
         public virtual DbSet<CollectionType> CollectionType { get; set; }
-        public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<CompanyCategory> CompanyCategory { get; set; }
         public virtual DbSet<LocationPriceCategory> LocationPriceCategory { get; set; }
         public virtual DbSet<MallContact> MallContact { get; set; }
@@ -300,7 +299,8 @@ namespace ActionForce.Entity
         public virtual DbSet<Mall> Mall { get; set; }
         public virtual DbSet<County> County { get; set; }
         public virtual DbSet<VTicketSaleRowCheck> VTicketSaleRowCheck { get; set; }
-        public virtual DbSet<VTicketSaleRowsAll> VTicketSaleRowsAll { get; set; }
+        public virtual DbSet<MallLocationContract> MallLocationContract { get; set; }
+        public virtual DbSet<Company> Company { get; set; }
         public virtual DbSet<VMall> VMall { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)

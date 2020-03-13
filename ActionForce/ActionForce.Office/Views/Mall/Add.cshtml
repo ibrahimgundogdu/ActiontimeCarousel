@@ -11,7 +11,7 @@
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
     </nav>
 </div>
-@using (Html.BeginForm("AddMall", "Mall", FormMethod.Post))
+@using (Html.BeginForm("AddMall", "Mall", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     <div class="content-body">
@@ -33,13 +33,11 @@
                                 <div class="row row-xs">
                                     <div class="col-lg-12">
                                         <div class="form-group row mg-b-5">
-                                            <label for="ourCompany" class="col-sm-3 col-form-label">Firma</label>
+                                            <label for="ourCompanyID" class="col-sm-3 col-form-label">Firma</label>
                                             <div class="col-sm-6">
                                                 <select class="form-control" id="ourCompanyID" name="OurCompanyID" required>
                                                     @if (Model?.OurCompanyList?.Count > 0)
                                                     {
-                                                        <option value="">Seçiniz</option>
-
                                                         foreach (var item in Model.OurCompanyList)
                                                         {
                                                             <option value="@(item.CompanyID)" @(Model.Authentication.ActionEmployee.OurCompanyID == item.CompanyID ? "selected" : "")>@(item.CompanyName)</option>
@@ -53,9 +51,10 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="fullName" class="col-sm-3 col-form-label">AVM İsmi</label>
                                             <div class="col-sm-6">
-                                                <input id="fullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="AVM İsmi" value="@(Model?.CheckMall?.FullName)">
+                                                <input id="fullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="AVM İsmi" value="@(Model?.CheckMall?.FullName)" required>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 mg-y-8">  
+                                                
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
@@ -87,7 +86,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="address" class="col-sm-3 col-form-label">AVM Adresi</label>
                                             <div class="col-sm-6">
-                                                <input id="address" name="Address" type="text" class="form-control" autocomplete="off" placeholder="AVM Adresi" value="@(Model?.CheckMall?.Address)">
+                                                <input id="address" name="Address" type="text" class="form-control" autocomplete="off" placeholder="AVM Adresi" value="@(Model?.CheckMall?.Address)" required>
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -166,15 +165,15 @@
                                             <label for="phoneCountryCode" class="col-sm-3 col-form-label">Telefon</label>
                                             <div class="col-sm-3">
                                                 <select class="form-control" id="phoneCountryCode" name="PhoneCountryCode">
-                                                    <option value="">Alan Kodu</option>
+                                                    
                                                     @foreach (var item in Model.PhoneCodes)
                                                     {
-                                                        <option value="@(item.ID)" @(Model?.CheckMall?.PhoneCountryCode == item.Code ? "selected" : "")>@(item.Code)</option>
+                                                    <option value="@(item.Code)" @(Model?.CheckMall?.PhoneCountryCode == item.Code ? "selected" : "")>@(item.Code) @(item.Country)</option>
                                                     }
                                                 </select>
                                             </div>
                                             <div class="col-sm-3">
-                                                <input id="phoneNumber" name="PhoneNumber" type="text" class="form-control phone" autocomplete="off" placeholder="Telefon" value="@(Model?.CheckMall?.PhoneNumber)">
+                                                <input id="phoneNumber" name="PhoneNumber" type="text" class="form-control phone" autocomplete="off" placeholder="Telefon" value="@(Model?.CheckMall?.PhoneNumber)" required>
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -258,7 +257,7 @@
                                             <label for="isActive" class="col-sm-3 col-form-label">Aktif mi?</label>
                                             <div class="col-sm-6">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="isActive" name="IsActive" value="1" @(Model?.CheckMall?.IsActive == true ? "checked" : "")>
+                                                    <input type="checkbox" class="custom-control-input" id="isActive" name="IsActive" value="1" @(Model?.CheckMall?.IsActive == "1" ? "checked" : "")>
                                                     <label class="custom-control-label" for="isActive">Aktif</label>
                                                 </div>
                                             </div>
@@ -282,17 +281,17 @@
                                 <div class="row row-xs">
                                     <div class="col-lg-12">
                                         <div class="form-group row mg-b-5">
-                                            <label for="title" class="col-sm-3 col-form-label">İletişim Kurulacak Kişinin Ünvanı</label>
+                                            <label for="title" class="col-sm-3 col-form-label">Ünvanı</label>
                                             <div class="col-sm-6">
-                                                <input id="title" name="Title" type="text" class="form-control" autocomplete="off" placeholder="İletişim Kurulacak Kişinin Ünvanı" value="@(Model?.CheckMall?.Title)">
+                                                <input id="title" name="Title" type="text" class="form-control" autocomplete="off" placeholder="Ünvanı" value="@(Model?.CheckMall?.Title)" required>
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
-                                            <label for="contactFullName" class="col-sm-3 col-form-label">İletişim Kurulacak Kişinin Adı Soyadı</label>
+                                            <label for="contactFullName" class="col-sm-3 col-form-label">Adı Soyadı</label>
                                             <div class="col-sm-6">
-                                                <input id="contactFullName" name="ContactFullName" type="text" class="form-control" autocomplete="off" placeholder="İletişim Kurulacak Kişinin Adı Soyadı" value="@(Model?.CheckMall?.ContactFullName)">
+                                                <input id="contactFullName" name="ContactFullName" type="text" class="form-control" autocomplete="off" placeholder="Adı Soyadı" value="@(Model?.CheckMall?.ContactFullName)" required>
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -301,15 +300,14 @@
                                             <label for="phoneCode" class="col-sm-3 col-form-label">Telefon</label>
                                             <div class="col-sm-3">
                                                 <select class="form-control" id="phoneCode" name="PhoneCode">
-                                                    <option value="">Alan Kodu</option>
                                                     @foreach (var item in Model.PhoneCodes)
                                                     {
-                                                        <option value="@(item.ID)" @(Model?.CheckMall?.PhoneCode == item.Code ? "selected" : "")>@(item.Code)</option>
+                                                    <option value="@(item.Code)" @(Model?.CheckMall?.PhoneCode == item.Code ? "selected" : "")>@(item.Code) @(item.Country)</option>
                                                     }
                                                 </select>
                                             </div>
                                             <div class="col-sm-3">
-                                                <input id="phoneNumber" name="PhoneNumber" type="text" class="form-control phone" autocomplete="off" placeholder="Telefon" value="@(Model?.CheckMall?.PhoneNumber)">
+                                                <input id="contactPhoneNumber" name="ContactPhoneNumber" type="text" class="form-control phone" autocomplete="off" placeholder="Telefon" value="@(Model?.CheckMall?.ContactPhoneNumber)" required>
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -317,7 +315,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="email" class="col-sm-3 col-form-label">Email</label>
                                             <div class="col-sm-6">
-                                                <input id="email" name="Email" type="email" class="form-control" autocomplete="off" placeholder="Email" value="@(Model?.CheckMall?.Email)">
+                                                <input id="email" name="Email" type="email" class="form-control" autocomplete="off" placeholder="Email" value="@(Model?.CheckMall?.Email)" required>
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -326,7 +324,7 @@
                                             <label for="mallContactIsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
                                             <div class="col-sm-6">
                                                 <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="mallContactIsActive" name="MallContactIsActive" value="1" @(Model?.CheckMall?.MallContactIsActive == true ? "checked" : "")>
+                                                    <input type="checkbox" class="custom-control-input" id="mallContactIsActive" name="MallContactIsActive" value="1" @(Model?.CheckMall?.MallContactIsActive == "1" ? "checked" : "")>
                                                     <label class="custom-control-label" for="mallContactIsActive">Aktif</label>
                                                 </div>
                                             </div>
@@ -350,23 +348,15 @@
                                 <div class="row row-xs">
                                     <div class="col-lg-12">
                                         <div class="form-group row mg-b-5">
-                                            <label for="mallLocationID" class="col-sm-3 col-form-label">Lokasyon</label>
+                                            <label for="locationID" class="col-sm-3 col-form-label">Lokasyon</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="mallLocationID" name="mallLocationID" required="">
+                                                <select class="form-control" id="locationID" name="LocationID" required="">
                                                     @if (Model?.LocationList?.Count > 0)
                                                     {
                                                         <option value="">Lokasyon Seçiniz</option>
-
                                                         foreach (var item in Model.LocationList)
                                                         {
-                                                            if (item.MallID == null)
-                                                            {
-                                                                <option value="@(item.LocationID)" @(Model?.CheckMall?.LocationID == item.LocationID ? "selected" : "")>@(item.LocationFullName)</option>
-                                                            }
-                                                            else
-                                                            {
-                                                                <option value="@(item.LocationID)" @(Model?.CheckMall?.LocationID == item.LocationID ? "selected" : "") disabled>@(item.LocationFullName)</option>
-                                                            }
+                                                            <option value="@(item.LocationID)" @(Model?.CheckMall?.LocationID == item.LocationID ? "selected" : "")>@(item.LocationFullName)</option>
                                                         }
                                                     }
                                                 </select>
@@ -385,14 +375,14 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="rentAmount" class="col-sm-3 col-form-label">Kira Bedeli</label>
                                             <div class="col-sm-3">
-                                                <input id="rentAmount" name="RentAmount" type="number" class="form-control" autocomplete="off" placeholder="Kira Bedeli" value="@(Model?.CheckMall?.RentAmount)">
+                                                <input id="rentAmount" name="RentAmount" type="text" class="form-control money" autocomplete="off" placeholder="Kira Bedeli" value="@(Model?.CheckMall?.RentAmount)">
                                             </div>
                                             <div class="col-sm-3">
                                                 <select class="form-control" id="currency" name="Currency">
                                                     <option value="">Para Birimi</option>
                                                     @foreach (var item in Model.CurrencyList)
                                                     {
-                                                        <option value="@(item.ID)" @(Model?.CheckMall?.Currency == item.Code ? "selected" : "")>@(item.Code)</option>
+                                                        <option value="@(item.Code)" @(Model?.CheckMall?.Currency == item.Code ? "selected" : "")>@(item.Code)</option>
                                                     }
                                                 </select>
                                             </div>
@@ -402,7 +392,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="commonExpenseAmount" class="col-sm-3 col-form-label">Ortak Alan Giderleri</label>
                                             <div class="col-sm-6">
-                                                <input id="commonExpenseAmount" name="CommonExpenseAmount" type="number" class="form-control" autocomplete="off" placeholder="Ortak Alan Giderleri" value="@(Model?.CheckMall?.CommonExpenseAmount)">
+                                                <input id="commonExpenseAmount" name="CommonExpenseAmount" type="text" class="form-control money" autocomplete="off" placeholder="Ortak Alan Giderleri" value="@(Model?.CheckMall?.CommonExpenseAmount)">
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -410,7 +400,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="guaranteeAmount" class="col-sm-3 col-form-label">Teminat</label>
                                             <div class="col-sm-6">
-                                                <input id="guaranteeAmount" name="GuaranteeAmount" type="number" class="form-control" autocomplete="off" placeholder="Teminat" value="@(Model?.CheckMall?.GuaranteeAmount)">
+                                                <input id="guaranteeAmount" name="GuaranteeAmount" type="text" class="form-control money" autocomplete="off" placeholder="Teminat" value="@(Model?.CheckMall?.GuaranteeAmount)">
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -418,26 +408,36 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="stampDutyAmount" class="col-sm-3 col-form-label">Damga Vergisi</label>
                                             <div class="col-sm-6">
-                                                <input id="stampDutyAmount" name="StampDutyAmount" type="number" class="form-control" autocomplete="off" placeholder="Damga Vergisi" value="@(Model?.CheckMall?.StampDutyAmount)">
-                                            </div>
-                                            <div class="col-sm-3">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row mg-b-5">
-                                            <label for="contractDuration" class="col-sm-3 col-form-label">Sözleşme Süresi</label>
-                                            <div class="col-sm-6">
-                                                <input id="contractDuration" name="ContractDuration" type="number" class="form-control" autocomplete="off" placeholder="Sözleşme Süresi" value="@(Model?.CheckMall?.ContractDuration)">
+                                                <input id="stampDutyAmount" name="StampDutyAmount" type="text" class="form-control money" autocomplete="off" placeholder="Damga Vergisi" value="@(Model?.CheckMall?.StampDutyAmount)">
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
                                         </div>
                                         <div class="form-group row bg-gray-50">
-                                            <label for="DateBegin" class="col-sm-3 col-form-label">Fiyat Başlangıç Tarih Saati</label>
+                                            <label for="contractDateBegin" class="col-sm-3 col-form-label">Sözleşme Başlangıç Bitiş Tarihi</label>
                                             <div class="col-sm-3">
-                                                <input id="DateBegin" name="DateBegin" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                                                <input id="contractDateBegin" name="ContractDateBegin" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Sözleşme Başlangıç Tarihi" value="@(Model?.CheckMall?.ContractDateBegin)" required>
                                             </div>
                                             <div class="col-sm-3">
-                                                <input id="DateBeginHour" name="DateBeginHour" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Saat" value="@(DateTime.Now.ToString("HH\\:mm\\:ss"))" required>
+                                                <input id="contractDateEnd" name="ContractDateEnd" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Sözleşme Bitiş Tarihi" value="@(Model?.CheckMall?.ContractDateEnd))" required>
+                                            </div>
+                                            <div class="col-sm-3">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row bg-gray-50">
+                                            <label for="contractFile" class="col-sm-3 col-form-label">Sözleşme Dosyası</label>
+                                            <div class="col-sm-6">                                               
+                                                <input type="file" id="contractFile" name="ContractFile" style="width: 100%;" class="form-control" />
+                                            </div>
+                                            <div class="col-sm-3"> </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="mallContractIsActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+                                            <div class="col-sm-6">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="mallContractIsActive" name="MallContractIsActive" value="1" @(Model?.CheckMall?.MallContractIsActive == "1" ? "checked" : "")>
+                                                    <label class="custom-control-label" for="mallContractIsActive">Aktif</label>
+                                                </div>
                                             </div>
                                             <div class="col-sm-3">
                                             </div>
@@ -453,7 +453,7 @@
                 <div class="col-sm-3">
                 </div>
                 <div class="col-sm-6">
-                    <button type="submit" class="btn btn-primary btn-block">Lokasyon Ekle</button>
+                    <button type="submit" class="btn btn-primary btn-block">AVM Ekle</button>
                 </div>
             </div>
         </div>
@@ -466,9 +466,9 @@
 
         $(function () {
             $('.shiftdate').mask('0000-00-00');
-            //$('.money').mask("#.##0,00", { reverse: true });
+            $('.money').mask("#.##0,00", { reverse: true });
 
-            $('#DateBegin').datepicker({
+            $('.shiftdate').datepicker({
                 dateFormat: "yy-mm-dd",
                 dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
                 monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
