@@ -17,6 +17,13 @@ namespace ActionForce.Office.Controllers
         public ActionResult Index(int? locationId)
         {
             CashControlModel model = new CashControlModel();
+            model.Filters = new FilterModel();
+
+            model.Filters.DateBegin = DateTime.UtcNow.AddMonths(-1).Date;
+            model.Filters.DateEnd = DateTime.UtcNow.Date;
+
+            model.CashCollections = Db.VDocumentCashCollections.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
             if (TempData["result"] != null)
             {
@@ -26,27 +33,24 @@ namespace ActionForce.Office.Controllers
             if (TempData["filter"] != null)
             {
                 model.Filters = TempData["filter"] as FilterModel;
+
+                if (model.Filters.DateBegin != null || model.Filters.DateEnd != null)
+                {
+                    model.CashCollections = Db.VDocumentCashCollections.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+                }
+
+                if (model.Filters.LocationID > 0)
+                {
+                    model.CashCollections = model.CashCollections.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+                }
+
+                if (!String.IsNullOrEmpty(model.Filters.IsActive))
+                {
+                    bool isActive = model.Filters.IsActive == "1" ? true : (model.Filters.IsActive == "0" ? false : false);
+
+                    model.CashCollections = model.CashCollections.Where(x => x.IsActive == isActive).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+                }
             }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.UtcNow.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.UtcNow.Date;
-                model.Filters = filterModel;
-            }
-            
-            model.CurrencyList = OfficeHelper.GetCurrency();
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-
-            model.CashCollections = Db.VDocumentCashCollections.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-
-            if (model.Filters.LocationID > 0)
-            {
-                model.CashCollections = model.CashCollections.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-            }
-
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value);
 
             return View(model);
         }
@@ -78,8 +82,38 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Index", "Cash");
         }
 
+        [HttpPost]
         [AllowAnonymous]
-        public ActionResult Add(Guid? id)
+        public PartialViewResult FilterIsActive(int? locationId, DateTime? beginDate, DateTime? endDate, string isActive)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (beginDate != null || endDate != null)
+            {
+                model.CashCollections = Db.VDocumentCashCollections.Where(x => x.Date >= beginDate && x.Date <= endDate && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            }
+
+            if (locationId > 0 && locationId != null)
+            {
+                model.CashCollections = model.CashCollections.Where(x => x.LocationID == locationId).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            }
+
+            if (!String.IsNullOrEmpty(isActive))
+            {
+                bool? _isActive = isActive == "1" ? true : (isActive == "0" ? false : (bool?)null);
+
+                if (_isActive != null)
+                {
+                    model.CashCollections = model.CashCollections.Where(x => x.IsActive == _isActive).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+                }
+            }
+            
+            return PartialView("_PartialCashList",model);
+        }
+
+
+        [AllowAnonymous]
+        public ActionResult AddCash(Guid? id)
         {
             CashControlModel model = new CashControlModel();
 
@@ -87,7 +121,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result ?? null;
             }
-            
+
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -105,7 +139,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result ?? null;
             }
-            
+
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -307,7 +341,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            
+
             model.BankAccountList = Db.BankAccount.ToList();
             model.PayMethodList = Db.PayMethod.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
@@ -380,7 +414,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result ?? null;
             }
-            
+
             model.PayMethodList = Db.PayMethod.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
@@ -587,7 +621,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            
+
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
@@ -659,7 +693,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result ?? null;
             }
-            
+
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -911,7 +945,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            
+
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -962,11 +996,11 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result ?? null;
             }
-            
+
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            
+
 
             return View(model);
         }
@@ -1175,7 +1209,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.DateEnd = DateTime.Now.Date;
                 model.Filters = filterModel;
             }
-            
+
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -1246,7 +1280,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result ?? null;
             }
-            
+
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -1528,7 +1562,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result ?? null;
             }
-            
+
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -1795,11 +1829,11 @@ namespace ActionForce.Office.Controllers
                 model.Result = TempData["result"] as Result ?? null;
             }
             model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
-            
+
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            
+
 
             model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
 
@@ -1816,7 +1850,7 @@ namespace ActionForce.Office.Controllers
                 model.Result = TempData["result"] as Result ?? null;
             }
             model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
-            
+
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
@@ -2159,7 +2193,7 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result ?? null;
             }
-            
+
             model.StatusList = Db.BankTransferStatus.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
@@ -2488,13 +2522,13 @@ namespace ActionForce.Office.Controllers
             }
 
 
-            
+
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.SalaryTypes = Db.SalaryType.Where(x => x.IsActive == true).ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID ).OrderBy(x => x.FullName).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.SalaryPayment = Db.VDocumentSalaryPayment.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -2787,10 +2821,10 @@ namespace ActionForce.Office.Controllers
             {
                 model.Result = TempData["result"] as Result ?? null;
             }
-            
+
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
             model.SalaryTypes = Db.SalaryType.Where(x => x.IsActive == true).ToList();
-            
+
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();

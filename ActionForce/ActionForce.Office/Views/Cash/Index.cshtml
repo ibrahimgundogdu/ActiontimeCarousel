@@ -22,7 +22,7 @@
             </nav>
         </div>
         <div class="d-none d-md-block">
-            <a href="@("/Cash/Add/")" class="btn btn-primary btn-uppercase"><i data-feather="plus-square"></i> &nbsp; Tahsilat Ekle</a>
+            <a href="@("/Cash/AddCash/")" class="btn btn-primary btn-uppercase"><i data-feather="plus-square"></i> &nbsp; Tahsilat Ekle</a>
         </div>
     </div>
     <div class="row">
@@ -130,17 +130,15 @@
             data.append('endDate', $("#dateTo").val());
             data.append('isActive', active);
 
-            $.ajax({
-                url: '@Url.Action("Filter","Cash")',
-                cache: false,
-                contentType: false,
-                processData: false,
-                method: 'POST',
-                type: 'POST',
-                data: data
-            }).done(function (res) {
-                $('#cashList').html(res);
-            });
+             $.ajax({
+                 url: '@Url.Action("FilterIsActive", "Cash")',
+                 cache: false,
+                 contentType: false,
+                 processData: false,
+                 method: 'POST',
+                 type: 'POST',
+                 data: data
+             }).done(function (res) { $('#cashList').html(res); });
         }
     </script>
 
