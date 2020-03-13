@@ -5949,6 +5949,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleRowsAll' does no
           <Property Name="PriceCategoryName" Type="nvarchar" MaxLength="50" />
           <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
           <Property Name="Unit" Type="int" />
+          <Property Name="ProductID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -8808,7 +8809,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketSaleRowsAll].[Currency] AS [Currency], 
     [VTicketSaleRowsAll].[PriceCategoryName] AS [PriceCategoryName], 
     [VTicketSaleRowsAll].[ProductName] AS [ProductName], 
-    [VTicketSaleRowsAll].[Unit] AS [Unit]
+    [VTicketSaleRowsAll].[Unit] AS [Unit], 
+    [VTicketSaleRowsAll].[ProductID] AS [ProductID]
     FROM [dbo].[VTicketSaleRowsAll] AS [VTicketSaleRowsAll]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="WeekList" EntityType="Self.WeekList" store:Type="Views" store:Schema="dbo">
@@ -15994,6 +15996,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="PriceCategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Unit" Type="Int32" />
+          <Property Name="ProductID" Type="Int32" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -22144,6 +22147,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VTicketSaleRowsAll">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketSaleRowsAll">
               <MappingFragment StoreEntitySet="VTicketSaleRowsAll">
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
                 <ScalarProperty Name="Unit" ColumnName="Unit" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
                 <ScalarProperty Name="PriceCategoryName" ColumnName="PriceCategoryName" />
