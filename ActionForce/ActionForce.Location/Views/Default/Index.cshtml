@@ -145,7 +145,7 @@
     </div>
 </div>
 
-<div id="AddBasketTicket" class="modal bg-white fade">
+<div id="AddBasketTicket" class="modal bg-white fade" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content" id="BasketItemTicketContent">
             <div class="modal-header">
@@ -158,7 +158,7 @@
                 <div class="input-group input-group-lg mb-3">
                     <input id="InputTicketNumber" name="TicketNumber" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" autofocus>
                     <div class="input-group-append">
-                        <button class="btn btn-warning" style="width:80px;" type="button" onclick="scan();"><i data-feather="cast"></i></button>
+                        <button class="btn btn-warning" style="width:80px;" type="button" onclick="GetReadTicketDetailTest();"><i data-feather="cast"></i></button> @*onclick="scan();"*@
                     </div>
                 </div>
 
@@ -182,6 +182,10 @@
             Android.scanBarcode();
         }
 
+        function OnTicketAddSuccess(data) {
+            $('#AddBasketTicket').modal('hide');
+        };
+
         function clearTicketNumber() {
             $("#InputTicketNumber").val('');
         }
@@ -195,6 +199,19 @@
         }
 
         function GetReadTicketDetail(qcode) {
+            $.ajax({
+                method: "GET",
+                url: "/Default/ReadTicketDetail",
+                data: { qcode: qcode }
+            }).done(function (d) {
+                $("#ReadTicketDetail").html(d);
+            });
+        };
+
+        function GetReadTicketDetailTest() {
+
+            var qcode = $("#InputTicketNumber").val();
+
             $.ajax({
                 method: "GET",
                 url: "/Default/ReadTicketDetail",

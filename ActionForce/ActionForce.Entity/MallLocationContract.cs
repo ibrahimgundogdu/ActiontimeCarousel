@@ -23,7 +23,7 @@ namespace ActionForce.Entity
         public Nullable<double> CommonExpenseAmount { get; set; }
         public Nullable<double> GuaranteeAmount { get; set; }
         public Nullable<double> StampDutyAmount { get; set; }
-        public string ContractDuration { get; set; }
+        public Nullable<int> ContractDuration { get; set; }
         public Nullable<System.DateTime> ContractDateBegin { get; set; }
         public Nullable<System.DateTime> ContractDateEnd { get; set; }
         public string ContractFile { get; set; }
