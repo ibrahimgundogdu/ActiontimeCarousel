@@ -10,6 +10,8 @@
 <div class="content-header">
     <div class="content-search">
         <span class="tx-20">Çalışan Mesai Takvimleri</span>
+        <input type="hidden" id="CurrentLocationID" value="@(Model.LocationID)" />
+        <input type="hidden" id="CurrentWeekCode" value="@(Model.WeekCode)" />
     </div>
     <nav class="nav">
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
@@ -212,6 +214,21 @@
         $('#listLocations').on('change', function () {
             window.location.href = "/Schedule/Employee?locationid=" + this.value;
         });
+
+        var _locationid = $('#CurrentLocationID').val();
+        var locationid = parseInt(_locationid);
+
+        var weekcode = $('#CurrentWeekCode').val();
+
+        if (locationid != null && locationid > 0) {
+
+            console.log(locationid);
+            console.log(weekcode);
+
+            $('#modalLocationSchedule').modal('show');
+            AddLocationSchedule(locationid, weekcode);
+
+        }
 
         function AddLocationSchedule(locationid, weekcode) {
             //console.log(locationid);

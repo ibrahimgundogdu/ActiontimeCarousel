@@ -1,21 +1,37 @@
 ﻿@model DefaultControlModel
 <div>
+    <div class="form-group row mb-1 bg-light--lt font-weight-bold">
+        <label class="col-sm-3 pt-1">Bilgi</label>
+        <label class="col-sm-9 pt-1">@(Model?.TicketInfo?.Result?.Message)</label>
+    </div>
     <div class="form-group row mb-1 bg-light--lt">
         <label class="col-sm-3 pt-1">Bilet Numarası</label>
-        <label class="col-sm-9 pt-1">aaa</label>
+        <label class="col-sm-9 pt-1">@(Model?.TicketInfo?.Info?.TicketNumberMasked)</label>
     </div>
     <div class="form-group row mb-1 bg-light--lt">
-        <label class="col-sm-3 pt-1">Bilet Adı</label>
-        <label class="col-sm-9 pt-1">aaa</label>
+        <label class="col-sm-3 pt-1">Bilet Türü</label>
+        <label class="col-sm-9 pt-1">@(Model?.TicketInfo?.Info?.TicketTypeName)</label>
+    </div>
+
+
+
+    <div class="form-group row mb-1 bg-light--lt">
+        <label class="col-sm-3 pt-1">Lokasyon</label>
+        <label class="col-sm-9 pt-1">@(Model?.TicketInfo?.Info?.LocationFullName)</label>
     </div>
     <div class="form-group row mb-1 bg-light--lt">
-        <label class="col-sm-3 pt-1">Fiyat Kategorisi</label>
-        <label class="col-sm-9 pt-1">aaa</label>
+        <label class="col-sm-3 pt-1">Sipariş No</label>
+        <label class="col-sm-9 pt-1">@(Model?.TicketInfo?.Info?.OrderNumber)</label>
     </div>
     <div class="form-group row mb-1 bg-light--lt">
-        <label class="col-sm-3 pt-1">Süresi</label>
-        <label class="col-sm-9 pt-1">aaa</label>
+        <label class="col-sm-3 pt-1">Sipariş Tarihi</label>
+        <label class="col-sm-9 pt-1">@(Model?.TicketInfo?.Info?.SaleDate)</label>
     </div>
+    <div class="form-group row mb-1 bg-light--lt">
+        <label class="col-sm-3 pt-1">Durumu</label>
+        <label class="col-sm-9 pt-1">@(Model?.TicketInfo?.Info?.StatusName)</label>
+    </div>
+
 </div>
 
 <button type="submit" class="btn btn-primary btn-md btn-block mb-4">Bileti Ekle</button>

@@ -161,8 +161,7 @@ namespace ActionForce.Location.Controllers
                 model.TicketInfo = LocationHelper.GetScannedTicketInfo(qcode);
             }
 
-
-            return PartialView("_PartialBasketItemDetail", model);
+            return PartialView("_PartialReadTicketDetail", model);
         }
     }
 }

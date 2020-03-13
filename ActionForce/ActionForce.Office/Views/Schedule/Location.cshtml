@@ -12,7 +12,6 @@
         <span class="tx-20">Lokasyon Mesai Takvimleri</span>
         <input type="hidden" id="CurrentLocationID" value="@(Model.LocationID)" />
         <input type="hidden" id="CurrentWeekCode" value="@(Model.WeekCode)" />
-
     </div>
     <nav class="nav">
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
