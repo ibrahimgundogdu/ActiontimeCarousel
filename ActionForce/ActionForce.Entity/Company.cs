@@ -16,6 +16,7 @@ namespace ActionForce.Entity
     {
         public int ID { get; set; }
         public Nullable<int> CategoryID { get; set; }
+        public Nullable<int> OurCompanyID { get; set; }
         public string FullName { get; set; }
         public string EMail { get; set; }
         public string PhoneCode { get; set; }

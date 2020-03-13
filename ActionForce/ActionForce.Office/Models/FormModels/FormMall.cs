@@ -34,7 +34,7 @@ namespace ActionForce.Office
         public string UpdateIP { get; set; }
         public Nullable<System.Guid> MallUID { get; set; }
         public int Timezone { get; set; }
-        public bool IsActive { get; set; }
+        public string IsActive { get; set; }
 
 
         public int MallContactID { get; set; }
@@ -45,39 +45,20 @@ namespace ActionForce.Office
         public string ContactPhoneNumber { get; set; }
         public string Email { get; set; }
         public bool IsMaster { get; set; }
-        public bool MallContactIsActive { get; set; }
+        public string MallContactIsActive { get; set; }
 
 
         public int MallContractID { get; set; }
         public int LocationID { get; set; }
         public string LocationDescription { get; set; }
-        public decimal RentAmount { get; set; }
+        public string RentAmount { get; set; }
         public string Currency { get; set; }
-        public decimal CommonExpenseAmount { get; set; }
-        public decimal GuaranteeAmount { get; set; }
-        public decimal StampDutyAmount { get; set; }
-        public string ContractDuration { get; set; }
-        public DateTime ContractDateBegin { get; set; }
-        public DateTime ContractDateEnd { get; set; }
+        public string CommonExpenseAmount { get; set; }
+        public string GuaranteeAmount { get; set; }
+        public string StampDutyAmount { get; set; }
+        public Nullable<System.DateTime> ContractDateBegin { get; set; }
+        public Nullable<System.DateTime> ContractDateEnd { get; set; }
         public string ContractFile { get; set; }
-        public bool LocationIsActive { get; set; }
+        public string MallContractIsActive { get; set; }
     }
-
-    //public class FormMallLocationContract
-    //{
-    //    public int ID { get; set; }
-    //    public int MallID { get; set; }
-    //    public int LocationID { get; set; }
-    //    public string LocationDescription { get; set; }
-    //    public decimal RentAmount { get; set; }
-    //    public string Currency { get; set; }
-    //    public decimal CommonExpenseAmount { get; set; }
-    //    public decimal GuaranteeAmount { get; set; }
-    //    public decimal StampDutyAmount { get; set; }
-    //    public string ContractDuration { get; set; }
-    //    public DateTime ContractDateBegin { get; set; }
-    //    public DateTime ContractDateEnd { get; set; }
-    //    public string ContractFile { get; set; }
-    //    public bool IsActive { get; set; }
-    //}
 }

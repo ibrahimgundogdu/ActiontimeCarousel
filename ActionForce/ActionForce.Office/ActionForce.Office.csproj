@@ -2289,6 +2289,7 @@
     <Content Include="lib\typicons.font\typicons.ttf" />
     <Content Include="lib\typicons.font\typicons.woff" />
     <Content Include="Document\CashRecorder\60a3ef22-b203-4953-aba7-22fc8ae0070d.pdf" />
+    <Content Include="Document\Contract\f370076d-4800-409c-8fd0-ec3bd73416c4.pdf" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
