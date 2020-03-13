@@ -1,36 +1,65 @@
 ﻿@model CashControlModel
-<table class="table table-sm table-hover">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Tarih</th>
-            <th>Belge No</th>
-            <th>Lokasyon</th>
-            <th>Kasa</th>
-            <th>İşlem</th>
-            <th>Bu Hesaptan</th>
-            <th>Tahsilat</th>
-            <th class="text-center">Para Br.</th>
-            <th>Kaydeden</th>
-            <th>Kayıt Tarihi</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.CashCollections)
-        {
-            <tr style='@(item.IsActive == false ? "color: red" : "")'>
-                <td class="tx-sm-13 bold">@item.ID</td>
-                <td class="tx-sm-13">@(item.Date)</td>
-                <td class="tx-sm-13"><a href="@("/Cash/CashDetail/" + @item.UID)">@item.DocumentNumber</a></td>
-                <td class="tx-sm-13">@item.LocationFullName</td>
-                <td class="tx-sm-13">@item.CashName</td>
-                <td class="tx-sm-13">@item.ActionTypeName</td>
-                <td class="tx-sm-13">@item.CustomerFullName @item.EmployeeFullName @item.BankAccountName </td>
-                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
-                <td class="tx-sm-13 text-center">@(item.Currency)</td>
-                <td class="tx-sm-13">@item.RecorderFullName</td>
-                <td class="tx-sm-13">@item.RecordDate</td>
+@if (Model.CashCollections != null && Model.CashCollections.Count() > 0)
+{
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Tarih</th>
+                <th>Belge No</th>
+                <th>Lokasyon</th>
+                <th>Kasa</th>
+                <th>İşlem</th>
+                <th>Bu Hesaptan</th>
+                <th>Tahsilat</th>
+                <th class="text-center">Para Br.</th>
+                <th>Kaydeden</th>
+                <th>Kayıt Tarihi</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CashCollections)
+            {
+                <tr style='@(item.IsActive == false ? "color: red" : "")'>
+                    <td class="tx-sm-13 bold">@item.ID</td>
+                    <td class="tx-sm-13">@(item.Date)</td>
+                    <td class="tx-sm-13"><a href="@("/Cash/CashDetail/" + @item.UID)">@item.DocumentNumber</a></td>
+                    <td class="tx-sm-13">@item.LocationFullName</td>
+                    <td class="tx-sm-13">@item.CashName</td>
+                    <td class="tx-sm-13">@item.ActionTypeName</td>
+                    <td class="tx-sm-13">@item.CustomerFullName @item.EmployeeFullName @item.BankAccountName </td>
+                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
+                    <td class="tx-sm-13 text-center">@(item.Currency)</td>
+                    <td class="tx-sm-13">@item.RecorderFullName</td>
+                    <td class="tx-sm-13">@item.RecordDate</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Tarih</th>
+                <th>Belge No</th>
+                <th>Lokasyon</th>
+                <th>Kasa</th>
+                <th>İşlem</th>
+                <th>Bu Hesaptan</th>
+                <th>Tahsilat</th>
+                <th class="text-center">Para Br.</th>
+                <th>Kaydeden</th>
+                <th>Kayıt Tarihi</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="10">Sonuç bulunamadı!</td>
+            </tr>
+        </tbody>
+    </table>
+
+}
