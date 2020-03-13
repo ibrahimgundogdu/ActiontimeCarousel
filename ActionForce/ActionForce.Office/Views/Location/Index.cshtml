@@ -8,7 +8,7 @@
         <span class="tx-20">Lokasyon Listesi</span>
     </div>
     <nav class="nav">
-        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 0).ToLongDateString())
     </nav>
 </div>
 <div class="content-body">

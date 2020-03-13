@@ -163,5 +163,20 @@ namespace ActionForce.Location.Controllers
 
             return PartialView("_PartialReadTicketDetail", model);
         }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public PartialViewResult AddReadedTicket(string TicketNumber)
+        {
+            DefaultControlModel model = new DefaultControlModel();
+
+            if (!string.IsNullOrEmpty(TicketNumber))
+            {
+                
+            }
+
+            return PartialView("_PartialBasketList", model);
+        }
+
     }
 }
