@@ -53,14 +53,14 @@
                                             <div class="col-sm-6">
                                                 <input id="fullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="AVM İsmi" value="@(Model?.CheckMall?.FullName)" required>
                                             </div>
-                                            <div class="col-sm-3 mg-y-8">  
-                                                
+                                            <div class="col-sm-3 text-danger mg-y-8">  
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
                                             <label for="mallSegmentID" class="col-sm-3 col-form-label">AVM Segmenti</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="mallSegmentID" name="MallSegmentID" required="">
+                                                <select class="form-control" id="mallSegmentID" name="MallSegmentID" required>
                                                     @if (Model?.MallSegmentList?.Count > 0)
                                                     {
                                                         <option value="">Seçiniz</option>
@@ -72,7 +72,8 @@
                                                     }
                                                 </select>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
@@ -88,7 +89,8 @@
                                             <div class="col-sm-6">
                                                 <input id="address" name="Address" type="text" class="form-control" autocomplete="off" placeholder="AVM Adresi" value="@(Model?.CheckMall?.Address)" required>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
@@ -102,7 +104,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="stateID" class="col-sm-3 col-form-label">Eyalet</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="stateID" name="StateID" required="">
+                                                <select class="form-control" id="stateID" name="StateID" required>
                                                     @if (Model?.StateList?.Count > 0)
                                                     {
                                                         <option value="">Seçiniz</option>
@@ -114,13 +116,14 @@
                                                     }
                                                 </select>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
                                             <label for="cityID" class="col-sm-3 col-form-label">Şehir</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="cityID" name="CityID" required="">
+                                                <select class="form-control" id="cityID" name="CityID" required>
                                                     @if (Model?.CityList?.Count > 0)
                                                     {
                                                         <option value="">Seçiniz</option>
@@ -132,13 +135,14 @@
                                                     }
                                                 </select>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
                                             <label for="countyID" class="col-sm-3 col-form-label">İlçe</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="countyID" name="CountyID" required="">
+                                                <select class="form-control" id="countyID" name="CountyID" required>
                                                     @if (Model?.CountyList?.Count > 0)
                                                     {
                                                         <option value="">İlçe Seçiniz</option>
@@ -150,7 +154,8 @@
                                                     }
                                                 </select>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
@@ -175,7 +180,8 @@
                                             <div class="col-sm-3">
                                                 <input id="phoneNumber" name="PhoneNumber" type="text" class="form-control phone" autocomplete="off" placeholder="Telefon" value="@(Model?.CheckMall?.PhoneNumber)" required>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
@@ -205,7 +211,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="investorCompanyID" class="col-sm-3 col-form-label">Yatırımcı Şirket Ünvanı</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="investorCompanyID" name="InvestorCompanyID" required="">
+                                                <select class="form-control" id="investorCompanyID" name="InvestorCompanyID" required>
                                                     @if (Model?.InvestorCompanyList?.Count > 0)
                                                     {
                                                         <option value="">Seçiniz</option>
@@ -217,13 +223,14 @@
                                                     }
                                                 </select>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
                                             <label for="leasingCompanyID" class="col-sm-3 col-form-label">Kiralama Firması</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="leasingCompanyID" name="LeasingCompanyID" required="">
+                                                <select class="form-control" id="leasingCompanyID" name="LeasingCompanyID" required>
                                                     @if (Model?.LeasingCompanyList?.Count > 0)
                                                     {
                                                         <option value="">Seçiniz</option>
@@ -235,13 +242,14 @@
                                                     }
                                                 </select>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
                                             <label for="timezone" class="col-sm-3 col-form-label">Time Zone</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="timezone" name="Timezone" required="">
+                                                <select class="form-control" id="timezone" name="Timezone" required>
                                                     <option value="">Seçiniz</option>
 
                                                     @for (int i = 3; i >= -13; i--)
@@ -250,7 +258,8 @@
                                                     }
                                                 </select>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
@@ -271,7 +280,7 @@
                     </div>
                     <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30 row">
                         <div class=" col-md-4"></div>
-                        <div class="col-md-11 tx-center">
+                        <div class="col-md-12 tx-center">
                             <h4 class="mg-b-0 tx-spacing--1">İletişim Bilgileri</h4>
                         </div>
                     </div>
@@ -285,7 +294,8 @@
                                             <div class="col-sm-6">
                                                 <input id="title" name="Title" type="text" class="form-control" autocomplete="off" placeholder="Ünvanı" value="@(Model?.CheckMall?.Title)" required>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
@@ -293,13 +303,14 @@
                                             <div class="col-sm-6">
                                                 <input id="contactFullName" name="ContactFullName" type="text" class="form-control" autocomplete="off" placeholder="Adı Soyadı" value="@(Model?.CheckMall?.ContactFullName)" required>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
                                             <label for="phoneCode" class="col-sm-3 col-form-label">Telefon</label>
                                             <div class="col-sm-3">
-                                                <select class="form-control" id="phoneCode" name="PhoneCode">
+                                                <select class="form-control" id="phoneCode" name="PhoneCode" required>
                                                     @foreach (var item in Model.PhoneCodes)
                                                     {
                                                     <option value="@(item.Code)" @(Model?.CheckMall?.PhoneCode == item.Code ? "selected" : "")>@(item.Code) @(item.Country)</option>
@@ -309,7 +320,8 @@
                                             <div class="col-sm-3">
                                                 <input id="contactPhoneNumber" name="ContactPhoneNumber" type="text" class="form-control phone" autocomplete="off" placeholder="Telefon" value="@(Model?.CheckMall?.ContactPhoneNumber)" required>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
@@ -317,7 +329,8 @@
                                             <div class="col-sm-6">
                                                 <input id="email" name="Email" type="email" class="form-control" autocomplete="off" placeholder="Email" value="@(Model?.CheckMall?.Email)" required>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
@@ -338,7 +351,7 @@
                     </div>
                     <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30 row">
                         <div class=" col-md-4"></div>
-                        <div class="col-md-11 tx-center">
+                        <div class="col-md-12 tx-center">
                             <h4 class="mg-b-0 tx-spacing--1">Sözleşme Bilgileri</h4>
                         </div>
                     </div>
@@ -350,7 +363,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="locationID" class="col-sm-3 col-form-label">Lokasyon</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="locationID" name="LocationID" required="">
+                                                <select class="form-control" id="locationID" name="LocationID" required>
                                                     @if (Model?.LocationList?.Count > 0)
                                                     {
                                                         <option value="">Lokasyon Seçiniz</option>
@@ -361,7 +374,8 @@
                                                     }
                                                 </select>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row">
@@ -375,10 +389,10 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="rentAmount" class="col-sm-3 col-form-label">Kira Bedeli</label>
                                             <div class="col-sm-3">
-                                                <input id="rentAmount" name="RentAmount" type="text" class="form-control money" autocomplete="off" placeholder="Kira Bedeli" value="@(Model?.CheckMall?.RentAmount)">
+                                                <input id="rentAmount" name="RentAmount" type="text" class="form-control money" autocomplete="off" placeholder="Kira Bedeli" required value="@(Model?.CheckMall?.RentAmount)">
                                             </div>
                                             <div class="col-sm-3">
-                                                <select class="form-control" id="currency" name="Currency">
+                                                <select class="form-control" id="currency" name="Currency" required>
                                                     <option value="">Para Birimi</option>
                                                     @foreach (var item in Model.CurrencyList)
                                                     {
@@ -386,7 +400,8 @@
                                                     }
                                                 </select>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row mg-b-5">
@@ -421,7 +436,8 @@
                                             <div class="col-sm-3">
                                                 <input id="contractDateEnd" name="ContractDateEnd" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Sözleşme Bitiş Tarihi" value="@(Model?.CheckMall?.ContractDateEnd))" required>
                                             </div>
-                                            <div class="col-sm-3">
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
                                             </div>
                                         </div>
                                         <div class="form-group row bg-gray-50">
