@@ -482,6 +482,9 @@
     <Compile Include="MallContact.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="MallLocationContract.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="MallSegment.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -931,9 +934,6 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VTicketSaleRowCheck.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
-    <Compile Include="VTicketSaleRowsAll.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="WeekList.cs">
