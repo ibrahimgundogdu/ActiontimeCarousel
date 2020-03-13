@@ -55,7 +55,7 @@ namespace ActionForce.Office.Controllers
                         ActionEmployee = new ActionEmployee()
                         {
                             EmployeeID = User.EmployeeID,
-                            EMail = User.EMail,
+
                             FotoFile = User.FotoFile,
                             FullName = User.FullName,
                             RoleGroupID = User.RoleGroupID,
