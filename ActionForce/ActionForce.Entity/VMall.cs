@@ -44,8 +44,6 @@ namespace ActionForce.Entity
         public Nullable<bool> IsActive { get; set; }
         public string CompanyName { get; set; }
         public string Currency { get; set; }
-        public string InvestorCompanyName { get; set; }
-        public string LeasingCompanyName { get; set; }
         public string RecorderEmployeeName { get; set; }
         public string UpdaterEmployeeName { get; set; }
         public string CityName { get; set; }
@@ -56,6 +54,7 @@ namespace ActionForce.Entity
         public Nullable<int> StateID { get; set; }
         public Nullable<int> CityID { get; set; }
         public Nullable<int> CountyID { get; set; }
-        public string CompanyFullName { get; set; }
+        public string LeasingCompanyName { get; set; }
+        public string InvestorCompanyName { get; set; }
     }
 }

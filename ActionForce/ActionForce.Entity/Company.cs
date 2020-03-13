@@ -30,5 +30,6 @@ namespace ActionForce.Entity
         public string ContactMail { get; set; }
         public string ContactPhone { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public Nullable<int> OurCompanyID { get; set; }
     }
 }

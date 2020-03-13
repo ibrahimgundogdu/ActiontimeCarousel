@@ -145,7 +145,7 @@
     </div>
 </div>
 
-<div id="AddBasketTicket" class="modal bg-white fade">
+<div id="AddBasketTicket" class="modal bg-white fade" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content" id="BasketItemTicketContent">
             <div class="modal-header">
@@ -181,6 +181,10 @@
             clearTicketNumber();
             Android.scanBarcode();
         }
+
+        function OnTicketAddSuccess(data) {
+            $('#AddBasketTicket').modal('hide');
+        };
 
         function clearTicketNumber() {
             $("#InputTicketNumber").val('');
