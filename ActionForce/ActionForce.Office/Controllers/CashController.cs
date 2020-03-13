@@ -31,23 +31,20 @@ namespace ActionForce.Office.Controllers
             {
                 FilterModel filterModel = new FilterModel();
 
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
+                filterModel.DateBegin = DateTime.UtcNow.AddMonths(-1).Date;
+                filterModel.DateEnd = DateTime.UtcNow.Date;
                 model.Filters = filterModel;
             }
             
             model.CurrencyList = OfficeHelper.GetCurrency();
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
             model.CashCollections = Db.VDocumentCashCollections.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+
             if (model.Filters.LocationID > 0)
             {
                 model.CashCollections = model.CashCollections.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-
             }
-
 
             model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value);
 
@@ -56,23 +53,24 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult Filter(int? locationId, DateTime? beginDate, DateTime? endDate)
+        public ActionResult Filter(int? locationId, DateTime? beginDate, DateTime? endDate, string isActive)
         {
             FilterModel model = new FilterModel();
 
             model.LocationID = locationId;
             model.DateBegin = beginDate;
             model.DateEnd = endDate;
+            model.IsActive = isActive;
 
             if (beginDate == null)
             {
-                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                DateTime begin = DateTime.UtcNow.AddMonths(-1).Date;
                 model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
             }
 
             if (endDate == null)
             {
-                model.DateEnd = DateTime.Now.Date;
+                model.DateEnd = DateTime.UtcNow.Date;
             }
 
             TempData["filter"] = model;
@@ -81,7 +79,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult AddCash(Guid? id)
+        public ActionResult Add(Guid? id)
         {
             CashControlModel model = new CashControlModel();
 
@@ -119,6 +117,9 @@ namespace ActionForce.Office.Controllers
 
             return View(model);
         }
+
+
+
 
         [HttpPost]
         [AllowAnonymous]

@@ -1,6 +1,7 @@
-﻿<table class="table table-striped table-hover table-sm tx-13 tx-nowrap mg-b-0">
-    <thead class="table-dark">
-        <tr class="tx-10 tx-spacing-1 tx-color-03 tx-uppercase">
+﻿@model CashControlModel
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
             <th>#</th>
             <th>Tarih</th>
             <th>Belge No</th>
@@ -9,17 +10,15 @@
             <th>İşlem</th>
             <th>Bu Hesaptan</th>
             <th>Tahsilat</th>
-            <th>Para Br.</th>
+            <th class="text-center">Para Br.</th>
             <th>Kaydeden</th>
             <th>Kayıt Tarihi</th>
         </tr>
     </thead>
     <tbody>
-
         @foreach (var item in Model.CashCollections)
         {
             <tr style='@(item.IsActive == false ? "color: red" : "")'>
-
                 <td class="tx-sm-13 bold">@item.ID</td>
                 <td class="tx-sm-13">@(item.Date)</td>
                 <td class="tx-sm-13"><a href="@("/Cash/CashDetail/" + @item.UID)">@item.DocumentNumber</a></td>
@@ -28,11 +27,10 @@
                 <td class="tx-sm-13">@item.ActionTypeName</td>
                 <td class="tx-sm-13">@item.CustomerFullName @item.EmployeeFullName @item.BankAccountName </td>
                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
-                <td class="tx-sm-13">@(item.Currency)</td>
+                <td class="tx-sm-13 text-center">@(item.Currency)</td>
                 <td class="tx-sm-13">@item.RecorderFullName</td>
-                <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                <td class="tx-sm-13">@item.RecordDate</td>
             </tr>
         }
-
     </tbody>
 </table>

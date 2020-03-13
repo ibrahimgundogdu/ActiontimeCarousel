@@ -936,9 +936,6 @@
     <Compile Include="VTicketSaleRowCheck.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
-    <Compile Include="VTicketSaleRowsAll.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
     <Compile Include="WeekList.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

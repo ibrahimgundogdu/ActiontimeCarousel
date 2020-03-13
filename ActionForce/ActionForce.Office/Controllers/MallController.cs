@@ -195,6 +195,7 @@ namespace ActionForce.Office.Controllers
                             return RedirectToAction("Index");
                         }
                     }
+
                     MallLocationContract mallLocationContractModel = new MallLocationContract();
 
                     mallLocationContractModel.MallID = mall.MallID;
