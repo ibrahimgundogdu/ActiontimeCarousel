@@ -297,9 +297,14 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Mall" Width="1.5" PointX="59.375" PointY="16.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.County" Width="1.5" PointX="51.375" PointY="59.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowCheck" Width="1.5" PointX="53.375" PointY="59.75" />
+<<<<<<< HEAD
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowsAll" Width="1.5" PointX="19.375" PointY="60.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VMall" Width="1.5" PointX="59.375" PointY="58.75" />
+=======
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.MallLocationContract" Width="1.5" PointX="31.375" PointY="57.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Company" Width="1.5" PointX="59.375" PointY="58.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VMall" Width="1.5" PointX="33.375" PointY="57.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Company" Width="1.5" PointX="62.25" PointY="58.25" />
+        
+&gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
