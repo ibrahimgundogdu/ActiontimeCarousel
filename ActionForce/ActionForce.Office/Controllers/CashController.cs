@@ -107,11 +107,12 @@ namespace ActionForce.Office.Controllers
                     model.CashCollections = model.CashCollections.Where(x => x.IsActive == _isActive).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
                 }
             }
-            
-            return PartialView("_PartialCashList",model);
+
+            return PartialView("_PartialCashList", model);
         }
 
 
+        #region DocumentCashCollections
         [AllowAnonymous]
         public ActionResult AddCash(Guid? id)
         {
@@ -151,8 +152,6 @@ namespace ActionForce.Office.Controllers
 
             return View(model);
         }
-
-
 
 
         [HttpPost]
@@ -220,7 +219,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult EditCashCollection(NewCashCollect cashCollect)
+        public ActionResult EditCashCollection(EditCashCollect cashCollect)
         {
             Result result = new Result()
             {
@@ -238,34 +237,57 @@ namespace ActionForce.Office.Controllers
                 var currency = cashCollect.Currency;
                 var docDate = DateTime.Now.Date;
                 double? newexchanges = Convert.ToDouble(cashCollect.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                double? exchanges = Convert.ToDouble(cashCollect.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                //double? exchanges = Convert.ToDouble(cashCollect.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(cashCollect.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
                 }
 
+                #region Exchange
+                var getExchange = OfficeHelper.GetExchange(docDate.Date);
+                double? exchangeRate = 1;
+
+                if (getExchange != null)
+                {
+                    getExchange.USDA = getExchange.USDA ?? Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault().USDA;
+                    getExchange.EURA = getExchange.EURA ?? Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault().EURA;
+
+                    exchangeRate = (currency == "USD" ? getExchange.USDA : (currency == "EUR" ? getExchange.EURA : 1));
+                }
+                else
+                {
+                    getExchange = Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault();
+
+                    exchangeRate = (currency == "USD" ? getExchange.USDA : (currency == "EUR" ? getExchange.EURA : 1));
+                }
+                #endregion
+
                 if (amount > 0)
                 {
-                    CashCollection collection = new CashCollection();
-                    collection.ActinTypeID = cashCollect.ActinTypeID;
-                    collection.Amount = amount;
-                    collection.Currency = currency;
-                    collection.Description = cashCollect.Description;
-                    collection.DocumentDate = docDate;
-                    collection.EnvironmentID = 2;
-                    collection.FromBankAccountID = fromPrefix == "B" ? fromID : (int?)null;
-                    collection.FromCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                    collection.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
-                    collection.LocationID = cashCollect.LocationID;
-                    collection.ReferanceID = cashCollect.ReferanceID;
-                    collection.UID = cashCollect.UID;
+                    CashCollection collection = new CashCollection()
+                    {
+                        ActinTypeID = cashCollect.ActinTypeID,
+                        Amount = amount,
+                        Currency = currency,
+                        Description = cashCollect.Description,
+                        DocumentDate = docDate,
+                        EnvironmentID = 2,
+                        FromBankAccountID = fromPrefix == "B" ? fromID : (int?)null,
+                        FromCustomerID = fromPrefix == "A" ? fromID : (int?)null,
+                        FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null,
+                        LocationID = cashCollect.LocationID,
+                        ReferanceID = cashCollect.ReferanceID,
+                        UID = cashCollect.UID,
+                        IsActive = cashCollect.IsActive == "1" ? true : false
+                    };
+
                     if (newexchanges > 0)
                     {
                         collection.ExchangeRate = newexchanges;
                     }
                     else
                     {
-                        collection.ExchangeRate = exchanges;
+                        collection.ExchangeRate = exchangeRate;
                     }
 
                     DocumentManager documentManager = new DocumentManager();
@@ -313,12 +335,10 @@ namespace ActionForce.Office.Controllers
 
             return RedirectToAction("CashDetail", new { id = id });
         }
+        #endregion
 
 
-
-
-
-
+        #region DocumentTicketSales
         [AllowAnonymous]
         public ActionResult Sale(int? locationId)
         {
@@ -498,7 +518,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult EditCashSale(NewCashSale cashSale)
+        public ActionResult EditCashSale(EditCashSale cashSale)
         {
             Result result = new Result()
             {
@@ -518,11 +538,31 @@ namespace ActionForce.Office.Controllers
                 var docDate = DateTime.Now.Date;
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSale.LocationID);
                 double? newexchanges = Convert.ToDouble(cashSale.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                double? exchanges = Convert.ToDouble(cashSale.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                //double? exchanges = Convert.ToDouble(cashSale.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 if (DateTime.TryParse(cashSale.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashSale.DocumentDate).Date;
                 }
+
+                #region Exchange
+                var getExchange = OfficeHelper.GetExchange(docDate.Date);
+                double? exchangeRate = 1;
+
+                if (getExchange != null)
+                {
+                    getExchange.USDA = getExchange.USDA ?? Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault().USDA;
+                    getExchange.EURA = getExchange.EURA ?? Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault().EURA;
+
+                    exchangeRate = (currency == "USD" ? getExchange.USDA : (currency == "EUR" ? getExchange.EURA : 1));
+                }
+                else
+                {
+                    getExchange = Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault();
+
+                    exchangeRate = (currency == "USD" ? getExchange.USDA : (currency == "EUR" ? getExchange.EURA : 1));
+                }
+                #endregion
+
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
                 if (amount > 0 && quantity > 0)
@@ -541,13 +581,14 @@ namespace ActionForce.Office.Controllers
                     sale.PayMethodID = cashSale.PayMethodID;
                     sale.ReferanceID = cashSale.ReferanceID;
                     sale.TimeZone = timezone;
+                    sale.IsActive = cashSale.IsActive == "1" ? true : false;
                     if (newexchanges > 0)
                     {
                         sale.ExchangeRate = newexchanges;
                     }
                     else
                     {
-                        sale.ExchangeRate = exchanges;
+                        sale.ExchangeRate = exchangeRate;
                     }
 
                     DocumentManager documentManager = new DocumentManager();
@@ -592,12 +633,8 @@ namespace ActionForce.Office.Controllers
 
             return RedirectToAction("SaleDetail", new { id = id });
 
-        }
-
-
-
-
-
+        } 
+        #endregion
 
         [AllowAnonymous]
         public ActionResult Exchange(int? locationId)

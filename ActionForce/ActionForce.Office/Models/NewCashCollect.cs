@@ -20,6 +20,22 @@ namespace ActionForce.Office
         public Guid UID { get; set; }
     }
 
+    public class EditCashCollect
+    {
+        public int ActinTypeID { get; set; }
+        public string FromID { get; set; }
+        public int LocationID { get; set; }
+        public string Amount { get; set; }
+        public string Currency { get; set; }
+        public string DocumentDate { get; set; }
+        public string Description { get; set; }
+        public string ExchangeRate { get; set; }
+        public string Exchange { get; set; }
+        public long? ReferanceID { get; set; }
+        public Guid UID { get; set; }
+        public string IsActive { get; set; }
+    }
+
     public class NewCashSale
     {
         public int ActinTypeID { get; set; }
@@ -35,6 +51,23 @@ namespace ActionForce.Office
         public long? ReferanceID { get; set; }
         public int PayMethodID { get; set; }
         public Guid UID { get; set; }
+    }
+    public class EditCashSale
+    {
+        public int ActinTypeID { get; set; }
+        public string FromID { get; set; }
+        public int LocationID { get; set; }
+        public int Quantity { get; set; }
+        public string Amount { get; set; }
+        public string Currency { get; set; }
+        public string DocumentDate { get; set; }
+        public string Description { get; set; }
+        public string ExchangeRate { get; set; }
+        public string Exchange { get; set; }
+        public long? ReferanceID { get; set; }
+        public int PayMethodID { get; set; }
+        public Guid UID { get; set; }
+        public string IsActive { get; set; }
     }
     public class NewCashExchange
     {

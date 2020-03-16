@@ -175,24 +175,19 @@ namespace ActionForce.Office
                         isCash.UpdateIP = OfficeHelper.GetIPAddress();
                         isCash.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == collection.Currency ? collection.Amount : collection.Amount * isCash.ExchangeRate;
                         isCash.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+                        isCash.IsActive = collection.IsActive;
 
                         Db.SaveChanges();
 
-                        var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == locId && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID);
+                        //Cari hesap hareketleri temizlenir.
 
-                        if (cashaction != null)
+                        Db.RemoveAllAccountActions(isCash.ID, isCash.UID);
+
+                        // Aktif ise Cari hesap kaydı eklenir.
+            
+                        if (isCash.IsActive == true)
                         {
-                            cashaction.LocationID = isCash.LocationID;
-                            cashaction.Collection = isCash.Amount;
-                            cashaction.CashID = cash.ID;
-                            cashaction.Currency = collection.Currency;
-                            cashaction.ActionDate = collection.DocumentDate;
-                            cashaction.ProcessDate = collection.DocumentDate;
-                            cashaction.UpdateDate = isCash.UpdateDate;
-                            cashaction.UpdateEmployeeID = isCash.UpdateEmployee;
-
-                            Db.SaveChanges();
-
+                            OfficeHelper.AddCashAction(isCash.CashID, isCash.LocationID, authentication.ActionEmployee.EmployeeID, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, isCash.Amount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
                         }
 
                         result.IsSuccess = true;
@@ -242,7 +237,11 @@ namespace ActionForce.Office
 
                             Db.SaveChanges();
 
-                            OfficeHelper.AddCashAction(isCash.CashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, -1 * isCash.Amount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
+                            //Cari hesap hareketleri temizlenir.
+
+                            Db.RemoveAllAccountActions(isCash.ID, isCash.UID);
+
+                            //OfficeHelper.AddCashAction(isCash.CashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, -1 * isCash.Amount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
 
                             result.IsSuccess = true;
                             result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki kasa tahsilatı başarı ile iptal edildi";
@@ -395,24 +394,20 @@ namespace ActionForce.Office
                         isCash.UpdateIP = OfficeHelper.GetIPAddress();
                         isCash.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == sale.Currency ? sale.Amount : sale.Amount * isCash.ExchangeRate;
                         isCash.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+                        isCash.IsActive = sale.IsActive;
+                        isCash.Currency = sale.Currency;
 
                         Db.SaveChanges();
 
-                        var cashaction = Db.CashActions.FirstOrDefault(x => x.LocationID == locId && x.CashActionTypeID == isCash.ActionTypeID && x.ProcessID == isCash.ID);
+                        //Cari hesap hareketleri temizlenir.
 
-                        if (cashaction != null)
+                        Db.RemoveAllAccountActions(isCash.ID, isCash.UID);
+
+                        // Aktif ise Cari hesap kaydı eklenir.
+
+                        if (isCash.IsActive == true)
                         {
-                            cashaction.LocationID = isCash.LocationID;
-                            cashaction.Collection = isCash.Amount;
-                            cashaction.CashID = cash.ID;
-                            cashaction.Currency = sale.Currency;
-                            cashaction.ActionDate = sale.DocumentDate;
-                            cashaction.ProcessDate = sale.DocumentDate;
-                            cashaction.UpdateDate = isCash.UpdateDate;
-                            cashaction.UpdateEmployeeID = isCash.UpdateEmployee;
-
-                            Db.SaveChanges();
-
+                            OfficeHelper.AddCashAction(isCash.CashID, isCash.LocationID, authentication.ActionEmployee.EmployeeID, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, -1, isCash.Amount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
                         }
 
                         result.IsSuccess = true;
@@ -461,7 +456,12 @@ namespace ActionForce.Office
 
                             Db.SaveChanges();
 
-                            OfficeHelper.AddCashAction(isCash.CashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, -1 * isCash.Amount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
+                            //Cari hesap hareketleri temizlenir.
+
+                            Db.RemoveAllAccountActions(isCash.ID, isCash.UID);
+
+
+                            //OfficeHelper.AddCashAction(isCash.CashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, -1 * isCash.Amount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
 
 
                             result.IsSuccess = true;
@@ -4102,7 +4102,7 @@ namespace ActionForce.Office
                     List<int> cashprocess = new int[] { 23, 27 }.ToList();
                     List<int> cardsales = new int[] { 1, 3, 5 }.ToList();
                     List<int> maas = new int[] { 3, 31 }.ToList();
-                    List<int> hakedisid = new int[] { 32,36,39 }.ToList();
+                    List<int> hakedisid = new int[] { 32, 36, 39 }.ToList();
                     List<int> cashexpense = new int[] { 4, 29 }.ToList();
                     List<int> cashexchange = new int[] { 25 }.ToList();
                     List<int> bankeft = new int[] { 11, 30 }.ToList();
