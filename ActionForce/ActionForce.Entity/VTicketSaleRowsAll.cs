@@ -17,7 +17,6 @@ namespace ActionForce.Entity
         public long ID { get; set; }
         public long OrderID { get; set; }
         public string OrderNumber { get; set; }
-        public string SaleDetail { get; set; }
         public Nullable<int> LocationID { get; set; }
         public Nullable<int> EmployeeID { get; set; }
         public string SaleCustomerName { get; set; }
@@ -37,19 +36,10 @@ namespace ActionForce.Entity
         public string RecorderFullName { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
         public Nullable<int> SalePaymethodID { get; set; }
-        public Nullable<double> Cash { get; set; }
-        public Nullable<double> Credit { get; set; }
-        public Nullable<double> SaleCash { get; set; }
-        public Nullable<double> SaleCredit { get; set; }
-        public string SaleMoney { get; set; }
+        public string SaleCurrency { get; set; }
         public string MethodName { get; set; }
         public Nullable<int> Adet { get; set; }
-        public Nullable<double> Total { get; set; }
-        public Nullable<double> SaleTotal { get; set; }
         public Nullable<bool> IsActive { get; set; }
-        public bool IsSale { get; set; }
-        public Nullable<bool> IsCash { get; set; }
-        public Nullable<bool> IsExtended { get; set; }
         public int TicketTypeID { get; set; }
         public string TicketNumber { get; set; }
         public System.DateTime Date { get; set; }
@@ -58,10 +48,9 @@ namespace ActionForce.Entity
         public double Price { get; set; }
         public Nullable<double> Discount { get; set; }
         public Nullable<double> RowTotal { get; set; }
-        public string Money { get; set; }
+        public string Currency { get; set; }
         public Nullable<int> PromotionID { get; set; }
         public Nullable<bool> IsPromotion { get; set; }
-        public Nullable<bool> IsOpen { get; set; }
         public Nullable<bool> IsExchangable { get; set; }
         public Nullable<int> StatusID { get; set; }
         public string DeviceID { get; set; }
@@ -69,8 +58,6 @@ namespace ActionForce.Entity
         public Nullable<double> Longitude { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
-        public Nullable<int> PrintCount { get; set; }
-        public Nullable<System.DateTime> PrintDate { get; set; }
         public string CustomerName { get; set; }
         public string CustomerData { get; set; }
         public string Description { get; set; }
@@ -84,20 +71,17 @@ namespace ActionForce.Entity
         public string TicketNumberMasked { get; set; }
         public string StatusName { get; set; }
         public string StatusColor { get; set; }
-        public Nullable<int> ReferenceOrderID { get; set; }
-        public Nullable<int> ReferenceOrderRowID { get; set; }
         public Nullable<int> SaleTypeID { get; set; }
-        public Nullable<int> PrepaidCampaignID { get; set; }
-        public Nullable<double> SalePrePaidTotal { get; set; }
-        public string PrepaidTicketNumber { get; set; }
-        public string CampaignName { get; set; }
         public Nullable<double> PrePaid { get; set; }
         public string TicketSaleTypeName { get; set; }
         public Nullable<long> TicketTripID { get; set; }
-        public string Currency { get; set; }
+        public string PriceCurrency { get; set; }
         public string PriceCategoryName { get; set; }
         public string ProductName { get; set; }
         public Nullable<int> Unit { get; set; }
         public Nullable<int> ProductID { get; set; }
+        public Nullable<double> SaleAmount { get; set; }
+        public Nullable<int> SaleRowUnit { get; set; }
+        public Nullable<bool> IsFinancialization { get; set; }
     }
 }

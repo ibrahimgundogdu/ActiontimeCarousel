@@ -272,10 +272,9 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleCollection" Width="1.5" PointX="57.375" PointY="43.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleStatus" Width="1.5" PointX="57.375" PointY="47.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPriceCategory" Width="1.5" PointX="57.375" PointY="57.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSale" Width="1.5" PointX="11.375" PointY="34.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRefund" Width="1.5" PointX="13.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProductCategory" Width="1.5" PointX="15.375" PointY="35.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProduct" Width="1.5" PointX="3.75" PointY="35.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProduct" Width="1.5" PointX="2.75" PointY="32.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationSchedule" Width="1.5" PointX="41.375" PointY="57.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPrice" Width="1.5" PointX="57.75" PointY="50.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Location" Width="1.5" PointX="58.375" PointY="26.75" />
@@ -301,10 +300,13 @@
 =======
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.MallLocationContract" Width="1.5" PointX="31.375" PointY="57.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Company" Width="1.5" PointX="62.25" PointY="58.25" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRows" Width="1.5" PointX="61.375" PointY="11.875" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowCheck" Width="1.5" PointX="9.6835081603766913" PointY="30.385365172468763" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowsAll" Width="1.5" PointX="0.53353448423255911" PointY="28.941844089395293" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VMall" Width="1.5" PointX="0.5123895912023213" PointY="28.440662278067627" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowCheck" Width="1.5" PointX="10.25" PointY="34.875" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VMall" Width="1.5" PointX="2.75" PointY="37.25" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSale" Width="1.5" PointX="3.8740823659459513" PointY="13.413234597730094" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRows" Width="1.5" PointX="6.8293811412664978" PointY="2.0410612235036965" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSale" Width="1.5" PointX="11.446473899970984" PointY="5.5005591090305517" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRows" Width="1.5" PointX="9.7111887306492726" PointY="8.1569609978035835" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowsAll" Width="1.5" PointX="2.7420721998168491" PointY="31.771645173324107" />
         
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
       </Diagram>

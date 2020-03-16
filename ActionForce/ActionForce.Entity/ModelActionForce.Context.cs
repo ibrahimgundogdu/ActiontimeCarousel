@@ -274,7 +274,6 @@ namespace ActionForce.Entity
         public virtual DbSet<TicketSaleCollection> TicketSaleCollection { get; set; }
         public virtual DbSet<TicketSaleStatus> TicketSaleStatus { get; set; }
         public virtual DbSet<VPriceCategory> VPriceCategory { get; set; }
-        public virtual DbSet<TicketSale> TicketSale { get; set; }
         public virtual DbSet<TicketSaleRefund> TicketSaleRefund { get; set; }
         public virtual DbSet<TicketProductCategory> TicketProductCategory { get; set; }
         public virtual DbSet<TicketProduct> TicketProduct { get; set; }
@@ -299,10 +298,13 @@ namespace ActionForce.Entity
         public virtual DbSet<County> County { get; set; }
         public virtual DbSet<MallLocationContract> MallLocationContract { get; set; }
         public virtual DbSet<Company> Company { get; set; }
-        public virtual DbSet<TicketSaleRows> TicketSaleRows { get; set; }
         public virtual DbSet<VTicketSaleRowCheck> VTicketSaleRowCheck { get; set; }
-        public virtual DbSet<VTicketSaleRowsAll> VTicketSaleRowsAll { get; set; }
         public virtual DbSet<VMall> VMall { get; set; }
+        public virtual DbSet<TicketSale> TicketSale { get; set; }
+        public virtual DbSet<TicketSaleRows> TicketSaleRows { get; set; }
+        public virtual DbSet<VTicketSale> VTicketSale { get; set; }
+        public virtual DbSet<VTicketSaleRows> VTicketSaleRows { get; set; }
+        public virtual DbSet<VTicketSaleRowsAll> VTicketSaleRowsAll { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
