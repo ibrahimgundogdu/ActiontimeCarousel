@@ -2731,6 +2731,8 @@
     <Content Include="Views\Mall\_PartialRelatedMallLocationList.cshtml" />
     <Content Include="Views\Mall\_PartialRelatedLocationList.cshtml" />
     <Content Include="Views\Mall\_PartialMallInformation.cshtml" />
+    <Content Include="Views\Mall\EditMall.cshtml" />
+    <Content Include="Views\Mall\_PartialEditMall.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

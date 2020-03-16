@@ -246,7 +246,7 @@ namespace ActionForce.Office.Controllers
             }
 
             model.MallModel = Db.VMall.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.MallUID == id);
-            model.LocationList = Db.VLocation.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.MallID == null && x.IsActive== true).ToList();
+            model.LocationList = Db.VLocation.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.MallID == null && x.IsActive == true).ToList();
 
             if (model.MallModel != null)
             {
@@ -269,17 +269,13 @@ namespace ActionForce.Office.Controllers
                     Db.SaveChanges();
 
                     model.MallModel = Db.VMall.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.ID == model.MallModel.ID);
-                    model.LocationList = Db.VLocation.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.MallID == null && x.IsActive == true).ToList();
 
                     if (model.MallModel != null)
                     {
                         model.RelatedLocationList = Db.VLocation.Where(x => x.MallID == model.MallModel.ID && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
                     }
-
-                    return PartialView("_PartialRelatedLocationList", model);
                 }
-
-                return PartialView();
+                return PartialView("_PartialRelatedLocationList", model);
             }
 
             model.Result.IsSuccess = false;
@@ -288,10 +284,27 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public ActionResult Edit(Guid guid)
+        public ActionResult EditMall(Guid id)
         {
+            if (id == Guid.Empty)
+            {
+                return RedirectToAction("Index");
+            }
 
-            return View();
+            MallControlModel model = new MallControlModel();
+            model.MallModel = Db.VMall.FirstOrDefault(x => x.MallUID == id);
+            model.OurCompanyList = Db.OurCompany.Where(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.MallSegmentList = Db.MallSegment.ToList();
+            model.RelatedCountry = Db.Country.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.StateList = Db.State.Where(x => x.CountryID == model.RelatedCountry.ID).ToList();
+            model.CityList = Db.VCity.Where(x => x.CountryID == model.RelatedCountry.ID).ToList();
+            model.CountyList = Db.County.ToList();
+            model.InvestorCompanyList = Db.Company.Where(x => x.CategoryID == 2 && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.LeasingCompanyList = Db.Company.Where(x => x.CategoryID == 3 && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+
+            return View(model);
         }
 
 
