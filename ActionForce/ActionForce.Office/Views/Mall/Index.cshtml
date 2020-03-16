@@ -48,7 +48,7 @@
                         <option value="" label="Şehir Seçiniz"></option>
                         @foreach (var item in Model.CityList)
                         {
-                            <option value="@item.CityName" @(Model.FilterModel != null ? (Model.FilterModel?.CityName == item.CityName ? "selected" : "") : "")>@Html.Raw($"<strong>{item.CityName}</strong>")</option>
+                            <option value="@item.CityName" @(Model.FilterModel != null ? (Model.FilterModel?.CityName == item.CityName ? "selected" : "") : "")   >@Html.Raw($"<strong>{item.CityName}</strong>")</option>
                         }
                     </select>
                 </div>

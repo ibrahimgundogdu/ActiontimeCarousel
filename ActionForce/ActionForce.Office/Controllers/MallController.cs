@@ -236,6 +236,93 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
+        public ActionResult Detail(Guid id)
+        {
+            MallControlModel model = new MallControlModel();
+
+            if ( id== Guid.Empty)
+            {
+                return RedirectToAction("Index");
+            }
+
+            model.MallModel = Db.VMall.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.MallUID == id);
+            model.LocationList = Db.VLocation.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.MallID == null && x.IsActive == true).ToList();
+
+            if (model.MallModel != null)
+            {
+                model.RelatedLocationList = Db.VLocation.Where(x => x.MallID == model.MallModel.ID && x.OurCompanyID== model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult LinkToMall(MallControlModel model)
+        {
+            if (model != null)
+            {
+                Location willBeLinkedLocation = Db.Location.Where(x => x.LocationID == model.LocationModelID && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).FirstOrDefault();
+
+                if (willBeLinkedLocation != null)
+                {
+                    willBeLinkedLocation.MallID = model.MallModel.ID;
+                    Db.SaveChanges();
+
+                    model.MallModel = Db.VMall.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.ID == model.MallModel.ID);
+
+                    if (model.MallModel != null)
+                    {
+                        model.RelatedLocationList = Db.VLocation.Where(x => x.MallID == model.MallModel.ID && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+                    }
+                }
+                return PartialView("_PartialRelatedLocationList", model);
+            }
+
+            model.Result.IsSuccess = false;
+            model.Result.Message = "Lokasyon veya AVM Bilgisi Eksik";
+            return PartialView("_PartialRelatedLocationList", model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult EditMall(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                return RedirectToAction("Index");
+            }
+
+            MallControlModel model = new MallControlModel();
+            model.MallModel = Db.VMall.FirstOrDefault(x => x.MallUID == id);
+            model.OurCompanyList = Db.OurCompany.Where(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.MallSegmentList = Db.MallSegment.ToList();
+            model.RelatedCountry = Db.Country.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.StateList = Db.State.Where(x => x.CountryID == model.RelatedCountry.ID).ToList();
+            model.CityList = Db.VCity.Where(x => x.CountryID == model.RelatedCountry.ID).ToList();
+            model.CountyList = Db.County.ToList();
+            model.InvestorCompanyList = Db.Company.Where(x => x.CategoryID == 2 && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.LeasingCompanyList = Db.Company.Where(x => x.CategoryID == 3 && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+
+            return View(model);
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        public JsonResult GetRefreshLocationList()
+        {
+            MallControlModel model = new MallControlModel();
+            List<VLocation> refreshedList= Db.VLocation.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.MallID == null && x.IsActive == true).ToList();
+            List<SelectListItem> SelectList = refreshedList.Select(x=> new SelectListItem() {
+                Text = x.LocationFullName,
+                Value = x.LocationID.ToString()
+            }).ToList();
+
+            return Json(SelectList, JsonRequestBehavior.AllowGet);
+        }
+
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult GetCountyList(int? id)
         {

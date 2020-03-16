@@ -191,18 +191,18 @@
                                 <div class="col-sm-3">
                                     <input name="ActinTypeID" type="hidden" value="23" />
                                     <input name="UID" type="hidden" value="@(Model.CashDetail.UID)" />
-                                    @if (Model.CashDetail.IsActive == true)
-                                    {
-                                        <button type="submit" class="btn btn-primary btn-block">Tahsilat Güncelle</button>
-                                    }
-
+                                    @*@if (Model.CashDetail.IsActive == true)
+                                        {
+                                            <button type="submit" class="btn btn-primary btn-block">Tahsilat Güncelle</button>
+                                        }*@
+                                    <button type="submit" class="btn btn-primary btn-block">Tahsilat Güncelle</button>
                                 </div>
                                 <div class="col-sm-3">
-                                    @if (Model.CashDetail.IsActive == true)
-                                    {
-                                        <a href="#" class="btn btn-danger btn-block btn-icon" onclick="confirm('Silmek Istediğinize Emin misiniz?')? DeleteCashCollection('@Model.CashDetail.UID'):''">Tahsilat Sil <i data-feather="trash-2"></i></a>
-                                    }
-
+                                    @*@if (Model.CashDetail.IsActive == true)
+                                        {
+                                            <a href="#" class="btn btn-danger btn-block btn-icon" onclick="confirm('Silmek Istediğinize Emin misiniz?')? DeleteCashCollection('@Model.CashDetail.UID'):''">Tahsilat Sil <i data-feather="trash-2"></i></a>
+                                        }*@
+                                    <a href="#" class="btn btn-danger btn-block btn-icon" onclick="confirm('Silmek Istediğinize Emin misiniz?')? DeleteCashCollection('@Model.CashDetail.UID'):''">Tahsilat Sil <i data-feather="trash-2"></i></a>
                                 </div>
                                 <div class="col-sm-3">
                                 </div>

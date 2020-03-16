@@ -1,0 +1,376 @@
+﻿@model MallControlModel
+
+@using (Html.BeginForm("AddMall", "Mall", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="content-body">
+        <div class="pd-x-0 tx-13">
+            <div class="media d-block d-lg-flex">
+                <div class="media-body  mg-t-40 mg-lg-t-0">
+                    <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30 row">
+                        <div class=" col-md-4"></div>
+                        <div class="col-md-4 tx-center">
+                            <h4 class="mg-b-0 tx-spacing--1">AVM Bilgileri</h4>
+                        </div>
+                    </div>
+                    <div id="mallStatus">
+                        <div class="row no-gutters">
+                            <div class="col-lg-12">
+                                <div class="row row-xs">
+                                    <div class="col-lg-12">
+                                        <div class="form-group row mg-b-5">
+                                            <label for="ourCompanyID" class="col-sm-3 col-form-label">Firma</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="ourCompanyID" name="OurCompanyID" required>
+                                                    @if (Model?.OurCompanyList?.Count > 0)
+                                                    {
+                                                        foreach (var item in Model.OurCompanyList)
+                                                        {
+                                                            <option value="@(item.CompanyID)" @(Model.Authentication.ActionEmployee.OurCompanyID == item.CompanyID ? "selected" : "")>@(item.CompanyName)</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="fullName" class="col-sm-3 col-form-label">AVM İsmi</label>
+                                            <div class="col-sm-6">
+                                                <input id="fullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="AVM İsmi"  value="@(Model?.CheckMall?.FullName ?? Model.CheckMall.FullName)" required>
+                                            </div>
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="mallSegmentID" class="col-sm-3 col-form-label">AVM Segmenti</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="mallSegmentID" name="MallSegmentID" required>
+                                                    @if (Model?.MallSegmentList?.Count > 0)
+                                                    {
+                                                        <option value="">Seçiniz</option>
+
+                                                        foreach (var item in Model.MallSegmentList)
+                                                        {
+                                                            <option value="@(item.ID)" @(Model?.CheckMall?.MallSegmentID == item.ID ? "selected" : "")>@(item.SegmentName)</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="structuralCondition" class="col-sm-3 col-form-label">AVM Fiziki Durumu</label>
+                                            <div class="col-sm-6">
+                                                <input id="structuralCondition" name="StructuralCondition" type="text" class="form-control" autocomplete="off" placeholder="AVM Fiziki Durumu" value="@(Model?.CheckMall?.StructuralCondition)">
+                                            </div>
+                                            <div class="col-sm-3">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="address" class="col-sm-3 col-form-label">AVM Adresi</label>
+                                            <div class="col-sm-6">
+                                                <input id="address" name="Address" type="text" class="form-control" autocomplete="off" placeholder="AVM Adresi" value="@(Model?.CheckMall?.Address)" required>
+                                            </div>
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="countryID" class="col-sm-3 col-form-label">Ülke</label>
+                                            <div class="col-sm-6">
+                                                <input id="countryID" name="CountryID" type="text" class="form-control" autocomplete="off" value="@(Model?.RelatedCountry?.CountryName)" readonly>
+                                            </div>
+                                            <div class="col-sm-3">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="stateID" class="col-sm-3 col-form-label">Eyalet</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="stateID" name="StateID" required>
+                                                    @if (Model?.StateList?.Count > 0)
+                                                    {
+                                                        <option value="">Seçiniz</option>
+
+                                                        foreach (var item in Model.StateList)
+                                                        {
+                                                            <option value="@(item.ID)" @(Model?.CheckMall?.StateID == item.ID ? "selected" : "")>@(item.StateName)</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="cityID" class="col-sm-3 col-form-label">Şehir</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="cityID" name="CityID" required>
+                                                    @if (Model?.CityList?.Count > 0)
+                                                    {
+                                                        <option value="">Seçiniz</option>
+
+                                                        foreach (var item in Model.CityList)
+                                                        {
+                                                            <option value="@(item.ID)" @(Model?.CheckMall?.CityID == item.ID ? "selected" : "")>@(item.CityName)</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="countyID" class="col-sm-3 col-form-label">İlçe</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="countyID" name="CountyID" required>
+                                                    @if (Model?.CountyList?.Count > 0)
+                                                    {
+                                                        <option value="">İlçe Seçiniz</option>
+
+                                                        foreach (var item in Model.CountyList)
+                                                        {
+                                                            <option value="@(item.ID)" @(Model?.CheckMall?.CountyID == item.ID ? "selected" : "")>@(item.CountyName)</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="postCode" class="col-sm-3 col-form-label">Posta Kodu</label>
+                                            <div class="col-sm-6">
+                                                <input id="postCode" name="PostCode" type="text" class="form-control postcode" autocomplete="off" placeholder="Posta Kodu" value="@(Model?.CheckMall?.PostCode)">
+                                            </div>
+                                            <div class="col-sm-3">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="phoneCountryCode" class="col-sm-3 col-form-label">Telefon</label>
+                                            <div class="col-sm-3">
+                                                <select class="form-control" id="phoneCountryCode" name="PhoneCountryCode">
+
+                                                    @foreach (var item in Model.PhoneCodes)
+                                                    {
+                                                        <option value="@(item.Code)" @(Model?.CheckMall?.PhoneCountryCode == item.Code ? "selected" : "")>@(item.Code) @(item.Country)</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input id="phoneNumber" name="PhoneNumber" type="text" class="form-control phone" autocomplete="off" placeholder="Telefon" value="@(Model?.CheckMall?.PhoneNumber)" required>
+                                            </div>
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="latitude" class="col-sm-3 col-form-label">Enlem</label>
+                                            <div class="col-sm-6">
+                                                <input id="latitude" name="Latitude" type="text" class="form-control" autocomplete="off" placeholder="Enlem" value="@(Model?.CheckMall?.Latitude)">
+                                            </div>
+                                            <div class="col-sm-3">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="longitude" class="col-sm-3 col-form-label">Boylam</label>
+                                            <div class="col-sm-6">
+                                                <input id="longitude" name="Longitude" type="text" class="form-control" autocomplete="off" placeholder="Boylam" value="@(Model?.CheckMall?.Longitude)">
+                                            </div>
+                                            <div class="col-sm-3">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="map" class="col-sm-3 col-form-label">AVM Map URL</label>
+                                            <div class="col-sm-6">
+                                                <input id="map" name="Map" type="text" class="form-control" autocomplete="off" placeholder="AVM Map URL" value="@(Model?.CheckMall?.Map)">
+                                            </div>
+                                            <div class="col-sm-3">
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="investorCompanyID" class="col-sm-3 col-form-label">Yatırımcı Şirket Ünvanı</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="investorCompanyID" name="InvestorCompanyID" required>
+                                                    @if (Model?.InvestorCompanyList?.Count > 0)
+                                                    {
+                                                        <option value="">Seçiniz</option>
+
+                                                        foreach (var item in Model.InvestorCompanyList)
+                                                        {
+                                                            <option value="@(item.ID)" @(Model?.CheckMall?.InvestorCompanyID == item.ID ? "selected" : "")>@(item.FullName)</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="leasingCompanyID" class="col-sm-3 col-form-label">Kiralama Firması</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="leasingCompanyID" name="LeasingCompanyID" required>
+                                                    @if (Model?.LeasingCompanyList?.Count > 0)
+                                                    {
+                                                        <option value="">Seçiniz</option>
+
+                                                        foreach (var item in Model.LeasingCompanyList)
+                                                        {
+                                                            <option value="@(item.ID)" @(Model?.CheckMall?.LeasingCompanyID == item.ID ? "selected" : "")>@(item.FullName)</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="timezone" class="col-sm-3 col-form-label">Time Zone</label>
+                                            <div class="col-sm-6">
+                                                <select class="form-control" id="timezone" name="Timezone" required>
+                                                    <option value="">Seçiniz</option>
+
+                                                    @for (int i = 3; i >= -13; i--)
+                                                    {
+                                                        <option value="@i" @(Model?.CheckMall?.Timezone == i ? "selected" : "")>@( i > 0 ? "+" + i : i.ToString())</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-sm-3 text-danger mg-y-8">
+                                                *
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mg-b-5">
+                                            <label for="isActive" class="col-sm-3 col-form-label">Aktif mi?</label>
+                                            <div class="col-sm-6">
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="isActive" name="IsActive" value="1" @(Model?.CheckMall?.IsActive == "1" ? "checked" : "")>
+                                                    <label class="custom-control-label" for="isActive">Aktif</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-3">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row mg-b-5">
+                <div class="col-sm-3">
+                </div>
+                <div class="col-sm-6">
+                    <button type="submit" class="btn btn-primary btn-block">AVM Ekle</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        $(function () {
+            $('.shiftdate').mask('0000-00-00');
+            $('.money').mask("#.##0,00", { reverse: true });
+
+            $('.shiftdate').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1,
+            });
+
+        });
+
+        $('.phone').mask('(000) 000 00 00');
+        $('.postcode').mask('00000-000');
+
+        $(document).ready(function () {
+
+            $("#cityID").change(function () {
+
+                var cityID = $("#cityID").val();
+
+                $.ajax
+                    ({
+                        url: '/Mall/GetCountyList',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            id: cityID,
+                        }),
+                        success: function (data) {
+
+                            $("#countyID").empty();
+                            $("#countyID").append($('<option></option>', { "value": "", "text": "İlçe Seçiminiz" }));
+                            $.each(data, function (index, label) {
+                                $("#countyID").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                            });
+                        },
+                        error: function () {
+                        },
+                    });
+
+            });
+        });
+    </script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $("#stateID").change(function () {
+
+                var stateID = $("#stateID").val();
+                console.log(stateID);
+                $.ajax
+                    ({
+                        url: '/Mall/GetCityList',
+                        type: 'POST',
+                        datatype: 'application/json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            id: stateID,
+                        }),
+                        success: function (data) {
+
+                            $("#cityID").empty();
+                            $("#cityID").append($('<option></option>', { "value": "", "text": "İl Seçiminiz" }));
+                            $.each(data, function (index, city) {
+                                $("#cityID").append($('<option></option>', { "value": city.Value, "text": city.Text }));
+                            });
+                        },
+                        error: function () {
+                        },
+                    });
+
+            });
+        });
+    </script>
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}

@@ -213,18 +213,18 @@
                                 <div class="col-sm-3">
                                     <input name="ActinTypeID" type="hidden" value="24" />
                                     <input name="UID" type="hidden" value="@(Model.SaleDetail.UID)" />
-                                    @if (Model.SaleDetail.IsActive == true)
-                                    {
+                                    @*@if (Model.SaleDetail.IsActive == true)
+                                        {
+                                        <button type="submit" class="btn btn-primary btn-block">Bilet Satış Güncelle</button>
+                                        }*@
                                     <button type="submit" class="btn btn-primary btn-block">Bilet Satış Güncelle</button>
-                                    }
-
                                 </div>
                                 <div class="col-sm-3">
-                                    @if (Model.SaleDetail.IsActive == true)
-                                    {
+                                    @*@if (Model.SaleDetail.IsActive == true)
+                                        {
+                                        <a href="#" class="btn btn-danger btn-block btn-icon" onclick="confirm('Silmek Istediğinize Emin misiniz?')? DeleteCashSale('@Model.SaleDetail.UID'):''">Bilet Satış Sil <i data-feather="trash-2"></i></a>
+                                        }*@
                                     <a href="#" class="btn btn-danger btn-block btn-icon" onclick="confirm('Silmek Istediğinize Emin misiniz?')? DeleteCashSale('@Model.SaleDetail.UID'):''">Bilet Satış Sil <i data-feather="trash-2"></i></a>
-                                    }
-
                                 </div>
                                 <div class="col-sm-3">
                                 </div>

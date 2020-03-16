@@ -25,5 +25,6 @@ namespace ActionForce.Office
         public long? ReferanceID { get; set; }
         public long? ResultID { get; set; }
         public Guid? UID { get; set; }
+        public bool IsActive { get; set; }
     }
 }

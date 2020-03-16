@@ -19,7 +19,7 @@
         {
             <tr style='@(item.IsActive == false ? "color: red" : "")'>
                 <td><span class="@(item.IsActive == true ? "tx-success":"tx-danger")">&#8226;</span></td>
-                <td class="tx-sm-13 bold"><a href="">@($"{item.FullName}")</a></td>
+                <td class="tx-sm-13 bold"><a href="@("/Mall/Detail/" + @item.MallUID)">@($"{item.FullName}")</a></td>
                 <td class="tx-sm-13">@item.CountryName</td>
                 <td class="tx-sm-13">@item.StateName</td>
                 <td class="tx-sm-13">@item.CityName</td>

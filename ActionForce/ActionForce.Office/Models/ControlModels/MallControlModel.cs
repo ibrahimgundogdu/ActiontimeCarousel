@@ -9,6 +9,7 @@ namespace ActionForce.Office
     public class MallControlModel : LayoutControlModel
     {
         public List<VMall> MallList { get; set; }
+        public VMall MallModel { get; set; }
         public List<MallLocationContract> LocationContracts { get; set; }
         public Country RelatedCountry { get; set; }
         public List<State> StateList { get; set; }
@@ -21,6 +22,8 @@ namespace ActionForce.Office
         public IEnumerable<CountryPhoneCode> PhoneCodes { get; set; }
         public IEnumerable<Currency> CurrencyList { get; set; }
         public List<VLocation> LocationList { get; set; }
+        public List<VLocation> RelatedLocationList { get; set; }
+        public int LocationModelID { get; set; }
         public Result Result { get; set; }
         public MallFilterModel FilterModel { get; set; }
         public FormMall CheckMall { get; set; }

@@ -1,0 +1,58 @@
+﻿@model MallControlModel
+@{
+    ViewBag.Title = "AVM Güncelleme" + (Model.MallList != null ? " - " + Model.MallModel.FullName : "");
+}
+
+
+@section style{
+    <link href="/lib/animate.css/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/css/dashforge.demo.css">
+    <link rel="stylesheet" href="/assets/css/dashforge.css">
+    <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
+}
+<div class="content-header">
+    <div class="content-search col-lg">
+        <span class="tx-20">AVM Güncelleme</span>
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div>
+
+<div class="content-body">
+    <div class="container-fluid pd-x-0 tx-13">
+        <div class="media d-lg-flex">
+            <div class="profile-sidebar profile-sidebar-two pd-lg-r-15">
+                <div class="row">
+                    @{Html.RenderPartial("_PartialMallInformation", Model);}
+                    @{Html.RenderPartial("_PartialMallSideBar", Model);}
+                </div>
+            </div>
+            <div class="media-body mg-t-40 mg-lg-t-0 pd-lg-x-10">
+                @{Html.RenderPartial("_PartialEditMall", Model);}
+            </div>
+        </div>
+</div>
+
+
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        function OnComplete() {
+
+            $.ajax({
+                method: "GET",
+                url: "/Mall/GetRefreshLocationList"
+            }).done(function (d) {
+                $("#locationModelID").empty();
+                console.log(d);
+                $.each(d, function (index, label) {
+                    $("#locationModelID").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                });
+            });
+        };
+
+    </script>
+}
