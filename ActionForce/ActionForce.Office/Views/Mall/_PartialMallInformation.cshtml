@@ -1,0 +1,13 @@
+﻿@model MallControlModel
+<div class="col-sm-3 col-md-2 col-lg">
+    <h5 class="mg-b-2 tx-spacing--1">@(Model.MallModel.FullName) </h5>
+    <p class="tx-color-03 mg-b-0">@(Model.MallModel.CountryName)</p>
+    <p class="tx-color-03 mg-b-25">@(Model.MallModel.CityName)</p>
+</div><!-- col -->
+<div class="col-sm-8 col-md-7 col-lg mg-t-20 mg-sm-t-0 mg-lg-t-0">
+    <div class="d-flex mg-b-25">
+        <a class="btn btn-xs btn-white flex-fill" href="/Mall/Edit/@(Model.MallModel.MallUID)">Düzenle</a>
+        <span class="btn btn-xs btn-info flex-fill mg-l-10 text-white"> @Html.Raw(Model.MallModel.IsActive==true ? "Aktif" : "Pasif" ) </span>
+    </div>
+</div>
+

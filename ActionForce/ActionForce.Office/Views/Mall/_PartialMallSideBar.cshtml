@@ -1,0 +1,10 @@
+﻿@model MallControlModel
+<div class="col-sm-6 col-md-5 col-lg mg-t-15">
+    <nav class="nav nav-classic tx-13">
+        <a href="/Mall/Contact" class="nav-link @(this.ViewContext.RouteData.Values["controller"].ToString() == "Mall" && this.ViewContext.RouteData.Values["action"].ToString() == "Contact" ? "active" : "")"><i data-feather="users"></i> İletişim Bilgileri</a>
+        <a href="/Mall/Contract" class="nav-link @(this.ViewContext.RouteData.Values["controller"].ToString() == "Mall" && this.ViewContext.RouteData.Values["action"].ToString() == "Contract" ? "active" : "")"><i data-feather="file"></i> Sözleşmeler</a>
+        <a href="/Mall/Index" class="nav-link @(this.ViewContext.RouteData.Values["controller"].ToString() == "Mall" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")"><i data-feather="shopping-bag"></i> AVM Listesi</a>
+        <a href="/Mall/Edit/@(Model.MallModel.MallUID)" class="nav-link @(this.ViewContext.RouteData.Values["controller"].ToString() == "Mall" && this.ViewContext.RouteData.Values["action"].ToString() == "Update" ? "active" : "")"><i data-feather="edit"></i> Güncelle</a>
+    </nav>
+</div>
+

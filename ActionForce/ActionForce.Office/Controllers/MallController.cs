@@ -236,6 +236,80 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
+        public ActionResult Detail(Guid id)
+        {
+            MallControlModel model = new MallControlModel();
+
+            if ( id== Guid.Empty)
+            {
+                return RedirectToAction("Index");
+            }
+
+            model.MallModel = Db.VMall.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.MallUID == id);
+            model.LocationList = Db.VLocation.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.MallID == null && x.IsActive== true).ToList();
+
+            if (model.MallModel != null)
+            {
+                model.RelatedLocationList = Db.VLocation.Where(x => x.MallID == model.MallModel.ID && x.OurCompanyID== model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult LinkToMall(MallControlModel model)
+        {
+            if (model != null)
+            {
+                Location willBeLinkedLocation = Db.Location.Where(x => x.LocationID == model.LocationModelID && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).FirstOrDefault();
+
+                if (willBeLinkedLocation != null)
+                {
+                    willBeLinkedLocation.MallID = model.MallModel.ID;
+                    Db.SaveChanges();
+
+                    model.MallModel = Db.VMall.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.ID == model.MallModel.ID);
+                    model.LocationList = Db.VLocation.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.MallID == null && x.IsActive == true).ToList();
+
+                    if (model.MallModel != null)
+                    {
+                        model.RelatedLocationList = Db.VLocation.Where(x => x.MallID == model.MallModel.ID && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+                    }
+
+                    return PartialView("_PartialRelatedLocationList", model);
+                }
+
+                return PartialView();
+            }
+
+            model.Result.IsSuccess = false;
+            model.Result.Message = "Lokasyon veya AVM Bilgisi Eksik";
+            return PartialView("_PartialRelatedLocationList", model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult Edit(Guid guid)
+        {
+
+            return View();
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        public JsonResult GetRefreshLocationList()
+        {
+            MallControlModel model = new MallControlModel();
+            List<VLocation> refreshedList= Db.VLocation.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.MallID == null && x.IsActive == true).ToList();
+            List<SelectListItem> SelectList = refreshedList.Select(x=> new SelectListItem() {
+                Text = x.LocationFullName,
+                Value = x.LocationID.ToString()
+            }).ToList();
+
+            return Json(SelectList, JsonRequestBehavior.AllowGet);
+        }
+
+        [AllowAnonymous]
         [HttpPost]
         public ActionResult GetCountyList(int? id)
         {

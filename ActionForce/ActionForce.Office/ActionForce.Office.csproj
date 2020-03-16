@@ -2726,6 +2726,11 @@
     <Content Include="Views\Location\_PartialLocationLogList.cshtml" />
     <Content Include="Views\Mall\Add.cshtml" />
     <Content Include="Views\Location\Schedule.cshtml" />
+    <Content Include="Views\Mall\Detail.cshtml" />
+    <Content Include="Views\Mall\_PartialMallSideBar.cshtml" />
+    <Content Include="Views\Mall\_PartialRelatedMallLocationList.cshtml" />
+    <Content Include="Views\Mall\_PartialRelatedLocationList.cshtml" />
+    <Content Include="Views\Mall\_PartialMallInformation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

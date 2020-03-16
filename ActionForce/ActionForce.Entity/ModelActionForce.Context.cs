@@ -299,10 +299,10 @@ namespace ActionForce.Entity
         public virtual DbSet<County> County { get; set; }
         public virtual DbSet<MallLocationContract> MallLocationContract { get; set; }
         public virtual DbSet<Company> Company { get; set; }
-        public virtual DbSet<VMall> VMall { get; set; }
         public virtual DbSet<TicketSaleRows> TicketSaleRows { get; set; }
         public virtual DbSet<VTicketSaleRowCheck> VTicketSaleRowCheck { get; set; }
         public virtual DbSet<VTicketSaleRowsAll> VTicketSaleRowsAll { get; set; }
+        public virtual DbSet<VMall> VMall { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
