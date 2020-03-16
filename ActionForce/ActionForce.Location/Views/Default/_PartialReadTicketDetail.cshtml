@@ -1,7 +1,10 @@
 ﻿@model DefaultControlModel
 @using (Ajax.BeginForm("AddReadedTicket", "Default", new AjaxOptions { HttpMethod = "POST", UpdateTargetId = "BasketList", InsertionMode = InsertionMode.Replace, OnSuccess = "OnTicketAddSuccess" }))
 {
-    <input id="TicketNumber" name="TicketNumber" type="hidden" value="@(Model?.TicketInfo?.Info?.TicketNumber)" />
+    <input id="TicketUID" name="TicketUID" type="hidden" value="@(Model?.TicketInfo?.Info?.UID)" />
+    <input id="TicketSaleDate" name="TicketSaleDate" type="hidden" value="@(Model?.TicketInfo?.Info?.SaleDate?.ToString("yyyy-MM-dd"))" />
+    <input id="TicketLocationCode" name="TicketLocationCode" type="hidden" value="@(Model?.TicketInfo?.Info?.LocationIDCode)" />
+    <input id="TicketOrderNumber" name="TicketOrderNumber" type="hidden" value="@(Model?.TicketInfo?.Info?.OrderNumber)" />
     <div>
         <div class="form-group row mb-1 bg-light--lt font-weight-bold">
             <label class="col-sm-3 pt-1"></label>

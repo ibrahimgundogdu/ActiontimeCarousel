@@ -127,12 +127,14 @@ namespace ActionForce.Location
                     using (ActionTimeEntities db = new ActionTimeEntities())
                     {
                         var isexists = db.VTicketSaleRowCheck.FirstOrDefault(x => x.LocationID == locationID && x.UID.ToString() == ticketUID && x.OrderNumber == orderNumber && x.SaleDate == orderDate);
-
+                       
                         if (isexists != null)
                         {
+                            var isbasket = db.TicketBasket.FirstOrDefault(x => x.TicketNumber == isexists.TicketNumber);
+
                             model.Info = isexists;
                            
-                            if (isexists.IsBlocked == false && isexists.IsActive == true && isexists.Status == 2 && isexists.StatusID == 2 && isexists.Currency == location.Currency && isexists.TicketTypeID == location.TicketTypeID)
+                            if (isexists.IsBlocked == false && isexists.IsActive == true && isexists.Status == 2 && isexists.StatusID == 2 && isexists.Currency == location.Currency && isexists.TicketTypeID == location.TicketTypeID && isbasket == null)
                             {
                                 result.IsSuccess = true;
                                 result.Message = "Bilet Kullanılabilir";
@@ -142,7 +144,7 @@ namespace ActionForce.Location
                                 result.IsSuccess = false;
                                 result.Message = "Bilet Bloke Edilmiş";
                             }
-                            else if (isexists.Status != 1 && isexists.StatusID != 1)
+                            else if (isexists.Status != 2 && isexists.StatusID != 2)
                             {
                                 result.IsSuccess = false;
                                 result.Message = "Bilet aşaması uygun değil : " + isexists.StatusName;
@@ -161,6 +163,11 @@ namespace ActionForce.Location
                             {
                                 result.IsSuccess = false;
                                 result.Message = "Bilet siparişi pasif edilmiş";
+                            }
+                            else if (isbasket != null)
+                            {
+                                result.IsSuccess = false;
+                                result.Message = "Bilet sepete zaten eklenmiş";
                             }
                         }
                         else

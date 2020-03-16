@@ -166,13 +166,16 @@ namespace ActionForce.Location.Controllers
 
         [AllowAnonymous]
         [HttpPost]
-        public PartialViewResult AddReadedTicket(string TicketNumber)
+        public PartialViewResult AddReadedTicket(string TicketUID, string TicketSaleDate, string TicketLocationCode, string TicketOrderNumber)
         {
             DefaultControlModel model = new DefaultControlModel();
 
-            if (!string.IsNullOrEmpty(TicketNumber))
+            if (!string.IsNullOrEmpty(TicketUID) && !string.IsNullOrEmpty(TicketSaleDate) && !string.IsNullOrEmpty(TicketUID) && !string.IsNullOrEmpty(TicketUID))
             {
-                var detail = Db.GetTicketDetail(TicketNumber).FirstOrDefault();
+                var saleDate = Convert.ToDateTime(TicketSaleDate).Date;
+
+                var ticket = Db.VTicketSaleRowCheck.FirstOrDefault(x => x.UID.ToString() == TicketUID && x.SaleDate == saleDate && x.LocationIDCode == TicketLocationCode && x.OrderNumber == TicketOrderNumber);
+                var detail = Db.GetTicketDetail(ticket.TicketNumber).FirstOrDefault();
 
                 if (detail != null)
                 {
@@ -180,7 +183,7 @@ namespace ActionForce.Location.Controllers
 
                     if (model.VPrice != null)
                     {
-                        var added = Db.AddBasketTicket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID, TicketNumber);
+                        var added = Db.AddBasketTicket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID, ticket.TicketNumber);
                     }
                 }
                 else
@@ -200,6 +203,37 @@ namespace ActionForce.Location.Controllers
             model.Result.Message = $"Açık Bilet Sepete Eklendi.";
 
             return PartialView("_PartialBasketList", model);
+        }
+
+        [AllowAnonymous]
+        public PartialViewResult AddOrderInfo()
+        {
+            DefaultControlModel model = new DefaultControlModel();
+
+            var currentBasketTotal = Db.GetLocationCurrentBasketTotal(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID).FirstOrDefault(x => x.Money == model.Authentication.CurrentOurCompany.Currency);
+            model.BasketTotal = new BasketTotal()
+            {
+                Total = currentBasketTotal?.Total ?? 0,
+                Discount = currentBasketTotal?.Discount ?? 0,
+                SubTotal = currentBasketTotal?.SubTotal ?? 0,
+                TaxTotal = currentBasketTotal?.TaxTotal ?? 0,
+                GeneralTotal = currentBasketTotal?.GeneralTotal ?? 0,
+                Currency = currentBasketTotal?.Money,
+                Sign = currentBasketTotal?.Sign
+            };
+
+            return PartialView("_PartialAddOrderInfo", model);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public PartialViewResult CreateOrder(FormOrder neworder)
+        {
+            DefaultControlModel model = new DefaultControlModel();
+
+            
+
+            return PartialView("_PartialAddOrderInfo", model);
         }
 
     }

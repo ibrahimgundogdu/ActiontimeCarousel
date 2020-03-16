@@ -578,6 +578,7 @@
     <Compile Include="Models\DefaultModels\TicketInfo.cs" />
     <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\ControlModels\LayoutControlModel.cs" />
+    <Compile Include="Models\FormModels\FormOrder.cs" />
     <Compile Include="Models\LocationHelper.cs" />
     <Compile Include="Models\LocationModels\LocationStatus.cs" />
     <Compile Include="Models\LocationModels\mLocation.cs" />
@@ -798,6 +799,7 @@
     <Content Include="Views\Default\_PartialBasketItemDetail.cshtml" />
     <Content Include="Views\Default\_PartialBasketTotal.cshtml" />
     <Content Include="Views\Default\_PartialReadTicketDetail.cshtml" />
+    <Content Include="Views\Default\_PartialAddOrderInfo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -808,7 +810,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="libs\plyrist\dist\" />
-    <Folder Include="Models\FormModels\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Employee\" />
     <Folder Include="Views\Logout\" />
