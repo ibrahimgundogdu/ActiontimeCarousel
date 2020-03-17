@@ -32,27 +32,110 @@
                 @{Html.RenderPartial("_PartialEditMall", Model);}
             </div>
         </div>
+    </div>
 </div>
 
-
-@section scripts
+    @section scripts
 {
 
-    <script type="text/javascript">
+        <script type="text/javascript">
 
-        function OnComplete() {
+            function OnComplete() {
 
-            $.ajax({
-                method: "GET",
-                url: "/Mall/GetRefreshLocationList"
-            }).done(function (d) {
-                $("#locationModelID").empty();
-                console.log(d);
-                $.each(d, function (index, label) {
-                    $("#locationModelID").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                $.ajax({
+                    method: "GET",
+                    url: "/Mall/GetRefreshLocationList"
+                }).done(function (d) {
+                    $("#locationModelID").empty();
+                    console.log(d);
+                    $.each(d, function (index, label) {
+                        $("#locationModelID").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                    });
+                });
+            };
+
+
+            $(function () {
+                $('.shiftdate').mask('0000-00-00');
+                $('.money').mask("#.##0,00", { reverse: true });
+                $('.phone').mask('(000) 000 00 00');
+                $('.postcode').mask('00000-000');
+
+                $('.shiftdate').datepicker({
+                    dateFormat: "yy-mm-dd",
+                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                    firstDay: 1,
+                });
+
+            });
+
+        </script>
+
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+                $("#cityID").change(function () {
+
+                    var cityID = $("#cityID").val();
+
+                    $.ajax
+                        ({
+                            url: '/Mall/GetCountyList',
+                            type: 'POST',
+                            datatype: 'application/json',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                id: cityID,
+                            }),
+                            success: function (data) {
+
+                                $("#countyID").empty();
+                                $("#countyID").append($('<option></option>', { "value": "", "text": "İlçe Seçiminiz" }));
+                                $.each(data, function (index, label) {
+                                    $("#countyID").append($('<option></option>', { "value": label.Value, "text": label.Text }));
+                                });
+                            },
+                            error: function () {
+                            },
+                        });
+
                 });
             });
-        };
+        </script>
 
-    </script>
-}
+        <script type="text/javascript">
+
+            $(document).ready(function () {
+
+                $("#stateID").change(function () {
+
+                    var stateID = $("#stateID").val();
+                    console.log(stateID);
+                    $.ajax
+                        ({
+                            url: '/Mall/GetCityList',
+                            type: 'POST',
+                            datatype: 'application/json',
+                            contentType: 'application/json',
+                            data: JSON.stringify({
+                                id: stateID,
+                            }),
+                            success: function (data) {
+
+                                $("#cityID").empty();
+                                $("#cityID").append($('<option></option>', { "value": "", "text": "İl Seçiminiz" }));
+                                $.each(data, function (index, city) {
+                                    $("#cityID").append($('<option></option>', { "value": city.Value, "text": city.Text }));
+                                });
+                            },
+                            error: function () {
+                            },
+                        });
+
+                });
+            });
+        </script>
+
+    }

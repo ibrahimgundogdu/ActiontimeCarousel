@@ -1,15 +1,16 @@
 ﻿@model MallControlModel
 
-@using (Html.BeginForm("AddMall", "Mall", FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm("UpdateMall", "Mall", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.CheckMall.ID)
     <div class="content-body">
         <div class="pd-x-0 tx-13">
             <div class="media d-block d-lg-flex">
                 <div class="media-body  mg-t-40 mg-lg-t-0">
                     <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30 row">
                         <div class=" col-md-4"></div>
-                        <div class="col-md-4 tx-center">
+                        <div class="col-md-12 tx-center">
                             <h4 class="mg-b-0 tx-spacing--1">AVM Bilgileri</h4>
                         </div>
                     </div>
@@ -37,7 +38,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="fullName" class="col-sm-3 col-form-label">AVM İsmi</label>
                                             <div class="col-sm-6">
-                                                <input id="fullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="AVM İsmi"  value="@(Model?.CheckMall?.FullName ?? Model.CheckMall.FullName)" required>
+                                                <input id="fullName" name="FullName" type="text" class="form-control" autocomplete="off" placeholder="AVM İsmi" value="@(Model?.CheckMall?.FullName)" required>
                                             </div>
                                             <div class="col-sm-3 text-danger mg-y-8">
                                                 *
@@ -270,7 +271,8 @@
                 <div class="col-sm-3">
                 </div>
                 <div class="col-sm-6">
-                    <button type="submit" class="btn btn-primary btn-block">AVM Ekle</button>
+                    <input id="id" name="ID" type="hidden" value="@(Model.CheckMall.ID)" />
+                    <button type="submit" class="btn btn-primary btn-block"> Güncelle</button>
                 </div>
             </div>
         </div>
@@ -279,87 +281,7 @@
 
 @section scripts {
 
-    <script type="text/javascript">
 
-        $(function () {
-            $('.shiftdate').mask('0000-00-00');
-            $('.money').mask("#.##0,00", { reverse: true });
-
-            $('.shiftdate').datepicker({
-                dateFormat: "yy-mm-dd",
-                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
-                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
-                firstDay: 1,
-            });
-
-        });
-
-        $('.phone').mask('(000) 000 00 00');
-        $('.postcode').mask('00000-000');
-
-        $(document).ready(function () {
-
-            $("#cityID").change(function () {
-
-                var cityID = $("#cityID").val();
-
-                $.ajax
-                    ({
-                        url: '/Mall/GetCountyList',
-                        type: 'POST',
-                        datatype: 'application/json',
-                        contentType: 'application/json',
-                        data: JSON.stringify({
-                            id: cityID,
-                        }),
-                        success: function (data) {
-
-                            $("#countyID").empty();
-                            $("#countyID").append($('<option></option>', { "value": "", "text": "İlçe Seçiminiz" }));
-                            $.each(data, function (index, label) {
-                                $("#countyID").append($('<option></option>', { "value": label.Value, "text": label.Text }));
-                            });
-                        },
-                        error: function () {
-                        },
-                    });
-
-            });
-        });
-    </script>
-
-    <script type="text/javascript">
-
-        $(document).ready(function () {
-
-            $("#stateID").change(function () {
-
-                var stateID = $("#stateID").val();
-                console.log(stateID);
-                $.ajax
-                    ({
-                        url: '/Mall/GetCityList',
-                        type: 'POST',
-                        datatype: 'application/json',
-                        contentType: 'application/json',
-                        data: JSON.stringify({
-                            id: stateID,
-                        }),
-                        success: function (data) {
-
-                            $("#cityID").empty();
-                            $("#cityID").append($('<option></option>', { "value": "", "text": "İl Seçiminiz" }));
-                            $.each(data, function (index, city) {
-                                $("#cityID").append($('<option></option>', { "value": city.Value, "text": city.Text }));
-                            });
-                        },
-                        error: function () {
-                        },
-                    });
-
-            });
-        });
-    </script>
     @if (Model.Result != null) //
     {
         <script type="text/javascript">
@@ -373,4 +295,6 @@
         });
         </script>
     }
+
 }
+

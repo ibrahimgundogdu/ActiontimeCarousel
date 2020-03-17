@@ -255,6 +255,13 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
+        public ActionResult RelatedMallContactDetail()
+        {
+            return View();
+        }
+
+
         [HttpPost]
         [AllowAnonymous]
         public PartialViewResult LinkToMall(MallControlModel model)
@@ -304,9 +311,141 @@ namespace ActionForce.Office.Controllers
             model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
 
+            FormMall EditFormMall = new FormMall()
+            {
+                ID = model.MallModel.ID,
+                FullName = model.MallModel.FullName.ToUpper(),
+                MallSegmentID = model.MallModel.MallSegmentID,
+                StructuralCondition = model.MallModel.StructuralCondition,
+                Address = model.MallModel.Address,
+                StateID = model.MallModel.StateID,
+                CityID = model.MallModel.CityID,
+                CountyID = model.MallModel.CountyID,
+                PostCode = model.MallModel.PostCode,
+                PhoneCountryCode = model.MallModel.PhoneCountryCode,
+                PhoneNumber = model.MallModel.PhoneNumber.Replace("(", "").Replace(")", "").Replace(" ", "") ?? "",
+                Latitude = model.MallModel.Latitude,
+                Longitude= model.MallModel.Longitude,
+                Map= model.MallModel.Map,
+                InvestorCompanyID = model.MallModel.InvestorCompanyID,
+                LeasingCompanyID = model.MallModel.LeasingCompanyID,
+                Timezone= model.MallModel.TimeZone,
+                IsActive = model.MallModel.IsActive == true ? "1" : ""
+            };
+
+            model.CheckMall = EditFormMall;
+
             return View(model);
         }
 
+        [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
+        [AllowAnonymous]
+        [HttpPost]
+        public ActionResult UpdateMall(FormMall toBeUpdatedModel)
+        {
+            MallControlModel model = new MallControlModel();
+
+            if (toBeUpdatedModel != null)
+            {
+                Mall isMall = Db.Mall.FirstOrDefault(x => x.ID == toBeUpdatedModel.ID);
+                toBeUpdatedModel.IsLeasingInHouse = toBeUpdatedModel.InvestorCompanyID == toBeUpdatedModel.LeasingCompanyID ? true : false;
+
+                if (isMall != null)
+                {
+                    Mall selfMallModel = new Mall()
+                    {
+                        ID = isMall.ID,
+                        OurCompanyID =isMall.OurCompanyID,
+                        FullName=isMall.FullName,
+                        MallSegmentID=isMall.MallSegmentID,
+                        StructuralCondition=isMall.StructuralCondition,
+                        Address=isMall.Address,
+                        CountryID=isMall.CountryID,
+                        StateID = isMall.StateID,
+                        CityID=isMall.CityID,
+                        CountyID=isMall.CountyID,
+                        PostCode = isMall.PostCode,
+                        PhoneCountryCode=isMall.PhoneCountryCode,
+                        PhoneNumber=isMall.PhoneNumber,
+                        Latitude=isMall.Latitude,
+                        Longitude=isMall.Longitude,
+                        Map=isMall.Map,
+                        InvestorCompanyID=isMall.InvestorCompanyID,
+                        LeasingCompanyID=isMall.LeasingCompanyID,
+                        IsLeasingInHouse=isMall.IsLeasingInHouse,
+                        ContactName=isMall.ContactName,
+                        ContactTitle=isMall.ContactTitle,
+                        ContactPhoneCode=isMall.ContactPhoneCode,
+                        ContactPhone=isMall.ContactPhone,
+                        ContactEmail=isMall.ContactEmail,
+                        RecordDate=isMall.RecordDate,
+                        RecordEmployeeID=isMall.RecordEmployeeID,
+                        RecordIP=isMall.RecordIP,
+                        UpdateDate=isMall.UpdateDate,
+                        UpdateEmployeeID=isMall.UpdateEmployeeID,
+                        UpdateIP=isMall.UpdateIP,
+                        MallUID=isMall.MallUID,
+                        TimeZone=isMall.TimeZone,
+                        IsActive=isMall.IsActive
+                    };
+
+                    isMall.ID = toBeUpdatedModel.ID;
+                    isMall.OurCompanyID = isMall.OurCompanyID;
+                    isMall.FullName = toBeUpdatedModel.FullName;
+                    isMall.MallSegmentID = toBeUpdatedModel.MallSegmentID;
+                    isMall.StructuralCondition = toBeUpdatedModel.StructuralCondition;
+                    isMall.Address = toBeUpdatedModel.Address;
+                    isMall.CountryID = isMall.CountryID;
+                    isMall.StateID = toBeUpdatedModel.StateID;
+                    isMall.CityID = toBeUpdatedModel.CityID;
+                    isMall.CountyID = toBeUpdatedModel.CountyID;
+                    isMall.PostCode = toBeUpdatedModel.PostCode;
+                    isMall.PhoneCountryCode = toBeUpdatedModel.PhoneCountryCode;
+                    isMall.PhoneNumber = toBeUpdatedModel.PhoneNumber.Replace("(", "").Replace(")", "").Replace(" ", "") ?? "";
+                    isMall.Latitude = toBeUpdatedModel.Latitude;
+                    isMall.Longitude = toBeUpdatedModel.Longitude;
+                    isMall.Map = toBeUpdatedModel.Map;
+                    isMall.InvestorCompanyID = toBeUpdatedModel.InvestorCompanyID;
+                    isMall.LeasingCompanyID = toBeUpdatedModel.LeasingCompanyID;
+                    isMall.IsLeasingInHouse = toBeUpdatedModel.IsLeasingInHouse;
+                    isMall.ContactName = isMall.ContactName;
+                    isMall.ContactTitle = isMall.ContactTitle;
+                    isMall.ContactPhoneCode = isMall.ContactPhoneCode;
+                    isMall.ContactPhone = isMall.ContactPhone;
+                    isMall.ContactEmail = isMall.ContactEmail;
+                    isMall.RecordDate = isMall.RecordDate;
+                    isMall.RecordEmployeeID = isMall.RecordEmployeeID;
+                    isMall.RecordIP = isMall.RecordIP;
+                    isMall.UpdateDate = DateTime.UtcNow.AddHours(toBeUpdatedModel.Timezone);
+                    isMall.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                    isMall.UpdateIP = OfficeHelper.GetIPAddress();
+                    isMall.MallUID = isMall.MallUID;
+                    isMall.TimeZone = toBeUpdatedModel.Timezone;
+                    isMall.IsActive = !string.IsNullOrEmpty(toBeUpdatedModel.IsActive) && toBeUpdatedModel.IsActive == "1" ? true : false;
+
+                    Db.SaveChanges();
+
+                    model.Result = new Result
+                    {
+                        IsSuccess = true,
+                        Message = $"{isMall.FullName} AVM'si güncellendi."
+                    };
+
+                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<Mall>(selfMallModel, isMall, OfficeHelper.getIgnorelist());
+                    OfficeHelper.AddApplicationLog("Office", "Mall", "Update", isMall.ID.ToString(), "Mall", "UpdateMall", isequal, model.Result.IsSuccess, model.Result.Message, string.Empty, DateTime.UtcNow.AddHours(toBeUpdatedModel.Timezone), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                    return RedirectToAction("Detail", new { id = isMall.MallUID });
+                }
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Model Veritabanında Bulunamadı.";
+                return RedirectToAction("Index");
+            }
+
+            model.Result.IsSuccess = false;
+            model.Result.Message = "Güncellenecek Model Gönderilemedi.";
+            return RedirectToAction("Index");
+        }
 
         [AllowAnonymous]
         [HttpGet]
