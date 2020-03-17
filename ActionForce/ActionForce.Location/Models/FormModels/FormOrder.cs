@@ -11,5 +11,6 @@ namespace ActionForce.Location
         public string OrderDetail { get; set; }
         public string OrderMobile { get; set; }
         public string OrderIdentity { get; set; }
+        public string OrderDescription { get; set; }
     }
 }
