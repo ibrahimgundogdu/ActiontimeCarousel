@@ -6404,6 +6404,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="DocumentNumber" Type="nvarchar" Mode="In" />
           <Parameter Name="SalaryCategoryID" Type="int" Mode="In" />
         </Function>
+        <Function Name="AddOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+          <Parameter Name="OrderNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerName" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerData" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerPhone" Type="nvarchar" Mode="In" />
+          <Parameter Name="IdentityCard" Type="nvarchar" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="CheckLocationPriceCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
         </Function>
@@ -9716,6 +9727,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VTicketSale" EntityType="db293_ActionTimeDbModel.VTicketSale" />
           <EntitySet Name="VTicketSaleRows" EntityType="db293_ActionTimeDbModel.VTicketSaleRows" />
           <EntitySet Name="VTicketSaleRowsAll" EntityType="db293_ActionTimeDbModel.VTicketSaleRowsAll" />
+          <FunctionImport Name="AddOrder" ReturnType="Collection(Int64)">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="OrderNumber" Mode="In" Type="String" />
+            <Parameter Name="CustomerName" Mode="In" Type="String" />
+            <Parameter Name="CustomerData" Mode="In" Type="String" />
+            <Parameter Name="CustomerPhone" Mode="In" Type="String" />
+            <Parameter Name="IdentityCard" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -22665,6 +22687,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddOrder" FunctionName="db293_ActionTimeDbModel.Store.AddOrder" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
