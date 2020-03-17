@@ -182,6 +182,26 @@ namespace ActionForce.Office.Controllers
                 {
                     docDate = Convert.ToDateTime(cashCollect.DocumentDate).Date;
                 }
+
+                #region Exchange
+                var getExchange = OfficeHelper.GetExchange(docDate.Date);
+                double? exchangeRate = 1;
+
+                if (getExchange != null)
+                {
+                    getExchange.USDA = getExchange.USDA ?? Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault().USDA;
+                    getExchange.EURA = getExchange.EURA ?? Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault().EURA;
+
+                    exchangeRate = (currency == "USD" ? getExchange.USDA : (currency == "EUR" ? getExchange.EURA : 1));
+                }
+                else
+                {
+                    getExchange = Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault();
+
+                    exchangeRate = (currency == "USD" ? getExchange.USDA : (currency == "EUR" ? getExchange.EURA : 1));
+                }
+                #endregion
+
                 var cash = OfficeHelper.GetCash(cashCollect.LocationID, cashCollect.Currency);
                 if (amount > 0)
                 {
@@ -197,6 +217,7 @@ namespace ActionForce.Office.Controllers
                     collection.FromEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
                     collection.LocationID = cashCollect.LocationID;
                     collection.ReferanceID = cashCollect.ReferanceID;
+                    collection.ExchangeRate = exchangeRate;
                     DocumentManager documentManager = new DocumentManager();
                     var addresult = documentManager.AddCashCollection(collection, model.Authentication);
 
@@ -337,6 +358,302 @@ namespace ActionForce.Office.Controllers
         }
         #endregion
 
+        #region DocumentCashCollectionsReturn
+
+        [AllowAnonymous]
+        public ActionResult CashPayment(int? locationId)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateTime.Now.Date;
+                model.Filters = filterModel;
+            }
+
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+
+            model.CashPayments = Db.VDocumentCashPayments.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            if (model.Filters.LocationID > 0)
+            {
+                model.CashPayments = model.CashPayments.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+
+            }
+
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A" || x.Prefix == "E").ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult FilterPayment(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("CashPayment", "Cash");
+        }
+
+        [AllowAnonymous]
+        public ActionResult AddPayment(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult PaymentDetail(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
+            model.PaymentDetail = Db.VDocumentCashPayments.FirstOrDefault(x => x.UID == id);
+            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "CashPayment" && x.Environment == "Office" && x.ProcessID == model.PaymentDetail.ID.ToString()).ToList();
+
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A" || x.Prefix == "E").ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddCashPayment(NewCashPayments cashPayment)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            CashControlModel model = new CashControlModel();
+
+            if (cashPayment != null)
+            {
+
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashPayment.ActinTypeID);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashPayment.LocationID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                var fromPrefix = cashPayment.FromID.Substring(0, 1);
+                var fromID = Convert.ToInt32(cashPayment.FromID.Substring(1, cashPayment.FromID.Length - 1));
+                var amount = Convert.ToDouble(cashPayment.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var currency = cashPayment.Currency;
+                var docDate = DateTime.Now.Date;
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
+
+
+                if (DateTime.TryParse(cashPayment.DocumentDate, out docDate))
+                {
+                    docDate = Convert.ToDateTime(cashPayment.DocumentDate).Date;
+                }
+                var cash = OfficeHelper.GetCash(cashPayment.LocationID, cashPayment.Currency);
+                // tahsilat eklenir.
+                var exchange = OfficeHelper.GetExchange(docDate);
+
+                if (amount > 0)
+                {
+                    CashPayment payment = new CashPayment();
+
+                    payment.ActinTypeID = actType.ID;
+                    payment.ActionTypeName = actType.Name;
+                    payment.Amount = amount;
+                    payment.CashID = cash.ID;
+                    payment.Currency = currency;
+                    payment.DocumentDate = docDate;
+                    payment.Description = cashPayment.Description;
+
+                    payment.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                    payment.ToEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
+                    payment.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                    payment.LocationID = cashPayment.LocationID;
+                    payment.OurCompanyID = location.OurCompanyID;
+                    payment.TimeZone = timezone;
+                    payment.ReferanceID = cashPayment.ReferanceID;
+
+                    DocumentManager documentManager = new DocumentManager();
+                    var addresult = documentManager.AddCashPayment(payment, model.Authentication);
+
+                    result.IsSuccess = addresult.IsSuccess;
+                    result.Message = addresult.Message;
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                }
+            }
+
+            TempData["result"] = result;
+
+            return RedirectToAction("CashPayment", "Cash");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult EditCashPayment(EditCashPayments cashPayment)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+            CashControlModel model = new CashControlModel();
+
+
+            if (cashPayment != null)
+            {
+                var fromPrefix = cashPayment.FromID.Substring(0, 1);
+                var fromID = Convert.ToInt32(cashPayment.FromID.Substring(1, cashPayment.FromID.Length - 1));
+                var amount = Convert.ToDouble(cashPayment.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var currency = cashPayment.Currency;
+                var docDate = DateTime.Now.Date;
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashPayment.LocationID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
+                double? newexchanges = Convert.ToDouble(cashPayment.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                //double? exchanges = Convert.ToDouble(cashPayment.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                if (DateTime.TryParse(cashPayment.DocumentDate, out docDate))
+                {
+                    docDate = Convert.ToDateTime(cashPayment.DocumentDate).Date;
+                }
+
+                #region Exchange
+                var getExchange = OfficeHelper.GetExchange(docDate.Date);
+                double? exchangeRate = 1;
+
+                if (getExchange != null)
+                {
+                    getExchange.USDA = getExchange.USDA ?? Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault().USDA;
+                    getExchange.EURA = getExchange.EURA ?? Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault().EURA;
+
+                    exchangeRate = (currency == "USD" ? getExchange.USDA : (currency == "EUR" ? getExchange.EURA : 1));
+                }
+                else
+                {
+                    getExchange = Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault();
+
+                    exchangeRate = (currency == "USD" ? getExchange.USDA : (currency == "EUR" ? getExchange.EURA : 1));
+                }
+                #endregion
+
+                if (amount > 0)
+                {
+                    CashPayment payment = new CashPayment();
+                    payment.ActinTypeID = cashPayment.ActinTypeID;
+                    payment.Amount = amount;
+                    payment.Currency = currency;
+                    payment.Description = cashPayment.Description;
+                    payment.DocumentDate = docDate;
+                    payment.EnvironmentID = 2;
+                    payment.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                    payment.ToEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
+                    payment.LocationID = cashPayment.LocationID;
+                    payment.UID = cashPayment.UID;
+                    payment.ReferanceID = cashPayment.ReferanceID;
+                    payment.TimeZone = timezone;
+                    payment.IsActive = cashPayment.IsActive == "1" ? true : false;
+
+                    if (newexchanges > 0)
+                    {
+                        payment.ExchangeRate = newexchanges;
+                    }
+                    else
+                    {
+                        payment.ExchangeRate = exchangeRate;
+                    }
+
+                    DocumentManager documentManager = new DocumentManager();
+                    var editresult = documentManager.EditCashPayment(payment, model.Authentication);
+
+                    result.IsSuccess = editresult.IsSuccess;
+                    result.Message = editresult.Message;
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                }
+            }
+
+            TempData["result"] = result;
+            return RedirectToAction("PaymentDetail", new { id = cashPayment.UID });
+        }
+
+        [AllowAnonymous]
+        public ActionResult DeleteCashPayment(string id)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            CashControlModel model = new CashControlModel();
+
+            if (id != null)
+            {
+                DocumentManager documentManager = new DocumentManager();
+                var delresult = documentManager.DeleteCashPayment(Guid.Parse(id), model.Authentication);
+
+                result.IsSuccess = delresult.IsSuccess;
+                result.Message = delresult.Message;
+            }
+
+            TempData["result"] = result;
+            return RedirectToAction("PaymentDetail", new { id = id });
+
+        }
+        #endregion
 
         #region DocumentTicketSales
         [AllowAnonymous]
@@ -633,8 +950,315 @@ namespace ActionForce.Office.Controllers
 
             return RedirectToAction("SaleDetail", new { id = id });
 
-        } 
+        }
         #endregion
+
+        #region DocumentTicketSalesReturn
+        [AllowAnonymous]
+        public ActionResult SaleReturn(int? locationId)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateTime.Now.Date;
+                model.Filters = filterModel;
+            }
+            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
+            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
+            model.BankAccountList = Db.BankAccount.ToList();
+            model.PayMethodList = Db.PayMethod.ToList();
+            model.StatusList = Db.BankTransferStatus.ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+
+            model.TicketSalesReturn = Db.VDocumentTicketSaleReturn.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            if (model.Filters.LocationID > 0)
+            {
+                model.TicketSalesReturn = model.TicketSalesReturn.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+
+            }
+
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult FilterReturn(int? locationId, DateTime? beginDate, DateTime? endDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = locationId;
+            model.DateBegin = beginDate;
+            model.DateEnd = endDate;
+
+            if (beginDate == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (endDate == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("SaleReturn", "Cash");
+        }
+
+        [AllowAnonymous]
+        public ActionResult AddSaleRefund(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+            model.PayMethodList = Db.PayMethod.ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult SaleRefundDetail(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.PayMethodList = Db.PayMethod.ToList();
+            model.SalesRefundDetail = Db.VDocumentTicketSaleReturn.FirstOrDefault(x => x.UID == id);
+            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "SaleReturn" && x.Environment == "Office" && x.ProcessID == model.SalesRefundDetail.ID.ToString()).ToList();
+
+            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddTicketSaleReturn(NewTicketSaleReturn cashSaleReturn)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            CashControlModel model = new CashControlModel();
+
+            if (cashSaleReturn != null)
+            {
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSaleReturn.ActinTypeID);
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSaleReturn.LocationID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                var fromPrefix = cashSaleReturn.FromID.Substring(0, 1);
+                var fromID = Convert.ToInt32(cashSaleReturn.FromID.Substring(1, cashSaleReturn.FromID.Length - 1));
+                var amount = Convert.ToDouble(cashSaleReturn.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var currency = cashSaleReturn.Currency;
+                var docDate = DateTime.Now.Date;
+                if (DateTime.TryParse(cashSaleReturn.DocumentDate, out docDate))
+                {
+                    docDate = Convert.ToDateTime(cashSaleReturn.DocumentDate).Date;
+                }
+                var cash = OfficeHelper.GetCash(cashSaleReturn.LocationID, cashSaleReturn.Currency);
+
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
+                var exchange = OfficeHelper.GetExchange(docDate);
+
+                if (amount > 0 && (int?)cashSaleReturn.Quantity > 0)
+                {
+                    SaleReturn sale = new SaleReturn();
+
+                    sale.ActinTypeID = actType.ID;
+                    sale.ActionTypeName = actType.Name;
+                    sale.Amount = amount;
+                    sale.Quantity = cashSaleReturn.Quantity;
+                    sale.CashID = cash.ID;
+                    sale.Currency = currency;
+                    sale.DocumentDate = docDate;
+                    sale.Description = cashSaleReturn.Description;
+                    sale.PayMethodID = cashSaleReturn.PayMethodID;
+                    sale.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
+                    sale.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                    sale.LocationID = cashSaleReturn.LocationID;
+                    sale.OurCompanyID = location.OurCompanyID;
+                    sale.TimeZone = timezone;
+                    sale.ReferanceID = cashSaleReturn.ReferanceID;
+
+                    DocumentManager documentManager = new DocumentManager();
+                    var addresult = documentManager.AddCashSaleReturn(sale, model.Authentication);
+
+                    result.IsSuccess = addresult.IsSuccess;
+                    result.Message = addresult.Message;
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                }
+            }
+
+            TempData["result"] = result;
+
+            return RedirectToAction("SaleReturn", "Cash");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult EditTicketSaleReturn(EditTicketSaleReturn cashSale)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            CashControlModel model = new CashControlModel();
+
+            if (cashSale != null)
+            {
+                var fromPrefix = cashSale.FromID.Substring(0, 1);
+                var fromID = Convert.ToInt32(cashSale.FromID.Substring(1, cashSale.FromID.Length - 1));
+                var amount = Convert.ToDouble(cashSale.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var quantity = Convert.ToInt32(cashSale.Quantity);
+                var currency = cashSale.Currency;
+                var docDate = DateTime.Now.Date;
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSale.LocationID);
+                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
+                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
+                double? newexchanges = Convert.ToDouble(cashSale.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                //double? exchanges = Convert.ToDouble(cashSale.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                if (DateTime.TryParse(cashSale.DocumentDate, out docDate))
+                {
+                    docDate = Convert.ToDateTime(cashSale.DocumentDate).Date;
+                }
+
+                #region Exchange
+                var getExchange = OfficeHelper.GetExchange(docDate.Date);
+                double? exchangeRate = 1;
+
+                if (getExchange != null)
+                {
+                    getExchange.USDA = getExchange.USDA ?? Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault().USDA;
+                    getExchange.EURA = getExchange.EURA ?? Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault().EURA;
+
+                    exchangeRate = (currency == "USD" ? getExchange.USDA : (currency == "EUR" ? getExchange.EURA : 1));
+                }
+                else
+                {
+                    getExchange = Db.Exchange.OrderByDescending(x => x.ID).FirstOrDefault();
+
+                    exchangeRate = (currency == "USD" ? getExchange.USDA : (currency == "EUR" ? getExchange.EURA : 1));
+                }
+                #endregion
+
+                if (amount > 0 && quantity > 0)
+                {
+                    SaleReturn sale = new SaleReturn();
+                    sale.ActinTypeID = cashSale.ActinTypeID;
+                    sale.Amount = amount;
+                    sale.Currency = currency;
+                    sale.Description = cashSale.Description;
+                    sale.DocumentDate = docDate;
+                    sale.EnvironmentID = 2;
+                    sale.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
+                    sale.LocationID = cashSale.LocationID;
+                    sale.UID = cashSale.UID;
+                    sale.Quantity = quantity;
+                    sale.PayMethodID = cashSale.PayMethodID;
+                    sale.ReferanceID = cashSale.ReferanceID;
+                    sale.TimeZone = timezone;
+                    sale.IsActive = cashSale.IsActive == "1" ? true : false;
+
+
+                    if (newexchanges > 0)
+                    {
+                        sale.ExchangeRate = newexchanges;
+                    }
+                    else
+                    {
+                        sale.ExchangeRate = exchangeRate;
+                    }
+
+                    DocumentManager documentManager = new DocumentManager();
+                    var editresult = documentManager.EditCashSaleReturn(sale, model.Authentication);
+
+                    result.IsSuccess = editresult.IsSuccess;
+                    result.Message = editresult.Message;
+                }
+                else
+                {
+                    result.IsSuccess = true;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                }
+            }
+
+
+            TempData["result"] = result;
+            return RedirectToAction("SaleRefundDetail", new { id = cashSale.UID });
+
+        }
+
+        [AllowAnonymous]
+        public ActionResult DeleteTicketSaleReturn(string id)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            CashControlModel model = new CashControlModel();
+
+            if (id != null)
+            {
+                DocumentManager documentManager = new DocumentManager();
+                var delresult = documentManager.DeleteCashSaleReturn(Guid.Parse(id), model.Authentication);
+
+                result.IsSuccess = delresult.IsSuccess;
+                result.Message = delresult.Message;
+            }
+
+            TempData["result"] = result;
+            return RedirectToAction("SaleRefundDetail", new { id = id });
+
+        }
+        #endregion
+
+
+
+
+
 
         [AllowAnonymous]
         public ActionResult Exchange(int? locationId)
@@ -1218,569 +1842,6 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("OpenDetail", new { id = id });
 
         }
-
-
-
-
-
-
-        [AllowAnonymous]
-        public ActionResult CashPayment(int? locationId)
-        {
-            CashControlModel model = new CashControlModel();
-
-            if (TempData["result"] != null)
-            {
-                model.Result = TempData["result"] as Result ?? null;
-            }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
-
-            model.CurrencyList = OfficeHelper.GetCurrency();
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
-
-            model.CashPayments = Db.VDocumentCashPayments.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-            if (model.Filters.LocationID > 0)
-            {
-                model.CashPayments = model.CashPayments.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-
-            }
-
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A" || x.Prefix == "E").ToList();
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult FilterPayment(int? locationId, DateTime? beginDate, DateTime? endDate)
-        {
-            FilterModel model = new FilterModel();
-
-            model.LocationID = locationId;
-            model.DateBegin = beginDate;
-            model.DateEnd = endDate;
-
-            if (beginDate == null)
-            {
-                DateTime begin = DateTime.Now.AddMonths(-1).Date;
-                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
-            }
-
-            if (endDate == null)
-            {
-                model.DateEnd = DateTime.Now.Date;
-            }
-
-            TempData["filter"] = model;
-
-            return RedirectToAction("CashPayment", "Cash");
-        }
-
-        [AllowAnonymous]
-        public ActionResult AddPayment(Guid? id)
-        {
-            CashControlModel model = new CashControlModel();
-
-            if (TempData["result"] != null)
-            {
-                model.Result = TempData["result"] as Result ?? null;
-            }
-
-            model.CurrencyList = OfficeHelper.GetCurrency();
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
-
-            return View(model);
-        }
-
-        [AllowAnonymous]
-        public ActionResult PaymentDetail(Guid? id)
-        {
-            CashControlModel model = new CashControlModel();
-
-            if (TempData["result"] != null)
-            {
-                model.Result = TempData["result"] as Result ?? null;
-            }
-
-            model.CurrencyList = OfficeHelper.GetCurrency();
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-
-            model.PaymentDetail = Db.VDocumentCashPayments.FirstOrDefault(x => x.UID == id);
-            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "CashPayment" && x.Environment == "Office" && x.ProcessID == model.PaymentDetail.ID.ToString()).ToList();
-
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A" || x.Prefix == "E").ToList();
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult AddCashPayment(NewCashPayments cashPayment)
-        {
-            Result result = new Result()
-            {
-                IsSuccess = false,
-                Message = string.Empty
-            };
-
-            CashControlModel model = new CashControlModel();
-
-            if (cashPayment != null)
-            {
-
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashPayment.ActinTypeID);
-                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashPayment.LocationID);
-                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var fromPrefix = cashPayment.FromID.Substring(0, 1);
-                var fromID = Convert.ToInt32(cashPayment.FromID.Substring(1, cashPayment.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashPayment.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var currency = cashPayment.Currency;
-                var docDate = DateTime.Now.Date;
-                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-
-
-                if (DateTime.TryParse(cashPayment.DocumentDate, out docDate))
-                {
-                    docDate = Convert.ToDateTime(cashPayment.DocumentDate).Date;
-                }
-                var cash = OfficeHelper.GetCash(cashPayment.LocationID, cashPayment.Currency);
-                // tahsilat eklenir.
-                var exchange = OfficeHelper.GetExchange(docDate);
-
-                if (amount > 0)
-                {
-                    CashPayment payment = new CashPayment();
-
-                    payment.ActinTypeID = actType.ID;
-                    payment.ActionTypeName = actType.Name;
-                    payment.Amount = amount;
-                    payment.CashID = cash.ID;
-                    payment.Currency = currency;
-                    payment.DocumentDate = docDate;
-                    payment.Description = cashPayment.Description;
-
-                    payment.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
-                    payment.ToEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
-                    payment.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                    payment.LocationID = cashPayment.LocationID;
-                    payment.OurCompanyID = location.OurCompanyID;
-                    payment.TimeZone = timezone;
-                    payment.ReferanceID = cashPayment.ReferanceID;
-
-                    DocumentManager documentManager = new DocumentManager();
-                    var addresult = documentManager.AddCashPayment(payment, model.Authentication);
-
-                    result.IsSuccess = addresult.IsSuccess;
-                    result.Message = addresult.Message;
-                }
-                else
-                {
-                    result.IsSuccess = true;
-                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
-                }
-            }
-
-            TempData["result"] = result;
-
-            return RedirectToAction("CashPayment", "Cash");
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult EditCashPayment(NewCashPayments cashPayment)
-        {
-            Result result = new Result()
-            {
-                IsSuccess = false,
-                Message = string.Empty
-            };
-            CashControlModel model = new CashControlModel();
-
-
-            if (cashPayment != null)
-            {
-                var fromPrefix = cashPayment.FromID.Substring(0, 1);
-                var fromID = Convert.ToInt32(cashPayment.FromID.Substring(1, cashPayment.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashPayment.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var currency = cashPayment.Currency;
-                var docDate = DateTime.Now.Date;
-                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashPayment.LocationID);
-                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-                double? newexchanges = Convert.ToDouble(cashPayment.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                double? exchanges = Convert.ToDouble(cashPayment.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                if (DateTime.TryParse(cashPayment.DocumentDate, out docDate))
-                {
-                    docDate = Convert.ToDateTime(cashPayment.DocumentDate).Date;
-                }
-
-                if (amount > 0)
-                {
-                    CashPayment payment = new CashPayment();
-                    payment.ActinTypeID = cashPayment.ActinTypeID;
-                    payment.Amount = amount;
-                    payment.Currency = currency;
-                    payment.Description = cashPayment.Description;
-                    payment.DocumentDate = docDate;
-                    payment.EnvironmentID = 2;
-                    payment.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                    payment.ToEmployeeID = fromPrefix == "E" ? fromID : (int?)null;
-                    payment.LocationID = cashPayment.LocationID;
-                    payment.UID = cashPayment.UID;
-                    payment.ReferanceID = cashPayment.ReferanceID;
-                    payment.TimeZone = timezone;
-                    if (newexchanges > 0)
-                    {
-                        payment.ExchangeRate = newexchanges;
-                    }
-                    else
-                    {
-                        payment.ExchangeRate = exchanges;
-                    }
-
-                    DocumentManager documentManager = new DocumentManager();
-                    var editresult = documentManager.EditCashPayment(payment, model.Authentication);
-
-                    result.IsSuccess = editresult.IsSuccess;
-                    result.Message = editresult.Message;
-                }
-                else
-                {
-                    result.IsSuccess = true;
-                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
-                }
-            }
-
-            TempData["result"] = result;
-            return RedirectToAction("PaymentDetail", new { id = cashPayment.UID });
-        }
-
-        [AllowAnonymous]
-        public ActionResult DeleteCashPayment(string id)
-        {
-            Result result = new Result()
-            {
-                IsSuccess = false,
-                Message = string.Empty
-            };
-
-            CashControlModel model = new CashControlModel();
-
-            if (id != null)
-            {
-                DocumentManager documentManager = new DocumentManager();
-                var delresult = documentManager.DeleteCashPayment(Guid.Parse(id), model.Authentication);
-
-                result.IsSuccess = delresult.IsSuccess;
-                result.Message = delresult.Message;
-            }
-
-            TempData["result"] = result;
-            return RedirectToAction("PaymentDetail", new { id = id });
-
-        }
-
-
-
-
-
-
-        [AllowAnonymous]
-        public ActionResult SaleReturn(int? locationId)
-        {
-            CashControlModel model = new CashControlModel();
-
-            if (TempData["result"] != null)
-            {
-                model.Result = TempData["result"] as Result ?? null;
-            }
-
-            if (TempData["filter"] != null)
-            {
-                model.Filters = TempData["filter"] as FilterModel;
-            }
-            else
-            {
-                FilterModel filterModel = new FilterModel();
-
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
-                model.Filters = filterModel;
-            }
-            model.ExpenseTypeList = Db.ExpenseType.Where(x => x.IsActive == true).ToList();
-            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
-            model.BankAccountList = Db.BankAccount.ToList();
-            model.PayMethodList = Db.PayMethod.ToList();
-            model.StatusList = Db.BankTransferStatus.ToList();
-            model.CurrencyList = OfficeHelper.GetCurrency();
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
-
-            model.TicketSalesReturn = Db.VDocumentTicketSaleReturn.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-            if (model.Filters.LocationID > 0)
-            {
-                model.TicketSalesReturn = model.TicketSalesReturn.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-
-            }
-
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult FilterReturn(int? locationId, DateTime? beginDate, DateTime? endDate)
-        {
-            FilterModel model = new FilterModel();
-
-            model.LocationID = locationId;
-            model.DateBegin = beginDate;
-            model.DateEnd = endDate;
-
-            if (beginDate == null)
-            {
-                DateTime begin = DateTime.Now.AddMonths(-1).Date;
-                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
-            }
-
-            if (endDate == null)
-            {
-                model.DateEnd = DateTime.Now.Date;
-            }
-
-            TempData["filter"] = model;
-
-            return RedirectToAction("SaleReturn", "Cash");
-        }
-
-        [AllowAnonymous]
-        public ActionResult AddSaleRefund(Guid? id)
-        {
-            CashControlModel model = new CashControlModel();
-
-            if (TempData["result"] != null)
-            {
-                model.Result = TempData["result"] as Result ?? null;
-            }
-            model.PayMethodList = Db.PayMethod.ToList();
-            model.CurrencyList = OfficeHelper.GetCurrency();
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).ToList();
-
-            return View(model);
-        }
-
-        [AllowAnonymous]
-        public ActionResult SaleRefundDetail(Guid? id)
-        {
-            CashControlModel model = new CashControlModel();
-
-            if (TempData["result"] != null)
-            {
-                model.Result = TempData["result"] as Result ?? null;
-            }
-
-            model.CurrencyList = OfficeHelper.GetCurrency();
-            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
-            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
-
-            model.SalesRefundDetail = Db.VDocumentTicketSaleReturn.FirstOrDefault(x => x.UID == id);
-            model.History = Db.ApplicationLog.Where(x => x.Controller == "Cash" && x.Action == "SaleReturn" && x.Environment == "Office" && x.ProcessID == model.SalesRefundDetail.ID.ToString()).ToList();
-
-            model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
-
-            return View(model);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult AddTicketSaleReturn(NewTicketSaleReturn cashSaleReturn)
-        {
-            Result result = new Result()
-            {
-                IsSuccess = false,
-                Message = string.Empty
-            };
-
-            CashControlModel model = new CashControlModel();
-
-            if (cashSaleReturn != null)
-            {
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSaleReturn.ActinTypeID);
-                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSaleReturn.LocationID);
-                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var fromPrefix = cashSaleReturn.FromID.Substring(0, 1);
-                var fromID = Convert.ToInt32(cashSaleReturn.FromID.Substring(1, cashSaleReturn.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashSaleReturn.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var currency = cashSaleReturn.Currency;
-                var docDate = DateTime.Now.Date;
-                if (DateTime.TryParse(cashSaleReturn.DocumentDate, out docDate))
-                {
-                    docDate = Convert.ToDateTime(cashSaleReturn.DocumentDate).Date;
-                }
-                var cash = OfficeHelper.GetCash(cashSaleReturn.LocationID, cashSaleReturn.Currency);
-
-                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-                var exchange = OfficeHelper.GetExchange(docDate);
-
-                if (amount > 0 && (int?)cashSaleReturn.Quantity > 0)
-                {
-                    SaleReturn sale = new SaleReturn();
-
-                    sale.ActinTypeID = actType.ID;
-                    sale.ActionTypeName = actType.Name;
-                    sale.Amount = amount;
-                    sale.Quantity = cashSaleReturn.Quantity;
-                    sale.CashID = cash.ID;
-                    sale.Currency = currency;
-                    sale.DocumentDate = docDate;
-                    sale.Description = cashSaleReturn.Description;
-                    sale.PayMethodID = cashSaleReturn.PayMethodID;
-                    sale.ExchangeRate = currency == "USD" ? exchange.USDA : currency == "EUR" ? exchange.EURA : 1;
-                    sale.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                    sale.LocationID = cashSaleReturn.LocationID;
-                    sale.OurCompanyID = location.OurCompanyID;
-                    sale.TimeZone = timezone;
-                    sale.ReferanceID = cashSaleReturn.ReferanceID;
-
-                    DocumentManager documentManager = new DocumentManager();
-                    var addresult = documentManager.AddCashSaleReturn(sale, model.Authentication);
-
-                    result.IsSuccess = addresult.IsSuccess;
-                    result.Message = addresult.Message;
-                }
-                else
-                {
-                    result.IsSuccess = true;
-                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
-                }
-            }
-
-            TempData["result"] = result;
-
-            return RedirectToAction("SaleReturn", "Cash");
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public ActionResult EditTicketSaleReturn(NewTicketSaleReturn cashSale)
-        {
-            Result result = new Result()
-            {
-                IsSuccess = false,
-                Message = string.Empty
-            };
-
-            CashControlModel model = new CashControlModel();
-
-            if (cashSale != null)
-            {
-                var fromPrefix = cashSale.FromID.Substring(0, 1);
-                var fromID = Convert.ToInt32(cashSale.FromID.Substring(1, cashSale.FromID.Length - 1));
-                var amount = Convert.ToDouble(cashSale.Amount.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var quantity = Convert.ToInt32(cashSale.Quantity);
-                var currency = cashSale.Currency;
-                var docDate = DateTime.Now.Date;
-                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSale.LocationID);
-                var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
-                double? newexchanges = Convert.ToDouble(cashSale.ExchangeRate?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                double? exchanges = Convert.ToDouble(cashSale.Exchange?.ToString().Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                if (DateTime.TryParse(cashSale.DocumentDate, out docDate))
-                {
-                    docDate = Convert.ToDateTime(cashSale.DocumentDate).Date;
-                }
-
-                if (amount > 0 && quantity > 0)
-                {
-                    SaleReturn sale = new SaleReturn();
-                    sale.ActinTypeID = cashSale.ActinTypeID;
-                    sale.Amount = amount;
-                    sale.Currency = currency;
-                    sale.Description = cashSale.Description;
-                    sale.DocumentDate = docDate;
-                    sale.EnvironmentID = 2;
-                    sale.ToCustomerID = fromPrefix == "A" ? fromID : (int?)null;
-                    sale.LocationID = cashSale.LocationID;
-                    sale.UID = cashSale.UID;
-                    sale.Quantity = quantity;
-                    sale.PayMethodID = cashSale.PayMethodID;
-                    sale.ReferanceID = cashSale.ReferanceID;
-                    sale.TimeZone = timezone;
-                    if (newexchanges > 0)
-                    {
-                        sale.ExchangeRate = newexchanges;
-                    }
-                    else
-                    {
-                        sale.ExchangeRate = exchanges;
-                    }
-
-                    DocumentManager documentManager = new DocumentManager();
-                    var editresult = documentManager.EditCashSaleReturn(sale, model.Authentication);
-
-                    result.IsSuccess = editresult.IsSuccess;
-                    result.Message = editresult.Message;
-                }
-                else
-                {
-                    result.IsSuccess = true;
-                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
-                }
-            }
-
-
-            TempData["result"] = result;
-            return RedirectToAction("SaleRefundDetail", new { id = cashSale.UID });
-
-        }
-
-        [AllowAnonymous]
-        public ActionResult DeleteTicketSaleReturn(string id)
-        {
-            Result result = new Result()
-            {
-                IsSuccess = false,
-                Message = string.Empty
-            };
-
-            CashControlModel model = new CashControlModel();
-
-            if (id != null)
-            {
-                DocumentManager documentManager = new DocumentManager();
-                var delresult = documentManager.DeleteCashSaleReturn(Guid.Parse(id), model.Authentication);
-
-                result.IsSuccess = delresult.IsSuccess;
-                result.Message = delresult.Message;
-            }
-
-            TempData["result"] = result;
-            return RedirectToAction("SaleRefundDetail", new { id = id });
-
-        }
-
-
 
 
 
