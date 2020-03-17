@@ -10,21 +10,21 @@ namespace ActionForce.Office
         public int ID { get; set; }
         public int OurCompanyID { get; set; }
         public string FullName { get; set; }
-        public int MallSegmentID { get; set; }
+        public int? MallSegmentID { get; set; }
         public string StructuralCondition { get; set; }
         public string Address { get; set; }
         public int CountryID { get; set; }
-        public int StateID { get; set; }
-        public int CityID { get; set; }
-        public int CountyID { get; set; }
+        public int? StateID { get; set; }
+        public int? CityID { get; set; }
+        public int? CountyID { get; set; }
         public string PostCode { get; set; }
         public string PhoneCountryCode { get; set; }
         public string PhoneNumber { get; set; }
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }
         public string Map { get; set; }
-        public int InvestorCompanyID { get; set; }
-        public int LeasingCompanyID { get; set; }
+        public int? InvestorCompanyID { get; set; }
+        public int? LeasingCompanyID { get; set; }
         public bool IsLeasingInHouse { get; set; }
         public DateTime RecordDate { get; set; }
         public int RecordEmployeeID { get; set; }

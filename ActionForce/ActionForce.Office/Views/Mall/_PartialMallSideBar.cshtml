@@ -4,7 +4,7 @@
         <a href="/Mall/Contact" class="nav-link @(this.ViewContext.RouteData.Values["controller"].ToString() == "Mall" && this.ViewContext.RouteData.Values["action"].ToString() == "Contact" ? "active" : "")"><i data-feather="users"></i> İletişim Bilgileri</a>
         <a href="/Mall/Contract" class="nav-link @(this.ViewContext.RouteData.Values["controller"].ToString() == "Mall" && this.ViewContext.RouteData.Values["action"].ToString() == "Contract" ? "active" : "")"><i data-feather="file"></i> Sözleşmeler</a>
         <a href="/Mall/Index" class="nav-link @(this.ViewContext.RouteData.Values["controller"].ToString() == "Mall" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")"><i data-feather="shopping-bag"></i> AVM Listesi</a>
-        <a href="/Mall/Edit/@(Model.MallModel.MallUID)" class="nav-link @(this.ViewContext.RouteData.Values["controller"].ToString() == "Mall" && this.ViewContext.RouteData.Values["action"].ToString() == "EditMall" ? "active" : "")"><i data-feather="edit"></i> Güncelle</a>
+        <a href="/Mall/EditMall/@(Model.MallModel.MallUID)" class="nav-link @(this.ViewContext.RouteData.Values["controller"].ToString() == "Mall" && this.ViewContext.RouteData.Values["action"].ToString() == "EditMall" ? "active" : "")"><i data-feather="edit"></i> Güncelle</a>
     </nav>
 </div>
 

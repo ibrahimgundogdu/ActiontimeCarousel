@@ -1,6 +1,6 @@
-﻿<table class="table table-striped table-hover table-sm tx-13 tx-nowrap mg-b-0">
-    <thead class="table-dark">
-        <tr class="tx-10 tx-spacing-1 tx-color-03 tx-uppercase">
+﻿<table class="table table-sm table-hover">
+    <thead>
+        <tr>
             <th>#</th>
             <th>Tarih</th>
             <th>Belge No</th>
@@ -34,7 +34,7 @@
                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
                 <td class="tx-sm-13">@(item.Currency)</td>
                 <td class="tx-sm-13">@item.RecorderFullName</td>
-                <td class="tx-sm-13 text-right">@item.RecordDate</td>
+                <td class="tx-sm-13">@item.RecordDate</td>
 
             </tr>
         }
