@@ -7,16 +7,14 @@
         </svg>
         <span class="hidden-folded d-inline l-s-n-1x d-lg-none">UFE</span>
     </a>
-    <div class=" navbar-collapse order-2 order-lg-1" id="navbarToggler">
-        <h4>@(Html.Raw(Model.Authentication.CurrentLocation.FullName))</h4>
-    </div>
+  
     <ul class="nav navbar-menu order-1 order-lg-2">
         <li class="nav-item d-none d-sm-block">
             <a class="nav-link px-2" data-toggle="fullscreen" data-plugin="fullscreen">
                 <i data-feather="maximize"></i>
             </a>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item  d-none dropdown">
             <a class="nav-link px-2" data-toggle="dropdown">
                 <i data-feather="settings"></i>
             </a>
@@ -63,114 +61,7 @@
                 </div>
             </div>
         </li>
-        <li class="nav-item dropdown">
-            <a class="nav-link px-2 mr-lg-2" data-toggle="dropdown">
-                <i data-feather="bell"></i>
-                <span class="badge badge-pill badge-up bg-primary">5</span>
-            </a>
-            <div class="dropdown-menu dropdown-menu-right mt-3 w-md animate fadeIn p-0">
-                <div class="scrollable hover" style="max-height: 250px">
-                    <div class="list list-row">
-                        <div class="list-item " data-id="11">
-                            <div>
-                                <a href="#">
-                                    <span class="w-32 avatar gd-info">
-                                        K
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="flex">
-                                <div class="item-feed h-2x">
-                                    Prepare the documentation for the
-                                    <a href='#'>Fitness app</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-item " data-id="14">
-                            <div>
-                                <a href="#">
-                                    <span class="w-32 avatar gd-warning">
-                                        B
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="flex">
-                                <div class="item-feed h-2x">
-                                    Do you know which are the popular ones? Leave a comment and get to know more from professional developers
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-item " data-id="17">
-                            <div>
-                                <a href="#">
-                                    <span class="w-32 avatar gd-warning">
-                                        H
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="flex">
-                                <div class="item-feed h-2x">
-                                    AI will deliver adaptive learning processes in assessments & digital textbooks to personalize learning
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-item " data-id="10">
-                            <div>
-                                <a href="#">
-                                    <span class="w-32 avatar gd-danger">
-                                        <img src="http://office.ufegrup.com/img/Employee/hezarfen.jpg" alt=".">
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="flex">
-                                <div class="item-feed h-2x">
-                                    Developers of
-                                    <a href='#'>iAI</a>, the AI assistant based on Free Software
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-item " data-id="20">
-                            <div>
-                                <a href="#">
-                                    <span class="w-32 avatar gd-warning">
-                                        G
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="flex">
-                                <div class="item-feed h-2x">
-                                    <a href='#'>Netflix</a> hackathon
-                                </div>
-                            </div>
-                        </div>
-                        <div class="list-item " data-id="17">
-                            <div>
-                                <a href="#">
-                                    <span class="w-32 avatar gd-warning">
-                                        A
-                                    </span>
-                                </a>
-                            </div>
-                            <div class="flex">
-                                <div class="item-feed h-2x">
-                                    Alibaba made a smart screen
-                                    <a href='#'>Alibaba</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-flex px-3 py-2 b-t">
-                    <div class="flex">
-                        <span>6 Notifications</span>
-                    </div>
-                    <a href="page.setting.html">
-                        See all
-                        <i class="fa fa-angle-right text-muted"></i>
-                    </a>
-                </div>
-            </div>
-        </li>
+        
         <li class="nav-item dropdown">
             <a href="#" data-toggle="dropdown" class="nav-link d-flex align-items-center px-2 text-color">
                 <span class="avatar w-24" style="margin: -2px;"><img src="@($"http://office.ufegrup.com/img/Employee/{Model.Authentication.CurrentEmployee.FotoFile}")" alt="@(Model.Authentication?.CurrentEmployee?.FullName)"></span>
@@ -198,11 +89,11 @@
                 <a class="dropdown-item" href="/Logout">Çıkış</a>
             </div>
         </li>
-        <li class="nav-item d-lg-none">
+        @*<li class="nav-item d-lg-none">
             <a href="#" class="nav-link px-2" data-toggle="collapse" data-toggle-class data-target="#navbarToggler">
                 <i data-feather="search"></i>
             </a>
-        </li>
+        </li>*@
         <li class="nav-item d-lg-none">
             <a class="nav-link px-1" data-toggle="modal" data-target="#aside">
                 <i data-feather="menu"></i>

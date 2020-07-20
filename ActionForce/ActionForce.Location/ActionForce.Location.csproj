@@ -556,6 +556,7 @@
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\EnvelopeController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\LogoutController.cs" />
@@ -571,6 +572,7 @@
     <Compile Include="Models\ControlModels\ActionControlModel.cs" />
     <Compile Include="Models\ControlModels\DefaultControlModel.cs" />
     <Compile Include="Models\ControlModels\EnvelopeControlModel.cs" />
+    <Compile Include="Models\ControlModels\HomeControlModel.cs" />
     <Compile Include="Models\ControlModels\LocationControlModel.cs" />
     <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\ControlModels\ScheduleControlModel.cs" />
@@ -800,6 +802,7 @@
     <Content Include="Views\Default\_PartialBasketTotal.cshtml" />
     <Content Include="Views\Default\_PartialReadTicketDetail.cshtml" />
     <Content Include="Views\Default\_PartialAddOrderInfo.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

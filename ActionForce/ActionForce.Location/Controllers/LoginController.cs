@@ -127,7 +127,7 @@ namespace ActionForce.Location.Controllers
 
                     if (authModel.CurrentLocation != null && authModel.CurrentLocation.ID > 0)
                     {
-                        return RedirectToAction("Index", "Default");
+                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {

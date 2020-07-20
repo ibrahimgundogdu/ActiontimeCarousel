@@ -1,12 +1,12 @@
 ﻿@model ScheduleControlModel
 @{
     ViewBag.Title = "Takvim";
-    ViewBag.PageTitle = $"{DateTime.Now.ToLongDateString()} &nbsp; &nbsp; <span class='font-weight-bold'> Schedule </span>"; 
+    ViewBag.PageTitle = $"{DateTime.Now.ToLongDateString()} &nbsp; &nbsp; <span class='font-weight-bold'> Schedule </span>";
 }
 
-<div class="d-flex flex fixed-content">
+<div class="flex fixed-content">
 
-    <div class="d-flex flex" id="content-body">
+    <div class="flex" id="content-body">
         <div class="d-flex flex-column flex" data-plugin="user">
             <div class="p-3">
                 <div class="toolbar">
@@ -22,118 +22,75 @@
                     <a href="/" class="btn btn-md btn-white" title="Takvim">
                         <i class="text-info font-weight-bold" data-feather="calendar"></i>
                     </a>
-                    <a href="#" class="btn btn-md btn-white">
+
+
+                </div>
+                <div class="mt-2">
+                    <a href="#" class="btn btn-sm btn-block btn-white">
                         <span class="font-weight-bold">@(DateTime.Now.ToLongDateString())</span>
                     </a>
-                    <ul class="nav no-border">
-                        <li>
-                            <a href="#">
-                                <span class="nav-icon">
-                                    <i data-feather="power"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="nav-icon">
-                                    <i data-feather="power"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="nav-icon">
-                                    <i data-feather="power"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="nav-icon">
-                                    <i data-feather="power"></i>
-                                </span>
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                <span class="nav-icon">
-                                    <i data-feather="power"></i>
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
+
                 </div>
             </div>
+
+
+         
             <div class="scroll-y mx-3 mb-3 card">
                 <div class="table-responsive">
+
+
+                   
+
                     <table class="table table-theme table-hover table-row v-middle" style="border-spacing: 0 1px !important; padding: 0.5rem !important;">
 
-
-
                         <thead>
-                            <tr class="text-center">
-                                <td></td>
-                                <td class="bg-primary text-md">10:00</td>
-                                <td class="bg-primary text-md">22:00</td>
-                                <td></td>
-                                <td class="bg-warning text-md">09:59</td>
-                                <td class="bg-warning text-md">22:05</td>
-                                <td class="bg-secondary text-md">12:06</td>
-                                <td></td>
-                            </tr>
+
                             <tr class="table-light text-sm font-weight-bold">
                                 <td></td>
-                                <td class="text-center">Takvim Başlangıç</td>
-                                <td class="text-center">Takvim Bitiş</td>
-                                <td class="text-center"></td>
-                                <td class="text-center">Mesai Başlangıç</td>
-                                <td class="text-center">Mesai Bitiş</td>
-                                <td></td>
+                                <td colspan="3" class="text-center">Takvim</td>
+                                <td colspan="3" class="text-center">Mesai</td>
                                 <td></td>
                             </tr>
                         </thead>
                         <tbody>
                             <tr class=" v-middle shadow-sm">
                                 <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><span class="text-muted">2020-01-29</span> <b>10:00</b></td>
-                                <td class="bg-primary-lt text-center text-dark"><span class="text-muted">2020-01-29</span> <b>22:00</b></td>
+                                <td class="bg-primary-lt text-center text-dark"><b>10:00</b></td>
+                                <td class="bg-primary-lt text-center text-dark"><b>22:00</b></td>
                                 <td class="bg-primary-lt text-center font-weight-bold">12:00</td>
-                                <td class="bg-warning-lt text-center text-dark"><span class="text-muted">2020-01-29</span> <b>10:00</b></td>
-                                <td class="bg-warning-lt text-center text-dark"><span class="text-muted">2020-01-29</span> <b>22:00</b></td>
+                                <td class="bg-warning-lt text-center text-dark"><b>10:00</b></td>
+                                <td class="bg-warning-lt text-center text-dark"><b>22:00</b></td>
                                 <td class="bg-secondary-lt text-center font-weight-bold">12:00</td>
                                 <td class="text-center"><i class="text-info font-weight-bold" data-feather="coffee"></i></td>
                             </tr>
                             <tr class=" v-middle shadow-sm">
                                 <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><span class="text-muted">2020-01-29</span> <b>10:00</b></td>
-                                <td class="bg-primary-lt text-center text-dark"><span class="text-muted">2020-01-29</span> <b>22:00</b></td>
+                                <td class="bg-primary-lt text-center text-dark"><b>10:00</b></td>
+                                <td class="bg-primary-lt text-center text-dark"><b>22:00</b></td>
                                 <td class="bg-primary-lt text-center font-weight-bold">12:00</td>
-                                <td class="bg-warning-lt text-center text-dark"><span class="text-muted">2020-01-29</span> <b>10:00</b></td>
-                                <td class="bg-warning-lt text-center text-dark"><span class="text-muted">2020-01-29</span> <b>22:00</b></td>
+                                <td class="bg-warning-lt text-center text-dark"><b>10:00</b></td>
+                                <td class="bg-warning-lt text-center text-dark"><b>22:00</b></td>
                                 <td class="bg-secondary-lt text-center font-weight-bold">12:00</td>
                                 <td class="text-center"><i class="text-info font-weight-bold" data-feather="coffee"></i></td>
                             </tr>
                             <tr class=" v-middle shadow-sm">
                                 <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><span class="text-muted">2020-01-29</span> <b>10:00</b></td>
-                                <td class="bg-primary-lt text-center text-dark"><span class="text-muted">2020-01-29</span> <b>22:00</b></td>
+                                <td class="bg-primary-lt text-center text-dark"><b>10:00</b></td>
+                                <td class="bg-primary-lt text-center text-dark"><b>22:00</b></td>
                                 <td class="bg-primary-lt text-center font-weight-bold">12:00</td>
-                                <td class="bg-warning-lt text-center text-dark"><span class="text-muted">2020-01-29</span> <b>10:00</b></td>
-                                <td class="bg-warning-lt text-center text-dark"><span class="text-muted">2020-01-29</span> <b>22:00</b></td>
+                                <td class="bg-warning-lt text-center text-dark"><b>10:00</b></td>
+                                <td class="bg-warning-lt text-center text-dark"><b>22:00</b></td>
                                 <td class="bg-secondary-lt text-center font-weight-bold">12:00</td>
                                 <td class="text-center bg-warning"><i class=" font-weight-bold" data-feather="coffee"></i></td>
                             </tr>
                         </tbody>
-                        <tfoot class="order-0">
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"></td>
-                                <td class="text-center text-dark"></td>
-                                <td class="text-center text-dark"></td>
-                                <td class="text-center font-weight-bold"></td>
-                                <td class="text-center text-dark"></td>
-                                <td class="text-center text-dark"></td>
-                                <td class="text-sm text-center text-md p-0"></td>
-                                <td class="text-center"></td>
+                        <tfoot>
+                            <tr class="text-center">
+                                <td></td>
+                                <td colspan="3" class="bg-primary text-sm-center">10:00 - 22:00</td>
+                                <td colspan="2" class="bg-warning text-sm-center">09:59 - 22:05</td>
+                                <td class="bg-secondary text-md">12:06</td>
+                                <td></td>
                             </tr>
                         </tfoot>
 
@@ -142,9 +99,9 @@
                 </div>
             </div>
         </div>
-    </div>
+            </div>
 
-</div>
+        </div>
 
 @section scripts {
     @if (Model.Result != null) //

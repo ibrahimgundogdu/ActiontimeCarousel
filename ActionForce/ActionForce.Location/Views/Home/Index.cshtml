@@ -1,0 +1,155 @@
+﻿@model HomeControlModel
+@{
+    ViewBag.Title = "Home";
+    ViewBag.PageTitle = $"{DateTime.Now.ToLongDateString()} &nbsp; &nbsp; <span class='font-weight-bold'> {Model.Authentication?.CurrentLocation?.FullName?.ToUpper()} </span>";
+
+}
+
+
+<div class="d-flex flex fixed-content">
+
+    <div class="d-flex flex" id="content-body">
+        <div class="d-flex flex-column flex" data-plugin="user">
+            <div class="p-3">
+                <div class="toolbar">
+                    <a href="javascript:;" class="btn btn-md btn-white" title="Sepeti Boşalt" onclick="return confirm('Sepeti silmek istediğinize Emin misiniz? ') ? ClearBasket():''">
+                        <i class="text-primary font-weight-bold" data-feather="trash-2"></i>
+                    </a>
+                    <a href="/Sale" class="btn btn-md btn-white">
+                        <i class="text-primary font-weight-bold" data-feather="list"></i>
+                    </a>
+                   
+                </div>
+            </div>
+            <div class="scroll-y mx-3 mb-3 card">
+
+                <div class="row no-gutters">
+                    <div class="col-md-6 b-r bg-light--lt">
+                        <div class="p-2">
+                            <div class="row row-xs">
+                                @foreach (var price in Model.PriceList)
+                                {
+                                    <div class="col-sm-6">
+                                        <div class="card shadow-sm mb-3">
+                                            <div class="media media-21x9 @(price.Style)">
+
+                                                <a href="#" class="media-content" onclick="AddBasket(@(price.ID))">
+                                                    <h2 class="text-fade text-white">@(price.Unit) Dk</h2><br />
+                                                </a>
+
+                                            </div>
+                                            <div class="p-2 text-center">
+                                                <h5 class="card-title mb-0">@(price.Price?.ToString("N2")) @(price.Sign)</h5>
+                                                <span class="item-amount d-none d-sm-block text-sm">
+                                                    @(price.ProductName)
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 bg-light">
+                        <div class="p-2">
+                            <span class="text-md"> Sepet</span>
+                            <span class="mr-2 float-right"><i data-feather="shopping-cart"></i></span>
+                            <div class="table-responsive" id="BasketList">
+                                @*@{ Html.RenderPartial("_PartialBasketList", Model);}*@
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+
+<div id="BasketItemDetail" class="modal fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" id="BasketItemDetailContent">
+        </div>
+    </div>
+</div>
+
+<div id="AddBasketTicket" class="modal bg-white fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" id="BasketItemTicketContent">
+            <div class="modal-header">
+                <h5 class="modal-title">Bileti Okutunuz</h5>
+                <button class="close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body p-2">
+
+
+                <div class="input-group input-group-lg mb-3">
+                    <input id="InputTicketNumber" name="TicketNumber" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" autofocus>
+                    <div class="input-group-append">
+                        <button class="btn btn-warning" style="width:80px;" type="button" onclick="GetReadTicketDetailTest();"><i data-feather="cast"></i></button> 
+                    </div>
+                </div>
+
+                <div class="" id="ReadTicketDetail">
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="AddOrderInfo" class="modal bg-white fade" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" id="AddOrderTicketContent">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                <button class="btn btn-lg btn-light close" data-dismiss="modal">×</button>
+            </div>
+            <div class="modal-body p-2" id="OrderSummary">
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        
+
+
+
+        //function AddBasketTicket() {
+        //    $.ajax({
+        //        method: "GET",
+        //        url: "/Default/BasketItemDetail",
+        //        data: { id: itemid }
+        //    }).done(function (d) {
+        //        $("#BasketItemDetailContent").html(d);
+        //    });
+        //};
+
+
+
+    </script>
+
+
+    @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
+    {
+        <script>
+            $(function () {
+                notie.setOptions({
+                    alertTime: 5
+                })
+                notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
+                noticed = true;
+            });
+        </script>
+    }
+
+}
