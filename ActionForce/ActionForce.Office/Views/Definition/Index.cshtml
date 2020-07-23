@@ -68,7 +68,7 @@
 
             $('.shifttime').mask('00:00');
             $('.shiftdate').mask('0000-00-00');
-
+            $('.money').mask("#.##0,00", { reverse: true });
 
             const scrollLocation = new PerfectScrollbar('#scrollLocation', {
                 suppressScrollX: true
@@ -103,6 +103,19 @@
                 data: { id: id }
             }).done(function (d) {
                 $("#AddLocationCash").html(d);
+            });
+        }
+
+        function EditLocationCash(id) {
+
+            var amount = $("#Amount" + id).val();
+            console.log(amount);
+            $.ajax({
+                method: "GET",
+                url: "/Definition/EditLocationCash",
+                data: { id: id, amount:amount }
+            }).done(function (d) {
+                $("#LocationCashList").html(d);
             });
         }
 

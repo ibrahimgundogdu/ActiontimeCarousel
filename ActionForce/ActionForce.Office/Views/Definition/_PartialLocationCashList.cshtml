@@ -11,18 +11,22 @@
                         <th class="tx-right">Bloked</th>
                         <th>Para Birim</th>
                         <th></th>
+                        <th></th>
 
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var cash in Model.CashList)
                     {
-                        <tr>
-                            <td>@(cash.CashName)</td>
-                            <td class="tx-right font-weight-bold">@(cash.BlockedAmount)</td>
-                            <td>@(cash.Currency)</td>
-                            <td class="tx-right font-weight-bold"><a href="#" class="text-danger" onclick="if(confirm('@cash.CashName isimli kasayı silmek istediğine emin misin? Bu işlem geri alınamaz')) DeleteLocationCash(@cash.ID)"><i class="fas fa-trash"></i></a></td>
-                        </tr>
+                    <tr>
+                        <td>@(cash.CashName)</td>
+                        <td class="tx-right font-weight-bold">
+                            <input type="text" class="form-control money" id="Amount@(cash.ID)" value="@(cash.BlockedAmount?.ToString("N2"))" />
+                        </td>
+                        <td>@(cash.Currency)</td>
+                        <td class="tx-right font-weight-bold"><a href="#" class="text-success" onclick="if(confirm('@cash.CashName isimli kasayı güncellemek istediğinize emin misiniz?')) EditLocationCash(@cash.ID)"><i class="fas fa-edit"></i></a></td>
+                        <td class="tx-right font-weight-bold"><a href="#" class="text-danger" onclick="if(confirm('@cash.CashName isimli kasayı silmek istediğinize emin misiniz? Bu işlem geri alınamaz')) DeleteLocationCash(@cash.ID)"><i class="fas fa-trash"></i></a></td>
+                    </tr>
                     }
                 </tbody>
             </table>
@@ -31,10 +35,13 @@
 
 
 </div>
-
+<script>
+    $('.money').mask("#.##0,00", { reverse: true });
+</script>
 @if (Model.Result != null)
 {
     <script type="text/javascript">
+
         $.toast({
             heading: 'Information',
             text: '@Model.Result.Message ',

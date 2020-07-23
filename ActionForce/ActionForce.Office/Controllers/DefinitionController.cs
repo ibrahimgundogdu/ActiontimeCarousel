@@ -201,6 +201,69 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
+        public PartialViewResult EditLocationCash(int? id, string amount)
+        {
+            Result<CashActions> result = new Result<CashActions>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+            DefinitionControlModel model = new DefinitionControlModel();
+            int? locID = 0;
+
+            if (id != null)
+            {
+
+                var isCash = Db.Cash.FirstOrDefault(x => x.ID == id);
+                if (isCash != null)
+                {
+                    try
+                    {
+                        locID = isCash.LocationID;
+                        var Amount = Convert.ToDouble(amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
+                        Cash self = new Cash()
+                        {
+                            LocationID = isCash.LocationID,
+                            CashName = isCash.CashName,
+                            BlockedAmount = isCash.BlockedAmount,
+                            Currency = isCash.Currency,
+                            IsMaster = isCash.IsMaster,
+                            IsActive = isCash.IsActive,
+                            SortBy = isCash.SortBy
+                        };
+
+                        isCash.BlockedAmount = Amount;
+                        Db.SaveChanges();
+
+                        result.IsSuccess = true;
+                        result.Message = $"{isCash.CashName} kasası başarı ile güncellendi";
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Definition", "Edit", id.ToString(), "Definition", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isCash);
+
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"{isCash.ID} ID'li {isCash.CashName} kasası güncellenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Definition", "Edit", "-1", "Definition", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                    }
+                }
+                model.CashList = Db.VCash.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == locID && x.cIsActive == true).ToList();
+
+            }
+
+            TempData["result"] = result;
+
+            model.Result = result;
+
+            return PartialView("_PartialLocationCashList", model);
+
+        }
+
+        [AllowAnonymous]
         public PartialViewResult LocationCash(int? id)
         {
             DefinitionControlModel model = new DefinitionControlModel();
