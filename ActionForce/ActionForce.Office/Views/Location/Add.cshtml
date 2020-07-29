@@ -128,7 +128,7 @@
                                         <div class="form-group row mg-b-5">
                                             <label for="avm" class="col-sm-3 col-form-label">AVM</label>
                                             <div class="col-sm-6">
-                                                <select class="form-control" id="avm" name="MallID" required>
+                                                <select class="form-control" id="avm" name="MallID">
                                                     @if (Model?.MallList?.Count > 0)
                                                     {
                                                         <option value="">Seçiniz</option>
@@ -313,6 +313,7 @@
                             });
 
                             $("#avm").empty();
+                            $("#avm").append($('<option></option>', { "value": "", "text": "Seçiniz" }));
                             $.each(getList.MallList, function (index, label) {
                                 $("#avm").append($('<option></option>', { "value": label.Value, "text": label.Text }));
                             });

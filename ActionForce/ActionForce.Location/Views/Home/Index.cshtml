@@ -18,7 +18,7 @@
                     <a href="/Sale" class="btn btn-md btn-white">
                         <i class="text-primary font-weight-bold" data-feather="list"></i>
                     </a>
-                   
+
                 </div>
             </div>
             <div class="scroll-y mx-3 mb-3 card">
@@ -26,29 +26,87 @@
                 <div class="row no-gutters">
                     <div class="col-md-6 b-r bg-light--lt">
                         <div class="p-2">
-                            <div class="row row-xs">
-                                @foreach (var price in Model.PriceList)
-                                {
-                                    <div class="col-sm-6">
-                                        <div class="card shadow-sm mb-3">
-                                            <div class="media media-21x9 @(price.Style)">
 
-                                                <a href="#" class="media-content" onclick="AddBasket(@(price.ID))">
-                                                    <h2 class="text-fade text-white">@(price.Unit) Dk</h2><br />
-                                                </a>
+                            <div class="table-responsive">
 
-                                            </div>
-                                            <div class="p-2 text-center">
-                                                <h5 class="card-title mb-0">@(price.Price?.ToString("N2")) @(price.Sign)</h5>
-                                                <span class="item-amount d-none d-sm-block text-sm">
-                                                    @(price.ProductName)
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                }
-                               
+
+
+
+                                <table class="table table-theme table-hover v-middle" style="border-spacing: 0 1px !important; padding: 0.5rem !important;">
+
+                                    <thead>
+
+                                        <tr class="table-light text-sm font-weight-bold">
+                                            <td>Bilet Satışı</td>
+                                            <td colspan="2" class="text-center bg-info">Nakit</td>
+                                            <td colspan="2" class="text-center bg-warning">Kart</td>
+                                            <td colspan="2"></td>
+
+                                        </tr>
+                                        <tr class="table-light text-sm font-weight-bold">
+                                            <td>Bilet</td>
+                                            <td class="text-center">Satış</td>
+                                            <td class="text-center">İade</td>
+                                            <td class="text-center bg-warning--lt">Satış</td>
+                                            <td class="text-center bg-warning-lt">İade</td>
+                                            <td class="text-center">Dk.</td>
+                                            <td class="text-center">@(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency)</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var price in Model.PriceList)
+                                        {
+                                        <tr class=" v-middle shadow-sm">
+                                            <td class="font-weight-500 text-dark">@(price.ProductName)</td>
+                                            <td class="text-center text-dark p-1">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="CashSale@(price.ID)" value="1" style="width:16px;">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-light" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center text-dark p-1">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control text-danger" id="CashSale@(price.ID)" value="1" style="width:16px;">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-light" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center p-1">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control" id="CashSale@(price.ID)" value="1" style="width:16px;">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-secondary" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-center text-danger p-1">
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control text-danger" id="CashSale@(price.ID)" value="1" style="width:16px;">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-secondary" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="text-dark">@(price.Unit)</td>
+                                            <td class="text-dark">@(price.Price?.ToString("N2"))</td>
+                                        </tr>
+
+                                        }
+
+
+                                    </tbody>
+
+
+                                </table>
+
                             </div>
+
+
+
+                           
                         </div>
                     </div>
                     <div class="col-md-6 bg-light">
@@ -64,7 +122,7 @@
             </div>
         </div>
     </div>
-    
+
 </div>
 
 <div id="BasketItemDetail" class="modal fade" data-backdrop="static" data-keyboard="false">
@@ -87,7 +145,7 @@
                 <div class="input-group input-group-lg mb-3">
                     <input id="InputTicketNumber" name="TicketNumber" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" autofocus>
                     <div class="input-group-append">
-                        <button class="btn btn-warning" style="width:80px;" type="button" onclick="GetReadTicketDetailTest();"><i data-feather="cast"></i></button> 
+                        <button class="btn btn-warning" style="width:80px;" type="button" onclick="GetReadTicketDetailTest();"><i data-feather="cast"></i></button>
                     </div>
                 </div>
 
@@ -120,7 +178,7 @@
 
     <script type="text/javascript">
 
-        
+
 
 
 

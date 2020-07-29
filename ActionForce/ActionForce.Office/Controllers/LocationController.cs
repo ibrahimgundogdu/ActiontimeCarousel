@@ -281,7 +281,7 @@ namespace ActionForce.Office.Controllers
 
                 if (isLocation != null)
                 {
-                    var isCheck = Db.Location.Where(x => (x.LocationName.Trim().ToUpper() == location.LocationName || x.SortBy.Trim().ToUpper() == location.SortBy.Trim().ToUpper()) && x.LocationID != isLocation.LocationID).ToList();
+                    var isCheck = Db.Location.Where(x => x.SortBy.Trim().ToUpper() == location.SortBy.Trim().ToUpper() && x.LocationID != isLocation.LocationID).ToList();
                     var getCity = Db.City.FirstOrDefault(x => x.ID == location.CityID);
 
                     if (isCheck.Count == 0)
@@ -468,7 +468,7 @@ namespace ActionForce.Office.Controllers
             LocationControlModel model = new LocationControlModel();
             model.Result = new Result();
             Guid locationUID = Guid.Empty;
-            var isLocation = Db.Location.FirstOrDefault(x => x.LocationName.Trim().ToUpper() == location.LocationName.Trim().ToUpper() || x.SortBy.Trim().ToUpper() == location.SortBy.Trim().ToUpper());
+            var isLocation = Db.Location.FirstOrDefault(x => x.SortBy.Trim().ToUpper() == location.SortBy.Trim().ToUpper());
             var getCity = Db.City.FirstOrDefault(x => x.ID == location.CityID);
 
             if (location != null && isLocation == null)
