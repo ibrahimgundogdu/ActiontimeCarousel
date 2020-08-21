@@ -441,7 +441,8 @@ namespace ActionForce.Office.Controllers
                         Address = isEmployee.Address,
                         Country = isEmployee.Country,
                         PostCode = isEmployee.PostCode,
-                        State = isEmployee.State
+                        State = isEmployee.State,
+                        RoleID = isEmployee.RoleID
 
                     };
 
@@ -469,6 +470,7 @@ namespace ActionForce.Office.Controllers
                     isEmployee.CountryPhoneCode = employee.CountryPhoneCode;
                     isEmployee.EMail = employee.EMail;
                     isEmployee.OurCompanyID = employee.OurCompanyID;
+                    isEmployee.RoleID = isEmployee.RoleID ?? 1;
 
                     isEmployee.Country = employee.Country;
                     isEmployee.State = employee.State;
@@ -1566,6 +1568,7 @@ namespace ActionForce.Office.Controllers
                 empdoc.City = employee.City;
                 empdoc.Address = employee.Address;
                 empdoc.PostCode = employee.PostCode;
+                empdoc.RoleID = 1;
 
                 empdoc.RecordDate = daterecord;
                 empdoc.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
@@ -1999,6 +2002,7 @@ namespace ActionForce.Office.Controllers
                 empdoc.Username = employee.Username;
                 empdoc.OurCompanyID = employee.OurCompanyID;
                 empdoc.IsActive = isActive;
+                empdoc.RoleID = 1;
                 empdoc.IsTemp = isTemp;
                 empdoc.RecordDate = DateTime.Now;
                 empdoc.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
