@@ -576,6 +576,7 @@
     <Compile Include="Models\ControlModels\LocationControlModel.cs" />
     <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\ControlModels\ScheduleControlModel.cs" />
+    <Compile Include="Models\ControlModels\SummaryControlModel.cs" />
     <Compile Include="Models\DefaultModels\BasketTotal.cs" />
     <Compile Include="Models\DefaultModels\TicketInfo.cs" />
     <Compile Include="Models\DifferentList.cs" />
@@ -586,8 +587,10 @@
     <Compile Include="Models\LocationModels\mLocation.cs" />
     <Compile Include="Models\LocationModels\mLocationSchedule.cs" />
     <Compile Include="Models\LocationModels\mLocationShift.cs" />
+    <Compile Include="Models\LocationServiceManager.cs" />
     <Compile Include="Models\LocationUser.cs" />
     <Compile Include="Models\Result.cs" />
+    <Compile Include="Models\TotalModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -803,6 +806,7 @@
     <Content Include="Views\Default\_PartialReadTicketDetail.cshtml" />
     <Content Include="Views\Default\_PartialAddOrderInfo.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_PartialSummary.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

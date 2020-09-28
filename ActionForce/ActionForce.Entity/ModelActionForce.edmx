@@ -3268,6 +3268,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="Date" Type="datetime" Nullable="false" />
           <Property Name="LocationID" Type="int" />
           <Property Name="EmployeeID" Type="int" />
+          <Property Name="IsSale" Type="bit" />
           <Property Name="TicketTripID" Type="bigint" />
           <Property Name="PaymethodID" Type="int" />
           <Property Name="UseImmediately" Type="bit" />
@@ -6382,6 +6383,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
           <Parameter Name="RecordDate" Type="datetime" Mode="In" />
           <Parameter Name="ProcessUID" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <Function Name="AddDayResult" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="Date" Type="date" Mode="In" />
+          <Parameter Name="StateID" Type="int" Mode="In" />
+          <Parameter Name="EnvironmentID" Type="int" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="AddEmployeeAction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
@@ -9735,6 +9745,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="CustomerData" Mode="In" Type="String" />
             <Parameter Name="CustomerPhone" Mode="In" Type="String" />
             <Parameter Name="IdentityCard" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddDayResult" ReturnType="Collection(Int64)">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="StateID" Mode="In" Type="Int32" />
+            <Parameter Name="EnvironmentID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="Description" Mode="In" Type="String" />
             <Parameter Name="RecordIP" Mode="In" Type="String" />
           </FunctionImport>
@@ -16180,6 +16199,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CustomerName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="CustomerData" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IsSale" Type="Boolean" />
         </EntityType>
         <EntityType Name="VTicketSale">
           <Key>
@@ -22470,6 +22490,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketSaleRows">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketSaleRows">
               <MappingFragment StoreEntitySet="TicketSaleRows">
+                <ScalarProperty Name="IsSale" ColumnName="IsSale" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="CustomerData" ColumnName="CustomerData" />
                 <ScalarProperty Name="CustomerName" ColumnName="CustomerName" />
@@ -22688,6 +22709,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddOrder" FunctionName="db293_ActionTimeDbModel.Store.AddOrder" />
+          <FunctionImportMapping FunctionImportName="AddDayResult" FunctionName="db293_ActionTimeDbModel.Store.AddDayResult" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

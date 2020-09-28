@@ -12,5 +12,7 @@ namespace ActionForce.Location
         public VPriceLastList Price { get; set; }
         public VPrice VPrice { get; set; }
 
+        public SummaryControlModel Summary { get; set; }
+
     }
 }

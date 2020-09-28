@@ -48,5 +48,6 @@ namespace ActionForce.Entity
         public string CustomerName { get; set; }
         public string CustomerData { get; set; }
         public string Description { get; set; }
+        public Nullable<bool> IsSale { get; set; }
     }
 }

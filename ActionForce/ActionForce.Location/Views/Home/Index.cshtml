@@ -31,90 +31,148 @@
 
 
 
-
+                                <!-- Nakit -->
                                 <table class="table table-theme table-hover v-middle" style="border-spacing: 0 1px !important; padding: 0.5rem !important;">
 
                                     <thead>
 
                                         <tr class="table-light text-sm font-weight-bold">
-                                            <td>Bilet Satışı</td>
-                                            <td colspan="2" class="text-center bg-info">Nakit</td>
-                                            <td colspan="2" class="text-center bg-warning">Kart</td>
-                                            <td colspan="2"></td>
-
+                                            <td colspan="3" class="text-center bg-info block">Nakit Bilet Satışı</td>
                                         </tr>
                                         <tr class="table-light text-sm font-weight-bold">
                                             <td>Bilet</td>
                                             <td class="text-center">Satış</td>
                                             <td class="text-center">İade</td>
-                                            <td class="text-center bg-warning--lt">Satış</td>
-                                            <td class="text-center bg-warning-lt">İade</td>
-                                            <td class="text-center">Dk.</td>
-                                            <td class="text-center">@(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency)</td>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var price in Model.PriceList)
                                         {
-                                        <tr class=" v-middle shadow-sm">
-                                            <td class="font-weight-500 text-dark">@(price.ProductName)</td>
-                                            <td class="text-center text-dark p-1">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" id="CashSale@(price.ID)" value="1" style="width:16px;">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-light" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
+                                            <tr class=" v-middle shadow-sm">
+                                                <td class="font-weight-500 text-dark">@*@(price.ProductName) *@@($"{price.Unit} Dk.") <br /><strong> @(price.Price?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency)</strong></td>
+                                                <td class="text-center text-dark p-1">
+                                                    <div class="input-group">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-light" type="button"><i class="text-danger font-weight-bold" data-feather="minus"></i></button>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="CashSale@(price.ID)" value="1" style="width:16px;">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-light" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-center text-dark p-1">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control text-danger" id="CashSale@(price.ID)" value="1" style="width:16px;">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-light" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
+                                                </td>
+                                                <td class="text-center text-dark p-1">
+                                                    <div class="input-group">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-light pr-1 pl-1" type="button"><i class="text-danger font-weight-bold" data-feather="minus"></i></button>
+                                                        </div>
+                                                        <input type="text" class="form-control text-danger" id="CashSale@(price.ID)" value="1" style="width:16px;">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-light" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-center p-1">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control" id="CashSale@(price.ID)" value="1" style="width:16px;">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-outline-secondary" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-center text-danger p-1">
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control text-danger" id="CashSale@(price.ID)" value="1" style="width:16px;">
-                                                    <div class="input-group-append">
-                                                        <button class="btn btn-outline-secondary" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="text-dark">@(price.Unit)</td>
-                                            <td class="text-dark">@(price.Price?.ToString("N2"))</td>
-                                        </tr>
+                                                </td>
+
+                                            </tr>
 
                                         }
 
+                                        <tr class="v-middle shadow-sm">
+                                            <td class="font-weight-500 text-dark text-center"></td>
+                                            <td class="text-center text-dark p-1">
+                                                120,00 ₺
+                                            </td>
+                                            <td class="text-center text-dark p-1">
+                                                -15,00
+                                            </td>
+                                        </tr>
 
                                     </tbody>
-
+                                    <tfoot>
+                                       
+                                        <tr class="v-middle shadow-sm">
+                                            <td colspan="2" class="font-weight-500 text-dark text-center">Nakit Hasılat</td>
+                                            
+                                            <td class="text-right text-dark p-1 font-weight-bold">
+                                                105,00 ₺
+                                            </td>
+                                        </tr>
+                                    </tfoot>
 
                                 </table>
+                                <!-- Kart -->
+                                <table class="table table-theme table-hover v-middle" style="border-spacing: 0 1px !important; padding: 0.5rem !important;">
 
+                                    <thead>
+
+                                        <tr class="table-light text-sm font-weight-bold">
+                                            <td colspan="3" class="text-center bg-warning block">Kart Bilet Satışı</td>
+                                        </tr>
+                                        <tr class="table-light text-sm font-weight-bold">
+                                            <td>Bilet</td>
+                                            <td class="text-center bg-warning--lt">Satış</td>
+                                            <td class="text-center bg-warning-lt">İade</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var price in Model.PriceList)
+                                        {
+                                            <tr class="v-middle shadow-sm">
+                                                <td class="font-weight-500 text-dark text-center">@*@(price.ProductName) <br />*@@($"{price.Unit} Dk.") <br /><strong> @(price.Price?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency)</strong></td>
+                                                <td class="text-center text-dark p-1">
+                                                    <div class="input-group">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-light" type="button"><i class="text-danger font-weight-bold" data-feather="minus"></i></button>
+                                                        </div>
+                                                        <input type="text" class="form-control" id="CashSale@(price.ID)" value="1" style="width:16px;">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-light" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="text-center text-dark p-1">
+                                                    <div class="input-group">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-light" type="button"><i class="text-danger font-weight-bold" data-feather="minus"></i></button>
+                                                        </div>
+                                                        <input type="text" class="form-control text-danger" id="CashSale@(price.ID)" value="1" style="width:16px;">
+                                                        <div class="input-group-append">
+                                                            <button class="btn btn-light" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                        }
+
+                                        <tr class="v-middle shadow-sm">
+                                            <td class="font-weight-500 text-dark text-center"></td>
+                                            <td class="text-center text-dark p-1">
+                                                120,00 ₺
+                                            </td>
+                                            <td class="text-center text-dark p-1">
+                                                -15,00
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                       
+                                        <tr class="v-middle shadow-sm">
+                                            <td colspan="2" class="font-weight-500 text-dark text-center">Kart Hasılatı</td>
+                                            <td class="text-right text-dark p-1 font-weight-bold">
+                                                105,00 ₺
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
-
-
-
-                           
                         </div>
                     </div>
                     <div class="col-md-6 bg-light">
                         <div class="p-2">
-                            <span class="text-md"> Sepet</span>
-                            <span class="mr-2 float-right"><i data-feather="shopping-cart"></i></span>
-                            <div class="table-responsive" id="BasketList">
-                                @*@{ Html.RenderPartial("_PartialBasketList", Model);}*@
+                            <span class="text-md"> Hesap Özeti</span>
+                            <div class="table-responsive" id="Summary">
+                                @{ Html.RenderPartial("_PartialSummary", Model.Summary);}
                             </div>
                         </div>
                     </div>

@@ -1,0 +1,80 @@
+﻿using ActionForce.Entity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace ActionForce.Location
+{
+    public class LocationServiceManager
+    {
+        private readonly ActionTimeEntities _db;
+        private readonly Entity.Location _location;
+        public LocationServiceManager(ActionTimeEntities db, LocationInfo location)
+        {
+            _db = db;
+            _location = _db.Location.FirstOrDefault(x => x.LocationID == location.ID);
+        }
+
+        public SummaryControlModel GetLocationSummary(DateTime currentDate, LocationEmployee employee)
+        {
+            SummaryControlModel model = new SummaryControlModel();
+
+            
+            model.DayResult = _db.DayResult.FirstOrDefault(x => x.LocationID == _location.LocationID && x.Date == currentDate);
+
+            if (model.DayResult == null)
+            {
+                var resultID = _db.AddDayResult(_location.LocationID, currentDate, 1, 3, employee.EmployeeID, "", LocationHelper.GetIPAddress()).FirstOrDefault();
+                model.DayResult = _db.DayResult.FirstOrDefault(x => x.ID == resultID);
+            }
+
+            model.CurrentDayResult = _db.VDayResult.FirstOrDefault(x => x.LocationID == _location.LocationID && x.Date == currentDate);
+            model.CashActions = _db.VCashActions.Where(x => x.LocationID == _location.LocationID && x.ActionDate == currentDate).ToList();
+            model.BankActions = _db.VBankActions.Where(x => x.LocationID == _location.LocationID && x.ActionDate == currentDate).ToList();
+
+            var trlCash = LocationHelper.GetCash(_location.LocationID, "TRL");
+            var usdCash = LocationHelper.GetCash(_location.LocationID, "USD");
+            var eurCash = LocationHelper.GetCash(_location.LocationID, "EUR");
+
+            model.CurrentCash = LocationHelper.GetCash(_location.LocationID, _location.Currency);
+
+            List<TotalModel> devirtotals = new List<TotalModel>();
+
+            devirtotals.Add(new TotalModel()
+            {
+                Currency = "TRL",
+                Total = _db.GetCashBalance(_location.LocationID, trlCash.ID, currentDate.AddDays(-1)).FirstOrDefault() ?? 0,
+                CiroTotal = model.CurrentCash.Currency == "TRL" ? ((_db.GetCashBalance(_location.LocationID, trlCash.ID, currentDate.AddDays(-1)).FirstOrDefault() ?? 0) - model.CurrentCash.BlockedAmount) ?? 0 : 0
+            });
+
+            devirtotals.Add(new TotalModel()
+            {
+                Currency = "USD",
+                Total = _db.GetCashBalance(_location.LocationID, usdCash.ID, currentDate.AddDays(-1)).FirstOrDefault() ?? 0,
+                CiroTotal = model.CurrentCash.Currency == "USD" ? ((_db.GetCashBalance(_location.LocationID, usdCash.ID, currentDate.AddDays(-1)).FirstOrDefault() ?? 0) - model.CurrentCash.BlockedAmount) ?? 0 : 0
+            });
+
+            devirtotals.Add(new TotalModel()
+            {
+                Currency = "EUR",
+                Total = _db.GetCashBalance(_location.LocationID, eurCash.ID, currentDate.AddDays(-1)).FirstOrDefault() ?? 0,
+                CiroTotal = model.CurrentCash.Currency == "USD" ? ((_db.GetCashBalance(_location.LocationID, eurCash.ID, currentDate.AddDays(-1)).FirstOrDefault() ?? 0) - model.CurrentCash.BlockedAmount) ?? 0 : 0
+            });
+
+            model.DevirTotal = devirtotals;
+
+            model.Result = new Result<DayResult>()
+            {
+                IsSuccess = true,
+                Message = "",
+                Data = null
+            };
+
+            model.ResultStates = _db.ResultState.Where(x => x.IsActive == true).ToList();
+
+            return model;
+        }
+
+    }
+}
