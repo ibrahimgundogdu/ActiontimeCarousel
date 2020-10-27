@@ -243,7 +243,6 @@ namespace ActionForce.Location.Controllers
 
             }
 
-
             return PartialView("_PartialAddOrderInfo", model);
         }
 

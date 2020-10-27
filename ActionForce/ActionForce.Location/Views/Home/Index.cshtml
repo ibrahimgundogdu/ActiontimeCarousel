@@ -11,171 +11,107 @@
     <div class="d-flex flex" id="content-body">
         <div class="d-flex flex-column flex" data-plugin="user">
             <div class="p-3">
-                <div class="toolbar">
-                    <a href="javascript:;" class="btn btn-md btn-white" title="Sepeti Boşalt" onclick="return confirm('Sepeti silmek istediğinize Emin misiniz? ') ? ClearBasket():''">
-                        <i class="text-primary font-weight-bold" data-feather="trash-2"></i>
-                    </a>
-                    <a href="/Sale" class="btn btn-md btn-white">
-                        <i class="text-primary font-weight-bold" data-feather="list"></i>
-                    </a>
+                <div class="row-xs">
+                    <table class="table mb-0">
+                        <thead>
+                            <tr>
+                                <th class="text-center text-info">Cash</th>
+                                <th class="text-center text-warning">Credit</th>
+                                <th class="text-center">Revenues</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th class="text-center">120,00 ₺</th>
+                                <th class="text-center">100,00 ₺</th>
+                                <th class="text-center">220,00 ₺</th>
+                            </tr>
+                        </tbody>
+                    </table>
 
                 </div>
             </div>
-            <div class="scroll-y mx-3 mb-3 card">
+            <div class="scroll-y mx-1 mb-0 card">
 
                 <div class="row no-gutters">
-                    <div class="col-md-6 b-r bg-light--lt">
+                    <div class="col-md-12 b-r bg-light--lt">
                         <div class="p-2">
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="card p-3 mb-1">
+                                        @foreach (var price in Model.PriceList)
+                                        {
+                                            <button class="btn btn-info btn-md btn-block btn-rounded" data-toggle="modal" data-target="#modalcash">@($"{price.Unit} Dk.")  &nbsp; &nbsp;   <span class="font-weight-bold">@(price.Price?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency) </span>  &nbsp; &nbsp; Cash</button>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="card p-3 mb-1">
+                                        @foreach (var price in Model.PriceList)
+                                        {
+                                            <button class="btn btn-warning btn-md btn-block btn-rounded" data-toggle="modal" data-target="#modalcredit">@($"{price.Unit} Dk.") &nbsp; &nbsp;   <span class="font-weight-bold">  @(price.Price?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency) </span>  &nbsp; &nbsp; Credit</button>
+                                        }
+                                    </div>
+                                </div>
+
+                            </div>
 
                             <div class="table-responsive">
 
 
 
-                                <!-- Nakit -->
+
                                 <table class="table table-theme table-hover v-middle" style="border-spacing: 0 1px !important; padding: 0.5rem !important;">
 
                                     <thead>
-
                                         <tr class="table-light text-sm font-weight-bold">
-                                            <td colspan="3" class="text-center bg-info block">Nakit Bilet Satışı</td>
-                                        </tr>
-                                        <tr class="table-light text-sm font-weight-bold">
-                                            <td>Bilet</td>
-                                            <td class="text-center">Satış</td>
-                                            <td class="text-center">İade</td>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @foreach (var price in Model.PriceList)
-                                        {
-                                            <tr class=" v-middle shadow-sm">
-                                                <td class="font-weight-500 text-dark">@*@(price.ProductName) *@@($"{price.Unit} Dk.") <br /><strong> @(price.Price?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency)</strong></td>
-                                                <td class="text-center text-dark p-1">
-                                                    <div class="input-group">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-light" type="button"><i class="text-danger font-weight-bold" data-feather="minus"></i></button>
-                                                        </div>
-                                                        <input type="text" class="form-control" id="CashSale@(price.ID)" value="1" style="width:16px;">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-light" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center text-dark p-1">
-                                                    <div class="input-group">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-light pr-1 pl-1" type="button"><i class="text-danger font-weight-bold" data-feather="minus"></i></button>
-                                                        </div>
-                                                        <input type="text" class="form-control text-danger" id="CashSale@(price.ID)" value="1" style="width:16px;">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-light" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-
-                                            </tr>
-
-                                        }
-
-                                        <tr class="v-middle shadow-sm">
-                                            <td class="font-weight-500 text-dark text-center"></td>
-                                            <td class="text-center text-dark p-1">
-                                                120,00 ₺
-                                            </td>
-                                            <td class="text-center text-dark p-1">
-                                                -15,00
-                                            </td>
-                                        </tr>
-
-                                    </tbody>
-                                    <tfoot>
-                                       
-                                        <tr class="v-middle shadow-sm">
-                                            <td colspan="2" class="font-weight-500 text-dark text-center">Nakit Hasılat</td>
-                                            
-                                            <td class="text-right text-dark p-1 font-weight-bold">
-                                                105,00 ₺
-                                            </td>
-                                        </tr>
-                                    </tfoot>
-
-                                </table>
-                                <!-- Kart -->
-                                <table class="table table-theme table-hover v-middle" style="border-spacing: 0 1px !important; padding: 0.5rem !important;">
-
-                                    <thead>
-
-                                        <tr class="table-light text-sm font-weight-bold">
-                                            <td colspan="3" class="text-center bg-warning block">Kart Bilet Satışı</td>
+                                            <td colspan="5" class="text-center block">@(DateTime.Now.ToLongDateString())</td>
                                         </tr>
                                         <tr class="table-light text-sm font-weight-bold">
-                                            <td>Bilet</td>
-                                            <td class="text-center bg-warning--lt">Satış</td>
-                                            <td class="text-center bg-warning-lt">İade</td>
+                                            <td>Time</td>
+                                            <td class="text-center">Part</td>
+                                            <td>Ticket</td>
+                                            <td class="text-right bg-secondary--lt">Amount</td>
+                                            <td></td>
+
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @foreach (var price in Model.PriceList)
                                         {
                                             <tr class="v-middle shadow-sm">
-                                                <td class="font-weight-500 text-dark text-center">@*@(price.ProductName) <br />*@@($"{price.Unit} Dk.") <br /><strong> @(price.Price?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency)</strong></td>
-                                                <td class="text-center text-dark p-1">
-                                                    <div class="input-group">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-light" type="button"><i class="text-danger font-weight-bold" data-feather="minus"></i></button>
-                                                        </div>
-                                                        <input type="text" class="form-control" id="CashSale@(price.ID)" value="1" style="width:16px;">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-light" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td class="text-center text-dark p-1">
-                                                    <div class="input-group">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-light" type="button"><i class="text-danger font-weight-bold" data-feather="minus"></i></button>
-                                                        </div>
-                                                        <input type="text" class="form-control text-danger" id="CashSale@(price.ID)" value="1" style="width:16px;">
-                                                        <div class="input-group-append">
-                                                            <button class="btn btn-light" type="button"><i class="text-info font-weight-bold" data-feather="plus"></i></button>
-                                                        </div>
-                                                    </div>
-                                                </td>
-
+                                                <td class="font-weight-500 text-dark text-center">10:23 </td>
+                                                <td class="font-weight-light text-dark text-center">Tramboline </td>
+                                                <td class="font-weight-500 text-warning text-center">@($"{price.Unit} Dk.") </td>
+                                                <td class="font-weight-bolder text-dark text-right"><strong> @(price.Price?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency)</strong></td>
+                                                <td><span class="badge badge-circle text-primary"></span></td>
                                             </tr>
                                         }
-
-                                        <tr class="v-middle shadow-sm">
-                                            <td class="font-weight-500 text-dark text-center"></td>
-                                            <td class="text-center text-dark p-1">
-                                                120,00 ₺
-                                            </td>
-                                            <td class="text-center text-dark p-1">
-                                                -15,00
-                                            </td>
-                                        </tr>
                                     </tbody>
                                     <tfoot>
-                                       
+
                                         <tr class="v-middle shadow-sm">
-                                            <td colspan="2" class="font-weight-500 text-dark text-center">Kart Hasılatı</td>
+                                            <td colspan="3" class="font-weight-500 text-dark text-left">Revenues</td>
                                             <td class="text-right text-dark p-1 font-weight-bold">
-                                                105,00 ₺
+                                                220,00 ₺
                                             </td>
+                                            <td></td>
+
                                         </tr>
                                     </tfoot>
                                 </table>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 bg-light">
-                        <div class="p-2">
-                            <span class="text-md"> Hesap Özeti</span>
-                            <div class="table-responsive" id="Summary">
-                                @{ Html.RenderPartial("_PartialSummary", Model.Summary);}
+                    @*<div class="col-md-6 bg-light">
+                            <div class="p-2">
+                                <span class="text-md"> Hesap Özeti</span>
+                                <div class="table-responsive" id="Summary">
+                                    @{ Html.RenderPartial("_PartialSummary", Model.Summary);}
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        </div>*@
                 </div>
             </div>
         </div>
@@ -183,55 +119,31 @@
 
 </div>
 
-<div id="BasketItemDetail" class="modal fade" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content" id="BasketItemDetailContent">
-        </div>
+<div id="modalcash" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><div class="modal-title text-md">Modal title</div><button class="close" data-dismiss="modal">×</button></div>
+            <div class="modal-body"><div class="p-4 text-center"><p>Woohoo, you're reading this text in a modal!</p></div></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info" data-dismiss="modal">Save Cash Sale</button>
+            </div>
+        </div><!-- /.modal-content -->
     </div>
 </div>
 
-<div id="AddBasketTicket" class="modal bg-white fade" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content" id="BasketItemTicketContent">
-            <div class="modal-header">
-                <h5 class="modal-title">Bileti Okutunuz</h5>
-                <button class="close" data-dismiss="modal">×</button>
+<div id="modalcredit" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><div class="modal-title text-md">Modal title</div><button class="close" data-dismiss="modal">×</button></div>
+            <div class="modal-body"><div class="p-4 text-center"><p>Woohoo, you're reading this text in a modal!</p></div></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Save Credit Sale</button>
             </div>
-            <div class="modal-body p-2">
-
-
-                <div class="input-group input-group-lg mb-3">
-                    <input id="InputTicketNumber" name="TicketNumber" type="text" class="form-control" aria-label="Large" aria-describedby="inputGroup-sizing-sm" autofocus>
-                    <div class="input-group-append">
-                        <button class="btn btn-warning" style="width:80px;" type="button" onclick="GetReadTicketDetailTest();"><i data-feather="cast"></i></button>
-                    </div>
-                </div>
-
-                <div class="" id="ReadTicketDetail">
-
-                </div>
-
-            </div>
-
-        </div>
+        </div><!-- /.modal-content -->
     </div>
 </div>
-
-<div id="AddOrderInfo" class="modal bg-white fade" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content" id="AddOrderTicketContent">
-            <div class="modal-header">
-                <h5 class="modal-title"></h5>
-                <button class="btn btn-lg btn-light close" data-dismiss="modal">×</button>
-            </div>
-            <div class="modal-body p-2" id="OrderSummary">
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
 @section scripts {
 
     <script type="text/javascript">
