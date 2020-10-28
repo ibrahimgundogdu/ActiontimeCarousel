@@ -11,8 +11,10 @@ namespace ActionForce.Location
         public IEnumerable<VPriceLastList> PriceList { get; set; }
         public VPriceLastList Price { get; set; }
         public VPrice VPrice { get; set; }
-
+        public LocationBalance LocationBalance { get; set; }
         public SummaryControlModel Summary { get; set; }
+
+        public IEnumerable<LocationTicketSaleInfo> TicketList { get; set; }
 
     }
 }

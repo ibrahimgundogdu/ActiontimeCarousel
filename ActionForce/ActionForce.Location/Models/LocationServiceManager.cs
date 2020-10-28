@@ -20,7 +20,7 @@ namespace ActionForce.Location
         {
             SummaryControlModel model = new SummaryControlModel();
 
-            
+
             model.DayResult = _db.DayResult.FirstOrDefault(x => x.LocationID == _location.LocationID && x.Date == currentDate);
 
             if (model.DayResult == null)
@@ -74,6 +74,49 @@ namespace ActionForce.Location
             model.ResultStates = _db.ResultState.Where(x => x.IsActive == true).ToList();
 
             return model;
+        }
+
+        public LocationBalance GetLocationSaleBalanceToday()
+        {
+            var currentDate = DateTime.Now;
+
+            LocationBalance balance = new LocationBalance() { Balance = 0, CashTotal = 0, CreditTotal = 0, Currency = _location.Currency, Date = currentDate.Date };
+
+            var isbalance = _db.GetLocationSaleBalanceToday(_location.LocationID, currentDate).FirstOrDefault();
+
+            if (isbalance != null)
+            {
+                balance.CashTotal = (float)isbalance.CashTotal;
+                balance.CreditTotal = (float)isbalance.CreditTotal;
+                balance.Balance = (float)isbalance.Balance;
+                balance.Currency = isbalance.Currency;
+                balance.Date = isbalance.CurrentDate ?? currentDate.Date;
+                balance.CurrencySign = isbalance.CurrencySign;
+            }
+
+            return balance;
+        }
+
+        public List<LocationTicketSaleInfo> GetLocationTicketsToday()
+        {
+            var currentDate = DateTime.Now;
+
+            List<LocationTicketSaleInfo> list = new List<LocationTicketSaleInfo>();
+
+            list = _db.GetLocationTicketsToday(_location.LocationID, currentDate).Select(x=> new LocationTicketSaleInfo() { 
+            Currency = x.Currency,
+            IsActive = x.IsActive.Value,
+            Part = x.Part,
+            PayMethodID = x.PaymethodID.Value,
+            RecordDate = x.RecordDate.Value,
+            RowID = x.RowID,
+            SaleID = x.SaleID,
+            StatusID = x.StatusID.Value,
+            Total = (float)x.Total,
+            Unit = x.Unit.Value
+            }).ToList();
+
+            return list;
         }
 
     }

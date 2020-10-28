@@ -1410,5 +1410,31 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddDayResult", locationIDParameter, dateParameter, stateIDParameter, environmentIDParameter, recordEmployeeIDParameter, descriptionParameter, recordIPParameter);
         }
+    
+        public virtual ObjectResult<GetLocationSaleBalanceToday_Result> GetLocationSaleBalanceToday(Nullable<int> locationID, Nullable<System.DateTime> date)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationSaleBalanceToday_Result>("GetLocationSaleBalanceToday", locationIDParameter, dateParameter);
+        }
+    
+        public virtual ObjectResult<GetLocationTicketsToday_Result> GetLocationTicketsToday(Nullable<int> locationID, Nullable<System.DateTime> date)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationTicketsToday_Result>("GetLocationTicketsToday", locationIDParameter, dateParameter);
+        }
     }
 }

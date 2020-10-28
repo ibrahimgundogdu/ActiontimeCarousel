@@ -18,7 +18,9 @@ namespace ActionForce.Location.Controllers
 
             LocationServiceManager manager = new LocationServiceManager(Db, model.Authentication.CurrentLocation);
 
-            model.Summary = manager.GetLocationSummary(DateTime.Now.Date, model.Authentication.CurrentEmployee);
+            //model.Summary = manager.GetLocationSummary(DateTime.Now.Date, model.Authentication.CurrentEmployee);
+            model.LocationBalance = manager.GetLocationSaleBalanceToday();
+            model.TicketList = manager.GetLocationTicketsToday();
 
             return View(model);
         }

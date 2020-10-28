@@ -380,6 +380,12 @@
     <Compile Include="GetLocationEmployees_Result1.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetLocationSaleBalanceToday_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetLocationTicketsToday_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="GetMonthList_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

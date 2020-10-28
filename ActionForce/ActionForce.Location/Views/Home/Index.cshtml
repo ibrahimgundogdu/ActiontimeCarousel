@@ -10,21 +10,21 @@
 
     <div class="d-flex flex" id="content-body">
         <div class="d-flex flex-column flex" data-plugin="user">
-            <div class="p-3">
+            <div class="p-1">
                 <div class="row-xs">
                     <table class="table mb-0">
                         <thead>
                             <tr>
-                                <th class="text-center text-info">Cash</th>
-                                <th class="text-center text-warning">Credit</th>
-                                <th class="text-center">Revenues</th>
+                                <th class="text-center text-info p-0">Cash</th>
+                                <th class="text-center text-warning p-0">Credit</th>
+                                <th class="text-center p-0">Revenues</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <th class="text-center">120,00 ₺</th>
-                                <th class="text-center">100,00 ₺</th>
-                                <th class="text-center">220,00 ₺</th>
+                                <th class="text-center p-1">@($"{Model.LocationBalance?.CashTotal.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
+                                <th class="text-center p-1">@($"{Model.LocationBalance?.CreditTotal.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
+                                <th class="text-center p-1">@($"{Model.LocationBalance?.Balance.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
                             </tr>
                         </tbody>
                     </table>
@@ -78,14 +78,14 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var price in Model.PriceList)
+                                        @foreach (var ticket in Model.TicketList.OrderByDescending(x=> x.RecordDate))
                                         {
-                                            <tr class="v-middle shadow-sm">
-                                                <td class="font-weight-500 text-dark text-center">10:23 </td>
-                                                <td class="font-weight-light text-dark text-center">Tramboline </td>
-                                                <td class="font-weight-500 text-warning text-center">@($"{price.Unit} Dk.") </td>
-                                                <td class="font-weight-bolder text-dark text-right"><strong> @(price.Price?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency)</strong></td>
-                                                <td><span class="badge badge-circle text-primary"></span></td>
+                                            <tr class="v-middle shadow-sm @(ticket.IsActive == true ? "table-light":"table-danger")">
+                                                <td class="font-weight-500 @(ticket.IsActive == true ? "text-dark":"text-danger")" text-center  p-0 pb-2 pt-2">@(ticket.RecordDate.ToString("hh\\:mm")) </td>
+                                                <td class="font-weight-light text-dark text-center  p-0">@(ticket.Part) </td>
+                                                <td class="font-weight-500 @(ticket.PayMethodID == 1 ? "text-info":"text-warning") text-center  p-0">@($"{ticket.Unit} Dk.") </td>
+                                                <td class="font-weight-bolder  @(ticket.IsActive == true ? "text-dark":"text-light") text-right  p-0"><strong> @(ticket.Total.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency)</strong></td>
+                                                <td class=" text-center p-0"><span class="badge badge-circle text-primary @(ticket.StatusID == 5 ? "text-warning" : ticket.StatusID == 4 ? "text-danger":"text-primary")"></span></td>
                                             </tr>
                                         }
                                     </tbody>
@@ -94,7 +94,7 @@
                                         <tr class="v-middle shadow-sm">
                                             <td colspan="3" class="font-weight-500 text-dark text-left">Revenues</td>
                                             <td class="text-right text-dark p-1 font-weight-bold">
-                                                220,00 ₺
+                                                @($"{Model.LocationBalance?.Balance.ToString("N2")} {Model.LocationBalance?.CurrencySign}")
                                             </td>
                                             <td></td>
 
@@ -122,11 +122,10 @@
 <div id="modalcash" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header"><div class="modal-title text-md">Modal title</div><button class="close" data-dismiss="modal">×</button></div>
+            <div class="modal-header"><div class="modal-title text-md text-info">Cash Sale</div><button class="close" data-dismiss="modal">×</button></div>
             <div class="modal-body"><div class="p-4 text-center"><p>Woohoo, you're reading this text in a modal!</p></div></div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-info" data-dismiss="modal">Save Cash Sale</button>
+                <button type="button" class="btn btn-info" data-dismiss="modal">Close Cash Sale</button>
             </div>
         </div><!-- /.modal-content -->
     </div>
@@ -135,11 +134,10 @@
 <div id="modalcredit" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header"><div class="modal-title text-md">Modal title</div><button class="close" data-dismiss="modal">×</button></div>
+            <div class="modal-header"><div class="modal-title text-md text-warning">Credit Sale</div><button class="close" data-dismiss="modal">×</button></div>
             <div class="modal-body"><div class="p-4 text-center"><p>Woohoo, you're reading this text in a modal!</p></div></div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-warning" data-dismiss="modal">Save Credit Sale</button>
+                <button type="button" class="btn btn-warning" data-dismiss="modal">Close Credit Sale</button>
             </div>
         </div><!-- /.modal-content -->
     </div>
