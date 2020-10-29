@@ -39,5 +39,6 @@ namespace ActionForce.Location
         public int ID { get; set; }
         public string FullName { get; set; }
         public Guid? UID { get; set; }
+        public int TimeZone { get; set; }
     }
 }

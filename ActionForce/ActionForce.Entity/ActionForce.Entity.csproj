@@ -362,6 +362,9 @@
     <Compile Include="GetLocationAll_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetLocationAnimalCostums_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="GetLocationCurrentBasketTotal_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -378,6 +381,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="GetLocationEmployees_Result1.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetLocationMallMotoColors_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="GetLocationSaleBalanceToday_Result.cs">

@@ -20,6 +20,7 @@ namespace ActionForce.Entity
         public System.DateTime Date { get; set; }
         public Nullable<int> LocationID { get; set; }
         public Nullable<int> EmployeeID { get; set; }
+        public Nullable<bool> IsSale { get; set; }
         public Nullable<long> TicketTripID { get; set; }
         public Nullable<int> PaymethodID { get; set; }
         public Nullable<bool> UseImmediately { get; set; }
@@ -48,7 +49,7 @@ namespace ActionForce.Entity
         public string CustomerName { get; set; }
         public string CustomerData { get; set; }
         public string Description { get; set; }
-        public Nullable<bool> IsSale { get; set; }
-        public Nullable<int> AnimalID { get; set; }
+        public Nullable<int> AnimalCostumeTypeID { get; set; }
+        public Nullable<int> MallMotoColorID { get; set; }
     }
 }

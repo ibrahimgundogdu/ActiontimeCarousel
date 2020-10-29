@@ -109,7 +109,7 @@ namespace ActionForce.Location.Controllers
 
                 if (model.Result.IsSuccess)
                 {
-                    return RedirectToAction("Index", "Default");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -146,7 +146,7 @@ namespace ActionForce.Location.Controllers
                         //Latitude = location.Latitude,
                         //Longitude = location.Longitude,
                         //SortBy = location.SortBy,
-                        //TimeZone = location.Timezone ?? 3,
+                        TimeZone = location.Timezone ?? 3,
                         UID = location.LocationUID
                     };
 

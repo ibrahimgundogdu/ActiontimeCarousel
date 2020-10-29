@@ -208,7 +208,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SetcardParameter" Width="1.5" PointX="0.75" PointY="51.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerActions" Width="1.5" PointX="51.375" PointY="0.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Department" Width="1.5" PointX="8.125" PointY="13" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Employee" Width="1.5" PointX="5.75" PointY="4.625" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Employee" Width="1.5" PointX="6.25" PointY="3.5" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeAreaCategory" Width="1.5" PointX="5.375" PointY="15.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeePositions" Width="1.5" PointX="5.375" PointY="18.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeSalaryCategory" Width="1.5" PointX="5.375" PointY="60.875" />
@@ -303,10 +303,10 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowCheck" Width="1.5" PointX="10.25" PointY="34.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VMall" Width="1.5" PointX="2.75" PointY="37.25" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSale" Width="1.5" PointX="58.75" PointY="2.375" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRows" Width="1.5" PointX="60.5" PointY="2.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSale" Width="1.5" PointX="62.375" PointY="2.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRows" Width="1.5" PointX="64.125" PointY="2.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowsAll" Width="1.5" PointX="2.7420721998168491" PointY="31.771645173324107" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRows" Width="1.5" PointX="60.5" PointY="2.375" />
         
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
       </Diagram>

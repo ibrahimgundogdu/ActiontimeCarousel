@@ -577,9 +577,12 @@
     <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\ControlModels\ScheduleControlModel.cs" />
     <Compile Include="Models\ControlModels\SummaryControlModel.cs" />
+    <Compile Include="Models\DefaultModels\AnimalCostume.cs" />
     <Compile Include="Models\DefaultModels\BasketTotal.cs" />
     <Compile Include="Models\DefaultModels\LocationBalance.cs" />
     <Compile Include="Models\DefaultModels\LocationTicketInfo.cs" />
+    <Compile Include="Models\DefaultModels\MallMotoColor.cs" />
+    <Compile Include="Models\DefaultModels\StandartTicket.cs" />
     <Compile Include="Models\DefaultModels\TicketInfo.cs" />
     <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\ControlModels\LayoutControlModel.cs" />
@@ -809,6 +812,7 @@
     <Content Include="Views\Default\_PartialAddOrderInfo.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_PartialSummary.cshtml" />
+    <Content Include="Views\Home\_PartialTicket.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -13,8 +13,9 @@ namespace ActionForce.Location
         public AuthenticationModel Authentication { get; set; }
         public VLocationSchedule Schedule { get; set; }
         public VLocationShift Shift { get; set; }
-        public VLocation Location { get; set; }
+        public LocationInfo Location { get; set; }
         public Result Result { get; set; }
+        public DateTime LocationDate { get; set; }
 
         public LayoutControlModel()
         {
@@ -24,9 +25,11 @@ namespace ActionForce.Location
 
                 using (ActionTimeEntities db = new ActionTimeEntities())
                 {
-                    Location = db.VLocation.FirstOrDefault(x => x.LocationID == Authentication.CurrentLocation.ID);
-                    Schedule = db.VLocationSchedule.FirstOrDefault(x => x.LocationID == Location.LocationID && x.ShiftDate == Location.LocalDate);
-                    Shift = db.VLocationShift.FirstOrDefault(x => x.LocationID == Location.LocationID && x.ShiftDate == Location.LocalDate);
+                    Location = Authentication.CurrentLocation;
+                    LocationDate = DateTime.UtcNow.AddHours(Location.TimeZone).Date;
+
+                    Schedule = db.VLocationSchedule.FirstOrDefault(x => x.LocationID == Location.ID && x.ShiftDate == LocationDate);
+                    Shift = db.VLocationShift.FirstOrDefault(x => x.LocationID == Location.ID && x.ShiftDate == LocationDate);
                 }
 
                 Result = new Result() { IsSuccess = false, Message = string.Empty };

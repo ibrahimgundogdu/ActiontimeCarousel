@@ -84,7 +84,7 @@ namespace ActionForce.Location.Controllers
                             //Latitude = location.Latitude,
                             //Longitude = location.Longitude,
                             //SortBy = location.SortBy,
-                            //TimeZone = location.Timezone ?? 3,
+                            TimeZone = location.Timezone ?? 3,
                             UID = location.LocationUID
                         },
                         CurrentOurCompany = new LocationOurCompany()

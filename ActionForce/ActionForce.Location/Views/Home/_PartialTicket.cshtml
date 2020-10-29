@@ -1,0 +1,44 @@
+﻿@model StandartTicket
+<table id="table" class="table table-theme v-middle table-hover mb-0" data-mobile-responsive="true" style="margin-top: 0px;">
+
+    <thead>
+        <tr>
+            <th class="h4 text-center  @(Model.PayMethodID == 1 ? "text-dark":"text-dark")"> @($"{Model.Price.Unit} Dk")</th>
+            <th class="h4 text-center  @(Model.PayMethodID == 1 ? "text-dark":"text-dark")">@($"{Model.Price.Price?.ToString("N2")} {Model.Price.Currency}")</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Price.TicketTypeID == 7)
+        {
+            foreach (var color in Model.MallMotoColor)
+            {
+                <tr class="">
+                    <td class="p-0 pb-1" colspan="2">
+                        <button class="btn @(Model.PayMethodID == 1 ? "btn-info":"btn-warning") btn-md btn-block btn-rounded" onclick="SetTicketSale(@($"{Model.Price.ID},{Model.PayMethodID},{color.ColorID},0"))"> @(color.ColorName)  </button>
+                    </td>
+                </tr>
+            }
+        }
+        else if (Model.Price.TicketTypeID == 2)
+        {
+            foreach (var costume in Model.AnimalCostumes)
+            {
+                <tr class="">
+                    <td class="p-0 pb-1" colspan="2">
+                        <button class="btn @(Model.PayMethodID == 1 ? "btn-info":"btn-warning") btn-md btn-block btn-rounded" onclick="SetTicketSale(@($"{Model.Price.ID},{Model.PayMethodID},0,{costume.CostumeID}"))"> @(costume.CostumeName)  </button>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr class="">
+                <td class="p-0 pb-1" colspan="2">
+                    <button class="btn @(Model.PayMethodID == 1 ? "btn-info":"btn-warning") btn-md btn-block btn-rounded" onclick="SetTicketSale(@($"{Model.Price.ID},{Model.PayMethodID},0,0"))"> @(Model.Price.TicketTypeName)  </button>
+                </td>
+            </tr>
+        }
+
+
+    </tbody>
+</table>

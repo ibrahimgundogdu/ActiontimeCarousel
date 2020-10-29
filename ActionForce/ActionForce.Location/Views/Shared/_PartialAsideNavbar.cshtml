@@ -105,9 +105,20 @@
         <b class="">@(Model.Schedule != null ? Html.Raw(Model.Schedule.ShiftdateEnd?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</b>
     </div>
     <ul class="nav no-border">
-        <li class="text-center">
-            <span class="nav-text">@(Html.Raw(Model.Authentication.CurrentLocation.FullName))</span>
-        </li>
+        @if (Model.Authentication.CurrentRoleGroup.RoleLevel >= 3)
+        {
+            <li class="text-center">
+                <a href="/Location/SetCurrentLocation" class="btn btn-block btn-light">@(Html.Raw(Model.Authentication.CurrentLocation.FullName))</a>
+</li>
+        }
+        else
+        {
+            <li class="text-center">
+                <a href="#" class="btn btn-block btn-light">@(Html.Raw(Model.Authentication.CurrentLocation.FullName))</a>
+            </li>
+        }
+
+
     </ul>
     <div class="py-2 mt-2 b-t no-shrink">
         <ul class="nav no-border">
