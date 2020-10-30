@@ -17,6 +17,7 @@ namespace ActionForce.Location
         public string Currency { get; set; }
         public DateTime RecordDate { get; set; }
         public bool IsActive { get; set; }
+        public Guid? Uid { get; set; }
 
 
     }

@@ -113,11 +113,13 @@ namespace ActionForce.Location
             SaleID = x.SaleID,
             StatusID = x.StatusID.Value,
             Total = (float)x.Total,
-            Unit = x.Unit.Value
+            Unit = x.Unit.Value,
+            Uid=x.UID
             }).ToList();
 
             return list;
         }
+
 
     }
 }

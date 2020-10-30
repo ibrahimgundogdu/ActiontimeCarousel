@@ -15,6 +15,17 @@ namespace ActionForce.Location
         public SummaryControlModel Summary { get; set; }
 
         public IEnumerable<LocationTicketSaleInfo> TicketList { get; set; }
+        public IEnumerable<AnimalCostume> AnimalCostumes { get; set; }
+        public IEnumerable<MallMotoColor> MallMotoColor { get; set; }
+
+        public TicketSaleRows SaleRow { get; set; }
+        public TicketSale Sale { get; set; }
+        public IEnumerable<TicketStatus> Status { get; set; }
+        public IEnumerable<PayMethod> PayMethods { get; set; }
+        public String EmployeeRecorded { get; set; }
+        public String EmployeeUpdated { get; set; }
+        public String SaleChannelName { get; set; }
+
 
     }
 }

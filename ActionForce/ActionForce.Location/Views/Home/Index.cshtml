@@ -70,11 +70,11 @@
                                         @foreach (var ticket in Model.TicketList.OrderByDescending(x => x.RecordDate))
                                         {
                                             <tr class="v-middle shadow-sm @(ticket.IsActive == true ? "table-light":"table-danger")">
-                                                <td class="font-weight-500 @(ticket.IsActive == true ? "text-dark":"text-danger")" text-center p-0 pb-2 pt-2">@(ticket.RecordDate.ToString("HH\\:mm\\:ss")) </td>
+                                                <td class="font-weight-500 @(ticket.IsActive == true ? "text-dark":"text-danger")" text-center p-0 pb-2 pt-2"><a href="@($"/Home/Detail/{ticket.Uid}")">@(ticket.RecordDate.ToString("HH\\:mm\\:ss"))</a> </td>
                                                 <td class="font-weight-light text-dark text-center  p-0">@(ticket.Part) </td>
                                                 <td class="font-weight-500 @(ticket.PayMethodID == 1 ? "text-info":"text-warning") text-center  p-0">@($"{ticket.Unit} Dk.") </td>
                                                 <td class="font-weight-bolder  @(ticket.IsActive == true ? "text-dark":"text-light") text-right  p-0"><strong> @(ticket.Total.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency)</strong></td>
-                                                <td class=" text-center p-0"><span class="badge badge-circle @(ticket.StatusID == 5 ? "text-warning" : ticket.StatusID == 4 ? "text-danger":"text-success")"></span></td>
+                                                <td class=" text-center p-0"> <a href="@($"/Home/Detail/{ticket.Uid}")"> <span class="badge badge-circle @(ticket.StatusID == 5 ? "text-warning" : ticket.StatusID == 4 ? "text-danger":"text-success")"></span></a></td>
                                             </tr>
                                         }
                                     </tbody>

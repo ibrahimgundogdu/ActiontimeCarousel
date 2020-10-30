@@ -587,6 +587,7 @@
     <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\ControlModels\LayoutControlModel.cs" />
     <Compile Include="Models\FormModels\FormOrder.cs" />
+    <Compile Include="Models\FormModels\FormSaleRow.cs" />
     <Compile Include="Models\LocationHelper.cs" />
     <Compile Include="Models\LocationModels\LocationStatus.cs" />
     <Compile Include="Models\LocationModels\mLocation.cs" />
@@ -813,6 +814,7 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\_PartialSummary.cshtml" />
     <Content Include="Views\Home\_PartialTicket.cshtml" />
+    <Content Include="Views\Home\Detail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

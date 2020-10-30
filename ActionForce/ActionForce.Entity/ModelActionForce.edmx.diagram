@@ -304,11 +304,13 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VMall" Width="1.5" PointX="2.75" PointY="37.25" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSale" Width="1.5" PointX="58.75" PointY="2.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSale" Width="1.5" PointX="62.375" PointY="2.375" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRows" Width="1.5" PointX="64.125" PointY="2.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowsAll" Width="1.5" PointX="2.7420721998168491" PointY="31.771645173324107" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRows" Width="1.5" PointX="60.5" PointY="2.375" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRows" Width="1.5" PointX="10.93310964989155" PointY="23.921924602203966" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRows" Width="1.5" PointX="2.1134524448371739" PointY="1.8945227870226478" />
+        
         
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

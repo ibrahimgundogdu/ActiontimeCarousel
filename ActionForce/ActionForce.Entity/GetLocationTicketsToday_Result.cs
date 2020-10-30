@@ -25,5 +25,6 @@ namespace ActionForce.Entity
         public string Part { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<int> LocationID { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
     }
 }

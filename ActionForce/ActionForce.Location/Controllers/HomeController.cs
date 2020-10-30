@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ActionForce.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -21,6 +22,63 @@ namespace ActionForce.Location.Controllers
             //model.Summary = manager.GetLocationSummary(DateTime.Now.Date, model.Authentication.CurrentEmployee);
             model.LocationBalance = manager.GetLocationSaleBalanceToday();
             model.TicketList = manager.GetLocationTicketsToday();
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult Detail(Guid? id)
+        {
+            HomeControlModel model = new HomeControlModel();
+
+            model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
+            LocationServiceManager manager = new LocationServiceManager(Db, model.Authentication.CurrentLocation);
+
+            if (id != null)
+            {
+                model.SaleRow = Db.TicketSaleRows.FirstOrDefault(x => x.UID == id);
+
+                if (model.SaleRow != null)
+                {
+                    model.Sale = Db.TicketSale.FirstOrDefault(x => x.ID == model.SaleRow.SaleID);
+                    model.VPrice = Db.VPrice.FirstOrDefault(x => x.ID == model.SaleRow.PriceID);
+
+                    model.Status = Db.TicketStatus.Where(x => new List<int> { 2, 4, 5 }.Contains(x.ID)).ToList();
+                    model.PayMethods = Db.PayMethod.Where(x => x.ID > 0).ToList();
+                    model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
+
+                    if (model.VPrice.TicketTypeID == 2)
+                    {
+                        model.AnimalCostumes = Db.GetLocationAnimalCostums(model.Location.ID).Select(x => new AnimalCostume()
+                        {
+                            CostumeID = x.ID,
+                            CostumeName = x.CostumeName
+                        }).ToList();
+                    }
+
+                    if (model.VPrice.TicketTypeID == 7)
+                    {
+                        model.MallMotoColor = Db.GetLocationMallMotoColors(model.Location.ID).Select(x => new MallMotoColor()
+                        {
+                            ColorID = x.ID,
+                            ColorName = x.ColorName
+                        }).ToList();
+                    }
+
+                    model.EmployeeRecorded = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.SaleRow.RecordEmployeeID)?.FullName;
+                    model.EmployeeUpdated = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.SaleRow.UpdateEmployeeID)?.FullName;
+                    model.SaleChannelName = Db.SaleChannel.FirstOrDefault(x => x.ID == model.Sale.SaleChannelD)?.ChannelName;
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+
 
             return View(model);
         }
@@ -81,5 +139,98 @@ namespace ActionForce.Location.Controllers
 
             return message;
         }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateSaleRow(FormSaleRow formSaleRow)
+        {
+            string message = string.Empty;
+            StandartTicket model = new StandartTicket();
+
+            if (formSaleRow != null && formSaleRow.UID != null)
+            {
+                var saleRow = Db.TicketSaleRows.FirstOrDefault(x => x.UID == formSaleRow.UID);
+
+                if (saleRow != null)
+                {
+                    var self = new TicketSaleRows()
+                    {
+                        TicketTripID = saleRow.TicketTripID,
+                        AnimalCostumeTypeID = saleRow.AnimalCostumeTypeID,
+                        Currency = saleRow.Currency,
+                        CustomerData = saleRow.CustomerData,
+                        UID = saleRow.UID,
+                        CustomerName = saleRow.CustomerName,
+                        Date = saleRow.Date,
+                        Description = saleRow.Description,
+                        DeviceID = saleRow.DeviceID,
+                        Discount = saleRow.Discount,
+                        EmployeeID = saleRow.EmployeeID,
+                        ExtraUnit = saleRow.ExtraUnit,
+                        ID = saleRow.ID,
+                        IsExchangable = saleRow.IsExchangable,
+                        IsPromotion = saleRow.IsPromotion,
+                        IsSale = saleRow.IsSale,
+                        Latitude = saleRow.Latitude,
+                        LocationID = saleRow.LocationID,
+                        Longitude = saleRow.Longitude,
+                        MallMotoColorID = saleRow.MallMotoColorID,
+                        PaymethodID = saleRow.PaymethodID,
+                        PrePaid = saleRow.PrePaid,
+                        Price = saleRow.Price,
+                        PriceCategoryID = saleRow.PriceCategoryID,
+                        PriceID = saleRow.PriceID,
+                        PromotionID = saleRow.PromotionID,
+                        Quantity = saleRow.Quantity,
+                        RecordDate = saleRow.RecordDate,
+                        RecordEmployeeID = saleRow.RecordEmployeeID,
+                        SaleID = saleRow.SaleID,
+                        StatusID = saleRow.StatusID,
+                        TicketNumber = saleRow.TicketNumber,
+                        TicketTypeID = saleRow.TicketTypeID,
+                        Total = saleRow.Total,
+                        Unit = saleRow.Unit,
+                        UpdateDate = saleRow.UpdateDate,
+                        UpdateEmployeeID = saleRow.UpdateEmployeeID,
+                        UseImmediately = saleRow.UseImmediately,
+                        ExtraPrice = saleRow.ExtraPrice
+                    };
+
+                    DateTime ticketdate = saleRow.Date.Date.Add(formSaleRow.RecordTime);
+                    int? colorid = formSaleRow.ColorID ?? null;
+                    int? costumeid = formSaleRow.CostumeID ?? null;
+
+                    var rowid = Db.UpdateLocationTicketSale(saleRow.LocationID, saleRow.ID, ticketdate, formSaleRow.PriceID, formSaleRow.ExtraUnit, formSaleRow.PayMethodID, formSaleRow.StatusID, model.Authentication.CurrentEmployee.EmployeeID, colorid, costumeid, formSaleRow.Description).FirstOrDefault();
+
+                    if (rowid != null && rowid > 0)
+                    {
+                        saleRow = Db.TicketSaleRows.FirstOrDefault(x => x.ID == saleRow.ID);
+
+                        message = "Güncelleme Başarılı";
+
+                        var isequal = LocationHelper.PublicInstancePropertiesEqual<TicketSaleRows>(self, saleRow, LocationHelper.getIgnorelist());
+                        LocationHelper.AddApplicationLog("Location", "TicketSaleRows", "Update", saleRow.ID.ToString(), "Home", "UpdateSaleRow", isequal, true, message, string.Empty, ticketdate, $"{model.Authentication.CurrentEmployee.EmployeeID} - {model.Authentication.CurrentEmployee.FullName}", LocationHelper.GetIPAddress(), string.Empty, null);
+                    }
+                    else
+                    {
+                        message = "Güncelleme Başarısız";
+                    }
+                }
+                else
+                {
+                    message = "Satış Bulunamadı";
+                }
+            }
+            else
+            {
+                message = "Form Verisi Alınamadı";
+            }
+
+            TempData["Message"] = message;
+
+            return RedirectToAction("Detail",new { id= formSaleRow.UID});
+        }
+
     }
 }

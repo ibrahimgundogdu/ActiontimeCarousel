@@ -15,7 +15,7 @@ namespace ActionForce.Entity
     public partial class TicketSaleRows
     {
         public long ID { get; set; }
-        public int SaleID { get; set; }
+        public long SaleID { get; set; }
         public Nullable<int> StatusID { get; set; }
         public System.DateTime Date { get; set; }
         public Nullable<int> LocationID { get; set; }
@@ -33,6 +33,7 @@ namespace ActionForce.Entity
         public int PriceID { get; set; }
         public double Price { get; set; }
         public Nullable<double> Discount { get; set; }
+        public Nullable<double> ExtraPrice { get; set; }
         public Nullable<double> PrePaid { get; set; }
         public Nullable<double> Total { get; set; }
         public string Currency { get; set; }
@@ -51,5 +52,6 @@ namespace ActionForce.Entity
         public string Description { get; set; }
         public Nullable<int> AnimalCostumeTypeID { get; set; }
         public Nullable<int> MallMotoColorID { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
     }
 }

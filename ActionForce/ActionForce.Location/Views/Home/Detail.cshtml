@@ -1,0 +1,193 @@
+﻿@model HomeControlModel
+@{
+    ViewBag.Title = "Detail";
+}
+
+<div class="d-flex flex fixed-content">
+    <div class="d-flex flex" id="content-body">
+        <div class="d-flex flex-column flex" data-plugin="user">
+            <div class="scroll-y mx-1 mb-0 card">
+                <div class="row no-gutters">
+                    <div class="col-md-12 b-r bg-light--lt p-2">
+                        <div class="card">
+                            <div class="card-header">
+
+
+                                <div class="d-flex">
+                                    <strong>Bilet Bilgisi</strong>
+                                    <span class="flex"></span>
+                                    <div>
+                                        <a href="/" class="font-weight-bold">
+                                            <i data-feather="grid"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-body">
+                                @using (Html.BeginForm("UpdateSaleRow", "Home", FormMethod.Post, new { role = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+
+                                    <div class="form-group row mb-1">
+                                        <label class="col-4 col-form-label">Tarihi</label>
+                                        <div class="col-8">
+                                            <label class="form-control font-weight-bold mb-0 bg-body"> @(Model.SaleRow.Date.ToShortDateString())</label>
+                                            <input id="Hidden1" name="UID" type="hidden" value="@(Model.SaleRow.UID)" />
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-1">
+                                        <label class="col-4 col-form-label">Saati</label>
+                                        <div class="col-8">
+                                            <input id="event-start-time" name="RecordTime" type="time" step="1" class="form-control font-weight-bold" placeholder="Time" value="@(Model.SaleRow.Date.ToString("HH\\:mm\\:ss"))" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-1">
+                                        <label class="col-4 col-form-label">Aşama</label>
+                                        <div class="col-8">
+                                            <select class="custom-select" name="StatusID">
+                                                @foreach (var item in Model.Status)
+                                                {
+                                                    <option value="@(item.ID)" @(item.ID == Model.SaleRow.StatusID ? "selected" : "")>@(item.StatusName)</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-1">
+                                        <label class="col-4 col-form-label">Fiyat</label>
+                                        <div class="col-8">
+                                            <select class="custom-select" name="PriceID">
+                                                @foreach (var item in Model.PriceList)
+                                                {
+                                                    <option value="@(item.ID)" @(item.ID == Model.VPrice.ID ? "selected" : "")>@($"{item.Unit} Dk. {item.Price?.ToString("N2")} {item.Sign}")</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-1">
+                                        <label class="col-4 col-form-label">Extra Dk</label>
+                                        <div class="col-4">
+                                            <select class="form-control" name="ExtraUnit">
+                                                @for (int i = 0; i < 61; i++)
+                                                {
+                                                    <option value="@(i)" @(Model.SaleRow.ExtraUnit == i ? "selected" : "")>@(i)</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-4 text-muted">
+                                            <span class="form-control-plaintext">x @(Model.VPrice.ExtraMultiple?.ToString("N2")) @(Model.VPrice.Sign)</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-1">
+                                        <label class="col-4 col-form-label">Tutar</label>
+                                        <div class="col-8">
+                                            <label class="form-control font-weight-bold mb-0 bg-body"> @(Model.SaleRow.Total?.ToString("N2"))</label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-1">
+                                        <label class="col-4 col-form-label">Ödeme</label>
+                                        <div class="col-8">
+                                            <div class="mt-2" id="event-type">
+                                                <div class="form-check form-check-inline">
+                                                    <label class="form-check-label text-info font-weight-bold">
+                                                        <input class="form-check-input" type="radio" name="PayMethodID" value="1" @(Model.SaleRow.PaymethodID == 1 ? "checked" : "")> Cash
+                                                    </label>
+                                                </div><div class="form-check form-check-inline">
+                                                    <label class="form-check-label text-warning font-weight-bold">
+                                                        <input class="form-check-input" type="radio" name="PayMethodID" value="2" @(Model.SaleRow.PaymethodID == 2 ? "checked" : "")> Credit
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    if (Model.SaleRow.TicketTypeID == 7)
+                                    {
+                                        <div class="form-group row mb-1">
+                                            <label class="col-4 col-form-label">Renk</label>
+                                            <div class="col-8">
+                                                <select class="custom-select" name="ColorID">
+                                                    @foreach (var item in Model.MallMotoColor)
+                                                    {
+                                                        <option value="@(item.ColorID)" @(item.ColorID == Model.SaleRow.MallMotoColorID ? "selected" : "")>@($"{item.ColorName}")</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    if (Model.SaleRow.TicketTypeID == 2)
+                                    {
+                                        <div class="form-group row mb-1">
+                                            <label class="col-4 col-form-label">Kostüm</label>
+                                            <div class="col-8">
+                                                <select class="custom-select" name="CostumeID">
+                                                    @foreach (var item in Model.AnimalCostumes)
+                                                    {
+                                                        <option value="@(item.CostumeID)" @(item.CostumeID == Model.SaleRow.AnimalCostumeTypeID ? "selected" : "")>@($"{item.CostumeName}")</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    }
+
+                                    <div class="form-group row">
+                                        <label class="col-4 col-form-label">Açıklama</label>
+                                        <div class="col-8">
+                                            <textarea id="event-desc" name="Description" class="form-control" rows="2">@(Model.SaleRow.Description)</textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-12">
+                                            <button type="submit" id="btn-save" class="btn btn-block bg-primary text-white btn-rounded">Save</button>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-1">
+                                        <div class="col-12 p-0 text-center">
+                                            <small class="text-muted"> @($"{Model.EmployeeRecorded} - {Model.SaleRow.RecordDate}")</small>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-1">
+                                        <div class="col-12 p-0 text-center">
+                                            <small class="text-muted"> @($"{Model.EmployeeUpdated} - {Model.SaleRow.UpdateDate}")</small>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header"><strong>Satış Bilgisi</strong></div><div class="card-body">
+                                <div class="form-group row mb-1">
+                                    <div class="col-12 text-center">
+                                        <label class="form-control-plaintext font-weight-bold"> @(Model.Sale.OrderNumber)</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-0">
+                                    <label class="col-4 col-form-label">Tarihi</label>
+                                    <div class="col-8">
+                                        <label class="form-control-plaintext"> @(Model.Sale.Date?.ToShortDateString())</label>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row mb-0">
+                                    <label class="col-4 col-form-label">Kaynak</label>
+                                    <div class="col-8">
+                                        <label class="form-control-plaintext"> @(Model.SaleChannelName)</label>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-0">
+                                    <label class="col-4 col-form-label">Aktif</label>
+                                    <div class="col-8">
+                                        <label class="form-control-plaintext"> @(Model.Sale.IsActive == true ? "Aktif":"Pasif")</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
