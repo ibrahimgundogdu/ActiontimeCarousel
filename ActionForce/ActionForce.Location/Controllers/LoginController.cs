@@ -76,7 +76,7 @@ namespace ActionForce.Location.Controllers
                         },
                         CurrentLocation = new LocationInfo()
                         {
-                            //Currency = location.Currency,
+                            Currency = location.Currency,
                             FullName = $"{location.LocationName} {location.Description} {location.State}",
                             ID = location.LocationID,
                             //IsActive = location.IsActive.Value,

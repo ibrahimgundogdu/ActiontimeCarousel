@@ -1548,5 +1548,51 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("UpdateLocationTicketSale", locationIDParameter, saleRowIDParameter, dateParameter, priceIDParameter, extraUnitParameter, paymethodIDParameter, statusIDParameter, updateEmployeeIDParameter, colorIDParameter, costumeIDParameter, descriptionParameter);
         }
+    
+        public virtual ObjectResult<Nullable<System.DateTime>> GetLocationScheduledDate(Nullable<int> locationID, Nullable<System.DateTime> date)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<System.DateTime>>("GetLocationScheduledDate", locationIDParameter, dateParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> GetDayResultID(Nullable<int> locationID, Nullable<System.DateTime> date, Nullable<int> stateID, Nullable<int> environmentID, Nullable<int> recordEmployeeID, string description, string recordIP)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            var stateIDParameter = stateID.HasValue ?
+                new ObjectParameter("StateID", stateID) :
+                new ObjectParameter("StateID", typeof(int));
+    
+            var environmentIDParameter = environmentID.HasValue ?
+                new ObjectParameter("EnvironmentID", environmentID) :
+                new ObjectParameter("EnvironmentID", typeof(int));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("GetDayResultID", locationIDParameter, dateParameter, stateIDParameter, environmentIDParameter, recordEmployeeIDParameter, descriptionParameter, recordIPParameter);
+        }
     }
 }

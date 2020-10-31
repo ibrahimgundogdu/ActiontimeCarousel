@@ -112,6 +112,7 @@
     <Content Include="assets\js\app\mail.js" />
     <Content Include="assets\js\app\search.js" />
     <Content Include="assets\js\app\user.js" />
+    <Content Include="assets\js\jquery.mask.js" />
     <Content Include="assets\js\jstore.js" />
     <Content Include="assets\js\lazyload.config.js" />
     <Content Include="assets\js\lazyload.js" />
@@ -552,6 +553,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ActionController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CashController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\EnvelopeController.cs" />
@@ -570,6 +572,7 @@
     </Compile>
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\ControlModels\ActionControlModel.cs" />
+    <Compile Include="Models\ControlModels\CashControlModel.cs" />
     <Compile Include="Models\ControlModels\DefaultControlModel.cs" />
     <Compile Include="Models\ControlModels\EnvelopeControlModel.cs" />
     <Compile Include="Models\ControlModels\HomeControlModel.cs" />
@@ -586,6 +589,7 @@
     <Compile Include="Models\DefaultModels\TicketInfo.cs" />
     <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\ControlModels\LayoutControlModel.cs" />
+    <Compile Include="Models\FormModels\FormCashCollect.cs" />
     <Compile Include="Models\FormModels\FormOrder.cs" />
     <Compile Include="Models\FormModels\FormSaleRow.cs" />
     <Compile Include="Models\LocationHelper.cs" />
@@ -815,6 +819,8 @@
     <Content Include="Views\Shared\_PartialSummary.cshtml" />
     <Content Include="Views\Home\_PartialTicket.cshtml" />
     <Content Include="Views\Home\Detail.cshtml" />
+    <Content Include="Views\Cash\Index.cshtml" />
+    <Content Include="Views\Cash\Collect.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -835,6 +841,10 @@
     <ProjectReference Include="..\ActionForce.Entity\ActionForce.Entity.csproj">
       <Project>{1ad5bb0d-6cc5-490a-a1b0-e2bcac259310}</Project>
       <Name>ActionForce.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ActionForce.Service\ActionForce.Service.csproj">
+      <Project>{9E51A576-274C-4F3C-B9D1-79D53567A6E3}</Project>
+      <Name>ActionForce.Service</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -130,7 +130,14 @@ namespace ActionForce.Location.Controllers
             if (rowID > 0)
             {
                 message = "Satış Eklendi";
-                LocationHelper.AddApplicationLog("Location", "TicketSaleRows", "Insert", rowID.ToString(), "Home", "SetTicketSale", null, true, message, string.Empty, date, $"{model.Authentication.CurrentEmployee.EmployeeID} - {model.Authentication.CurrentEmployee.FullName}", LocationHelper.GetIPAddress(), string.Empty, null);
+                var saleRow = new TicketSaleRows();
+
+                using (ActionTimeEntities _db = new ActionTimeEntities())
+                {
+                    saleRow = _db.TicketSaleRows.FirstOrDefault(x => x.ID == rowID);
+                }
+
+                LocationHelper.AddApplicationLog("Location", "TicketSaleRows", "Insert", rowID.ToString(), "Home", "SetTicketSale", null, true, message, string.Empty, date, $"{model.Authentication.CurrentEmployee.EmployeeID} - {model.Authentication.CurrentEmployee.FullName}", LocationHelper.GetIPAddress(), string.Empty, saleRow);
             }
             else
             {
@@ -205,7 +212,10 @@ namespace ActionForce.Location.Controllers
 
                     if (rowid != null && rowid > 0)
                     {
-                        saleRow = Db.TicketSaleRows.FirstOrDefault(x => x.ID == saleRow.ID);
+                        using (ActionTimeEntities _db = new ActionTimeEntities())
+                        {
+                            saleRow = _db.TicketSaleRows.FirstOrDefault(x => x.ID == saleRow.ID);
+                        }
 
                         message = "Güncelleme Başarılı";
 

@@ -1,0 +1,17 @@
+﻿using ActionForce.Entity;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace ActionForce.Location
+{
+    public class CashControlModel : LayoutControlModel
+    {
+        public IEnumerable<Cash> Cashes { get; set; }
+        public Cash CurrentCash { get; set; }
+        public IEnumerable<Currency> Currencies { get; set; }
+        public IEnumerable<DocumentCashCollections> CashCollections { get; set; }
+
+    }
+}

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.779
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionForce.Office", "ActionForce.Office\ActionForce.Office.csproj", "{C0050AE9-2E67-4F0E-960D-7103E9A536D5}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionForce.Location", "ActionForce.Location\ActionForce.Location.csproj", "{DF3C5D88-8AA4-4C0D-927D-FD54D92D3AB5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionForce.PosService", "ActionForce.IngenicoService\ActionForce.PosService.csproj", "{23607F60-2404-49A5-9409-25B850D47FD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionForce.Service", "ActionForce.Service\ActionForce.Service.csproj", "{9E51A576-274C-4F3C-B9D1-79D53567A6E3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{23607F60-2404-49A5-9409-25B850D47FD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{23607F60-2404-49A5-9409-25B850D47FD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{23607F60-2404-49A5-9409-25B850D47FD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E51A576-274C-4F3C-B9D1-79D53567A6E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E51A576-274C-4F3C-B9D1-79D53567A6E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E51A576-274C-4F3C-B9D1-79D53567A6E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E51A576-274C-4F3C-B9D1-79D53567A6E3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

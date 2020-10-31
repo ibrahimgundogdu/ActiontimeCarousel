@@ -13,25 +13,37 @@
 <div class="flex scrollable hover">
     <div class="nav-active-text-primary" data-nav>
         <ul class="nav bg">
-           
+
             <li>
                 <a href="/">
                     <span class="nav-icon text-primary"><i data-feather='tablet'></i></span>
-                    <span class="nav-text">Bilet Satış Bilgileri</span>
+                    <span class="nav-text">Bilet Satış İşlemleri</span>
                 </a>
             </li>
+            <li>
+                <a href="#" class="" data-pjax-state="">
+                    <span class="nav-icon text-danger">
+                        <i data-feather='hard-drive'></i>
+                    </span>
+                    <span class="nav-text">Kasa İşlemleri</span> <span class="nav-caret"></span>
+                </a>
+                <ul class="nav-sub nav-mega">
+                    <li><a href="/Cash/Index" class="" data-pjax-state=""><span class="nav-text">Kasa</span></a></li>
+                    <li><a href="/Cash/Collect" class="" data-pjax-state=""><span class="nav-text">Kasa Nakit Tahsilatı</span></a></li>
+                    <li><a href="/Cash/Payment" class="" data-pjax-state=""><span class="nav-text">Kasa Nakit Ödemesi</span></a></li>
+                    <li><a href="/Cash/ExchangeSell" class="" data-pjax-state=""><span class="nav-text">Döviz Satışı</span></a></li>
+                    <li><a href="/Cash/ExchangeBuy" class="" data-pjax-state=""><span class="nav-text">Döviz Alışı</span></a></li>
+                    <li><a href="/Cash/Expense" class="" data-pjax-state=""><span class="nav-text">Masraf</span></a></li>
+                    <li><a href="/Cash/Transfer" class="" data-pjax-state=""><span class="nav-text">Havale - EFT</span></a></li>
+                    <li><a href="/Cash/SalaryPay" class="" data-pjax-state=""><span class="nav-text">Kasa Avans Ödemesi</span></a></li>
+                </ul>
+            </li>
             @*<li>
-            <a href="/Sale">
-                <span class="nav-icon text-primary"><i data-feather='dollar-sign'></i></span>
-                <span class="nav-text">Satışlar</span>
-            </a>
-        </li>
-        <li>
-            <a href="/Action">
-                <span class="nav-icon text-primary"><i data-feather='layers'></i></span>
-                <span class="nav-text">Cari Hesap</span>
-            </a>
-        </li>*@
+                    <a href="/Action">
+                        <span class="nav-icon text-primary"><i data-feather='layers'></i></span>
+                        <span class="nav-text">Cari Hesap</span>
+                    </a>
+                </li>*@
 
             <li>
                 <a href="/Schedule">
@@ -54,34 +66,34 @@
                 </a>
             </li>
             @*<li class="nav-header hidden-folded">
-            <span class="text-muted">Lokasyon</span>
-        </li>
+                    <span class="text-muted">Lokasyon</span>
+                </li>
 
-        <li>
-            <a href="/Location">
-                <span class="nav-icon text-success"><i data-feather='airplay'></i></span>
-                <span class="nav-text">Lokasyonum</span>
-            </a>
-        </li>
+                <li>
+                    <a href="/Location">
+                        <span class="nav-icon text-success"><i data-feather='airplay'></i></span>
+                        <span class="nav-text">Lokasyonum</span>
+                    </a>
+                </li>
 
-        <li>
-            <a href="/Employee">
-                <span class="nav-icon text-success"><i data-feather='users'></i></span>
-                <span class="nav-text">Çalışanlar</span>
-            </a>
-        </li>
+                <li>
+                    <a href="/Employee">
+                        <span class="nav-icon text-success"><i data-feather='users'></i></span>
+                        <span class="nav-text">Çalışanlar</span>
+                    </a>
+                </li>
 
-        <li class="nav-header hidden-folded">
-            <span class="text-muted">Bildirim</span>
-        </li>
+                <li class="nav-header hidden-folded">
+                    <span class="text-muted">Bildirim</span>
+                </li>
 
-        <li>
-            <a href="/Message">
-                <span class="nav-icon text-warning"><i data-feather='message-circle'></i></span>
-                <span class="nav-text">Mesajlar</span>
-                <span class="nav-badge"><b class="badge-circle xs text-warning"></b></span>
-            </a>
-        </li>*@
+                <li>
+                    <a href="/Message">
+                        <span class="nav-icon text-warning"><i data-feather='message-circle'></i></span>
+                        <span class="nav-text">Mesajlar</span>
+                        <span class="nav-badge"><b class="badge-circle xs text-warning"></b></span>
+                    </a>
+                </li>*@
 
 
             <li>
@@ -95,21 +107,29 @@
     </div>
 </div>
 <div class="no-shrink ">
-    <div class="p-0 text-center">
-        <b>@(Model.Schedule != null ? Html.Raw(Model.Schedule.ShiftDateStart?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</b><br>
-        <b class="text-success">@(Model.Shift != null ? Html.Raw(Model.Shift.ShiftDateStart?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</b>
-        <button class="btn btn-lg btn-raised btn-wave btn-icon btn-rounded mb-2 mt-2 light-green text-white">
-            <i data-feather="sun"></i>
-        </button><br />
-        <b class="text-highlight">@(Model.Shift != null ? Html.Raw(Model.Shift.ShiftDateFinish?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</b><br>
-        <b class="">@(Model.Schedule != null ? Html.Raw(Model.Schedule.ShiftdateEnd?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</b>
+    <div class="row p-0 text-center">
+        <div class="col-4 m-0 p-0 text-center font-weight-bold v-middle">
+            <p class="text-info">@(Model.Schedule != null ? Html.Raw(Model.Schedule.ShiftDateStart?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</p>
+            <p class="text-success">@(Model.Shift != null ? Html.Raw(Model.Shift.ShiftDateStart?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</p>
+        </div>
+        <div class="col-4">
+            <button class="btn btn-lg btn-raised btn-wave btn-icon btn-rounded mb-2 mt-2 light-green text-white">
+                <i data-feather="sun"></i>
+            </button>
+        </div>
+        <div class="col-4 m-0 p-0 text-center font-weight-bold v-middle">
+            <p class="text-info">@(Model.Schedule != null ? Html.Raw(Model.Schedule.ShiftdateEnd?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</p>
+            <p class="text-success">@(Model.Shift != null ? Html.Raw(Model.Shift.ShiftDateFinish?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</p>
+        </div>
+
+
     </div>
     <ul class="nav no-border">
         @if (Model.Authentication.CurrentRoleGroup.RoleLevel >= 3)
         {
             <li class="text-center">
                 <a href="/Location/SetCurrentLocation" class="btn btn-block btn-light">@(Html.Raw(Model.Authentication.CurrentLocation.FullName))</a>
-</li>
+            </li>
         }
         else
         {

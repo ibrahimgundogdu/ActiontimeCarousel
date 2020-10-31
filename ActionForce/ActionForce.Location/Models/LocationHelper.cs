@@ -1,6 +1,7 @@
 ﻿using ActionForce.Entity;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -38,7 +39,25 @@ namespace ActionForce.Location
             }
             return context.Request.ServerVariables["REMOTE_ADDR"];
         }
-
+        public static double GetStringToAmount(string amount)
+        {
+            double Amount = Convert.ToDouble(amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+            return Amount;
+        }
+        public static DateTime GetLocationScheduledDate(int LocationID, DateTime date)
+        {
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                return db.GetLocationScheduledDate(LocationID, date).FirstOrDefault() ?? date.Date;
+            }
+        }
+        public static long? GetDayResultID(int LocationID, DateTime date, int StateID, int EnvironmentID, int RecordEmployeeID, string Description, string RecordIP)
+        {
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                return db.GetDayResultID(LocationID, date,StateID,EnvironmentID,RecordEmployeeID,Description,RecordIP).FirstOrDefault();
+            }
+        }
         public static IEnumerable<DifferentList> PublicInstancePropertiesEqual<T>(T self, T to, params string[] ignore) where T : class
         {
             List<DifferentList> loglist = new List<DifferentList>();
@@ -127,13 +146,13 @@ namespace ActionForce.Location
                     using (ActionTimeEntities db = new ActionTimeEntities())
                     {
                         var isexists = db.VTicketSaleRowCheck.FirstOrDefault(x => x.LocationID == locationID && x.UID.ToString() == ticketUID && x.OrderNumber == orderNumber && x.SaleDate == orderDate);
-                       
+
                         if (isexists != null)
                         {
                             var isbasket = db.TicketBasket.FirstOrDefault(x => x.TicketNumber == isexists.TicketNumber);
 
                             model.Info = isexists;
-                           
+
                             if (isexists.IsBlocked == false && isexists.IsActive == true && isexists.Status == 2 && isexists.StatusID == 2 && isexists.Currency == location.Currency && isexists.TicketTypeID == location.TicketTypeID && isbasket == null)
                             {
                                 result.IsSuccess = true;
