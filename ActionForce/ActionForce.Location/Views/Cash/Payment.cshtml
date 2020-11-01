@@ -1,34 +1,24 @@
 ﻿@model CashControlModel
 @{
-    ViewBag.Title = "Kasa Tahsilatı";
+    ViewBag.Title = "Kasa Ödemesi";
 }
 
 <div class="flex fixed-content">
 
     <div class="flex" id="content-body">
         <div class="d-flex flex-column flex" data-plugin="user">
-            @*<div class="p-3">
-            <div class="toolbar">
-                <a href="/" class="btn btn-block btn-white" title="Cash">
-                    <i class="text-info font-weight-bold" data-feather="hard-drive"></i> &nbsp; &nbsp; Kasa
-                </a>
-                <a href="javascript:;" class="btn btn-white" title="Add Cash Collect" data-toggle="modal" data-target="#modalcashcollect">
-                    <i class="text-success font-weight-bold" data-feather="plus"></i>
-                </a>
-            </div>
-        </div>*@
 
             <div class="scroll-y mx-3 mb-3">
                 <div class="card">
                     <div class="card-header pl-3 pr-2">
                         <div class="d-flex">
-                            <strong>Kasa Nakit Tahsilatları</strong>
+                            <strong>Kasa Nakit Ödemeleri</strong>
                             <span class="flex"></span>
                             <div>
-                                <a href="/Cash/Collect" class="font-weight-bold">
+                                <a href="/Cash/Payment" class="font-weight-bold">
                                     <i data-feather="grid"></i>
                                 </a>
-                                <a href="javascript:;" class="font-weight-bold pl-2" title="Add Cash Collect" data-toggle="modal" data-target="#modalcashcollect">
+                                <a href="javascript:;" class="font-weight-bold pl-2" title="Add Cash Payment" data-toggle="modal" data-target="#modalcashpayment">
                                     <i class="text-success" data-feather="plus"></i>
                                 </a>
                             </div>
@@ -48,12 +38,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model.CashCollections)
+                                    @foreach (var item in Model.CashPayments)
                                     {
                                         <tr class="v-middle shadow-sm">
-                                            <td class="pl-1"><a href="/Cash/CollectDetail/@(item.UID)" class="@(item.IsActive == false ? "text-danger":"")">@(item.DocumentNumber)</a></td>
+                                            <td class="pl-1"><a href="/Cash/PaymentDetail/@(item.UID)" class="@(item.IsActive == false ? "text-danger":"")">@(item.DocumentNumber)</a></td>
                                             <td class="">@(item.Date?.ToShortDateString())</td>
-                                            <td class="text-right @(item.IsActive == false ? "text-muted":"text-dark")  font-weight-bold pr-0"><b>@(item.Amount?.ToString("N2"))</b></td>
+                                            <td class="text-right  @(item.IsActive == false ? "text-muted":"text-dark") font-weight-bold pr-0"><b>@(item.Amount?.ToString("N2"))</b></td>
                                             <td class="pl-1"> @(item.Currency == "TRL" ? "₺" : item.Currency == "USD" ? "$":"€")</td>
                                         </tr>
                                     }
@@ -61,17 +51,17 @@
                                 <tfoot>
                                     <tr>
                                         <td class="p-1" colspan="2"></td>
-                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashCollections.Where(x=> x.Currency == "TRL" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
+                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashPayments.Where(x=> x.Currency == "TRL" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
                                         <td class="p-1">₺</td>
                                     </tr>
                                     <tr>
                                         <td class="p-1" colspan="2"></td>
-                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashCollections.Where(x=> x.Currency == "USD" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
+                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashPayments.Where(x=> x.Currency == "USD" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
                                         <td class="p-1">$</td>
                                     </tr>
                                     <tr>
                                         <td class="p-1" colspan="2"></td>
-                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashCollections.Where(x=> x.Currency == "EUR" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
+                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashPayments.Where(x=> x.Currency == "EUR" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
                                         <td class="p-1">€</td>
                                     </tr>
                                 </tfoot>
@@ -88,12 +78,12 @@
 
 </div>
 
-<div id="modalcashcollect" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
+<div id="modalcashpayment" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header"><div class="modal-title font-weight-500 text-dark">Cash Collect</div><button class="close" data-dismiss="modal">×</button></div>
+            <div class="modal-header"><div class="modal-title font-weight-500 text-dark">Cash Payment</div><button class="close" data-dismiss="modal">×</button></div>
             <div class="modal-body mt-0 mb-0 pb-4 pt-4">
-                @using (Html.BeginForm("AddCashCollection", "Cash", FormMethod.Post, new { role = "form" }))
+                @using (Html.BeginForm("AddCashPayment", "Cash", FormMethod.Post, new { role = "form" }))
                 {
                     @Html.AntiForgeryToken()
 

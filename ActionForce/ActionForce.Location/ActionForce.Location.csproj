@@ -590,6 +590,8 @@
     <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\ControlModels\LayoutControlModel.cs" />
     <Compile Include="Models\FormModels\FormCashCollect.cs" />
+    <Compile Include="Models\FormModels\FormCashExpense.cs" />
+    <Compile Include="Models\FormModels\FormCashPayment.cs" />
     <Compile Include="Models\FormModels\FormOrder.cs" />
     <Compile Include="Models\FormModels\FormSaleRow.cs" />
     <Compile Include="Models\LocationHelper.cs" />
@@ -821,6 +823,11 @@
     <Content Include="Views\Home\Detail.cshtml" />
     <Content Include="Views\Cash\Index.cshtml" />
     <Content Include="Views\Cash\Collect.cshtml" />
+    <Content Include="Views\Cash\CollectDetail.cshtml" />
+    <Content Include="Views\Cash\Payment.cshtml" />
+    <Content Include="Views\Cash\PaymentDetail.cshtml" />
+    <Content Include="Views\Cash\_PartialCashSummary.cshtml" />
+    <Content Include="Views\Cash\Expense.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

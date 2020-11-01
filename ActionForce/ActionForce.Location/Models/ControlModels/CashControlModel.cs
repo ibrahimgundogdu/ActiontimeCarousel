@@ -8,10 +8,29 @@ namespace ActionForce.Location
 {
     public class CashControlModel : LayoutControlModel
     {
+        public DateTime SelectedDate { get; set; }
         public IEnumerable<Cash> Cashes { get; set; }
         public Cash CurrentCash { get; set; }
         public IEnumerable<Currency> Currencies { get; set; }
         public IEnumerable<DocumentCashCollections> CashCollections { get; set; }
+        public DocumentCashCollections CashCollection { get; set; }
+        public string EmployeeRecorded { get; set; }
+        public string EmployeeUpdated { get; set; }
+        public bool IsUpdatible { get; set; } = false;
+
+
+        public IEnumerable<DocumentCashPayments> CashPayments { get; set; }
+        public DocumentCashPayments CashPayment { get; set; }
+
+        public SummaryControlModel Summary { get; set; }
+
+
+        public IEnumerable<ExpenseType> ExpenseTypes { get; set; }
+        public IEnumerable<DocumentCashExpense> CashExpenses { get; set; }
+        public DocumentCashExpense CashExpense { get; set; }
+        public DateTime? ReceiptDate { get; set; }
+
+
 
     }
 }

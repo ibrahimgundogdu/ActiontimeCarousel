@@ -6,17 +6,16 @@ using System.Threading.Tasks;
 
 namespace ActionForce.Service
 {
-    public class CashCollectionModel
+    public class CashPaymentModel
     {
         public int ActionTypeID { get; set; }
         public string ActionTypeName { get; set; }
-        public int? FromEmployeeID { get; set; }
-        public int? FromBankAccountID { get; set; }
-        public int? FromCustomerID { get; set; }
+        public int? ToEmployeeID { get; set; }
+        public int? ToCustomerID { get; set; }
         public int LocationID { get; set; }
         public double Amount { get; set; }
         public string Currency { get; set; }
-        public DateTime? DocumentDate { get; set; }
+        public DateTime DocumentDate { get; set; }
         public DateTime ProcessDate { get; set; }
         public string Description { get; set; }
         public int? EnvironmentID { get; set; }
@@ -25,7 +24,4 @@ namespace ActionForce.Service
         public bool IsActive { get; set; }
         public Guid? UID { get; set; }
     }
-
-    
-
 }

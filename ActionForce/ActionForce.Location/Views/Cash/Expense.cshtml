@@ -1,34 +1,24 @@
 ﻿@model CashControlModel
 @{
-    ViewBag.Title = "Kasa Tahsilatı";
+    ViewBag.Title = "Kasa Masrafı";
 }
 
 <div class="flex fixed-content">
 
     <div class="flex" id="content-body">
         <div class="d-flex flex-column flex" data-plugin="user">
-            @*<div class="p-3">
-            <div class="toolbar">
-                <a href="/" class="btn btn-block btn-white" title="Cash">
-                    <i class="text-info font-weight-bold" data-feather="hard-drive"></i> &nbsp; &nbsp; Kasa
-                </a>
-                <a href="javascript:;" class="btn btn-white" title="Add Cash Collect" data-toggle="modal" data-target="#modalcashcollect">
-                    <i class="text-success font-weight-bold" data-feather="plus"></i>
-                </a>
-            </div>
-        </div>*@
 
             <div class="scroll-y mx-3 mb-3">
                 <div class="card">
                     <div class="card-header pl-3 pr-2">
                         <div class="d-flex">
-                            <strong>Kasa Nakit Tahsilatları</strong>
+                            <strong>Kasa Masraf Fişleri</strong>
                             <span class="flex"></span>
                             <div>
-                                <a href="/Cash/Collect" class="font-weight-bold">
+                                <a href="/Cash/Expense" class="font-weight-bold">
                                     <i data-feather="grid"></i>
                                 </a>
-                                <a href="javascript:;" class="font-weight-bold pl-2" title="Add Cash Collect" data-toggle="modal" data-target="#modalcashcollect">
+                                <a href="javascript:;" class="font-weight-bold pl-2" title="Add Cash Payment" data-toggle="modal" data-target="#modalcashexpense">
                                     <i class="text-success" data-feather="plus"></i>
                                 </a>
                             </div>
@@ -48,12 +38,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model.CashCollections)
+                                    @foreach (var item in Model.CashExpenses)
                                     {
                                         <tr class="v-middle shadow-sm">
-                                            <td class="pl-1"><a href="/Cash/CollectDetail/@(item.UID)" class="@(item.IsActive == false ? "text-danger":"")">@(item.DocumentNumber)</a></td>
+                                            <td class="pl-1"><a href="/Cash/ExpenseDetail/@(item.UID)" class="@(item.IsActive == false ? "text-danger":"")">@(item.DocumentNumber)</a></td>
                                             <td class="">@(item.Date?.ToShortDateString())</td>
-                                            <td class="text-right @(item.IsActive == false ? "text-muted":"text-dark")  font-weight-bold pr-0"><b>@(item.Amount?.ToString("N2"))</b></td>
+                                            <td class="text-right  @(item.IsActive == false ? "text-muted":"text-dark") font-weight-bold pr-0"><b>@(item.Amount?.ToString("N2"))</b></td>
                                             <td class="pl-1"> @(item.Currency == "TRL" ? "₺" : item.Currency == "USD" ? "$":"€")</td>
                                         </tr>
                                     }
@@ -61,17 +51,17 @@
                                 <tfoot>
                                     <tr>
                                         <td class="p-1" colspan="2"></td>
-                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashCollections.Where(x=> x.Currency == "TRL" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
+                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashExpenses.Where(x=> x.Currency == "TRL" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
                                         <td class="p-1">₺</td>
                                     </tr>
                                     <tr>
                                         <td class="p-1" colspan="2"></td>
-                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashCollections.Where(x=> x.Currency == "USD" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
+                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashExpenses.Where(x=> x.Currency == "USD" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
                                         <td class="p-1">$</td>
                                     </tr>
                                     <tr>
                                         <td class="p-1" colspan="2"></td>
-                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashCollections.Where(x=> x.Currency == "EUR" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
+                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashExpenses.Where(x=> x.Currency == "EUR" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
                                         <td class="p-1">€</td>
                                     </tr>
                                 </tfoot>
@@ -88,22 +78,35 @@
 
 </div>
 
-<div id="modalcashcollect" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
+<div id="modalcashexpense" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header"><div class="modal-title font-weight-500 text-dark">Cash Collect</div><button class="close" data-dismiss="modal">×</button></div>
+            <div class="modal-header"><div class="modal-title font-weight-500 text-dark">Cash Expense</div><button class="close" data-dismiss="modal">×</button></div>
             <div class="modal-body mt-0 mb-0 pb-4 pt-4">
-                @using (Html.BeginForm("AddCashCollection", "Cash", FormMethod.Post, new { role = "form" }))
+                @using (Html.BeginForm("AddCashExpense", "Cash", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
 
                     <div class="form-group row mb-1">
-                        <label class="col-4 col-form-label">Tutar</label>
+                        <label class="col-4 col-form-label">Masraf</label>
+                        <div class="col-8">
+                            <select class="custom-select" name="TypeID">
+                                @foreach (var item in Model.ExpenseTypes)
+                                {
+                                    <option value="@(item.ID)">@(item.ExpenseName)</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label">Tutarı</label>
                         <div class="col-5 pr-1">
-                            <input id="Amount" name="Amount" type="text" class="form-control font-weight-bold text-md text-right money" placeholder="0,00" required>
+                            <input id="Amount" name="Amount" type="text" class="form-control font-weight-bold text-right money" placeholder="0,00" required>
                         </div>
                         <div class="col-3 pl-1">
-                            <select class="custom-select text-md" name="Currency">
+                            <select class="custom-select" name="Currency">
                                 @foreach (var item in Model.Currencies)
                                 {
                                     <option value="@(item.Code)" @(item.Code == Model.Location.Currency ? "selected" : "")>@(item.Sign)</option>
@@ -112,12 +115,38 @@
                         </div>
                     </div>
 
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label">Fiş No</label>
+                        <div class="col-8">
+                            <input id="ReceiptNumber" type="text" name="ReceiptNumber" class="form-control font-weight-bold" required />
+                        </div>
+                    </div>
 
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label">Tarihi</label>
+                        <div class="col-8">
+                            <input id="ReceiptDate" name="ReceiptDate" type="date" class="form-control font-weight-bold" placeholder="Date" value="@(Model.ReceiptDate?.ToString("yyyy-MM-dd"))" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label">Saati</label>
+                        <div class="col-8">
+                            <input id="ReceiptTime" name="ReceiptTime" type="time" class="form-control font-weight-bold" step="1" placeholder="Time" value="@(Model.ReceiptDate?.ToString("HH\\:mm\\:ss"))" required>
+                        </div>
+                    </div>
 
                     <div class="form-group row">
                         <label class="col-4 col-form-label">Açıklama</label>
                         <div class="col-8">
                             <textarea id="event-desc" name="Description" class="form-control" rows="2"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-4 col-form-label">Dosya</label>
+                        <div class="col-8">
+                            <input id="ReceiptFile" name="ReceiptFile" class="form-control" type="file" style="width:100%;" />
                         </div>
                     </div>
 

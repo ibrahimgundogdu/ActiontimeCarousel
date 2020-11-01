@@ -84,18 +84,17 @@ namespace ActionForce.Service
                         ServiceHelper.AddCashAction(cashCollect.CashID, cashCollect.LocationID, null, cashCollect.ActionTypeID, cashCollect.Date, cashCollect.ActionTypeName, cashCollect.ID, cashCollect.Date, cashCollect.DocumentNumber, cashCollect.Description, 1, cashCollect.Amount, 0, cashCollect.Currency, null, null, cashCollect.RecordEmployeeID, cashCollect.RecordDate, cashCollect.UID.Value);
 
                         result.IsSuccess = true;
-                        result.Message = $"{cashCollect.Date} tarihli { cashCollect.Amount } {cashCollect.Currency} tutarındaki kasa tahsilatı başarı ile eklendi";
+                        result.Message = $"{cashCollect.Date?.ToShortDateString()} tarihli { cashCollect.Amount } {cashCollect.Currency} tutarındaki kasa tahsilatı başarı ile eklendi";
 
                         // log atılır
-                        ServiceHelper.AddApplicationLog("Office", "Cash", "Insert", cashCollect.ID.ToString(), "Cash", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), _employee.FullName, _ip, string.Empty, cashCollect);
+                        ServiceHelper.AddApplicationLog("Location", "Cash", "Insert", cashCollect.ID.ToString(), "Cash", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), _employee.FullName, _ip, string.Empty, cashCollect);
 
                     }
                     catch (Exception ex)
                     {
 
                         result.Message = $"{amount} {currency} tutarındaki kasa tahsilatı eklenemedi : {ex.Message}";
-                        ServiceHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "Index", null, false, $"{result.Message}", string.Empty, location.LocalDateTime.Value, _employee.FullName, _ip, string.Empty, null);
-
+                        ServiceHelper.AddApplicationLog("Location", "Cash", "Insert", "-1", "Cash", "Index", null, false, $"{result.Message}", string.Empty, location.LocalDateTime.Value, _employee.FullName, _ip, string.Empty, null);
                     }
 
                 }
@@ -104,160 +103,371 @@ namespace ActionForce.Service
             return result;
         }
 
-        //public Result<DocumentCashCollections> EditCashCollection(CashCollection collection, AuthenticationModel authentication)
-        //{
-        //    Result<DocumentCashCollections> result = new Result<DocumentCashCollections>()
-        //    {
-        //        IsSuccess = false,
-        //        Message = string.Empty,
-        //        Data = null
-        //    };
+        public Result<DocumentCashCollections> UpdateCashCollection(CashCollectionModel collection)
+        {
+            Result<DocumentCashCollections> result = new Result<DocumentCashCollections>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
 
-        //    using (ActionTimeEntities Db = new ActionTimeEntities())
-        //    {
-        //        var isCash = Db.DocumentCashCollections.FirstOrDefault(x => x.UID == collection.UID);
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var cashCollect = Db.DocumentCashCollections.FirstOrDefault(x => x.UID == collection.UID);
 
-        //        if (isCash != null)
-        //        {
-        //            try
-        //            {
-        //                var cash = ServiceHelper.GetCash(collection.LocationID, collection.Currency);
-        //                var location = Db.Location.FirstOrDefault(x => x.LocationID == collection.LocationID);
-        //                var locId = isCash.LocationID;
-        //                var exchange = ServiceHelper.GetExchange(collection.DocumentDate.Value);
-        //                var refID = collection.ReferanceID ?? (long?)null;
-        //                DocumentCashCollections self = new DocumentCashCollections()
-        //                {
-        //                    ActionTypeID = isCash.ActionTypeID,
-        //                    ActionTypeName = isCash.ActionTypeName,
-        //                    Amount = isCash.Amount,
-        //                    CashID = isCash.CashID,
-        //                    Currency = isCash.Currency,
-        //                    Date = isCash.Date,
-        //                    Description = isCash.Description,
-        //                    DocumentNumber = isCash.DocumentNumber,
-        //                    ExchangeRate = isCash.ExchangeRate,
-        //                    ID = isCash.ID,
-        //                    IsActive = isCash.IsActive,
-        //                    LocationID = isCash.LocationID,
-        //                    OurCompanyID = isCash.OurCompanyID,
-        //                    RecordDate = isCash.RecordDate,
-        //                    RecordEmployeeID = isCash.RecordEmployeeID,
-        //                    RecordIP = isCash.RecordIP,
-        //                    ReferenceID = isCash.ReferenceID,
-        //                    SystemAmount = isCash.SystemAmount,
-        //                    SystemCurrency = isCash.SystemCurrency,
-        //                    UpdateDate = isCash.UpdateDate,
-        //                    UpdateEmployee = isCash.UpdateEmployee,
-        //                    UpdateIP = isCash.UpdateIP,
-        //                    EnvironmentID = isCash.EnvironmentID,
-        //                    FromBankAccountID = isCash.FromBankAccountID,
-        //                    FromCustomerID = isCash.FromCustomerID,
-        //                    FromEmployeeID = isCash.FromEmployeeID,
-        //                    ResultID = isCash.ResultID,
-        //                    UID = isCash.UID
-        //                };
-        //                isCash.ReferenceID = refID;
-        //                isCash.LocationID = collection.LocationID;
-        //                isCash.CashID = cash.ID;
-        //                isCash.Date = collection.DocumentDate;
-        //                isCash.FromBankAccountID = collection.FromBankAccountID ?? (int?)null;
-        //                isCash.FromEmployeeID = collection.FromEmployeeID ?? (int?)null;
-        //                isCash.FromCustomerID = collection.FromCustomerID ?? (int?)null;
-        //                isCash.Amount = collection.Amount;
-        //                isCash.Currency = collection.Currency;
-        //                isCash.Description = collection.Description;
-        //                isCash.ExchangeRate = collection.ExchangeRate != null ? collection.ExchangeRate : self.ExchangeRate;
-        //                isCash.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
-        //                isCash.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
-        //                isCash.UpdateIP = ServiceHelper.GetIPAddress();
-        //                isCash.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == collection.Currency ? collection.Amount : collection.Amount * isCash.ExchangeRate;
-        //                isCash.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
-        //                isCash.IsActive = collection.IsActive;
+                if (cashCollect != null)
+                {
+                    try
+                    {
+                        var cash = ServiceHelper.GetCash(collection.LocationID, collection.Currency);
+                        var exchange = ServiceHelper.GetExchange(collection.DocumentDate.Value);
 
-        //                Db.SaveChanges();
+                        DocumentCashCollections self = new DocumentCashCollections()
+                        {
+                            ActionTypeID = cashCollect.ActionTypeID,
+                            ActionTypeName = cashCollect.ActionTypeName,
+                            Amount = cashCollect.Amount,
+                            CashID = cashCollect.CashID,
+                            Currency = cashCollect.Currency,
+                            Date = cashCollect.Date,
+                            Description = cashCollect.Description,
+                            DocumentNumber = cashCollect.DocumentNumber,
+                            ExchangeRate = cashCollect.ExchangeRate,
+                            ID = cashCollect.ID,
+                            IsActive = cashCollect.IsActive,
+                            LocationID = cashCollect.LocationID,
+                            OurCompanyID = cashCollect.OurCompanyID,
+                            RecordDate = cashCollect.RecordDate,
+                            RecordEmployeeID = cashCollect.RecordEmployeeID,
+                            RecordIP = cashCollect.RecordIP,
+                            ReferenceID = cashCollect.ReferenceID,
+                            SystemAmount = cashCollect.SystemAmount,
+                            SystemCurrency = cashCollect.SystemCurrency,
+                            UpdateDate = cashCollect.UpdateDate,
+                            UpdateEmployee = cashCollect.UpdateEmployee,
+                            UpdateIP = cashCollect.UpdateIP,
+                            EnvironmentID = cashCollect.EnvironmentID,
+                            FromBankAccountID = cashCollect.FromBankAccountID,
+                            FromCustomerID = cashCollect.FromCustomerID,
+                            FromEmployeeID = cashCollect.FromEmployeeID,
+                            ResultID = cashCollect.ResultID,
+                            UID = cashCollect.UID
 
-        //                //Cari hesap hareketleri temizlenir.
+                        };
 
-        //                Db.RemoveAllAccountActions(isCash.ID, isCash.UID);
+                        cashCollect.CashID = cash.ID;
+                        cashCollect.Date = collection.DocumentDate?.Date;
+                        cashCollect.FromBankAccountID = collection.FromBankAccountID ?? (int?)null;
+                        cashCollect.FromEmployeeID = collection.FromEmployeeID ?? (int?)null;
+                        cashCollect.FromCustomerID = collection.FromCustomerID ?? (int?)null;
+                        cashCollect.Amount = collection.Amount;
+                        cashCollect.Currency = collection.Currency;
+                        cashCollect.Description = collection.Description;
+                        cashCollect.ExchangeRate = collection.Currency == "USD" ? exchange.USDA : collection.Currency == "EUR" ? exchange.EURA : 1;
+                        cashCollect.UpdateDate = collection.ProcessDate;
+                        cashCollect.UpdateEmployee = _employee.ID;
+                        cashCollect.UpdateIP = _ip;
+                        cashCollect.SystemAmount = _company.Currency == collection.Currency ? collection.Amount : collection.Amount * cashCollect.ExchangeRate;
+                        cashCollect.SystemCurrency = _company.Currency;
+                        cashCollect.IsActive = collection.IsActive;
 
-        //                // Aktif ise Cari hesap kaydı eklenir.
+                        Db.SaveChanges();
 
-        //                if (isCash.IsActive == true)
-        //                {
-        //                    ServiceHelper.AddCashAction(isCash.CashID, isCash.LocationID, authentication.ActionEmployee.EmployeeID, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, isCash.Amount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
-        //                }
+                        //Cari hesap hareketleri temizlenir.
 
-        //                result.IsSuccess = true;
-        //                result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki kasa tahsilatı başarı ile güncellendi";
+                        Db.RemoveAllAccountActions(cashCollect.ID, cashCollect.UID);
+
+                        // Aktif ise Cari hesap kaydı eklenir.
+
+                        if (cashCollect.IsActive == true)
+                        {
+                            ServiceHelper.AddCashAction(cashCollect.CashID, cashCollect.LocationID, _employee.ID, cashCollect.ActionTypeID, cashCollect.Date, cashCollect.ActionTypeName, cashCollect.ID, cashCollect.Date, cashCollect.DocumentNumber, cashCollect.Description, 1, cashCollect.Amount, 0, cashCollect.Currency, null, null, cashCollect.UpdateEmployee, cashCollect.UpdateDate, cashCollect.UID.Value);
+                        }
+
+                        result.IsSuccess = true;
+                        result.Message = $"{cashCollect.ID} ID li {cashCollect.Date?.ToShortDateString()} tarihli {cashCollect.Amount} {cashCollect.Currency} tutarındaki kasa tahsilatı başarı ile güncellendi";
+
+                        var isequal = ServiceHelper.PublicInstancePropertiesEqual<DocumentCashCollections>(self, cashCollect, ServiceHelper.getIgnorelist());
+                        ServiceHelper.AddApplicationLog("Location", "Cash", "Update", cashCollect.ID.ToString(), "Cash", "Index", isequal, true, $"{result.Message}", string.Empty, collection.ProcessDate, _employee.FullName, _ip, string.Empty, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"{cashCollect.Amount} {cashCollect.Currency} tutarındaki kasa tahsilatı güncellenemedi : {ex.Message}";
+                        ServiceHelper.AddApplicationLog("Location", "Cash", "Update", "-1", "Cash", "Index", null, false, $"{result.Message}", string.Empty, collection.ProcessDate, _employee.FullName, _ip, string.Empty, null);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public Result<DocumentCashCollections> DeleteCashCollection(Guid? id)
+        {
+            Result<DocumentCashCollections> result = new Result<DocumentCashCollections>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            if (id != null)
+            {
+                using (ActionTimeEntities Db = new ActionTimeEntities())
+                {
+                    var isCash = Db.DocumentCashCollections.FirstOrDefault(x => x.UID == id);
+
+                    if (isCash != null)
+                    {
+                        DateTime processDate = Db.Location.FirstOrDefault(x => x.LocationID == isCash.LocationID)?.LocalDateTime ?? DateTime.UtcNow;
+
+                        try
+                        {
+                            isCash.IsActive = false;
+                            isCash.UpdateDate = processDate;
+                            isCash.UpdateEmployee = _employee.ID;
+                            isCash.UpdateIP = _ip;
+
+                            Db.SaveChanges();
+
+                            Db.RemoveAllAccountActions(isCash.ID, isCash.UID);
+
+                            result.IsSuccess = true;
+                            result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki kasa tahsilatı başarı ile iptal edildi";
+
+                            ServiceHelper.AddApplicationLog("Location", "Cash", "Remove", isCash.ID.ToString(), "Cash", "Index", null, true, $"{result.Message}", string.Empty, processDate, _employee.FullName, _ip, string.Empty, isCash);
+                        }
+                        catch (Exception ex)
+                        {
+                            result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki kasa tahsilatı iptal edilemedi : {ex.Message}";
+                            ServiceHelper.AddApplicationLog("Location", "Cash", "Remove", "-1", "Cash", "Index", null, false, $"{result.Message}", string.Empty, processDate, _employee.FullName, _ip, string.Empty, null);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
 
 
-        //                var isequal = ServiceHelper.PublicInstancePropertiesEqual<DocumentCashCollections>(self, isCash, ServiceHelper.getIgnorelist());
-        //                ServiceHelper.AddApplicationLog("Office", "Cash", "Update", isCash.ID.ToString(), "Cash", "Index", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), authentication.ActionEmployee.FullName, ServiceHelper.GetIPAddress(), string.Empty, null);
+        public Result<DocumentCashPayments> AddCashPayment(CashPaymentModel payment)
+        {
+            Result<DocumentCashPayments> result = new Result<DocumentCashPayments>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
 
-        //            }
-        //            catch (Exception ex)
-        //            {
+            if (payment != null)
+            {
+                using (ActionTimeEntities Db = new ActionTimeEntities())
+                {
+                    var cash = ServiceHelper.GetCash(payment.LocationID, payment.Currency);
 
-        //                result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki kasa tahsilatı güncellenemedi : {ex.Message}";
-        //                ServiceHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(ServiceHelper.GetTimeZone(collection.LocationID)), authentication.ActionEmployee.FullName, ServiceHelper.GetIPAddress(), string.Empty, null);
-        //            }
-        //        }
-        //    }
+                    try
+                    {
+                        var exchange = ServiceHelper.GetExchange(payment.DocumentDate);
 
-        //    return result;
-        //}
+                        DocumentCashPayments cashPayment = new DocumentCashPayments();
 
-        //public Result<DocumentCashCollections> DeleteCashCollection(Guid? id, AuthenticationModel authentication)
-        //{
-        //    Result<DocumentCashCollections> result = new Result<DocumentCashCollections>()
-        //    {
-        //        IsSuccess = false,
-        //        Message = string.Empty,
-        //        Data = null
-        //    };
+                        cashPayment.ActionTypeID = payment.ActionTypeID;
+                        cashPayment.ActionTypeName = payment.ActionTypeName;
+                        cashPayment.Amount = payment.Amount;
+                        cashPayment.CashID = cash.ID;
+                        cashPayment.Currency = payment.Currency;
+                        cashPayment.Date = payment.DocumentDate;
+                        cashPayment.Description = payment.Description;
+                        cashPayment.DocumentNumber = ServiceHelper.GetDocumentNumber(_company.ID, "CPY");
+                        cashPayment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA : payment.Currency == "EUR" ? exchange.EURA : 1;
+                        cashPayment.ToEmployeeID = payment.ToEmployeeID;
+                        cashPayment.ToCustomerID = payment.ToCustomerID;
+                        cashPayment.IsActive = true;
+                        cashPayment.LocationID = payment.LocationID;
+                        cashPayment.OurCompanyID = _company.ID;
+                        cashPayment.RecordDate =payment.ProcessDate;
+                        cashPayment.RecordEmployeeID = _employee.ID;
+                        cashPayment.RecordIP = _ip;
+                        cashPayment.SystemAmount = _company.Currency == payment.Currency ? payment.Amount : payment.Amount * cashPayment.ExchangeRate;
+                        cashPayment.SystemCurrency = _company.Currency;
+                        cashPayment.EnvironmentID = payment.EnvironmentID;
+                        cashPayment.ReferenceID = payment.ReferanceID;
+                        cashPayment.UID = Guid.NewGuid();
 
-        //    if (id != null)
-        //    {
-        //        using (ActionTimeEntities Db = new ActionTimeEntities())
-        //        {
-        //            var isCash = Db.DocumentCashCollections.FirstOrDefault(x => x.UID == id);
-        //            if (isCash != null)
-        //            {
-        //                try
-        //                {
-        //                    var exchange = ServiceHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+                        Db.DocumentCashPayments.Add(cashPayment);
+                        Db.SaveChanges();
 
-        //                    isCash.IsActive = false;
-        //                    isCash.UpdateDate = DateTime.UtcNow.AddHours(ServiceHelper.GetTimeZone(isCash.LocationID ?? 3));
-        //                    isCash.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
-        //                    isCash.UpdateIP = ServiceHelper.GetIPAddress();
+                        ServiceHelper.AddCashAction(cashPayment.CashID, cashPayment.LocationID, null, cashPayment.ActionTypeID, cashPayment.Date, cashPayment.ActionTypeName, cashPayment.ID, cashPayment.Date, cashPayment.DocumentNumber, cashPayment.Description, -1, 0, cashPayment.Amount, cashPayment.Currency, null, null, cashPayment.RecordEmployeeID, cashPayment.RecordDate, cashPayment.UID.Value);
 
-        //                    Db.SaveChanges();
+                        result.IsSuccess = true;
+                        result.Message = $"{cashPayment.Date?.ToShortDateString()} tarihli { cashPayment.Amount } {cashPayment.Currency} tutarındaki kasa ödemesi başarı ile eklendi";
 
-        //                    //Cari hesap hareketleri temizlenir.
+                        ServiceHelper.AddApplicationLog("Location", "Cash", "Insert", cashPayment.ID.ToString(), "Cash", "CashPayment", null, true, $"{result.Message}", string.Empty, payment.ProcessDate, _employee.FullName, _ip, string.Empty, cashPayment);
 
-        //                    Db.RemoveAllAccountActions(isCash.ID, isCash.UID);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"{payment.Amount} {payment.Currency} tutarındaki kasa ödemesi eklenemedi : {ex.Message}";
+                        ServiceHelper.AddApplicationLog("Location", "Cash", "Insert", "-1", "Cash", "CashPayment", null, false, $"{result.Message}", string.Empty, payment.ProcessDate, _employee.FullName, _ip, string.Empty, null);
+                    }
 
-        //                    //ServiceHelper.AddCashAction(isCash.CashID, isCash.LocationID, null, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, -1 * isCash.Amount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
+                }
+            }
 
-        //                    result.IsSuccess = true;
-        //                    result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki kasa tahsilatı başarı ile iptal edildi";
+            return result;
+        }
 
-        //                    ServiceHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(ServiceHelper.GetTimeZone(isCash.LocationID ?? 3)), authentication.ActionEmployee.FullName, ServiceHelper.GetIPAddress(), string.Empty, null);
+        public Result<DocumentCashPayments> UpdateCashPayment(CashPaymentModel payment)
+        {
+            Result<DocumentCashPayments> result = new Result<DocumentCashPayments>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
 
-        //                }
-        //                catch (Exception ex)
-        //                {
-        //                    result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki kasa tahsilatı iptal edilemedi : {ex.Message}";
-        //                    ServiceHelper.AddApplicationLog("Office", "Cash", "Remove", "-1", "Cash", "Index", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(ServiceHelper.GetTimeZone(isCash.LocationID ?? 3)), authentication.ActionEmployee.FullName, ServiceHelper.GetIPAddress(), string.Empty, null);
-        //                }
-        //            }
-        //        }
-        //    }
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var cashPayment = Db.DocumentCashPayments.FirstOrDefault(x => x.UID == payment.UID);
 
-        //    return result;
-        //}
+                if (cashPayment != null)
+                {
+                    try
+                    {
+                        var cash = ServiceHelper.GetCash(payment.LocationID, payment.Currency);
+                        var exchange = ServiceHelper.GetExchange(payment.DocumentDate);
+
+                        DocumentCashPayments self = new DocumentCashPayments()
+                        {
+                            ActionTypeID = cashPayment.ActionTypeID,
+                            ActionTypeName = cashPayment.ActionTypeName,
+                            Amount = cashPayment.Amount,
+                            CashID = cashPayment.CashID,
+                            Currency = cashPayment.Currency,
+                            Date = cashPayment.Date,
+                            Description = cashPayment.Description,
+                            DocumentNumber = cashPayment.DocumentNumber,
+                            ExchangeRate = cashPayment.ExchangeRate,
+                            ID = cashPayment.ID,
+                            IsActive = cashPayment.IsActive,
+                            LocationID = cashPayment.LocationID,
+                            OurCompanyID = cashPayment.OurCompanyID,
+                            RecordDate = cashPayment.RecordDate,
+                            RecordEmployeeID = cashPayment.RecordEmployeeID,
+                            RecordIP = cashPayment.RecordIP,
+                            ReferenceID = cashPayment.ReferenceID,
+                            SystemAmount = cashPayment.SystemAmount,
+                            SystemCurrency = cashPayment.SystemCurrency,
+                            UpdateDate = cashPayment.UpdateDate,
+                            UpdateEmployee = cashPayment.UpdateEmployee,
+                            UpdateIP = cashPayment.UpdateIP,
+                            EnvironmentID = cashPayment.EnvironmentID,
+                            ResultID = cashPayment.ResultID,
+                            ToCustomerID = cashPayment.ToCustomerID,
+                            ToEmployeeID = cashPayment.ToEmployeeID,
+                            UID = cashPayment.UID
+                        };
+
+                        cashPayment.LocationID = payment.LocationID;
+                        cashPayment.CashID = cash.ID;
+                        cashPayment.Date = payment.DocumentDate;
+                        cashPayment.Amount = payment.Amount;
+                        cashPayment.Currency = payment.Currency;
+                        cashPayment.Description = payment.Description;
+                        cashPayment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA : payment.Currency == "EUR" ? exchange.EURA : 1;
+                        cashPayment.UpdateDate = payment.ProcessDate;
+                        cashPayment.UpdateEmployee = _employee.ID;
+                        cashPayment.UpdateIP = _ip;
+                        cashPayment.SystemAmount = _company.Currency == payment.Currency ? payment.Amount : payment.Amount * cashPayment.ExchangeRate;
+                        cashPayment.SystemCurrency = _company.Currency;
+                        cashPayment.IsActive = payment.IsActive;
+
+                        Db.SaveChanges();
+
+                        Db.RemoveAllAccountActions(cashPayment.ID, cashPayment.UID);
+
+                        if (cashPayment.IsActive == true)
+                        {
+                            ServiceHelper.AddCashAction(cashPayment.CashID, cashPayment.LocationID, _employee.ID, cashPayment.ActionTypeID, cashPayment.Date, cashPayment.ActionTypeName, cashPayment.ID, cashPayment.Date, cashPayment.DocumentNumber, cashPayment.Description, -1, 0, cashPayment.Amount, cashPayment.Currency, null, null, cashPayment.RecordEmployeeID, cashPayment.RecordDate, cashPayment.UID.Value);
+                        }
+
+                        result.IsSuccess = true;
+                        result.Message = $"{cashPayment.ID} ID li {cashPayment.Date} tarihli {cashPayment.Amount} {cashPayment.Currency} tutarındaki kasa ödemesi başarı ile güncellendi";
+
+
+                        var isequal = ServiceHelper.PublicInstancePropertiesEqual<DocumentCashPayments>(self, cashPayment, ServiceHelper.getIgnorelist());
+                        ServiceHelper.AddApplicationLog("Location", "Cash", "Update", cashPayment.ID.ToString(), "Cash", "CashPayment", isequal, true, $"{result.Message}", string.Empty, payment.ProcessDate, _employee.FullName, _ip, string.Empty, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"{payment.Amount} {payment.Currency} tutarındaki kasa ödemesi güncellenemedi : {ex.Message}";
+                        ServiceHelper.AddApplicationLog("Location", "Cash", "Update", "-1", "Cash", "CashPayment", null, false, $"{result.Message}", string.Empty, payment.ProcessDate, _employee.FullName, _ip, string.Empty, null);
+                    }
+
+
+                }
+            }
+
+            return result;
+        }
+
+        public Result<DocumentCashPayments> DeleteCashPayment(Guid? id)
+        {
+            Result<DocumentCashPayments> result = new Result<DocumentCashPayments>()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                Data = null
+            };
+
+            if (id != null)
+            {
+                using (ActionTimeEntities Db = new ActionTimeEntities())
+                {
+                    var isCash = Db.DocumentCashPayments.FirstOrDefault(x => x.UID == id);
+
+                    if (isCash != null)
+                    {
+                        DateTime processDate = Db.Location.FirstOrDefault(x => x.LocationID == isCash.LocationID)?.LocalDateTime ?? DateTime.UtcNow;
+
+                        try
+                        {
+                            var exchange = ServiceHelper.GetExchange(Convert.ToDateTime(isCash.Date));
+
+
+
+                            isCash.IsActive = false;
+                            isCash.UpdateDate = processDate;
+                            isCash.UpdateEmployee = _employee.ID;
+                            isCash.UpdateIP = _ip;
+
+                            Db.SaveChanges();
+
+                            //Cari hesap hareketleri temizlenir.
+
+                            Db.RemoveAllAccountActions(isCash.ID, isCash.UID);
+
+                            result.IsSuccess = true;
+                            result.Message = $"{isCash.ID} ID li {isCash.Date?.ToShortDateString()} tarihli {isCash.Amount} {isCash.Currency} tutarındaki kasa ödemesi başarı ile iptal edildi";
+
+                            ServiceHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "CashPayment", null, true, $"{result.Message}", string.Empty, processDate, _employee.FullName, _ip, string.Empty, null);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki kasa ödemesi iptal edilemedi : {ex.Message}";
+                            ServiceHelper.AddApplicationLog("Office", "Cash", "Remove", "-1", "Cash", "CashPayment", null, false, $"{result.Message}", string.Empty, processDate, _employee.FullName, _ip, string.Empty, null);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
+
+
 
 
 
@@ -1068,230 +1278,6 @@ namespace ActionForce.Service
 
 
 
-        //public Result<DocumentCashPayments> AddCashPayment(CashPayment payment, AuthenticationModel authentication)
-        //{
-        //    Result<DocumentCashPayments> result = new Result<DocumentCashPayments>()
-        //    {
-        //        IsSuccess = false,
-        //        Message = string.Empty,
-        //        Data = null
-        //    };
-
-        //    if (payment != null && authentication != null)
-        //    {
-        //        using (ActionTimeEntities Db = new ActionTimeEntities())
-        //        {
-        //            try
-        //            {
-        //                var balance = Db.GetCashBalance(payment.LocationID, payment.CashID, payment.DocumentDate).FirstOrDefault() ?? 0;
-
-        //                if (balance >= payment.Amount)
-        //                {
-        //                    DocumentCashPayments cashPayment = new DocumentCashPayments();
-
-        //                    cashPayment.ActionTypeID = payment.ActinTypeID;
-        //                    cashPayment.ActionTypeName = payment.ActionTypeName;
-        //                    cashPayment.Amount = payment.Amount;
-        //                    cashPayment.CashID = payment.CashID;
-        //                    cashPayment.Currency = payment.Currency;
-        //                    cashPayment.Date = payment.DocumentDate;
-        //                    cashPayment.Description = payment.Description;
-        //                    cashPayment.DocumentNumber = ServiceHelper.GetDocumentNumber(payment.OurCompanyID, "CPY");
-        //                    cashPayment.ExchangeRate = payment.ExchangeRate;
-        //                    cashPayment.ToEmployeeID = payment.ToEmployeeID;
-        //                    cashPayment.ToCustomerID = payment.ToCustomerID;
-        //                    cashPayment.IsActive = true;
-        //                    cashPayment.LocationID = payment.LocationID;
-        //                    cashPayment.OurCompanyID = payment.OurCompanyID;
-        //                    cashPayment.RecordDate = DateTime.UtcNow.AddHours(payment.TimeZone.Value);
-        //                    cashPayment.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
-        //                    cashPayment.RecordIP = ServiceHelper.GetIPAddress();
-        //                    cashPayment.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == payment.Currency ? payment.Amount : payment.Amount * payment.ExchangeRate;
-        //                    cashPayment.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
-        //                    cashPayment.ReferenceID = payment.ReferanceID;
-        //                    cashPayment.EnvironmentID = 2;
-        //                    cashPayment.UID = Guid.NewGuid();
-
-
-
-        //                    Db.DocumentCashPayments.Add(cashPayment);
-        //                    Db.SaveChanges();
-
-        //                    // cari hesap işlemesi
-        //                    ServiceHelper.AddCashAction(cashPayment.CashID, cashPayment.LocationID, null, cashPayment.ActionTypeID, cashPayment.Date, cashPayment.ActionTypeName, cashPayment.ID, cashPayment.Date, cashPayment.DocumentNumber, cashPayment.Description, -1, 0, cashPayment.Amount, cashPayment.Currency, null, null, cashPayment.RecordEmployeeID, cashPayment.RecordDate, cashPayment.UID.Value);
-
-
-
-        //                    result.IsSuccess = true;
-        //                    result.Message = "Kasa Ödemesi başarı ile eklendi";
-
-        //                    // log atılır
-        //                    ServiceHelper.AddApplicationLog("Office", "Cash", "Insert", cashPayment.ID.ToString(), "Cash", "CashPayment", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(payment.TimeZone.Value), authentication.ActionEmployee.FullName, ServiceHelper.GetIPAddress(), string.Empty, cashPayment);
-        //                }
-        //                else
-        //                {
-        //                    result.Message = $"Kasa bakiyesi { payment.Amount } { payment.Currency } tutar için yeterli değildir. Kullanılabilir bakiye { balance } { payment.Currency } tutardır.";
-        //                    ServiceHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "CashPayment", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(payment.TimeZone.Value), authentication.ActionEmployee.FullName, ServiceHelper.GetIPAddress(), string.Empty, null);
-        //                }
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                result.Message = $"Kasa Ödemesi eklenemedi : {ex.Message}";
-        //                ServiceHelper.AddApplicationLog("Office", "Cash", "Insert", "-1", "Cash", "CashPayment", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(payment.TimeZone.Value), authentication.ActionEmployee.FullName, ServiceHelper.GetIPAddress(), string.Empty, null);
-        //            }
-
-        //        }
-        //    }
-
-        //    return result;
-        //}
-
-        //public Result<DocumentCashPayments> EditCashPayment(CashPayment payment, AuthenticationModel authentication)
-        //{
-        //    Result<DocumentCashPayments> result = new Result<DocumentCashPayments>()
-        //    {
-        //        IsSuccess = false,
-        //        Message = string.Empty,
-        //        Data = null
-        //    };
-
-        //    using (ActionTimeEntities Db = new ActionTimeEntities())
-        //    {
-        //        var isPayment = Db.DocumentCashPayments.FirstOrDefault(x => x.UID == payment.UID);
-
-        //        if (isPayment != null)
-        //        {
-        //            try
-        //            {
-        //                var cash = ServiceHelper.GetCash(payment.LocationID, payment.Currency);
-        //                var location = Db.Location.FirstOrDefault(x => x.LocationID == payment.LocationID);
-        //                var locId = isPayment.LocationID;
-        //                var exchange = ServiceHelper.GetExchange(payment.DocumentDate.Value);
-
-        //                DocumentCashPayments self = new DocumentCashPayments()
-        //                {
-        //                    ActionTypeID = isPayment.ActionTypeID,
-        //                    ActionTypeName = isPayment.ActionTypeName,
-        //                    Amount = isPayment.Amount,
-        //                    CashID = isPayment.CashID,
-        //                    Currency = isPayment.Currency,
-        //                    Date = isPayment.Date,
-        //                    Description = isPayment.Description,
-        //                    DocumentNumber = isPayment.DocumentNumber,
-        //                    ExchangeRate = isPayment.ExchangeRate,
-        //                    ID = isPayment.ID,
-        //                    IsActive = isPayment.IsActive,
-        //                    LocationID = isPayment.LocationID,
-        //                    OurCompanyID = isPayment.OurCompanyID,
-        //                    RecordDate = isPayment.RecordDate,
-        //                    RecordEmployeeID = isPayment.RecordEmployeeID,
-        //                    RecordIP = isPayment.RecordIP,
-        //                    ReferenceID = isPayment.ReferenceID,
-        //                    SystemAmount = isPayment.SystemAmount,
-        //                    SystemCurrency = isPayment.SystemCurrency,
-        //                    UpdateDate = isPayment.UpdateDate,
-        //                    UpdateEmployee = isPayment.UpdateEmployee,
-        //                    UpdateIP = isPayment.UpdateIP,
-        //                    EnvironmentID = isPayment.EnvironmentID
-        //                };
-        //                isPayment.ReferenceID = payment.ReferanceID;
-        //                isPayment.LocationID = payment.LocationID;
-        //                isPayment.CashID = cash.ID;
-        //                isPayment.Date = payment.DocumentDate;
-        //                isPayment.ToEmployeeID = payment.ToEmployeeID ?? (int?)null;
-        //                isPayment.ToCustomerID = payment.ToCustomerID ?? (int?)null;
-        //                isPayment.Amount = payment.Amount;
-        //                isPayment.Currency = payment.Currency;
-        //                isPayment.Description = payment.Description;
-        //                isPayment.ExchangeRate = payment.ExchangeRate != null ? payment.ExchangeRate : self.ExchangeRate;
-        //                isPayment.UpdateDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
-        //                isPayment.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
-        //                isPayment.UpdateIP = ServiceHelper.GetIPAddress();
-        //                isPayment.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == payment.Currency ? payment.Amount : payment.Amount * isPayment.ExchangeRate;
-        //                isPayment.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
-        //                isPayment.IsActive = payment.IsActive;
-
-        //                Db.SaveChanges();
-
-        //                //Cari hesap hareketleri temizlenir.
-
-        //                Db.RemoveAllAccountActions(isPayment.ID, isPayment.UID);
-
-        //                // Aktif ise Cari hesap kaydı eklenir.
-
-        //                if (isPayment.IsActive == true)
-        //                {
-        //                    ServiceHelper.AddCashAction(isPayment.CashID, isPayment.LocationID, authentication.ActionEmployee.EmployeeID, isPayment.ActionTypeID, isPayment.Date, isPayment.ActionTypeName, isPayment.ID, isPayment.Date, isPayment.DocumentNumber, isPayment.Description, -1, 0, isPayment.Amount, isPayment.Currency, null, null, isPayment.RecordEmployeeID, isPayment.RecordDate, isPayment.UID.Value);
-        //                }
-
-        //                result.IsSuccess = true;
-        //                result.Message = $"{isPayment.ID} ID li {isPayment.Date} tarihli {isPayment.Amount} {isPayment.Currency} tutarındaki kasa ödemesi başarı ile güncellendi";
-
-
-        //                var isequal = ServiceHelper.PublicInstancePropertiesEqual<DocumentCashPayments>(self, isPayment, ServiceHelper.getIgnorelist());
-        //                ServiceHelper.AddApplicationLog("Office", "Cash", "Update", isPayment.ID.ToString(), "Cash", "CashPayment", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(payment.TimeZone.Value), authentication.ActionEmployee.FullName, ServiceHelper.GetIPAddress(), string.Empty, null);
-        //            }
-        //            catch (Exception ex)
-        //            {
-        //                result.Message = $"{payment.Amount} {payment.Currency} tutarındaki kasa ödemesi güncellenemedi : {ex.Message}";
-        //                ServiceHelper.AddApplicationLog("Office", "Cash", "Update", "-1", "Cash", "CashPayment", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(payment.TimeZone.Value), authentication.ActionEmployee.FullName, ServiceHelper.GetIPAddress(), string.Empty, null);
-        //            }
-
-
-        //        }
-        //    }
-
-        //    return result;
-        //}
-
-        //public Result<DocumentCashPayments> DeleteCashPayment(Guid? id, AuthenticationModel authentication)
-        //{
-        //    Result<DocumentCashPayments> result = new Result<DocumentCashPayments>()
-        //    {
-        //        IsSuccess = false,
-        //        Message = string.Empty,
-        //        Data = null
-        //    };
-
-        //    if (id != null)
-        //    {
-        //        using (ActionTimeEntities Db = new ActionTimeEntities())
-        //        {
-        //            var isCash = Db.DocumentCashPayments.FirstOrDefault(x => x.UID == id);
-        //            if (isCash != null)
-        //            {
-        //                try
-        //                {
-        //                    var exchange = ServiceHelper.GetExchange(Convert.ToDateTime(isCash.Date));
-
-        //                    isCash.IsActive = false;
-        //                    isCash.UpdateDate = DateTime.UtcNow.AddHours(ServiceHelper.GetTimeZone(isCash.LocationID ?? 3));
-        //                    isCash.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
-        //                    isCash.UpdateIP = ServiceHelper.GetIPAddress();
-
-        //                    Db.SaveChanges();
-
-        //                    //Cari hesap hareketleri temizlenir.
-
-        //                    Db.RemoveAllAccountActions(isCash.ID, isCash.UID);
-
-        //                    result.IsSuccess = true;
-        //                    result.Message = $"{isCash.ID} ID li {isCash.Date} tarihli {isCash.Amount} {isCash.Currency} tutarındaki kasa ödemesi başarı ile iptal edildi";
-
-        //                    ServiceHelper.AddApplicationLog("Office", "Cash", "Remove", isCash.ID.ToString(), "Cash", "CashPayment", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(ServiceHelper.GetTimeZone(isCash.LocationID ?? 3)), authentication.ActionEmployee.FullName, ServiceHelper.GetIPAddress(), string.Empty, null);
-
-        //                }
-        //                catch (Exception ex)
-        //                {
-        //                    result.Message = $"{isCash.Amount} {isCash.Currency} tutarındaki kasa ödemesi iptal edilemedi : {ex.Message}";
-        //                    ServiceHelper.AddApplicationLog("Office", "Cash", "Remove", "-1", "Cash", "CashPayment", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(ServiceHelper.GetTimeZone(isCash.LocationID ?? 3)), authentication.ActionEmployee.FullName, ServiceHelper.GetIPAddress(), string.Empty, null);
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    return result;
-        //}
 
 
 

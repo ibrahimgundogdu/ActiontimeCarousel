@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="Models\AuditTrail.cs" />
     <Compile Include="Models\CashCollectionModel.cs" />
+    <Compile Include="Models\CashPaymentModel.cs" />
     <Compile Include="Models\ProcessCompany.cs" />
     <Compile Include="Models\ProcessEmployee.cs" />
     <Compile Include="DocumentManager.cs" />

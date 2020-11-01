@@ -5,7 +5,7 @@ using System.Web;
 
 namespace ActionForce.Location
 {
-    public class FormCashCollect
+    public class FormCashPayment
     {
         public Guid? UID { get; set; }
         public string Amount { get; set; }

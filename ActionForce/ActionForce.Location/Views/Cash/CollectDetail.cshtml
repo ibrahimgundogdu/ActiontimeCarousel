@@ -1,0 +1,144 @@
+﻿@model CashControlModel
+@{
+    ViewBag.Title = "Kasa Tahsilatı";
+}
+
+<div class="flex fixed-content">
+
+    <div class="flex" id="content-body">
+        <div class="d-flex flex-column flex" data-plugin="user">
+            @*<div class="p-3">
+                <div class="toolbar">
+                    <a href="/" class="btn btn-block btn-white" title="Cash">
+                        <i class="text-info font-weight-bold" data-feather="hard-drive"></i> &nbsp; &nbsp; Kasa
+                    </a>
+                    <a href="javascript:;" class="btn btn-white" title="Add Cash Collect" data-toggle="modal" data-target="#modalcashcollect">
+                        <i class="text-success font-weight-bold" data-feather="plus"></i>
+                    </a>
+                </div>
+            </div>*@
+
+            <div class="scroll-y mx-3 mb-3">
+                <div class="card">
+                    <div class="card-header pl-3 pr-2">
+                        <div class="d-flex">
+                            <strong>Kasa Nakit Tahsilat Bilgisi</strong>
+                            <span class="flex"></span>
+                            <div>
+                                <a href="/Cash/Collect" class="font-weight-bold">
+                                    <i data-feather="grid"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body m-0 p-2">
+                        @using (Html.BeginForm("UpdateCollect", "Cash", FormMethod.Post, new { role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <div class="form-group row mb-1">
+                                <label class="col-4 col-form-label">Numarası</label>
+                                <div class="col-8">
+                                    <label class="form-control font-weight-bold mb-0 bg-body"> @(Model.CashCollection.DocumentNumber)</label>
+                                    <input id="Hidden1" name="UID" type="hidden" value="@(Model.CashCollection.UID)" />
+                                </div>
+                            </div>
+                            <div class="form-group row mb-1">
+                                <label class="col-4 col-form-label">Tarihi</label>
+                                <div class="col-8">
+                                    <input id="event-start-time" name="DocumentDate" type="date" class="form-control font-weight-bold" placeholder="Date" value="@(Model.CashCollection.Date?.ToString("yyyy-MM-dd"))" required>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-1">
+                                <label class="col-4 col-form-label">Tutar</label>
+                                <div class="col-5 pr-1">
+                                    <input id="Amount" name="Amount" type="text" class="form-control font-weight-bold text-right money" value="@(Model.CashCollection?.Amount?.ToString("N2"))" required>
+                                </div>
+                                <div class="col-3 pl-1">
+                                    <select class="custom-select" name="Currency">
+                                        @foreach (var item in Model.Currencies)
+                                        {
+                                            <option value="@(item.Code)" @(item.Code == Model.CashCollection.Currency ? "selected" : "")>@(item.Sign)</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-4 col-form-label">Açıklama</label>
+                                <div class="col-8">
+                                    <textarea id="event-desc" name="Description" class="form-control" rows="3">@(Model.CashCollection.Description)</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-1">
+                                <label class="col-4 col-form-label">Aktif ?</label>
+                                <div class="col-8">
+                                    <label class="form-check-label font-weight-bold pl-4 pt-1">
+                                        <input class="form-check-input" type="checkbox" name="IsActive" value="1" @(Model.CashCollection.IsActive == true ? "checked" : "")> Aktif
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-12">
+                                    @if (Model.IsUpdatible)
+                                    {
+                                        <button type="submit" id="btn-save" class="btn btn-block bg-primary text-white btn-rounded">Save</button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" id="btn-save" class="btn btn-block bg-secondary text-white btn-rounded">Readonly</button>
+                                    }
+                                </div>
+                            </div>
+                            <div class="form-group row mb-1">
+                                <div class="col-12 p-0 text-center">
+                                    <small class="text-muted"> @($"{Model.EmployeeRecorded} - {Model.CashCollection.RecordDate}")</small>
+                                </div>
+                            </div>
+                            <div class="form-group row mb-1">
+                                <div class="col-12 p-0 text-center">
+                                    <small class="text-muted"> @($"{Model.EmployeeUpdated} - {Model.CashCollection.UpdateDate}")</small>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+
+@section scripts {
+
+    @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
+    {
+        <script>
+                $(function () {
+                    notie.setOptions({
+                        alertTime: 5
+                    })
+                    notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
+                    noticed = true;
+                });
+        </script>
+    }
+
+
+    <script type="text/javascript">
+
+        $(function () {
+            $('.shiftbegintime').mask('00:00');
+            $('.hour').mask('00:00');
+            $('.hourfull').mask('00:00:00');
+            $('.shiftdate').mask('0000-00-00');
+            $('.postcode').mask('00000-000');
+            $('.money').mask("#.##0,00", { reverse: true });
+            $('.money4').mask("#.##0,0000", { reverse: true });
+        });
+    </script>
+}
+
+
