@@ -218,6 +218,9 @@
     <Compile Include="DocumentBankTransfer.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="DocumentBuyExchange.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="DocumentCashCollections.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

@@ -592,6 +592,7 @@
     <Compile Include="Models\FormModels\FormCashCollect.cs" />
     <Compile Include="Models\FormModels\FormCashExpense.cs" />
     <Compile Include="Models\FormModels\FormCashPayment.cs" />
+    <Compile Include="Models\FormModels\FormExchangeSell.cs" />
     <Compile Include="Models\FormModels\FormOrder.cs" />
     <Compile Include="Models\FormModels\FormSaleRow.cs" />
     <Compile Include="Models\LocationHelper.cs" />
@@ -828,6 +829,8 @@
     <Content Include="Views\Cash\PaymentDetail.cshtml" />
     <Content Include="Views\Cash\_PartialCashSummary.cshtml" />
     <Content Include="Views\Cash\Expense.cshtml" />
+    <Content Include="Views\Cash\ExpenseDetail.cshtml" />
+    <Content Include="Views\Cash\ExchangeSell.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -837,6 +840,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Documents\" />
     <Folder Include="libs\plyrist\dist\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Employee\" />

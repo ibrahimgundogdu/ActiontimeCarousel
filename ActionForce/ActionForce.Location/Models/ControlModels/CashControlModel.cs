@@ -31,6 +31,10 @@ namespace ActionForce.Location
         public DateTime? ReceiptDate { get; set; }
 
 
+        public IEnumerable<DocumentSaleExchange> CashSaleExchanges { get; set; }
+        public DocumentSaleExchange CashSaleExchange { get; set; }
 
+        public IEnumerable<DocumentBuyExchange> CashBuyExchanges { get; set; }
+        public DocumentBuyExchange CashBuyExchange { get; set; }
     }
 }

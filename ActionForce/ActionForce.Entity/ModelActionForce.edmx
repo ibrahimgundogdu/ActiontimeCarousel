@@ -928,6 +928,42 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Property Name="EnvironmentID" Type="int" />
           <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
+        <EntityType Name="DocumentBuyExchange">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="Date" Type="date" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployee" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="FromCashID" Type="int" />
+          <Property Name="ToCashID" Type="int" />
+          <Property Name="SaleExchangeRate" Type="float" />
+          <Property Name="ExchangeRate" Type="float" />
+          <Property Name="ToAmount" Type="float" />
+          <Property Name="ToCurrency" Type="nvarchar" MaxLength="4" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="ReferenceID" Type="bigint" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
+          <Property Name="ActionTypeID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="SlipDate" Type="datetime" />
+          <Property Name="SlipNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="SlipPath" Type="nvarchar" MaxLength="50" />
+          <Property Name="SlipDocument" Type="nvarchar" MaxLength="50" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
+        </EntityType>
         <EntityType Name="DocumentCashCollections">
           <Key>
             <PropertyRef Name="ID" />
@@ -6692,6 +6728,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DayResultItems" EntityType="Self.DayResultItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Department" EntityType="Self.Department" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentBankTransfer" EntityType="Self.DocumentBankTransfer" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentBuyExchange" EntityType="Self.DocumentBuyExchange" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentCashCollections" EntityType="Self.DocumentCashCollections" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentCashExpense" EntityType="Self.DocumentCashExpense" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentCashOpen" EntityType="Self.DocumentCashOpen" Schema="dbo" store:Type="Tables" />
@@ -9865,6 +9902,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="Description" Mode="In" Type="String" />
             <Parameter Name="RecordIP" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="DocumentBuyExchange" EntityType="db293_ActionTimeDbModel.DocumentBuyExchange" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -16539,6 +16577,42 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="PrePaid" Type="Double" />
           <Property Name="TicketTripID" Type="Int64" />
         </EntityType>
+        <EntityType Name="DocumentBuyExchange">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FromCashID" Type="Int32" />
+          <Property Name="ToCashID" Type="Int32" />
+          <Property Name="SaleExchangeRate" Type="Double" />
+          <Property Name="ExchangeRate" Type="Double" />
+          <Property Name="ToAmount" Type="Double" />
+          <Property Name="ToCurrency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="ReferenceID" Type="Int64" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="SlipDate" Type="DateTime" Precision="3" />
+          <Property Name="SlipNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SlipPath" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SlipDocument" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -22910,6 +22984,43 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetLocationScheduledDate" FunctionName="db293_ActionTimeDbModel.Store.GetLocationScheduledDate" />
           <FunctionImportMapping FunctionImportName="GetDayResultID" FunctionName="db293_ActionTimeDbModel.Store.GetDayResultID" />
+          <EntitySetMapping Name="DocumentBuyExchange">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentBuyExchange">
+              <MappingFragment StoreEntitySet="DocumentBuyExchange">
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="SlipDocument" ColumnName="SlipDocument" />
+                <ScalarProperty Name="SlipPath" ColumnName="SlipPath" />
+                <ScalarProperty Name="SlipNumber" ColumnName="SlipNumber" />
+                <ScalarProperty Name="SlipDate" ColumnName="SlipDate" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ToCurrency" ColumnName="ToCurrency" />
+                <ScalarProperty Name="ToAmount" ColumnName="ToAmount" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="SaleExchangeRate" ColumnName="SaleExchangeRate" />
+                <ScalarProperty Name="ToCashID" ColumnName="ToCashID" />
+                <ScalarProperty Name="FromCashID" ColumnName="FromCashID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -37,7 +37,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="card p-3 mb-1">
-                                        @foreach (var price in Model.PriceList)
+                                        @foreach (var price in Model.PriceList.OrderBy(x=> x.Unit))
                                         {
                                             <button class="btn btn-info btn-md btn-block btn-rounded" data-toggle="modal" data-target="#modalcash" onclick="GetTicketCashModal(@(price.ID))">@($"{price.Unit} Dk.")  &nbsp; &nbsp;   <span class="font-weight-bold">@(price.Price?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency) </span>  &nbsp; &nbsp; Cash</button>
                                         }
@@ -45,7 +45,7 @@
                                 </div>
                                 <div class="col-md-6">
                                     <div class="card p-3 mb-1">
-                                        @foreach (var price in Model.PriceList)
+                                        @foreach (var price in Model.PriceList.OrderBy(x => x.Unit))
                                         {
                                             <button class="btn btn-warning btn-md btn-block btn-rounded" data-toggle="modal" data-target="#modalcredit" onclick="GetTicketCreditModal(@(price.ID))">@($"{price.Unit} Dk.") &nbsp; &nbsp;   <span class="font-weight-bold">  @(price.Price?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency) </span>  &nbsp; &nbsp; Credit</button>
                                         }

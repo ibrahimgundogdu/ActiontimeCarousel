@@ -119,7 +119,7 @@ namespace ActionForce.Office.Controllers
                     Active = x.Active ?? false,
                     PositionName = x.PositionName
                 }).ToList();
-                model.LocationPriceLastList = Db.GetLocationPrice(model.LocationModel.LocationID,model.LocationModel.LocalDateTime).ToList();
+                model.LocationPriceLastList = Db.GetLocationPrice(model.LocationModel.LocationID,model.LocationModel.LocalDateTime).OrderBy(x=> x.Unit).ToList();
                 #region Schedule
                 model.ScheduleStart = model.LocationModel.ScheduleStart?.ToShortTimeString();
                 model.ScheduleFinish = model.LocationModel.ScheduleEnd?.ToShortTimeString();

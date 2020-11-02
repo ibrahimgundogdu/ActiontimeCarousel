@@ -8,7 +8,7 @@
     <div class="flex" id="content-body">
         <div class="d-flex flex-column flex" data-plugin="user">
 
-            <div class="scroll-y mx-3 mb-3">
+            <div class="scroll-y mx-2 mb-2">
                 <div class="card">
                     <div class="card-header pl-3 pr-2">
                         <div class="d-flex">
@@ -88,7 +88,7 @@
                     @Html.AntiForgeryToken()
 
                     <div class="form-group row mb-1">
-                        <label class="col-4 col-form-label">Masraf</label>
+                        <label class="col-4 col-form-label pr-0">Masraf Türü</label>
                         <div class="col-8">
                             <select class="custom-select" name="TypeID">
                                 @foreach (var item in Model.ExpenseTypes)
@@ -123,14 +123,14 @@
                     </div>
 
                     <div class="form-group row mb-1">
-                        <label class="col-4 col-form-label">Tarihi</label>
+                        <label class="col-4 col-form-label">Fiş Tarihi</label>
                         <div class="col-8">
                             <input id="ReceiptDate" name="ReceiptDate" type="date" class="form-control font-weight-bold" placeholder="Date" value="@(Model.ReceiptDate?.ToString("yyyy-MM-dd"))" required>
                         </div>
                     </div>
 
                     <div class="form-group row mb-1">
-                        <label class="col-4 col-form-label">Saati</label>
+                        <label class="col-4 col-form-label">Fiş Saati</label>
                         <div class="col-8">
                             <input id="ReceiptTime" name="ReceiptTime" type="time" class="form-control font-weight-bold" step="1" placeholder="Time" value="@(Model.ReceiptDate?.ToString("HH\\:mm\\:ss"))" required>
                         </div>
@@ -144,8 +144,7 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-4 col-form-label">Dosya</label>
-                        <div class="col-8">
+                        <div class="col-12">
                             <input id="ReceiptFile" name="ReceiptFile" class="form-control" type="file" style="width:100%;" />
                         </div>
                     </div>
