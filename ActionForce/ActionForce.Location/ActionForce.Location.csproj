@@ -585,6 +585,7 @@
     <Compile Include="Models\DefaultModels\LocationBalance.cs" />
     <Compile Include="Models\DefaultModels\LocationTicketInfo.cs" />
     <Compile Include="Models\DefaultModels\MallMotoColor.cs" />
+    <Compile Include="Models\DefaultModels\SalaryPayment.cs" />
     <Compile Include="Models\DefaultModels\StandartTicket.cs" />
     <Compile Include="Models\DefaultModels\TicketInfo.cs" />
     <Compile Include="Models\DifferentList.cs" />
@@ -594,6 +595,7 @@
     <Compile Include="Models\FormModels\FormCashPayment.cs" />
     <Compile Include="Models\FormModels\FormExchangeSell.cs" />
     <Compile Include="Models\FormModels\FormOrder.cs" />
+    <Compile Include="Models\FormModels\FormSalaryPay.cs" />
     <Compile Include="Models\FormModels\FormSaleRow.cs" />
     <Compile Include="Models\LocationHelper.cs" />
     <Compile Include="Models\LocationModels\LocationStatus.cs" />
@@ -831,6 +833,10 @@
     <Content Include="Views\Cash\Expense.cshtml" />
     <Content Include="Views\Cash\ExpenseDetail.cshtml" />
     <Content Include="Views\Cash\ExchangeSell.cshtml" />
+    <Content Include="Views\Cash\ExchangeSellDetail.cshtml" />
+    <Content Include="Views\Cash\ExchangeBuy.cshtml" />
+    <Content Include="Views\Cash\ExchangeBuyDetail.cshtml" />
+    <Content Include="Views\Cash\SalaryPay.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

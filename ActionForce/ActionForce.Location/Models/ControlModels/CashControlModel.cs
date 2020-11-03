@@ -36,5 +36,12 @@ namespace ActionForce.Location
 
         public IEnumerable<DocumentBuyExchange> CashBuyExchanges { get; set; }
         public DocumentBuyExchange CashBuyExchange { get; set; }
+        public Exchange Exchange { get; set; }
+
+        public IEnumerable<SalaryPayment> SalaryPayments { get; set; }
+        public SalaryPayment SalaryPayment { get; set; }
+        public IEnumerable<Employee> Employees { get; set; }
+
+
     }
 }

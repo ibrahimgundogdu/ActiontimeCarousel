@@ -580,7 +580,7 @@ namespace ActionForce.Location.Controllers
             model.ReceiptDate = documentDate;
             model.Currencies = Db.Currency.ToList();
             model.CashSaleExchanges = Db.DocumentSaleExchange.Where(x => x.LocationID == model.Location.ID && x.Date == documentDate).OrderByDescending(x => x.RecordDate).ToList();
-
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
 
             return View(model);
         }
@@ -599,14 +599,14 @@ namespace ActionForce.Location.Controllers
 
             if (id != null)
             {
-                model.CashExpense = Db.DocumentCashExpense.FirstOrDefault(x => x.UID == id);
+                model.CashSaleExchange = Db.DocumentSaleExchange.FirstOrDefault(x => x.UID == id);
 
-                if (model.CashExpense != null)
+                if (model.CashSaleExchange != null)
                 {
-                    model.EmployeeRecorded = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashExpense.RecordEmployeeID)?.FullName;
-                    model.EmployeeUpdated = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashExpense.UpdateEmployee)?.FullName;
+                    model.EmployeeRecorded = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashSaleExchange.RecordEmployeeID)?.FullName;
+                    model.EmployeeUpdated = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashSaleExchange.UpdateEmployee)?.FullName;
 
-                    if (model.CashExpense.Date == documentDate)
+                    if (model.CashSaleExchange.Date == documentDate)
                     {
                         model.IsUpdatible = true;
                     }
@@ -615,14 +615,13 @@ namespace ActionForce.Location.Controllers
                         model.Result.Message = "Doküman bugüne ait değildir. Merkezden güncellenebilir.";
                         TempData["Result"] = model.Result;
                     }
-
                 }
                 else
                 {
                     model.Result.Message = "Doküman bilgisine ulaşılamadı.";
                     TempData["Result"] = model.Result;
 
-                    return RedirectToAction("Expense");
+                    return RedirectToAction("ExchangeSell");
                 }
             }
             else
@@ -630,11 +629,11 @@ namespace ActionForce.Location.Controllers
                 model.Result.Message = "Doküman bilgisi yok.";
                 TempData["Result"] = model.Result;
 
-                return RedirectToAction("Expense");
+                return RedirectToAction("ExchangeSell");
             }
 
             model.Currencies = Db.Currency.ToList();
-            model.ExpenseTypes = Db.ExpenseType.Where(x => x.IsLocation == true && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
 
             return View(model);
         }
@@ -653,6 +652,7 @@ namespace ActionForce.Location.Controllers
             var documentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
             var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
             var dayResultID = LocationHelper.GetDayResultID(model.Location.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", LocationHelper.GetIPAddress());
+
 
             DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);
             string SlipPath = "/Documents";
@@ -720,59 +720,39 @@ namespace ActionForce.Location.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateCashExchangeSell(FormCashExpense expense)
+        public ActionResult UpdateCashExchangeSell(FormExchangeSell exchange)
         {
             CashControlModel model = new CashControlModel();
 
-            var amount = LocationHelper.GetStringToAmount(expense.Amount);
-            var documentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, expense.DocumentDate);
+            var amount = LocationHelper.GetStringToAmount(exchange.Amount);
+            var toAmount = LocationHelper.GetStringToAmount(exchange.ToAmount);
+            var SaleExchangeRate = LocationHelper.GetStringToAmount(exchange.SaleExchangeRate);
+
             var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
-            var dayResultID = LocationHelper.GetDayResultID(model.Location.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", LocationHelper.GetIPAddress());
-            DateTime slipdate = expense.ReceiptDate.Add(expense.ReceiptTime.TimeOfDay);
 
-
-
-            CashExpenseModel documentModel = new CashExpenseModel()
-            {
-                ActionTypeID = 4,
-                ActionTypeName = "Expense",
-                Amount = amount,
-                Currency = expense.Currency,
-                Description = expense.Description,
-                DocumentDate = documentDate,
-                EnvironmentID = 3,
-                ToCustomerID = model.Authentication.CurrentOurCompany.ID == 1 ? 1 : 2,
-                IsActive = expense.IsActive == 1 ? true : false,
-                LocationID = model.Location.ID,
-                ResultID = dayResultID,
-                UID = expense.UID,
-                ProcessDate = processDate,
-                ExpenseTypeID = expense.TypeID,
-                SlipDate = slipdate,
-                SlipNumber = expense.ReceiptNumber,
-                SlipPath = "/Documents",
-                SlipDocument = string.Empty
-            };
+            DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);
+            string SlipPath = "/Documents";
+            string fileName = string.Empty;
 
             // dosya işlemleri yapılır
-            if (expense.ReceiptFile != null && expense.ReceiptFile.ContentLength > 0)
+            if (exchange.ReceiptFile != null && exchange.ReceiptFile.ContentLength > 0)
             {
-                documentModel.SlipDocument = Guid.NewGuid().ToString() + Path.GetExtension(expense.ReceiptFile.FileName);
+                fileName = Guid.NewGuid().ToString() + Path.GetExtension(exchange.ReceiptFile.FileName);
 
-                string mappath = Server.MapPath(documentModel.SlipPath);
+                string mappath = Server.MapPath(SlipPath);
 
                 try
                 {
                     //Kaydetme
-                    expense.ReceiptFile.SaveAs(Path.Combine(mappath, documentModel.SlipDocument));
+                    exchange.ReceiptFile.SaveAs(Path.Combine(mappath, fileName));
 
                     //Kopyalama
                     if (!Request.IsLocal)
                     {
-                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Expense";
+                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Exchange";
                         string sourcePath = @"C:\inetpub\wwwroot\location\Documents";
-                        string sourceFile = System.IO.Path.Combine(sourcePath, documentModel.SlipDocument);
-                        string destFile = System.IO.Path.Combine(targetPath, documentModel.SlipDocument);
+                        string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
+                        string destFile = System.IO.Path.Combine(targetPath, fileName);
                         System.IO.File.Copy(sourceFile, destFile, true);
                         System.IO.File.Delete(sourceFile);
                     }
@@ -782,11 +762,34 @@ namespace ActionForce.Location.Controllers
                 }
             }
 
-            var result = documentManager.UpdateCashExpense(documentModel);
+            CashExchangeModel documentModel = new CashExchangeModel()
+            {
+                ActionTypeID = 25,
+                ActionTypeName = "Döviz Satışı",
+                Amount = amount,
+                Currency = exchange.Currency,
+                ToAmount = toAmount,
+                ToCurrency = exchange.ToCurrency,
+                SaleExchangeRate = SaleExchangeRate,
+                Description = exchange.Description,
+                DocumentDate = exchange.DocumentDate,
+                IsActive = exchange.IsActive == 1 ? true : false,
+                LocationID = model.Location.ID,
+                UID = exchange.UID,
+                ProcessDate = processDate,
+                SlipDate = slipdate,
+                SlipNumber = exchange.ReceiptNumber,
+                SlipPath = @"\Document\Exchange",
+                SlipDocument = fileName
+
+            };
+
+
+            var result = documentManager.UpdateCashSellExchange(documentModel);
 
             TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
 
-            return RedirectToAction("ExpenseDetail", new { id = expense.UID });
+            return RedirectToAction("ExchangeSellDetail", new { id = exchange.UID });
         }
 
 
@@ -805,9 +808,9 @@ namespace ActionForce.Location.Controllers
             }
 
             model.ReceiptDate = documentDate;
-            model.ExpenseTypes = Db.ExpenseType.Where(x => x.IsLocation == true && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.Currencies = Db.Currency.ToList();
-            model.CashExpenses = Db.DocumentCashExpense.Where(x => x.LocationID == model.Location.ID && x.Date == documentDate).OrderByDescending(x => x.RecordDate).ToList();
+            model.CashBuyExchanges = Db.DocumentBuyExchange.Where(x => x.LocationID == model.Location.ID && x.Date == documentDate).OrderByDescending(x => x.RecordDate).ToList();
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
 
             return View(model);
         }
@@ -826,14 +829,14 @@ namespace ActionForce.Location.Controllers
 
             if (id != null)
             {
-                model.CashExpense = Db.DocumentCashExpense.FirstOrDefault(x => x.UID == id);
+                model.CashBuyExchange = Db.DocumentBuyExchange.FirstOrDefault(x => x.UID == id);
 
-                if (model.CashExpense != null)
+                if (model.CashBuyExchange != null)
                 {
-                    model.EmployeeRecorded = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashExpense.RecordEmployeeID)?.FullName;
-                    model.EmployeeUpdated = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashExpense.UpdateEmployee)?.FullName;
+                    model.EmployeeRecorded = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashBuyExchange.RecordEmployeeID)?.FullName;
+                    model.EmployeeUpdated = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashBuyExchange.UpdateEmployee)?.FullName;
 
-                    if (model.CashExpense.Date == documentDate)
+                    if (model.CashBuyExchange.Date == documentDate)
                     {
                         model.IsUpdatible = true;
                     }
@@ -842,14 +845,13 @@ namespace ActionForce.Location.Controllers
                         model.Result.Message = "Doküman bugüne ait değildir. Merkezden güncellenebilir.";
                         TempData["Result"] = model.Result;
                     }
-
                 }
                 else
                 {
                     model.Result.Message = "Doküman bilgisine ulaşılamadı.";
                     TempData["Result"] = model.Result;
 
-                    return RedirectToAction("Expense");
+                    return RedirectToAction("ExchangeBuy");
                 }
             }
             else
@@ -857,11 +859,11 @@ namespace ActionForce.Location.Controllers
                 model.Result.Message = "Doküman bilgisi yok.";
                 TempData["Result"] = model.Result;
 
-                return RedirectToAction("Expense");
+                return RedirectToAction("ExchangeBuy");
             }
 
             model.Currencies = Db.Currency.ToList();
-            model.ExpenseTypes = Db.ExpenseType.Where(x => x.IsLocation == true && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
 
             return View(model);
         }
@@ -869,41 +871,44 @@ namespace ActionForce.Location.Controllers
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddCashExchangeBuy(FormCashExpense expense)
+        public ActionResult AddCashExchangeBuy(FormExchangeSell exchange)
         {
             CashControlModel model = new CashControlModel();
 
-            var amount = LocationHelper.GetStringToAmount(expense.Amount);
+            var amount = LocationHelper.GetStringToAmount(exchange.Amount);
+            var toAmount = LocationHelper.GetStringToAmount(exchange.ToAmount);
+            var SaleExchangeRate = LocationHelper.GetStringToAmount(exchange.SaleExchangeRate);
+
             var documentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
             var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
             var dayResultID = LocationHelper.GetDayResultID(model.Location.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", LocationHelper.GetIPAddress());
 
-            DateTime slipdate = expense.ReceiptDate.Add(expense.ReceiptTime.TimeOfDay);
+
+            DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);
             string SlipPath = "/Documents";
             string fileName = string.Empty;
 
             // dosya işlemleri yapılır
-            if (expense.ReceiptFile != null && expense.ReceiptFile.ContentLength > 0)
+            if (exchange.ReceiptFile != null && exchange.ReceiptFile.ContentLength > 0)
             {
-                fileName = Guid.NewGuid().ToString() + Path.GetExtension(expense.ReceiptFile.FileName);
+                fileName = Guid.NewGuid().ToString() + Path.GetExtension(exchange.ReceiptFile.FileName);
 
                 string mappath = Server.MapPath(SlipPath);
 
                 try
                 {
                     //Kaydetme
-                    expense.ReceiptFile.SaveAs(Path.Combine(mappath, fileName));
+                    exchange.ReceiptFile.SaveAs(Path.Combine(mappath, fileName));
 
                     //Kopyalama
                     if (!Request.IsLocal)
                     {
-                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Expense";
+                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Exchange";
                         string sourcePath = @"C:\inetpub\wwwroot\location\Documents";
                         string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
                         string destFile = System.IO.Path.Combine(targetPath, fileName);
                         System.IO.File.Copy(sourceFile, destFile, true);
                         System.IO.File.Delete(sourceFile);
-
                     }
                 }
                 catch (Exception)
@@ -911,92 +916,73 @@ namespace ActionForce.Location.Controllers
                 }
             }
 
-            CashExpenseModel documentModel = new CashExpenseModel()
+            CashExchangeModel documentModel = new CashExchangeModel()
             {
-                ActionTypeID = 4,
-                ActionTypeName = "Expense",
+                ActionTypeID = 40,
+                ActionTypeName = "Döviz Alışı",
                 Amount = amount,
-                Currency = expense.Currency,
-                Description = expense.Description,
+                Currency = exchange.Currency,
+                ToAmount = toAmount,
+                ToCurrency = exchange.ToCurrency,
+                SaleExchangeRate = SaleExchangeRate,
+                Description = exchange.Description,
                 DocumentDate = documentDate,
                 EnvironmentID = 3,
-                ToCustomerID = model.Authentication.CurrentOurCompany.ID == 1 ? 1 : 2,
                 IsActive = true,
                 LocationID = model.Location.ID,
                 ResultID = dayResultID,
                 UID = Guid.NewGuid(),
                 ProcessDate = processDate,
-                ExpenseTypeID = expense.TypeID,
                 SlipDate = slipdate,
-                SlipNumber = expense.ReceiptNumber,
-                SlipPath = SlipPath,
+                SlipNumber = exchange.ReceiptNumber,
+                SlipPath = @"\Document\Exchange",
                 SlipDocument = fileName
             };
 
 
-            var result = documentManager.AddCashExpense(documentModel);
+            var result = documentManager.AddCashBuyExchange(documentModel);
 
             TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
 
-            return RedirectToAction("Expense");
+            return RedirectToAction("ExchangeBuy");
         }
 
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UpdateCashExchangeBuy(FormCashExpense expense)
+        public ActionResult UpdateCashExchangeBuy(FormExchangeSell exchange)
         {
             CashControlModel model = new CashControlModel();
 
-            var amount = LocationHelper.GetStringToAmount(expense.Amount);
-            var documentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, expense.DocumentDate);
+            var amount = LocationHelper.GetStringToAmount(exchange.Amount);
+            var toAmount = LocationHelper.GetStringToAmount(exchange.ToAmount);
+            var SaleExchangeRate = LocationHelper.GetStringToAmount(exchange.SaleExchangeRate);
+
             var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
-            var dayResultID = LocationHelper.GetDayResultID(model.Location.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", LocationHelper.GetIPAddress());
-            DateTime slipdate = expense.ReceiptDate.Add(expense.ReceiptTime.TimeOfDay);
 
-
-
-            CashExpenseModel documentModel = new CashExpenseModel()
-            {
-                ActionTypeID = 4,
-                ActionTypeName = "Expense",
-                Amount = amount,
-                Currency = expense.Currency,
-                Description = expense.Description,
-                DocumentDate = documentDate,
-                EnvironmentID = 3,
-                ToCustomerID = model.Authentication.CurrentOurCompany.ID == 1 ? 1 : 2,
-                IsActive = expense.IsActive == 1 ? true : false,
-                LocationID = model.Location.ID,
-                ResultID = dayResultID,
-                UID = expense.UID,
-                ProcessDate = processDate,
-                ExpenseTypeID = expense.TypeID,
-                SlipDate = slipdate,
-                SlipNumber = expense.ReceiptNumber,
-                SlipPath = "/Documents",
-                SlipDocument = string.Empty
-            };
+            DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);
+            string SlipPath = "/Documents";
+            string fileName = string.Empty;
 
             // dosya işlemleri yapılır
-            if (expense.ReceiptFile != null && expense.ReceiptFile.ContentLength > 0)
+            if (exchange.ReceiptFile != null && exchange.ReceiptFile.ContentLength > 0)
             {
-                documentModel.SlipDocument = Guid.NewGuid().ToString() + Path.GetExtension(expense.ReceiptFile.FileName);
+                fileName = Guid.NewGuid().ToString() + Path.GetExtension(exchange.ReceiptFile.FileName);
 
-                string mappath = Server.MapPath(documentModel.SlipPath);
+                string mappath = Server.MapPath(SlipPath);
 
                 try
                 {
                     //Kaydetme
-                    expense.ReceiptFile.SaveAs(Path.Combine(mappath, documentModel.SlipDocument));
+                    exchange.ReceiptFile.SaveAs(Path.Combine(mappath, fileName));
 
                     //Kopyalama
                     if (!Request.IsLocal)
                     {
-                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Expense";
+                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Exchange";
                         string sourcePath = @"C:\inetpub\wwwroot\location\Documents";
-                        string sourceFile = System.IO.Path.Combine(sourcePath, documentModel.SlipDocument);
-                        string destFile = System.IO.Path.Combine(targetPath, documentModel.SlipDocument);
+                        string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
+                        string destFile = System.IO.Path.Combine(targetPath, fileName);
                         System.IO.File.Copy(sourceFile, destFile, true);
                         System.IO.File.Delete(sourceFile);
                     }
@@ -1006,11 +992,244 @@ namespace ActionForce.Location.Controllers
                 }
             }
 
-            var result = documentManager.UpdateCashExpense(documentModel);
+            CashExchangeModel documentModel = new CashExchangeModel()
+            {
+                ActionTypeID = 40,
+                ActionTypeName = "Döviz Alışı",
+                Amount = amount,
+                Currency = exchange.Currency,
+                ToAmount = toAmount,
+                ToCurrency = exchange.ToCurrency,
+                SaleExchangeRate = SaleExchangeRate,
+                Description = exchange.Description,
+                DocumentDate = exchange.DocumentDate,
+                IsActive = exchange.IsActive == 1 ? true : false,
+                LocationID = model.Location.ID,
+                UID = exchange.UID,
+                ProcessDate = processDate,
+                SlipDate = slipdate,
+                SlipNumber = exchange.ReceiptNumber,
+                SlipPath = @"\Document\Exchange",
+                SlipDocument = fileName
+
+            };
+
+
+            var result = documentManager.UpdateCashBuyExchange(documentModel);
 
             TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
 
-            return RedirectToAction("ExpenseDetail", new { id = expense.UID });
+            return RedirectToAction("ExchangeBuyDetail", new { id = exchange.UID });
         }
+
+
+
+
+        [AllowAnonymous]
+        public ActionResult SalaryPay()
+        {
+            CashControlModel model = new CashControlModel();
+
+            var documentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            List<int> scheduledempids = Db.Schedule.Where(x => x.LocationID == model.Location.ID && x.ShiftDate == documentDate).Select(x => x.EmployeeID.Value).ToList();
+            model.Employees = Db.Employee.Where(x => scheduledempids.Contains(x.EmployeeID)).ToList();
+
+            model.Currencies = Db.Currency.ToList();
+            model.SalaryPayments = Db.DocumentSalaryPayment.Where(x => x.LocationID == model.Location.ID && x.Date == documentDate).OrderByDescending(x => x.RecordDate).Select(x => new SalaryPayment()
+            {
+                Amount = x.Amount.Value,
+                Currency = x.Currency,
+                Date = x.Date.Value,
+                EmployeeID = x.ToEmployeeID.Value,
+                ID = x.ID,
+                IsActive = x.IsActive.Value,
+                UID = x.UID.Value,
+                DocumentNumber = x.DocumentNumber
+            }).ToList();
+
+            foreach (var salary in model.SalaryPayments)
+            {
+                salary.EmployeeName = model.Employees.FirstOrDefault(y => y.EmployeeID == salary.EmployeeID).FullName ?? string.Empty;
+            }
+
+            return View(model);
+        }
+
+        //[AllowAnonymous]
+        //public ActionResult SalaryPayDetail(Guid? id)
+        //{
+        //    CashControlModel model = new CashControlModel();
+
+        //    var documentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
+
+        //    if (TempData["Result"] != null)
+        //    {
+        //        model.Result = TempData["Result"] as Result;
+        //    }
+
+        //    if (id != null)
+        //    {
+        //        model.CashSaleExchange = Db.DocumentSaleExchange.FirstOrDefault(x => x.UID == id);
+
+        //        if (model.CashSaleExchange != null)
+        //        {
+        //            model.EmployeeRecorded = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashSaleExchange.RecordEmployeeID)?.FullName;
+        //            model.EmployeeUpdated = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashSaleExchange.UpdateEmployee)?.FullName;
+
+        //            if (model.CashSaleExchange.Date == documentDate)
+        //            {
+        //                model.IsUpdatible = true;
+        //            }
+        //            else
+        //            {
+        //                model.Result.Message = "Doküman bugüne ait değildir. Merkezden güncellenebilir.";
+        //                TempData["Result"] = model.Result;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            model.Result.Message = "Doküman bilgisine ulaşılamadı.";
+        //            TempData["Result"] = model.Result;
+
+        //            return RedirectToAction("ExchangeSell");
+        //        }
+        //    }
+        //    else
+        //    {
+        //        model.Result.Message = "Doküman bilgisi yok.";
+        //        TempData["Result"] = model.Result;
+
+        //        return RedirectToAction("ExchangeSell");
+        //    }
+
+        //    model.Currencies = Db.Currency.ToList();
+        //    model.Exchange = ServiceHelper.GetExchange(documentDate);
+
+        //    return View(model);
+        //}
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddCashSalaryPay(FormSalaryPay salary)
+        {
+            CashControlModel model = new CashControlModel();
+
+            var amount = LocationHelper.GetStringToAmount(salary.Amount);
+
+            var documentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
+            var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
+            var dayResultID = LocationHelper.GetDayResultID(model.Location.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", LocationHelper.GetIPAddress());
+            var cash = ServiceHelper.GetCash(model.Location.ID, salary.Currency);
+
+            SalaryPaymentModel documentModel = new SalaryPaymentModel()
+            {
+                ActionTypeID = 31,
+                ActionTypeName = "Maaş Avans Ödemesi",
+                Amount = amount,
+                Currency = salary.Currency,
+                Description = salary.Description,
+                DocumentDate = documentDate,
+                EnvironmentID = 3,
+                IsActive = true,
+                LocationID = model.Location.ID,
+                ResultID = dayResultID,
+                UID = Guid.NewGuid(),
+                ProcessDate = processDate,
+                CategoryID = 8,
+                EmployeeID = salary.EmployeeID,
+                SalaryTypeID = 2,
+                FromCashID = cash.ID
+            };
+
+
+            var result = documentManager.AddSalaryPayment(documentModel);
+
+            TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return RedirectToAction("SalaryPay");
+        }
+
+        //[AllowAnonymous]
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult UpdateCashSalaryPay(FormSalaryPay salary)
+        //{
+        //    CashControlModel model = new CashControlModel();
+
+        //    var amount = LocationHelper.GetStringToAmount(exchange.Amount);
+        //    var toAmount = LocationHelper.GetStringToAmount(exchange.ToAmount);
+        //    var SaleExchangeRate = LocationHelper.GetStringToAmount(exchange.SaleExchangeRate);
+
+        //    var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
+
+        //    DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);
+        //    string SlipPath = "/Documents";
+        //    string fileName = string.Empty;
+
+        //    // dosya işlemleri yapılır
+        //    if (exchange.ReceiptFile != null && exchange.ReceiptFile.ContentLength > 0)
+        //    {
+        //        fileName = Guid.NewGuid().ToString() + Path.GetExtension(exchange.ReceiptFile.FileName);
+
+        //        string mappath = Server.MapPath(SlipPath);
+
+        //        try
+        //        {
+        //            //Kaydetme
+        //            exchange.ReceiptFile.SaveAs(Path.Combine(mappath, fileName));
+
+        //            //Kopyalama
+        //            if (!Request.IsLocal)
+        //            {
+        //                string targetPath = @"C:\inetpub\wwwroot\Action\Document\Exchange";
+        //                string sourcePath = @"C:\inetpub\wwwroot\location\Documents";
+        //                string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
+        //                string destFile = System.IO.Path.Combine(targetPath, fileName);
+        //                System.IO.File.Copy(sourceFile, destFile, true);
+        //                System.IO.File.Delete(sourceFile);
+        //            }
+        //        }
+        //        catch (Exception)
+        //        {
+        //        }
+        //    }
+
+        //    CashExchangeModel documentModel = new CashExchangeModel()
+        //    {
+        //        ActionTypeID = 25,
+        //        ActionTypeName = "Döviz Satışı",
+        //        Amount = amount,
+        //        Currency = exchange.Currency,
+        //        ToAmount = toAmount,
+        //        ToCurrency = exchange.ToCurrency,
+        //        SaleExchangeRate = SaleExchangeRate,
+        //        Description = exchange.Description,
+        //        DocumentDate = exchange.DocumentDate,
+        //        IsActive = exchange.IsActive == 1 ? true : false,
+        //        LocationID = model.Location.ID,
+        //        UID = exchange.UID,
+        //        ProcessDate = processDate,
+        //        SlipDate = slipdate,
+        //        SlipNumber = exchange.ReceiptNumber,
+        //        SlipPath = @"\Document\Exchange",
+        //        SlipDocument = fileName
+
+        //    };
+
+
+        //    var result = documentManager.UpdateCashSellExchange(documentModel);
+
+        //    TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+        //    return RedirectToAction("ExchangeSellDetail", new { id = exchange.UID });
+        //}
+
     }
 }

@@ -184,7 +184,7 @@ namespace ActionForce.Office
                         Db.RemoveAllAccountActions(isCash.ID, isCash.UID);
 
                         // Aktif ise Cari hesap kaydı eklenir.
-            
+
                         if (isCash.IsActive == true)
                         {
                             OfficeHelper.AddCashAction(isCash.CashID, isCash.LocationID, authentication.ActionEmployee.EmployeeID, isCash.ActionTypeID, isCash.Date, isCash.ActionTypeName, isCash.ID, isCash.Date, isCash.DocumentNumber, isCash.Description, 1, isCash.Amount, 0, isCash.Currency, null, null, isCash.RecordEmployeeID, isCash.RecordDate, isCash.UID.Value);
@@ -4099,7 +4099,7 @@ namespace ActionForce.Office
                     List<int> maas = new int[] { 3, 31 }.ToList();
                     List<int> hakedisid = new int[] { 32, 36, 39 }.ToList();
                     List<int> cashexpense = new int[] { 4, 29 }.ToList();
-                    List<int> cashexchange = new int[] { 25 }.ToList();
+                    List<int> cashexchange = new int[] { 25, 40 }.ToList();
                     List<int> bankeft = new int[] { 11, 30 }.ToList();
 
                     var cashActions = Db.VCashActions.Where(x => x.LocationID == isResult.LocationID && x.ActionDate == isResult.Date && x.Currency == authentication.ActionEmployee.OurCompany.Currency).ToList();

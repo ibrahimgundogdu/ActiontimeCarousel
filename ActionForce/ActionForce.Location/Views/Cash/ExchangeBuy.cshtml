@@ -1,6 +1,6 @@
 ﻿@model CashControlModel
 @{
-    ViewBag.Title = "Döviz Satış";
+    ViewBag.Title = "Döviz Alış";
 }
 
 <div class="flex fixed-content">
@@ -12,13 +12,13 @@
                 <div class="card">
                     <div class="card-header pl-3 pr-2">
                         <div class="d-flex">
-                            <strong>Kasa Döviz Satış</strong>
+                            <strong>Kasa Döviz Alış</strong>
                             <span class="flex"></span>
                             <div>
-                                <a href="/Cash/ExchangeSell" class="font-weight-bold">
+                                <a href="/Cash/ExchangeBuy" class="font-weight-bold">
                                     <i data-feather="grid"></i>
                                 </a>
-                                <a href="javascript:;" class="font-weight-bold pl-2" title="Add Exchange Sell" data-toggle="modal" data-target="#modalcasheexchangesell">
+                                <a href="javascript:;" class="font-weight-bold pl-2" title="Add Exchange Buy" data-toggle="modal" data-target="#modalcasheexchangebuy">
                                     <i class="text-success" data-feather="plus"></i>
                                 </a>
                             </div>
@@ -42,10 +42,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model.CashSaleExchanges)
+                                    @foreach (var item in Model.CashBuyExchanges)
                                     {
                                         <tr class="v-middle shadow-sm">
-                                            <td class="pl-1"><a href="/Cash/ExchangeSellDetail/@(item.UID)" class="@(item.IsActive == false ? "text-danger":"")">@(item.DocumentNumber)</a></td>
+                                            <td class="pl-1"><a href="/Cash/ExchangeBuyDetail/@(item.UID)" class="@(item.IsActive == false ? "text-danger":"")">@(item.DocumentNumber)</a></td>
                                             <td class="">@(item.Date?.ToShortDateString())</td>
                                             <td class="text-right  @(item.IsActive == false ? "text-muted":"text-dark") font-weight-bold pr-0"><b>@(item.Amount?.ToString("N2"))</b></td>
                                             <td class="pl-1"> @(item.Currency == "TRL" ? "₺" : item.Currency == "USD" ? "$":"€")</td>
@@ -55,17 +55,17 @@
                                 <tfoot>
                                     <tr>
                                         <td class="p-1" colspan="2"></td>
-                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashSaleExchanges.Where(x=> x.Currency == "TRL" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
+                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashBuyExchanges.Where(x=> x.Currency == "TRL" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
                                         <td class="p-1">₺</td>
                                     </tr>
                                     <tr>
                                         <td class="p-1" colspan="2"></td>
-                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashSaleExchanges.Where(x=> x.Currency == "USD" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
+                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashBuyExchanges.Where(x=> x.Currency == "USD" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
                                         <td class="p-1">$</td>
                                     </tr>
                                     <tr>
                                         <td class="p-1" colspan="2"></td>
-                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashSaleExchanges.Where(x=> x.Currency == "EUR" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
+                                        <td class="p-1 text-right text-dark font-weight-bold">@(Model.CashBuyExchanges.Where(x=> x.Currency == "EUR" && x.IsActive == true).Sum(x=> x.Amount)?.ToString("N2"))</td>
                                         <td class="p-1">€</td>
                                     </tr>
                                 </tfoot>
@@ -82,20 +82,20 @@
 
 </div>
 
-<div id="modalcasheexchangesell" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
+<div id="modalcasheexchangebuy" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header"><div class="modal-title font-weight-500 text-dark">Cash Exchange Sell</div><button class="close" data-dismiss="modal">×</button></div>
+            <div class="modal-header"><div class="modal-title font-weight-500 text-dark">Cash Exchange Buy</div><button class="close" data-dismiss="modal">×</button></div>
             <div class="modal-body mt-0 mb-0 pb-0 pt-1">
                 <div class="col-12 p-2 text-right text-xs">
                     $: @(Model.Exchange.USDA?.ToString("N4")) &nbsp; &nbsp; € : @(Model.Exchange.EURA?.ToString("N4"))
                 </div>
-                @using (Html.BeginForm("AddCashExchangeSell", "Cash", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
+                @using (Html.BeginForm("AddCashExchangeBuy", "Cash", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
                 {
                     @Html.AntiForgeryToken()
 
                     <div class="form-group row mb-1">
-                        <label class="col-4 col-form-label pr-0">Satılan Döviz</label>
+                        <label class="col-4 col-form-label pr-0">Alınan Döviz</label>
                         <div class="col-5 pr-1">
                             <input id="Amount" name="Amount" type="text" class="form-control font-weight-bold text-right money" placeholder="0,00" required>
                         </div>
@@ -125,7 +125,7 @@
                     </div>
 
                     <div class="form-group row mb-1">
-                        <label class="col-4 col-form-label">Satış Kuru</label>
+                        <label class="col-4 col-form-label">Alış Kuru</label>
                         <div class="col-5 pr-1">
                             <input id="SaleExchangeRate" type="text" name="SaleExchangeRate" class="form-control font-weight-bold text-right money4" onkeyup="SumExchangeToAmount()" placeholder="0,0000" required />
                         </div>
@@ -188,19 +188,15 @@
     @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
     {
         <script>
-                $(function () {
-                    notie.setOptions({
-                        alertTime: 5
-                    })
-                    notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
-                    noticed = true;
-                });
-
-
-
+            $(function () {
+                notie.setOptions({
+                    alertTime: 5
+                })
+                notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
+                noticed = true;
+            });
         </script>
     }
-
 
     <script type="text/javascript">
 
@@ -221,7 +217,7 @@
 
             var rate = parseFloat(toamount) / parseFloat(amount) || 0.0000;
 
-            $("#SaleExchangeRate").val(rate.toFixed(4).toString());
+            $("#SaleExchangeRate").val(rate.toFixed(4).replace('.', ',').toString());
         };
 
         function SumExchangeToAmount() {
@@ -231,8 +227,9 @@
 
             var toamount = parseFloat(amount) * parseFloat(rate) || 0.00;
 
-            $("#ToAmount").val(toamount.toFixed(2).toString());
+            $("#ToAmount").val(toamount.toFixed(2).replace('.', ',').toString());
         };
+
     </script>
 }
 
