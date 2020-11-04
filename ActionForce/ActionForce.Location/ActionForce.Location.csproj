@@ -581,6 +581,7 @@
     <Compile Include="Models\ControlModels\ScheduleControlModel.cs" />
     <Compile Include="Models\ControlModels\SummaryControlModel.cs" />
     <Compile Include="Models\DefaultModels\AnimalCostume.cs" />
+    <Compile Include="Models\DefaultModels\BankTransfer.cs" />
     <Compile Include="Models\DefaultModels\BasketTotal.cs" />
     <Compile Include="Models\DefaultModels\LocationBalance.cs" />
     <Compile Include="Models\DefaultModels\LocationTicketInfo.cs" />
@@ -590,6 +591,7 @@
     <Compile Include="Models\DefaultModels\TicketInfo.cs" />
     <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\ControlModels\LayoutControlModel.cs" />
+    <Compile Include="Models\FormModels\FormBankTransfer.cs" />
     <Compile Include="Models\FormModels\FormCashCollect.cs" />
     <Compile Include="Models\FormModels\FormCashExpense.cs" />
     <Compile Include="Models\FormModels\FormCashPayment.cs" />
@@ -837,6 +839,9 @@
     <Content Include="Views\Cash\ExchangeBuy.cshtml" />
     <Content Include="Views\Cash\ExchangeBuyDetail.cshtml" />
     <Content Include="Views\Cash\SalaryPay.cshtml" />
+    <Content Include="Views\Cash\SalaryPayDetail.cshtml" />
+    <Content Include="Views\Cash\Transfer.cshtml" />
+    <Content Include="Views\Cash\TransferDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

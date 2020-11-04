@@ -34,14 +34,21 @@ namespace ActionForce.Location
         public IEnumerable<DocumentSaleExchange> CashSaleExchanges { get; set; }
         public DocumentSaleExchange CashSaleExchange { get; set; }
 
+
         public IEnumerable<DocumentBuyExchange> CashBuyExchanges { get; set; }
         public DocumentBuyExchange CashBuyExchange { get; set; }
         public Exchange Exchange { get; set; }
 
+
         public IEnumerable<SalaryPayment> SalaryPayments { get; set; }
-        public SalaryPayment SalaryPayment { get; set; }
+        public DocumentSalaryPayment SalaryPayment { get; set; }
         public IEnumerable<Employee> Employees { get; set; }
 
 
+        public IEnumerable<BankTransfer> BankTransfers { get; set; }
+        public DocumentBankTransfer BankTransfer { get; set; }
+        public IEnumerable<VBankAccount> BankAccountList { get; set; }
+        public IEnumerable<BankTransferStatus> TransferStatus { get; set; }
+        
     }
 }

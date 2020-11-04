@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\AuditTrail.cs" />
+    <Compile Include="Models\BankTransferModel.cs" />
     <Compile Include="Models\CashCollectionModel.cs" />
     <Compile Include="Models\CashExchangeModel.cs" />
     <Compile Include="Models\CashExpenseModel.cs" />

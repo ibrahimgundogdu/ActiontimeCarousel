@@ -2276,7 +2276,7 @@ namespace ActionForce.Office
                     List<DayResultCheckPrice> cplist = new List<DayResultCheckPrice>();
 
                     var location = db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
-                    var pricelist = db.GetLocationPrice(dayresult.LocationID, dayresult.Date);
+                    var pricelist = db.GetLocationPrice(dayresult.LocationID, dayresult.Date).ToList();
 
                     foreach (var item in pricelist)
                     {

@@ -1,21 +1,20 @@
 ﻿@model CashControlModel
 @{
-    ViewBag.Title = "Masraf Ödemesi";
+    ViewBag.Title = "Kasa Maaş/Avans Ödemesi";
 }
 
 <div class="flex fixed-content">
 
     <div class="flex" id="content-body">
         <div class="d-flex flex-column flex" data-plugin="user">
-
             <div class="scroll-y mx-2 mb-2">
                 <div class="card">
                     <div class="card-header pl-3 pr-2">
                         <div class="d-flex">
-                            <strong>Kasa Masraf Fişi Bilgisi</strong>
+                            <strong>Kasa Avans Ödeme Bilgisi</strong>
                             <span class="flex"></span>
                             <div>
-                                <a href="/Cash/Expense" class="font-weight-bold">
+                                <a href="/Cash/SalaryPay" class="font-weight-bold">
                                     <i data-feather="grid"></i>
                                 </a>
                             </div>
@@ -23,98 +22,56 @@
                     </div>
 
                     <div class="card-body m-0 p-2">
-                        @using (Html.BeginForm("UpdateCashExpense", "Cash", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
+                        @using (Html.BeginForm("UpdateCashSalaryPay", "Cash", FormMethod.Post, new { role = "form" }))
                         {
                             @Html.AntiForgeryToken()
 
                             <div class="form-group row mb-1">
                                 <label class="col-4 col-form-label">Numarası</label>
                                 <div class="col-8">
-                                    <label class="form-control font-weight-bold mb-0 bg-body"> @(Model.CashExpense.DocumentNumber)</label>
-                                    <input id="Hidden1" name="UID" type="hidden" value="@(Model.CashExpense.UID)" />
+                                    <label class="form-control font-weight-bold mb-0 bg-body"> @(Model.SalaryPayment.DocumentNumber)</label>
+                                    <input id="Hidden1" name="UID" type="hidden" value="@(Model.SalaryPayment.UID)" />
                                 </div>
                             </div>
-
                             <div class="form-group row mb-1">
                                 <label class="col-4 col-form-label">Tarihi</label>
                                 <div class="col-8">
-                                    <label class="form-control font-weight-bold mb-0 bg-body"> @(Model.CashExpense.Date?.ToString("yyyy-MM-dd"))</label>
-                                    <input id="DocumentDate" name="DocumentDate" type="hidden" value="@(Model.CashExpense.Date?.ToString("yyyy-MM-dd"))">
+                                    <label class="form-control font-weight-bold mb-0 bg-body"> @(Model.SalaryPayment.Date?.ToString("yyyy-MM-dd"))</label>
+                                    <input id="DocumentDate" name="DocumentDate" type="hidden" value="@(Model.SalaryPayment.Date?.ToString("yyyy-MM-dd"))">
                                 </div>
                             </div>
 
                             <div class="form-group row mb-1">
-                                <label class="col-4 col-form-label pr-0">Masraf Türü</label>
+                                <label class="col-4 col-form-label">Çalışan</label>
                                 <div class="col-8">
-                                    <select class="custom-select" name="TypeID">
-                                        @foreach (var item in Model.ExpenseTypes)
+                                    <select class="custom-select" name="EmployeeID">
+                                        @foreach (var item in Model.Employees)
                                         {
-                                            <option value="@(item.ID)" @(item.ID == Model.CashExpense.ActionTypeID ? "selected" : "")>@(item.ExpenseName)</option>
+                                            <option value="@(item.EmployeeID)" @(item.EmployeeID == Model.SalaryPayment.ToEmployeeID ? "selected":"")>@(item.FullName)</option>
                                         }
                                     </select>
                                 </div>
                             </div>
 
-
                             <div class="form-group row mb-1">
-                                <label class="col-4 col-form-label">Tutarı</label>
+                                <label class="col-4 col-form-label">Tutar</label>
                                 <div class="col-5 pr-1">
-                                    <input id="Amount" name="Amount" type="text" class="form-control font-weight-bold text-right money" value="@(Model.CashExpense.Amount?.ToString("N2"))" required>
+                                    <input id="Amount" name="Amount" type="text" class="form-control font-weight-bold text-right money" value="@(Model.SalaryPayment?.Amount?.ToString("N2"))" required>
                                 </div>
                                 <div class="col-3 pl-1">
                                     <select class="custom-select" name="Currency">
                                         @foreach (var item in Model.Currencies)
                                         {
-                                            <option value="@(item.Code)" @(item.Code == Model.CashExpense.Currency ? "selected" : "")>@(item.Sign)</option>
+                                            <option value="@(item.Code)" @(item.Code == Model.SalaryPayment.Currency ? "selected" : "")>@(item.Sign)</option>
                                         }
                                     </select>
-                                </div>
-                            </div>
-
-                            <div class="form-group row mb-1">
-                                <label class="col-4 col-form-label">Fiş No</label>
-                                <div class="col-8">
-                                    <input id="ReceiptNumber" type="text" name="ReceiptNumber" class="form-control font-weight-bold" value="@(Model.CashExpense.SlipNumber)" required />
-                                </div>
-                            </div>
-
-                            <div class="form-group row mb-1">
-                                <label class="col-4 col-form-label">Fiş Tarihi</label>
-                                <div class="col-8">
-                                    <input id="ReceiptDate" name="ReceiptDate" type="date" class="form-control font-weight-bold" placeholder="Date" value="@(Model.CashExpense.SlipDate?.ToString("yyyy-MM-dd"))" required>
-                                </div>
-                            </div>
-
-                            <div class="form-group row mb-1">
-                                <label class="col-4 col-form-label">Fiş Saati</label>
-                                <div class="col-8">
-                                    <input id="ReceiptTime" name="ReceiptTime" type="time" class="form-control font-weight-bold" step="1" placeholder="Time" value="@(Model.CashExpense.SlipDate?.ToString("HH\\:mm\\:ss"))" required>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label class="col-4 col-form-label">Açıklama</label>
                                 <div class="col-8">
-                                    <textarea id="event-desc" name="Description" class="form-control" rows="2">@(Model.CashExpense.Description)</textarea>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-12">
-                                    @if (!Request.IsLocal)
-                                    {
-                                        <img src="@($"http://action.ufegrup.com/Document/Expense/{Model.CashExpense.SlipDocument}")" alt="@(Model.CashExpense.SlipDocument)" style="width:100%" />
-                                    }
-                                    else
-                                    {
-                                        <img src="@($"/Documents/{Model.CashExpense.SlipDocument}")" alt="@(Model.CashExpense.SlipDocument)" style="width:100%" />
-                                    }
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-12">
-                                    <input id="ReceiptFile" name="ReceiptFile" class="form-control" type="file" style="width:100%;" />
+                                    <textarea id="event-desc" name="Description" class="form-control" rows="3">@(Model.SalaryPayment.Description)</textarea>
                                 </div>
                             </div>
 
@@ -122,11 +79,10 @@
                                 <label class="col-4 col-form-label">Aktif ?</label>
                                 <div class="col-8">
                                     <label class="form-check-label font-weight-bold pl-4 pt-1">
-                                        <input class="form-check-input" type="checkbox" name="IsActive" value="1" @(Model.CashExpense.IsActive == true ? "checked" : "")> Aktif
+                                        <input class="form-check-input" type="checkbox" name="IsActive" value="1" @(Model.SalaryPayment.IsActive == true ? "checked" : "")> Aktif
                                     </label>
                                 </div>
                             </div>
-
                             <div class="form-group row">
                                 <div class="col-12">
                                     @if (Model.IsUpdatible)
@@ -139,17 +95,14 @@
                                     }
                                 </div>
                             </div>
-
-
-
                             <div class="form-group row mb-1">
                                 <div class="col-12 p-0 text-center">
-                                    <small class="text-muted"> @($"{Model.EmployeeRecorded} - {Model.CashExpense.RecordDate}")</small>
+                                    <small class="text-muted"> @($"{Model.EmployeeRecorded} - {Model.SalaryPayment.RecordDate}")</small>
                                 </div>
                             </div>
                             <div class="form-group row mb-1">
                                 <div class="col-12 p-0 text-center">
-                                    <small class="text-muted"> @($"{Model.EmployeeUpdated} - {Model.CashExpense.UpdateDate}")</small>
+                                    <small class="text-muted"> @($"{Model.EmployeeUpdated} - {Model.SalaryPayment.UpdateDate}")</small>
                                 </div>
                             </div>
                         }

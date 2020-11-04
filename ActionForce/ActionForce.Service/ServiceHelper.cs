@@ -248,8 +248,33 @@ namespace ActionForce.Service
             }
         }
 
+        public static string BankReferenceCode(int OurCompanyID)
+        {
+            string rndNumber = string.Empty;
 
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                List<string> numberlist = db.DocumentBankTransfer.Select(x => x.ReferenceCode).ToList();
 
+                rndNumber = OurCompanyID.ToString() + DateTime.Now.ToString("yy");
+
+                Random rnd = new Random();
+
+                for (int i = 1; i < 6; i++)
+                {
+                    rndNumber += rnd.Next(0, 9).ToString();
+                }
+
+                if (!numberlist.Contains(rndNumber))
+                {
+                    return rndNumber;
+                }
+                else
+                {
+                    return BankReferenceCode(OurCompanyID);
+                }
+            }
+        }
 
 
 

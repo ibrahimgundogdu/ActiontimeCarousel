@@ -1061,58 +1061,60 @@ namespace ActionForce.Location.Controllers
             return View(model);
         }
 
-        //[AllowAnonymous]
-        //public ActionResult SalaryPayDetail(Guid? id)
-        //{
-        //    CashControlModel model = new CashControlModel();
+        [AllowAnonymous]
+        public ActionResult SalaryPayDetail(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
 
-        //    var documentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
+            var documentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
 
-        //    if (TempData["Result"] != null)
-        //    {
-        //        model.Result = TempData["Result"] as Result;
-        //    }
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
 
-        //    if (id != null)
-        //    {
-        //        model.CashSaleExchange = Db.DocumentSaleExchange.FirstOrDefault(x => x.UID == id);
+            List<int> scheduledempids = Db.Schedule.Where(x => x.LocationID == model.Location.ID && x.ShiftDate == documentDate).Select(x => x.EmployeeID.Value).ToList();
+            model.Employees = Db.Employee.Where(x => scheduledempids.Contains(x.EmployeeID)).ToList();
 
-        //        if (model.CashSaleExchange != null)
-        //        {
-        //            model.EmployeeRecorded = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashSaleExchange.RecordEmployeeID)?.FullName;
-        //            model.EmployeeUpdated = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashSaleExchange.UpdateEmployee)?.FullName;
+            if (id != null)
+            {
+                model.SalaryPayment = Db.DocumentSalaryPayment.FirstOrDefault(x => x.UID == id);
 
-        //            if (model.CashSaleExchange.Date == documentDate)
-        //            {
-        //                model.IsUpdatible = true;
-        //            }
-        //            else
-        //            {
-        //                model.Result.Message = "Doküman bugüne ait değildir. Merkezden güncellenebilir.";
-        //                TempData["Result"] = model.Result;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            model.Result.Message = "Doküman bilgisine ulaşılamadı.";
-        //            TempData["Result"] = model.Result;
+                if (model.SalaryPayment != null)
+                {
+                    model.EmployeeRecorded = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.SalaryPayment.RecordEmployeeID)?.FullName;
+                    model.EmployeeUpdated = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.SalaryPayment.UpdateEmployee)?.FullName;
 
-        //            return RedirectToAction("ExchangeSell");
-        //        }
-        //    }
-        //    else
-        //    {
-        //        model.Result.Message = "Doküman bilgisi yok.";
-        //        TempData["Result"] = model.Result;
+                    if (model.SalaryPayment.Date == documentDate)
+                    {
+                        model.IsUpdatible = true;
+                    }
+                    else
+                    {
+                        model.Result.Message = "Doküman bugüne ait değildir. Merkezden güncellenebilir.";
+                        TempData["Result"] = model.Result;
+                    }
+                }
+                else
+                {
+                    model.Result.Message = "Doküman bilgisine ulaşılamadı.";
+                    TempData["Result"] = model.Result;
 
-        //        return RedirectToAction("ExchangeSell");
-        //    }
+                    return RedirectToAction("SalaryPay");
+                }
+            }
+            else
+            {
+                model.Result.Message = "Doküman bilgisi yok.";
+                TempData["Result"] = model.Result;
 
-        //    model.Currencies = Db.Currency.ToList();
-        //    model.Exchange = ServiceHelper.GetExchange(documentDate);
+                return RedirectToAction("SalaryPay");
+            }
 
-        //    return View(model);
-        //}
+            model.Currencies = Db.Currency.ToList();
+
+            return View(model);
+        }
 
         [AllowAnonymous]
         [HttpPost]
@@ -1156,80 +1158,292 @@ namespace ActionForce.Location.Controllers
             return RedirectToAction("SalaryPay");
         }
 
-        //[AllowAnonymous]
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult UpdateCashSalaryPay(FormSalaryPay salary)
-        //{
-        //    CashControlModel model = new CashControlModel();
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateCashSalaryPay(FormSalaryPay salary)
+        {
+            CashControlModel model = new CashControlModel();
 
-        //    var amount = LocationHelper.GetStringToAmount(exchange.Amount);
-        //    var toAmount = LocationHelper.GetStringToAmount(exchange.ToAmount);
-        //    var SaleExchangeRate = LocationHelper.GetStringToAmount(exchange.SaleExchangeRate);
-
-        //    var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
-
-        //    DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);
-        //    string SlipPath = "/Documents";
-        //    string fileName = string.Empty;
-
-        //    // dosya işlemleri yapılır
-        //    if (exchange.ReceiptFile != null && exchange.ReceiptFile.ContentLength > 0)
-        //    {
-        //        fileName = Guid.NewGuid().ToString() + Path.GetExtension(exchange.ReceiptFile.FileName);
-
-        //        string mappath = Server.MapPath(SlipPath);
-
-        //        try
-        //        {
-        //            //Kaydetme
-        //            exchange.ReceiptFile.SaveAs(Path.Combine(mappath, fileName));
-
-        //            //Kopyalama
-        //            if (!Request.IsLocal)
-        //            {
-        //                string targetPath = @"C:\inetpub\wwwroot\Action\Document\Exchange";
-        //                string sourcePath = @"C:\inetpub\wwwroot\location\Documents";
-        //                string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
-        //                string destFile = System.IO.Path.Combine(targetPath, fileName);
-        //                System.IO.File.Copy(sourceFile, destFile, true);
-        //                System.IO.File.Delete(sourceFile);
-        //            }
-        //        }
-        //        catch (Exception)
-        //        {
-        //        }
-        //    }
-
-        //    CashExchangeModel documentModel = new CashExchangeModel()
-        //    {
-        //        ActionTypeID = 25,
-        //        ActionTypeName = "Döviz Satışı",
-        //        Amount = amount,
-        //        Currency = exchange.Currency,
-        //        ToAmount = toAmount,
-        //        ToCurrency = exchange.ToCurrency,
-        //        SaleExchangeRate = SaleExchangeRate,
-        //        Description = exchange.Description,
-        //        DocumentDate = exchange.DocumentDate,
-        //        IsActive = exchange.IsActive == 1 ? true : false,
-        //        LocationID = model.Location.ID,
-        //        UID = exchange.UID,
-        //        ProcessDate = processDate,
-        //        SlipDate = slipdate,
-        //        SlipNumber = exchange.ReceiptNumber,
-        //        SlipPath = @"\Document\Exchange",
-        //        SlipDocument = fileName
-
-        //    };
+            var amount = LocationHelper.GetStringToAmount(salary.Amount);
+            var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
+            var cash = ServiceHelper.GetCash(model.Location.ID, salary.Currency);
 
 
-        //    var result = documentManager.UpdateCashSellExchange(documentModel);
+            SalaryPaymentModel documentModel = new SalaryPaymentModel()
+            {
+                ActionTypeID = 31,
+                ActionTypeName = "Maaş Avans Ödemesi",
+                Amount = amount,
+                Currency = salary.Currency,
+                Description = salary.Description,
+                DocumentDate = salary.DocumentDate,
+                EnvironmentID = 3,
+                IsActive = salary.IsActive == 1 ? true : false,
+                LocationID = model.Location.ID,
+                UID = salary.UID,
+                ProcessDate = processDate,
+                CategoryID = 8,
+                EmployeeID = salary.EmployeeID,
+                SalaryTypeID = 2,
+                FromCashID = cash.ID
+            };
 
-        //    TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
 
-        //    return RedirectToAction("ExchangeSellDetail", new { id = exchange.UID });
-        //}
+            var result = documentManager.UpdateSalaryPayment(documentModel);
+
+            TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return RedirectToAction("SalaryPayDetail", new { id = salary.UID });
+        }
+
+
+
+        //
+        [AllowAnonymous]
+        public ActionResult Transfer()
+        {
+            CashControlModel model = new CashControlModel();
+
+            var documentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            model.ReceiptDate = documentDate;
+            model.Currencies = Db.Currency.ToList();
+            model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.CurrentOurCompany.ID && x.AccountTypeID == 1).ToList();
+
+            model.BankTransfers = Db.DocumentBankTransfer.Where(x => x.LocationID == model.Location.ID && x.Date == documentDate).OrderByDescending(x => x.RecordDate).Select(x => new BankTransfer()
+            {
+                Amount = x.Amount,
+                Commission = x.Commission,
+                Currency = x.Currency,
+                Date = x.Date,
+                DocumentNumber = x.DocumentNumber,
+                ID = x.ID,
+                IsActive = x.IsActive.Value,
+                ToBankAccountID = x.ToBankAccountID.Value,
+                UID = x.UID.Value
+            }).ToList();
+
+            foreach (var item in model.BankTransfers)
+            {
+                item.BankAccountName = model.BankAccountList.FirstOrDefault(x => x.ID == item.ToBankAccountID).Name;
+            }
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult TransferDetail(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+
+            var documentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.CurrentOurCompany.ID && x.AccountTypeID == 1).ToList();
+
+            if (id != null)
+            {
+                model.BankTransfer = Db.DocumentBankTransfer.FirstOrDefault(x => x.UID == id);
+                model.TransferStatus = Db.BankTransferStatus.Where(x=> x.LevelNumber <= 3).ToList();
+
+                if (model.BankTransfer != null)
+                {
+                    model.EmployeeRecorded = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.BankTransfer.RecordEmployeeID)?.FullName;
+                    model.EmployeeUpdated = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.BankTransfer.UpdateEmployee)?.FullName;
+
+                    if (model.BankTransfer.Date == documentDate)
+                    {
+                        model.IsUpdatible = true;
+                    }
+                    else
+                    {
+                        model.Result.Message = "Doküman bugüne ait değildir. Merkezden güncellenebilir.";
+                        TempData["Result"] = model.Result;
+                    }
+
+                }
+                else
+                {
+                    model.Result.Message = "Doküman bilgisine ulaşılamadı.";
+                    TempData["Result"] = model.Result;
+
+                    return RedirectToAction("Transfer");
+                }
+            }
+            else
+            {
+                model.Result.Message = "Doküman bilgisi yok.";
+                TempData["Result"] = model.Result;
+
+                return RedirectToAction("Transfer");
+            }
+
+            model.Currencies = Db.Currency.ToList();
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddTransfer(FormBankTransfer transfer)
+        {
+            CashControlModel model = new CashControlModel();
+
+            var amount = LocationHelper.GetStringToAmount(transfer.Amount);
+            var commission = LocationHelper.GetStringToAmount(transfer.Commission);
+            var documentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
+            var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
+            var dayResultID = LocationHelper.GetDayResultID(model.Location.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", LocationHelper.GetIPAddress());
+
+            DateTime slipdate = transfer.ReceiptDate.Add(transfer.ReceiptTime.TimeOfDay);
+            string SlipPath = "/Documents";
+            string fileName = string.Empty;
+
+            // dosya işlemleri yapılır
+            if (transfer.ReceiptFile != null && transfer.ReceiptFile.ContentLength > 0)
+            {
+                fileName = Guid.NewGuid().ToString() + Path.GetExtension(transfer.ReceiptFile.FileName);
+
+                string mappath = Server.MapPath(SlipPath);
+
+                try
+                {
+                    //Kaydetme
+                    transfer.ReceiptFile.SaveAs(Path.Combine(mappath, fileName));
+
+                    //Kopyalama
+                    if (!Request.IsLocal)
+                    {
+                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Bank";
+                        string sourcePath = @"C:\inetpub\wwwroot\location\Documents";
+                        string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
+                        string destFile = System.IO.Path.Combine(targetPath, fileName);
+                        System.IO.File.Copy(sourceFile, destFile, true);
+                        System.IO.File.Delete(sourceFile);
+
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            BankTransferModel documentModel = new BankTransferModel()
+            {
+                ActionTypeID = 30,
+                ActionTypeName = "Havale / Eft İşlemi",
+                Amount = amount,
+                Commission = commission,
+                Currency = transfer.Currency,
+                StatusID = 1,
+                Description = transfer.Description,
+                DocumentDate = documentDate,
+                EnvironmentID = 3,
+                ToBankID = transfer.BankAccountID,
+                IsActive = true,
+                LocationID = model.Location.ID,
+                ResultID = dayResultID,
+                UID = Guid.NewGuid(),
+                ProcessDate = processDate,
+                SlipDate = slipdate,
+                SlipNumber = transfer.ReceiptNumber,
+                SlipPath = @"/Document/Bank",
+                SlipDocument = fileName,
+                ReferanceCode = ""
+            };
+
+
+            var result = documentManager.AddBankTransfer(documentModel);
+
+            TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return RedirectToAction("Transfer");
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateTransfer(FormBankTransfer transfer)
+        {
+            CashControlModel model = new CashControlModel();
+
+            var amount = LocationHelper.GetStringToAmount(transfer.Amount);
+            var commission = LocationHelper.GetStringToAmount(transfer.Commission);
+            var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
+
+            DateTime slipdate = transfer.ReceiptDate.Add(transfer.ReceiptTime.TimeOfDay);
+
+
+
+            BankTransferModel documentModel = new BankTransferModel()
+            {
+                ActionTypeID = 30,
+                ActionTypeName = "Havale / Eft İşlemi",
+                Amount = amount,
+                Commission = commission,
+                Currency = transfer.Currency,
+                StatusID = transfer.StatusID,
+                Description = transfer.Description,
+                DocumentDate = transfer.DocumentDate,
+                EnvironmentID = 3,
+                ToBankID = transfer.BankAccountID,
+                IsActive = transfer.IsActive == 1 ? true : false,
+                LocationID = model.Location.ID,
+                UID = transfer.UID.Value,
+                ProcessDate = processDate,
+                SlipDate = slipdate,
+                SlipNumber = transfer.ReceiptNumber,
+                SlipPath = @"/Document/Bank",
+                SlipDocument = string.Empty,
+                ReferanceCode = transfer.ReferenceCode,
+                TrackingNumber = transfer.TrackingNumber
+            };
+
+            // dosya işlemleri yapılır
+            if (transfer.ReceiptFile != null && transfer.ReceiptFile.ContentLength > 0)
+            {
+                documentModel.SlipDocument = Guid.NewGuid().ToString() + Path.GetExtension(transfer.ReceiptFile.FileName);
+
+                string mappath = Server.MapPath(documentModel.SlipPath);
+
+                try
+                {
+                    //Kaydetme
+                    transfer.ReceiptFile.SaveAs(Path.Combine(mappath, documentModel.SlipDocument));
+
+                    //Kopyalama
+                    if (!Request.IsLocal)
+                    {
+                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Bank";
+                        string sourcePath = @"C:\inetpub\wwwroot\location\Documents";
+                        string sourceFile = System.IO.Path.Combine(sourcePath, documentModel.SlipDocument);
+                        string destFile = System.IO.Path.Combine(targetPath, documentModel.SlipDocument);
+                        System.IO.File.Copy(sourceFile, destFile, true);
+                        System.IO.File.Delete(sourceFile);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            var result = documentManager.UpdateBankTransfer(documentModel);
+
+            TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return RedirectToAction("TransferDetail", new { id = transfer.UID });
+        }
 
     }
 }
