@@ -1,7 +1,127 @@
-﻿
+﻿@model EnvelopeControlModel
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Gün Sonu Zarfı";
 }
 
-<h2>Index</h2>
+<div class="d-flex flex fixed-content">
+    <div class="d-flex flex" id="content-body">
+        <div class="d-flex flex-column flex" data-plugin="user">
+            <div class="p-2">
+                <div class="toolbar row  no-gutters">
+                    <a href="#" class="btn btn-md btn-rounded light-green text-white" title="Satış">
+                        <span class="font-weight-bold">@(Model.DocumentDate.ToLongDateString())</span>
+                    </a>
+                    <a href="#" class="btn btn-md btn-wave btn-rounded light-green text-white px-3">
+                        <i data-feather="sun"></i>
+                    </a>
+                </div>
+                <div class="mt-2">
+                    <a href="#" class="btn btn-sm btn-block btn-white btn-rounded">
+                        <span class="font-weight-bold">@(Model.Location.FullName)</span>
+                    </a>
+                </div>
+            </div>
+            <div class="scroll-y mb-0">
+                <div class="row no-gutters">
+                    <div class="col-md-12 p-2">
 
+                        <div class="card mb-2" data-sr-id="31" style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
+                            <div class="card-header">
+                                <span class="font-weight-500">Lokasyon Takvim ve Mesaisi</span>
+                            </div>
+                            <div class="card-body m-0 p-0">
+                                <table class="table mb-0">
+                                    <tbody>
+                                        <tr>
+                                            <td class="text-body font-weight-500 text-center bg-body p-1">@(Model.Schedule?.DateStart.ToShortTimeString())</td>
+                                            <td class="text-body font-weight-500 text-center bg-body p-1">@(Model.Schedule?.DateEnd?.ToShortTimeString())</td>
+                                            <td class="text-body font-weight-500 text-center bg-body p-1">@(Model.Schedule?.Duration?.ToString(@"hh\:mm"))</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="text-success font-weight-500 text-center bg-body p-1">@(Model.Shift?.DateStart.ToString("HH\\:mm\\:ss"))</td>
+                                            <td class="text-success font-weight-500 text-center bg-body p-1">@(Model.Shift?.DateEnd?.ToString("HH\\:mm\\:ss"))</td>
+                                            <td class="text-success font-weight-500 text-center bg-body p-1">@(Model.Shift?.Duration?.ToString(@"hh\:mm\:ss"))</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card" data-sr-id="31" style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
+                            <div class="card-header">
+                                <div class="d-flex">
+                                    <span class="font-weight-500">Çalışanlar Mesai ve Hakedişler</span>
+                                    <span class="flex"></span>
+                                    <div>
+                                        <a href="/Envelope/CalculateSalary" class="font-weight-bold pl-2" title="Add Cash Collect">
+                                            <i class="text-success font-weight-bold" data-feather="repeat"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body m-0 p-0">
+                                <div class="table-responsive scrollable scroll-x">
+                                    @foreach (var item in Model.EmployeeActions.Where(x => x.ActionTypeID == 32))
+                                    {
+                                        var shiftModel = Model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+
+                                        <table class="table mb-0">
+                                            <thead>
+                                                <tr>
+                                                    <th colspan="3">@(item.FullName)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td class="bg-body p-1 pl-3">Takvimi</td>
+                                                    <th class="p-1">@(shiftModel?.ScheduleDateStart?.ToString("HH\\:mm\\:ss"))</th>
+                                                    <th class="p-1 text-right">@(shiftModel?.ScheduleDateEnd?.ToString("HH\\:mm\\:ss"))</th>
+                                                </tr>
+                                                <tr>
+                                                    <td class="bg-body p-1 pl-3">Mesaisi</td>
+                                                    <th class="text-success p-1">@(shiftModel?.ShiftDateStart?.ToString("HH\\:mm\\:ss"))</th>
+                                                    <th class="text-success p-1 text-right">@(shiftModel?.ShiftDateEnd?.ToString("HH\\:mm\\:ss"))</th>
+                                                </tr>
+                                                <tr>
+                                                    <td class="bg-body p-1 pl-3">Mesai Süresi (Saat)</td>
+                                                    <th class="p-1">@(shiftModel?.ShiftDuration?.ToString(@"hh\:mm"))</th>
+                                                    <th class="p-1 text-right">@(item.QuantityHour?.ToString("N2"))</th>
+                                                </tr>
+                                                <tr>
+                                                    <td class="bg-body p-1 pl-3">Birimi - Hakedişi</td>
+                                                    <td class="p-1 text-right">@(item.UnitPrice?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</td>
+                                                    <th class="p-1 text-right">@(item.TotalAmount?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</th>
+                                                </tr>
+                                                <tr>
+                                                    <td class="bg-body p-1 pl-3">Setcard - Maaş</td>
+                                                    <td class="p-1 text-right">@(item.TotalAmountFood?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</td>
+                                                    <td class="p-1 text-right">@(item.TotalAmountSalary?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</td>
+                                                </tr>
+                                               
+                                            </tbody>
+                                        </table>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
+    {
+        <script>
+                $(function () {
+                    notie.setOptions({
+                        alertTime: 5
+                    })
+                    notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
+                    noticed = true;
+                });
+        </script>
+    }
+}

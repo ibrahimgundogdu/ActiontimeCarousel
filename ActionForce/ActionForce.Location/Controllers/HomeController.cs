@@ -1,4 +1,5 @@
 ﻿using ActionForce.Entity;
+using ActionForce.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,28 @@ namespace ActionForce.Location.Controllers
 {
     public class HomeController : BaseController
     {
+        private readonly DocumentManager documentManager;
+        public HomeController()
+        {
+            LayoutControlModel model = new LayoutControlModel();
+
+            documentManager = new DocumentManager(
+               new ProcessEmployee()
+               {
+                   ID = model.Authentication.CurrentEmployee.EmployeeID,
+                   FullName = model.Authentication.CurrentEmployee.FullName
+               },
+               LocationHelper.GetIPAddress(),
+               new ProcessCompany()
+               {
+                   ID = model.Authentication.CurrentOurCompany.ID,
+                   Name = model.Authentication.CurrentOurCompany.Name,
+                   Currency = model.Authentication.CurrentOurCompany.Currency,
+                   TimeZone = model.Authentication.CurrentOurCompany.TimeZone
+               }
+           );
+        }
+
         // GET: Home
         [AllowAnonymous]
         public ActionResult Index()
@@ -18,10 +41,12 @@ namespace ActionForce.Location.Controllers
             model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
 
             LocationServiceManager manager = new LocationServiceManager(Db, model.Authentication.CurrentLocation);
+            model.DocumentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
+
 
             //model.Summary = manager.GetLocationSummary(DateTime.Now.Date, model.Authentication.CurrentEmployee);
-            model.LocationBalance = manager.GetLocationSaleBalanceToday();
-            model.TicketList = manager.GetLocationTicketsToday();
+            model.LocationBalance = manager.GetLocationSaleBalanceToday(model.DocumentDate);
+            model.TicketList = manager.GetLocationTicketsToday(model.DocumentDate);
 
             return View(model);
         }
@@ -138,6 +163,9 @@ namespace ActionForce.Location.Controllers
                 }
 
                 LocationHelper.AddApplicationLog("Location", "TicketSaleRows", "Insert", rowID.ToString(), "Home", "SetTicketSale", null, true, message, string.Empty, date, $"{model.Authentication.CurrentEmployee.EmployeeID} - {model.Authentication.CurrentEmployee.FullName}", LocationHelper.GetIPAddress(), string.Empty, saleRow);
+
+                System.Threading.Tasks.Task lblusatask = System.Threading.Tasks.Task.Factory.StartNew(() => documentManager.CheckLocationTicketSale(rowID.Value, date));
+                
             }
             else
             {
@@ -218,9 +246,13 @@ namespace ActionForce.Location.Controllers
                         }
 
                         message = "Güncelleme Başarılı";
+                        DateTime dateProcess = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
 
                         var isequal = LocationHelper.PublicInstancePropertiesEqual<TicketSaleRows>(self, saleRow, LocationHelper.getIgnorelist());
                         LocationHelper.AddApplicationLog("Location", "TicketSaleRows", "Update", saleRow.ID.ToString(), "Home", "UpdateSaleRow", isequal, true, message, string.Empty, ticketdate, $"{model.Authentication.CurrentEmployee.EmployeeID} - {model.Authentication.CurrentEmployee.FullName}", LocationHelper.GetIPAddress(), string.Empty, null);
+
+                        System.Threading.Tasks.Task lblusatask = System.Threading.Tasks.Task.Factory.StartNew(() => documentManager.CheckLocationTicketSale(rowid.Value, dateProcess));
+
                     }
                     else
                     {
@@ -239,7 +271,7 @@ namespace ActionForce.Location.Controllers
 
             TempData["Message"] = message;
 
-            return RedirectToAction("Detail",new { id= formSaleRow.UID});
+            return RedirectToAction("Detail", new { id = formSaleRow.UID });
         }
 
     }

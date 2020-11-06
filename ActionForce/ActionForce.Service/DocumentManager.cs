@@ -1847,6 +1847,595 @@ namespace ActionForce.Service
 
 
 
+        public Result AddSalaryEarn(SalaryEarnModel salary)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            if (salary != null)
+            {
+                using (ActionTimeEntities Db = new ActionTimeEntities())
+                {
+                    try
+                    {
+                        var setcardparam = Db.SetcardParameter.Where(x => x.Year <= salary.DocumentDate.Year && x.OurCompanyID == _company.ID).OrderByDescending(x => x.Year).FirstOrDefault();
+                        var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == salary.EmployeeID);
+                        var location = Db.Location.FirstOrDefault(x => x.LocationID == salary.LocationID);
+                        var exchange = ServiceHelper.GetExchange(salary.DocumentDate);
+                        double salaryMultiplier = Db.GetSalaryMultiplier(salary.LocationID, salary.EmployeeID, salary.DocumentDate).FirstOrDefault() ?? 0;
+
+                        var empunits = Db.EmployeeSalary.Where(x => x.EmployeeID == salary.EmployeeID && x.DateStart <= salary.DocumentDate && x.Hourly > 0).OrderByDescending(x => x.DateStart).FirstOrDefault();
+                        double? unitprice = empunits?.Hourly ?? 0;
+
+                        var locationstats = Db.LocationStats.FirstOrDefault(x => x.LocationID == salary.LocationID && x.StatsID == 2 && x.OptionID == 3);
+                        if (location.OurCompanyID == 1 && locationstats != null)
+                        {
+                            unitprice = unitprice + 1;
+                        }
+
+                        unitprice = unitprice * salaryMultiplier;
+
+                        var SalaryEarn = Db.DocumentSalaryEarn.FirstOrDefault(x => x.LocationID == salary.LocationID && x.EmployeeID == salary.EmployeeID && x.Date == salary.DocumentDate && x.ResultID == salary.ResultID);
+
+                        if (SalaryEarn == null)
+                        {
+
+
+                            DocumentSalaryEarn salaryEarn = new DocumentSalaryEarn();
+
+                            salaryEarn.ActionTypeID = salary.ActionTypeID;
+                            salaryEarn.ActionTypeName = salary.ActionTypeName;
+                            salaryEarn.EmployeeID = salary.EmployeeID;
+                            salaryEarn.QuantityHour = salary.QuantityHour;
+                            salaryEarn.UnitPrice = unitprice;
+                            salaryEarn.TotalAmount = (salaryEarn.QuantityHour * salaryEarn.UnitPrice);
+                            salaryEarn.UnitPriceMultiplierApplied = salaryMultiplier;
+
+                            salaryEarn.Currency = salary.Currency;
+                            salaryEarn.Date = salary.DocumentDate;
+                            salaryEarn.Description = salary.Description;
+                            salaryEarn.DocumentNumber = ServiceHelper.GetDocumentNumber(salary.OurCompanyID, "SE");
+                            salaryEarn.IsActive = true;
+                            salaryEarn.LocationID = salary.LocationID;
+                            salaryEarn.OurCompanyID = salary.OurCompanyID;
+                            salaryEarn.RecordDate = DateTime.UtcNow.AddHours(salary.TimeZone.Value);
+                            salaryEarn.RecordEmployeeID = _employee.ID;
+                            salaryEarn.RecordIP = _ip;
+                            salaryEarn.UID = salary.UID;
+                            salaryEarn.EnvironmentID = salary.EnvironmentID;
+                            salaryEarn.ReferenceID = salary.ReferanceID;
+                            salaryEarn.ResultID = salary.ResultID;
+                            salaryEarn.SystemQuantityHour = salary.QuantityHour;
+                            salaryEarn.SystemTotalAmount = (salaryEarn.QuantityHour * salaryEarn.UnitPrice);
+                            salaryEarn.SystemUnitPrice = unitprice;
+                            salaryEarn.CategoryID = salary.CategoryID;
+
+                            salaryEarn.UnitFoodPrice = 0;
+                            salaryEarn.QuantityHourSalary = salaryEarn.QuantityHour;
+                            salaryEarn.QuantityHourFood = salaryEarn.QuantityHour;
+
+                            if (employee.OurCompanyID == 2 && employee.AreaCategoryID == 2 && (employee.PositionID == 5 || employee.PositionID == 6))
+                            {
+                                salaryEarn.UnitFoodPrice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
+                                salaryEarn.QuantityHourSalary = (salaryEarn.QuantityHour * 0.9);
+                                salaryEarn.QuantityHourFood = (salaryEarn.QuantityHour * 0.9);
+                            }
+
+
+
+                            Db.DocumentSalaryEarn.Add(salaryEarn);
+                            Db.SaveChanges();
+
+                            // cari hesap işlemesi
+                            ServiceHelper.AddEmployeeAction(salaryEarn.EmployeeID, salaryEarn.LocationID, salaryEarn.ActionTypeID, salaryEarn.ActionTypeName, salaryEarn.ID, salaryEarn.Date, salaryEarn.Description, 1, salaryEarn.TotalAmountSalary, 0, salaryEarn.Currency, null, null, null, salaryEarn.RecordEmployeeID, salaryEarn.RecordDate, salaryEarn.UID.Value, salaryEarn.DocumentNumber, 3);
+                            if (salaryEarn.TotalAmountFood > 0)
+                            {
+                                var setcartacttype = Db.CashActionType.FirstOrDefault(x => x.ID == 39);
+                                ServiceHelper.AddEmployeeAction(salaryEarn.EmployeeID, salaryEarn.LocationID, setcartacttype.ID, setcartacttype.Name, salaryEarn.ID, salaryEarn.Date, salaryEarn.Description, 1, salaryEarn.TotalAmountFood, 0, salaryEarn.Currency, null, null, null, salaryEarn.RecordEmployeeID, salaryEarn.RecordDate, salaryEarn.UID.Value, salaryEarn.DocumentNumber, 17);
+                            }
+
+                            result.IsSuccess = true;
+                            result.Message = "Ücret Hakediş başarı ile eklendi";
+
+                            // log atılır
+                            ServiceHelper.AddApplicationLog("Location", "Salary", "Insert", salaryEarn.ID.ToString(), "Salary", "Index", null, true, $"{result.Message}", string.Empty, salary.ProcessDate, _employee.FullName, _ip, string.Empty, salaryEarn);
+                        }
+                        else
+                        {
+                            result.IsSuccess = false;
+                            result.Message = "Ücret Hakedişi daha önce zaten var";
+
+                            // log atılır
+                            ServiceHelper.AddApplicationLog("Location", "Salary", "Insert", SalaryEarn.ID.ToString(), "Salary", "Index", null, false, $"{result.Message}", string.Empty, salary.ProcessDate, _employee.FullName, _ip, string.Empty, null);
+
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"Ücret Hakediş eklenemedi : {ex.Message}";
+                        ServiceHelper.AddApplicationLog("Location", "Salary", "Insert", "-1", "Salary", "Index", null, false, $"{result.Message}", string.Empty, salary.ProcessDate, _employee.FullName, _ip, string.Empty, null);
+
+                    }
+
+                }
+            }
+
+            return result;
+        }
+
+        public Result UpdateSalaryEarn(SalaryEarnModel salary)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var isEarn = Db.DocumentSalaryEarn.FirstOrDefault(x => x.UID == salary.UID);
+                if (isEarn != null)
+                {
+                    try
+                    {
+                        var location = Db.Location.FirstOrDefault(x => x.LocationID == salary.LocationID);
+                        var locId = salary.LocationID;
+                        var exchange = ServiceHelper.GetExchange(salary.DocumentDate);
+                        var setcardparam = Db.SetcardParameter.Where(x => x.Year <= salary.DocumentDate.Year && x.OurCompanyID == _company.ID).OrderByDescending(x => x.Year).FirstOrDefault();
+                        var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == salary.EmployeeID);
+                        double salaryMultiplier = Db.GetSalaryMultiplier(salary.LocationID, salary.EmployeeID, salary.DocumentDate).FirstOrDefault() ?? 0;
+
+                        var empunits = Db.EmployeeSalary.Where(x => x.EmployeeID == salary.EmployeeID && x.DateStart <= salary.DocumentDate && x.Hourly > 0).OrderByDescending(x => x.DateStart).FirstOrDefault();
+                        double? unitprice = empunits?.Hourly ?? 0;
+
+                        var locationstats = Db.LocationStats.FirstOrDefault(x => x.LocationID == salary.LocationID && x.StatsID == 2 && x.OptionID == 3);
+                        if (location.OurCompanyID == 1 && locationstats != null)
+                        {
+                            unitprice = unitprice + 1;
+                        }
+                        unitprice = unitprice * salaryMultiplier;
+
+                        var isEmp = salary.EmployeeID;
+
+                        DocumentSalaryEarn self = new DocumentSalaryEarn()
+                        {
+                            ActionTypeID = isEarn.ActionTypeID,
+                            ActionTypeName = isEarn.ActionTypeName,
+                            TotalAmount = isEarn.TotalAmount,
+                            EmployeeID = isEarn.EmployeeID,
+                            Currency = isEarn.Currency,
+                            Date = isEarn.Date,
+                            Description = isEarn.Description,
+                            DocumentNumber = isEarn.DocumentNumber,
+                            QuantityHour = isEarn.QuantityHour,
+                            ID = isEarn.ID,
+                            UnitPrice = isEarn.UnitPrice,
+                            IsActive = isEarn.IsActive,
+                            LocationID = isEarn.LocationID,
+                            OurCompanyID = isEarn.OurCompanyID,
+                            RecordDate = isEarn.RecordDate,
+                            RecordEmployeeID = isEarn.RecordEmployeeID,
+                            RecordIP = isEarn.RecordIP,
+                            ReferenceID = isEarn.ReferenceID,
+                            UpdateDate = isEarn.UpdateDate,
+                            UpdateEmployee = isEarn.UpdateEmployee,
+                            UpdateIP = isEarn.UpdateIP,
+                            CategoryID = isEarn.CategoryID,
+                            EnvironmentID = isEarn.EnvironmentID,
+                            SystemQuantityHour = isEarn.SystemQuantityHour,
+                            SystemTotalAmount = isEarn.SystemTotalAmount,
+                            SystemUnitPrice = isEarn.SystemUnitPrice,
+                            QuantityHourFood = isEarn.QuantityHourFood,
+                            QuantityHourSalary = isEarn.QuantityHourSalary,
+                            ResultID = isEarn.ResultID,
+                            TotalAmountFood = isEarn.TotalAmountFood,
+                            TotalAmountLabor = isEarn.TotalAmountLabor,
+                            TotalAmountSalary = isEarn.TotalAmountSalary,
+                            UID = isEarn.UID,
+                            UnitFoodPrice = isEarn.UnitFoodPrice,
+                            UnitPriceMultiplierApplied = isEarn.UnitPriceMultiplierApplied
+
+                        };
+
+                        isEarn.ReferenceID = salary.ReferanceID;
+                        isEarn.CategoryID = salary.CategoryID;
+                        isEarn.EmployeeID = salary.EmployeeID;
+                        isEarn.UnitPrice = (double?)unitprice;
+                        isEarn.QuantityHour = (double)salary.QuantityHour;
+                        isEarn.TotalAmount = (double)((double?)isEarn.UnitPrice * (double)isEarn.QuantityHour);
+                        isEarn.UnitPriceMultiplierApplied = salaryMultiplier;
+                        isEarn.Description = salary.Description;
+
+                        isEarn.UpdateDate = DateTime.UtcNow.AddHours(salary.TimeZone.Value);
+                        isEarn.UpdateEmployee = _employee.ID;
+                        isEarn.UpdateIP = _ip;
+                        isEarn.SystemQuantityHour = isEarn.QuantityHour;
+                        isEarn.SystemTotalAmount = isEarn.TotalAmount;
+                        isEarn.SystemUnitPrice = unitprice;
+
+                        isEarn.UnitFoodPrice = 0;//setcardparam != null ? setcardparam.Amount ?? 0 : 0;
+                        isEarn.QuantityHourSalary = isEarn.QuantityHour;
+                        isEarn.QuantityHourFood = isEarn.QuantityHour;
+
+                        if (employee.OurCompanyID == 2 && employee.AreaCategoryID == 2 && (employee.PositionID == 5 || employee.PositionID == 6))
+                        {
+                            isEarn.UnitFoodPrice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
+                            isEarn.QuantityHourSalary = (isEarn.QuantityHour * 0.9);
+                            isEarn.QuantityHourFood = (isEarn.QuantityHour * 0.9);
+                        }
+
+                        Db.SaveChanges();
+
+                        var empaction = Db.EmployeeCashActions.Where(x => x.ProcessUID == isEarn.UID).ToList();
+                        Db.EmployeeCashActions.RemoveRange(empaction);
+                        Db.SaveChanges();
+
+                        // cari hesap işlemesi
+                        ServiceHelper.AddEmployeeAction(isEarn.EmployeeID, isEarn.LocationID, isEarn.ActionTypeID, isEarn.ActionTypeName, isEarn.ID, isEarn.Date, isEarn.Description, 1, isEarn.TotalAmountSalary, 0, isEarn.Currency, null, null, null, isEarn.RecordEmployeeID, isEarn.RecordDate, isEarn.UID.Value, isEarn.DocumentNumber, 3);
+                        if (isEarn.TotalAmountFood > 0)
+                        {
+                            var setcartacttype = Db.CashActionType.FirstOrDefault(x => x.ID == 39);
+                            ServiceHelper.AddEmployeeAction(isEarn.EmployeeID, isEarn.LocationID, setcartacttype.ID, setcartacttype.Name, isEarn.ID, isEarn.Date, isEarn.Description, 1, isEarn.TotalAmountFood, 0, isEarn.Currency, null, null, null, isEarn.RecordEmployeeID, isEarn.RecordDate, isEarn.UID.Value, isEarn.DocumentNumber, 17);
+                        }
+
+                        result.IsSuccess = true;
+                        result.Message = "Ücret Hakediş başarı ile güncellendi";
+
+                        var isequal = ServiceHelper.PublicInstancePropertiesEqual<DocumentSalaryEarn>(self, isEarn, ServiceHelper.getIgnorelist());
+                        ServiceHelper.AddApplicationLog("Location", "Salary", "Update", isEarn.ID.ToString(), "Salary", "Index", isequal, true, $"{result.Message}", string.Empty, salary.ProcessDate, _employee.FullName, _ip, string.Empty, null);
+
+                    }
+                    catch (Exception ex)
+                    {
+
+                        result.Message = $"Ücret Hakediş güncellenemedi : {ex.Message}";
+                        ServiceHelper.AddApplicationLog("Location", "Salary", "Update", "-1", "Salary", "Index", null, false, $"{result.Message}", string.Empty, salary.ProcessDate, _employee.FullName, _ip, string.Empty, null);
+
+                    }
+                }
+
+            }
+
+            return result;
+        }
+
+        public Result CheckLocationTicketSale(long id, DateTime processDate)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            if (id > 0)
+            {
+                using (ActionTimeEntities Db = new ActionTimeEntities())
+                {
+                    var i = Db.CheckLocationTicketSale(id, _employee.ID, processDate, _ip, _company.ID).FirstOrDefault();
+                    result.IsSuccess = true;
+                    result.Message = "Ok";
+                }
+            }
+
+            return result;
+        }
+
+
+
+        public bool CheckSalaryEarn(DateTime? date, int? locationid)
+        {
+            bool issuccess = false;
+
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                var location = db.Location.FirstOrDefault(x => x.LocationID == locationid);
+                var dayresult = db.DayResult.FirstOrDefault(x => x.LocationID == locationid && x.Date == date);
+                var locschedule = db.LocationSchedule.FirstOrDefault(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date);
+
+                if (locschedule != null)
+                {
+                    var empschedules = db.Schedule.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date).ToList();
+                    List<int> empids = empschedules.Select(x => x.EmployeeID.Value).ToList();
+
+
+                    var empshifts = db.EmployeeShift.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date && empids.Contains(x.EmployeeID.Value)).ToList();
+                    var empunits = db.EmployeeSalary.Where(x => empids.Contains(x.EmployeeID) && x.DateStart <= dayresult.Date).ToList();
+
+                    foreach (var emp in empids)
+                    {
+                        var calculate = CalculateSalaryEarn(dayresult.ID, emp, dayresult.Date, dayresult.LocationID);
+                    }
+
+                    issuccess = true;
+                }
+            }
+
+            return issuccess;
+        }
+
+        public bool CalculateSalaryEarn(long? resultid, int employeeid, DateTime? date, int? locationid)
+        {
+            bool issuccess = false;
+
+            if (employeeid > 0 && (resultid > 0 || date != null || locationid > 0))
+            {
+
+                using (ActionTimeEntities db = new ActionTimeEntities())
+                {
+                    var dayresult = db.VDayResult.FirstOrDefault(x => x.ID == resultid.Value);
+
+                    if (dayresult == null)
+                    {
+                        date = date.Value.Date;
+                        dayresult = db.VDayResult.FirstOrDefault(x => x.LocationID == locationid && x.Date == date);
+                    }
+
+
+                    if (dayresult != null)
+                    {
+                        List<DayResultItemList> itemlist = new List<DayResultItemList>();
+
+                        var items = db.DayResultItems.ToList();
+
+                        var locschedule = db.LocationSchedule.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date);
+                        var location = db.Location.FirstOrDefault(x => x.LocationID == dayresult.LocationID);
+                        var processDate = DateTime.UtcNow.AddHours(location.Timezone.Value);
+
+                        if (locschedule != null)
+                        {
+                            var employeeschedule = db.Schedule.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date && x.EmployeeID == employeeid);
+                            var employeeshift = db.EmployeeShift.FirstOrDefault(x => x.LocationID == dayresult.LocationID && x.ShiftDate == dayresult.Date && x.EmployeeID == employeeid);
+
+                            double? durationhour = 0;
+
+                            TimeSpan? duration = null;
+
+                            if (employeeschedule != null && employeeshift != null)
+                            {
+                                DateTime? starttime = employeeschedule.ShiftDateStart;
+                                if (employeeshift.ShiftDateStart > starttime)
+                                {
+                                    starttime = employeeshift.ShiftDateStart;
+                                }
+
+                                DateTime? finishtime = employeeschedule.ShiftdateEnd;
+                                if (employeeshift.ShiftDateEnd < finishtime)
+                                {
+                                    finishtime = employeeshift.ShiftDateEnd;
+                                }
+
+                                if (finishtime != null && starttime != null)
+                                {
+                                    duration = (finishtime - starttime).Value;
+                                    double? durationminute = (finishtime - starttime).Value.TotalMinutes;
+                                    durationhour = (durationminute / 60);
+                                }
+
+                                // varmı yokmu
+                                var existsitem = db.DayResultItemList.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == employeeid && x.Date == dayresult.Date && x.ResultItemID == 8);
+                                if (existsitem != null)
+                                {
+                                    db.DayResultItemList.Remove(existsitem);
+                                    db.SaveChanges();
+                                }
+
+                                itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
+                                {
+                                    Amount = 0,
+                                    Category = x.Category,
+                                    Currency = location.Currency,
+                                    ResultID = dayresult.ID,
+                                    ResultItemID = x.ID,
+                                    Quantity = 0,
+                                    SystemQuantity = 0,
+                                    Exchange = 1,
+                                    SystemAmount = 0,
+                                    LocationID = location.LocationID,
+                                    Date = dayresult.Date,
+                                    EmployeeID = employeeid,
+                                    SystemHourQuantity = durationhour,
+                                    UnitHourPrice = 0,
+                                    RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                    RecordEmployeeID = _employee.ID,
+                                    RecordIP = _ip,
+                                    Duration = duration,
+                                    SystemDuration = duration,
+                                    HourQuantity = durationhour
+
+                                }).FirstOrDefault());
+
+                                var existsitem9 = db.DayResultItemList.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == employeeid && x.Date == dayresult.Date && x.ResultItemID == 9);
+                                if (existsitem9 != null)
+                                {
+                                    db.DayResultItemList.Remove(existsitem9);
+                                    db.SaveChanges();
+                                }
+
+                                itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
+                                {
+                                    Amount = 0,
+                                    Category = x.Category,
+                                    Currency = location.Currency,
+                                    ResultID = dayresult.ID,
+                                    ResultItemID = x.ID,
+                                    Quantity = 0,
+                                    SystemQuantity = 0,
+                                    Exchange = 1,
+                                    SystemAmount = 0,
+                                    LocationID = location.LocationID,
+                                    Date = dayresult.Date,
+                                    EmployeeID = employeeid,
+                                    RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                    RecordEmployeeID = _employee.ID,
+                                    RecordIP = _ip
+
+                                }).FirstOrDefault()); ;
+
+                                // maaş hakedişi dosya ve hareket olarak ekle
+
+
+                                var existssalaryearn = db.DocumentSalaryEarn.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == employeeid && x.Date == dayresult.Date && x.ActionTypeID == 32 && x.IsActive == true);
+
+                                if (existssalaryearn != null)
+                                {
+
+                                    SalaryEarnModel earn = new SalaryEarnModel();
+
+                                    earn.ActionTypeID = 32;
+                                    earn.ActionTypeName = "Ücret Hakediş";
+                                    earn.Currency = location.Currency;
+                                    earn.DocumentDate = dayresult.Date;
+                                    earn.EmployeeID = employeeid;
+                                    earn.EnvironmentID = 2;
+                                    earn.LocationID = location.LocationID;
+                                    earn.OurCompanyID = location.OurCompanyID;
+                                    earn.QuantityHour = durationhour.Value;
+                                    earn.ResultID = dayresult.ID;
+                                    earn.TimeZone = location.Timezone;
+                                    earn.UID = existssalaryearn.UID.Value;
+                                    earn.Description = existssalaryearn.Description;
+                                    earn.ProcessDate = processDate;
+
+                                    var res = UpdateSalaryEarn(earn);  // log zaten var.
+
+                                }
+                                else
+                                {
+
+                                    SalaryEarnModel earn = new SalaryEarnModel();
+
+                                    earn.ActionTypeID = 32;
+                                    earn.ActionTypeName = "Ücret Hakediş";
+                                    earn.Currency = location.Currency;
+                                    earn.DocumentDate = dayresult.Date;
+                                    earn.EmployeeID = employeeid;
+                                    earn.EnvironmentID = 2;
+                                    earn.LocationID = location.LocationID;
+                                    earn.OurCompanyID = location.OurCompanyID;
+                                    earn.QuantityHour = durationhour.Value;
+                                    earn.ResultID = dayresult.ID;
+                                    earn.TimeZone = location.Timezone;
+                                    earn.UID = Guid.NewGuid();
+                                    earn.ProcessDate = processDate;
+
+
+                                    var res = AddSalaryEarn(earn);  // log zaten var.
+                                }
+
+                            }
+                            else
+                            {
+
+                                var existsitem8 = db.DayResultItemList.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == employeeid && x.Date == dayresult.Date && x.ResultItemID == 8);
+                                if (existsitem8 != null)
+                                {
+                                    db.DayResultItemList.Remove(existsitem8);
+                                    db.SaveChanges();
+                                }
+
+                                var existsitem9 = db.DayResultItemList.FirstOrDefault(x => x.LocationID == location.LocationID && x.EmployeeID == employeeid && x.Date == dayresult.Date && x.ResultItemID == 9);
+                                if (existsitem9 != null)
+                                {
+                                    db.DayResultItemList.Remove(existsitem9);
+                                    db.SaveChanges();
+                                }
+
+                                itemlist.Add(items.Where(x => x.ID == 8).Select(x => new DayResultItemList()
+                                {
+                                    Amount = 0,
+                                    Category = x.Category,
+                                    Currency = location.Currency,
+                                    ResultID = dayresult.ID,
+                                    ResultItemID = x.ID,
+                                    Quantity = 0,
+                                    SystemQuantity = 0,
+                                    Exchange = 1,
+                                    SystemAmount = 0,
+                                    LocationID = location.LocationID,
+                                    Date = dayresult.Date,
+                                    EmployeeID = employeeid,
+                                    SystemHourQuantity = 0,
+                                    UnitHourPrice = 0,
+                                    RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                    RecordEmployeeID = _employee.ID,
+                                    RecordIP = _ip
+
+                                }).FirstOrDefault());
+
+                                itemlist.Add(items.Where(x => x.ID == 9).Select(x => new DayResultItemList()
+                                {
+                                    Amount = 0,
+                                    Category = x.Category,
+                                    Currency = location.Currency,
+                                    ResultID = dayresult.ID,
+                                    ResultItemID = x.ID,
+                                    Quantity = 0,
+                                    SystemQuantity = 0,
+                                    Exchange = 1,
+                                    SystemAmount = 0,
+                                    LocationID = location.LocationID,
+                                    Date = dayresult.Date,
+                                    EmployeeID = employeeid,
+                                    RecordDate = DateTime.UtcNow.AddHours(location.Timezone.Value),
+                                    RecordEmployeeID = _employee.ID,
+                                    RecordIP = _ip
+
+                                }).FirstOrDefault());
+
+
+                            }
+                        }
+
+                        db.DayResultItemList.AddRange(itemlist);
+                        db.SaveChanges();
+                    }
+                }
+            }
+
+            return issuccess;
+        }
+
+
+        public List<EmployeeShiftModel> GetEmployeeShifts(DateTime date, int locationid)
+        {
+            List<EmployeeShiftModel> list = new List<EmployeeShiftModel>();
+            List<int> employeeids = new List<int>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var schedules = Db.Schedule.Where(x => x.LocationID == locationid && x.ShiftDate == date).ToList();
+                var shifts = Db.EmployeeShift.Where(x => x.LocationID == locationid && x.ShiftDate == date && x.IsWorkTime == true).ToList();
+
+                employeeids.AddRange(schedules.Select(x => x.EmployeeID.Value).Distinct());
+                employeeids.AddRange(shifts.Select(x => x.EmployeeID.Value).Distinct());
+
+                employeeids = employeeids.Distinct().ToList();
+
+                foreach (var empid in employeeids)
+                {
+                    var empschedule = schedules.FirstOrDefault(x => x.EmployeeID == empid);
+                    var empshift = shifts.FirstOrDefault(x => x.EmployeeID == empid);
+
+                    EmployeeShiftModel model = new EmployeeShiftModel();
+                    model.EmployeeID = empid;
+                    model.DocumentDate = date;
+                    model.ScheduleDateStart = empschedule?.ShiftDateStart;
+                    model.ScheduleDateEnd = empschedule?.ShiftdateEnd;
+                    model.ScheduleDuration = new TimeSpan(0, empschedule.DurationMinute.Value, 0);
+                    model.ShiftDateStart = empshift?.ShiftDateStart;
+                    model.ShiftDateEnd = empshift?.ShiftDateEnd;
+                    model.ShiftDuration = empshift?.ShiftDuration;
+
+                    list.Add(model);
+                }
+            }
+
+            return list;
+        }
 
         //public Result<DocumentTicketSales> AddCashSale(CashSale sale, AuthenticationModel authentication)
         //{

@@ -60,9 +60,11 @@
     <Compile Include="Models\CashExchangeModel.cs" />
     <Compile Include="Models\CashExpenseModel.cs" />
     <Compile Include="Models\CashPaymentModel.cs" />
+    <Compile Include="Models\EmployeeShiftModel.cs" />
     <Compile Include="Models\ProcessCompany.cs" />
     <Compile Include="Models\ProcessEmployee.cs" />
     <Compile Include="DocumentManager.cs" />
+    <Compile Include="Models\SalaryEarnModel.cs" />
     <Compile Include="Models\SalaryPaymentModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Models\Result.cs" />

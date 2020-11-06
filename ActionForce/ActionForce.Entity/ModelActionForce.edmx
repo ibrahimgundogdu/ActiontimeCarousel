@@ -2233,6 +2233,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="EnvironmentID" Type="int" />
           <Property Name="CloseEnvironmentID" Type="int" />
+          <Property Name="ShiftDuration" Type="time" Precision="0" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="LocationShiftSet">
           <Key>
@@ -6455,8 +6456,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="SalaryCategoryID" Type="int" Mode="In" />
         </Function>
         <Function Name="AddLocationTicketSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="LocationID" Type="int" Mode="In" />
-          <Parameter Name="Date" Type="datetime" Mode="In" />
+          <Parameter Name="CurrentLocationID" Type="int" Mode="In" />
+          <Parameter Name="ProcessDate" Type="datetime" Mode="In" />
           <Parameter Name="PriceID" Type="int" Mode="In" />
           <Parameter Name="PaymethodID" Type="int" Mode="In" />
           <Parameter Name="SaleChannelD" Type="int" Mode="In" />
@@ -6479,6 +6480,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         </Function>
         <Function Name="CheckLocationPriceCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CheckLocationTicketSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SaleRowID" Type="bigint" Mode="In" />
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+          <Parameter Name="ProcessDate" Type="datetime" Mode="In" />
+          <Parameter Name="IP" Type="nvarchar" Mode="In" />
+          <Parameter Name="OurCompanyID" Type="int" Mode="In" />
         </Function>
         <Function Name="CleanBasket" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -9858,18 +9866,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImport Name="GetLocationMallMotoColors" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationMallMotoColors_Result)">
           <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
-          <FunctionImport Name="AddLocationTicketSale" ReturnType="Collection(Int64)">
-            <Parameter Name="LocationID" Mode="In" Type="Int32" />
-            <Parameter Name="Date" Mode="In" Type="DateTime" />
-            <Parameter Name="PriceID" Mode="In" Type="Int32" />
-            <Parameter Name="PaymethodID" Mode="In" Type="Int32" />
-            <Parameter Name="SaleChannelD" Mode="In" Type="Int32" />
-            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
-            <Parameter Name="ColorID" Mode="In" Type="Int32" />
-            <Parameter Name="CostumeID" Mode="In" Type="Int32" />
-            <Parameter Name="OrderNumber" Mode="In" Type="String" />
-            <Parameter Name="IP" Mode="In" Type="String" />
-          </FunctionImport>
           <FunctionImport Name="GetLocationTicketsToday" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationTicketsToday_Result)">
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
             <Parameter Name="Date" Mode="In" Type="DateTime" />
@@ -9903,6 +9899,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="RecordIP" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="DocumentBuyExchange" EntityType="db293_ActionTimeDbModel.DocumentBuyExchange" />
+          <FunctionImport Name="AddLocationTicketSale" ReturnType="Collection(Int64)">
+            <Parameter Name="CurrentLocationID" Mode="In" Type="Int32" />
+            <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
+            <Parameter Name="PriceID" Mode="In" Type="Int32" />
+            <Parameter Name="PaymethodID" Mode="In" Type="Int32" />
+            <Parameter Name="SaleChannelD" Mode="In" Type="Int32" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="ColorID" Mode="In" Type="Int32" />
+            <Parameter Name="CostumeID" Mode="In" Type="Int32" />
+            <Parameter Name="OrderNumber" Mode="In" Type="String" />
+            <Parameter Name="IP" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CheckLocationTicketSale" ReturnType="Collection(Int64)">
+            <Parameter Name="SaleRowID" Mode="In" Type="Int64" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
+            <Parameter Name="IP" Mode="In" Type="String" />
+            <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -10742,6 +10757,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="DurationMinute" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="CloseEnvironmentID" Type="Int32" />
+          <Property Name="ShiftDuration" Type="Time" annotation:StoreGeneratedPattern="Computed" Precision="0" />
         </EntityType>
         <EntityType Name="LocationShiftSet">
           <Key>
@@ -17472,6 +17488,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="LocationShift">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationShift">
               <MappingFragment StoreEntitySet="LocationShift">
+                <ScalarProperty Name="ShiftDuration" ColumnName="ShiftDuration" />
                 <ScalarProperty Name="CloseEnvironmentID" ColumnName="CloseEnvironmentID" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="DurationMinute" ColumnName="DurationMinute" />
@@ -22860,7 +22877,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="AddLocationTicketSale" FunctionName="db293_ActionTimeDbModel.Store.AddLocationTicketSale" />
           <FunctionImportMapping FunctionImportName="GetLocationTicketsToday" FunctionName="db293_ActionTimeDbModel.Store.GetLocationTicketsToday">
             <ResultMapping>
               <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetLocationTicketsToday_Result">
@@ -23021,6 +23037,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddLocationTicketSale" FunctionName="db293_ActionTimeDbModel.Store.AddLocationTicketSale" />
+          <FunctionImportMapping FunctionImportName="CheckLocationTicketSale" FunctionName="db293_ActionTimeDbModel.Store.CheckLocationTicketSale" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

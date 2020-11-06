@@ -37,5 +37,6 @@ namespace ActionForce.Entity
         public Nullable<int> DurationMinute { get; set; }
         public Nullable<int> EnvironmentID { get; set; }
         public Nullable<int> CloseEnvironmentID { get; set; }
+        public Nullable<System.TimeSpan> ShiftDuration { get; set; }
     }
 }

@@ -584,6 +584,8 @@
     <Compile Include="Models\DefaultModels\BankTransfer.cs" />
     <Compile Include="Models\DefaultModels\BasketTotal.cs" />
     <Compile Include="Models\DefaultModels\LocationBalance.cs" />
+    <Compile Include="Models\DefaultModels\LocationScheduleInfo.cs" />
+    <Compile Include="Models\DefaultModels\LocationShiftInfo.cs" />
     <Compile Include="Models\DefaultModels\LocationTicketInfo.cs" />
     <Compile Include="Models\DefaultModels\MallMotoColor.cs" />
     <Compile Include="Models\DefaultModels\SalaryPayment.cs" />

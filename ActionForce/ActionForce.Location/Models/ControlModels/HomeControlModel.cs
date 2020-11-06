@@ -8,6 +8,7 @@ namespace ActionForce.Location
 {
     public class HomeControlModel : LayoutControlModel
     {
+        public DateTime DocumentDate { get; set; }
         public IEnumerable<VPriceLastList> PriceList { get; set; }
         public VPriceLastList Price { get; set; }
         public VPrice VPrice { get; set; }

@@ -1443,51 +1443,6 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationMallMotoColors_Result>("GetLocationMallMotoColors", locationIDParameter);
         }
     
-        public virtual ObjectResult<Nullable<long>> AddLocationTicketSale(Nullable<int> locationID, Nullable<System.DateTime> date, Nullable<int> priceID, Nullable<int> paymethodID, Nullable<int> saleChannelD, Nullable<int> recordEmployeeID, Nullable<int> colorID, Nullable<int> costumeID, string orderNumber, string iP)
-        {
-            var locationIDParameter = locationID.HasValue ?
-                new ObjectParameter("LocationID", locationID) :
-                new ObjectParameter("LocationID", typeof(int));
-    
-            var dateParameter = date.HasValue ?
-                new ObjectParameter("Date", date) :
-                new ObjectParameter("Date", typeof(System.DateTime));
-    
-            var priceIDParameter = priceID.HasValue ?
-                new ObjectParameter("PriceID", priceID) :
-                new ObjectParameter("PriceID", typeof(int));
-    
-            var paymethodIDParameter = paymethodID.HasValue ?
-                new ObjectParameter("PaymethodID", paymethodID) :
-                new ObjectParameter("PaymethodID", typeof(int));
-    
-            var saleChannelDParameter = saleChannelD.HasValue ?
-                new ObjectParameter("SaleChannelD", saleChannelD) :
-                new ObjectParameter("SaleChannelD", typeof(int));
-    
-            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
-                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
-                new ObjectParameter("RecordEmployeeID", typeof(int));
-    
-            var colorIDParameter = colorID.HasValue ?
-                new ObjectParameter("ColorID", colorID) :
-                new ObjectParameter("ColorID", typeof(int));
-    
-            var costumeIDParameter = costumeID.HasValue ?
-                new ObjectParameter("CostumeID", costumeID) :
-                new ObjectParameter("CostumeID", typeof(int));
-    
-            var orderNumberParameter = orderNumber != null ?
-                new ObjectParameter("OrderNumber", orderNumber) :
-                new ObjectParameter("OrderNumber", typeof(string));
-    
-            var iPParameter = iP != null ?
-                new ObjectParameter("IP", iP) :
-                new ObjectParameter("IP", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddLocationTicketSale", locationIDParameter, dateParameter, priceIDParameter, paymethodIDParameter, saleChannelDParameter, recordEmployeeIDParameter, colorIDParameter, costumeIDParameter, orderNumberParameter, iPParameter);
-        }
-    
         public virtual ObjectResult<GetLocationTicketsToday_Result> GetLocationTicketsToday(Nullable<int> locationID, Nullable<System.DateTime> date)
         {
             var locationIDParameter = locationID.HasValue ?
@@ -1594,6 +1549,76 @@ namespace ActionForce.Entity
                 new ObjectParameter("RecordIP", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("GetDayResultID", locationIDParameter, dateParameter, stateIDParameter, environmentIDParameter, recordEmployeeIDParameter, descriptionParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> AddLocationTicketSale(Nullable<int> currentLocationID, Nullable<System.DateTime> processDate, Nullable<int> priceID, Nullable<int> paymethodID, Nullable<int> saleChannelD, Nullable<int> recordEmployeeID, Nullable<int> colorID, Nullable<int> costumeID, string orderNumber, string iP)
+        {
+            var currentLocationIDParameter = currentLocationID.HasValue ?
+                new ObjectParameter("CurrentLocationID", currentLocationID) :
+                new ObjectParameter("CurrentLocationID", typeof(int));
+    
+            var processDateParameter = processDate.HasValue ?
+                new ObjectParameter("ProcessDate", processDate) :
+                new ObjectParameter("ProcessDate", typeof(System.DateTime));
+    
+            var priceIDParameter = priceID.HasValue ?
+                new ObjectParameter("PriceID", priceID) :
+                new ObjectParameter("PriceID", typeof(int));
+    
+            var paymethodIDParameter = paymethodID.HasValue ?
+                new ObjectParameter("PaymethodID", paymethodID) :
+                new ObjectParameter("PaymethodID", typeof(int));
+    
+            var saleChannelDParameter = saleChannelD.HasValue ?
+                new ObjectParameter("SaleChannelD", saleChannelD) :
+                new ObjectParameter("SaleChannelD", typeof(int));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var colorIDParameter = colorID.HasValue ?
+                new ObjectParameter("ColorID", colorID) :
+                new ObjectParameter("ColorID", typeof(int));
+    
+            var costumeIDParameter = costumeID.HasValue ?
+                new ObjectParameter("CostumeID", costumeID) :
+                new ObjectParameter("CostumeID", typeof(int));
+    
+            var orderNumberParameter = orderNumber != null ?
+                new ObjectParameter("OrderNumber", orderNumber) :
+                new ObjectParameter("OrderNumber", typeof(string));
+    
+            var iPParameter = iP != null ?
+                new ObjectParameter("IP", iP) :
+                new ObjectParameter("IP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddLocationTicketSale", currentLocationIDParameter, processDateParameter, priceIDParameter, paymethodIDParameter, saleChannelDParameter, recordEmployeeIDParameter, colorIDParameter, costumeIDParameter, orderNumberParameter, iPParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> CheckLocationTicketSale(Nullable<long> saleRowID, Nullable<int> employeeID, Nullable<System.DateTime> processDate, string iP, Nullable<int> ourCompanyID)
+        {
+            var saleRowIDParameter = saleRowID.HasValue ?
+                new ObjectParameter("SaleRowID", saleRowID) :
+                new ObjectParameter("SaleRowID", typeof(long));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            var processDateParameter = processDate.HasValue ?
+                new ObjectParameter("ProcessDate", processDate) :
+                new ObjectParameter("ProcessDate", typeof(System.DateTime));
+    
+            var iPParameter = iP != null ?
+                new ObjectParameter("IP", iP) :
+                new ObjectParameter("IP", typeof(string));
+    
+            var ourCompanyIDParameter = ourCompanyID.HasValue ?
+                new ObjectParameter("OurCompanyID", ourCompanyID) :
+                new ObjectParameter("OurCompanyID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("CheckLocationTicketSale", saleRowIDParameter, employeeIDParameter, processDateParameter, iPParameter, ourCompanyIDParameter);
         }
     }
 }

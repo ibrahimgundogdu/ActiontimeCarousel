@@ -76,13 +76,12 @@ namespace ActionForce.Location
             return model;
         }
 
-        public LocationBalance GetLocationSaleBalanceToday()
+        public LocationBalance GetLocationSaleBalanceToday(DateTime DocumentDate)
         {
-            var currentDate = DateTime.Now;
 
-            LocationBalance balance = new LocationBalance() { Balance = 0, CashTotal = 0, CreditTotal = 0, Currency = _location.Currency, Date = currentDate.Date };
+            LocationBalance balance = new LocationBalance() { Balance = 0, CashTotal = 0, CreditTotal = 0, Currency = _location.Currency, Date = DocumentDate.Date };
 
-            var isbalance = _db.GetLocationSaleBalanceToday(_location.LocationID, currentDate).FirstOrDefault();
+            var isbalance = _db.GetLocationSaleBalanceToday(_location.LocationID, DocumentDate).FirstOrDefault();
 
             if (isbalance != null)
             {
@@ -90,20 +89,19 @@ namespace ActionForce.Location
                 balance.CreditTotal = (float)isbalance.CreditTotal;
                 balance.Balance = (float)isbalance.Balance;
                 balance.Currency = isbalance.Currency;
-                balance.Date = isbalance.CurrentDate ?? currentDate.Date;
+                balance.Date = isbalance.CurrentDate ?? DocumentDate.Date;
                 balance.CurrencySign = isbalance.CurrencySign;
             }
 
             return balance;
         }
 
-        public List<LocationTicketSaleInfo> GetLocationTicketsToday()
+        public List<LocationTicketSaleInfo> GetLocationTicketsToday(DateTime DocumentDate)
         {
-            var currentDate = DateTime.Now;
 
             List<LocationTicketSaleInfo> list = new List<LocationTicketSaleInfo>();
 
-            list = _db.GetLocationTicketsToday(_location.LocationID, currentDate).Select(x=> new LocationTicketSaleInfo() { 
+            list = _db.GetLocationTicketsToday(_location.LocationID, DocumentDate).Select(x=> new LocationTicketSaleInfo() { 
             Currency = x.Currency,
             IsActive = x.IsActive.Value,
             Part = x.Part,

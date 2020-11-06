@@ -109,8 +109,8 @@
 <div class="no-shrink ">
     <div class="row p-0 text-center">
         <div class="col-4 m-0 p-0 text-center font-weight-bold v-middle">
-            <p class="text-info">@(Model.Schedule != null ? Html.Raw(Model.Schedule.ShiftDateStart?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</p>
-            <p class="text-success">@(Model.Shift != null ? Html.Raw(Model.Shift.ShiftDateStart?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</p>
+            <p class="text-info">@(Model.Schedule != null ? Html.Raw(Model.Schedule.DateStart.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</p>
+            <p class="text-success">@(Model.Shift != null ? Html.Raw(Model.Shift.DateStart.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</p>
         </div>
         <div class="col-4">
             <button class="btn btn-lg btn-raised btn-wave btn-icon btn-rounded mb-2 mt-2 light-green text-white">
@@ -118,8 +118,8 @@
             </button>
         </div>
         <div class="col-4 m-0 p-0 text-center font-weight-bold v-middle">
-            <p class="text-info">@(Model.Schedule != null ? Html.Raw(Model.Schedule.ShiftdateEnd?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</p>
-            <p class="text-success">@(Model.Shift != null ? Html.Raw(Model.Shift.ShiftDateFinish?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</p>
+            <p class="text-info">@(Model.Schedule != null ? Html.Raw(Model.Schedule.DateEnd?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</p>
+            <p class="text-success">@(Model.Shift != null ? Html.Raw(Model.Shift.DateEnd?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</p>
         </div>
 
 

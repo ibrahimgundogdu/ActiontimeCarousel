@@ -11,8 +11,8 @@ namespace ActionForce.Location
     public class LayoutControlModel
     {
         public AuthenticationModel Authentication { get; set; }
-        public VLocationSchedule Schedule { get; set; }
-        public VLocationShift Shift { get; set; }
+        public LocationScheduleInfo Schedule { get; set; }
+        public LocationShiftInfo Shift { get; set; }
         public LocationInfo Location { get; set; }
         public Result Result { get; set; }
         public DateTime LocationDate { get; set; }
@@ -26,16 +26,32 @@ namespace ActionForce.Location
                 using (ActionTimeEntities db = new ActionTimeEntities())
                 {
                     Location = Authentication.CurrentLocation;
-                    LocationDate = DateTime.UtcNow.AddHours(Location.TimeZone).Date;
+                    LocationDate = LocationHelper.GetLocationScheduledDate(Location.ID, DateTime.UtcNow.AddHours(Location.TimeZone)).Date;
 
-                    Schedule = db.VLocationSchedule.FirstOrDefault(x => x.LocationID == Location.ID && x.ShiftDate == LocationDate);
-                    Shift = db.VLocationShift.FirstOrDefault(x => x.LocationID == Location.ID && x.ShiftDate == LocationDate);
+
+                    Schedule = db.LocationSchedule.Where(x => x.LocationID == Location.ID && x.ShiftDate == LocationDate).Select(x => new LocationScheduleInfo()
+                    {
+                        LocationID = x.LocationID.Value,
+                        ScheduleDate = x.ShiftDate.Value,
+                        DateStart = x.ShiftDateStart.Value,
+                        DateEnd = x.ShiftdateEnd,
+                        Duration = x.ShiftDuration
+                    }).FirstOrDefault();
+
+                    Shift = db.LocationShift.Where(x => x.LocationID == Location.ID && x.ShiftDate == LocationDate).Select(x => new LocationShiftInfo()
+                    {
+                        LocationID = x.LocationID,
+                        ScheduleDate = x.ShiftDate,
+                        DateStart = x.ShiftDateStart.Value,
+                        DateEnd = x.ShiftDateFinish,
+                        Duration = x.ShiftDuration
+                    }).FirstOrDefault();
                 }
 
                 Result = new Result() { IsSuccess = false, Message = string.Empty };
             }
 
-            
+
         }
     }
 }
