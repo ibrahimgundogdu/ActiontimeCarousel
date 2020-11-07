@@ -27,7 +27,7 @@
 
                         <div class="card mb-2" data-sr-id="31" style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
                             <div class="card-header">
-                                <span class="font-weight-500">Lokasyon Takvim ve Mesaisi</span>
+                                <span class="font-weight-500 fa-2x">Lokasyon Takvim ve Mesaisi</span>
                             </div>
                             <div class="card-body m-0 p-0">
                                 <table class="table mb-0">
@@ -67,7 +67,7 @@
                                         <table class="table mb-0">
                                             <thead>
                                                 <tr>
-                                                    <th colspan="3">@(item.FullName)</th>
+                                                    <th class="p-1 pl-3" colspan="3">@(item.FullName)</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -96,13 +96,125 @@
                                                     <td class="p-1 text-right">@(item.TotalAmountFood?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</td>
                                                     <td class="p-1 text-right">@(item.TotalAmountSalary?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</td>
                                                 </tr>
-                                               
+
                                             </tbody>
                                         </table>
                                     }
                                 </div>
                             </div>
                         </div>
+
+                        <div class="card" data-sr-id="31" style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
+                            <div class="card-header">
+                                <div class="d-flex">
+                                    <span class="font-weight-500">Biletler ve Satışlar</span>
+                                </div>
+                            </div>
+                            <div class="card-body m-0 p-0">
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead>
+                                           
+                                            <tr class="table-info">
+                                                <td class="p-1 pl-3">Dk.</td>
+                                                <td class="p-1 pl-3 text-right">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
+                                                <td class="p-1 pl-3 text-center" colspan="2">Sale</td>
+                                                <td class="p-1 pl-3 text-center" colspan="2">Refund</td>
+                                                <td class="p-1 pl-3 text-right">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var item in Model.PriceList.OrderBy(x => x.Unit).ToList())
+                                            {
+                                                var saletotal = Model.TicketList.Where(x => x.PayMethodID == 1 && x.Unit == item.Unit).ToList();
+                                                var salereftotal = Model.TicketList.Where(x => x.PayMethodID == 1 && x.Unit == item.Unit && (new List<int> { 4, 5 }).Contains(x.StatusID)).ToList();
+
+                                                <tr>
+                                                    <td class="bg-body p-1 pl-3">@(item.Unit)</td>
+                                                    <td class="bg-body p-1 pl-3 text-right">@(item.Price?.ToString("N2"))</td>
+                                                    <th class="p-1 text-info text-right">@(saletotal.Count)</th>
+                                                    <th class="p-1 text-info text-right">@(saletotal.Sum(x=> x.Total).ToString("N2"))</th>
+                                                    <th class="p-1 text-danger text-right">@(salereftotal.Count)</th>
+                                                    <th class="p-1 text-danger text-right">@(salereftotal.Sum(x=> x.Total).ToString("N2"))</th>
+                                                    <th class="p-1 text-right">@((saletotal.Sum(x => x.Total) - salereftotal.Sum(x => x.Total)).ToString("N2") )</th>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th class="bg-body p-1 pl-3 text-info" colspan="6">Cash</th>
+                                                <th class="bg-body p-1 pl-3 text-right">@(Model.LocationBalance.CashTotal.ToString("N2"))</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                    <table class="table mb-0">
+                                        <thead>
+                                           
+                                            <tr class="table-warning">
+                                                <td class="p-1 pl-3">Dk.</td>
+                                                <td class="p-1 pl-3 text-right">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
+                                                <td class="p-1 pl-3 text-center" colspan="2">Sale</td>
+                                                <td class="p-1 pl-3 text-center" colspan="2">Refund</td>
+                                                <td class="p-1 pl-3 text-right">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var item in Model.PriceList.OrderBy(x => x.Unit).ToList())
+                                            {
+                                                var saletotal = Model.TicketList.Where(x => x.PayMethodID == 2 && x.Unit == item.Unit).ToList();
+                                                var salereftotal = Model.TicketList.Where(x => x.PayMethodID == 2 && x.Unit == item.Unit && (new List<int> { 4, 5 }).Contains(x.StatusID)).ToList();
+
+                                                <tr>
+                                                    <td class="bg-body p-1 pl-3">@(item.Unit)</td>
+                                                    <td class="bg-body p-1 pl-3 text-right">@(item.Price?.ToString("N2"))</td>
+                                                    <th class="p-1 text-warning text-right">@(saletotal.Count)</th>
+                                                    <th class="p-1 text-warning text-right">@(saletotal.Sum(x=> x.Total).ToString("N2"))</th>
+                                                    <th class="p-1 text-danger text-right">@(salereftotal.Count)</th>
+                                                    <th class="p-1 text-danger text-right">@(salereftotal.Sum(x=> x.Total).ToString("N2"))</th>
+                                                    <th class="p-1 text-right">@((saletotal.Sum(x => x.Total) - salereftotal.Sum(x => x.Total)).ToString("N2") )</th>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th class="bg-body p-1 pl-3 text-warning" colspan="6">Credit</th>
+                                                <th class="bg-body p-1 pl-3 text-right">@(Model.LocationBalance.CreditTotal.ToString("N2"))</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center text-info p-0">Cash</th>
+                                                <th class="text-center text-warning p-0">Credit</th>
+                                                <th class="text-center p-0">Revenues</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th class="text-center p-1">@($"{Model.LocationBalance?.CashTotal.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
+                                                <th class="text-center p-1">@($"{Model.LocationBalance?.CreditTotal.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
+                                                <th class="text-center p-1">@($"{Model.LocationBalance?.Balance.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card" data-sr-id="31" style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
+                            <div class="card-header">
+                                <span class="font-weight-500">Günlük Kasa Özeti</span>
+                            </div>
+                            <div class="card-body m-0 p-0">
+                                @{ Html.RenderPartial("_PartialCashSummary", Model.Summary);}
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
             </div>

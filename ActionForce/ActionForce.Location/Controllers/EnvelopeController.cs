@@ -38,11 +38,17 @@ namespace ActionForce.Location.Controllers
         public ActionResult Index()
         {
             EnvelopeControlModel model = new EnvelopeControlModel();
+            LocationServiceManager manager = new LocationServiceManager(Db, model.Authentication.CurrentLocation);
+
 
             model.DocumentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
             model.EmployeeActions = Db.VEmployeeCashActions.Where(x => x.LocationID == model.Location.ID && x.ProcessDate == model.DocumentDate.Date).ToList();
             model.EmployeeShifts = documentManager.GetEmployeeShifts(model.DocumentDate, model.Location.ID);
-            
+            model.TicketList = manager.GetLocationTicketsToday(model.DocumentDate);
+            model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
+            model.LocationBalance = manager.GetLocationSaleBalanceToday(model.DocumentDate);
+            model.Summary = manager.GetLocationSummary(model.DocumentDate, model.Authentication.CurrentEmployee);
+
             //List<int?> employeeids = model.EmployeeActions.Select(x => x.EmployeeID).ToList();
 
 

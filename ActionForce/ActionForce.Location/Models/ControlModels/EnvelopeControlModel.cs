@@ -13,5 +13,10 @@ namespace ActionForce.Location
         public DateTime ProcessDate { get; set; }
         public IEnumerable<VEmployeeCashActions> EmployeeActions { get; set; }
         public IEnumerable<EmployeeShiftModel> EmployeeShifts { get; set; }
+        public IEnumerable<LocationTicketSaleInfo> TicketList { get; set; }
+        public IEnumerable<VPriceLastList> PriceList { get; set; }
+        public LocationBalance LocationBalance { get; set; }
+        public SummaryControlModel Summary { get; set; }
+
     }
 }

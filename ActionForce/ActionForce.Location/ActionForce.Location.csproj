@@ -833,7 +833,7 @@
     <Content Include="Views\Cash\CollectDetail.cshtml" />
     <Content Include="Views\Cash\Payment.cshtml" />
     <Content Include="Views\Cash\PaymentDetail.cshtml" />
-    <Content Include="Views\Cash\_PartialCashSummary.cshtml" />
+    <Content Include="Views\Shared\_PartialCashSummary.cshtml" />
     <Content Include="Views\Cash\Expense.cshtml" />
     <Content Include="Views\Cash\ExpenseDetail.cshtml" />
     <Content Include="Views\Cash\ExchangeSell.cshtml" />

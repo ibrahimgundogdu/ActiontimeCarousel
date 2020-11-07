@@ -428,7 +428,6 @@ namespace ActionForce.Location.Controllers
             var dayResultID = LocationHelper.GetDayResultID(model.Location.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", LocationHelper.GetIPAddress());
 
             DateTime slipdate = expense.ReceiptDate.Add(expense.ReceiptTime.TimeOfDay);
-            string SlipPath = "/Documents";
             string fileName = string.Empty;
 
             // dosya işlemleri yapılır
@@ -436,7 +435,7 @@ namespace ActionForce.Location.Controllers
             {
                 fileName = Guid.NewGuid().ToString() + Path.GetExtension(expense.ReceiptFile.FileName);
 
-                string mappath = Server.MapPath(SlipPath);
+                string mappath = Server.MapPath("/Documents");
 
                 try
                 {
@@ -532,7 +531,7 @@ namespace ActionForce.Location.Controllers
             {
                 documentModel.SlipDocument = Guid.NewGuid().ToString() + Path.GetExtension(expense.ReceiptFile.FileName);
 
-                string mappath = Server.MapPath(documentModel.SlipPath);
+                string mappath = Server.MapPath("/Documents");
 
                 try
                 {
@@ -547,7 +546,7 @@ namespace ActionForce.Location.Controllers
                         string sourceFile = System.IO.Path.Combine(sourcePath, documentModel.SlipDocument);
                         string destFile = System.IO.Path.Combine(targetPath, documentModel.SlipDocument);
                         System.IO.File.Copy(sourceFile, destFile, true);
-                        System.IO.File.Delete(sourceFile);
+                        //System.IO.File.Delete(sourceFile);
                     }
                 }
                 catch (Exception)
@@ -655,7 +654,6 @@ namespace ActionForce.Location.Controllers
 
 
             DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);
-            string SlipPath = "/Documents";
             string fileName = string.Empty;
 
             // dosya işlemleri yapılır
@@ -663,7 +661,7 @@ namespace ActionForce.Location.Controllers
             {
                 fileName = Guid.NewGuid().ToString() + Path.GetExtension(exchange.ReceiptFile.FileName);
 
-                string mappath = Server.MapPath(SlipPath);
+                string mappath = Server.MapPath("/Documents");
 
                 try
                 {
@@ -678,7 +676,7 @@ namespace ActionForce.Location.Controllers
                         string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
                         string destFile = System.IO.Path.Combine(targetPath, fileName);
                         System.IO.File.Copy(sourceFile, destFile, true);
-                        System.IO.File.Delete(sourceFile);
+                        //System.IO.File.Delete(sourceFile);
                     }
                 }
                 catch (Exception)
@@ -731,7 +729,6 @@ namespace ActionForce.Location.Controllers
             var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
 
             DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);
-            string SlipPath = "/Documents";
             string fileName = string.Empty;
 
             // dosya işlemleri yapılır
@@ -739,7 +736,7 @@ namespace ActionForce.Location.Controllers
             {
                 fileName = Guid.NewGuid().ToString() + Path.GetExtension(exchange.ReceiptFile.FileName);
 
-                string mappath = Server.MapPath(SlipPath);
+                string mappath = Server.MapPath("/Documents");
 
                 try
                 {
@@ -754,7 +751,7 @@ namespace ActionForce.Location.Controllers
                         string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
                         string destFile = System.IO.Path.Combine(targetPath, fileName);
                         System.IO.File.Copy(sourceFile, destFile, true);
-                        System.IO.File.Delete(sourceFile);
+                        //System.IO.File.Delete(sourceFile);
                     }
                 }
                 catch (Exception)
@@ -884,8 +881,7 @@ namespace ActionForce.Location.Controllers
             var dayResultID = LocationHelper.GetDayResultID(model.Location.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", LocationHelper.GetIPAddress());
 
 
-            DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);
-            string SlipPath = "/Documents";
+            DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);         
             string fileName = string.Empty;
 
             // dosya işlemleri yapılır
@@ -893,7 +889,7 @@ namespace ActionForce.Location.Controllers
             {
                 fileName = Guid.NewGuid().ToString() + Path.GetExtension(exchange.ReceiptFile.FileName);
 
-                string mappath = Server.MapPath(SlipPath);
+                string mappath = Server.MapPath("/Documents");
 
                 try
                 {
@@ -908,7 +904,7 @@ namespace ActionForce.Location.Controllers
                         string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
                         string destFile = System.IO.Path.Combine(targetPath, fileName);
                         System.IO.File.Copy(sourceFile, destFile, true);
-                        System.IO.File.Delete(sourceFile);
+                        //System.IO.File.Delete(sourceFile);
                     }
                 }
                 catch (Exception)
@@ -961,7 +957,6 @@ namespace ActionForce.Location.Controllers
             var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
 
             DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);
-            string SlipPath = "/Documents";
             string fileName = string.Empty;
 
             // dosya işlemleri yapılır
@@ -969,7 +964,7 @@ namespace ActionForce.Location.Controllers
             {
                 fileName = Guid.NewGuid().ToString() + Path.GetExtension(exchange.ReceiptFile.FileName);
 
-                string mappath = Server.MapPath(SlipPath);
+                string mappath = Server.MapPath("/Documents");
 
                 try
                 {
@@ -984,7 +979,7 @@ namespace ActionForce.Location.Controllers
                         string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
                         string destFile = System.IO.Path.Combine(targetPath, fileName);
                         System.IO.File.Copy(sourceFile, destFile, true);
-                        System.IO.File.Delete(sourceFile);
+                       // System.IO.File.Delete(sourceFile);
                     }
                 }
                 catch (Exception)
@@ -1307,7 +1302,6 @@ namespace ActionForce.Location.Controllers
             var dayResultID = LocationHelper.GetDayResultID(model.Location.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", LocationHelper.GetIPAddress());
 
             DateTime slipdate = transfer.ReceiptDate.Add(transfer.ReceiptTime.TimeOfDay);
-            string SlipPath = "/Documents";
             string fileName = string.Empty;
 
             // dosya işlemleri yapılır
@@ -1315,7 +1309,7 @@ namespace ActionForce.Location.Controllers
             {
                 fileName = Guid.NewGuid().ToString() + Path.GetExtension(transfer.ReceiptFile.FileName);
 
-                string mappath = Server.MapPath(SlipPath);
+                string mappath = Server.MapPath("/Documents");
 
                 try
                 {
@@ -1325,12 +1319,12 @@ namespace ActionForce.Location.Controllers
                     //Kopyalama
                     if (!Request.IsLocal)
                     {
-                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Bank";
+                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Bank"; //"C:\inetpub\wwwroot\Action\Document\Bank"
                         string sourcePath = @"C:\inetpub\wwwroot\location\Documents";
                         string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
                         string destFile = System.IO.Path.Combine(targetPath, fileName);
                         System.IO.File.Copy(sourceFile, destFile, true);
-                        System.IO.File.Delete(sourceFile);
+                        //System.IO.File.Delete(sourceFile);
 
                     }
                 }
@@ -1415,7 +1409,7 @@ namespace ActionForce.Location.Controllers
             {
                 documentModel.SlipDocument = Guid.NewGuid().ToString() + Path.GetExtension(transfer.ReceiptFile.FileName);
 
-                string mappath = Server.MapPath(documentModel.SlipPath);
+                string mappath = Server.MapPath("/Documents");
 
                 try
                 {
@@ -1430,7 +1424,7 @@ namespace ActionForce.Location.Controllers
                         string sourceFile = System.IO.Path.Combine(sourcePath, documentModel.SlipDocument);
                         string destFile = System.IO.Path.Combine(targetPath, documentModel.SlipDocument);
                         System.IO.File.Copy(sourceFile, destFile, true);
-                        System.IO.File.Delete(sourceFile);
+                        //System.IO.File.Delete(sourceFile);
                     }
                 }
                 catch (Exception)
