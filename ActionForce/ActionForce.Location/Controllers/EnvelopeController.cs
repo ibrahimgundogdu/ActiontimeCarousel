@@ -1,4 +1,6 @@
-﻿using ActionForce.Service;
+﻿using ActionForce.Entity;
+using ActionForce.Integration.UfeService;
+using ActionForce.Service;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -56,7 +58,7 @@ namespace ActionForce.Location.Controllers
             model.Summary = manager.GetLocationSummary(model.DocumentDate, model.Authentication.CurrentEmployee);
             model.CashRecordSlip = Db.DocumentCashRecorderSlip.Where(x => x.LocationID == model.Location.ID && x.Date == model.DocumentDate).OrderByDescending(x => x.RecordDate).ToList();
             model.ResultDocuments = Db.DayResultDocuments.Where(x => x.LocationID == model.Location.ID && x.Date == model.DocumentDate && x.ResultID == model.CurrentDayResult.ID).ToList();
-
+            model.ResultStates = Db.ResultState.Where(x => x.StateID <= 2).ToList();
             //List<int?> employeeids = model.EmployeeActions.Select(x => x.EmployeeID).ToList();
 
 
@@ -255,6 +257,8 @@ namespace ActionForce.Location.Controllers
 
             return PartialView("_PartialResultDocument", model);
         }
+
+
         [AllowAnonymous]
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -301,6 +305,111 @@ namespace ActionForce.Location.Controllers
 
             return RedirectToAction("Index");
         }
-        //AddResultDocument
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SetResultState(FormResultState result)
+        {
+            EnvelopeControlModel model = new EnvelopeControlModel();
+
+            var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
+
+            if (result.DayresultID > 0 && result.StateID > 0)
+            {
+                var dayresult = Db.DayResult.FirstOrDefault(x => x.ID == result.DayresultID);
+
+                if (dayresult != null)
+                {
+
+                    DayResult self = new DayResult()
+                    {
+                        Date = dayresult.Date,
+                        Description = dayresult.Description,
+                        DayResultItemList = dayresult.DayResultItemList,
+                        EnvironmentID = dayresult.EnvironmentID,
+                        ID = dayresult.ID,
+                        RecordDate = dayresult.RecordDate,
+                        IsActive = dayresult.IsActive,
+                        UID = dayresult.UID,
+                        IsMobile = dayresult.IsMobile,
+                        Latitude = dayresult.Latitude,
+                        LocationID = dayresult.LocationID,
+                        Longitude = dayresult.Longitude,
+                        RecordEmployeeID = dayresult.RecordEmployeeID,
+                        RecordIP = dayresult.RecordIP,
+                        StateID = dayresult.StateID,
+                        StatusID = dayresult.StatusID,
+                        UpdateDate = dayresult.UpdateDate,
+                        UpdateEmployeeID = dayresult.UpdateEmployeeID,
+                        UpdateIP = dayresult.UpdateIP
+                    };
+
+                    dayresult.StateID = result.StateID;
+                    dayresult.Description = result.Description;
+                    dayresult.UpdateDate = processDate;
+                    dayresult.UpdateEmployeeID = model.Authentication.CurrentEmployee.EmployeeID;
+                    dayresult.UpdateIP = LocationHelper.GetIPAddress();
+
+                    Db.SaveChanges();
+
+
+
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = "Günsonu durumu başarı ile güncellendi. ";
+
+                    // eski sisteme uyumlu kayıtlar at.
+
+                    if (result.StateID == 2 || result.StateID == 3 || result.StateID == 4)
+                    {
+                        var islocal = Request.IsLocal;
+                        var updresult = documentManager.CheckResultBackward(dayresult.ID, islocal);
+                        model.Result.Message += updresult.Message;
+                    }
+
+                    // log at
+                    var isequal = ServiceHelper.PublicInstancePropertiesEqual<DayResult>(self, dayresult, ServiceHelper.getIgnorelist());
+                    ServiceHelper.AddApplicationLog("Location", "Result", "Update", dayresult.ID.ToString(), "Result", "Detail", isequal, true, $"{model.Result.Message}", string.Empty, processDate, model.Authentication.CurrentEmployee.FullName, LocationHelper.GetIPAddress(), string.Empty, null);
+                }
+
+            }
+            else
+            {
+                model.Result.Message = "Günsonu veya durum bilgisi hatalı";
+                ServiceHelper.AddApplicationLog("Location", "Result", "Update", result.DayresultID.ToString(), "Result", "Detail", null, true, $"{model.Result.Message}", string.Empty, processDate, model.Authentication.CurrentEmployee.FullName, LocationHelper.GetIPAddress(), string.Empty, null);
+            }
+
+            TempData["result"] = model.Result;
+
+            return RedirectToAction("Index");
+
+
+        }
+
+        [AllowAnonymous]
+        public ActionResult LocationShiftStart()
+        {
+            EnvelopeControlModel model = new EnvelopeControlModel();
+
+            var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
+            var serviceresult = documentManager.LocationShiftStart(model.Authentication.CurrentEmployee.Token.ToString(), processDate, model.Location.ID);
+
+            TempData["Result"] = new Result() { IsSuccess = serviceresult.IsSuccess, Message = serviceresult?.Message };
+
+            return RedirectToAction("Index");
+        }
+
+        [AllowAnonymous]
+        public ActionResult LocationShiftEnd()
+        {
+            EnvelopeControlModel model = new EnvelopeControlModel();
+
+            var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
+            var serviceresult = documentManager.LocationShiftEnd(model.Authentication.CurrentEmployee.Token.ToString(), processDate, model.Location.ID);
+
+            TempData["Result"] = new Result() { IsSuccess = serviceresult.IsSuccess, Message = serviceresult?.Message };
+
+            return RedirectToAction("Index");
+        }
     }
 }

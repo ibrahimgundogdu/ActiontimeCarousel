@@ -42,11 +42,12 @@ namespace ActionForce.Location.Controllers
 
             LocationServiceManager manager = new LocationServiceManager(Db, model.Authentication.CurrentLocation);
             model.DocumentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
+            var currentDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
 
 
             //model.Summary = manager.GetLocationSummary(DateTime.Now.Date, model.Authentication.CurrentEmployee);
-            model.LocationBalance = manager.GetLocationSaleBalanceToday(model.DocumentDate);
-            model.TicketList = manager.GetLocationTicketsToday(model.DocumentDate);
+            model.LocationBalance = manager.GetLocationSaleBalanceToday(currentDate);
+            model.TicketList = manager.GetLocationTicketsToday(currentDate);
 
             return View(model);
         }
@@ -143,7 +144,8 @@ namespace ActionForce.Location.Controllers
             string message = string.Empty;
 
             StandartTicket model = new StandartTicket();
-            var date = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
+            var documentdate = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
+            var date = DateTime.UtcNow.AddHours(model.Location.TimeZone);
             var processdate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
 
             model.Price = Db.VPrice.FirstOrDefault(x => x.ID == PriceID);

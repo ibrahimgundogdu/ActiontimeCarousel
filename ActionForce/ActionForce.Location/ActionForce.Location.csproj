@@ -601,6 +601,7 @@
     <Compile Include="Models\FormModels\FormExchangeSell.cs" />
     <Compile Include="Models\FormModels\FormOrder.cs" />
     <Compile Include="Models\FormModels\FormResultDocument.cs" />
+    <Compile Include="Models\FormModels\FormResultState.cs" />
     <Compile Include="Models\FormModels\FormSalaryPay.cs" />
     <Compile Include="Models\FormModels\FormSaleRow.cs" />
     <Compile Include="Models\LocationHelper.cs" />
@@ -869,6 +870,10 @@
     <ProjectReference Include="..\ActionForce.Entity\ActionForce.Entity.csproj">
       <Project>{1ad5bb0d-6cc5-490a-a1b0-e2bcac259310}</Project>
       <Name>ActionForce.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ActionForce.Integration\ActionForce.Integration.csproj">
+      <Project>{0E14D519-4375-4DD5-BC0C-DA09796370B5}</Project>
+      <Name>ActionForce.Integration</Name>
     </ProjectReference>
     <ProjectReference Include="..\ActionForce.Service\ActionForce.Service.csproj">
       <Project>{9E51A576-274C-4F3C-B9D1-79D53567A6E3}</Project>

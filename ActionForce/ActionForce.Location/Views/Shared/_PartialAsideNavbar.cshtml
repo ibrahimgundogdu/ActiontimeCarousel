@@ -113,9 +113,9 @@
             <p class="text-success">@(Model.Shift != null ? Html.Raw(Model.Shift.DateStart.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</p>
         </div>
         <div class="col-4">
-            <button class="btn btn-lg btn-raised btn-wave btn-icon btn-rounded mb-2 mt-2 light-green text-white">
-                <i data-feather="sun"></i>
-            </button>
+            <a href="@(Model.Shift == null ? "/Envelope/LocationShiftStart" : Model?.Shift?.DateEnd  == null && Model?.Shift?.Duration == null ? "/Envelope/LocationShiftEnd":"#")" class="btn btn-lg btn-raised btn-wave btn-icon btn-rounded mb-2 mt-2  @( Model.Shift == null ? "  btn-dark" : Model?.Shift?.DateEnd  == null && Model?.Shift?.Duration == null ? "light-green text-white":"light-blue text-white")  text-white">
+                <i data-feather="@(Model.Shift == null ? "cloud" : Model?.Shift?.DateEnd  == null && Model?.Shift?.Duration == null ? "sun":"moon")"></i>
+            </a>
         </div>
         <div class="col-4 m-0 p-0 text-center font-weight-bold v-middle">
             <p class="text-info">@(Model.Schedule != null ? Html.Raw(Model.Schedule.DateEnd?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</p>

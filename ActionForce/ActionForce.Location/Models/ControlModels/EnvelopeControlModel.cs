@@ -17,6 +17,7 @@ namespace ActionForce.Location
         public IEnumerable<VPriceLastList> PriceList { get; set; }
         public IEnumerable<DocumentCashRecorderSlip> CashRecordSlip { get; set; }
         public IEnumerable<DayResultDocuments> ResultDocuments { get; set; }
+        public IEnumerable<ResultState> ResultStates { get; set; }
         public LocationBalance LocationBalance { get; set; }
         public SummaryControlModel Summary { get; set; }
         public DocumentCashRecorderSlip CashRecorderSlip { get; set; }

@@ -8,11 +8,11 @@
         <div class="d-flex flex-column flex" data-plugin="user">
             <div class="p-2">
                 <div class="toolbar row  no-gutters">
-                    <a href="#" class="btn btn-md btn-rounded light-green text-white" title="Satış">
+                    <a href="@( Model.Shift == null ? "/Envelope/LocationShiftStart" : Model?.Shift?.DateEnd  == null && Model?.Shift?.Duration == null ? "/Envelope/LocationShiftEnd":"#") " class="btn btn-md btn-rounded @( Model.Shift == null ? "  btn-dark" : Model?.Shift?.DateEnd  == null && Model?.Shift?.Duration == null ? "light-green text-white":"light-blue text-white") " title="Satış">
                         <span class="font-weight-bold">@(Model.DocumentDate.ToLongDateString())</span>
                     </a>
-                    <a href="#" class="btn btn-md btn-wave btn-rounded light-green text-white px-3">
-                        <i data-feather="sun"></i>
+                    <a href="@( Model.Shift == null ? "/Envelope/LocationShiftStart" : Model?.Shift?.DateEnd  == null && Model?.Shift?.Duration == null ? "/Envelope/LocationShiftEnd":"#") " class="btn btn-md btn-wave btn-rounded  @( Model.Shift == null ? "  btn-dark" : Model?.Shift?.DateEnd  == null && Model?.Shift?.Duration == null ? "light-green text-white":"light-blue text-white")  text-white px-3">
+                        <i data-feather="@(Model.Shift == null ? "cloud" : Model?.Shift?.DateEnd  == null && Model?.Shift?.Duration == null ? "sun":"moon")"></i>
                     </a>
                 </div>
                 <div class="mt-2">
@@ -315,6 +315,52 @@
 
                                 </div>
                             </div>
+                        </div>
+
+                        <div class="card" data-sr-id="31" style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
+                            <div class="card-header">
+                                <div class="d-flex">
+                                    <span class="font-weight-500">Gün Sonu Kapama</span>
+                                </div>
+                            </div>
+                            @using (Html.BeginForm("SetResultState", "Envelope", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                <div class="card-body mt-0 mb-0 pb-4 pt-4">
+
+                                    <div class="form-group row mb-1">
+                                        <label class="col-4 col-form-label">Durum</label>
+                                        <div class="col-8">
+                                            <input name="DayresultID" type="hidden" value="@(Model.CurrentDayResult.ID)" />
+                                            <select class="form-control" name="StateID" required>
+                                                @foreach (var item in Model.ResultStates)
+                                                {
+                                                    <option value="@item.StateID" @(item.StateID == Model.CurrentDayResult.StateID ? "selected" : "")>@(Html.Raw($"{item.StateName}"))</option>
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row mb-1">
+                                        <label class="col-12 col-form-label">Açıklama</label>
+                                        <div class="col-12">
+                                            <textarea id="ResultDescription" name="Description" class="form-control" rows="4" style="width:100%">@(Model.CurrentDayResult?.Description)</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-footer text-center tx-13">
+                                    @if (Model?.Shift != null && Model?.Shift?.Duration != null)
+                                    {
+                                        <input id="btnResultStateSubmit" class="btn btn-warning btn-block" type="submit" value="Durumu Onayla" />
+
+                                    }
+                                    else
+                                    {
+                                        <input id="btnResultStateSubmit" class="btn btn-warning btn-block" type="button" disabled value="Lokasyon Kapanmalıdır" />
+
+                                    }
+                                </div>
+                            }
                         </div>
 
                     </div>
