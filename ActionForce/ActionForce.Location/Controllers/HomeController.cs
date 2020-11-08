@@ -143,7 +143,8 @@ namespace ActionForce.Location.Controllers
             string message = string.Empty;
 
             StandartTicket model = new StandartTicket();
-            var date = DateTime.UtcNow.AddHours(model.Location.TimeZone);
+            var date = LocationHelper.GetLocationScheduledDate(model.Location.ID, DateTime.UtcNow.AddHours(model.Location.TimeZone));
+            var processdate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
 
             model.Price = Db.VPrice.FirstOrDefault(x => x.ID == PriceID);
             model.PayMethodID = PaymethodID;
@@ -162,7 +163,7 @@ namespace ActionForce.Location.Controllers
                     saleRow = _db.TicketSaleRows.FirstOrDefault(x => x.ID == rowID);
                 }
 
-                LocationHelper.AddApplicationLog("Location", "TicketSaleRows", "Insert", rowID.ToString(), "Home", "SetTicketSale", null, true, message, string.Empty, date, $"{model.Authentication.CurrentEmployee.EmployeeID} - {model.Authentication.CurrentEmployee.FullName}", LocationHelper.GetIPAddress(), string.Empty, saleRow);
+                LocationHelper.AddApplicationLog("Location", "TicketSaleRows", "Insert", rowID.ToString(), "Home", "SetTicketSale", null, true, message, string.Empty, processdate, $"{model.Authentication.CurrentEmployee.EmployeeID} - {model.Authentication.CurrentEmployee.FullName}", LocationHelper.GetIPAddress(), string.Empty, saleRow);
 
                 System.Threading.Tasks.Task lblusatask = System.Threading.Tasks.Task.Factory.StartNew(() => documentManager.CheckLocationTicketSale(rowID.Value, date));
                 

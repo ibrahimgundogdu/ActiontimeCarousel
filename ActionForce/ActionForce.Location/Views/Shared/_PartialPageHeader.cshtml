@@ -67,13 +67,13 @@
                 <span class="avatar w-24" style="margin: -2px;"><img src="@($"http://office.ufegrup.com/img/Employee/{Model.Authentication.CurrentEmployee.FotoFile}")" alt="@(Model.Authentication?.CurrentEmployee?.FullName)"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-right w mt-3 animate fadeIn">
-                <a class="dropdown-item" href="page.profile.html">
+                <a class="dropdown-item" href="#">
                     <span>@(Model.Authentication?.CurrentEmployee?.FullName)</span>
                 </a>
-                <a class="dropdown-item" href="page.price.html">
+                <a class="dropdown-item" href="#">
                     <span>@(Model.Authentication?.CurrentEmployee?.Position)</span>
                 </a>
-                <div class="dropdown-divider"></div>
+                @*<div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="page.profile.html">
                     <span>Profile</span>
                 </a>
@@ -85,7 +85,7 @@
                 <div class="dropdown-divider"></div>
                 <a class="dropdown-item" href="page.setting.html">
                     <span>Account Settings</span>
-                </a>
+                </a>*@
                 <a class="dropdown-item" href="/Logout">Çıkış</a>
             </div>
         </li>
