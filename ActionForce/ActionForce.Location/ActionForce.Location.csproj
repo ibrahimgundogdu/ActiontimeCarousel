@@ -574,6 +574,7 @@
     <Compile Include="Models\ControlModels\ActionControlModel.cs" />
     <Compile Include="Models\ControlModels\CashControlModel.cs" />
     <Compile Include="Models\ControlModels\DefaultControlModel.cs" />
+    <Compile Include="Models\ControlModels\EmployeeControlModel.cs" />
     <Compile Include="Models\ControlModels\EnvelopeControlModel.cs" />
     <Compile Include="Models\ControlModels\HomeControlModel.cs" />
     <Compile Include="Models\ControlModels\LocationControlModel.cs" />
@@ -583,6 +584,9 @@
     <Compile Include="Models\DefaultModels\AnimalCostume.cs" />
     <Compile Include="Models\DefaultModels\BankTransfer.cs" />
     <Compile Include="Models\DefaultModels\BasketTotal.cs" />
+    <Compile Include="Models\DefaultModels\EmployeeBreakModel.cs" />
+    <Compile Include="Models\DefaultModels\EmployeeScheduleModel.cs" />
+    <Compile Include="Models\DefaultModels\EmployeeShiftLocationModel.cs" />
     <Compile Include="Models\DefaultModels\LocationBalance.cs" />
     <Compile Include="Models\DefaultModels\LocationScheduleInfo.cs" />
     <Compile Include="Models\DefaultModels\LocationShiftInfo.cs" />
@@ -593,6 +597,7 @@
     <Compile Include="Models\DefaultModels\TicketInfo.cs" />
     <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\ControlModels\LayoutControlModel.cs" />
+    <Compile Include="Models\DefaultModels\EmployeeModel.cs" />
     <Compile Include="Models\FormModels\FormBankTransfer.cs" />
     <Compile Include="Models\FormModels\FormCashCollect.cs" />
     <Compile Include="Models\FormModels\FormCashExpense.cs" />
@@ -849,6 +854,7 @@
     <Content Include="Views\Cash\TransferDetail.cshtml" />
     <Content Include="Views\Envelope\_PartialCashRecorder.cshtml" />
     <Content Include="Views\Envelope\_PartialResultDocument.cshtml" />
+    <Content Include="Views\Employee\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -861,7 +867,6 @@
     <Folder Include="Documents\" />
     <Folder Include="libs\plyrist\dist\" />
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\Employee\" />
     <Folder Include="Views\Logout\" />
     <Folder Include="Views\Message\" />
     <Folder Include="Views\Shift\" />

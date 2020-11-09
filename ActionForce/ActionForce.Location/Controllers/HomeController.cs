@@ -38,6 +38,11 @@ namespace ActionForce.Location.Controllers
         {
             HomeControlModel model = new HomeControlModel();
 
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
             model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
 
             LocationServiceManager manager = new LocationServiceManager(Db, model.Authentication.CurrentLocation);
@@ -56,6 +61,11 @@ namespace ActionForce.Location.Controllers
         public ActionResult Detail(Guid? id)
         {
             HomeControlModel model = new HomeControlModel();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
 
             model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
             LocationServiceManager manager = new LocationServiceManager(Db, model.Authentication.CurrentLocation);
@@ -157,7 +167,9 @@ namespace ActionForce.Location.Controllers
 
             if (rowID > 0)
             {
-                message = "Satış Eklendi";
+                model.Result.IsSuccess = true;
+                model.Result.Message = "Satış Eklendi";
+
                 var saleRow = new TicketSaleRows();
 
                 using (ActionTimeEntities _db = new ActionTimeEntities())
@@ -168,12 +180,15 @@ namespace ActionForce.Location.Controllers
                 LocationHelper.AddApplicationLog("Location", "TicketSaleRows", "Insert", rowID.ToString(), "Home", "SetTicketSale", null, true, message, string.Empty, processdate, $"{model.Authentication.CurrentEmployee.EmployeeID} - {model.Authentication.CurrentEmployee.FullName}", LocationHelper.GetIPAddress(), string.Empty, saleRow);
 
                 System.Threading.Tasks.Task lblusatask = System.Threading.Tasks.Task.Factory.StartNew(() => documentManager.CheckLocationTicketSale(rowID.Value, date));
-                
+
             }
             else
             {
-                message = "Satış Eklenemedi";
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Satış Eklenemedi";
             }
+
+            TempData["Result"] = model.Result;
 
             return message;
         }
@@ -184,6 +199,7 @@ namespace ActionForce.Location.Controllers
         public ActionResult UpdateSaleRow(FormSaleRow formSaleRow)
         {
             string message = string.Empty;
+
             StandartTicket model = new StandartTicket();
 
             if (formSaleRow != null && formSaleRow.UID != null)
@@ -248,7 +264,8 @@ namespace ActionForce.Location.Controllers
                             saleRow = _db.TicketSaleRows.FirstOrDefault(x => x.ID == saleRow.ID);
                         }
 
-                        message = "Güncelleme Başarılı";
+                        model.Result.IsSuccess = true;
+                        model.Result.Message = "Güncelleme Başarılı";
                         DateTime dateProcess = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
 
                         var isequal = LocationHelper.PublicInstancePropertiesEqual<TicketSaleRows>(self, saleRow, LocationHelper.getIgnorelist());
@@ -259,20 +276,20 @@ namespace ActionForce.Location.Controllers
                     }
                     else
                     {
-                        message = "Güncelleme Başarısız";
+                        model.Result.Message = "Güncelleme Başarısız";
                     }
                 }
                 else
                 {
-                    message = "Satış Bulunamadı";
+                    model.Result.Message = "Satış Bulunamadı";
                 }
             }
             else
             {
-                message = "Form Verisi Alınamadı";
+                model.Result.Message = "Form Verisi Alınamadı";
             }
 
-            TempData["Message"] = message;
+            TempData["Result"] = model.Result;
 
             return RedirectToAction("Detail", new { id = formSaleRow.UID });
         }

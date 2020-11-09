@@ -191,3 +191,20 @@
         </div>
     </div>
 </div>
+@section scripts {
+
+
+    @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
+    {
+        <script>
+            $(function () {
+                notie.setOptions({
+                    alertTime: 5
+                })
+                notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
+                noticed = true;
+            });
+        </script>
+    }
+
+}

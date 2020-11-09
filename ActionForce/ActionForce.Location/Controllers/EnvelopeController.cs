@@ -57,7 +57,12 @@ namespace ActionForce.Location.Controllers
             model.LocationBalance = manager.GetLocationSaleBalanceToday(model.DocumentDate);
             model.Summary = manager.GetLocationSummary(model.DocumentDate, model.Authentication.CurrentEmployee);
             model.CashRecordSlip = Db.DocumentCashRecorderSlip.Where(x => x.LocationID == model.Location.ID && x.Date == model.DocumentDate).OrderByDescending(x => x.RecordDate).ToList();
-            model.ResultDocuments = Db.DayResultDocuments.Where(x => x.LocationID == model.Location.ID && x.Date == model.DocumentDate && x.ResultID == model.CurrentDayResult.ID).ToList();
+
+            if (model.CurrentDayResult != null)
+            {
+                model.ResultDocuments = Db.DayResultDocuments.Where(x => x.LocationID == model.Location.ID && x.Date == model.DocumentDate && x.ResultID == model.CurrentDayResult.ID).ToList();
+            }
+
             model.ResultStates = Db.ResultState.Where(x => x.StateID <= 2).ToList();
             //List<int?> employeeids = model.EmployeeActions.Select(x => x.EmployeeID).ToList();
 

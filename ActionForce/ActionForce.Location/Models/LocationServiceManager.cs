@@ -101,23 +101,82 @@ namespace ActionForce.Location
 
             List<LocationTicketSaleInfo> list = new List<LocationTicketSaleInfo>();
 
-            list = _db.GetLocationTicketsToday(_location.LocationID, DocumentDate).Select(x=> new LocationTicketSaleInfo() { 
-            Currency = x.Currency,
-            IsActive = x.IsActive.Value,
-            Part = x.Part,
-            PayMethodID = x.PaymethodID.Value,
-            RecordDate = x.RecordDate.Value,
-            RowID = x.RowID,
-            SaleID = x.SaleID,
-            StatusID = x.StatusID.Value,
-            Total = (float)x.Total,
-            Unit = x.Unit.Value,
-            Uid=x.UID
+            list = _db.GetLocationTicketsToday(_location.LocationID, DocumentDate).Select(x => new LocationTicketSaleInfo()
+            {
+                Currency = x.Currency,
+                IsActive = x.IsActive.Value,
+                Part = x.Part,
+                PayMethodID = x.PaymethodID.Value,
+                RecordDate = x.RecordDate.Value,
+                RowID = x.RowID,
+                SaleID = x.SaleID,
+                StatusID = x.StatusID.Value,
+                Total = (float)x.Total,
+                Unit = x.Unit.Value,
+                Uid = x.UID
             }).ToList();
 
             return list;
         }
 
+        public List<EmployeeModel> GetLocationEmployeesToday()
+        {
 
-    }
+            List<EmployeeModel> resultlist = new List<EmployeeModel>();
+
+             var schedules = _db.Schedule.Where(x => x.LocationID == _location.LocationID && x.ShiftDate == _location.LocalDate).ToList();
+
+            List<int> empids = schedules.Select(x => x.EmployeeID.Value).Distinct().ToList();
+
+            var shifts = _db.EmployeeShift.Where(x => x.LocationID == _location.LocationID && x.ShiftDate == _location.LocalDate && empids.Contains(x.EmployeeID.Value)).ToList();
+
+
+            resultlist = _db.Employee.Where(x => empids.Contains(x.EmployeeID)).Select(x => new EmployeeModel()
+            {
+                ID = x.EmployeeID,
+                FotoFile = x.FotoFile,
+                FullName = x.FullName,
+                Token = x.EmployeeUID
+            }).ToList();
+
+            foreach (var item in resultlist)
+            {
+                item.Schedule = schedules.Where(x => x.EmployeeID == item.ID).Select(x => new EmployeeScheduleModel()
+                {
+                    EmployeeID = item.ID,
+                    ScheduleDate = x.ShiftDate.Value,
+                    DateStart = x.ShiftDateStart.Value,
+                    DateEnd = x.ShiftdateEnd,
+                    Duration = (x.ShiftdateEnd - x.ShiftDateStart)
+
+
+                }).FirstOrDefault();
+
+                item.Shift = shifts.Where(x => x.EmployeeID == item.ID && x.IsWorkTime == true).Select(x => new EmployeeShiftLocationModel()
+                {
+                    EmployeeID = item.ID,
+                    ShiftDate = x.ShiftDate.Value,
+                    DateStart = x.ShiftDateStart.Value,
+                    DateEnd = x.ShiftDateEnd,
+                    Duration = (x.ShiftDateEnd - x.ShiftDateStart.Value)
+                }).FirstOrDefault();
+
+                item.Breaks = shifts.Where(x => x.EmployeeID == item.ID && x.IsBreakTime == true).Select(x => new EmployeeBreakModel()
+                {
+                    EmployeeID = item.ID,
+                    BreaktDate = x.ShiftDate.Value,
+                    DateStart = x.BreakDateStart.Value,
+                    DateEnd = x.BreakDateEnd,
+                    Duration = (x.BreakDateEnd - x.BreakDateStart.Value)
+
+                }).ToList();
+
+            }
+
+            return resultlist;
+        }
+
+       
+
+}
 }
