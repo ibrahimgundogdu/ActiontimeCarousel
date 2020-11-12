@@ -234,7 +234,7 @@ namespace ActionForce.Office.Controllers
                 {
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
-                int? quantity = posCollect.Quantity;
+                int? quantity = posCollect.Quantity <= 0 ? 1 : posCollect.Quantity;
                 if (amount > 0 && quantity > 0)
                 {
                     PosCollection payment = new PosCollection();

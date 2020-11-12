@@ -226,7 +226,7 @@
                                     <select class="form-control" name="StatusID" required>
                                         @foreach (var item in Model.StatusList)
                                         {
-                                            <option value="@item.ID" @(Model.TransferDetail.StatusID >= (item.ID - 1) ? "" : item.ID == 7 ? "" : "disabled") @(Model.TransferDetail.StatusID == item.ID ? "selected" : "")> @(Model.TransferDetail.StatusID >= (item.ID - 1) ? Html.Raw($"<span class='font-weight-bold'>{item.LevelNumber} {item.StatusName}</span>") : item.ID == 7 ? Html.Raw($"<span class='font-weight-bold'>{item.LevelNumber} {item.StatusName}</span>") : Html.Raw($"{item.LevelNumber} {item.StatusName}"))</option>
+                                            <option value="@item.ID"  @(Model.TransferDetail.StatusID == item.ID ? "selected" : "")> @(Model.TransferDetail.StatusID >= (item.ID - 1) ? Html.Raw($"<span class='font-weight-bold'>{item.LevelNumber} {item.StatusName}</span>") : item.ID == 7 ? Html.Raw($"<span class='font-weight-bold'>{item.LevelNumber} {item.StatusName}</span>") : Html.Raw($"{item.LevelNumber} {item.StatusName}"))</option>
                                         }
                                     </select>
                                 </div>
