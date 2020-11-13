@@ -64,7 +64,7 @@
         
         <li class="nav-item dropdown">
             <a href="#" data-toggle="dropdown" class="nav-link d-flex align-items-center px-2 text-color">
-                <span class="avatar w-24" style="margin: -2px;"><img src="@($"http://office.ufegrup.com/img/Employee/{Model.Authentication.CurrentEmployee.FotoFile}")" alt="@(Model.Authentication?.CurrentEmployee?.FullName)"></span>
+                <span class="avatar w-24" style="margin: -2px;"><img src="@(!string.IsNullOrEmpty(Model.Authentication.CurrentEmployee.FotoFile) ? $"http://office.ufegrup.com/img/Employee/{Model.Authentication.CurrentEmployee.FotoFile}" : $"http://office.ufegrup.com/img/Employee/user.png")" alt="@(Model.Authentication?.CurrentEmployee?.FullName)"></span>
             </a>
             <div class="dropdown-menu dropdown-menu-right w mt-3 animate fadeIn">
                 <a class="dropdown-item" href="#">

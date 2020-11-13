@@ -39,26 +39,26 @@
                 </ul>
             </li>
             @*<li>
-            <a href="/Action">
-                <span class="nav-icon text-primary"><i data-feather='layers'></i></span>
-                <span class="nav-text">Cari Hesap</span>
-            </a>
-        </li>*@
+                    <a href="/Action">
+                        <span class="nav-icon text-primary"><i data-feather='layers'></i></span>
+                        <span class="nav-text">Cari Hesap</span>
+                    </a>
+                </li>*@
 
             @*<li>
-            <a href="/Schedule">
-                <span class="nav-icon text-info"><i data-feather='calendar'></i></span>
-                <span class="nav-text">Plan Takvimleri</span>
-                <span class="nav-badge"><b class="badge-circle xs text-info"></b></span>
-            </a>
-        </li>
-        <li>
-            <a href="/Shift">
-                <span class="nav-icon text-info"><i data-feather='clock'></i></span>
-                <span class="nav-text">Mesai Molalar</span>
-                <span class="nav-badge"><b class="badge-circle xs text-info"></b></span>
-            </a>
-        </li>*@
+                    <a href="/Schedule">
+                        <span class="nav-icon text-info"><i data-feather='calendar'></i></span>
+                        <span class="nav-text">Plan Takvimleri</span>
+                        <span class="nav-badge"><b class="badge-circle xs text-info"></b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/Shift">
+                        <span class="nav-icon text-info"><i data-feather='clock'></i></span>
+                        <span class="nav-text">Mesai Molalar</span>
+                        <span class="nav-badge"><b class="badge-circle xs text-info"></b></span>
+                    </a>
+                </li>*@
             <li>
                 <a href="/Employee">
                     <span class="nav-icon text-success"><i data-feather='users'></i></span>
@@ -66,34 +66,34 @@
                 </a>
             </li>
             @*<li class="nav-header hidden-folded">
-            <span class="text-muted">Lokasyon</span>
-        </li>
+                    <span class="text-muted">Lokasyon</span>
+                </li>
 
-        <li>
-            <a href="/Location">
-                <span class="nav-icon text-success"><i data-feather='airplay'></i></span>
-                <span class="nav-text">Lokasyonum</span>
-            </a>
-        </li>
+                <li>
+                    <a href="/Location">
+                        <span class="nav-icon text-success"><i data-feather='airplay'></i></span>
+                        <span class="nav-text">Lokasyonum</span>
+                    </a>
+                </li>
 
-        <li>
-            <a href="/Employee">
-                <span class="nav-icon text-success"><i data-feather='users'></i></span>
-                <span class="nav-text">Çalışanlar</span>
-            </a>
-        </li>
+                <li>
+                    <a href="/Employee">
+                        <span class="nav-icon text-success"><i data-feather='users'></i></span>
+                        <span class="nav-text">Çalışanlar</span>
+                    </a>
+                </li>
 
-        <li class="nav-header hidden-folded">
-            <span class="text-muted">Bildirim</span>
-        </li>
+                <li class="nav-header hidden-folded">
+                    <span class="text-muted">Bildirim</span>
+                </li>
 
-        <li>
-            <a href="/Message">
-                <span class="nav-icon text-warning"><i data-feather='message-circle'></i></span>
-                <span class="nav-text">Mesajlar</span>
-                <span class="nav-badge"><b class="badge-circle xs text-warning"></b></span>
-            </a>
-        </li>*@
+                <li>
+                    <a href="/Message">
+                        <span class="nav-icon text-warning"><i data-feather='message-circle'></i></span>
+                        <span class="nav-text">Mesajlar</span>
+                        <span class="nav-badge"><b class="badge-circle xs text-warning"></b></span>
+                    </a>
+                </li>*@
 
 
             <li>
@@ -134,7 +134,8 @@
         else
         {
             <li class="text-center">
-                <a href="#" class="btn btn-block btn-light">@(Html.Raw(Model.Authentication.CurrentLocation.FullName))</a>
+                @*<a href="#" class="btn btn-block btn-light">@(Html.Raw(Model.Authentication.CurrentLocation.FullName))</a>*@
+                <a href="/Location/SetCurrentLocation" class="btn btn-block btn-light">@(Html.Raw(Model.Authentication.CurrentLocation.FullName))</a>
             </li>
         }
 
