@@ -168,6 +168,8 @@
         };
 
         function SetTicketSale(priceID, paymethodID, colorID, costumeID) {
+            $("#modalcreditContent").html('Ekleniyor...');
+            $("#modalcashContent").html('Ekleniyor...');
             $.ajax({
                 method: "GET",
                 url: "/Home/SetTicketSale",
