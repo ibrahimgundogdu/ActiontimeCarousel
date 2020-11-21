@@ -6588,6 +6588,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
           <Parameter Name="Date" Type="date" Mode="In" />
         </Function>
+        <Function Name="GetSaleToday" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Date" Type="date" Mode="In" />
+        </Function>
         <Function Name="GetTicketDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TicketNumber" Type="nvarchar" Mode="In" />
         </Function>
@@ -9917,6 +9920,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
             <Parameter Name="IP" Mode="In" Type="String" />
             <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetSaleToday" ReturnType="Collection(db293_ActionTimeDbModel.GetSaleToday_Result)">
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
         
           </EntityContainer>
@@ -16629,6 +16635,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="UID" Type="Guid" />
         </EntityType>
+        <ComplexType Name="GetSaleToday_Result">
+          <Property Type="Int32" Name="PaymethodID" Nullable="true" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+          <Property Type="Double" Name="Amount" Nullable="true" />
+          <Property Type="String" Name="Currency" Nullable="false" MaxLength="4" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23039,6 +23051,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddLocationTicketSale" FunctionName="db293_ActionTimeDbModel.Store.AddLocationTicketSale" />
           <FunctionImportMapping FunctionImportName="CheckLocationTicketSale" FunctionName="db293_ActionTimeDbModel.Store.CheckLocationTicketSale" />
+          <FunctionImportMapping FunctionImportName="GetSaleToday" FunctionName="db293_ActionTimeDbModel.Store.GetSaleToday">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetSaleToday_Result">
+                <ScalarProperty Name="PaymethodID" ColumnName="PaymethodID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

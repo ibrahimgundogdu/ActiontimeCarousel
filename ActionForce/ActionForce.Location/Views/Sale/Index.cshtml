@@ -6,142 +6,114 @@
 }
 
 <div class="d-flex flex fixed-content">
-
     <div class="d-flex flex" id="content-body">
         <div class="d-flex flex-column flex" data-plugin="user">
-            <div class="p-3">
+            <div class="p-2">
                 <div class="toolbar">
-                    <a href="/" class="btn btn-md btn-white" title="Önceki Gün">
-                        <i class="text-primary font-weight-bold" data-feather="chevron-left"></i>
+                    <a href="/Sale/Index/@(Model.SelectedDate.AddDays(-1).ToString("yyyy-MM-dd"))" class="btn btn-md btn-white" title="Önceki Gün">
+                        <i class="text-info font-weight-bold" data-feather="chevron-left"></i>
                     </a>
-                    <a href="/" class="btn btn-md btn-white" title="Bu gün">
-                        <i class="text-primary font-weight-bold" data-feather="target"></i>
+                    <a href="/Sale/Index/@(Model.LocationDate.ToString("yyyy-MM-dd"))" class="btn btn-md btn-white" title="Bu gün">
+                        <i class="text-info font-weight-bold" data-feather="target"></i>
                     </a>
-                    <a href="/" class="btn btn-md btn-white" title="Sonraki Gün">
-                        <i class="text-primary font-weight-bold" data-feather="chevron-right"></i>
+                    <a href="/Sale/Index/@(Model.SelectedDate.AddDays(1).ToString("yyyy-MM-dd"))" class="btn btn-md btn-white" title="Sonraki Gün">
+                        <i class="text-info font-weight-bold" data-feather="chevron-right"></i>
                     </a>
-                    <a href="/" class="btn btn-md btn-white" title="Takvim">
-                        <i class="text-primary font-weight-bold" data-feather="calendar"></i>
+                    <a href="/" class="btn btn-md btn-block btn-white" title="Satış">
+                        <i class="text-info font-weight-bold" data-feather="grid"></i>
                     </a>
-                    <a href="#" class="btn btn-md btn-white">
-                        <span class="font-weight-bold">@(DateTime.Now.ToLongDateString())</span>
+
+
+                </div>
+                <div class="mt-2">
+                    <a href="#" class="btn btn-sm btn-block btn-white">
+                        <span class="font-weight-bold">@(Model.SelectedDate.ToLongDateString())</span>
                     </a>
                 </div>
             </div>
-            <div class="scroll-y mx-3 mb-3 card">
-                <div class="table-responsive">
-                    <table class="table table-theme table-hover table-row v-middle" style="border-spacing: 0 1px !important; padding: 0.5rem !important;">
+            <div class="scroll-y mb-0">
+                <div class="row no-gutters">
+                    <div class="col-md-12 p-2">
+
+                        <div class="card" data-sr-id="31" style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
+                            <div class="card-header">
+                                <span class="font-weight-500">Bugünkü Satışlar</span>
+                            </div>
+                            <div class="card-body m-0 p-0">
 
 
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr class="table-info">
+                                                <td class="p-1 pl-3">Ad.</td>
+                                                <td class="p-1 pl-3 text-right">$</td>
+                                                <td class="p-1 pl-3">Ad.</td>
+                                                <td class="p-1 pl-3 text-right">€</td>
+                                                <td class="p-1 pl-3">Ad.</td>
+                                                <td class="p-1 pl-3 text-right">₺</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th colspan="6">Nakit Satışları</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-body text-info p-1 pl-3">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "USD").Quantity)</td>
+                                                <td class="bg-body text-info p-1 pl-3 text-right">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "USD").Amount.ToString("N2"))</td>
+                                                <td class="bg-body text-info p-1 pl-3">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "EUR").Quantity)</td>
+                                                <td class="bg-body text-info p-1 pl-3 text-right">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "EUR").Amount.ToString("N2"))</td>
+                                                <td class="bg-body text-info p-1 pl-3">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "TRL").Quantity)</td>
+                                                <td class="bg-body text-info p-1 pl-3 text-right">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "TRL").Amount.ToString("N2"))</td>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="6">Kredi Kartı Satışları</th>
+                                            </tr>
+                                            <tr>
+                                                <td class="bg-body text-warning p-1 pl-3">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "USD").Quantity)</td>
+                                                <td class="bg-body text-warning p-1 pl-3 text-right">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "USD").Amount.ToString("N2"))</td>
+                                                <td class="bg-body text-warning p-1 pl-3">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "EUR").Quantity)</td>
+                                                <td class="bg-body text-warning p-1 pl-3 text-right">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "EUR").Amount.ToString("N2"))</td>
+                                                <td class="bg-body text-warning p-1 pl-3">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "TRL").Quantity)</td>
+                                                <td class="bg-body text-warning p-1 pl-3 text-right">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "TRL").Amount.ToString("N2"))</td>
+                                            </tr>
 
-                        <thead>
-                            <tr class="table-light text-sm font-weight-bold">
-                                <td>No</td>
-                                <td>Müşteri</td>
-                                <td class="text-center">Adet</td>
-                                <td class="text-right">Tutar</td>
-                                <td>Tür</td>
-                                <td class="text-center">Durumu</td>
-                                <td class="text-center">POS</td>
-                                <td></td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"><a href="#" class="">ST00001</a></td>
-                                <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><b>3</b></td>
-                                <td class="bg-primary-lt text-right text-dark"> <b>50,00</b> <span class="text-muted">₺</span></td>
-                                <td class="text-center">Nakit</td>
-                                <td class="bg-warning-lt text-center text-dark">OK</td>
-                                <td class="bg-warning-lt text-center text-dark">Gönderildi</td>
-                                <td class="text-center"><i class="text-info font-weight-bold" data-feather="dollar-sign"></i></td>
-                            </tr>
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"><a href="#" class="">ST00001</a></td>
-                                <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><b>3</b></td>
-                                <td class="bg-primary-lt text-right text-dark"> <b>50,00</b> <span class="text-muted">₺</span></td>
-                                <td class="text-center">Nakit</td>
-                                <td class="bg-warning-lt text-center text-dark">OK</td>
-                                <td class="bg-warning-lt text-center text-dark">Gönderildi</td>
-                                <td class="text-center"><i class="text-info font-weight-bold" data-feather="dollar-sign"></i></td>
-                            </tr>
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"><a href="#" class="">ST00001</a></td>
-                                <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><b>3</b></td>
-                                <td class="bg-primary-lt text-right text-dark"> <b>50,00</b> <span class="text-muted">₺</span></td>
-                                <td class="text-center">Nakit</td>
-                                <td class="bg-warning-lt text-center text-dark">İptal</td>
-                                <td class="bg-warning-lt text-center text-dark">Gönderildi</td>
-                                <td class="text-center"><i class="text-info font-weight-bold" data-feather="dollar-sign"></i></td>
-                            </tr>
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"><a href="#" class="">ST00001</a></td>
-                                <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><b>3</b></td>
-                                <td class="bg-primary-lt text-right text-dark"> <b>50,00</b> <span class="text-muted">₺</span></td>
-                                <td class="text-center">Nakit</td>
-                                <td class="bg-warning-lt text-center text-dark">İade</td>
-                                <td class="bg-warning-lt text-center text-dark">Gönderildi</td>
-                                <td class="text-center"><i class="text-info font-weight-bold" data-feather="dollar-sign"></i></td>
-                            </tr>
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"><a href="#" class="">ST00001</a></td>
-                                <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><b>3</b></td>
-                                <td class="bg-primary-lt text-right text-dark"> <b>50,00</b> <span class="text-muted">₺</span></td>
-                                <td class="text-center">Nakit</td>
-                                <td class="bg-warning-lt text-center text-dark">OK</td>
-                                <td class="bg-warning-lt text-center text-dark">Gönderildi</td>
-                                <td class="text-center"><i class="text-info font-weight-bold" data-feather="dollar-sign"></i></td>
-                            </tr>
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"><a href="#" class="">ST00001</a></td>
-                                <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><b>3</b></td>
-                                <td class="bg-primary-lt text-right text-dark"> <b>50,00</b> <span class="text-muted">₺</span></td>
-                                <td class="text-center">Nakit</td>
-                                <td class="bg-warning-lt text-center text-dark">İptal</td>
-                                <td class="bg-warning-lt text-center text-dark">Gönderildi</td>
-                                <td class="text-center"><i class="text-info font-weight-bold" data-feather="dollar-sign"></i></td>
-                            </tr>
-                        </tbody>
-                        <tfoot class="order-0">
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"></td>
-                                <td class="text-center text-dark"></td>
-                                <td class="text-center text-dark"></td>
-                                <td class="text-right font-weight-bold"><b>1.200,00</b> <span class="text-muted">₺</span></td>
-                                <td class="text-center text-dark"></td>
-                                <td class="text-center text-dark"></td>
-                                <td class="text-sm text-center text-md p-0"></td>
-                                <td class="text-center"></td>
-                            </tr>
-                        </tfoot>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <th class="bg-body p-1 pl-3">@(Model.SaleTotals.Where(x=> x.Currency == "USD").Sum(x=> x.Quantity))</th>
+                                                <th class="bg-body p-1 pl-3 text-right">@(Model.SaleTotals.Where(x=> x.Currency == "USD").Sum(x => x.Amount).ToString("N2"))</th>
+                                                <th class="bg-body p-1 pl-3">@(Model.SaleTotals.Where(x=> x.Currency == "EUR").Sum(x => x.Quantity))</th>
+                                                <th class="bg-body p-1 pl-3 text-right">@(Model.SaleTotals.Where(x=>  x.Currency == "EUR").Sum(x => x.Amount).ToString("N2"))</th>
+                                                <th class="bg-body p-1 pl-3">@(Model.SaleTotals.Where(x=>  x.Currency == "TRL").Sum(x => x.Quantity))</th>
+                                                <th class="bg-body p-1 pl-3 text-right">@(Model.SaleTotals.Where(x=> x.Currency == "TRL").Sum(x => x.Amount).ToString("N2"))</th>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
 
-                    </table>
+                            </div>
+                        </div>
 
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 
 @section scripts {
-    @if (Model.Result != null) //
+
+    @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
     {
         <script>
-            $(function () {
-                notie.setOptions({
-                    alertTime: 5
-                })
-                notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
-                noticed = true;
-            });
+                $(function () {
+                    notie.setOptions({
+                        alertTime: 5
+                    })
+                    notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
+                    noticed = true;
+                });
         </script>
     }
-
 }

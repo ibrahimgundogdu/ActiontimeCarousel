@@ -3107,5 +3107,33 @@ namespace ActionForce.Service
 
             return result;
         }
+
+        public List<SaleDayTotalModal> GetDailySale(DateTime processDate)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            List<SaleDayTotalModal> salelist = new List<SaleDayTotalModal>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                var isResult = Db.GetSaleToday(processDate).ToList();
+
+
+                salelist.Add(new SaleDayTotalModal() { PaymethodID = 1, Currency = "TRL", Quantity = isResult.FirstOrDefault(x => x.PaymethodID == 1 && x.Currency == "TRL")?.Quantity ?? 0, Amount = isResult.FirstOrDefault(x => x.PaymethodID == 1 && x.Currency == "TRL")?.Amount ?? 0 });
+                salelist.Add(new SaleDayTotalModal() { PaymethodID = 1, Currency = "USD", Quantity = isResult.FirstOrDefault(x => x.PaymethodID == 1 && x.Currency == "USD")?.Quantity ?? 0, Amount = isResult.FirstOrDefault(x => x.PaymethodID == 1 && x.Currency == "USD")?.Amount ?? 0 });
+                salelist.Add(new SaleDayTotalModal() { PaymethodID = 1, Currency = "EUR", Quantity = isResult.FirstOrDefault(x => x.PaymethodID == 1 && x.Currency == "EUR")?.Quantity ?? 0, Amount = isResult.FirstOrDefault(x => x.PaymethodID == 1 && x.Currency == "EUR")?.Amount ?? 0 });
+
+                salelist.Add(new SaleDayTotalModal() { PaymethodID = 2, Currency = "TRL", Quantity = isResult.FirstOrDefault(x => x.PaymethodID == 2 && x.Currency == "TRL")?.Quantity ?? 0, Amount = isResult.FirstOrDefault(x => x.PaymethodID == 2 && x.Currency == "TRL")?.Amount ?? 0 });
+                salelist.Add(new SaleDayTotalModal() { PaymethodID = 2, Currency = "USD", Quantity = isResult.FirstOrDefault(x => x.PaymethodID == 2 && x.Currency == "USD")?.Quantity ?? 0, Amount = isResult.FirstOrDefault(x => x.PaymethodID == 2 && x.Currency == "USD")?.Amount ?? 0 });
+                salelist.Add(new SaleDayTotalModal() { PaymethodID = 2, Currency = "EUR", Quantity = isResult.FirstOrDefault(x => x.PaymethodID == 2 && x.Currency == "EUR")?.Quantity ?? 0, Amount = isResult.FirstOrDefault(x => x.PaymethodID == 2 && x.Currency == "EUR")?.Amount ?? 0 });
+
+            }
+
+            return salelist;
+        }
     }
 }

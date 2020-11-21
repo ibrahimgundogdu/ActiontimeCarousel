@@ -1620,5 +1620,14 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("CheckLocationTicketSale", saleRowIDParameter, employeeIDParameter, processDateParameter, iPParameter, ourCompanyIDParameter);
         }
+    
+        public virtual ObjectResult<GetSaleToday_Result> GetSaleToday(Nullable<System.DateTime> date)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSaleToday_Result>("GetSaleToday", dateParameter);
+        }
     }
 }
