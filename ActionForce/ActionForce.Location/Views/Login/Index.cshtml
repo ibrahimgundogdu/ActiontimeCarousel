@@ -1,4 +1,5 @@
-﻿@{
+﻿@model LoginControlModel
+@{
     Layout = null;
 }
 <!DOCTYPE html>
@@ -26,11 +27,11 @@
                         <img src="~/assets/img/login.png" class="w-100" alt="Lokasyon Uygulaması" />
                     </div>
                     @*<div class="d-flex text-sm text-fade">
-                        <a href="/About" class="text-white">Hakkımızda</a>
-                        <span class="flex"></span>
-                        <a href="#" class="text-white mx-1">Terms</a>
-                        <a href="#" class="text-white mx-1">Policy</a>
-                    </div>*@
+                            <a href="/About" class="text-white">Hakkımızda</a>
+                            <span class="flex"></span>
+                            <a href="#" class="text-white mx-1">Terms</a>
+                            <a href="#" class="text-white mx-1">Policy</a>
+                        </div>*@
                 </div>
             </div>
             <div class="col-md-6">
@@ -40,7 +41,7 @@
                         <p class="mb-5">
                             <span class="">Lokasyon işlemleri için giriş yapınız</span>
                         </p>
-                        @using (Html.BeginForm("Login", "Login", FormMethod.Post,new { role = "form" }))
+                        @using (Html.BeginForm("Login", "Login", FormMethod.Post, new { role = "form" }))
                         {
                             @Html.AntiForgeryToken()
                             <div class="form-group">
@@ -80,6 +81,21 @@
     <!-- theme -->
     <script src="/assets/js/theme.js"></script>
     <script src="/assets/js/utils.js"></script>
+    <script src="/libs/notie/dist/notie.min.js"></script>
     <!-- endbuild -->
+
+    @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
+    {
+        <script>
+            $(function () {
+                notie.setOptions({
+                    alertTime: 5
+                })
+                notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
+                noticed = true;
+            });
+        </script>
+    }
+
 </body>
 </html>

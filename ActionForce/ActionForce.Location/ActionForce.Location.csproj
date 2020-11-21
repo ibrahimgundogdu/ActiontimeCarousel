@@ -578,6 +578,7 @@
     <Compile Include="Models\ControlModels\EnvelopeControlModel.cs" />
     <Compile Include="Models\ControlModels\HomeControlModel.cs" />
     <Compile Include="Models\ControlModels\LocationControlModel.cs" />
+    <Compile Include="Models\ControlModels\LoginControlModel.cs" />
     <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\ControlModels\ScheduleControlModel.cs" />
     <Compile Include="Models\ControlModels\SummaryControlModel.cs" />

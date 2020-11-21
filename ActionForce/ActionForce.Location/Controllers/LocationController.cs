@@ -73,6 +73,7 @@ namespace ActionForce.Location.Controllers
 
                 if (location != null)
                 {
+                    var dayresultid = Db.GetDayResultID(location.LocationID, location.LocalDate, 1, 3, model.Authentication.CurrentEmployee.EmployeeID, "", "").FirstOrDefault();
 
                     if (model.Authentication.CurrentRoleGroup.RoleLevel == 2)
                     {

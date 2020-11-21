@@ -14,7 +14,14 @@ namespace ActionForce.Location.Controllers
         [AllowAnonymous]
         public ActionResult Index()
         {
-            return View();
+            LoginControlModel model = new LoginControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result;
+            }
+            
+            return View(model);
         }
 
         [HttpPost]
@@ -41,97 +48,150 @@ namespace ActionForce.Location.Controllers
                 var roleGroup = db.RoleGroup.FirstOrDefault(x => x.ID == User.RoleGroupID);
                 var position = db.EmployeePositions.FirstOrDefault(x => x.ID == User.PositionID);
                 Entity.Location location = null;
+                var currentlocations = db.EmployeeLocation.Where(x => x.EmployeeID == User.EmployeeID && x.IsActive == true).ToList();
+                List<int> locationids = currentlocations.Select(x => x.LocationID).Distinct().ToList();
+                var locationlist = db.Location.Where(x => locationids.Contains(x.LocationID)).ToList();
 
 
                 if (roleGroup != null && roleGroup.RoleLevel1.LevelNumber >= 1 && User.IsTemp == false && User.IsActive == true && (User.IsDismissal == false || User.IsDismissal == null))
                 {
-                    var currentlocation = db.EmployeeLocation.Where(x => x.EmployeeID == User.EmployeeID && x.IsActive == true).ToList();
-                    if (currentlocation != null && currentlocation.Count > 0)
+
+                    if (currentlocations != null && currentlocations.Count > 0)
                     {
-                        int? locationid = currentlocation.FirstOrDefault(x => x.IsMaster == true)?.LocationID;
-                        if (locationid > 0)
+
+
+
+                        if (roleGroup.RoleLevel1.LevelNumber >= 2)
                         {
-                            location = db.Location.FirstOrDefault(x => x.LocationID == locationid);
+                            int? locationid = currentlocations.FirstOrDefault(x => x.IsMaster == true)?.LocationID;
+                            if (locationid > 0)
+                            {
+                                location = locationlist.FirstOrDefault(x => x.LocationID == locationid);
+                            }
+                            else
+                            {
+                                location = locationlist.FirstOrDefault(x => x.LocationID == locationid);
+                            }
                         }
                         else
                         {
-                            locationid = currentlocation.FirstOrDefault()?.LocationID;
-                            location = db.Location.FirstOrDefault(x => x.LocationID == locationid);
+                            foreach (var loc in locationlist)
+                            {
+                                var currentdate = loc.LocalDate;
+
+                                if (db.Schedule.Any(x => x.LocationID == loc.LocationID && x.EmployeeID == User.EmployeeID && x.ShiftDate == currentdate))
+                                {
+                                    location = loc;
+                                }
+                            }
+
+                            if (location == null)
+                            {
+                                result.IsSuccess = false;
+                                result.Message = "Takvim tanımlanmış lokasyonunuz bulunamadı.";
+
+                                TempData["result"] = result;
+                                return RedirectToAction("Index", "Login");
+                            }
+
                         }
-                    }
-
-                    var authModel = new AuthenticationModel()
-                    {
-
-                        CurrentEmployee = new LocationEmployee()
-                        {
-                            EmployeeID = User.EmployeeID,
-                            //EMail = User.EMail,
-                            FullName = User.FullName,
-                            Username = User.Username,
-                            FotoFile = User.FotoFile,
-                            //Mobile = User.Mobile,
-                            Position = position != null ? position.PositionName : User.Title,
-                            Token = User.EmployeeUID
-                        },
-                        CurrentLocation = new LocationInfo()
-                        {
-                            Currency = location.Currency,
-                            FullName = $"{location.LocationName} {location.Description} {location.State}",
-                            ID = location.LocationID,
-                            //IsActive = location.IsActive.Value,
-                            //OurCompanyID = location.OurCompanyID,
-                            //Latitude = location.Latitude,
-                            //Longitude = location.Longitude,
-                            //SortBy = location.SortBy,
-                            TimeZone = location.Timezone ?? 3,
-                            UID = location.LocationUID
-                        },
-                        CurrentOurCompany = new LocationOurCompany()
-                        {
-                            ID = ourCompany.CompanyID,
-                            Code = ourCompany.Code,
-                            Culture = ourCompany.Culture,
-                            Currency = ourCompany.Currency,
-                            Name = ourCompany.CompanyName,
-                            TimeZone = ourCompany.TimeZone.Value
-                        },
-                        CurrentRoleGroup = new LocationRoleGroup()
-                        {
-                            ID = roleGroup.ID,
-                            RoleLevel = roleGroup.RoleLevel.Value,
-                            GroupName = roleGroup.GroupName
-                        },
-                        Culture = ourCompany.Culture
-                    };
-
-
-
-                    result.IsSuccess = true;
-                    result.Message = "Giriş Başarılı";
-
-                    LocationHelper.AddApplicationLog("Location", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, true, $"{User.Username} başarılı bir giriş yaptı.", string.Empty, DateTime.UtcNow, User.FullName, LocationHelper.GetIPAddress(), string.Empty, authModel);
-
-                    var userData = Newtonsoft.Json.JsonConvert.SerializeObject(authModel);
-                    var ticket = new FormsAuthenticationTicket(2, User.Username, DateTime.Now, DateTime.Now.AddMinutes(1440), true, userData, FormsAuthentication.FormsCookiePath);
-                    string hash = FormsAuthentication.Encrypt(ticket);
-                    var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, hash);
-                    //cookie.SameSite = SameSiteMode.Lax;
-
-                    if (ticket.IsPersistent)
-                    {
-                        cookie.Expires = ticket.Expiration;
-                    }
-                    Response.Cookies.Add(cookie);
-                    ChangeCulture(ourCompany.Culture);
-
-                    if (authModel.CurrentLocation != null && authModel.CurrentLocation.ID > 0)
-                    {
-                        return RedirectToAction("Index", "Home");
                     }
                     else
                     {
-                        return RedirectToAction("SetCurrentLocation", "Location");
+                        result.IsSuccess = false;
+                        result.Message = "Lokasyon Tanımınız Eksik";
+
+                        TempData["result"] = result;
+                        return RedirectToAction("Index", "Login");
+                    }
+
+                    if (location != null)
+                    {
+                        var dayresultid = db.GetDayResultID(location.LocationID, location.LocalDate, 1, 3, User.EmployeeID, "", "").FirstOrDefault();
+
+                        var authModel = new AuthenticationModel()
+                        {
+
+                            CurrentEmployee = new LocationEmployee()
+                            {
+                                EmployeeID = User.EmployeeID,
+                                //EMail = User.EMail,
+                                FullName = User.FullName,
+                                Username = User.Username,
+                                FotoFile = User.FotoFile,
+                                //Mobile = User.Mobile,
+                                Position = position != null ? position.PositionName : User.Title,
+                                Token = User.EmployeeUID
+                            },
+
+                            CurrentLocation = new LocationInfo()
+                            {
+                                Currency = location.Currency,
+                                FullName = $"{location.LocationName} {location.Description} {location.State}",
+                                ID = location.LocationID,
+                                //IsActive = location.IsActive.Value,
+                                //OurCompanyID = location.OurCompanyID,
+                                //Latitude = location.Latitude,
+                                //Longitude = location.Longitude,
+                                //SortBy = location.SortBy,
+                                TimeZone = location.Timezone ?? 3,
+                                UID = location.LocationUID
+                            },
+
+                            CurrentOurCompany = new LocationOurCompany()
+                            {
+                                ID = ourCompany.CompanyID,
+                                Code = ourCompany.Code,
+                                Culture = ourCompany.Culture,
+                                Currency = ourCompany.Currency,
+                                Name = ourCompany.CompanyName,
+                                TimeZone = ourCompany.TimeZone.Value
+                            },
+
+                            CurrentRoleGroup = new LocationRoleGroup()
+                            {
+                                ID = roleGroup.ID,
+                                RoleLevel = roleGroup.RoleLevel.Value,
+                                GroupName = roleGroup.GroupName
+                            },
+
+                            Culture = ourCompany.Culture
+                        };
+
+                        result.IsSuccess = true;
+                        result.Message = "Giriş Başarılı";
+
+                        LocationHelper.AddApplicationLog("Location", "Login", "Select", User.EmployeeID.ToString(), "Login", "Login", null, true, $"{User.Username} başarılı bir giriş yaptı.", string.Empty, DateTime.UtcNow, User.FullName, LocationHelper.GetIPAddress(), string.Empty, authModel);
+
+                        var userData = Newtonsoft.Json.JsonConvert.SerializeObject(authModel);
+                        var ticket = new FormsAuthenticationTicket(2, User.Username, DateTime.Now, DateTime.Now.AddMinutes(1440), true, userData, FormsAuthentication.FormsCookiePath);
+                        string hash = FormsAuthentication.Encrypt(ticket);
+                        var cookie = new HttpCookie(FormsAuthentication.FormsCookieName, hash);
+
+                        if (ticket.IsPersistent)
+                        {
+                            cookie.Expires = ticket.Expiration;
+                        }
+
+                        Response.Cookies.Add(cookie);
+                        ChangeCulture(ourCompany.Culture);
+
+                        if (authModel.CurrentLocation != null && authModel.CurrentLocation.ID > 0)
+                        {
+                            return RedirectToAction("Index", "Home");
+                        }
+                        else
+                        {
+                            return RedirectToAction("SetCurrentLocation", "Location");
+                        }
+                    }
+                    else
+                    {
+                        result.IsSuccess = false;
+                        result.Message = "Lokasyon Tanımınız Eksik";
+
+                        TempData["result"] = result;
+                        return RedirectToAction("Index", "Login");
                     }
 
                 }

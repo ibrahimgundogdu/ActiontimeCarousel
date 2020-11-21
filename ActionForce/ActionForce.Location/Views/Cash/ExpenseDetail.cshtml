@@ -49,7 +49,7 @@
                                     <select class="custom-select" name="TypeID">
                                         @foreach (var item in Model.ExpenseTypes)
                                         {
-                                            <option value="@(item.ID)" @(item.ID == Model.CashExpense.ActionTypeID ? "selected" : "")>@(item.ExpenseName)</option>
+                                            <option value="@(item.ID)" @(item.ID == Model.CashExpense.ExpenseTypeID ? "selected" : "")>@(item.ExpenseName)</option>
                                         }
                                     </select>
                                 </div>

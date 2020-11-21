@@ -497,7 +497,7 @@ namespace ActionForce.Location.Controllers
             CashControlModel model = new CashControlModel();
 
             var amount = LocationHelper.GetStringToAmount(expense.Amount);
-            var documentDate = LocationHelper.GetLocationScheduledDate(model.Location.ID, expense.DocumentDate);
+            var documentDate = expense.DocumentDate;
             var processDate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
             var dayResultID = LocationHelper.GetDayResultID(model.Location.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", LocationHelper.GetIPAddress());
             DateTime slipdate = expense.ReceiptDate.Add(expense.ReceiptTime.TimeOfDay);
