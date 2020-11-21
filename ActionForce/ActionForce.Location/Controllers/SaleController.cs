@@ -46,6 +46,7 @@ namespace ActionForce.Location.Controllers
 
             model.SelectedDate = selectedDate;
             model.SaleTotals = documentManager.GetDailySale(selectedDate);
+            model.RefundTotals = documentManager.GetDailySaleRefund(selectedDate);
 
             return View(model);
         }

@@ -13,6 +13,7 @@ namespace ActionForce.Location
         public Result Result { get; set; }
 
         public IEnumerable<SaleDayTotalModal> SaleTotals { get; set; }
+        public IEnumerable<SaleDayTotalModal> RefundTotals { get; set; }
 
     }
 }
