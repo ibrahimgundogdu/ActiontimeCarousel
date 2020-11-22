@@ -76,6 +76,20 @@ namespace ActionForce.Location.Controllers
 
                 if (model.SaleRow != null)
                 {
+                    model.ParentSaleRow = null;
+
+                    if (model.SaleRow.ParentID > 0)
+                    {
+                        model.ParentSaleRow = Db.TicketSaleRows.FirstOrDefault(x => x.ID == model.SaleRow.ParentID);
+                    }
+
+                    model.ChildSaleRow = null;
+
+                    if (Db.TicketSaleRows.Any(x => x.ParentID == model.SaleRow.ID))
+                    {
+                        model.ChildSaleRow = Db.TicketSaleRows.FirstOrDefault(x => x.ParentID == model.SaleRow.ID);
+                    }
+
                     model.Sale = Db.TicketSale.FirstOrDefault(x => x.ID == model.SaleRow.SaleID);
                     model.VPrice = Db.VPrice.FirstOrDefault(x => x.ID == model.SaleRow.PriceID);
 
@@ -163,7 +177,7 @@ namespace ActionForce.Location.Controllers
             var OrderNumber = string.Format("S{0}{1}{2}{3}", date.Year.ToString().Substring(2, 2), date.Month < 10 ? "0" + date.Month.ToString() : date.Month.ToString(), date.Day < 10 ? "0" + date.Day.ToString() : date.Day.ToString(), date.Ticks.ToString());
             string ip = LocationHelper.GetIPAddress();
 
-            var rowID = Db.AddLocationTicketSale(model.Location.ID, date, PriceID, PaymethodID, 2, model.Authentication.CurrentEmployee.EmployeeID, ColorID > 0 ? ColorID : null, CostumeID > 0 ? CostumeID : null, OrderNumber, ip).FirstOrDefault();
+            var rowID = Db.AddLocationTicketSale(0, model.Location.ID, date, PriceID, PaymethodID, 2, model.Authentication.CurrentEmployee.EmployeeID, ColorID > 0 ? ColorID : null, CostumeID > 0 ? CostumeID : null, OrderNumber, ip, 2, null).FirstOrDefault();
 
             if (rowID > 0)
             {
@@ -248,7 +262,9 @@ namespace ActionForce.Location.Controllers
                         UpdateDate = saleRow.UpdateDate,
                         UpdateEmployeeID = saleRow.UpdateEmployeeID,
                         UseImmediately = saleRow.UseImmediately,
-                        ExtraPrice = saleRow.ExtraPrice
+                        ExtraPrice = saleRow.ExtraPrice,
+                        ParentID = saleRow.ParentID
+                        
                     };
 
                     DateTime ticketdate = saleRow.Date.Date.Add(formSaleRow.RecordTime);
@@ -277,6 +293,163 @@ namespace ActionForce.Location.Controllers
                     else
                     {
                         model.Result.Message = "Güncelleme Başarısız";
+                    }
+                }
+                else
+                {
+                    model.Result.Message = "Satış Bulunamadı";
+                }
+            }
+            else
+            {
+                model.Result.Message = "Form Verisi Alınamadı";
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", new { id = formSaleRow.UID });
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CancelSaleRow(FormSaleRow formSaleRow)
+        {
+            string message = string.Empty;
+
+            StandartTicket model = new StandartTicket();
+
+            if (formSaleRow != null && formSaleRow.UID != null)
+            {
+                var saleRow = Db.TicketSaleRows.FirstOrDefault(x => x.UID == formSaleRow.UID);
+
+                if (saleRow != null)
+                {
+                    var self = new TicketSaleRows()
+                    {
+                        TicketTripID = saleRow.TicketTripID,
+                        AnimalCostumeTypeID = saleRow.AnimalCostumeTypeID,
+                        Currency = saleRow.Currency,
+                        CustomerData = saleRow.CustomerData,
+                        UID = saleRow.UID,
+                        CustomerName = saleRow.CustomerName,
+                        Date = saleRow.Date,
+                        Description = saleRow.Description,
+                        DeviceID = saleRow.DeviceID,
+                        Discount = saleRow.Discount,
+                        EmployeeID = saleRow.EmployeeID,
+                        ExtraUnit = saleRow.ExtraUnit,
+                        ID = saleRow.ID,
+                        IsExchangable = saleRow.IsExchangable,
+                        IsPromotion = saleRow.IsPromotion,
+                        IsSale = saleRow.IsSale,
+                        Latitude = saleRow.Latitude,
+                        LocationID = saleRow.LocationID,
+                        Longitude = saleRow.Longitude,
+                        MallMotoColorID = saleRow.MallMotoColorID,
+                        PaymethodID = saleRow.PaymethodID,
+                        PrePaid = saleRow.PrePaid,
+                        Price = saleRow.Price,
+                        PriceCategoryID = saleRow.PriceCategoryID,
+                        PriceID = saleRow.PriceID,
+                        PromotionID = saleRow.PromotionID,
+                        Quantity = saleRow.Quantity,
+                        RecordDate = saleRow.RecordDate,
+                        RecordEmployeeID = saleRow.RecordEmployeeID,
+                        SaleID = saleRow.SaleID,
+                        StatusID = saleRow.StatusID,
+                        TicketNumber = saleRow.TicketNumber,
+                        TicketTypeID = saleRow.TicketTypeID,
+                        Total = saleRow.Total,
+                        Unit = saleRow.Unit,
+                        UpdateDate = saleRow.UpdateDate,
+                        UpdateEmployeeID = saleRow.UpdateEmployeeID,
+                        UseImmediately = saleRow.UseImmediately,
+                        ExtraPrice = saleRow.ExtraPrice,
+                        ParentID = saleRow.ParentID
+                    };
+
+
+                    var rowid = Db.UpdateLocationTicketSale(saleRow.LocationID, saleRow.ID, saleRow.Date, saleRow.PriceID, saleRow.ExtraUnit, saleRow.PaymethodID, 4, model.Authentication.CurrentEmployee.EmployeeID, saleRow.MallMotoColorID, saleRow.AnimalCostumeTypeID, formSaleRow.Description).FirstOrDefault();
+
+                    if (rowid != null && rowid > 0)
+                    {
+                        using (ActionTimeEntities _db = new ActionTimeEntities())
+                        {
+                            saleRow = _db.TicketSaleRows.FirstOrDefault(x => x.ID == saleRow.ID);
+                        }
+
+                        model.Result.IsSuccess = true;
+                        model.Result.Message = "Satış İptal Başarılı";
+                        DateTime dateProcess = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
+
+                        var isequal = LocationHelper.PublicInstancePropertiesEqual<TicketSaleRows>(self, saleRow, LocationHelper.getIgnorelist());
+                        LocationHelper.AddApplicationLog("Location", "TicketSaleRows", "Update", saleRow.ID.ToString(), "Home", "UpdateSaleRow", isequal, true, message, string.Empty, saleRow.Date, $"{model.Authentication.CurrentEmployee.EmployeeID} - {model.Authentication.CurrentEmployee.FullName}", LocationHelper.GetIPAddress(), string.Empty, null);
+
+                        System.Threading.Tasks.Task lblusatask = System.Threading.Tasks.Task.Factory.StartNew(() => documentManager.CheckLocationTicketSale(rowid.Value, dateProcess));
+
+                    }
+                    else
+                    {
+                        model.Result.Message = "Satış İptal Başarısız";
+                    }
+                }
+                else
+                {
+                    model.Result.Message = "Satış Bulunamadı";
+                }
+            }
+            else
+            {
+                model.Result.Message = "Form Verisi Alınamadı";
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", new { id = formSaleRow.UID });
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult RefundSaleRow(FormSaleRow formSaleRow)
+        {
+            string message = string.Empty;
+
+            StandartTicket model = new StandartTicket();
+
+            if (formSaleRow != null && formSaleRow.UID != null)
+            {
+                var saleRow = Db.TicketSaleRows.FirstOrDefault(x => x.UID == formSaleRow.UID);
+
+                if (saleRow != null)
+                {
+                    var processdate = DateTime.UtcNow.AddHours(model.Location.TimeZone);
+                    model.PayMethodID = formSaleRow.PayMethodID;
+                    string ip = LocationHelper.GetIPAddress();
+
+                    var rowid = Db.AddLocationTicketSale(saleRow.ID, model.Location.ID, processdate, saleRow.PriceID, model.PayMethodID, 2, model.Authentication.CurrentEmployee.EmployeeID, saleRow.MallMotoColorID, saleRow.AnimalCostumeTypeID, "", ip, 5, formSaleRow.Description).FirstOrDefault();
+
+                    if (rowid != null && rowid > 0)
+                    {
+                        model.Result.IsSuccess = true;
+                        model.Result.Message = "Satış İadesi Eklendi";
+
+                        var refsaleRow = new TicketSaleRows();
+
+                        using (ActionTimeEntities _db = new ActionTimeEntities())
+                        {
+                            refsaleRow = _db.TicketSaleRows.FirstOrDefault(x => x.ID == rowid);
+                        }
+
+                        LocationHelper.AddApplicationLog("Location", "TicketSaleRows", "Insert", rowid.ToString(), "Home", "SetTicketSale", null, true, message, string.Empty, processdate, $"{model.Authentication.CurrentEmployee.EmployeeID} - {model.Authentication.CurrentEmployee.FullName}", LocationHelper.GetIPAddress(), string.Empty, refsaleRow);
+
+                        System.Threading.Tasks.Task lblusatask = System.Threading.Tasks.Task.Factory.StartNew(() => documentManager.CheckLocationTicketSale(rowid.Value, refsaleRow.Date));
+
+                    }
+                    else
+                    {
+                        model.Result.Message = "İade Başarısız";
                     }
                 }
                 else

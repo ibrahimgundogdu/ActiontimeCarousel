@@ -33,7 +33,7 @@ namespace ActionForce.Location.Controllers
 
 
         [AllowAnonymous]
-        public ActionResult Index(string id)
+        public ActionResult Index(string id, int? OurCompnayID)
         {
             SaleControlModel model = new SaleControlModel();
 
@@ -44,9 +44,45 @@ namespace ActionForce.Location.Controllers
                 DateTime.TryParse(id, out selectedDate);
             }
 
+            
+
+            model.DateKey = Db.DateList.FirstOrDefault(x => x.DateKey == selectedDate);
+            model.OurCompanies = Db.OurCompany.ToList();
             model.SelectedDate = selectedDate;
             model.SaleTotals = documentManager.GetDailySale(selectedDate);
             model.RefundTotals = documentManager.GetDailySaleRefund(selectedDate);
+            model.SalaryList = documentManager.GetDailyEmployeeSalary(selectedDate);
+            model.ExpenseList = documentManager.GetDailyCashExpense(selectedDate);
+
+            if (OurCompnayID != null && OurCompnayID > 0)
+            {
+                model.CurrentOurCompany = model.OurCompanies.FirstOrDefault(x => x.CompanyID == OurCompnayID);
+
+                model.SaleTotals = documentManager.GetDailySale(selectedDate); //model.SaleTotals.Where(x=> x.OurCompanyID == OurCompnayID);
+                model.RefundTotals = documentManager.GetDailySaleRefund(selectedDate);
+                model.SalaryList = documentManager.GetDailyEmployeeSalary(selectedDate);
+                model.ExpenseList = documentManager.GetDailyCashExpense(selectedDate);
+            }
+
+            model.ActiveLocations = Db.GetActiveLocations(selectedDate).Select(x => new LocationInfo()
+            {
+                ID = x.LocationID,
+                Currency = x.Currency,
+                FullName = x.LocationFullName,
+                OurCompanyID = x.OurCompanyID,
+                TimeZone = x.Timezone.Value,
+                UID = x.LocationUID
+            }).ToList();
+
+            model.AppLocations = Db.GetAppLocations(selectedDate).Select(x => new LocationInfo()
+            {
+                ID = x.LocationID,
+                Currency = x.Currency,
+                FullName = x.LocationFullName,
+                OurCompanyID = x.OurCompanyID,
+                TimeZone = x.Timezone.Value,
+                UID = x.LocationUID
+            }).ToList();
 
             return View(model);
         }

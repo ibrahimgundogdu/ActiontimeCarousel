@@ -3161,5 +3161,66 @@ namespace ActionForce.Service
 
             return salelist;
         }
+
+        public List<DailyEmployeeSalaryModel> GetDailyEmployeeSalary(DateTime processDate)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            List<DailyEmployeeSalaryModel> salarylist = new List<DailyEmployeeSalaryModel>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                salarylist = Db.ComputeEmployeeSalary(processDate.Date).Select(x => new DailyEmployeeSalaryModel()
+                {
+                    Amount = x.Amount,
+                    Currency = x.Currency,
+                    Duration = x.Duration,
+                    EmployeeID = x.EmployeeID.Value,
+                    ID = x.ID.Value,
+                    LocationID = x.LocationID.Value,
+                    OurCompanyID = x.OurCompanyID.Value,
+                    ShiftDate = x.ShiftDate.Value,
+                    ShiftDateEnd = x.ShiftDateEnd,
+                    ShiftDateStart = x.ShiftDateStart,
+                    UnitPrice = x.UnitPrice
+                }).ToList();
+
+            }
+
+            return salarylist;
+        }
+
+        public List<DailyCashExpense> GetDailyCashExpense(DateTime processDate)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            List<DailyCashExpense> expenselist = new List<DailyCashExpense>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                expenselist = Db.VCashExpense.Where(x => x.ActionDate == processDate).Select(x => new DailyCashExpense()
+                {
+                    Amount = x.Amount,
+                    Currency = x.Currency,
+                    ID = x.ID,
+                    LocationID = x.LocationID.Value,
+                    OurCompanyID = x.OurCompanyID.Value,
+                    ActionDate = x.ActionDate.Value
+                    
+                }).ToList();
+
+            }
+
+            return expenselist;
+        }
+
     }
 }

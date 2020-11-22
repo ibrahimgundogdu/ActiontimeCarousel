@@ -52,7 +52,7 @@ namespace ActionForce.Location.Controllers
             model.CurrentDayResult = Db.DayResult.FirstOrDefault(x => x.Date == model.DocumentDate && x.LocationID == model.Location.ID);
             model.EmployeeActions = Db.VEmployeeCashActions.Where(x => x.LocationID == model.Location.ID && x.ProcessDate == model.DocumentDate.Date).ToList();
             model.EmployeeShifts = documentManager.GetEmployeeShifts(model.DocumentDate, model.Location.ID);
-            model.TicketList = manager.GetLocationTicketsToday(model.DocumentDate);
+            model.TicketList = manager.GetLocationTicketsToday(model.DocumentDate).Where(x=> x.StatusID != 4).ToList();
             model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
             model.LocationBalance = manager.GetLocationSaleBalanceToday(model.DocumentDate);
             model.Summary = manager.GetLocationSummary(model.DocumentDate, model.Authentication.CurrentEmployee);

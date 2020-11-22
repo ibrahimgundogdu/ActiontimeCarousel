@@ -14,9 +14,9 @@
                     <table class="table mb-0">
                         <thead>
                             <tr>
-                                <th class="text-center text-info p-0">Cash</th>
-                                <th class="text-center text-warning p-0">Credit</th>
-                                <th class="text-center p-0">Revenues</th>
+                                <th class="text-center text-info p-0">Nakit</th>
+                                <th class="text-center text-warning p-0">Kredi Kartı</th>
+                                <th class="text-center p-0">Hasılat</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -37,9 +37,9 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <div class="card p-3 mb-1">
-                                        @foreach (var price in Model.PriceList.OrderBy(x=> x.Unit))
+                                        @foreach (var price in Model.PriceList.OrderBy(x => x.Unit))
                                         {
-                                            <button class="btn btn-info btn-md btn-block btn-rounded" data-toggle="modal" data-target="#modalcash" onclick="GetTicketCashModal(@(price.ID))">@($"{price.Unit} Dk.")  &nbsp; &nbsp;   <span class="font-weight-bold">@(price.Price?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency) </span>  &nbsp; &nbsp; Cash</button>
+                                            <button class="btn btn-info btn-md btn-block btn-rounded" data-toggle="modal" data-target="#modalcash" onclick="GetTicketCashModal(@(price.ID))">@($"{price.Unit} Dk.")  &nbsp; &nbsp;   <span class="font-weight-bold">@(price.Price?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency) </span>  &nbsp; &nbsp; Nakit</button>
                                         }
                                     </div>
                                 </div>
@@ -47,7 +47,7 @@
                                     <div class="card p-3 mb-1">
                                         @foreach (var price in Model.PriceList.OrderBy(x => x.Unit))
                                         {
-                                            <button class="btn btn-warning btn-md btn-block btn-rounded" data-toggle="modal" data-target="#modalcredit" onclick="GetTicketCreditModal(@(price.ID))">@($"{price.Unit} Dk.") &nbsp; &nbsp;   <span class="font-weight-bold">  @(price.Price?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency) </span>  &nbsp; &nbsp; Credit</button>
+                                            <button class="btn btn-warning btn-md btn-block btn-rounded" data-toggle="modal" data-target="#modalcredit" onclick="GetTicketCreditModal(@(price.ID))">@($"{price.Unit} Dk.") &nbsp; &nbsp;   <span class="font-weight-bold">  @(price.Price?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency) </span>  &nbsp; &nbsp; Kredi Kartı</button>
                                         }
                                     </div>
                                 </div>
@@ -59,15 +59,15 @@
                                             <td colspan="5" class="text-center block">@(Model.DocumentDate.ToLongDateString())</td>
                                         </tr>
                                         <tr class="table-light text-sm font-weight-bold">
-                                            <td>Time</td>
-                                            <td class="text-center">Part</td>
-                                            <td>Ticket</td>
-                                            <td class="text-right bg-secondary--lt">Amount</td>
+                                            <td>Zaman</td>
+                                            <td class="text-center">Bölüm</td>
+                                            <td>Bilet</td>
+                                            <td class="text-right bg-secondary--lt">Tutar</td>
                                             <td></td>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach (var ticket in Model.TicketList.OrderByDescending(x => x.RecordDate))
+                                        @foreach (var ticket in Model.TicketList.Where(x => x.StatusID != 4).OrderByDescending(x => x.RecordDate))
                                         {
                                             <tr class="v-middle shadow-sm @(ticket.IsActive == true ? "table-light":"table-danger")">
                                                 <td class="font-weight-500 @(ticket.IsActive == true ? "text-dark":"text-danger")" text-center p-0 pb-2 pt-2"><a href="@($"/Home/Detail/{ticket.Uid}")">@(ticket.RecordDate.ToString("HH\\:mm\\:ss"))</a> </td>
@@ -81,7 +81,7 @@
                                     <tfoot>
 
                                         <tr class="v-middle shadow-sm">
-                                            <td colspan="3" class="font-weight-500 text-dark text-left">Revenues</td>
+                                            <td colspan="3" class="font-weight-500 text-dark text-left">Hasılat</td>
                                             <td class="text-right text-dark p-1 font-weight-bold">
                                                 @($"{Model.LocationBalance?.Balance.ToString("N2")} {Model.LocationBalance?.CurrencySign}")
                                             </td>
@@ -89,6 +89,35 @@
 
                                         </tr>
                                     </tfoot>
+                                </table>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-theme table-hover v-middle" style="border-spacing: 0 1px !important; padding: 0.5rem !important;">
+                                    <thead>
+                                        <tr class="table-light text-sm font-weight-bold">
+                                            <td colspan="5" class="text-center block">İptal Edilen Biletler</td>
+                                        </tr>
+                                        <tr class="table-light text-sm font-weight-bold">
+                                            <td>Zaman</td>
+                                            <td class="text-center">Bölüm</td>
+                                            <td>Bilet</td>
+                                            <td class="text-right bg-secondary--lt">Tutar</td>
+                                            <td></td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var ticket in Model.TicketList.Where(x => x.StatusID == 4).OrderByDescending(x => x.RecordDate))
+                                        {
+                                            <tr class="v-middle shadow-sm @(ticket.IsActive == true ? "table-light":"table-danger")">
+                                                <td class="font-weight-light text-dark @(ticket.IsActive == true ? "text-dark":"text-danger")" text-center p-0 pb-2 pt-2"><a href="@($"/Home/Detail/{ticket.Uid}")">@(ticket.RecordDate.ToString("HH\\:mm\\:ss"))</a> </td>
+                                                <td class="font-weight-light text-dark text-center  p-0">@(ticket.Part) </td>
+                                                <td class="font-weight-light text-dark @(ticket.PayMethodID == 1 ? "text-info":"text-warning") text-center  p-0">@($"{ticket.Unit} Dk.") </td>
+                                                <td class="font-weight-light text-dark  @(ticket.IsActive == true ? "text-dark":"text-light") text-right  p-0"><strong> @(ticket.Total.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency)</strong></td>
+                                                <td class=" text-center p-0"> <a href="@($"/Home/Detail/{ticket.Uid}")"> <span class="badge badge-circle @(ticket.StatusID == 5 || ticket.StatusID == 4 ? "text-danger":"text-success")"></span></a></td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    
                                 </table>
                             </div>
                         </div>

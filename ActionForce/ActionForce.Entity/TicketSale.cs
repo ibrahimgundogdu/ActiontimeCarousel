@@ -43,5 +43,6 @@ namespace ActionForce.Entity
         public string UpdateIP { get; set; }
         public Nullable<bool> IsFinancialization { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public Nullable<int> OurCompanyID { get; set; }
     }
 }

@@ -119,8 +119,8 @@
                                             <tr class="table-info">
                                                 <td class="p-1 pl-3">Dk.</td>
                                                 <td class="p-1 pl-3 text-right">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
-                                                <td class="p-1 pl-3 text-center" colspan="2">Sale</td>
-                                                <td class="p-1 pl-3 text-center" colspan="2">Refund</td>
+                                                <td class="p-1 pl-3 text-center" colspan="2">Satış</td>
+                                                <td class="p-1 pl-3 text-center" colspan="2">İade</td>
                                                 <td class="p-1 pl-3 text-right">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
                                             </tr>
                                         </thead>
@@ -128,8 +128,8 @@
 
                                             @foreach (var item in Model.PriceList.OrderBy(x => x.Unit).ToList())
                                             {
-                                                var saletotal = Model.TicketList.Where(x => x.PayMethodID == 1 && x.Unit == item.Unit).ToList();
-                                                var salereftotal = Model.TicketList.Where(x => x.PayMethodID == 1 && x.Unit == item.Unit && (new List<int> { 4, 5 }).Contains(x.StatusID)).ToList();
+                                                var saletotal = Model.TicketList.Where(x => x.PayMethodID == 1 && x.Unit == item.Unit && (new List<int> { 1,2,3 }).Contains(x.StatusID)).ToList();
+                                                var salereftotal = Model.TicketList.Where(x => x.PayMethodID == 1 && x.Unit == item.Unit && (new List<int> {  5 }).Contains(x.StatusID)).ToList();
 
                                                 <tr>
                                                     <td class="bg-body p-1 pl-3">@(item.Unit)</td>
@@ -144,7 +144,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th class="bg-body p-1 pl-3 text-info" colspan="6">Cash</th>
+                                                <th class="bg-body p-1 pl-3 text-info" colspan="6">Nakit</th>
                                                 <th class="bg-body p-1 pl-3 text-right">@(Model.LocationBalance.CashTotal.ToString("N2"))</th>
                                             </tr>
                                         </tfoot>
@@ -155,8 +155,8 @@
                                             <tr class="table-warning">
                                                 <td class="p-1 pl-3">Dk.</td>
                                                 <td class="p-1 pl-3 text-right">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
-                                                <td class="p-1 pl-3 text-center" colspan="2">Sale</td>
-                                                <td class="p-1 pl-3 text-center" colspan="2">Refund</td>
+                                                <td class="p-1 pl-3 text-center" colspan="2">Satış</td>
+                                                <td class="p-1 pl-3 text-center" colspan="2">İade</td>
                                                 <td class="p-1 pl-3 text-right">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
                                             </tr>
                                         </thead>
@@ -164,8 +164,8 @@
 
                                             @foreach (var item in Model.PriceList.OrderBy(x => x.Unit).ToList())
                                             {
-                                                var saletotal = Model.TicketList.Where(x => x.PayMethodID == 2 && x.Unit == item.Unit).ToList();
-                                                var salereftotal = Model.TicketList.Where(x => x.PayMethodID == 2 && x.Unit == item.Unit && (new List<int> { 4, 5 }).Contains(x.StatusID)).ToList();
+                                                var saletotal = Model.TicketList.Where(x => x.PayMethodID == 2 && x.Unit == item.Unit && (new List<int> { 1,2,3 }).Contains(x.StatusID)).ToList();
+                                                var salereftotal = Model.TicketList.Where(x => x.PayMethodID == 2 && x.Unit == item.Unit && (new List<int> { 5 }).Contains(x.StatusID)).ToList();
 
                                                 <tr>
                                                     <td class="bg-body p-1 pl-3">@(item.Unit)</td>
@@ -180,7 +180,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th class="bg-body p-1 pl-3 text-warning" colspan="6">Credit</th>
+                                                <th class="bg-body p-1 pl-3 text-warning" colspan="6">Kredi Kartı</th>
                                                 <th class="bg-body p-1 pl-3 text-right">@(Model.LocationBalance.CreditTotal.ToString("N2"))</th>
                                             </tr>
                                         </tfoot>
@@ -189,9 +189,9 @@
                                     <table class="table mb-0">
                                         <thead>
                                             <tr>
-                                                <th class="text-center text-info p-0">Cash</th>
-                                                <th class="text-center text-warning p-0">Credit</th>
-                                                <th class="text-center p-0">Revenues</th>
+                                                <th class="text-center text-info p-0">Nakit</th>
+                                                <th class="text-center text-warning p-0">Kredi Kartı</th>
+                                                <th class="text-center p-0">Hasılat</th>
                                             </tr>
                                         </thead>
                                         <tbody>

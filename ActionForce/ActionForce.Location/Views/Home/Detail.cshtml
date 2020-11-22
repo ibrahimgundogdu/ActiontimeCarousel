@@ -29,11 +29,33 @@
                                 {
                                     @Html.AntiForgeryToken()
 
+                                    if (Model.ParentSaleRow != null)
+                                    {
+                                        <div class="form-group row mb-1">
+                                            <label class="col-12 col-form-label">Bağlı Olduğu Asıl Bilet</label>
+                                            <div class="col-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-theme v-middle">
+                                                        <tbody>
+                                                            <tr class="font-weight-bold @(Model.ParentSaleRow.StatusID == 5 ? "table-danger":"table-light")">
+                                                                <td class="font-weight-bold text-dark p-0 pb-2 pt-2"><a href="@($"/Home/Detail/{Model.ParentSaleRow.UID}")">@(Model.ParentSaleRow.Date.ToString("HH\\:mm\\:ss"))</a> </td>
+                                                                <td class="font-weight-bold @(Model.ParentSaleRow.PaymethodID == 1 ? "text-info":"text-warning") text-center  p-0">@($"{Model.ParentSaleRow.Unit} Dk.") </td>
+                                                                <td class="font-weight-bold @(Model.ParentSaleRow.PaymethodID == 1 ? "text-info":"text-warning") text-center  p-0">@(Model.ParentSaleRow.PaymethodID == 1 ? "Nakit":"Kart") </td>
+                                                                <td class="font-weight-bold text-dark  @(Model.ParentSaleRow.StatusID == 5 ? "table-danger":"table-light") text-right  p-0"><strong> @(Model.ParentSaleRow.Total?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency)</strong></td>
+                                                                <td class=" text-center p-0"> <a href="@($"/Home/Detail/{Model.ParentSaleRow.UID}")"> <span class="badge badge-circle @(Model.ParentSaleRow.StatusID == 5 || Model.ParentSaleRow.StatusID == 4 ? "text-danger":"text-success")"></span></a></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
                                     <div class="form-group row mb-1">
                                         <label class="col-4 col-form-label">Tarihi</label>
                                         <div class="col-8">
                                             <label class="form-control font-weight-bold mb-0 bg-body"> @(Model.SaleRow.Date.ToShortDateString())</label>
                                             <input id="Hidden1" name="UID" type="hidden" value="@(Model.SaleRow.UID)" />
+                                            <input id="Hidden1" name="StatusID" type="hidden" value="@(Model.SaleRow.StatusID)" />
                                         </div>
                                     </div>
                                     <div class="form-group row mb-1">
@@ -45,12 +67,7 @@
                                     <div class="form-group row mb-1">
                                         <label class="col-4 col-form-label">Aşama</label>
                                         <div class="col-8">
-                                            <select class="custom-select" name="StatusID">
-                                                @foreach (var item in Model.Status)
-                                                {
-                                                    <option value="@(item.ID)" @(item.ID == Model.SaleRow.StatusID ? "selected" : "")>@(item.StatusName)</option>
-                                                }
-                                            </select>
+                                            <label class="form-control font-weight-bold @( Model.SaleRow.StatusID == 5 ? "text-warning" : Model.SaleRow.StatusID == 4 ? "text-danger":"") mb-0 bg-body"> @(Model.Status.FirstOrDefault(x=> x.ID == Model.SaleRow.StatusID)?.StatusName)</label>
                                         </div>
                                     </div>
                                     <div class="form-group row mb-1">
@@ -90,11 +107,11 @@
                                             <div class="mt-2" id="event-type">
                                                 <div class="form-check form-check-inline">
                                                     <label class="form-check-label text-info font-weight-bold">
-                                                        <input class="form-check-input" type="radio" name="PayMethodID" value="1" @(Model.SaleRow.PaymethodID == 1 ? "checked" : "")> Cash
+                                                        <input class="form-check-input" type="radio" name="PayMethodID" value="1" @(Model.SaleRow.PaymethodID == 1 ? "checked" : "")> Nakit
                                                     </label>
                                                 </div><div class="form-check form-check-inline">
                                                     <label class="form-check-label text-warning font-weight-bold">
-                                                        <input class="form-check-input" type="radio" name="PayMethodID" value="2" @(Model.SaleRow.PaymethodID == 2 ? "checked" : "")> Credit
+                                                        <input class="form-check-input" type="radio" name="PayMethodID" value="2" @(Model.SaleRow.PaymethodID == 2 ? "checked" : "")> Kredi Kartı
                                                     </label>
                                                 </div>
                                             </div>
@@ -138,11 +155,49 @@
                                         </div>
                                     </div>
 
+                                    if (Model.ChildSaleRow != null)
+                                    {
+                                        <div class="form-group row mb-1">
+                                            <label class="col-12 col-form-label">İade Edildiği Bilet</label>
+                                            <div class="col-12">
+                                                <div class="table-responsive">
+                                                    <table class="table table-theme v-middle">
+                                                        <tbody>
+                                                            <tr class="font-weight-bold @(Model.ChildSaleRow.StatusID == 5 ? "table-danger":"table-light")">
+                                                                <td class="font-weight-bold text-dark p-0 pb-2 pt-2"><a href="@($"/Home/Detail/{Model.ChildSaleRow.UID}")">@(Model.ChildSaleRow.Date.ToString("HH\\:mm\\:ss"))</a> </td>
+                                                                <td class="font-weight-bold @(Model.ChildSaleRow.PaymethodID == 1 ? "text-info":"text-warning") text-center  p-0">@($"{Model.ChildSaleRow.Unit} Dk.") </td>
+                                                                <td class="font-weight-bold @(Model.ChildSaleRow.PaymethodID == 1 ? "text-info":"text-warning") text-center  p-0">@(Model.ChildSaleRow.PaymethodID == 1 ? "Nakit":"Kart") </td>
+                                                                <td class="font-weight-bold text-dark  @(Model.ChildSaleRow.StatusID == 5 ? "table-danger":"table-light") text-right  p-0"><strong> @(Model.ChildSaleRow.Total?.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency)</strong></td>
+                                                                <td class=" text-center p-0"> <a href="@($"/Home/Detail/{Model.ChildSaleRow.UID}")"> <span class="badge badge-circle @(Model.ChildSaleRow.StatusID == 5 || Model.ChildSaleRow.StatusID == 4 ? "text-danger":"text-success")"></span></a></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    }
+
                                     <div class="form-group row">
                                         <div class="col-12">
-                                            <button type="submit" id="btn-save" class="btn btn-block bg-primary text-white btn-rounded">Save</button>
+                                            <button type="submit" id="btn-save" class="btn btn-block bg-primary text-white btn-rounded">Güncelle</button>
                                         </div>
                                     </div>
+
+                                    if (Model.SaleRow.StatusID <= 3 && Model.ChildSaleRow == null && Model.ParentSaleRow == null)
+                                    {
+                                        <div class="form-group row">
+                                            <div class="col-12">
+                                                <button type="button" id="btn-cancel" class="btn btn-block bg-warning text-white btn-rounded" data-toggle="modal" data-target="#modalSaleRefund">Bileti İade Et</button>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-12">
+                                                <button type="button" id="btn-cancel" class="btn btn-block bg-danger text-white btn-rounded" data-toggle="modal" data-target="#modalSaleCancel">Bileti İptal Et</button>
+                                            </div>
+                                        </div>
+                                    }
+
                                     <div class="form-group row mb-1">
                                         <div class="col-12 p-0 text-center">
                                             <small class="text-muted"> @($"{Model.EmployeeRecorded} - {Model.SaleRow.RecordDate}")</small>
@@ -154,6 +209,8 @@
                                         </div>
                                     </div>
                                 }
+
+
                             </div>
                         </div>
                         <div class="card">
@@ -191,6 +248,95 @@
         </div>
     </div>
 </div>
+
+<div id="modalSaleCancel" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><div class="modal-title font-weight-500 text-dark">Bilet İptal Formu</div><button class="close" data-dismiss="modal">×</button></div>
+            <div class="modal-body mt-0 mb-0 pb-4 pt-4">
+                @using (Html.BeginForm("CancelSaleRow", "Home", FormMethod.Post, new { role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input id="TicketSaleRowID" name="UID" type="hidden" value="@(Model.SaleRow.UID)" />
+                    <div class="form-group row">
+                        <label class="col-4 col-form-label">Açıklama</label>
+                        <div class="col-8">
+                            <textarea id="event-desc" name="Description" class="form-control" rows="2" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-4 col-form-label"></label>
+                        <div class="col-8">
+                            <button type="submit" id="btn-save" class="btn btn-block bg-danger text-white btn-rounded">İptal Et</button>
+                        </div>
+                    </div>
+
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-rounded btn-light" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
+
+<div id="modalSaleRefund" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><div class="modal-title font-weight-500 text-dark">Bilet İade Formu</div><button class="close" data-dismiss="modal">×</button></div>
+            <div class="modal-body mt-0 mb-0 pb-4 pt-4">
+                @using (Html.BeginForm("RefundSaleRow", "Home", FormMethod.Post, new { role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <input id="TicketSaleRowID" name="UID" type="hidden" value="@(Model.SaleRow.UID)" />
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label">Tutar</label>
+                        <div class="col-8">
+                            <label class="form-control font-weight-bold mb-0 bg-body"> @(Model.SaleRow.Total?.ToString("N2")) @(Model.SaleRow.Currency == "USD" ? "$" : Model.SaleRow.Currency == "EUR" ? "€" : "₺")</label>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-1">
+                        <label class="col-4 col-form-label">Ödeme</label>
+                        <div class="col-8">
+                            <div class="mt-2" id="event-type">
+                                <div class="form-check form-check-inline">
+                                    <label class="form-check-label text-info font-weight-bold">
+                                        <input class="form-check-input" type="radio" name="PayMethodID" value="1" @(Model.SaleRow.PaymethodID == 1 ? "checked" : "")> Cash
+                                    </label>
+                                </div><div class="form-check form-check-inline">
+                                    <label class="form-check-label text-warning font-weight-bold">
+                                        <input class="form-check-input" type="radio" name="PayMethodID" value="2" @(Model.SaleRow.PaymethodID == 2 ? "checked" : "")> Credit
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-4 col-form-label">Açıklama</label>
+                        <div class="col-8">
+                            <textarea id="event-desc" name="Description" class="form-control" rows="2" required></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-4 col-form-label"></label>
+                        <div class="col-8">
+                            <button type="submit" id="btn-save" class="btn btn-block bg-warning text-white btn-rounded">Bileti İade Et</button>
+                        </div>
+                    </div>
+
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-rounded btn-light" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div>
+</div>
+
+
 @section scripts {
 
 

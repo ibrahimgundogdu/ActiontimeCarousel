@@ -20,6 +20,8 @@ namespace ActionForce.Location
         public IEnumerable<MallMotoColor> MallMotoColor { get; set; }
 
         public TicketSaleRows SaleRow { get; set; }
+        public TicketSaleRows ParentSaleRow { get; set; }
+        public TicketSaleRows ChildSaleRow { get; set; }
         public TicketSale Sale { get; set; }
         public IEnumerable<TicketStatus> Status { get; set; }
         public IEnumerable<PayMethod> PayMethods { get; set; }

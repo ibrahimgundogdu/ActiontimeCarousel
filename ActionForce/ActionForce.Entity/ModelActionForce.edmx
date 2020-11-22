@@ -3210,6 +3210,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="OrderNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="SaleTypeID" Type="int" />
           <Property Name="Date" Type="date" />
+          <Property Name="OurCompanyID" Type="int" />
           <Property Name="LocationID" Type="int" />
           <Property Name="EmployeeID" Type="int" />
           <Property Name="CustomerName" Type="nvarchar" MaxLength="150" />
@@ -3300,6 +3301,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ParentID" Type="bigint" />
           <Property Name="SaleID" Type="bigint" Nullable="false" />
           <Property Name="StatusID" Type="int" />
           <Property Name="Date" Type="datetime" Nullable="false" />
@@ -3809,6 +3811,19 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashBankActions' does not 
           <Property Name="ProcessUID" Type="uniqueidentifier" />
           <Property Name="ActionTypeID" Type="int" />
           <Property Name="Prefix" Type="varchar" MaxLength="8000" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashExpense' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VCashExpense">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="ActionDate" Type="date" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCashRecorderMuhasebe' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6456,6 +6471,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="SalaryCategoryID" Type="int" Mode="In" />
         </Function>
         <Function Name="AddLocationTicketSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ParentID" Type="bigint" Mode="In" />
           <Parameter Name="CurrentLocationID" Type="int" Mode="In" />
           <Parameter Name="ProcessDate" Type="datetime" Mode="In" />
           <Parameter Name="PriceID" Type="int" Mode="In" />
@@ -6466,6 +6482,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="CostumeID" Type="int" Mode="In" />
           <Parameter Name="OrderNumber" Type="nvarchar" Mode="In" />
           <Parameter Name="IP" Type="nvarchar" Mode="In" />
+          <Parameter Name="StatusID" Type="int" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar(max)" Mode="In" />
         </Function>
         <Function Name="AddOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -6492,10 +6510,19 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
         </Function>
+        <Function Name="ComputeEmployeeSalary" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProcessDate" Type="date" Mode="In" />
+        </Function>
         <Function Name="ComputeLocationWeekRevenue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Week" Type="int" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
           <Parameter Name="LocationID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetActiveLocations" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProcessDate" Type="date" Mode="In" />
+        </Function>
+        <Function Name="GetAppLocations" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ProcessDate" Type="date" Mode="In" />
         </Function>
         <Function Name="GetBasketCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -7102,6 +7129,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VCashBankActions].[ActionTypeID] AS [ActionTypeID], 
     [VCashBankActions].[Prefix] AS [Prefix]
     FROM [dbo].[VCashBankActions] AS [VCashBankActions]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VCashExpense" EntityType="Self.VCashExpense" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VCashExpense].[ID] AS [ID], 
+    [VCashExpense].[OurCompanyID] AS [OurCompanyID], 
+    [VCashExpense].[LocationID] AS [LocationID], 
+    [VCashExpense].[ActionDate] AS [ActionDate], 
+    [VCashExpense].[Amount] AS [Amount], 
+    [VCashExpense].[Currency] AS [Currency]
+    FROM [dbo].[VCashExpense] AS [VCashExpense]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VCashRecorderMuhasebe" EntityType="Self.VCashRecorderMuhasebe" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -9905,7 +9942,31 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="RecordIP" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="DocumentBuyExchange" EntityType="db293_ActionTimeDbModel.DocumentBuyExchange" />
+          <FunctionImport Name="CheckLocationTicketSale" ReturnType="Collection(Int64)">
+            <Parameter Name="SaleRowID" Mode="In" Type="Int64" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
+            <Parameter Name="IP" Mode="In" Type="String" />
+            <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetSaleRefundToday" ReturnType="Collection(db293_ActionTimeDbModel.GetSaleRefundToday_Result)">
+          <Parameter Name="Date" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="GetActiveLocations" ReturnType="Collection(db293_ActionTimeDbModel.GetActiveLocations_Result)">
+          <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="GetAppLocations" ReturnType="Collection(db293_ActionTimeDbModel.GetAppLocations_Result)">
+          <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="ComputeEmployeeSalary" ReturnType="Collection(db293_ActionTimeDbModel.ComputeEmployeeSalary_Result)">
+          <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <EntitySet Name="VCashExpense" EntityType="db293_ActionTimeDbModel.VCashExpense" />
+          <FunctionImport Name="GetSaleToday" ReturnType="Collection(db293_ActionTimeDbModel.GetSaleToday_Result)">
+          <Parameter Name="Date" Mode="In" Type="DateTime" />
+          </FunctionImport>
           <FunctionImport Name="AddLocationTicketSale" ReturnType="Collection(Int64)">
+            <Parameter Name="ParentID" Mode="In" Type="Int64" />
             <Parameter Name="CurrentLocationID" Mode="In" Type="Int32" />
             <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
             <Parameter Name="PriceID" Mode="In" Type="Int32" />
@@ -9916,19 +9977,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="CostumeID" Mode="In" Type="Int32" />
             <Parameter Name="OrderNumber" Mode="In" Type="String" />
             <Parameter Name="IP" Mode="In" Type="String" />
-          </FunctionImport>
-          <FunctionImport Name="CheckLocationTicketSale" ReturnType="Collection(Int64)">
-            <Parameter Name="SaleRowID" Mode="In" Type="Int64" />
-            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
-            <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
-            <Parameter Name="IP" Mode="In" Type="String" />
-            <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
-          </FunctionImport>
-          <FunctionImport Name="GetSaleToday" ReturnType="Collection(db293_ActionTimeDbModel.GetSaleToday_Result)">
-          <Parameter Name="Date" Mode="In" Type="DateTime" />
-          </FunctionImport>
-          <FunctionImport Name="GetSaleRefundToday" ReturnType="Collection(db293_ActionTimeDbModel.GetSaleRefundToday_Result)">
-            <Parameter Name="Date" Mode="In" Type="DateTime" />
+            <Parameter Name="StatusID" Mode="In" Type="Int32" />
+            <Parameter Name="Description" Mode="In" Type="String" />
           </FunctionImport>
         
           </EntityContainer>
@@ -16334,6 +16384,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="IsFinancialization" Type="Boolean" />
           <Property Name="IsActive" Type="Boolean" />
+          <Property Name="OurCompanyID" Type="Int32" />
         </EntityType>
         <EntityType Name="VTicketSale">
           <Key>
@@ -16540,6 +16591,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="AnimalCostumeTypeID" Type="Int32" />
           <Property Name="MallMotoColorID" Type="Int32" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="ParentID" Type="Int64" />
         </EntityType>
         <EntityType Name="VTicketSaleRows">
           <Key>
@@ -16641,13 +16693,53 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="EnvironmentID" Type="Int32" />
           <Property Name="UID" Type="Guid" />
         </EntityType>
-        <ComplexType Name="GetSaleToday_Result">
+        <ComplexType Name="GetSaleRefundToday_Result">
           <Property Type="Int32" Name="PaymethodID" Nullable="true" />
           <Property Type="Int32" Name="Quantity" Nullable="true" />
           <Property Type="Double" Name="Amount" Nullable="true" />
           <Property Type="String" Name="Currency" Nullable="false" MaxLength="4" />
         </ComplexType>
-        <ComplexType Name="GetSaleRefundToday_Result">
+        <ComplexType Name="GetActiveLocations_Result">
+          <Property Type="Int32" Name="LocationID" Nullable="false" />
+          <Property Type="String" Name="Currency" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="LocationFullName" Nullable="true" MaxLength="613" />
+          <Property Type="Guid" Name="LocationUID" Nullable="true" />
+          <Property Type="Int32" Name="Timezone" Nullable="true" />
+          <Property Type="Int32" Name="OurCompanyID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetAppLocations_Result">
+          <Property Type="Int32" Name="LocationID" Nullable="false" />
+          <Property Type="String" Name="Currency" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="LocationFullName" Nullable="true" MaxLength="613" />
+          <Property Type="Guid" Name="LocationUID" Nullable="true" />
+          <Property Type="Int32" Name="Timezone" Nullable="true" />
+          <Property Type="Int32" Name="OurCompanyID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="ComputeEmployeeSalary_Result">
+          <Property Type="Int64" Name="ID" Nullable="true" />
+          <Property Type="Int32" Name="OurCompanyID" Nullable="true" />
+          <Property Type="Int32" Name="LocationID" Nullable="true" />
+          <Property Type="Int32" Name="EmployeeID" Nullable="true" />
+          <Property Type="Double" Name="UnitPrice" Nullable="true" />
+          <Property Type="DateTime" Name="ShiftDate" Nullable="true" />
+          <Property Type="DateTime" Name="ShiftDateStart" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="ShiftDateEnd" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="Duration" Nullable="true" />
+          <Property Type="Double" Name="Amount" Nullable="true" />
+          <Property Type="String" Name="Currency" Nullable="true" MaxLength="4" />
+        </ComplexType>
+        <EntityType Name="VCashExpense">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="ActionDate" Type="DateTime" Precision="0" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <ComplexType Name="GetSaleToday_Result">
           <Property Type="Int32" Name="PaymethodID" Nullable="true" />
           <Property Type="Int32" Name="Quantity" Nullable="true" />
           <Property Type="Double" Name="Amount" Nullable="true" />
@@ -22714,6 +22806,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketSale">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketSale">
               <MappingFragment StoreEntitySet="TicketSale">
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="IsFinancialization" ColumnName="IsFinancialization" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
@@ -22924,6 +23017,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketSaleRows">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketSaleRows">
               <MappingFragment StoreEntitySet="TicketSaleRows">
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="MallMotoColorID" ColumnName="MallMotoColorID" />
                 <ScalarProperty Name="AnimalCostumeTypeID" ColumnName="AnimalCostumeTypeID" />
@@ -23061,18 +23155,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AddLocationTicketSale" FunctionName="db293_ActionTimeDbModel.Store.AddLocationTicketSale" />
           <FunctionImportMapping FunctionImportName="CheckLocationTicketSale" FunctionName="db293_ActionTimeDbModel.Store.CheckLocationTicketSale" />
-          <FunctionImportMapping FunctionImportName="GetSaleToday" FunctionName="db293_ActionTimeDbModel.Store.GetSaleToday">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetSaleToday_Result">
-                <ScalarProperty Name="PaymethodID" ColumnName="PaymethodID" />
-                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="GetSaleRefundToday" FunctionName="db293_ActionTimeDbModel.Store.GetSaleRefundToday">
             <ResultMapping>
               <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetSaleRefundToday_Result">
@@ -23083,6 +23166,70 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetActiveLocations" FunctionName="db293_ActionTimeDbModel.Store.GetActiveLocations">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetActiveLocations_Result">
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="LocationUID" ColumnName="LocationUID" />
+                <ScalarProperty Name="Timezone" ColumnName="Timezone" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetAppLocations" FunctionName="db293_ActionTimeDbModel.Store.GetAppLocations">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetAppLocations_Result">
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="LocationUID" ColumnName="LocationUID" />
+                <ScalarProperty Name="Timezone" ColumnName="Timezone" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="ComputeEmployeeSalary" FunctionName="db293_ActionTimeDbModel.Store.ComputeEmployeeSalary">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.ComputeEmployeeSalary_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="ShiftDate" ColumnName="ShiftDate" />
+                <ScalarProperty Name="ShiftDateStart" ColumnName="ShiftDateStart" />
+                <ScalarProperty Name="ShiftDateEnd" ColumnName="ShiftDateEnd" />
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="VCashExpense">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCashExpense">
+              <MappingFragment StoreEntitySet="VCashExpense">
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetSaleToday" FunctionName="db293_ActionTimeDbModel.Store.GetSaleToday">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetSaleToday_Result">
+                <ScalarProperty Name="PaymethodID" ColumnName="PaymethodID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AddLocationTicketSale" FunctionName="db293_ActionTimeDbModel.Store.AddLocationTicketSale" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

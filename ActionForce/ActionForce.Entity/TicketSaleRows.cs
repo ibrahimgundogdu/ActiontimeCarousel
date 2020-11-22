@@ -53,5 +53,6 @@ namespace ActionForce.Entity
         public Nullable<int> AnimalCostumeTypeID { get; set; }
         public Nullable<int> MallMotoColorID { get; set; }
         public Nullable<System.Guid> UID { get; set; }
+        public Nullable<long> ParentID { get; set; }
     }
 }

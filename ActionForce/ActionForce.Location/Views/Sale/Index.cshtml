@@ -10,13 +10,13 @@
         <div class="d-flex flex-column flex" data-plugin="user">
             <div class="p-2">
                 <div class="toolbar">
-                    <a href="/Sale/Index/@(Model.SelectedDate.AddDays(-1).ToString("yyyy-MM-dd"))" class="btn btn-md btn-white" title="Önceki Gün">
+                    <a href="/Sale/Index/@(Model.SelectedDate.AddDays(-1).ToString("yyyy-MM-dd"))@(Model.CurrentOurCompany != null ? "?OurCompnayID="+Model.CurrentOurCompany.CompanyID:"")" class="btn btn-md btn-white" title="Önceki Gün">
                         <i class="text-info font-weight-bold" data-feather="chevron-left"></i>
                     </a>
-                    <a href="/Sale/Index/@(Model.LocationDate.ToString("yyyy-MM-dd"))" class="btn btn-md btn-white" title="Bu gün">
+                    <a href="/Sale/Index/@(Model.LocationDate.ToString("yyyy-MM-dd"))@(Model.CurrentOurCompany != null ? "?OurCompnayID="+Model.CurrentOurCompany.CompanyID:"")" class="btn btn-md btn-white" title="Bu gün">
                         <i class="text-info font-weight-bold" data-feather="target"></i>
                     </a>
-                    <a href="/Sale/Index/@(Model.SelectedDate.AddDays(1).ToString("yyyy-MM-dd"))" class="btn btn-md btn-white" title="Sonraki Gün">
+                    <a href="/Sale/Index/@(Model.SelectedDate.AddDays(1).ToString("yyyy-MM-dd"))@(Model.CurrentOurCompany != null ? "?OurCompnayID="+Model.CurrentOurCompany.CompanyID:"")" class="btn btn-md btn-white" title="Sonraki Gün">
                         <i class="text-info font-weight-bold" data-feather="chevron-right"></i>
                     </a>
                     <a href="/" class="btn btn-md btn-block btn-white" title="Satış">
@@ -27,7 +27,7 @@
                 </div>
                 <div class="mt-2">
                     <a href="#" class="btn btn-sm btn-block btn-white">
-                        <span class="font-weight-bold">@(Model.SelectedDate.ToLongDateString())</span>
+                        <span class="text-black-50">@($"({Model.DateKey?.WeekNumber}. Hafta)") </span> &nbsp;&nbsp; <span class="font-weight-bold">@(Model.SelectedDate.ToLongDateString())</span>
                     </a>
                 </div>
             </div>
@@ -36,25 +36,39 @@
                     <div class="col-md-12 p-2">
 
                         <div class="card" data-sr-id="31" style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
-                            <div class="card-header">
-                                <span class="font-weight-500">Bugün Toplam Satışlar   </span> @*<span class="text-info">Nakit</span> <span class="text-warning">Kredi Kartı</span>*@
-                            </div>
+                            <!--<div class="card-header">
+                                <span class="font-weight-500">Bugün Toplam Satışlar   </span>-->
+                            @*<span class="text-info">Nakit</span> <span class="text-warning">Kredi Kartı</span>*@
+                            <!--</div>-->
                             <div class="card-body m-0 p-0">
 
 
                                 <div class="table-responsive">
                                     <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-success p-1" colspan="6">
 
+                                                    <select class="custom-select" id="OurCompanyID">
+                                                        <option value="0">Tümü</option>
+                                                        @foreach (var item in Model.OurCompanies)
+                                                        {
+                                                            <option value="@(item.CompanyID)" @(item.CompanyID == Model?.CurrentOurCompany?.CompanyID ? "selected":"" )>@(item.CompanyName)</option>
+                                                        }
+                                                    </select>
+                                                </th>
+                                            </tr>
+                                        </thead>
                                         <tbody>
                                             <tr class="v-middle shadow-sm">
-                                                <th colspan="6" class="bg-body p-1 pl-2 pt-4">Nakit Satışları ve İadeleri</th>
+                                                <td colspan="6" class="bg-body p-1 pl-2 pt-3">Nakit, Kredi Kartı Satışları ve İadeleri</td>
                                             </tr>
                                             <tr>
-                                                <th class="text-info p-2">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "USD").Quantity)</th>
+                                                <td class="text-info p-2">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "USD").Quantity)</td>
                                                 <th class="text-info p-2 text-right" style="border-right:solid 1px #e6e6e6;">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "USD").Amount.ToString("N2")) $</th>
-                                                <th class="text-info p-2">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "EUR").Quantity)</th>
+                                                <td class="text-info p-2">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "EUR").Quantity)</td>
                                                 <th class="text-info p-2 text-right" style="border-right: solid 1px #e6e6e6;">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "EUR").Amount.ToString("N2")) €</th>
-                                                <th class="text-info p-2">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "TRL").Quantity)</th>
+                                                <td class="text-info p-2">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "TRL").Quantity)</td>
                                                 <th class="text-info p-2 text-right">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 1 && x.Currency == "TRL").Amount.ToString("N2")) ₺</th>
                                             </tr>
                                             <tr>
@@ -67,25 +81,25 @@
                                             </tr>
 
                                             <tr class="v-middle shadow-sm">
-                                                <th class="bg-body p-2 text-black-50">@(Model.SaleTotals.Where(x=> x.PaymethodID == 1 && x.Currency == "USD").Sum(x=> x.Quantity) - Model.RefundTotals.FirstOrDefault(x => x.PaymethodID == 1 && x.Currency == "USD").Quantity)</th>
+                                                <td class="bg-body p-2 text-black-50">@(Model.SaleTotals.Where(x=> x.PaymethodID == 1 && x.Currency == "USD").Sum(x=> x.Quantity) - Model.RefundTotals.FirstOrDefault(x => x.PaymethodID == 1 && x.Currency == "USD").Quantity)</td>
                                                 <th class="bg-body p-2 text-right text-black-50" style="border-right: solid 1px #e6e6e6;">@((Model.SaleTotals.Where(x=> x.PaymethodID == 1 && x.Currency == "USD").Sum(x => x.Amount) - Model.RefundTotals.Where(x => x.PaymethodID == 1 && x.Currency == "USD").Sum(x => x.Amount)).ToString("N2")) $</th>
-                                                <th class="bg-body p-2 text-black-50">@(Model.SaleTotals.Where(x=> x.PaymethodID == 1 && x.Currency == "EUR").Sum(x => x.Quantity) - Model.RefundTotals.FirstOrDefault(x => x.PaymethodID == 1 && x.Currency == "EUR").Quantity)</th>
+                                                <td class="bg-body p-2 text-black-50">@(Model.SaleTotals.Where(x=> x.PaymethodID == 1 && x.Currency == "EUR").Sum(x => x.Quantity) - Model.RefundTotals.FirstOrDefault(x => x.PaymethodID == 1 && x.Currency == "EUR").Quantity)</td>
                                                 <th class="bg-body p-2 text-right text-black-50" style="border-right: solid 1px #e6e6e6;">@((Model.SaleTotals.Where(x=> x.PaymethodID == 1 && x.Currency == "EUR").Sum(x => x.Amount) - Model.RefundTotals.Where(x => x.PaymethodID == 1 && x.Currency == "EUR").Sum(x => x.Amount)).ToString("N2")) €</th>
-                                                <th class="bg-body p-2 text-black-50">@(Model.SaleTotals.Where(x=> x.PaymethodID == 1 && x.Currency == "TRL").Sum(x => x.Quantity) - Model.RefundTotals.FirstOrDefault(x => x.PaymethodID == 1 && x.Currency == "TRL").Quantity)</th>
+                                                <td class="bg-body p-2 text-black-50">@(Model.SaleTotals.Where(x=> x.PaymethodID == 1 && x.Currency == "TRL").Sum(x => x.Quantity) - Model.RefundTotals.FirstOrDefault(x => x.PaymethodID == 1 && x.Currency == "TRL").Quantity)</td>
                                                 <th class="bg-body p-2 text-right text-black-50">@((Model.SaleTotals.Where(x=> x.PaymethodID == 1 && x.Currency == "TRL").Sum(x => x.Amount) - Model.RefundTotals.Where(x => x.PaymethodID == 1 && x.Currency == "TRL").Sum(x => x.Amount)).ToString("N2")) ₺</th>
                                             </tr>
 
 
 
                                             <tr class="v-middle shadow-sm">
-                                                <th colspan="6" class="bg-body p-1 pl-2 pt-4">Kredi Kartı Satışları ve İadeleri</th>
+                                                <td colspan="6" class="bg-body p-0"></td>
                                             </tr>
                                             <tr>
-                                                <th class="text-warning p-2">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "USD").Quantity)</th>
+                                                <td class="text-warning p-2">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "USD").Quantity)</td>
                                                 <th class="text-warning p-2 text-right" style="border-right: solid 1px #e6e6e6;">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "USD").Amount.ToString("N2")) $</th>
-                                                <th class="text-warning p-2">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "EUR").Quantity)</th>
+                                                <td class="text-warning p-2">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "EUR").Quantity)</td>
                                                 <th class="text-warning p-2 text-right" style="border-right: solid 1px #e6e6e6;">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "EUR").Amount.ToString("N2")) €</th>
-                                                <th class="text-warning p-2">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "TRL").Quantity)</th>
+                                                <td class="text-warning p-2">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "TRL").Quantity)</td>
                                                 <th class="text-warning p-2 text-right">@(Model.SaleTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "TRL").Amount.ToString("N2")) ₺</th>
                                             </tr>
                                             <tr>
@@ -97,39 +111,62 @@
                                                 <td class="text-danger p-2 text-right">- @(Model.RefundTotals.FirstOrDefault(x=> x.PaymethodID == 2 && x.Currency == "TRL").Amount.ToString("N2")) ₺</td>
                                             </tr>
                                             <tr class="v-middle shadow-sm">
-                                                <th class="bg-body p-2 text-black-50">@(Model.SaleTotals.Where(x=> x.PaymethodID == 2 && x.Currency == "USD").Sum(x=> x.Quantity) - Model.RefundTotals.FirstOrDefault(x => x.PaymethodID == 2 && x.Currency == "USD").Quantity)</th>
+                                                <td class="bg-body p-2 text-black-50">@(Model.SaleTotals.Where(x=> x.PaymethodID == 2 && x.Currency == "USD").Sum(x=> x.Quantity) - Model.RefundTotals.FirstOrDefault(x => x.PaymethodID == 2 && x.Currency == "USD").Quantity)</td>
                                                 <th class="bg-body p-2 text-right  text-black-50" style="border-right: solid 1px #e6e6e6;">@((Model.SaleTotals.Where(x=> x.PaymethodID == 2 && x.Currency == "USD").Sum(x => x.Amount) - Model.RefundTotals.Where(x => x.PaymethodID == 2 && x.Currency == "USD").Sum(x => x.Amount)).ToString("N2")) $</th>
-                                                <th class="bg-body p-2 text-black-50">@(Model.SaleTotals.Where(x=> x.PaymethodID == 2 && x.Currency == "EUR").Sum(x => x.Quantity) - Model.RefundTotals.FirstOrDefault(x => x.PaymethodID == 2 && x.Currency == "EUR").Quantity)</th>
+                                                <td class="bg-body p-2 text-black-50">@(Model.SaleTotals.Where(x=> x.PaymethodID == 2 && x.Currency == "EUR").Sum(x => x.Quantity) - Model.RefundTotals.FirstOrDefault(x => x.PaymethodID == 2 && x.Currency == "EUR").Quantity)</td>
                                                 <th class="bg-body p-2 text-right text-black-50" style="border-right: solid 1px #e6e6e6;">@((Model.SaleTotals.Where(x=> x.PaymethodID == 2 && x.Currency == "EUR").Sum(x => x.Amount) - Model.RefundTotals.Where(x => x.PaymethodID == 2 && x.Currency == "EUR").Sum(x => x.Amount)).ToString("N2")) €</th>
-                                                <th class="bg-body p-2 text-black-50">@(Model.SaleTotals.Where(x=> x.PaymethodID == 2 && x.Currency == "TRL").Sum(x => x.Quantity) - Model.RefundTotals.FirstOrDefault(x => x.PaymethodID == 2 && x.Currency == "TRL").Quantity)</th>
+                                                <td class="bg-body p-2 text-black-50">@(Model.SaleTotals.Where(x=> x.PaymethodID == 2 && x.Currency == "TRL").Sum(x => x.Quantity) - Model.RefundTotals.FirstOrDefault(x => x.PaymethodID == 2 && x.Currency == "TRL").Quantity)</td>
                                                 <th class="bg-body p-2 text-right text-black-50">@((Model.SaleTotals.Where(x=> x.PaymethodID == 2 && x.Currency == "TRL").Sum(x => x.Amount) - Model.RefundTotals.Where(x => x.PaymethodID == 2 && x.Currency == "TRL").Sum(x => x.Amount)).ToString("N2")) ₺</th>
                                             </tr>
-
+                                            <tr class="v-middle shadow-sm">
+                                                <td colspan="6" class="bg-body p-0"></td>
+                                            </tr>
                                             <tr>
-                                                <th class="bg-body p-2 pt-4">@(Model.SaleTotals.Where(x=> x.Currency == "USD").Sum(x=> x.Quantity))</th>
-                                                <th class="bg-body p-2 pt-4 text-right" style="border-right: solid 1px #e6e6e6;">@((Model.SaleTotals.Where(x=> x.Currency == "USD").Sum(x => x.Amount) - Model.RefundTotals.Where(x => x.Currency == "USD").Sum(x => x.Amount)).ToString("N2")) $</th>
-                                                <th class="bg-body p-2 pt-4">@(Model.SaleTotals.Where(x=> x.Currency == "EUR").Sum(x => x.Quantity))</th>
-                                                <th class="bg-body p-2 pt-4 text-right" style="border-right: solid 1px #e6e6e6;">@((Model.SaleTotals.Where(x=> x.Currency == "EUR").Sum(x => x.Amount) - Model.RefundTotals.Where(x => x.Currency == "EUR").Sum(x => x.Amount)).ToString("N2")) €</th>
-                                                <th class="bg-body p-2 pt-4">@(Model.SaleTotals.Where(x=>  x.Currency == "TRL").Sum(x => x.Quantity))</th>
-                                                <th class="bg-body p-2 pt-4 text-right">@((Model.SaleTotals.Where(x=> x.Currency == "TRL").Sum(x => x.Amount) - Model.RefundTotals.Where(x => x.Currency == "TRL").Sum(x => x.Amount)).ToString("N2")) ₺</th>
+                                                <td class="bg-body p-2" style="border-top: solid 4px #e6e6e6;">@(Model.SaleTotals.Where(x=> x.Currency == "USD").Sum(x=> x.Quantity))</td>
+                                                <th class="bg-body p-2 text-right" style="border-right: solid 1px #e6e6e6; border-top: solid 4px #e6e6e6;">@((Model.SaleTotals.Where(x=> x.Currency == "USD").Sum(x => x.Amount) - Model.RefundTotals.Where(x => x.Currency == "USD").Sum(x => x.Amount)).ToString("N2")) $</th>
+                                                <td class="bg-body p-2" style="border-top: solid 4px #e6e6e6;">@(Model.SaleTotals.Where(x=> x.Currency == "EUR").Sum(x => x.Quantity))</td>
+                                                <th class="bg-body p-2 text-right" style="border-right: solid 1px #e6e6e6; border-top: solid 4px #e6e6e6;">@((Model.SaleTotals.Where(x=> x.Currency == "EUR").Sum(x => x.Amount) - Model.RefundTotals.Where(x => x.Currency == "EUR").Sum(x => x.Amount)).ToString("N2")) €</th>
+                                                <td class="bg-body p-2" style="border-top: solid 4px #e6e6e6;">@(Model.SaleTotals.Where(x=>  x.Currency == "TRL").Sum(x => x.Quantity))</td>
+                                                <th class="bg-body p-2 text-right" style="border-top: solid 4px #e6e6e6;">@((Model.SaleTotals.Where(x=> x.Currency == "TRL").Sum(x => x.Amount) - Model.RefundTotals.Where(x => x.Currency == "TRL").Sum(x => x.Amount)).ToString("N2")) ₺</th>
                                             </tr>
 
                                             <tr class="v-middle shadow-sm">
-                                                <th colspan="6" class="bg-body p-1 pl-2 pt-4">İşçilik Maliyeti</th>
+                                                <td colspan="6" class="bg-body p-1 pl-2 pt-3">İşçilik Maliyeti</td>
                                             </tr>
-                                            <tr>
-                                                <th class="text-success p-2" style="border-right: solid 1px #e6e6e6;" colspan="2">USA</th>
-                                                <th class="text-success p-2 text-right" style="border-right: solid 1px #e6e6e6;" colspan="2"></th>
-                                                <th class="text-success p-2 text-right" colspan="2"></th>
+
+                                            @foreach (var our in Model.OurCompanies.OrderBy(x => x.Code).ToList())
+                                            {
+                                                foreach (var currency in Model.SalaryList?.Where(x => x.OurCompanyID == our.CompanyID).Select(x => x.Currency).Distinct().ToList())
+                                                {
+                                                    <tr>
+                                                        <td class="p-2" style="border-right: solid 1px #e6e6e6;" colspan="2">@(our.Code)</td>
+                                                        <td class="text-success p-2" style="border-right: solid 1px #e6e6e6;">@(Model.SalaryList?.Where(x => x.OurCompanyID == our.CompanyID)?.Select(x=> x.LocationID)?.Distinct()?.Count())</td>
+                                                        <td class="text-success p-2" style="border-right: solid 1px #e6e6e6;"><i data-feather="user"></i> &nbsp; @(Model.SalaryList?.Where(x => x.OurCompanyID == our.CompanyID && x.Currency == currency)?.Count())</td>
+                                                        <th class="text-success p-2 text-right" colspan="2">@(Model.SalaryList?.Where(x => x.OurCompanyID == our.CompanyID && x.Currency == currency)?.Sum(x=> x.Amount)?.ToString("N2")) @(currency == "USD" ? "$" : currency == "EUR" ? "€":"₺")</th>
+                                                    </tr>
+                                                }
+                                            }
+
+
+                                            <tr class="v-middle shadow-sm">
+                                                <td colspan="6" class="bg-body p-1 pl-2 pt-3">Masraflar</td>
                                             </tr>
-                                            <tr>
-                                                <th class="text-success p-2" style="border-right: solid 1px #e6e6e6;" colspan="2">TUR</th>
-                                                <th class="text-success p-2 text-right" style="border-right: solid 1px #e6e6e6;" colspan="2"></th>
-                                                <th class="text-success p-2 text-right" colspan="2"></th>
-                                            </tr>
+
+                                            @foreach (var our in Model.OurCompanies.OrderBy(x => x.Code).ToList())
+                                            {
+                                                foreach (var currency in Model.ExpenseList?.Where(x => x.OurCompanyID == our.CompanyID).Select(x => x.Currency).Distinct().ToList())
+                                                {
+                                                    <tr>
+                                                        <td class="p-2" style="border-right: solid 1px #e6e6e6;" colspan="2">@(our.Code)</td>
+                                                        <td class="text-primary p-2" style="border-right: solid 1px #e6e6e6;" colspan="2">@(Model.ExpenseList?.Where(x => x.OurCompanyID == our.CompanyID)?.Select(x=> x.LocationID)?.Distinct()?.Count())</td>
+                                                        <th class="text-primary p-2 text-right" colspan="2">@(Model.ExpenseList?.Where(x => x.OurCompanyID == our.CompanyID && x.Currency == currency)?.Sum(x=> x.Amount)?.ToString("N2")) @(currency == "USD" ? "$" : currency == "EUR" ? "€":"₺")</th>
+                                                    </tr>
+                                                }
+                                            }
+
                                         </tbody>
                                         <tfoot>
-                                           
+
                                         </tfoot>
                                     </table>
                                 </div>
@@ -145,6 +182,22 @@
 </div>
 
 @section scripts {
+
+    <script type="text/javascript">
+
+        $('select#OurCompanyID').on('change', function (e) {
+
+            var id = this.value;
+
+            //const params = new URLSearchParams(window.location.search);
+            const newparams = new URLSearchParams('');
+
+            newparams.append('OurCompnayID', id);
+
+            window.location.search = newparams;
+        });
+
+    </script>
 
     @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
     {
