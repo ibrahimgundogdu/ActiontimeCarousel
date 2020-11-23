@@ -3162,6 +3162,34 @@ namespace ActionForce.Service
             return salelist;
         }
 
+        public List<SaleDayLocationModal> GetDailyLocationSales(DateTime processDate)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            List<SaleDayLocationModal> salelist = new List<SaleDayLocationModal>();
+
+            using (ActionTimeEntities Db = new ActionTimeEntities())
+            {
+                salelist = Db.GetSaleLocationsToday(processDate).Select(x => new SaleDayLocationModal()
+                {
+                    PayMethodID = x.PaymethodID.Value,
+                    Currency = x.Currency,
+                    Quantity = x.Quantity,
+                    Amount = x.Total.Value,
+                    OurCompanyID = x.OurCompanyID.Value,
+                    LocationID = x.LocationID.Value,
+                    StatusID = x.StatusID.Value
+                }).ToList();
+
+            }
+
+            return salelist;
+        }
+
         public List<DailyEmployeeSalaryModel> GetDailyEmployeeSalary(DateTime processDate)
         {
             Result result = new Result()
@@ -3214,7 +3242,7 @@ namespace ActionForce.Service
                     LocationID = x.LocationID.Value,
                     OurCompanyID = x.OurCompanyID.Value,
                     ActionDate = x.ActionDate.Value
-                    
+
                 }).ToList();
 
             }

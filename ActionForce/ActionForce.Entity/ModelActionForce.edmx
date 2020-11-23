@@ -6615,6 +6615,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
           <Parameter Name="Date" Type="date" Mode="In" />
         </Function>
+        <Function Name="GetSaleLocationsToday" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Date" Type="date" Mode="In" />
+        </Function>
         <Function Name="GetSaleRefundToday" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="date" Mode="In" />
         </Function>
@@ -9979,6 +9982,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="IP" Mode="In" Type="String" />
             <Parameter Name="StatusID" Mode="In" Type="Int32" />
             <Parameter Name="Description" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetSaleLocationsToday" ReturnType="Collection(db293_ActionTimeDbModel.GetSaleLocationsToday_Result)">
+            <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
         
           </EntityContainer>
@@ -16745,6 +16751,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Type="Double" Name="Amount" Nullable="true" />
           <Property Type="String" Name="Currency" Nullable="false" MaxLength="4" />
         </ComplexType>
+        <ComplexType Name="GetSaleLocationsToday_Result">
+          <Property Type="Int32" Name="OurCompanyID" Nullable="true" />
+          <Property Type="Int32" Name="LocationID" Nullable="true" />
+          <Property Type="Int32" Name="PaymethodID" Nullable="true" />
+          <Property Type="Int32" Name="Quantity" Nullable="false" />
+          <Property Type="Double" Name="Total" Nullable="true" />
+          <Property Type="String" Name="Currency" Nullable="false" MaxLength="4" />
+          <Property Type="Int32" Name="StatusID" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23230,6 +23245,19 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="AddLocationTicketSale" FunctionName="db293_ActionTimeDbModel.Store.AddLocationTicketSale" />
+          <FunctionImportMapping FunctionImportName="GetSaleLocationsToday" FunctionName="db293_ActionTimeDbModel.Store.GetSaleLocationsToday">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetSaleLocationsToday_Result">
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="PaymethodID" ColumnName="PaymethodID" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

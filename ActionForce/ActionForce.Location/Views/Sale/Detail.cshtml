@@ -1,147 +1,183 @@
 ﻿@model SaleControlModel
 @{
     ViewBag.Title = "Satışlar";
-    ViewBag.PageTitle = $"{DateTime.Now.ToLongDateString()} &nbsp; &nbsp; <span class='font-weight-bold'> Sales </span>";
+    ViewBag.PageTitle = $"<span class='font-weight-bold'> Siparişler </span>";
 
 }
 
 <div class="d-flex flex fixed-content">
-
     <div class="d-flex flex" id="content-body">
         <div class="d-flex flex-column flex" data-plugin="user">
-            <div class="p-3">
+            <div class="p-2">
                 <div class="toolbar">
-                    <a href="/" class="btn btn-md btn-white" title="Önceki Gün">
-                        <i class="text-primary font-weight-bold" data-feather="chevron-left"></i>
+                    <a href="/Sale/Detail/@(Model.SelectedDate.AddDays(-1).ToString("yyyy-MM-dd"))@(Model.CurrentOurCompany != null ? "?OurCompnayID="+Model.CurrentOurCompany.CompanyID:"")" class="btn btn-md btn-white" title="Önceki Gün">
+                        <i class="text-info font-weight-bold" data-feather="chevron-left"></i>
                     </a>
-                    <a href="/" class="btn btn-md btn-white" title="Bu gün">
-                        <i class="text-primary font-weight-bold" data-feather="target"></i>
+                    <a href="/Sale/Detail/@(Model.LocationDate.ToString("yyyy-MM-dd"))@(Model.CurrentOurCompany != null ? "?OurCompnayID="+Model.CurrentOurCompany.CompanyID:"")" class="btn btn-md btn-white" title="Bu gün">
+                        <i class="text-info font-weight-bold" data-feather="target"></i>
                     </a>
-                    <a href="/" class="btn btn-md btn-white" title="Sonraki Gün">
-                        <i class="text-primary font-weight-bold" data-feather="chevron-right"></i>
+                    <a href="/Sale/Detail/@(Model.SelectedDate.AddDays(1).ToString("yyyy-MM-dd"))@(Model.CurrentOurCompany != null ? "?OurCompnayID="+Model.CurrentOurCompany.CompanyID:"")" class="btn btn-md btn-white" title="Sonraki Gün">
+                        <i class="text-info font-weight-bold" data-feather="chevron-right"></i>
                     </a>
-                    <a href="/" class="btn btn-md btn-white" title="Takvim">
-                        <i class="text-primary font-weight-bold" data-feather="calendar"></i>
+                    <a href="/Sale/Index/@(Model.SelectedDate.ToString("yyyy-MM-dd"))@(Model.CurrentOurCompany != null ? "?OurCompnayID="+Model.CurrentOurCompany.CompanyID:"")" class="btn btn-md btn-block btn-white" title="Satış">
+                        <i class="text-info font-weight-bold" data-feather="layers"></i>
                     </a>
-                    <a href="#" class="btn btn-md btn-white">
-                        <span class="font-weight-bold">@(DateTime.Now.ToLongDateString())</span>
+
+
+                </div>
+                <div class="mt-2">
+                    <a href="#" class="btn btn-sm btn-block btn-white">
+                        <span class="text-black-50">@($"({Model.DateKey?.WeekNumber}. Hafta)") </span> &nbsp;&nbsp; <span class="font-weight-bold">@(Model.SelectedDate.ToLongDateString())</span>
                     </a>
                 </div>
             </div>
-            <div class="scroll-y mx-3 mb-3 card">
-                <div class="table-responsive">
-                    <table class="table table-theme table-hover table-row v-middle" style="border-spacing: 0 1px !important; padding: 0.5rem !important;">
+            <div class="scroll-y mb-0">
+                <div class="row no-gutters">
+                    <div class="col-md-12 p-2">
+
+                        <div class="card" data-sr-id="31" style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
+                            <div class="card-header">
+                                <select class="custom-select" id="OurCompanyID">
+                                    <option value="0">Tümü</option>
+                                    @foreach (var item in Model.OurCompanies)
+                                    {
+                                        <option value="@(item.CompanyID)" @(item.CompanyID == Model?.CurrentOurCompany?.CompanyID ? "selected" : "" )>@(item.CompanyName)</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="card-body m-0 p-0">
+
+
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr class="v-middle shadow-sm">
+                                                <th colspan="4" class="bg-body p-1 pl-2 pt-3">Satış Detayları</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var our in Model.CurrentOurCompany != null ?   Model.OurCompanies.Where(x=> x.CompanyID == Model.CurrentOurCompany?.CompanyID) : Model.OurCompanies)
+                                            {
+                                                var ocash = Model.LocationSaleTotals.Where(x => x.OurCompanyID == our.CompanyID && x.PayMethodID == 1 & x.StatusID <= 3).ToList();
+                                                var ocashref = Model.LocationSaleTotals.Where(x => x.OurCompanyID == our.CompanyID && x.PayMethodID == 1 & x.StatusID == 5).ToList();
+                                                var ocredit = Model.LocationSaleTotals.Where(x => x.OurCompanyID == our.CompanyID && x.PayMethodID == 2 & x.StatusID <= 3).ToList();
+                                                var ocreditref = Model.LocationSaleTotals.Where(x => x.OurCompanyID == our.CompanyID && x.PayMethodID == 2 & x.StatusID == 5).ToList();
+                                                var olabor = Model.SalaryList.Where(x => x.OurCompanyID == our.CompanyID).ToList();
+                                                var oexpense = Model.ExpenseList.Where(x => x.OurCompanyID == our.CompanyID).ToList();
+
+                                                <tr v-middle shadow-sm>
+                                                    <th class="text-black-50 bg-body p-1 pt-4" colspan="4">@(our.CompanyName) Lokasyonları</th>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-info p-1 text-center">Nakit</td>
+                                                    <td class="text-warning p-1 text-center">Kredi</td>
+                                                    <td class="text-success p-1 text-center">İşçilik</td>
+                                                    <td class="text-primary p-1 text-center">Masraf</td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="text-info p-1 text-right" style="border-right:solid 1px #e6e6e6;">@((ocash.Sum(x=> x.Amount) - ocashref.Sum(x => x.Amount)).ToString("N2")) </th>
+                                                    <th class="text-warning p-1 text-right" style="border-right:solid 1px #e6e6e6;">@((ocredit.Sum(x=> x.Amount) - ocreditref.Sum(x => x.Amount)).ToString("N2"))</th>
+                                                    <th class="text-success p-1 text-right" style="border-right:solid 1px #e6e6e6;">@(olabor.Sum(x=> x.Amount)?.ToString("N2"))</th>
+                                                    <th class="text-primary p-1 text-right">@(oexpense.Sum(x=> x.Amount)?.ToString("N2"))</th>
+                                                </tr>
+                                                <tr class="v-middle shadow-sm">
+                                                    <td colspan="4" class="p-0"></td>
+                                                </tr>
+
+                                                foreach (var loc in Model.ActiveLocations.Where(x => x.OurCompanyID == our.CompanyID).OrderBy(x => x.FullName))
+                                                {
+                                                    var cash = Model.LocationSaleTotals.Where(x => x.LocationID == loc.ID && x.PayMethodID == 1 & x.StatusID <= 3).ToList();
+                                                    var cashref = Model.LocationSaleTotals.Where(x => x.LocationID == loc.ID && x.PayMethodID == 1 & x.StatusID == 5).ToList();
+                                                    var credit = Model.LocationSaleTotals.Where(x => x.LocationID == loc.ID && x.PayMethodID == 2 & x.StatusID <= 3).ToList();
+                                                    var creditref = Model.LocationSaleTotals.Where(x => x.LocationID == loc.ID && x.PayMethodID == 2 & x.StatusID == 5).ToList();
+                                                    var labor = Model.SalaryList.Where(x => x.LocationID == loc.ID).ToList();
+                                                    var expense = Model.ExpenseList.Where(x => x.LocationID == loc.ID).ToList();
+
+                                                    <tr v-middle shadow-sm>
+                                                        <td class="text-black-50 bg-body p-1 pt-3" colspan="4"><a href="/Sale/Location/@(Model.SelectedDate.ToString("yyyy-MM-dd"))?LocationID=@(loc.ID)">@(loc.FullName)</a></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-info p-1 text-right @((cash.Sum(x=> x.Amount) - cashref.Sum(x => x.Amount)) != 0 ? "font-weight-bold":"")" style="border-right:solid 1px #e6e6e6;">@((cash.Sum(x=> x.Amount) - cashref.Sum(x => x.Amount)).ToString("N2")) </td>
+                                                        <td class="text-warning p-1 text-right @((credit.Sum(x=> x.Amount) - creditref.Sum(x => x.Amount)) != 0 ? "font-weight-bold":"")" style="border-right:solid 1px #e6e6e6;">@((credit.Sum(x=> x.Amount) - creditref.Sum(x => x.Amount)).ToString("N2"))</td>
+                                                        <td class="text-success p-1 text-right @(labor.Sum(x=> x.Amount) != 0 ? "font-weight-bold":"")" style="border-right:solid 1px #e6e6e6;">@(labor.Sum(x=> x.Amount)?.ToString("N2"))</td>
+                                                        <td class="text-primary p-1 text-right @(expense.Sum(x=> x.Amount) != 0 ? "font-weight-bold":"")">@(expense.Sum(x=> x.Amount)?.ToString("N2"))</td>
+                                                    </tr>
+                                                    <tr class="v-middle shadow-sm">
+                                                        <td colspan="4" class="p-0"></td>
+                                                    </tr>
+
+                                                }
+
+                                                <tr v-middle shadow-sm>
+                                                    <th class="text-black-50 bg-body p-1 pt-4" colspan="4">@(our.CompanyName) Toplamı</th>
+                                                </tr>
+                                                <tr>
+                                                    <td class="text-info p-1 text-center">Nakit</td>
+                                                    <td class="text-warning p-1 text-center">Kredi</td>
+                                                    <td class="text-success p-1 text-center">İşçilik</td>
+                                                    <td class="text-primary p-1 text-center">Masraf</td>
+                                                </tr>
+                                                <tr>
+                                                    <th class="text-info p-1 text-right" style="border-right:solid 1px #e6e6e6;">@((ocash.Sum(x=> x.Amount) - ocashref.Sum(x => x.Amount)).ToString("N2")) </th>
+                                                    <th class="text-warning p-1 text-right" style="border-right:solid 1px #e6e6e6;">@((ocredit.Sum(x=> x.Amount) - ocreditref.Sum(x => x.Amount)).ToString("N2"))</th>
+                                                    <th class="text-success p-1 text-right" style="border-right:solid 1px #e6e6e6;">@(olabor.Sum(x=> x.Amount)?.ToString("N2"))</th>
+                                                    <th class="text-primary p-1 text-right">@(oexpense.Sum(x=> x.Amount)?.ToString("N2"))</th>
+                                                </tr>
+                                                <tr class="v-middle shadow-sm">
+                                                    <td colspan="4" class="p-0"></td>
+                                                </tr>
+
+
+                                            }
 
 
 
-                        <thead>
-                            <tr class="table-light text-sm font-weight-bold">
-                                <td>No</td>
-                                <td>Müşteri</td>
-                                <td class="text-center">Adet</td>
-                                <td class="text-right">Tutar</td>
-                                <td>Tür</td>
-                                <td class="text-center">Durumu</td>
-                                <td class="text-center">POS</td>
-                                <td></td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"><a href="#" class="">ST00001</a></td>
-                                <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><b>3</b></td>
-                                <td class="bg-primary-lt text-right text-dark"> <b>50,00</b> <span class="text-muted">₺</span></td>
-                                <td class="text-center">Nakit</td>
-                                <td class="bg-warning-lt text-center text-dark">OK</td>
-                                <td class="bg-warning-lt text-center text-dark">Gönderildi</td>
-                                <td class="text-center"><i class="text-info font-weight-bold" data-feather="dollar-sign"></i></td>
-                            </tr>
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"><a href="#" class="">ST00001</a></td>
-                                <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><b>3</b></td>
-                                <td class="bg-primary-lt text-right text-dark"> <b>50,00</b> <span class="text-muted">₺</span></td>
-                                <td class="text-center">Nakit</td>
-                                <td class="bg-warning-lt text-center text-dark">OK</td>
-                                <td class="bg-warning-lt text-center text-dark">Gönderildi</td>
-                                <td class="text-center"><i class="text-info font-weight-bold" data-feather="dollar-sign"></i></td>
-                            </tr>
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"><a href="#" class="">ST00001</a></td>
-                                <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><b>3</b></td>
-                                <td class="bg-primary-lt text-right text-dark"> <b>50,00</b> <span class="text-muted">₺</span></td>
-                                <td class="text-center">Nakit</td>
-                                <td class="bg-warning-lt text-center text-dark">İptal</td>
-                                <td class="bg-warning-lt text-center text-dark">Gönderildi</td>
-                                <td class="text-center"><i class="text-info font-weight-bold" data-feather="dollar-sign"></i></td>
-                            </tr>
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"><a href="#" class="">ST00001</a></td>
-                                <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><b>3</b></td>
-                                <td class="bg-primary-lt text-right text-dark"> <b>50,00</b> <span class="text-muted">₺</span></td>
-                                <td class="text-center">Nakit</td>
-                                <td class="bg-warning-lt text-center text-dark">İade</td>
-                                <td class="bg-warning-lt text-center text-dark">Gönderildi</td>
-                                <td class="text-center"><i class="text-info font-weight-bold" data-feather="dollar-sign"></i></td>
-                            </tr>
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"><a href="#" class="">ST00001</a></td>
-                                <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><b>3</b></td>
-                                <td class="bg-primary-lt text-right text-dark"> <b>50,00</b> <span class="text-muted">₺</span></td>
-                                <td class="text-center">Nakit</td>
-                                <td class="bg-warning-lt text-center text-dark">OK</td>
-                                <td class="bg-warning-lt text-center text-dark">Gönderildi</td>
-                                <td class="text-center"><i class="text-info font-weight-bold" data-feather="dollar-sign"></i></td>
-                            </tr>
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"><a href="#" class="">ST00001</a></td>
-                                <td class="flex"><a href="#" class="">İBRAHİM GÜNDOĞDU</a></td>
-                                <td class="bg-primary-lt text-center text-dark"><b>3</b></td>
-                                <td class="bg-primary-lt text-right text-dark"> <b>50,00</b> <span class="text-muted">₺</span></td>
-                                <td class="text-center">Nakit</td>
-                                <td class="bg-warning-lt text-center text-dark">İptal</td>
-                                <td class="bg-warning-lt text-center text-dark">Gönderildi</td>
-                                <td class="text-center"><i class="text-info font-weight-bold" data-feather="dollar-sign"></i></td>
-                            </tr>
-                        </tbody>
-                        <tfoot class="order-0">
-                            <tr class=" v-middle shadow-sm">
-                                <td class="flex"></td>
-                                <td class="text-center text-dark"></td>
-                                <td class="text-center text-dark"></td>
-                                <td class="text-right font-weight-bold"><b>1.200,00</b> <span class="text-muted">₺</span></td>
-                                <td class="text-center text-dark"></td>
-                                <td class="text-center text-dark"></td>
-                                <td class="text-sm text-center text-md p-0"></td>
-                                <td class="text-center"></td>
-                            </tr>
-                        </tfoot>
+                                        </tbody>
+                                        <tfoot>
 
-                    </table>
+                                        </tfoot>
+                                    </table>
+                                </div>
 
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
 </div>
 
 @section scripts {
-    @if (Model.Result != null) //
+
+    <script type="text/javascript">
+
+        $('select#OurCompanyID').on('change', function (e) {
+
+            var id = this.value;
+
+            const newparams = new URLSearchParams('');
+            if (id != '0') {
+                newparams.append('OurCompnayID', id);
+            }
+
+            window.location.search = newparams;
+        });
+
+    </script>
+
+    @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
     {
         <script>
-            $(function () {
-                notie.setOptions({
-                    alertTime: 5
-                })
-                notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
-                noticed = true;
-            });
+                $(function () {
+                    notie.setOptions({
+                        alertTime: 5
+                    })
+                    notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
+                    noticed = true;
+                });
         </script>
     }
-
 }

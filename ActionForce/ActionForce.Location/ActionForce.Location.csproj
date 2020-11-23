@@ -856,6 +856,7 @@
     <Content Include="Views\Envelope\_PartialCashRecorder.cshtml" />
     <Content Include="Views\Envelope\_PartialResultDocument.cshtml" />
     <Content Include="Views\Employee\Index.cshtml" />
+    <Content Include="Views\Sale\Location.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

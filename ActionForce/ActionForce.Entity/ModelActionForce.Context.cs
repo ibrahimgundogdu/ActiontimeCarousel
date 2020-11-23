@@ -1678,5 +1678,14 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddLocationTicketSale", parentIDParameter, currentLocationIDParameter, processDateParameter, priceIDParameter, paymethodIDParameter, saleChannelDParameter, recordEmployeeIDParameter, colorIDParameter, costumeIDParameter, orderNumberParameter, iPParameter, statusIDParameter, descriptionParameter);
         }
+    
+        public virtual ObjectResult<GetSaleLocationsToday_Result> GetSaleLocationsToday(Nullable<System.DateTime> date)
+        {
+            var dateParameter = date.HasValue ?
+                new ObjectParameter("Date", date) :
+                new ObjectParameter("Date", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSaleLocationsToday_Result>("GetSaleLocationsToday", dateParameter);
+        }
     }
 }

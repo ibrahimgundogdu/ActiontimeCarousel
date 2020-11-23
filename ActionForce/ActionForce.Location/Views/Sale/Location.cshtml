@@ -1,0 +1,138 @@
+﻿@model SaleControlModel
+@{
+    ViewBag.Title = "Satışlar";
+    ViewBag.PageTitle = $"<span class='font-weight-bold'> Siparişler </span>";
+
+}
+
+<div class="d-flex flex fixed-content">
+    <div class="d-flex flex" id="content-body">
+        <div class="d-flex flex-column flex" data-plugin="user">
+            <div class="p-2">
+                <div class="toolbar">
+                    <a href="/Sale/Location/@(Model.SelectedDate.AddDays(-1).ToString("yyyy-MM-dd"))@(Model.CurrentLocation != null ? "?LocationID="+Model.CurrentLocation.ID:"")" class="btn btn-md btn-white" title="Önceki Gün">
+                        <i class="text-info font-weight-bold" data-feather="chevron-left"></i>
+                    </a>
+                    <a href="/Sale/Location/@(Model.LocationDate.ToString("yyyy-MM-dd"))@(Model.CurrentLocation != null ? "?LocationID="+Model.CurrentLocation.ID:"")" class="btn btn-md btn-white" title="Bu gün">
+                        <i class="text-info font-weight-bold" data-feather="target"></i>
+                    </a>
+                    <a href="/Sale/Location/@(Model.SelectedDate.AddDays(1).ToString("yyyy-MM-dd"))@(Model.CurrentLocation != null ? "?LocationID="+Model.CurrentLocation.ID:"")" class="btn btn-md btn-white" title="Sonraki Gün">
+                        <i class="text-info font-weight-bold" data-feather="chevron-right"></i>
+                    </a>
+                    <a href="/Sale/Detail/@(Model.SelectedDate.ToString("yyyy-MM-dd"))@(Model.CurrentOurCompany != null ? "?OurCompnayID="+Model.CurrentOurCompany.CompanyID:"")" class="btn btn-md btn-block btn-white" title="Satış">
+                        <i class="text-info font-weight-bold" data-feather="layers"></i>
+                    </a>
+
+
+                </div>
+                <div class="mt-2">
+                    <a href="#" class="btn btn-sm btn-block btn-white">
+                        <span class="text-black-50">@($"({Model.DateKey?.WeekNumber}. Hafta)") </span> &nbsp;&nbsp; <span class="font-weight-bold">@(Model.SelectedDate.ToLongDateString())</span>
+                    </a>
+                </div>
+            </div>
+            <div class="scroll-y mb-0">
+                <div class="row no-gutters">
+                    <div class="col-md-12 p-2">
+
+                        <div class="card" data-sr-id="31" style="visibility: visible; transform: none; opacity: 1; transition: none 0s ease 0s;">
+                            <div class="card-header">
+                                @(Model.CurrentLocation.FullName)
+                            </div>
+                            <div class="card-body m-0 p-0">
+
+
+                                <div class="table-responsive">
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center text-info p-0">Nakit</th>
+                                                <th class="text-center text-warning p-0">Kredi Kartı</th>
+                                                <th class="text-center p-0">Hasılat</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th class="text-center p-1">@($"{Model.LocationBalance?.CashTotal.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
+                                                <th class="text-center p-1">@($"{Model.LocationBalance?.CreditTotal.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
+                                                <th class="text-center p-1">@($"{Model.LocationBalance?.Balance.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <table class="table table-theme table-hover v-middle" style="border-spacing: 0 1px !important; padding: 0.5rem !important;">
+                                        <thead>
+                                            <tr class="table-light text-sm font-weight-bold">
+                                                <td>Zaman</td>
+                                                <td class="text-center">Bölüm</td>
+                                                <td>Bilet</td>
+                                                <td class="text-right bg-secondary--lt">Tutar</td>
+                                                <td></td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var ticket in Model.TicketList.Where(x => x.StatusID != 4).OrderByDescending(x => x.RecordDate))
+                                            {
+                                                <tr class="v-middle shadow-sm @(ticket.IsActive == true ? "table-light":"table-danger")">
+                                                    <td class="font-weight-500 @(ticket.IsActive == true ? "text-dark":"text-danger")" text-center p-0 pb-2 pt-2"><a href="@($"/Home/Detail/{ticket.Uid}")">@(ticket.RecordDate.ToString("HH\\:mm\\:ss"))</a> </td>
+                                                    <td class="font-weight-light text-dark text-center  p-0">@(ticket.Part) </td>
+                                                    <td class="font-weight-500 @(ticket.PayMethodID == 1 ? "text-info":"text-warning") text-center  p-0">@($"{ticket.Unit} Dk.") </td>
+                                                    <td class="font-weight-bolder  @(ticket.IsActive == true ? "text-dark":"text-light") text-right  p-0"><strong> @(ticket.Total.ToString("N2")) @(Model.PriceList.FirstOrDefault()?.Sign ?? Model.Authentication.CurrentOurCompany.Currency)</strong></td>
+                                                    <td class=" text-center p-0"> <a href="@($"/Home/Detail/{ticket.Uid}")"> <span class="badge badge-circle @(ticket.StatusID == 5 || ticket.StatusID == 4 ? "text-danger":"text-success")"></span></a></td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                        <tfoot>
+
+                                            <tr class="v-middle shadow-sm">
+                                                <td colspan="3" class="font-weight-500 text-dark text-left">Hasılat</td>
+                                                <td class="text-right text-dark p-1 font-weight-bold">
+                                                    @($"{Model.LocationBalance?.Balance.ToString("N2")} {Model.LocationBalance?.CurrencySign}")
+                                                </td>
+                                                <td></td>
+
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        $('select#OurCompanyID').on('change', function (e) {
+
+            var id = this.value;
+
+            const newparams = new URLSearchParams('');
+            if (id != '0') {
+                newparams.append('OurCompnayID', id);
+            }
+
+            window.location.search = newparams;
+        });
+
+    </script>
+
+    @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
+    {
+        <script>
+                $(function () {
+                    notie.setOptions({
+                        alertTime: 5
+                    })
+                    notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
+                    noticed = true;
+                });
+        </script>
+    }
+}
