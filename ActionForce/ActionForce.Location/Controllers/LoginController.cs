@@ -70,6 +70,8 @@ namespace ActionForce.Location.Controllers
                             }
                             else
                             {
+                                locationid = currentlocations.FirstOrDefault(x => x.IsActive == true)?.LocationID;
+
                                 location = locationlist.FirstOrDefault(x => x.LocationID == locationid);
                             }
                         }

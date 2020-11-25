@@ -73,23 +73,24 @@ namespace ActionForce.Office.Controllers
 
                     foreach (var datelist in model.DateLists)
                     {
-                        List<int> employeeIds = new List<int>();
+                        //List<int> employeeIds = new List<int>();
 
-                        var employeeschedule = Db.Schedule.Where(x => x.LocationID == locationid && x.ShiftDate == datelist.DateKey).Select(x => x.EmployeeID.Value).ToList();
-                        employeeIds.AddRange(employeeschedule.Distinct());
-                        var employeeshift = Db.EmployeeShift.Where(x => x.LocationID == locationid && x.ShiftDate == datelist.DateKey).Select(x => x.EmployeeID.Value).ToList();
-                        employeeIds.AddRange(employeeshift.Distinct());
-                        employeeIds = employeeIds.Distinct().ToList();
+                        //var employeeschedule = Db.Schedule.Where(x => x.LocationID == locationid && x.ShiftDate == datelist.DateKey).Select(x => x.EmployeeID.Value).ToList();
+                        //employeeIds.AddRange(employeeschedule.Distinct());
+                        //var employeeshift = Db.EmployeeShift.Where(x => x.LocationID == locationid && x.ShiftDate == datelist.DateKey).Select(x => x.EmployeeID.Value).ToList();
+                        //employeeIds.AddRange(employeeshift.Distinct());
+                        //employeeIds = employeeIds.Distinct().ToList();
 
-                        foreach (var empid in employeeIds)
-                        {
-                            var employee = Db.Employee.FirstOrDefault(x=> x.EmployeeID == empid);
-                            var result = OfficeHelper.ComputeSalaryEarn(empid, datelist.DateKey, location.LocationID, model.Authentication);
-                            hubContext.Clients.All.AddMessageToPage("Hakediş", $"{employee.FullName} çalışanı {datelist.DateKey.ToLongDateString()} günü için hakediş hesaplandı : {result}");
+                        //foreach (var empid in employeeIds)
+                        //{
+                        //    var employee = Db.Employee.FirstOrDefault(x=> x.EmployeeID == empid);
 
-                        }
+                        //    hubContext.Clients.All.AddMessageToPage("Hakediş", $"{employee.FullName} çalışanı {datelist.DateKey.ToLongDateString()} günü için hakediş hesaplandı : {result}");
 
-                        hubContext.Clients.All.AddMessageToPage("Hakediş", $"{location?.SortBy?.Trim()} {location.LocationName} lokasyonunda {datelist.DateKey.ToLongDateString()} günü için hakedişler hesaplandı");
+                        //}
+
+                        var result = OfficeHelper.CheckSalaryEarn(datelist.DateKey, location.LocationID, model.Authentication);
+                        hubContext.Clients.All.AddMessageToPage("Hakediş", $"{location?.SortBy?.Trim()} {location.LocationName} lokasyonunda {datelist.DateKey.ToLongDateString()} günü için hakedişler hesaplandı : {result}");
 
                         // 02. hesaplanan hakedişler günsonu dosyasına yazılır
                         var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == locationid && x.Date == datelist.DateKey && x.IsActive == true);

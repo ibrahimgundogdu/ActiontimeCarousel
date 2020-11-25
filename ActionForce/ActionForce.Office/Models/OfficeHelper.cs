@@ -970,7 +970,7 @@ namespace ActionForce.Office
                         }).FirstOrDefault());
 
 
-                        
+
 
                     }
                     else if (location.OurCompanyID == 1)  // ülke amerika ise
@@ -1688,23 +1688,27 @@ namespace ActionForce.Office
             {
                 var location = db.Location.FirstOrDefault(x => x.LocationID == locationid);
                 var dayresult = db.DayResult.FirstOrDefault(x => x.LocationID == locationid && x.Date == date);
-                var locschedule = db.LocationSchedule.FirstOrDefault(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date);
 
-                if (locschedule != null)
+                if (dayresult != null)
                 {
-                    var empschedules = db.Schedule.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date).ToList();
-                    List<int> empids = empschedules.Select(x => x.EmployeeID.Value).ToList();
+                    var locschedule = db.LocationSchedule.FirstOrDefault(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date);
 
-
-                    var empshifts = db.EmployeeShift.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date && empids.Contains(x.EmployeeID.Value)).ToList();
-                    var empunits = db.EmployeeSalary.Where(x => empids.Contains(x.EmployeeID) && x.DateStart <= dayresult.Date).ToList();
-
-                    foreach (var emp in empids)
+                    if (locschedule != null)
                     {
-                        var calculate = CalculateSalaryEarn(dayresult.ID, emp, dayresult.Date, dayresult.LocationID, authentication);
-                    }
+                        var empschedules = db.Schedule.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date).ToList();
+                        List<int> empids = empschedules.Select(x => x.EmployeeID.Value).ToList();
 
-                    issuccess = true;
+
+                        var empshifts = db.EmployeeShift.Where(x => x.LocationID == location.LocationID && x.ShiftDate == dayresult.Date && empids.Contains(x.EmployeeID.Value)).ToList();
+                        var empunits = db.EmployeeSalary.Where(x => empids.Contains(x.EmployeeID) && x.DateStart <= dayresult.Date).ToList();
+
+                        foreach (var emp in empids)
+                        {
+                            var calculate = CalculateSalaryEarn(dayresult.ID, emp, dayresult.Date, dayresult.LocationID, authentication);
+                        }
+
+                        issuccess = true;
+                    }
                 }
             }
 
@@ -2338,7 +2342,7 @@ namespace ActionForce.Office
                             cp.Sign = item.Sign;
 
                             cplist.Add(cp);
-                            
+
 
                             AddApplicationLog("Office", "DayResultCheckPrice", "Insert", cp.ID.ToString(), "Result", "AddItemsToResultEnvelope", null, true, $"{cp.Unit} - {cp.Price} {item.Currency}", string.Empty, DateTime.UtcNow.AddHours(location.Timezone.Value), $"{model.Authentication.ActionEmployee.EmployeeID} {model.Authentication.ActionEmployee.FullName}", OfficeHelper.GetIPAddress(), string.Empty, cp);
 
