@@ -9,6 +9,7 @@
             <th>Cash</th>
             <th>Credit</th>
             <th>Total</th>
+            <th>VAT</th>
             <th>Labor</th>
             <th>Expense</th>
             <th>CashIn</th>
@@ -33,6 +34,7 @@
             <td>@(line.Cash?.ToString("N2"))</td>
             <td>@(line.Credit?.ToString("N2"))</td>
             <td>@(line.Total.ToString("N2"))</td>
+            <td>@(line.VAT?.ToString("N2"))</td>
             <td>@(line.Labor?.ToString("N2"))</td>
             <td>@(line.Expense?.ToString("N2"))</td>
             <td>@(line.CashIn?.ToString("N2"))</td>
@@ -61,6 +63,7 @@
             <td>@(Model.RevenueLines?.Sum(x => x.Cash)?.ToString("N2"))</td>
             <td>@(Model.RevenueLines?.Sum(x => x.Credit)?.ToString("N2"))</td>
             <td>@(Model.RevenueLines?.Sum(x => x.Total).ToString("N2"))</td>
+            <td>@(Model.RevenueLines?.Sum(x => x.VAT ?? 0).ToString("N2"))</td>
             <td>@(Model.RevenueLines?.Sum(x => x.Labor)?.ToString("N2"))</td>
             <td>@(Model.RevenueLines?.Sum(x => x.Expense)?.ToString("N2"))</td>
             <td>@(Model.RevenueLines?.Sum(x => x.CashIn)?.ToString("N2"))</td>
@@ -110,6 +113,15 @@
         <tr>
             <th>Gross Total</th>
             <td class="text-right">@(Model.Revenue.GrossTotal?.ToString("N2"))</td>
+            <td class="text-right"></td>
+            <td class="text-right"></td>
+            <td class="text-right"></td>
+            <td class="text-right"></td>
+            <th class="text-center">@(Model.Revenue.Currency)</th>
+        </tr>
+        <tr>
+            <th>Vat Total</th>
+            <td class="text-right">@(Model.Revenue.TotalVAT?.ToString("N2"))</td>
             <td class="text-right"></td>
             <td class="text-right"></td>
             <td class="text-right"></td>

@@ -44,5 +44,6 @@ namespace ActionForce.Entity
         public Nullable<double> OpDeptMonthly { get; set; }
         public Nullable<double> RentRate { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public Nullable<double> TotalVAT { get; set; }
     }
 }

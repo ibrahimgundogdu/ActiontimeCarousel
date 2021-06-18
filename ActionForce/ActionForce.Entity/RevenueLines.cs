@@ -40,5 +40,6 @@ namespace ActionForce.Entity
         public Nullable<double> OpReturn { get; set; }
         public Nullable<double> DailyLqd { get; set; }
         public string EnvelopeFile { get; set; }
+        public Nullable<double> VAT { get; set; }
     }
 }

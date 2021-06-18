@@ -87,7 +87,7 @@
                                                     <th class="p-1">@(shiftModel?.ShiftDuration?.ToString(@"hh\:mm"))</th>
                                                     <th class="p-1 text-right">@(item.QuantityHour?.ToString("N2"))</th>
                                                 </tr>
-                                                <tr>
+                                                @*<tr>
                                                     <td class="bg-body p-1 pl-3">Birimi - Hakedişi</td>
                                                     <td class="p-1 text-right">@(item.UnitPrice?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</td>
                                                     <th class="p-1 text-right">@(item.TotalAmount?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</th>
@@ -96,7 +96,7 @@
                                                     <td class="bg-body p-1 pl-3">Setcard - Maaş</td>
                                                     <td class="p-1 text-right">@(item.TotalAmountFood?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</td>
                                                     <td class="p-1 text-right">@(item.TotalAmountSalary?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</td>
-                                                </tr>
+                                                </tr>*@
 
                                             </tbody>
                                         </table>

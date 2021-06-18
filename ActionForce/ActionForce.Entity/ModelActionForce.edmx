@@ -3589,6 +3589,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="TotalCash" Type="float" />
           <Property Name="TotalCredit" Type="float" />
           <Property Name="GrossTotal" Type="float" />
+          <Property Name="TotalVAT" Type="float" />
           <Property Name="Net" Type="float" />
           <Property Name="Operator" Type="float" />
           <Property Name="ActionTime" Type="float" />
@@ -3622,6 +3623,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="Credit" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="Total" Type="float" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="VAT" Type="float" />
           <Property Name="Labor" Type="float" />
           <Property Name="Expense" Type="float" />
           <Property Name="CashIn" Type="float" />
@@ -5580,6 +5582,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VRevenue' does not have a p
           <Property Name="OpDeptMonthly" Type="float" />
           <Property Name="RentRate" Type="float" />
           <Property Name="IsActive" Type="bit" />
+          <Property Name="TotalVAT" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VRevenueLines' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5616,6 +5619,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VRevenueLines' does not hav
           <Property Name="AcTi" Type="float" />
           <Property Name="Operator" Type="float" />
           <Property Name="NetTotal" Type="float" />
+          <Property Name="VAT" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSchedule' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -8721,7 +8725,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VRevenue].[OpDept] AS [OpDept], 
     [VRevenue].[OpDeptMonthly] AS [OpDeptMonthly], 
     [VRevenue].[RentRate] AS [RentRate], 
-    [VRevenue].[IsActive] AS [IsActive]
+    [VRevenue].[IsActive] AS [IsActive], 
+    [VRevenue].[TotalVAT] AS [TotalVAT]
     FROM [dbo].[VRevenue] AS [VRevenue]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VRevenueLines" EntityType="Self.VRevenueLines" store:Type="Views" store:Schema="dbo">
@@ -8753,7 +8758,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VRevenueLines].[OpReturn] AS [OpReturn], 
     [VRevenueLines].[AcTi] AS [AcTi], 
     [VRevenueLines].[Operator] AS [Operator], 
-    [VRevenueLines].[NetTotal] AS [NetTotal]
+    [VRevenueLines].[NetTotal] AS [NetTotal], 
+    [VRevenueLines].[VAT] AS [VAT]
     FROM [dbo].[VRevenueLines] AS [VRevenueLines]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VSchedule" EntityType="Self.VSchedule" store:Type="Views" store:Schema="dbo">
@@ -9984,7 +9990,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="Description" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="GetSaleLocationsToday" ReturnType="Collection(db293_ActionTimeDbModel.GetSaleLocationsToday_Result)">
-            <Parameter Name="Date" Mode="In" Type="DateTime" />
+          <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
         
           </EntityContainer>
@@ -14412,6 +14418,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RentRate" Type="Double" />
           <Property Name="OpDept" Type="Double" />
           <Property Name="OpDeptMonthly" Type="Double" />
+          <Property Name="TotalVAT" Type="Double" />
         </EntityType>
         <EntityType Name="RevenueLines">
           <Key>
@@ -14443,6 +14450,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="OpReturn" Type="Double" />
           <Property Name="DailyLqd" Type="Double" />
           <Property Name="EnvelopeFile" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="VAT" Type="Double" />
         </EntityType>
         <EntityType Name="RevenueParameter">
           <Key>
@@ -14496,6 +14504,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="OpDeptMonthly" Type="Double" />
           <Property Name="RentRate" Type="Double" />
           <Property Name="IsActive" Type="Boolean" />
+          <Property Name="TotalVAT" Type="Double" />
         </EntityType>
         <EntityType Name="VRevenueLines">
           <Key>
@@ -14530,6 +14539,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="AcTi" Type="Double" />
           <Property Name="Operator" Type="Double" />
           <Property Name="NetTotal" Type="Double" />
+          <Property Name="VAT" Type="Double" />
         </EntityType>
         <EntityType Name="LocationParamCalculate">
           <Key>
@@ -21101,6 +21111,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="Revenue">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Revenue">
               <MappingFragment StoreEntitySet="Revenue">
+                <ScalarProperty Name="TotalVAT" ColumnName="TotalVAT" />
                 <ScalarProperty Name="OpDeptMonthly" ColumnName="OpDeptMonthly" />
                 <ScalarProperty Name="OpDept" ColumnName="OpDept" />
                 <ScalarProperty Name="RentRate" ColumnName="RentRate" />
@@ -21133,6 +21144,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="RevenueLines">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.RevenueLines">
               <MappingFragment StoreEntitySet="RevenueLines">
+                <ScalarProperty Name="VAT" ColumnName="VAT" />
                 <ScalarProperty Name="EnvelopeFile" ColumnName="EnvelopeFile" />
                 <ScalarProperty Name="DailyLqd" ColumnName="DailyLqd" />
                 <ScalarProperty Name="OpReturn" ColumnName="OpReturn" />
@@ -21184,6 +21196,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VRevenue">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VRevenue">
               <MappingFragment StoreEntitySet="VRevenue">
+                <ScalarProperty Name="TotalVAT" ColumnName="TotalVAT" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="RentRate" ColumnName="RentRate" />
                 <ScalarProperty Name="OpDeptMonthly" ColumnName="OpDeptMonthly" />
@@ -21220,6 +21233,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VRevenueLines">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VRevenueLines">
               <MappingFragment StoreEntitySet="VRevenueLines">
+                <ScalarProperty Name="VAT" ColumnName="VAT" />
                 <ScalarProperty Name="NetTotal" ColumnName="NetTotal" />
                 <ScalarProperty Name="Operator" ColumnName="Operator" />
                 <ScalarProperty Name="AcTi" ColumnName="AcTi" />

@@ -42,5 +42,6 @@ namespace ActionForce.Entity
         public Nullable<double> AcTi { get; set; }
         public Nullable<double> Operator { get; set; }
         public Nullable<double> NetTotal { get; set; }
+        public Nullable<double> VAT { get; set; }
     }
 }
