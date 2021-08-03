@@ -16,8 +16,8 @@ namespace ActionForce.PosService
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
-                routeTemplate: "api/{controller}/{action}/{id}",
-                defaults: new { id = RouteParameter.Optional }
+                routeTemplate: "{controller}/{action}/{moduleId}",
+                defaults: new { moduleId = RouteParameter.Optional }
             );
         }
     }

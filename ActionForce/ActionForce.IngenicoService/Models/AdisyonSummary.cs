@@ -8,10 +8,10 @@ namespace ActionForce.PosService
     public class AdisyonSummary
     {
         public string AdisyonNo { get; set; }
-        public string AdisyonID { get; set; }
+        public long AdisyonID { get; set; }
         public string AdisyonName { get; set; }
         public string TableNo { get; set; }
-        public string TotalAmount { get; set; }
-        public string NetAmount { get; set; }
+        public long TotalAmount { get; set; }
+        public long NetAmount { get; set; }
     }
 }

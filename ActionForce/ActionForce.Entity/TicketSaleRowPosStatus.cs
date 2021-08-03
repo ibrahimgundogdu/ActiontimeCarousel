@@ -12,13 +12,11 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class LocationPosTerminal
+    public partial class TicketSaleRowPosStatus
     {
         public int ID { get; set; }
-        public Nullable<int> LocationID { get; set; }
-        public Nullable<int> TerminalID { get; set; }
+        public string PosStatusName { get; set; }
+        public string SortBy { get; set; }
         public Nullable<bool> IsActive { get; set; }
-        public Nullable<bool> IsMaster { get; set; }
-        public Nullable<System.DateTime> RecordDate { get; set; }
     }
 }

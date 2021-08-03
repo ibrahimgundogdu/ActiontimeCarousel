@@ -12,13 +12,14 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class LocationPosTerminal
+    public partial class VAdisyonSummary
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
         public Nullable<int> LocationID { get; set; }
-        public Nullable<int> TerminalID { get; set; }
-        public Nullable<bool> IsActive { get; set; }
-        public Nullable<bool> IsMaster { get; set; }
-        public Nullable<System.DateTime> RecordDate { get; set; }
+        public System.DateTime Date { get; set; }
+        public Nullable<System.DateTime> SaleDate { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
+        public Nullable<double> Total { get; set; }
+        public string Currency { get; set; }
     }
 }

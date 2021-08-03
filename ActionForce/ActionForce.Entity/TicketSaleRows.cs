@@ -54,5 +54,6 @@ namespace ActionForce.Entity
         public Nullable<int> MallMotoColorID { get; set; }
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<long> ParentID { get; set; }
+        public Nullable<int> PosStatusID { get; set; }
     }
 }

@@ -22,14 +22,14 @@ namespace ActionForce.PosService
             {
                 string AuthorizationToken = actionContext.Request.Headers.Authorization.Parameter;
 
-                if (ApiHelper.UserAuthentication(AuthorizationToken))
-                {
-                    Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(AuthorizationToken), null);
-                }
-                else
-                {
-                    actionContext.Response = actionContext.Request.CreateResponse(System.Net.HttpStatusCode.Unauthorized);
-                }
+                //if (ApiHelper.UserAuthentication(AuthorizationToken))
+                //{
+                //    Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(AuthorizationToken), null);
+                //}
+                //else
+                //{
+                //    actionContext.Response = actionContext.Request.CreateResponse(System.Net.HttpStatusCode.Unauthorized);
+                //}
             }
 
         }

@@ -14,6 +14,7 @@ namespace ActionForce.Entity
     
     public partial class VLocationPosTerminal
     {
+        public int ID { get; set; }
         public int LocationID { get; set; }
         public int OurCompanyID { get; set; }
         public string LocationFullName { get; set; }
@@ -22,9 +23,7 @@ namespace ActionForce.Entity
         public string ModelName { get; set; }
         public string SerialNumber { get; set; }
         public Nullable<int> TerminalID { get; set; }
-        public string AccountName { get; set; }
         public Nullable<int> BankAccountID { get; set; }
-        public int ID { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<bool> IsMaster { get; set; }
     }

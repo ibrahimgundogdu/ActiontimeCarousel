@@ -182,11 +182,9 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeSalary" Width="1.5" PointX="21.375" PointY="46.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeSalaryDist" Width="1.5" PointX="15.375" PointY="47.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CashRecorders" Width="1.5" PointX="47.375" PointY="18.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationPosTerminal" Width="1.5" PointX="45.375" PointY="35.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PosTerminal" Width="1.5" PointX="47.375" PointY="21.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCashRecorders" Width="1.5" PointX="47.375" PointY="25.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPosTerminal" Width="1.5" PointX="47.375" PointY="29.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationPosTerminal" Width="1.5" PointX="31.375" PointY="47.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankTransferStatus" Width="1.5" PointX="38.375" PointY="8.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentBankTransfer" Width="1.5" PointX="47.375" PointY="34.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" Width="1.5" PointX="3.375" PointY="48.75" />
@@ -309,6 +307,10 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRows" Width="1.5" PointX="5.25" PointY="1.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentBuyExchange" Width="1.5" PointX="0.75" PointY="0.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCashExpense" Width="1.5" PointX="9.375" PointY="8.875" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationPosTerminal" Width="1.5" PointX="9.5687974177155635" PointY="26.136947539698774" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationPosTerminal" Width="1.5" PointX="2.6082448114679404" PointY="9.5084316476753123" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRowPosStatus" Width="1.5" PointX="4.8262791283551039" PointY="17.752336242120869" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VAdisyonSummary" Width="1.5" PointX="8.38780086133061" PointY="25.197110098412779" />
         
         
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24

@@ -5,7 +5,7 @@ using System.Web;
 
 namespace ActionForce.PosService
 {
-    public class Result
+    public class ResultSummary
     {
         public int ResultCode { get; set; }
         public string ResultMessage { get; set; }

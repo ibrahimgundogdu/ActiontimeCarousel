@@ -188,11 +188,9 @@ namespace ActionForce.Entity
         public virtual DbSet<VEmployeeSalary> VEmployeeSalary { get; set; }
         public virtual DbSet<VEmployeeSalaryDist> VEmployeeSalaryDist { get; set; }
         public virtual DbSet<CashRecorders> CashRecorders { get; set; }
-        public virtual DbSet<LocationPosTerminal> LocationPosTerminal { get; set; }
         public virtual DbSet<PosTerminal> PosTerminal { get; set; }
         public virtual DbSet<VCashRecorders> VCashRecorders { get; set; }
         public virtual DbSet<VPosTerminal> VPosTerminal { get; set; }
-        public virtual DbSet<VLocationPosTerminal> VLocationPosTerminal { get; set; }
         public virtual DbSet<BankTransferStatus> BankTransferStatus { get; set; }
         public virtual DbSet<DocumentBankTransfer> DocumentBankTransfer { get; set; }
         public virtual DbSet<VDocumentBankTransfer> VDocumentBankTransfer { get; set; }
@@ -307,6 +305,10 @@ namespace ActionForce.Entity
         public virtual DbSet<VTicketSaleRows> VTicketSaleRows { get; set; }
         public virtual DbSet<DocumentBuyExchange> DocumentBuyExchange { get; set; }
         public virtual DbSet<VCashExpense> VCashExpense { get; set; }
+        public virtual DbSet<LocationPosTerminal> LocationPosTerminal { get; set; }
+        public virtual DbSet<VLocationPosTerminal> VLocationPosTerminal { get; set; }
+        public virtual DbSet<TicketSaleRowPosStatus> TicketSaleRowPosStatus { get; set; }
+        public virtual DbSet<VAdisyonSummary> VAdisyonSummary { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

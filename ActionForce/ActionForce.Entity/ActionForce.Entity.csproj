@@ -750,6 +750,9 @@
     <Compile Include="TicketSaleRowHistory.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="TicketSaleRowPosStatus.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="TicketSaleRows.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -787,6 +790,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="TrampolineType.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VAdisyonSummary.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VBankAccount.cs">
