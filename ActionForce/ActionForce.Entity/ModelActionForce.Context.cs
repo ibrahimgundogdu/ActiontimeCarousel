@@ -1689,5 +1689,67 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSaleLocationsToday_Result>("GetSaleLocationsToday", dateParameter);
         }
+    
+        public virtual int AddPosServiceLog(Nullable<int> locationID, string posSerialNumber, string adisyonNo, string header_Username, string header_Password, string requestIP, string requestMethod, Nullable<System.DateTime> requestDate, string resultCode, string resultMessage)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var posSerialNumberParameter = posSerialNumber != null ?
+                new ObjectParameter("PosSerialNumber", posSerialNumber) :
+                new ObjectParameter("PosSerialNumber", typeof(string));
+    
+            var adisyonNoParameter = adisyonNo != null ?
+                new ObjectParameter("AdisyonNo", adisyonNo) :
+                new ObjectParameter("AdisyonNo", typeof(string));
+    
+            var header_UsernameParameter = header_Username != null ?
+                new ObjectParameter("Header_Username", header_Username) :
+                new ObjectParameter("Header_Username", typeof(string));
+    
+            var header_PasswordParameter = header_Password != null ?
+                new ObjectParameter("Header_Password", header_Password) :
+                new ObjectParameter("Header_Password", typeof(string));
+    
+            var requestIPParameter = requestIP != null ?
+                new ObjectParameter("RequestIP", requestIP) :
+                new ObjectParameter("RequestIP", typeof(string));
+    
+            var requestMethodParameter = requestMethod != null ?
+                new ObjectParameter("RequestMethod", requestMethod) :
+                new ObjectParameter("RequestMethod", typeof(string));
+    
+            var requestDateParameter = requestDate.HasValue ?
+                new ObjectParameter("RequestDate", requestDate) :
+                new ObjectParameter("RequestDate", typeof(System.DateTime));
+    
+            var resultCodeParameter = resultCode != null ?
+                new ObjectParameter("ResultCode", resultCode) :
+                new ObjectParameter("ResultCode", typeof(string));
+    
+            var resultMessageParameter = resultMessage != null ?
+                new ObjectParameter("ResultMessage", resultMessage) :
+                new ObjectParameter("ResultMessage", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddPosServiceLog", locationIDParameter, posSerialNumberParameter, adisyonNoParameter, header_UsernameParameter, header_PasswordParameter, requestIPParameter, requestMethodParameter, requestDateParameter, resultCodeParameter, resultMessageParameter);
+        }
+    
+        public virtual ObjectResult<GetTicketProduct_Result> GetTicketProduct(Nullable<int> ticketTypeID, Nullable<int> priceCategoryID, Nullable<int> unit)
+        {
+            var ticketTypeIDParameter = ticketTypeID.HasValue ?
+                new ObjectParameter("TicketTypeID", ticketTypeID) :
+                new ObjectParameter("TicketTypeID", typeof(int));
+    
+            var priceCategoryIDParameter = priceCategoryID.HasValue ?
+                new ObjectParameter("PriceCategoryID", priceCategoryID) :
+                new ObjectParameter("PriceCategoryID", typeof(int));
+    
+            var unitParameter = unit.HasValue ?
+                new ObjectParameter("Unit", unit) :
+                new ObjectParameter("Unit", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetTicketProduct_Result>("GetTicketProduct", ticketTypeIDParameter, priceCategoryIDParameter, unitParameter);
+        }
     }
 }

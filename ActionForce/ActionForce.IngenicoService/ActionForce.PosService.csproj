@@ -98,11 +98,21 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\AdisyonDetail.cs" />
     <Compile Include="Models\AdisyonSummary.cs" />
     <Compile Include="Models\ApiHelper.cs" />
+    <Compile Include="Models\CurrentAccount.cs" />
+    <Compile Include="Models\DetailRequest.cs" />
+    <Compile Include="Models\Discount.cs" />
     <Compile Include="Models\Header.cs" />
-    <Compile Include="Models\Result.cs" />
+    <Compile Include="Models\Invoice.cs" />
+    <Compile Include="Models\Payment.cs" />
+    <Compile Include="Models\ResultDetail.cs" />
+    <Compile Include="Models\ResultSummary.cs" />
+    <Compile Include="Models\SaleItem.cs" />
+    <Compile Include="Models\SalesItemizerList.cs" />
     <Compile Include="Models\SummaryRequest.cs" />
+    <Compile Include="Models\UserMessageList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

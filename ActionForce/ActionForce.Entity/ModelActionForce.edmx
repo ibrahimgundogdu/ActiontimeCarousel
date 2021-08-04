@@ -3123,6 +3123,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="TicketTypeID" Type="int" />
           <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
           <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="TaxRate" Type="float" />
           <Property Name="Unit" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="RecordDate" Type="datetime" />
@@ -6537,6 +6538,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="Description" Type="nvarchar" Mode="In" />
           <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="AddPosServiceLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="PosSerialNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="AdisyonNo" Type="nvarchar" Mode="In" />
+          <Parameter Name="Header_Username" Type="nvarchar" Mode="In" />
+          <Parameter Name="Header_Password" Type="nvarchar" Mode="In" />
+          <Parameter Name="RequestIP" Type="nvarchar" Mode="In" />
+          <Parameter Name="RequestMethod" Type="nvarchar" Mode="In" />
+          <Parameter Name="RequestDate" Type="datetime" Mode="In" />
+          <Parameter Name="ResultCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="ResultMessage" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="CheckLocationPriceCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
         </Function>
@@ -6667,6 +6680,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         </Function>
         <Function Name="GetTicketDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TicketNumber" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetTicketProduct" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TicketTypeID" Type="int" Mode="In" />
+          <Parameter Name="PriceCategoryID" Type="int" Mode="In" />
+          <Parameter Name="Unit" Type="int" Mode="In" />
         </Function>
         <Function Name="GetToList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
@@ -10042,6 +10060,23 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VLocationPosTerminal" EntityType="db293_ActionTimeDbModel.VLocationPosTerminal" />
           <EntitySet Name="TicketSaleRowPosStatus" EntityType="db293_ActionTimeDbModel.TicketSaleRowPosStatus" />
           <EntitySet Name="VAdisyonSummary" EntityType="db293_ActionTimeDbModel.VAdisyonSummary" />
+          <FunctionImport Name="AddPosServiceLog">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="PosSerialNumber" Mode="In" Type="String" />
+            <Parameter Name="AdisyonNo" Mode="In" Type="String" />
+            <Parameter Name="Header_Username" Mode="In" Type="String" />
+            <Parameter Name="Header_Password" Mode="In" Type="String" />
+            <Parameter Name="RequestIP" Mode="In" Type="String" />
+            <Parameter Name="RequestMethod" Mode="In" Type="String" />
+            <Parameter Name="RequestDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ResultCode" Mode="In" Type="String" />
+            <Parameter Name="ResultMessage" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetTicketProduct" ReturnType="Collection(db293_ActionTimeDbModel.GetTicketProduct_Result)">
+            <Parameter Name="TicketTypeID" Mode="In" Type="Int32" />
+            <Parameter Name="PriceCategoryID" Mode="In" Type="Int32" />
+            <Parameter Name="Unit" Mode="In" Type="Int32" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -15576,6 +15611,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateEmployeeID" Type="Int32" />
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="TaxRate" Type="Double" />
         </EntityType>
         <EntityType Name="LocationSchedule">
           <Key>
@@ -16855,6 +16891,23 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Total" Type="Double" />
           <Property Name="Currency" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="true" />
         </EntityType>
+        <ComplexType Name="GetTicketProduct_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="OurCompanyID" Nullable="true" />
+          <Property Type="Int32" Name="CategoryID" Nullable="true" />
+          <Property Type="Int32" Name="TicketTypeID" Nullable="true" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="500" />
+          <Property Type="Double" Name="TaxRate" Nullable="true" />
+          <Property Type="Int32" Name="Unit" Nullable="true" />
+          <Property Type="Boolean" Name="IsActive" Nullable="true" />
+          <Property Type="DateTime" Name="RecordDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="RecordEmployeeID" Nullable="true" />
+          <Property Type="String" Name="RecordIP" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="UpdateDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="UpdateEmployeeID" Nullable="true" />
+          <Property Type="String" Name="UpdateIP" Nullable="true" MaxLength="20" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -22171,6 +22224,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketProduct">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketProduct">
               <MappingFragment StoreEntitySet="TicketProduct">
+                <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
                 <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
@@ -23392,6 +23446,28 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddPosServiceLog" FunctionName="db293_ActionTimeDbModel.Store.AddPosServiceLog" />
+          <FunctionImportMapping FunctionImportName="GetTicketProduct" FunctionName="db293_ActionTimeDbModel.Store.GetTicketProduct">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetTicketProduct_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
+                <ScalarProperty Name="ProductName" ColumnName="ProductName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -422,6 +422,9 @@
     <Compile Include="GetTicketDetail_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetTicketProduct_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="GetToList_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

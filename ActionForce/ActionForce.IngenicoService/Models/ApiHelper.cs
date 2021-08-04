@@ -50,5 +50,38 @@ namespace ActionForce.PosService
             }
             return context.Request.ServerVariables["REMOTE_ADDR"];
         }
+
+        public static string PasswordMD5_Pan(string password)
+        {
+
+            password = makeMD5(password);
+
+            if (password.Length > 10)
+            {
+                password = $"{password.Substring(0, 5)}*****{password.Substring(password.Length - 5, 5)}";
+            }
+            else if (password.Length <= 10 && password.Length > 3)
+            {
+                password = $"{password.Substring(0, 1)}***{password.Substring(password.Length - 1, 1)}";
+            }
+
+            return password;
+        }
+
+        public static void AddPosServiceLog(int LocationID, string PosSerialNumber, string AdisyonNo, string Username, string Password, string MethodName, string ResultCode, string ResultMessage)
+        {
+            try
+            {
+                using (ActionTimeEntities Db = new ActionTimeEntities())
+                {
+                    Db.AddPosServiceLog(LocationID, PosSerialNumber, AdisyonNo, Username, Password, ApiHelper.GetIPAddress(), MethodName, DateTime.UtcNow, ResultCode, ResultMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+
+
+        }
     }
 }
