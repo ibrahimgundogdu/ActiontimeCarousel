@@ -12,7 +12,7 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class TicketSaleRowPosStatus
+    public partial class TicketSalePosStatus
     {
         public int ID { get; set; }
         public string PosStatusName { get; set; }

@@ -42,5 +42,6 @@ namespace ActionForce.Entity
         public string Sign { get; set; }
         public string BackStyle { get; set; }
         public string Description { get; set; }
+        public Nullable<double> TaxRate { get; set; }
     }
 }

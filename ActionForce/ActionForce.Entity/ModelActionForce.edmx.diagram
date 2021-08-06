@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="9994b25f60eb42c19af558a806d4e321" Name="Diagram1" ZoomLevel="51">
+      <Diagram DiagramId="9994b25f60eb42c19af558a806d4e321" Name="Diagram1" ZoomLevel="77">
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Action" Width="1.5" PointX="10" PointY="20.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionAccounts" Width="1.5" PointX="2.75" PointY="16.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRow" Width="1.5" PointX="12.25" PointY="18.375" />
@@ -300,17 +300,18 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Company" Width="1.5" PointX="62.25" PointY="58.25" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowCheck" Width="1.5" PointX="10.25" PointY="34.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VMall" Width="1.5" PointX="2.75" PointY="37.25" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSale" Width="1.5" PointX="58.75" PointY="2.375" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSale" Width="1.5" PointX="62.375" PointY="2.375" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowsAll" Width="1.5" PointX="2.7420721998168491" PointY="31.771645173324107" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRows" Width="1.5" PointX="10.93310964989155" PointY="23.921924602203966" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRows" Width="1.5" PointX="5.25" PointY="1.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentBuyExchange" Width="1.5" PointX="0.75" PointY="0.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCashExpense" Width="1.5" PointX="9.375" PointY="8.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationPosTerminal" Width="1.5" PointX="9.5687974177155635" PointY="26.136947539698774" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationPosTerminal" Width="1.5" PointX="2.6082448114679404" PointY="9.5084316476753123" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRowPosStatus" Width="1.5" PointX="4.8262791283551039" PointY="17.752336242120869" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VAdisyonSummary" Width="1.5" PointX="8.38780086133061" PointY="25.197110098412779" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSale" Width="1.5" PointX="3.1695151083029414" PointY="17.771729045441248" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRows" Width="1.5" PointX="5.7859016311289277" PointY="10.471893077004651" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowsAll" Width="1.5" PointX="4.300896788156078" PointY="24.244175594413736" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VAdisyonSummary" Width="1.5" PointX="5.375" PointY="9" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSalePosStatus" Width="1.5" PointX="11.664037261001784" PointY="2.0036855945380805" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSalePosDiscount" Width="1.5" PointX="2.8429997744238937" PointY="18.560131707489553" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSalePosPayment" Width="1.5" PointX="10.066812028208194" PointY="22.699026282270918" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSalePosReceipt" Width="1.5" PointX="8.3675917686743624" PointY="21.281905452386432" />
         
         
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24

@@ -13,6 +13,7 @@ namespace ActionForce.Office
         public int TicketTypeID { get; set; }
         public string ProductName { get; set; }
         public string Description { get; set; }
+        public string TaxRate { get; set; }
         public int Unit { get; set; }
         public string IsActive { get; set; }
     }

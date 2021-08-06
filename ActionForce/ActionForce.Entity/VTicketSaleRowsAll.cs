@@ -83,5 +83,8 @@ namespace ActionForce.Entity
         public Nullable<double> SaleAmount { get; set; }
         public Nullable<int> SaleRowUnit { get; set; }
         public Nullable<bool> IsFinancialization { get; set; }
+        public Nullable<int> PosStatusID { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
+        public Nullable<double> TaxRate { get; set; }
     }
 }

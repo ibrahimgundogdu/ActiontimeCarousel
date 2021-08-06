@@ -19,6 +19,7 @@ namespace ActionForce.Entity
         public string OrderNumber { get; set; }
         public Nullable<int> SaleTypeID { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
+        public Nullable<int> OurCompanyID { get; set; }
         public Nullable<int> LocationID { get; set; }
         public Nullable<int> EmployeeID { get; set; }
         public string CustomerName { get; set; }
@@ -32,6 +33,8 @@ namespace ActionForce.Entity
         public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
         public Nullable<int> ReasonID { get; set; }
+        public Nullable<int> PosStatusID { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
         public System.Guid UID { get; set; }
         public Nullable<double> Latitude { get; set; }
         public Nullable<double> Longitude { get; set; }
@@ -43,6 +46,6 @@ namespace ActionForce.Entity
         public string UpdateIP { get; set; }
         public Nullable<bool> IsFinancialization { get; set; }
         public Nullable<bool> IsActive { get; set; }
-        public Nullable<int> OurCompanyID { get; set; }
+        public Nullable<bool> IsSendPosTerminal { get; set; }
     }
 }

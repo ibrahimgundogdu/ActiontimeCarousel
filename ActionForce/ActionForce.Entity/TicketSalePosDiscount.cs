@@ -12,13 +12,14 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class VAdisyonSummary
+    public partial class TicketSalePosDiscount
     {
         public long ID { get; set; }
-        public Nullable<int> LocationID { get; set; }
-        public Nullable<System.DateTime> Date { get; set; }
-        public string OrderNumber { get; set; }
-        public Nullable<double> Amount { get; set; }
-        public string Currency { get; set; }
+        public Nullable<long> SaleID { get; set; }
+        public Nullable<int> IndexOffItem { get; set; }
+        public string DiscountText { get; set; }
+        public string DiscountType { get; set; }
+        public Nullable<int> DiscountValue { get; set; }
+        public Nullable<int> Orjin { get; set; }
     }
 }

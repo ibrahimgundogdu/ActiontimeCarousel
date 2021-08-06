@@ -742,6 +742,7 @@ namespace ActionForce.Office.Controllers
             model.TicketProductList = Db.VTicketProduct.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.TicketProductCategoryList = Db.TicketProductCategory.ToList();
             model.OurCompanyList = Db.OurCompany.ToList();
+            model.TaxList = Db.Tax.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
             return View(model);
         }
@@ -755,6 +756,7 @@ namespace ActionForce.Office.Controllers
             model.TicketProductCategoryList = Db.TicketProductCategory.Where(x => x.IsActive == true).ToList();
             model.TicketTypeList = Db.TicketType.Where(x => x.IsActive == true).ToList();
             model.OurCompanyList = Db.OurCompany.ToList();
+            model.TaxList = Db.Tax.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
             return PartialView("_PartialAddTicketProduct", model);
         }
@@ -769,6 +771,8 @@ namespace ActionForce.Office.Controllers
 
             if (ticketproduct != null)
             {
+                double? taxrate = Convert.ToDouble(ticketproduct.TaxRate.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
                 TicketProduct prod = new TicketProduct();
 
                 prod.ProductName = ticketproduct.ProductName;
@@ -781,6 +785,8 @@ namespace ActionForce.Office.Controllers
                 prod.RecordIP = OfficeHelper.GetIPAddress();
                 prod.TicketTypeID = ticketproduct.TicketTypeID;
                 prod.Description = ticketproduct.Description;
+                prod.TaxRate = taxrate;
+
 
                 Db.TicketProduct.Add(prod);
                 Db.SaveChanges();
@@ -806,6 +812,7 @@ namespace ActionForce.Office.Controllers
             model.TicketProductCategoryList = Db.TicketProductCategory.ToList();
             model.TicketTypeList = Db.TicketType.ToList();
             model.OurCompanyList = Db.OurCompany.ToList();
+            model.TaxList = Db.Tax.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
             return PartialView("_PartialEditTicketProduct", model);
         }
@@ -820,6 +827,8 @@ namespace ActionForce.Office.Controllers
 
             if (ticketproduct != null)
             {
+                double? taxrate = Convert.ToDouble(ticketproduct.TaxRate.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
                 TicketProduct prod = Db.TicketProduct.FirstOrDefault(x => x.ID == ticketproduct.ID);
 
                 if (prod != null)
@@ -840,7 +849,9 @@ namespace ActionForce.Office.Controllers
                         ProductName = prod.ProductName,
                         Unit = prod.Unit,
                         TicketTypeID = prod.TicketTypeID,
-                        Description = prod.Description
+                        Description = prod.Description,
+                        TaxRate = prod.TaxRate
+                        
                     };
 
                     prod.CategoryID = ticketproduct.CategoryID;
@@ -853,7 +864,7 @@ namespace ActionForce.Office.Controllers
                     prod.Unit = ticketproduct.Unit;
                     prod.TicketTypeID = ticketproduct.TicketTypeID;
                     prod.Description = ticketproduct.Description;
-
+                    prod.TaxRate = taxrate;
                     Db.SaveChanges();
 
                     model.Result.IsSuccess = true;

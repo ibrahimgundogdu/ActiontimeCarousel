@@ -51,6 +51,18 @@
         </div>
 
         <div class="form-group row bg-gray-50 mg-b-5">
+            <label for="TaxRate" class="col-sm-3 col-form-label">Vergi Oranı</label>
+            <div class="col-sm-9">
+                <select class="form-control" id="TaxRate" name="TaxRate" required>
+                    @foreach (var item in Model.TaxList.OrderBy(x => x.Rate).ToList())
+                    {
+                        <option value="@item.Rate">@($"{item.Code}")</option>
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group row bg-gray-50 mg-b-5">
             <label for="Unit" class="col-sm-3 col-form-label">Birim (Dakika)</label>
             <div class="col-sm-9">
                 <input id="Unit" name="Unit" type="number" class="form-control" autocomplete="off" placeholder="Birim" required>

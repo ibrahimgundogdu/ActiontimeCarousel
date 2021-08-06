@@ -68,13 +68,13 @@ namespace ActionForce.PosService
             return password;
         }
 
-        public static void AddPosServiceLog(int LocationID, string PosSerialNumber, string AdisyonNo, string Username, string Password, string MethodName, string ResultCode, string ResultMessage)
+        public static void AddPosServiceLog(int LocationID, string PosSerialNumber, string AdisyonNo, string Username, string Password, string MethodName, string RequestData, string ResultCode, string ResultMessage)
         {
             try
             {
                 using (ActionTimeEntities Db = new ActionTimeEntities())
                 {
-                    Db.AddPosServiceLog(LocationID, PosSerialNumber, AdisyonNo, Username, Password, ApiHelper.GetIPAddress(), MethodName, DateTime.UtcNow, ResultCode, ResultMessage);
+                    Db.AddPosServiceLog(LocationID, PosSerialNumber, AdisyonNo, Username, Password, ApiHelper.GetIPAddress(), MethodName, DateTime.UtcNow, RequestData, ResultCode, ResultMessage);
                 }
             }
             catch (Exception ex)
