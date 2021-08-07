@@ -3272,7 +3272,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="SaleID" Type="bigint" />
           <Property Name="IndexOffItem" Type="int" />
           <Property Name="DiscountText" Type="nvarchar" MaxLength="50" />
-          <Property Name="DiscountType" Type="nchar" MaxLength="10" />
+          <Property Name="DiscountType" Type="int" />
           <Property Name="DiscountValue" Type="int" />
           <Property Name="Orjin" Type="int" />
         </EntityType>
@@ -3289,7 +3289,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="PaymentDesc" Type="nvarchar" MaxLength="100" />
           <Property Name="PaymentCurrency" Type="int" />
           <Property Name="PaymentInfo" Type="nvarchar" MaxLength="150" />
-          <Property Name="PaymentDateTime" Type="nvarchar" MaxLength="14" />
+          <Property Name="PaymentDateTime" Type="nvarchar" MaxLength="30" />
           <Property Name="PaymentDate" Type="date" />
           <Property Name="PaymentTime" Type="time" Precision="0" />
           <Property Name="BankBKMID" Type="smallint" />
@@ -3311,7 +3311,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ReceiptNo" Type="smallint" />
           <Property Name="ZNo" Type="smallint" />
           <Property Name="EkuNo" Type="smallint" />
-          <Property Name="TransDateTime" Type="nvarchar" MaxLength="14" />
+          <Property Name="TransDateTime" Type="nvarchar" MaxLength="30" />
           <Property Name="ReceiptDate" Type="date" />
           <Property Name="ReceiptTime" Type="time" Precision="0" />
           <Property Name="TicketType" Type="int" />
@@ -6494,6 +6494,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="RequestData" Type="ntext" Mode="In" />
           <Parameter Name="ResultCode" Type="nvarchar" Mode="In" />
           <Parameter Name="ResultMessage" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AddTicketSalePosDiscount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SaleID" Type="bigint" Mode="In" />
+          <Parameter Name="IndexOffItem" Type="int" Mode="In" />
+          <Parameter Name="DiscountText" Type="nvarchar" Mode="In" />
+          <Parameter Name="DiscountType" Type="int" Mode="In" />
+          <Parameter Name="DiscountValue" Type="int" Mode="In" />
+          <Parameter Name="Orjin" Type="int" Mode="In" />
         </Function>
         <Function Name="AddTicketSalePosPayment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SaleID" Type="bigint" Mode="In" />
@@ -9966,6 +9974,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="RequestData" Mode="In" Type="String" />
             <Parameter Name="ResultCode" Mode="In" Type="String" />
             <Parameter Name="ResultMessage" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddTicketSalePosDiscount">
+            <Parameter Name="SaleID" Mode="In" Type="Int64" />
+            <Parameter Name="IndexOffItem" Mode="In" Type="Int32" />
+            <Parameter Name="DiscountText" Mode="In" Type="String" />
+            <Parameter Name="DiscountType" Mode="In" Type="Int32" />
+            <Parameter Name="DiscountValue" Mode="In" Type="Int32" />
+            <Parameter Name="Orjin" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="TicketSalePosDiscount" EntityType="db293_ActionTimeDbModel.TicketSalePosDiscount" />
           <EntitySet Name="TicketSalePosPayment" EntityType="db293_ActionTimeDbModel.TicketSalePosPayment" />
@@ -16735,7 +16751,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SaleID" Type="Int64" />
           <Property Name="IndexOffItem" Type="Int32" />
           <Property Name="DiscountText" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="DiscountType" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="DiscountType" Type="Int32" />
           <Property Name="DiscountValue" Type="Int32" />
           <Property Name="Orjin" Type="Int32" />
         </EntityType>
@@ -16752,7 +16768,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="PaymentDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="PaymentCurrency" Type="Int32" />
           <Property Name="PaymentInfo" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="PaymentDateTime" Type="String" MaxLength="14" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentDateTime" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="PaymentDate" Type="DateTime" Precision="0" />
           <Property Name="PaymentTime" Type="Time" Precision="0" />
           <Property Name="BankBKMID" Type="Int16" />
@@ -16774,7 +16790,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ReceiptNo" Type="Int16" />
           <Property Name="ZNo" Type="Int16" />
           <Property Name="EkuNo" Type="Int16" />
-          <Property Name="TransDateTime" Type="String" MaxLength="14" FixedLength="false" Unicode="true" />
+          <Property Name="TransDateTime" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
           <Property Name="ReceiptDate" Type="DateTime" Precision="0" />
           <Property Name="ReceiptTime" Type="Time" Precision="0" />
           <Property Name="TicketType" Type="Int32" />
@@ -23246,6 +23262,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="SetTicketSaleStatus" FunctionName="db293_ActionTimeDbModel.Store.SetTicketSaleStatus" />
           <FunctionImportMapping FunctionImportName="AddPosServiceLog" FunctionName="db293_ActionTimeDbModel.Store.AddPosServiceLog" />
+          <FunctionImportMapping FunctionImportName="AddTicketSalePosDiscount" FunctionName="db293_ActionTimeDbModel.Store.AddTicketSalePosDiscount" />
           <EntitySetMapping Name="TicketSalePosDiscount">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketSalePosDiscount">
               <MappingFragment StoreEntitySet="TicketSalePosDiscount">

@@ -46,7 +46,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeSalary" Width="1.5" PointX="24.75" PointY="21.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeShift" Width="1.5" PointX="22.75" PointY="25.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeShiftSet" Width="1.5" PointX="24.75" PointY="24.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Inspection" Width="1.5" PointX="4.75" PointY="26.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Inspection" Width="1.5" PointX="6.375" PointY="25.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.InspectionCategory" Width="1.5" PointX="25.75" PointY="7.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.InspectionItem" Width="1.5" PointX="25.75" PointY="10.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.InspectorReport" Width="1.5" PointX="10.75" PointY="26.75" />
@@ -64,7 +64,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationTicketType" Width="1.5" PointX="27.75" PointY="11.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationTrampoline" Width="1.5" PointX="26.75" PointY="28.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationType" Width="1.5" PointX="0.75" PointY="29.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationWareHouse" Width="1.5" PointX="2.75" PointY="29.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationWareHouse" Width="1.5" PointX="2.375" PointY="29.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LoginLog" Width="1.5" PointX="8.75" PointY="29.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.MobileLog" Width="1.5" PointX="28.75" PointY="14.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.MobileLoginLog" Width="1.5" PointX="28.75" PointY="18.75" />
@@ -92,7 +92,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.RoleGroupMembers" Width="1.5" PointX="31.75" PointY="4.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.RoleGroupPermissions" Width="1.5" PointX="9.25" PointY="5.125" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.RoleLevel" Width="1.5" PointX="0.75" PointY="8.375" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.SaleChannel" Width="1.5" PointX="4.75" PointY="32.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.SaleChannel" Width="1.5" PointX="6.125" PointY="32" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Serials" Width="1.5" PointX="31.75" PointY="8.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SerialsHistory" Width="1.5" PointX="31.75" PointY="11.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SMSNumber" Width="1.5" PointX="22.75" PointY="32.75" />
@@ -172,7 +172,7 @@
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_ResultItemList_Result1" />
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_ResultItemList_ResultItems1" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDayResult" Width="1.5" PointX="43.375" PointY="15.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ApplicationLog" Width="1.5" PointX="20.375" PointY="8.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ApplicationLog" Width="1.5" PointX="21.875" PointY="7.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationShift" Width="1.5" PointX="45.375" PointY="12.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentPosCancel" Width="1.5" PointX="19.375" PointY="38.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentPosRefund" Width="1.5" PointX="13.375" PointY="45.75" />
@@ -272,7 +272,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPriceCategory" Width="1.5" PointX="57.375" PointY="57.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRefund" Width="1.5" PointX="13.375" PointY="35.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProductCategory" Width="1.5" PointX="15.375" PointY="35.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProduct" Width="1.5" PointX="2.75" PointY="32.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketProduct" Width="1.5" PointX="2.5" PointY="32.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationSchedule" Width="1.5" PointX="41.375" PointY="57.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPrice" Width="1.5" PointX="57.75" PointY="50.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Location" Width="1.5" PointX="58.375" PointY="26.75" />
@@ -299,22 +299,35 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.MallLocationContract" Width="1.5" PointX="31.375" PointY="57.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Company" Width="1.5" PointX="62.25" PointY="58.25" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowCheck" Width="1.5" PointX="10.25" PointY="34.875" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VMall" Width="1.5" PointX="2.75" PointY="37.25" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VMall" Width="1.5" PointX="2.625" PointY="37.25" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentBuyExchange" Width="1.5" PointX="0.75" PointY="0.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCashExpense" Width="1.5" PointX="9.375" PointY="8.875" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationPosTerminal" Width="1.5" PointX="9.5687974177155635" PointY="26.136947539698774" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationPosTerminal" Width="1.5" PointX="10.875" PointY="24.125" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationPosTerminal" Width="1.5" PointX="2.6082448114679404" PointY="9.5084316476753123" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSale" Width="1.5" PointX="3.1695151083029414" PointY="17.771729045441248" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSale" Width="1.5" PointX="0.5" PointY="19.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRows" Width="1.5" PointX="5.7859016311289277" PointY="10.471893077004651" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowsAll" Width="1.5" PointX="4.300896788156078" PointY="24.244175594413736" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VAdisyonSummary" Width="1.5" PointX="5.375" PointY="9" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSalePosStatus" Width="1.5" PointX="11.664037261001784" PointY="2.0036855945380805" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSalePosDiscount" Width="1.5" PointX="2.8429997744238937" PointY="18.560131707489553" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSalePosPayment" Width="1.5" PointX="10.066812028208194" PointY="22.699026282270918" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSalePosReceipt" Width="1.5" PointX="8.3675917686743624" PointY="21.281905452386432" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSalePosDiscount" Width="1.5" PointX="11.419236888838578" PointY="29.087986393406982" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSalePosPayment" Width="1.5" PointX="11.282556876206098" PointY="28.127335159167338" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSalePosReceipt" Width="1.5" PointX="4.65038228065259" PointY="20.961141581163343" />
+        
+        
+        
         
         
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
       &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
       </Diagram>
     </edmx:Diagrams>

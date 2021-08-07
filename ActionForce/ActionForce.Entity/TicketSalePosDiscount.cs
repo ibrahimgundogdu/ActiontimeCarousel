@@ -18,7 +18,7 @@ namespace ActionForce.Entity
         public Nullable<long> SaleID { get; set; }
         public Nullable<int> IndexOffItem { get; set; }
         public string DiscountText { get; set; }
-        public string DiscountType { get; set; }
+        public Nullable<int> DiscountType { get; set; }
         public Nullable<int> DiscountValue { get; set; }
         public Nullable<int> Orjin { get; set; }
     }

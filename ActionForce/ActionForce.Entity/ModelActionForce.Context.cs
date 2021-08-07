@@ -1770,6 +1770,35 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddPosServiceLog", locationIDParameter, posSerialNumberParameter, adisyonNoParameter, header_UsernameParameter, header_PasswordParameter, requestIPParameter, requestMethodParameter, requestDateParameter, requestDataParameter, resultCodeParameter, resultMessageParameter);
         }
     
+        public virtual int AddTicketSalePosDiscount(Nullable<long> saleID, Nullable<int> indexOffItem, string discountText, Nullable<int> discountType, Nullable<int> discountValue, Nullable<int> orjin)
+        {
+            var saleIDParameter = saleID.HasValue ?
+                new ObjectParameter("SaleID", saleID) :
+                new ObjectParameter("SaleID", typeof(long));
+    
+            var indexOffItemParameter = indexOffItem.HasValue ?
+                new ObjectParameter("IndexOffItem", indexOffItem) :
+                new ObjectParameter("IndexOffItem", typeof(int));
+    
+            var discountTextParameter = discountText != null ?
+                new ObjectParameter("DiscountText", discountText) :
+                new ObjectParameter("DiscountText", typeof(string));
+    
+            var discountTypeParameter = discountType.HasValue ?
+                new ObjectParameter("DiscountType", discountType) :
+                new ObjectParameter("DiscountType", typeof(int));
+    
+            var discountValueParameter = discountValue.HasValue ?
+                new ObjectParameter("DiscountValue", discountValue) :
+                new ObjectParameter("DiscountValue", typeof(int));
+    
+            var orjinParameter = orjin.HasValue ?
+                new ObjectParameter("Orjin", orjin) :
+                new ObjectParameter("Orjin", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddTicketSalePosDiscount", saleIDParameter, indexOffItemParameter, discountTextParameter, discountTypeParameter, discountValueParameter, orjinParameter);
+        }
+    
         public virtual int AddTicketSalePosPayment(Nullable<long> saleID, Nullable<int> paymentType, string paymentSubType, Nullable<int> numberOfInstallment, Nullable<double> paymentAmount, string paymentDesc, Nullable<int> paymentCurrency, string paymentInfo, string paymentDateTime, Nullable<System.DateTime> paymentDate, Nullable<System.TimeSpan> paymentTime, Nullable<short> bankBKMID, string batchNumber, string stanNumber, string merchantID, string terminalID, string referenceNumber, string authorizationCode, string maskedPan)
         {
             var saleIDParameter = saleID.HasValue ?

@@ -228,7 +228,7 @@ namespace ActionForce.PosService.Controllers
         }
 
         [HttpPost]
-        public HttpResponseMessage TSM_lR_SendAdisyonPayment([FromBody] SendAdisyonPaymentRequest request)
+        public HttpResponseMessage TSM_IR_SendAdisyonPayment([FromBody] SendAdisyonPaymentRequest request)
         {
             ResultPayment result = new ResultPayment();
             int LocationID = 0;
@@ -253,25 +253,49 @@ namespace ActionForce.PosService.Controllers
 
                             if (order != null)
                             {
+                                Receipt receipt = request.Receipt;
+                                var receiptdate = Convert.ToDateTime(receipt.TransDateTime);
 
-                                //receipt kaydı
+                                try
+                                {
+                                    //receipt kaydı
+
+                                    var receiptid = Db.AddTicketSalePosReceipt(order.ID, receipt.ReceiptNo, receipt.ZNo, receipt.EkuNo, receipt.TransDateTime, receiptdate.Date, receiptdate.TimeOfDay, receipt.TicketType);
+
+                                    if (receipt.PaymentList != null && receipt.PaymentList.Count() > 0)
+                                    {
+                                        foreach (var payment in receipt.PaymentList.ToList())
+                                        {
+                                            var noi = Convert.ToInt32(payment.NumberOfInstallment);
+                                            var paymentamount = Convert.ToDouble(payment.PaymentAmount / 100);
+                                            var paymentdate = Convert.ToDateTime(payment.PaymentDateTime);
+
+                                            var paymentid = Db.AddTicketSalePosPayment(order.ID, payment.PaymentType, payment.PaymentSubType, noi, paymentamount, payment.PaymentDesc, payment.PaymentCurrency, payment.PaymentInfo, payment.PaymentDateTime, paymentdate.Date, paymentdate.TimeOfDay, payment.BankBKMID, payment.BatchNumber, payment.StanNumber, payment.MerchantID, payment.TerminalID, payment.ReferenceNumber, payment.AuthorizationCode, payment.MaskedPan);
+                                        }
 
 
+                                        order.PosStatusID = 1;
+                                        Db.SaveChanges();
+                                    }
+
+                                    if (receipt.DiscountList != null && receipt.DiscountList.Count() > 0)
+                                    {
+                                        foreach (var discount in receipt.DiscountList.ToList())
+                                        {
+                                            var discountid = Db.AddTicketSalePosDiscount(order.ID, discount.IndexOffItem, discount.Text, discount.Type, discount.Value, discount.Orjin);
+                                        }
+                                    }
+
+                                    result.ResultCode = 0;
+                                    result.ResultMessage = $"Adisyon Odeme Bilgisi Alındı";
+                                }
+                                catch (Exception ex)
+                                {
+                                    result.ResultCode = 1;
+                                    result.ResultMessage = $"Adisyon Odeme Bilgisi Alınamadı!";
+                                }
 
 
-
-
-
-
-
-
-
-
-
-                                result.ResultCode = 0;
-                                result.ResultMessage = $"Adisyon Odeme Bilgisi Alındı";
-
-                                // buraya kodlar gelecek
                             }
                             else
                             {
@@ -315,7 +339,7 @@ namespace ActionForce.PosService.Controllers
         }
 
         [HttpPost]
-        public HttpResponseMessage TSM_IR_SetStatus([FromBody] SetStatusRequest request)
+        public HttpResponseMessage TSM_IR_SetStatus(SetStatusRequest request)
         {
             ResultStatus result = new ResultStatus();
             int LocationID = 0;
