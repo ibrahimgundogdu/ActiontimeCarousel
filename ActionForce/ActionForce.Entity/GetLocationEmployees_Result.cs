@@ -16,8 +16,8 @@ namespace ActionForce.Entity
         public int EmployeeID { get; set; }
         public Nullable<System.Guid> EmployeeUID { get; set; }
         public string FullName { get; set; }
-        public string StatusName { get; set; }
         public string PositionName { get; set; }
-        public Nullable<bool> IsActive { get; set; }
+        public Nullable<bool> Active { get; set; }
+        public string PhotoFile { get; set; }
     }
 }

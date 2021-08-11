@@ -9754,9 +9754,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="TicketSaleStatus" EntityType="db293_ActionTimeDbModel.TicketSaleStatus" />
           <EntitySet Name="VPriceCategory" EntityType="db293_ActionTimeDbModel.VPriceCategory" />
           <EntitySet Name="TicketSaleRefund" EntityType="db293_ActionTimeDbModel.TicketSaleRefund" />
-          <FunctionImport Name="GetLocationEmployees" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationEmployees_Result1)">
-          <Parameter Name="LocationID" Mode="In" Type="Int32" />
-          </FunctionImport>
           <EntitySet Name="TicketProductCategory" EntityType="db293_ActionTimeDbModel.TicketProductCategory" />
           <FunctionImport Name="GetLocationAll" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationAll_Result)">
             <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
@@ -10016,6 +10013,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="ReceiptDate" Mode="In" Type="DateTime" />
             <Parameter Name="ReceiptTime" Mode="In" Type="Time" />
             <Parameter Name="TicketType" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="GetLocationEmployees" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationEmployees_Result)">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
         
           </EntityContainer>
@@ -15484,21 +15484,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateEmployeeID" Type="Int32" />
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
         </EntityType>
-        <ComplexType Name="GetLocationEmployees_Result">
-          <Property Type="Int32" Name="EmployeeID" Nullable="false" />
-          <Property Type="Guid" Name="EmployeeUID" Nullable="true" />
-          <Property Type="String" Name="FullName" Nullable="true" MaxLength="150" />
-          <Property Type="String" Name="StatusName" Nullable="true" MaxLength="50" />
-          <Property Type="String" Name="PositionName" Nullable="true" MaxLength="50" />
-          <Property Type="Boolean" Name="IsActive" Nullable="true" />
-        </ComplexType>
-        <ComplexType Name="GetLocationEmployees_Result1">
-          <Property Type="Int32" Name="EmployeeID" Nullable="false" />
-          <Property Type="Guid" Name="EmployeeUID" Nullable="true" />
-          <Property Type="String" Name="FullName" Nullable="true" MaxLength="150" />
-          <Property Type="String" Name="PositionName" Nullable="false" MaxLength="50" />
-          <Property Type="Boolean" Name="Active" Nullable="true" />
-        </ComplexType>
         <EntityType Name="TicketProductCategory">
           <Key>
             <PropertyRef Name="ID" />
@@ -16796,6 +16781,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TicketType" Type="Int32" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
         </EntityType>
+        <ComplexType Name="GetLocationEmployees_Result">
+          <Property Type="Int32" Name="EmployeeID" Nullable="false" />
+          <Property Type="Guid" Name="EmployeeUID" Nullable="true" />
+          <Property Type="String" Name="FullName" Nullable="true" MaxLength="150" />
+          <Property Type="String" Name="PositionName" Nullable="false" MaxLength="50" />
+          <Property Type="Boolean" Name="Active" Nullable="true" />
+          <Property Type="String" Name="PhotoFile" Nullable="true" MaxLength="50" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -22059,17 +22052,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="GetLocationEmployees" FunctionName="db293_ActionTimeDbModel.Store.GetLocationEmployees">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetLocationEmployees_Result1">
-                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-                <ScalarProperty Name="EmployeeUID" ColumnName="EmployeeUID" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
-                <ScalarProperty Name="Active" ColumnName="Active" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
           <EntitySetMapping Name="TicketProductCategory">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketProductCategory">
               <MappingFragment StoreEntitySet="TicketProductCategory">
@@ -23321,6 +23303,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddTicketSalePosPayment" FunctionName="db293_ActionTimeDbModel.Store.AddTicketSalePosPayment" />
           <FunctionImportMapping FunctionImportName="AddTicketSalePosReceipt" FunctionName="db293_ActionTimeDbModel.Store.AddTicketSalePosReceipt" />
+          <FunctionImportMapping FunctionImportName="GetLocationEmployees" FunctionName="db293_ActionTimeDbModel.Store.GetLocationEmployees">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetLocationEmployees_Result">
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="EmployeeUID" ColumnName="EmployeeUID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="PhotoFile" ColumnName="PhotoFile" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

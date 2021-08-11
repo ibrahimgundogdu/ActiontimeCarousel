@@ -1063,15 +1063,6 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemoveEmployeePhone", addressIDParameter);
         }
     
-        public virtual ObjectResult<GetLocationEmployees_Result1> GetLocationEmployees(Nullable<int> locationID)
-        {
-            var locationIDParameter = locationID.HasValue ?
-                new ObjectParameter("LocationID", locationID) :
-                new ObjectParameter("LocationID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationEmployees_Result1>("GetLocationEmployees", locationIDParameter);
-        }
-    
         public virtual ObjectResult<GetLocationAll_Result> GetLocationAll(Nullable<int> ourCompanyID, Nullable<System.Guid> locationUID, Nullable<int> locationID)
         {
             var ourCompanyIDParameter = ourCompanyID.HasValue ?
@@ -1915,6 +1906,15 @@ namespace ActionForce.Entity
                 new ObjectParameter("TicketType", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddTicketSalePosReceipt", saleIDParameter, receiptNoParameter, zNoParameter, ekuNoParameter, transDateTimeParameter, receiptDateParameter, receiptTimeParameter, ticketTypeParameter);
+        }
+    
+        public virtual ObjectResult<GetLocationEmployees_Result> GetLocationEmployees(Nullable<int> locationID)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationEmployees_Result>("GetLocationEmployees", locationIDParameter);
         }
     }
 }

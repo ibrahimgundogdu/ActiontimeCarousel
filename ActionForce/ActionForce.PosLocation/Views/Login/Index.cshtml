@@ -1,0 +1,96 @@
+﻿@model LoginControlModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>Action Force | Lokasyon</title>
+    <meta name="description" content="UFE Group LLC" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <!-- style -->
+    <!-- build:css /assets/css/site.min.css -->
+    <link rel="stylesheet" href="/assets/css/bootstrap.css" type="text/css" />
+    <link rel="stylesheet" href="/assets/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="/assets/css/style.css" type="text/css" />
+    <!-- endbuild -->
+</head>
+<body class="layout-row">
+    <div class="d-flex flex-column flex">
+        <div class="row no-gutters h-100">
+            <div class="col-md-6 bg-primary" style="">
+                <div class="p-3 p-md-5 d-flex flex-column h-100">
+                    <h4 class="mb-3 text-white">Action Force</h4>
+                    <div class="text-fade">Lokasyon Yönetimi</div>
+                    <div class="d-flex flex align-items-center justify-content-center">
+                        <img src="~/assets/img/login.png" class="w-100" alt="Lokasyon Uygulaması" />
+                    </div>
+                    
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="content-body">
+                    <div class="p-3 p-md-5">
+                        <h5>Hoşgeldiniz.</h5>
+                        <p class="mb-5">
+                            <span class="">Lokasyon işlemleri için giriş yapınız</span>
+                        </p>
+                        @using (Html.BeginForm("Login", "Login", FormMethod.Post, new { role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <div class="form-group">
+                                <label for="Username" class="text-muted mb-0">Kullanıcı Adınız</label>
+                                <input id="Username" name="Username" type="text" class="form-control" placeholder="Kullanıcı Adı">
+                            </div>
+                            <div class="form-group">
+                                <label for="Password" class="text-muted mb-0">Şifreniz</label>
+                                <input id="Password" name="Password" type="password" class="form-control" placeholder="Şifre">
+                            </div>
+
+                            <button type="submit" class="btn btn-block btn-primary mt-4">Sign in</button>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- build:js /assets/js/site.min.js -->
+    <!-- jQuery -->
+    <script src="/libs/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap -->
+    <script src="/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <!-- ajax page -->
+    <script src="/libs/pjax/pjax.min.js"></script>
+    <script src="/assets/js/ajax.js"></script>
+    <!-- lazyload plugin -->
+    <script src="/assets/js/lazyload.config.js"></script>
+    <script src="/assets/js/lazyload.js"></script>
+    <script src="/assets/js/plugin.js"></script>
+    <!-- scrollreveal -->
+    <script src="/libs/scrollreveal/dist/scrollreveal.min.js"></script>
+    <!-- feathericon -->
+    <script src="/libs/feather-icons/dist/feather.min.js"></script>
+    <script src="/assets/js/plugins/feathericon.js"></script>
+    <!-- theme -->
+    <script src="/assets/js/theme.js"></script>
+    <script src="/assets/js/utils.js"></script>
+    <script src="/libs/notie/dist/notie.min.js"></script>
+    <!-- endbuild -->
+
+    @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
+    {
+        <script>
+            $(function () {
+                notie.setOptions({
+                    alertTime: 5
+                })
+                notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
+                noticed = true;
+            });
+        </script>
+    }
+
+</body>
+</html>
