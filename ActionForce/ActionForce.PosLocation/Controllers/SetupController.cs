@@ -12,6 +12,10 @@ namespace ActionForce.PosLocation.Controllers
         public ActionResult Index()
         {
             SetupControlModel model = new SetupControlModel();
+            if (TempData["Result"] != null)
+            {
+                model.Result = (Result)TempData["Result"];
+            }
 
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == 2 & x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             return View(model);
@@ -43,6 +47,10 @@ namespace ActionForce.PosLocation.Controllers
         public ActionResult Serial()
         {
             SetupControlModel model = new SetupControlModel();
+            if (TempData["Result"] != null)
+            {
+                model.Result = (Result)TempData["Result"];
+            }
 
             HttpCookie locationCookie = System.Web.HttpContext.Current.Request.Cookies["PosLocation"];
 
@@ -126,6 +134,11 @@ namespace ActionForce.PosLocation.Controllers
         {
             SetupControlModel model = new SetupControlModel();
 
+            if (TempData["Result"] != null)
+            {
+                model.Result = (Result)TempData["Result"];
+            }
+
             HttpCookie locationCookie = System.Web.HttpContext.Current.Request.Cookies["PosLocation"];
 
             if (locationCookie != null && !string.IsNullOrEmpty(locationCookie.Value))
@@ -175,37 +188,76 @@ namespace ActionForce.PosLocation.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [AllowAnonymous]
-        public ActionResult UserLoginCheck(SerialFormModel form)
+        public ActionResult UserLoginCheck(UserLoginFormModel form)
         {
             SetupControlModel model = new SetupControlModel();
+            PosManager manager = new PosManager();
 
-            if (form.Correct == 1)
+            var employeecheck = manager.GetLocationEmployeesToday(form.LocationID).Where(x=> x.EmployeeID == form.EmployeeID).FirstOrDefault();
+            if (employeecheck != null)
             {
+                string password = PosManager.makeMD5(form.Password.Trim());
+                var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == form.EmployeeID && x.Username == form.Username.Trim() && x.Password == password);
 
-                Response.Cookies.Remove("PosTerminal");
+                if (employee != null)
+                {
+                    var location = Db.Location.FirstOrDefault(x => x.LocationID == form.LocationID);
+                    string AuthenticationToken = $"{location.LocationUID}|{employee.EmployeeUID}|{string.Empty}";
 
-                HttpCookie locationPosCookie = System.Web.HttpContext.Current.Request.Cookies["PosTerminal"];
+                    Response.Cookies.Remove("AuthenticationToken");
 
-                if (locationPosCookie == null)
-                    locationPosCookie = new HttpCookie("PosTerminal");
+                    HttpCookie authCookie = System.Web.HttpContext.Current.Request.Cookies["AuthenticationToken"];
 
-                locationPosCookie.Value = form.PosTerminalSerial;
-                locationPosCookie.Expires = DateTime.Now.AddYears(10);
+                    if (authCookie == null)
+                        authCookie = new HttpCookie("AuthenticationToken");
 
-                Response.SetCookie(locationPosCookie);
+                    authCookie.Value = AuthenticationToken;
+                    authCookie.Expires = DateTime.Now.AddYears(10);
+
+                    Response.SetCookie(authCookie);
+
+                    return RedirectToAction("Index","Default");
+                }
+                else
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = "Kullanıcı Bulunamadı";
+                }
+
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Lokasyonda Tanımlı Böyle Bir Kullanıcı Bulunamadı";
             }
 
-            if (form.Fail == 1)
-            {
-
-                Response.Cookies.Remove("PosTerminal");
-                return RedirectToAction("Serial");
-            }
-
+            TempData["Result"] = model.Result;
             return RedirectToAction("Employee");
 
         }
 
+        public ActionResult Login()
+        {
+            SetupControlModel model = new SetupControlModel();
+            if (TempData["Result"] != null)
+            {
+                model.Result = (Result)TempData["Result"];
+            }
+
+            return View(model);
+        }
+
+
+        public ActionResult Lock()
+        {
+            SetupControlModel model = new SetupControlModel();
+            if (TempData["Result"] != null)
+            {
+                model.Result = (Result)TempData["Result"];
+            }
+
+            return View(model);
+        }
 
     }
 }

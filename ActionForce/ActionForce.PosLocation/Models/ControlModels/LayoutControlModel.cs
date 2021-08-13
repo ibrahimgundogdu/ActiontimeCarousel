@@ -12,7 +12,11 @@ namespace ActionForce.PosLocation
 
         public LayoutControlModel()
         {
-
+            Result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
         }
     }
 }

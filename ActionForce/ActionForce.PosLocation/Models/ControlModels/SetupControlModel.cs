@@ -12,6 +12,7 @@ namespace ActionForce.PosLocation
         public Location Location { get; set; }
         public string PosTerminalSerial { get; set; }
         public List<DataEmployee> Employees { get; set; }
+        public Result Result { get; set; }
 
     }
 }

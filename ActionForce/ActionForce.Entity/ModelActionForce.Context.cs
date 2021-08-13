@@ -40,7 +40,6 @@ namespace ActionForce.Entity
         public virtual DbSet<ActionRowSale> ActionRowSale { get; set; }
         public virtual DbSet<ActionState> ActionState { get; set; }
         public virtual DbSet<ActionType> ActionType { get; set; }
-        public virtual DbSet<ActionTypeExpense> ActionTypeExpense { get; set; }
         public virtual DbSet<Animal> Animal { get; set; }
         public virtual DbSet<AnimalType> AnimalType { get; set; }
         public virtual DbSet<AuthorizedIP> AuthorizedIP { get; set; }
@@ -310,6 +309,7 @@ namespace ActionForce.Entity
         public virtual DbSet<TicketSalePosDiscount> TicketSalePosDiscount { get; set; }
         public virtual DbSet<TicketSalePosPayment> TicketSalePosPayment { get; set; }
         public virtual DbSet<TicketSalePosReceipt> TicketSalePosReceipt { get; set; }
+        public virtual DbSet<ActionTypeExpense> ActionTypeExpense { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -1915,6 +1915,39 @@ namespace ActionForce.Entity
                 new ObjectParameter("LocationID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationEmployees_Result>("GetLocationEmployees", locationIDParameter);
+        }
+    
+        public virtual int AddPosBasket(Nullable<int> locationID, Nullable<int> employeeID, Nullable<int> priceID, Nullable<int> promotionID, Nullable<bool> isPromotion, string ticketNumber, Nullable<int> environment)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            var priceIDParameter = priceID.HasValue ?
+                new ObjectParameter("PriceID", priceID) :
+                new ObjectParameter("PriceID", typeof(int));
+    
+            var promotionIDParameter = promotionID.HasValue ?
+                new ObjectParameter("PromotionID", promotionID) :
+                new ObjectParameter("PromotionID", typeof(int));
+    
+            var isPromotionParameter = isPromotion.HasValue ?
+                new ObjectParameter("IsPromotion", isPromotion) :
+                new ObjectParameter("IsPromotion", typeof(bool));
+    
+            var ticketNumberParameter = ticketNumber != null ?
+                new ObjectParameter("TicketNumber", ticketNumber) :
+                new ObjectParameter("TicketNumber", typeof(string));
+    
+            var environmentParameter = environment.HasValue ?
+                new ObjectParameter("Environment", environment) :
+                new ObjectParameter("Environment", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddPosBasket", locationIDParameter, employeeIDParameter, priceIDParameter, promotionIDParameter, isPromotionParameter, ticketNumberParameter, environmentParameter);
         }
     }
 }

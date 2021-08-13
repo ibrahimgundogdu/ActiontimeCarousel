@@ -43,5 +43,6 @@ namespace ActionForce.Entity
         public Nullable<double> TaxRate { get; set; }
         public Nullable<double> Tax { get; set; }
         public Nullable<double> Discount { get; set; }
+        public Nullable<int> EnvironmentID { get; set; }
     }
 }

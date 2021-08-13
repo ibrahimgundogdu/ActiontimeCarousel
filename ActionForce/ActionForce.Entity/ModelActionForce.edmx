@@ -3069,6 +3069,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="SaleTypeID" Type="int" />
           <Property Name="PrePaid" Type="float" />
           <Property Name="PrePaidCampaignID" Type="int" />
+          <Property Name="EnvironmentID" Type="int" />
         </EntityType>
         <EntityType Name="TicketBasketCounter">
           <Key>
@@ -6482,6 +6483,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="Description" Type="nvarchar" Mode="In" />
           <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="AddPosBasket" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+          <Parameter Name="PriceID" Type="int" Mode="In" />
+          <Parameter Name="PromotionID" Type="int" Mode="In" />
+          <Parameter Name="IsPromotion" Type="bit" Mode="In" />
+          <Parameter Name="TicketNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="Environment" Type="int" Mode="In" />
+        </Function>
         <Function Name="AddPosServiceLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="PosSerialNumber" Type="nvarchar" Mode="In" />
@@ -9234,7 +9244,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="ActionRowSale" EntityType="db293_ActionTimeDbModel.ActionRowSale" />
           <EntitySet Name="ActionState" EntityType="db293_ActionTimeDbModel.ActionState" />
           <EntitySet Name="ActionType" EntityType="db293_ActionTimeDbModel.ActionType" />
-          <EntitySet Name="ActionTypeExpense" EntityType="db293_ActionTimeDbModel.ActionTypeExpense" />
           <EntitySet Name="Animal" EntityType="db293_ActionTimeDbModel.Animal" />
           <EntitySet Name="AnimalType" EntityType="db293_ActionTimeDbModel.AnimalType" />
           <EntitySet Name="AuthorizedIP" EntityType="db293_ActionTimeDbModel.AuthorizedIP" />
@@ -10015,8 +10024,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="TicketType" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="GetLocationEmployees" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationEmployees_Result)">
-            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+          <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="AddPosBasket">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="PriceID" Mode="In" Type="Int32" />
+            <Parameter Name="PromotionID" Mode="In" Type="Int32" />
+            <Parameter Name="IsPromotion" Mode="In" Type="Boolean" />
+            <Parameter Name="TicketNumber" Mode="In" Type="String" />
+            <Parameter Name="Environment" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="ActionTypeExpense" EntityType="db293_ActionTimeDbModel.ActionTypeExpense" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -10308,15 +10327,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsActionIN" Type="Boolean" />
           <Property Name="SortBay" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
           <Property Name="IsParam" Type="Boolean" />
-          <Property Name="IsActive" Type="Boolean" />
-        </EntityType>
-        <EntityType Name="ActionTypeExpense">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TypeCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         <EntityType Name="Animal">
@@ -15831,6 +15841,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TaxRate" Type="Double" />
           <Property Name="Tax" Type="Double" />
           <Property Name="Discount" Type="Double" />
+          <Property Name="EnvironmentID" Type="Int32" />
         </EntityType>
         <EntityType Name="VTicketBasket">
           <Key>
@@ -16789,6 +16800,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Type="Boolean" Name="Active" Nullable="true" />
           <Property Type="String" Name="PhotoFile" Nullable="true" MaxLength="50" />
         </ComplexType>
+        <EntityType Name="ActionTypeExpense">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TypeCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -17090,16 +17110,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="TypeName" ColumnName="TypeName" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="TypeID" ColumnName="TypeID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="ActionTypeExpense">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ActionTypeExpense">
-              <MappingFragment StoreEntitySet="ActionTypeExpense">
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
-                <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -22392,6 +22402,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketBasket">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketBasket">
               <MappingFragment StoreEntitySet="TicketBasket">
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="Discount" ColumnName="Discount" />
                 <ScalarProperty Name="Tax" ColumnName="Tax" />
                 <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
@@ -23315,6 +23326,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="AddPosBasket" FunctionName="db293_ActionTimeDbModel.Store.AddPosBasket" />
+          <EntitySetMapping Name="ActionTypeExpense">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ActionTypeExpense">
+              <MappingFragment StoreEntitySet="ActionTypeExpense">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="TypeCode" ColumnName="TypeCode" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

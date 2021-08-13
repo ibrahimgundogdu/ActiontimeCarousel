@@ -44,6 +44,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Dapper, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Dapper.2.0.90\lib\net461\Dapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -135,13 +138,17 @@
     <Content Include="assets\fancybox\js\wheel.js" />
     <Content Include="assets\img\clean.svg" />
     <Content Include="assets\img\dots.svg" />
+    <Content Include="assets\img\exit.svg" />
     <Content Include="assets\img\homepage.svg" />
     <Content Include="assets\img\location-icon.svg" />
+    <Content Include="assets\img\lock.svg" />
     <Content Include="assets\img\main-img.png" />
     <Content Include="assets\img\menu.svg" />
     <Content Include="assets\img\minus.svg" />
+    <Content Include="assets\img\order-connect.svg" />
     <Content Include="assets\img\payment.svg" />
     <Content Include="assets\img\people-icon.svg" />
+    <Content Include="assets\img\sun.svg" />
     <Content Include="assets\img\user-icon.svg" />
     <Content Include="assets\img\yazar-kasa-icon.svg" />
     <Content Include="assets\js\aos-2.3.1.min.js" />
@@ -216,8 +223,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
-    <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\SalesController.cs" />
     <Compile Include="Controllers\SetupController.cs" />
+    <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -225,11 +233,17 @@
     <Compile Include="Models\ControlModels\DefaultControlModel.cs" />
     <Compile Include="Models\ControlModels\LayoutControlModel.cs" />
     <Compile Include="Models\ControlModels\LoginControlModel.cs" />
+    <Compile Include="Models\ControlModels\SalesControlModel.cs" />
     <Compile Include="Models\ControlModels\SetupControlModel.cs" />
+    <Compile Include="Models\ControlModels\TransactionControlModel.cs" />
     <Compile Include="Models\CurrentEmployee.cs" />
     <Compile Include="Models\CurrentLocation.cs" />
+    <Compile Include="Models\DataModel\BasketTotal.cs" />
+    <Compile Include="Models\DataModel\CurrentPriceList.cs" />
     <Compile Include="Models\DataModel\DataEmployee.cs" />
+    <Compile Include="Models\DataModel\TicketInfo.cs" />
     <Compile Include="Models\FormModels\SerialFormModel.cs" />
+    <Compile Include="Models\FormModels\UserLoginFormModel.cs" />
     <Compile Include="Models\LockedEmployee.cs" />
     <Compile Include="Models\PosManager.cs" />
     <Compile Include="Models\Result.cs" />
@@ -243,6 +257,9 @@
     <Content Include="Views\Setup\Serial.cshtml" />
     <Content Include="Views\Setup\Employee.cshtml" />
     <Content Include="Views\Setup\_PartialUserLogin.cshtml" />
+    <Content Include="Views\Default\_PartialBasketList.cshtml" />
+    <Content Include="Views\Shared\_PartialMenu.cshtml" />
+    <Content Include="Views\Transaction\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -254,6 +271,8 @@
     <Folder Include="App_Data\" />
     <Folder Include="Filters\" />
     <Folder Include="Views\Base\" />
+    <Folder Include="Views\Lock\" />
+    <Folder Include="Views\Sales\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ActionForce.Entity\ActionForce.Entity.csproj">

@@ -10,20 +10,17 @@ namespace ActionForce.PosLocation.Controllers
     public class BaseController : Controller
     {
         public ActionTimeEntities Db { get; set; } = new ActionTimeEntities();
-
+        public AuthenticationModel AuthenticationData { get; set; }
 
         public BaseController()
         {
             Db = new ActionTimeEntities();
+            AuthenticationData = new AuthenticationModel();
         }
         protected override void OnActionExecuting(ActionExecutingContext context)
         {
 
             // 01. lokasyon Kontrolü
-            var controller = context.RouteData.Values["controller"].ToString();
-            var action = context.RouteData.Values["action"].ToString();
-
-
             if (context.RouteData.Values["controller"].ToString() != "Setup")
             {
                 HttpCookie locationCookie = System.Web.HttpContext.Current.Request.Cookies["PosLocation"];
@@ -33,11 +30,69 @@ namespace ActionForce.PosLocation.Controllers
                     context.Result = new RedirectResult("/Setup/Index");
                     return;
                 }
+
+                HttpCookie tokencookie = System.Web.HttpContext.Current.Request.Cookies["AuthenticationToken"];
+
+                if (tokencookie != null && !string.IsNullOrEmpty(tokencookie.Value))
+                {
+                    string token = tokencookie.Value;
+                    var tokenparsed = token.Split('|').ToList();
+                    var locationuid = tokenparsed[0];
+                    var employeeuid = tokenparsed[1];
+                    var lockedEmployeeuid = tokenparsed[2];
+
+                    if (string.IsNullOrEmpty(locationuid))
+                    {
+                        context.Result = new RedirectResult("/Setup/Index");
+                        return;
+                    }
+
+                    if (!string.IsNullOrEmpty(employeeuid) && string.IsNullOrEmpty(lockedEmployeeuid))
+                    {
+                        var employee = Db.Employee.FirstOrDefault(x => x.EmployeeUID.ToString() == employeeuid);
+                        var location = Db.Location.FirstOrDefault(x => x.LocationUID.ToString() == locationuid);
+
+                        AuthenticationData.CurrentEmployee = new CurrentEmployee()
+                        {
+                            EmployeeID = employee.EmployeeID,
+                            FotoFile = employee.FotoFile,
+                            FullName = employee.FullName,
+                            Token = employee.EmployeeUID,
+                            Username = employee.Username
+                        };
+                        AuthenticationData.CurrentLocation = new CurrentLocation()
+                        {
+                            Currency = location.Currency,
+                            FullName = location.LocationFullName,
+                            ID = location.LocationID,
+                            OurCompanyID = location.OurCompanyID,
+                            TimeZone = location.Timezone ?? 3,
+                            UID = location.LocationUID
+                        };
+
+                        return;
+                    }
+
+                    if (string.IsNullOrEmpty(employeeuid) && !string.IsNullOrEmpty(lockedEmployeeuid))
+                    {
+                        context.Result = new RedirectResult("/Setup/Lock");
+                        return;
+                    }
+
+                    if (string.IsNullOrEmpty(employeeuid) && string.IsNullOrEmpty(lockedEmployeeuid))
+                    {
+                        context.Result = new RedirectResult("/Setup/Login");
+                        return;
+                    }
+
+                }
+                else
+                {
+                    context.Result = new RedirectResult("/Setup/Employee");
+                    return;
+                }
+
             }
-
-            
-
-
 
 
 
@@ -56,7 +111,7 @@ namespace ActionForce.PosLocation.Controllers
             base.Dispose(disposing);
         }
 
-       
+
 
     }
 }

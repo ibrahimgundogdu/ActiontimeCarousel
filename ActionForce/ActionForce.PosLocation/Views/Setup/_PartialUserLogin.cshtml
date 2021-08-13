@@ -5,7 +5,7 @@
                 <path d="M102,2A100,100,0,1,0,202,102,100.036,100.036,0,0,0,102,2ZM52.7,164.8C57,155.8,83.2,147,102,147s45.1,8.8,49.3,17.8a79.254,79.254,0,0,1-98.6,0Zm112.9-14.5c-14.3-17.4-49-23.3-63.6-23.3s-49.3,5.9-63.6,23.3a80,80,0,1,1,127.2,0ZM102,42a35,35,0,1,0,35,35A34.911,34.911,0,0,0,102,42Zm0,50a15,15,0,1,1,15-15A14.98,14.98,0,0,1,102,92Z" transform="translate(-2 -2)" fill="currentColor" />
             </svg>*@
         <img src="http://office.ufegrup.com/img/Employee/@(!string.IsNullOrEmpty(Model.PhotoFile) ? Model.PhotoFile:"user.png")" class="rounded-circle" alt="@(Model.PhotoFile)" style="width:200px;height:200px;">
-       
+
         <!-- user-icon -->
     </div>
     <div class="name">
@@ -16,6 +16,7 @@
         @Html.AntiForgeryToken()
         <div class="form">
             <input id="EmployeeID" type="hidden" name="EmployeeID" value="@(Model.EmployeeID)" />
+            <input id="LocationID" type="hidden" name="LocationID" value="@(Model.LocationID)" />
             <div class="form-group">
                 <input type="text" name="Username" required>
             </div>
