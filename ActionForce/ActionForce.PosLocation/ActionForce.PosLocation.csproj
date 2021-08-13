@@ -242,6 +242,7 @@
     <Compile Include="Models\DataModel\CurrentPriceList.cs" />
     <Compile Include="Models\DataModel\DataEmployee.cs" />
     <Compile Include="Models\DataModel\TicketInfo.cs" />
+    <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\FormModels\SerialFormModel.cs" />
     <Compile Include="Models\FormModels\UserLoginFormModel.cs" />
     <Compile Include="Models\LockedEmployee.cs" />

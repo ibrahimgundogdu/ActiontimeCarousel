@@ -6492,6 +6492,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="TicketNumber" Type="nvarchar" Mode="In" />
           <Parameter Name="Environment" Type="int" Mode="In" />
         </Function>
+        <Function Name="AddPosOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+          <Parameter Name="OrderNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerName" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerData" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerPhone" Type="nvarchar" Mode="In" />
+          <Parameter Name="IdentityCard" Type="nvarchar" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="AddPosServiceLog" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="PosSerialNumber" Type="nvarchar" Mode="In" />
@@ -6658,6 +6669,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <Function Name="GetPersonList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
         </Function>
+        <Function Name="GetPosOrderNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="GetSalaryMultiplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
@@ -10036,6 +10048,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="Environment" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="ActionTypeExpense" EntityType="db293_ActionTimeDbModel.ActionTypeExpense" />
+          <FunctionImport Name="GetPosOrderNumber" ReturnType="Collection(String)" />
+          <FunctionImport Name="AddPosOrder" ReturnType="Collection(Int64)">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="OrderNumber" Mode="In" Type="String" />
+            <Parameter Name="CustomerName" Mode="In" Type="String" />
+            <Parameter Name="CustomerData" Mode="In" Type="String" />
+            <Parameter Name="CustomerPhone" Mode="In" Type="String" />
+            <Parameter Name="IdentityCard" Mode="In" Type="String" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -23337,6 +23361,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetPosOrderNumber" FunctionName="db293_ActionTimeDbModel.Store.GetPosOrderNumber" />
+          <FunctionImportMapping FunctionImportName="AddPosOrder" FunctionName="db293_ActionTimeDbModel.Store.AddPosOrder" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

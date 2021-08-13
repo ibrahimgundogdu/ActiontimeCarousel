@@ -67,5 +67,70 @@ namespace ActionForce.PosLocation
             }
             return EmployeeList;
         }
+
+        public static IEnumerable<DifferentList> PublicInstancePropertiesEqual<T>(T self, T to, params string[] ignore) where T : class
+        {
+            List<DifferentList> loglist = new List<DifferentList>();
+
+            if (self != null && to != null)
+            {
+                Type type = typeof(T);
+                List<string> ignoreList = new List<string>(ignore);
+                foreach (System.Reflection.PropertyInfo pi in type.GetProperties(System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance))
+                {
+                    if (!ignoreList.Contains(pi.Name))
+                    {
+                        object selfValue = type.GetProperty(pi.Name).GetValue(self, null);
+                        object toValue = type.GetProperty(pi.Name).GetValue(to, null);
+
+                        if (selfValue != toValue && (selfValue == null || !selfValue.Equals(toValue)) && pi.PropertyType.IsClass == false)
+                        {
+                            loglist.Add(new DifferentList() { FieldName = pi.Name, OldValue = selfValue?.ToString(), NewValue = toValue?.ToString(), TableName = type.Name });
+                        }
+                    }
+                }
+
+            }
+            return loglist;
+        }
+
+        public static string[] getIgnorelist()
+        {
+            List<string> ignores = new List<string>() {
+                " "
+            };
+
+            return ignores.ToArray();
+        }
+
+        public static void AddApplicationLog(string environment, string module, string processType, string processId, string controller, string action, IEnumerable<DifferentList> differents, bool isSuccess, string resultMessage, string errorMessage, DateTime recordDate, string recordEmployee, string recordIP, string recordDevice, object objdata)
+        {
+            using (ActionTimeEntities db = new ActionTimeEntities())
+            {
+                string data = Newtonsoft.Json.JsonConvert.SerializeObject(objdata);
+                if (differents != null)
+                {
+                    if (differents.Count() > 0)
+                    {
+                        foreach (var item in differents)
+                        {
+                            db.AddApplicationLog(environment, module, processType, processId, controller, action, item.TableName, item.FieldName, item.OldValue, item.NewValue, isSuccess, resultMessage, errorMessage, recordDate, recordEmployee, recordIP, recordDevice, data);
+                        }
+                    }
+                    else
+                    {
+                        db.AddApplicationLog(environment, module, processType, processId, controller, action, string.Empty, string.Empty, string.Empty, string.Empty, isSuccess, resultMessage, errorMessage, recordDate, recordEmployee, recordIP, recordDevice, data);
+
+                    }
+
+                }
+                else
+                {
+                    db.AddApplicationLog(environment, module, processType, processId, controller, action, string.Empty, string.Empty, string.Empty, string.Empty, isSuccess, resultMessage, errorMessage, recordDate, recordEmployee, recordIP, recordDevice, data);
+
+                }
+            }
+        }
+
     }
 }

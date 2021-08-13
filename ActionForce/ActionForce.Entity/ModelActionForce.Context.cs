@@ -1949,5 +1949,51 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddPosBasket", locationIDParameter, employeeIDParameter, priceIDParameter, promotionIDParameter, isPromotionParameter, ticketNumberParameter, environmentParameter);
         }
+    
+        public virtual ObjectResult<string> GetPosOrderNumber()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetPosOrderNumber");
+        }
+    
+        public virtual ObjectResult<Nullable<long>> AddPosOrder(Nullable<int> locationID, Nullable<int> employeeID, string orderNumber, string customerName, string customerData, string customerPhone, string identityCard, string description, string recordIP)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            var orderNumberParameter = orderNumber != null ?
+                new ObjectParameter("OrderNumber", orderNumber) :
+                new ObjectParameter("OrderNumber", typeof(string));
+    
+            var customerNameParameter = customerName != null ?
+                new ObjectParameter("CustomerName", customerName) :
+                new ObjectParameter("CustomerName", typeof(string));
+    
+            var customerDataParameter = customerData != null ?
+                new ObjectParameter("CustomerData", customerData) :
+                new ObjectParameter("CustomerData", typeof(string));
+    
+            var customerPhoneParameter = customerPhone != null ?
+                new ObjectParameter("CustomerPhone", customerPhone) :
+                new ObjectParameter("CustomerPhone", typeof(string));
+    
+            var identityCardParameter = identityCard != null ?
+                new ObjectParameter("IdentityCard", identityCard) :
+                new ObjectParameter("IdentityCard", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddPosOrder", locationIDParameter, employeeIDParameter, orderNumberParameter, customerNameParameter, customerDataParameter, customerPhoneParameter, identityCardParameter, descriptionParameter, recordIPParameter);
+        }
     }
 }

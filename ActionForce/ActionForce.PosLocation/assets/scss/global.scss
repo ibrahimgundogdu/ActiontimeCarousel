@@ -162,6 +162,40 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
     }
     h2{ font-size: 24px; color: #26436B; font-weight: 400; }
   }
+  .connect-content{ margin: -20px -20px 0; min-height: calc(100vh - 100px); text-align: center; position: relative; box-sizing: border-box; background: #EFF4FA; border-radius: 0; padding-bottom: 1px;  display: flex; align-items: center; justify-content: center;
+    .back-repeat{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 50px; 
+      .back{
+        button{ border: none; background: transparent; display: block; cursor: pointer; color: #FF2B00;
+          svg{ display: block; width: 40px; height: 40px; margin: 0 auto; }
+          span{ display: block; font-size: 12px; color: #6F93C5; }
+        }
+      }
+      .repeat{
+        button{ border: none; background: transparent; display: block; cursor: pointer; color: #0075FF; 
+          svg{ display: block; width: 40px; height: 40px; margin: 0 auto; }
+          span{ display: block; font-size: 12px; color: #6F93C5; }
+        }
+      }
+    }
+    .order-box{ display: flex; align-items: center; border-radius: 10px; width: 90%; min-width: calc(320px - 2rem); margin: 0 auto; min-height: 420px; 
+      .centered{ flex: 0 0 100%; max-width: 100%; }
+      h3{ font-size: 4.5vw; color: #6F93C5; font-weight: 400; }
+      .order-no{
+        p{ font-size: 10vw; color: #26436B; font-weight: 700; }
+      }
+      .order-amount{ margin-bottom: 40px; 
+        p{ font-size: 10vw; color: #0075FF; font-weight: 700; 
+          span{ display: inline-block; padding-left: 10px; }
+        }
+      }
+      .order-icon{ color: #6F93C5; 
+        svg{ display: block; width: 150px; height: 150px; margin: 0 auto; }
+      }
+    }
+    .connect-lower{ padding: 50px 10px 20px; margin-bottom: 50px;
+      p{ font-size: 5.5vw; color: #26436B; font-weight: 500; margin-bottom: 0; }
+    }
+  }
 }/* content */
 .fixed-footer{ position: fixed; left: 0; right: 0; bottom: 0; background: #fff; z-index: 55;
   &-overlay{ position: fixed; left: 0; top: 0; right: 0; bottom: 0; z-index: 54; background: rgba(111,147,197,.54); pointer-events: none; opacity: 0; transition: .4s; 
