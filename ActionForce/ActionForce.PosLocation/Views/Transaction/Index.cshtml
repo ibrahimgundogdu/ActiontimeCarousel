@@ -62,7 +62,7 @@
                                     <path d="M36.26,68.5,52.224,84.46a56.853,56.853,0,0,1,80.157,0L148.345,68.5a79.265,79.265,0,0,0-112.084,0ZM92.3,0A124.147,124.147,0,0,0,4.22,36.456L20.184,52.419a101.952,101.952,0,0,1,144.125.113l15.964-15.964A123.313,123.313,0,0,0,92.3,0Z" transform="translate(43.557)" fill="currentColor" />
                                 </svg>
                             </div>
-                            <div class="connect-lower">
+                            <div class="connect-lower" id="MessageArea">
                                 <p>Ingenico'dan işlemi tamamlayın...</p>
                             </div>
                         </div>
@@ -74,44 +74,45 @@
     <script src="/assets/js/jquery-3.5.1.min.js"></script>
     <script src="/assets/js/modal.js"></script>
     <script src="/assets/js/global.js"></script>
-    <script>$(function(){
+    <script>
+        $(function () {
             const open = 'open';
             const $menu = $('.header .menu');
             const $listBtn = $('.bot-list-btn');
 
-            $menu.on('click',function(){
+            $menu.on('click', function () {
                 let $this = $(this);
-                if(($this).hasClass(open)){
+                if (($this).hasClass(open)) {
                     $this.removeClass(open);
                     $('.side-menu,.side-menu-overlay').removeClass(open);
-                }else{
+                } else {
                     $this.addClass(open);
                     $('.side-menu,.side-menu-overlay').addClass(open);
                 }
             });
-            $('.side-menu-overlay').on('click',function(){
+            $('.side-menu-overlay').on('click', function () {
                 $menu.removeClass(open);
                 $('.side-menu,.side-menu-overlay').removeClass(open);
             });
 
-            $listBtn.on('click',function(){
+            $listBtn.on('click', function () {
                 let $this = $(this);
-                if($this.hasClass(open)){
+                if ($this.hasClass(open)) {
                     $this.removeClass(open);
                     $('.fixed-footer-overlay').removeClass(open);
                     $('.footer-basket').stop().slideUp();
-                }else{
+                } else {
                     $this.addClass(open);
                     $('.fixed-footer-overlay').addClass(open);
                     $('.footer-basket').stop().slideDown();
                 }
             });
-            $('.fixed-footer-overlay').on('click',function(){
+            $('.fixed-footer-overlay').on('click', function () {
                 $listBtn.removeClass(open);
                 $('.fixed-footer-overlay').removeClass(open);
                 $('.footer-basket').stop().slideUp();
             });
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('.piece-options .minus').click(function () {
                     var $input = $(this).parent().find('input');
                     var count = parseInt($input.val()) - 1;
@@ -128,5 +129,232 @@
                 });
             });
         });</script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js"></script>
+    <script type="text/javascript">
+
+
+
+        "use strict";
+
+        var connection;
+
+        connection = new signalR.HubConnectionBuilder()
+            .withUrl('http://push.ufegrup.com/MyHub')
+            .build();
+
+       
+
+        connection.start().catch(function (err) {
+            $("#MessageArea").html("<p>" + err.toString() + "</p>");
+            //return console.error(err.toString())
+        });
+
+        connection.on('ReceiveMessage', (serial, message) => {
+            $("#MessageArea").html("<p>" + message + "</p>");
+        })
+
+        connection.on('finished', (update) => {
+            connection.stop();
+        });
+
+
+
+
+
+        //$(document).ready(() => {
+        //    //configureLogging(signalR.LogLevel.Information)
+        //    var connection = new signalR.HubConnectionBuilder().withAutomaticReconnect([1000, 3000, 3000, 2000]).withUrl("https://localhost:44327/MyHub").build();
+
+        //    statusShow();
+
+        //    start();
+
+        //    //Functions
+        //    function statusShow() {
+        //        $("#MessageArea").html("<p>" + connection.connectionState + "</p>");
+        //    }
+
+        //    function start() {
+
+        //        connection.start().then(() => {
+        //            statusShow();
+        //            $("#loading").hide();
+
+        //            // connection.invoke("GetNames");
+
+        //            connection.invoke("ReceiveMessage");
+
+        //        }).catch((err) => {
+        //            console.log(err);
+        //            $("#MessageArea").html("<p>" + err + "</p>");
+        //            setTimeout(() => start(), 2000)
+        //        });
+
+        //    }
+
+        //    statusShow();
+        //    //Subscribes
+        //    connection.onreconnecting(err => {
+        //        $("#loading").show();
+        //        statusShow();
+
+        //    });
+
+        //    connection.onreconnected(connectionId => {
+        //        $("#loading").hide();
+        //        statusShow();
+
+        //        console.log("connectionId:" + connectionId)
+
+        //    })
+
+        //    connection.onclose(() => {
+
+        //        $("#loading").hide();
+        //        statusShow();
+        //        start();
+
+        //    })
+
+        //    connection.on("ReceiveMessage", (message) => {
+
+        //        $("#MessageArea").html("<p> " + message + "</p>");
+
+        //    })
+
+        //    //connection.on("ReceiveClientCount", (clientCount) => {
+
+        //    //    console.log(clientCount);
+        //    //    $("#clientCount").text(clientCount);
+
+        //    //})
+
+        //    //connection.on("Notify", (countText) => {
+
+        //    //    $("#notify").html(`<div class="alert alert-success">${countText} </div>`)
+
+        //    //})
+
+        //    //connection.on("Error", (errorText) => {
+
+        //    //    alert(errorText);
+        //    //})
+
+        //    //connection.on("ReceiveNames", (names) => {
+
+        //    //    $("#namesList").empty();
+
+        //    //    names.forEach((item, index) => {
+
+        //    //        $("#namesList").append(`<li class="list-group-item">${item} </li>`)
+
+        //    //    })
+
+        //    //})
+
+
+
+        //    //connection.on("ReceiveMessageByGroup", (name, teamId) => {
+
+        //    //    let listName;
+
+        //    //    if (teamId == 1)
+
+        //    //        listName = "ATeamList";
+        //    //    else
+        //    //        listName = "BTeamList";
+
+        //    //    $(`#${listName}`).append(`<li class="list-group-item">${name} </li>`)
+
+        //    //})
+
+        //    //connection.on("ReceiveNamesByGroup", (teams) => {
+        //    //    console.log(teams);
+
+        //    //    teams.forEach((team, index) => {
+
+        //    //        let listName;
+
+        //    //        if (team.teamId == 1)
+
+        //    //            listName = "ATeamList";
+        //    //        else
+        //    //            listName = "BTeamList";
+
+        //    //        team.users.forEach((user, index2) => {
+
+        //    //            $(`#${listName}`).append(`<li class="list-group-item">${user.name} </li>`)
+
+        //    //        })
+
+        //    //    })
+
+        //    //})
+
+        //    //connection.on("ReceiveProduct", (product) => {
+
+        //    //    console.log(product);
+        //    //})
+        //    //Clicks
+
+        //    //$("#btnProduct").click(() => {
+
+        //    //    let product = { "Id": 1, "Name": "Kalem", "Price": 100, "Stock": 200 };
+
+        //    //    connection.invoke("SendProduct", product);
+
+        //    //})
+
+        //    //$("#btnNameSave").click(() => {
+
+        //    //    connection.invoke("SendName", $("#txtName").val()).catch((err) => console.log(err))
+
+        //    //})
+        //    //$("#btnNameTeam").click(() => {
+
+        //    //    let name = $("#txtName").val();
+
+        //    //    let teamName = $("input[type=radio]:checked").val();
+
+        //    //    if (teamName == null) {
+        //    //        alert("Takım seçiniz");
+        //    //        return;
+        //    //    }
+
+        //    //    connection.invoke("SendNameByGroup", name, teamName).catch((err) => {
+        //    //        console.log(err);
+        //    //    })
+
+        //    //})
+
+        //    //$("input[type=radio]").change(() => {
+
+        //    //    let value = $(`input[type=radio]:checked`).val();
+
+        //    //    if (value == "Team A") {
+
+        //    //        connection.invoke("AddToGroup", value);
+
+        //    //        connection.invoke("RemoveToGroup", "Team B");
+
+        //    //    }
+        //    //    else {
+        //    //        connection.invoke("AddToGroup", value);
+
+        //    //        connection.invoke("RemoveToGroup", "Team A");
+
+        //    //    }
+
+        //    //})
+
+        //})
+
+
+
+
+    </script>
+
 </body>
 </html>

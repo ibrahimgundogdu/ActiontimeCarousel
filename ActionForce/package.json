@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@microsoft/signalr": "^6.0.0-preview.7.21378.6"
+  }
+}

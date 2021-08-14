@@ -109,6 +109,10 @@ namespace ActionForce.PosService.Controllers
 
             ApiHelper.AddPosServiceLog(LocationID, request.SerialNo, request.AdisyonNo, request.Header_Info.UserName, ApiHelper.PasswordMD5_Pan(request.Header_Info.Password), "TSM_IR_GetAdisyonSummary", data, result.ResultCode.ToString(), result.ResultMessage);
 
+            PushClient pushService = new PushClient();
+            pushService.SendMessage(request.SerialNo, result.ResultMessage);
+
+
             return Request.CreateResponse(HttpStatusCode.OK, result);
 
         }
@@ -223,6 +227,9 @@ namespace ActionForce.PosService.Controllers
             data = data.Replace(request.Header_Info.UserName, "*").Replace(request.Header_Info.Password, "*");
             ApiHelper.AddPosServiceLog(LocationID, request.SerialNo, request.AdisyonId.ToString(), request.Header_Info.UserName, ApiHelper.PasswordMD5_Pan(request.Header_Info.Password), "TSM_IR_GetAdisyon", data, result.ResultCode.ToString(), result.ResultMessage);
 
+            PushClient pushService = new PushClient();
+            pushService.SendMessage(request.SerialNo, result.ResultMessage);
+
             return Request.CreateResponse(HttpStatusCode.OK, result);
 
         }
@@ -334,6 +341,9 @@ namespace ActionForce.PosService.Controllers
             data = data.Replace(request.Header_Info.UserName, "*").Replace(request.Header_Info.Password, "*");
             ApiHelper.AddPosServiceLog(LocationID, request.SerialNo, request.AdisyonId.ToString(), request.Header_Info.UserName, ApiHelper.PasswordMD5_Pan(request.Header_Info.Password), "TSM_lR_SendAdisyonPayment", data, result.ResultCode.ToString(), result.ResultMessage);
 
+            PushClient pushService = new PushClient();
+            pushService.SendMessage(request.SerialNo, result.ResultMessage);
+
             return Request.CreateResponse(HttpStatusCode.OK, result);
 
         }
@@ -416,6 +426,9 @@ namespace ActionForce.PosService.Controllers
             string data = Newtonsoft.Json.JsonConvert.SerializeObject(request);
             data = data.Replace(request.Header_Info.UserName, "*").Replace(request.Header_Info.Password, "*");
             ApiHelper.AddPosServiceLog(LocationID, request.SerialNo, request.AdisyonId.ToString(), request.Header_Info.UserName, ApiHelper.PasswordMD5_Pan(request.Header_Info.Password), "TSM_lR_SendAdisyonPayment", data, result.ResultCode.ToString(), result.ResultMessage);
+
+            PushClient pushService = new PushClient();
+            pushService.SendMessage(request.SerialNo, result.ResultMessage);
 
             return Request.CreateResponse(HttpStatusCode.OK, result);
 
