@@ -83,5 +83,24 @@ namespace ActionForce.PosService
 
 
         }
+
+        public static string GetStatusCode (int Code)
+        {
+            var statusName = string.Empty;
+
+            switch (Code)
+            {
+
+                case 1: statusName = "Açık"; break;
+                case 2: statusName = "İşlem Görüyor"; break;
+                case 3: statusName = "Ödendi"; break;
+                case 4: statusName = "İptal"; break;
+                case 5: statusName = "Kapatıldı"; break;
+
+                default: statusName = "İlk Kayıt"; break;
+            }
+
+            return statusName;
+        }
     }
 }

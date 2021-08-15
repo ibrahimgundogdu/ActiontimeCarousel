@@ -22,6 +22,10 @@ namespace ActionForce.Office
                 Formatting = Newtonsoft.Json.Formatting.Indented,
                 ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
             };
+
+            //MQClient client = new MQClient();
         }
+
+        
     }
 }

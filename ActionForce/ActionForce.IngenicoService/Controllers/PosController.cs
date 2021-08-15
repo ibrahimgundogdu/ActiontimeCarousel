@@ -356,6 +356,9 @@ namespace ActionForce.PosService.Controllers
 
             try
             {
+                MQClient mqClient = new MQClient();
+
+
                 var isAuthentication = ApiHelper.CheckUserAuthentication(request.Header_Info);
 
                 if (isAuthentication)
@@ -380,7 +383,7 @@ namespace ActionForce.PosService.Controllers
                                     Db.SetTicketSaleStatus(order.ID, request.Status);
 
                                     result.ResultCode = 0;
-                                    result.ResultMessage = $"Adisyon Durumu İşlendi";
+                                    result.ResultMessage = $"Adisyon Durumu : {ApiHelper.GetStatusCode(request.Status)}";
                                 }
                                 catch (Exception ex)
                                 {
@@ -414,6 +417,11 @@ namespace ActionForce.PosService.Controllers
                 {
                     result.ResultCode = 2;
                     result.ResultMessage = $"Servis kullanıcısı bulunamadı";
+                }
+
+                if (request.Status == 3 || request.Status == 4)
+                {
+                    mqClient.SendPosResult(request.AdisyonId, request.SerialNo, request.Status);
                 }
 
             }
