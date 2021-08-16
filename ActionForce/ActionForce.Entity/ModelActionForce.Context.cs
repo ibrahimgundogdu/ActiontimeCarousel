@@ -310,6 +310,8 @@ namespace ActionForce.Entity
         public virtual DbSet<TicketSalePosPayment> TicketSalePosPayment { get; set; }
         public virtual DbSet<TicketSalePosReceipt> TicketSalePosReceipt { get; set; }
         public virtual DbSet<ActionTypeExpense> ActionTypeExpense { get; set; }
+        public virtual DbSet<PosPaymentSubType> PosPaymentSubType { get; set; }
+        public virtual DbSet<PosPaymentType> PosPaymentType { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -1994,6 +1996,15 @@ namespace ActionForce.Entity
                 new ObjectParameter("RecordIP", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddPosOrder", locationIDParameter, employeeIDParameter, orderNumberParameter, customerNameParameter, customerDataParameter, customerPhoneParameter, identityCardParameter, descriptionParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> CheckLocationPosTicketSale(Nullable<long> saleID)
+        {
+            var saleIDParameter = saleID.HasValue ?
+                new ObjectParameter("SaleID", saleID) :
+                new ObjectParameter("SaleID", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("CheckLocationPosTicketSale", saleIDParameter);
         }
     }
 }

@@ -581,6 +581,12 @@
     <Compile Include="PhoneType.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="PosPaymentSubType.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="PosPaymentType.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="PosTerminal.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

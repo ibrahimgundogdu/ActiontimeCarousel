@@ -132,5 +132,7 @@ namespace ActionForce.PosLocation
             }
         }
 
+
+
     }
 }

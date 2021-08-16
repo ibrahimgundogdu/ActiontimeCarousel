@@ -356,7 +356,7 @@ namespace ActionForce.PosService.Controllers
 
             try
             {
-                MQClient mqClient = new MQClient();
+                //MQClient mqClient = new MQClient();
 
 
                 var isAuthentication = ApiHelper.CheckUserAuthentication(request.Header_Info);
@@ -421,7 +421,7 @@ namespace ActionForce.PosService.Controllers
 
                 if (request.Status == 3 || request.Status == 4)
                 {
-                    mqClient.SendPosResult(request.AdisyonId, request.SerialNo, request.Status);
+                    //mqClient.SendPosResult(request.AdisyonId, request.SerialNo, request.Status);
                 }
 
             }

@@ -2601,6 +2601,22 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="SortBy" Type="char" MaxLength="2" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="PosPaymentSubType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PaymentSubTypeID" Type="int" />
+          <Property Name="PaymentSubTypeName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="PosPaymentType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PaymentTypeID" Type="int" />
+          <Property Name="PaymentTypeName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="PosTerminal">
           <Key>
             <PropertyRef Name="ID" />
@@ -6555,6 +6571,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="ReceiptTime" Type="time" Mode="In" />
           <Parameter Name="TicketType" Type="int" Mode="In" />
         </Function>
+        <Function Name="CheckLocationPosTicketSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SaleID" Type="bigint" Mode="In" />
+        </Function>
         <Function Name="CheckLocationPriceCategory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
         </Function>
@@ -6928,6 +6947,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="PersonalDocument" EntityType="Self.PersonalDocument" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PersonalDocumentType" EntityType="Self.PersonalDocumentType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PhoneType" EntityType="Self.PhoneType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PosPaymentSubType" EntityType="Self.PosPaymentSubType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PosPaymentType" EntityType="Self.PosPaymentType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PosTerminal" EntityType="Self.PosTerminal" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrePaidCampaign" EntityType="Self.PrePaidCampaign" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PrePaidCampaignPrices" EntityType="Self.PrePaidCampaignPrices" Schema="dbo" store:Type="Tables" />
@@ -10059,6 +10080,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="IdentityCard" Mode="In" Type="String" />
             <Parameter Name="Description" Mode="In" Type="String" />
             <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="PosPaymentSubType" EntityType="db293_ActionTimeDbModel.PosPaymentSubType" />
+          <EntitySet Name="PosPaymentType" EntityType="db293_ActionTimeDbModel.PosPaymentType" />
+          <FunctionImport Name="CheckLocationPosTicketSale" ReturnType="Collection(Int64)">
+            <Parameter Name="SaleID" Mode="In" Type="Int64" />
           </FunctionImport>
         
           </EntityContainer>
@@ -16833,6 +16859,22 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
+        <EntityType Name="PosPaymentSubType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PaymentSubTypeID" Type="Int32" />
+          <Property Name="PaymentSubTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PosPaymentType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PaymentTypeID" Type="Int32" />
+          <Property Name="PaymentTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23363,6 +23405,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetPosOrderNumber" FunctionName="db293_ActionTimeDbModel.Store.GetPosOrderNumber" />
           <FunctionImportMapping FunctionImportName="AddPosOrder" FunctionName="db293_ActionTimeDbModel.Store.AddPosOrder" />
+          <EntitySetMapping Name="PosPaymentSubType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PosPaymentSubType">
+              <MappingFragment StoreEntitySet="PosPaymentSubType">
+                <ScalarProperty Name="PaymentSubTypeName" ColumnName="PaymentSubTypeName" />
+                <ScalarProperty Name="PaymentSubTypeID" ColumnName="PaymentSubTypeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PosPaymentType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PosPaymentType">
+              <MappingFragment StoreEntitySet="PosPaymentType">
+                <ScalarProperty Name="PaymentTypeName" ColumnName="PaymentTypeName" />
+                <ScalarProperty Name="PaymentTypeID" ColumnName="PaymentTypeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CheckLocationPosTicketSale" FunctionName="db293_ActionTimeDbModel.Store.CheckLocationPosTicketSale" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -9,14 +9,14 @@ namespace ActionForce.PosService
 {
     public class MQClient
     {
-        private Uri MQUri = new Uri("amqps://afaxyhan:D6ZFCkpk2uxdyTpJ1WeQgEOLDVYedDWM@rat.rmq2.cloudamqp.com/afaxyhan");
-        private string MQPass = "D6ZFCkpk2uxdyTpJ1WeQgEOLDVYedDWM";
+        //private Uri MQUri = new Uri("amqps://afaxyhan:D6ZFCkpk2uxdyTpJ1WeQgEOLDVYedDWM@rat.rmq2.cloudamqp.com/afaxyhan");
+        //private string MQPass = "D6ZFCkpk2uxdyTpJ1WeQgEOLDVYedDWM";
         private ConnectionFactory factory;
 
         public MQClient()
         {
-            factory = new ConnectionFactory();
-            factory.Uri = MQUri;
+            factory = new ConnectionFactory() { HostName = "localhost" };
+            //factory.Uri = MQUri;
         }
 
 
