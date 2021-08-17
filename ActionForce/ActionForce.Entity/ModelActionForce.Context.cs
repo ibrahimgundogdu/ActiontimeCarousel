@@ -1701,19 +1701,6 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetTicketProduct_Result>("GetTicketProduct", ticketTypeIDParameter, priceCategoryIDParameter, unitParameter);
         }
     
-        public virtual int SetTicketSaleStatus(Nullable<long> orderID, Nullable<int> statusID)
-        {
-            var orderIDParameter = orderID.HasValue ?
-                new ObjectParameter("OrderID", orderID) :
-                new ObjectParameter("OrderID", typeof(long));
-    
-            var statusIDParameter = statusID.HasValue ?
-                new ObjectParameter("StatusID", statusID) :
-                new ObjectParameter("StatusID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetTicketSaleStatus", orderIDParameter, statusIDParameter);
-        }
-    
         public virtual int AddPosServiceLog(Nullable<int> locationID, string posSerialNumber, string adisyonNo, string header_Username, string header_Password, string requestIP, string requestMethod, Nullable<System.DateTime> requestDate, string requestData, string resultCode, string resultMessage)
         {
             var locationIDParameter = locationID.HasValue ?
@@ -2005,6 +1992,23 @@ namespace ActionForce.Entity
                 new ObjectParameter("SaleID", typeof(long));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("CheckLocationPosTicketSale", saleIDParameter);
+        }
+    
+        public virtual int SetTicketSaleStatus(Nullable<long> orderID, Nullable<int> statusID, string sicilNo)
+        {
+            var orderIDParameter = orderID.HasValue ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(long));
+    
+            var statusIDParameter = statusID.HasValue ?
+                new ObjectParameter("StatusID", statusID) :
+                new ObjectParameter("StatusID", typeof(int));
+    
+            var sicilNoParameter = sicilNo != null ?
+                new ObjectParameter("SicilNo", sicilNo) :
+                new ObjectParameter("SicilNo", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetTicketSaleStatus", orderIDParameter, statusIDParameter, sicilNoParameter);
         }
     }
 }

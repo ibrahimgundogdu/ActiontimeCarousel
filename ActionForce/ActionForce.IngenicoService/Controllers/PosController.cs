@@ -356,7 +356,7 @@ namespace ActionForce.PosService.Controllers
 
             try
             {
-                //MQClient mqClient = new MQClient();
+                MQClient mqClient = new MQClient();
 
 
                 var isAuthentication = ApiHelper.CheckUserAuthentication(request.Header_Info);
@@ -380,7 +380,7 @@ namespace ActionForce.PosService.Controllers
 
                                 try
                                 {
-                                    Db.SetTicketSaleStatus(order.ID, request.Status);
+                                    Db.SetTicketSaleStatus(order.ID, request.Status, request.SerialNo);
 
                                     result.ResultCode = 0;
                                     result.ResultMessage = $"Adisyon Durumu : {ApiHelper.GetStatusCode(request.Status)}";
@@ -421,7 +421,8 @@ namespace ActionForce.PosService.Controllers
 
                 if (request.Status == 3 || request.Status == 4)
                 {
-                    //mqClient.SendPosResult(request.AdisyonId, request.SerialNo, request.Status);
+                    var sendResult = mqClient.SendPosResult("DocumentProcess", request.AdisyonId, request.SerialNo, request.Status);
+
                 }
 
             }

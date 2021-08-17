@@ -9,18 +9,35 @@ namespace ActionForce.PosService
 {
     public class MQClient
     {
-        //private Uri MQUri = new Uri("amqps://afaxyhan:D6ZFCkpk2uxdyTpJ1WeQgEOLDVYedDWM@rat.rmq2.cloudamqp.com/afaxyhan");
-        //private string MQPass = "D6ZFCkpk2uxdyTpJ1WeQgEOLDVYedDWM";
-        private ConnectionFactory factory;
 
-        public MQClient()
+
+        public IConnection GetRabbitMQConnection()
         {
-            factory = new ConnectionFactory() { HostName = "localhost" };
-            //factory.Uri = MQUri;
+            //ConnectionFactory connectionFactory = new ConnectionFactory()
+            //{
+            //    HostName = "37.1.145.98",
+            //    UserName = "ufeservice",
+            //    Password = "n4q4n6O0",
+            //    VirtualHost = "/",
+            //    Port = AmqpTcpEndpoint.UseDefaultPort
+            //};
+
+            ConnectionFactory connectionFactory = new ConnectionFactory()
+            {
+                HostName = "localhost",
+                UserName = "ufeservice",
+                Password = "n4q4n6O0",
+                VirtualHost = "/",
+                Port = AmqpTcpEndpoint.UseDefaultPort
+            };
+
+            //var connectionFactory = new ConnectionFactory { Uri = new Uri("amqp://ufeservice:n4q4n6O0@37.1.145.98:15672/") };
+
+
+            return connectionFactory.CreateConnection();
         }
 
-
-        public ResultMQ SendPosResult(long OrderID, string SerialNumber, int StatusID)
+        public ResultMQ SendPosResult(string QueeName, long OrderID, string SerialNumber, int StatusID)
         {
             ResultMQ result = new ResultMQ()
             {
@@ -28,24 +45,23 @@ namespace ActionForce.PosService
                 Message = string.Empty
             };
 
-            using (var connection = factory.CreateConnection())
+            using (var connection = GetRabbitMQConnection())
             {
                 try
                 {
 
-                
-                var channel = connection.CreateModel();
+                    var channel = connection.CreateModel();
 
-                channel.QueueDeclare("DocumentProcess", true, false, false);
+                    channel.QueueDeclare(QueeName, true, false, false); //"DocumentProcess"
 
-                string datamesaj = $"{OrderID}|{SerialNumber}|{StatusID}";
+                    string datamesaj = $"{OrderID}|{SerialNumber}|{StatusID}";
 
-                var messagebody = Encoding.UTF8.GetBytes(datamesaj);
+                    var messagebody = Encoding.UTF8.GetBytes(datamesaj);
 
-                channel.BasicPublish(string.Empty, "DocumentProcess", null, messagebody);
+                    channel.BasicPublish(string.Empty, QueeName, null, messagebody); //"DocumentProcess"
 
-                result.IsSuccess = true;
-                result.Message = "Kuyruğa Gönderildi";
+                    result.IsSuccess = true;
+                    result.Message = "Kuyruğa Gönderildi";
 
                 }
                 catch (Exception ex)

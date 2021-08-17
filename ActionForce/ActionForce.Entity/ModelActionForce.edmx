@@ -3266,6 +3266,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
           <Property Name="IsSendPosTerminal" Type="bit" />
+          <Property Name="PosRegistryNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="IsFinancialization" Type="bit" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
@@ -6766,6 +6767,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <Function Name="SetTicketSaleStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OrderID" Type="bigint" Mode="In" />
           <Parameter Name="StatusID" Type="int" Mode="In" />
+          <Parameter Name="SicilNo" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="sp_employeeUID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="UpdateCashAction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -9997,10 +9999,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VTicketSaleRowsAll" EntityType="db293_ActionTimeDbModel.VTicketSaleRowsAll" />
           <EntitySet Name="VAdisyonSummary" EntityType="db293_ActionTimeDbModel.VAdisyonSummary" />
           <EntitySet Name="TicketSalePosStatus" EntityType="db293_ActionTimeDbModel.TicketSalePosStatus" />
-          <FunctionImport Name="SetTicketSaleStatus">
-            <Parameter Name="OrderID" Mode="In" Type="Int64" />
-            <Parameter Name="StatusID" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="AddPosServiceLog">
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
             <Parameter Name="PosSerialNumber" Mode="In" Type="String" />
@@ -10084,7 +10082,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="PosPaymentSubType" EntityType="db293_ActionTimeDbModel.PosPaymentSubType" />
           <EntitySet Name="PosPaymentType" EntityType="db293_ActionTimeDbModel.PosPaymentType" />
           <FunctionImport Name="CheckLocationPosTicketSale" ReturnType="Collection(Int64)">
-            <Parameter Name="SaleID" Mode="In" Type="Int64" />
+          <Parameter Name="SaleID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="SetTicketSaleStatus">
+            <Parameter Name="OrderID" Mode="In" Type="Int64" />
+            <Parameter Name="StatusID" Mode="In" Type="Int32" />
+            <Parameter Name="SicilNo" Mode="In" Type="String" />
           </FunctionImport>
         
           </EntityContainer>
@@ -16636,6 +16639,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsFinancialization" Type="Boolean" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="IsSendPosTerminal" Type="Boolean" />
+          <Property Name="PosRegistryNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="TicketSaleRows">
           <Key>
@@ -23134,6 +23138,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketSale">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketSale">
               <MappingFragment StoreEntitySet="TicketSale">
+                <ScalarProperty Name="PosRegistryNumber" ColumnName="PosRegistryNumber" />
                 <ScalarProperty Name="IsSendPosTerminal" ColumnName="IsSendPosTerminal" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="IsFinancialization" ColumnName="IsFinancialization" />
@@ -23319,7 +23324,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SetTicketSaleStatus" FunctionName="db293_ActionTimeDbModel.Store.SetTicketSaleStatus" />
           <FunctionImportMapping FunctionImportName="AddPosServiceLog" FunctionName="db293_ActionTimeDbModel.Store.AddPosServiceLog" />
           <FunctionImportMapping FunctionImportName="AddTicketSalePosDiscount" FunctionName="db293_ActionTimeDbModel.Store.AddTicketSalePosDiscount" />
           <EntitySetMapping Name="TicketSalePosDiscount">
@@ -23424,6 +23428,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="CheckLocationPosTicketSale" FunctionName="db293_ActionTimeDbModel.Store.CheckLocationPosTicketSale" />
+          <FunctionImportMapping FunctionImportName="SetTicketSaleStatus" FunctionName="db293_ActionTimeDbModel.Store.SetTicketSaleStatus" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
