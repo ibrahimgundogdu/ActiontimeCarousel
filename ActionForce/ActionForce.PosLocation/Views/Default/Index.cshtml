@@ -109,6 +109,7 @@
                     $('.side-menu,.side-menu-overlay').addClass(open);
                 }
             });
+
             $('.side-menu-overlay').on('click', function () {
                 $menu.removeClass(open);
                 $('.side-menu,.side-menu-overlay').removeClass(open);
@@ -126,11 +127,13 @@
                     $('.footer-basket').stop().slideDown();
                 }
             });
+
             $('.fixed-footer-overlay').on('click', function () {
                 $listBtn.removeClass(open);
                 $('.fixed-footer-overlay').removeClass(open);
                 $('.footer-basket').stop().slideUp();
             });
+
             $(document).ready(function () {
                 $('.piece-options .minus').click(function () {
                     var $input = $(this).parent().find('input');
@@ -147,6 +150,7 @@
                     return false;
                 });
             });
+
         });
 
 

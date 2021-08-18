@@ -181,6 +181,7 @@
     <Content Include="assets\scss\slick.css" />
     <Content Include="assets\scss\swiper.min.css" />
     <Content Include="Global.asax" />
+    <Content Include="libman.json" />
     <Content Include="assets\plugins\bootstrap-scrollspy\_bootstrap.scrollspy.scss" />
     <Content Include="assets\scss\documentation.css.map" />
     <Content Include="assets\scss\documentation.scss" />
@@ -193,7 +194,6 @@
     <Content Include="assets\scss\_prism.scss" />
     <Content Include="assets\scss\_reset.scss" />
     <Content Include="assets\scss\_responsive.scss" />
-    <Content Include="libman.json" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Scripts\jquery-1.6.4.js" />
     <Content Include="Scripts\jquery-1.6.4.min.js" />
@@ -245,6 +245,8 @@
     <Content Include="Views\Default\_PartialBasketList.cshtml" />
     <Content Include="Views\Shared\_PartialMenu.cshtml" />
     <Content Include="Views\Transaction\Index.cshtml" />
+    <Content Include="Views\Sales\Index.cshtml" />
+    <Content Include="Views\Sales\Detail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -257,7 +259,6 @@
     <Folder Include="Filters\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Lock\" />
-    <Folder Include="Views\Sales\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ActionForce.Entity\ActionForce.Entity.csproj">

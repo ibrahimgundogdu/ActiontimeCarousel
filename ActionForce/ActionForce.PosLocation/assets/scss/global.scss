@@ -121,7 +121,10 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
     ul{
       li{ margin-bottom: 10px; 
         a{ display: flex; align-items: center; justify-content: space-between; background: #fff; border-radius: 10px; box-shadow: 0 2px 5px rgba(111,147,197, .67); padding: 10px 15px;
-          .identity-datetime{
+          .environment{ color: #6F93C5; transition: .4s; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+            svg{ display: block; width: 40px; height: 40px; }
+          }
+          .identity-datetime{ padding-left: 60px; position: relative; text-align: left;
             .num{ font-size: 22px; color: #26436B; font-weight: 500; transition: .4s; }
             .datetime{ font-size: 14px; color: #6F93C5; }
           }
@@ -129,19 +132,62 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
             .piece{ font-size: 20px; color: #6F93C5; }
             .name{ font-size: 16px; color: #6F93C5; }
           }
-          .credit{
+          .credit{ padding-right: 60px; position: relative; text-align: right;
             .price{ font-size: 22px; color: #0075FF; font-weight: 700; transition: .4s;  
               span{ font-size: 16px; font-weight: 500; }
             }
             .text{ font-size: 16px; color: #6F93C5; }
           }
+          .detail{ color: #0075FF; transition: .4s; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+            svg{ display: block; width: 40px; height: 40px; }
+          }
+        }
+        &.ilk-kayit{
+          .identity-datetime{
+            .num{ color: #7f8c8d; }
+          }
+          .credit{
+            .price{ color: #7f8c8d; }
+          }
+        }
+        &.islemde{
+          .identity-datetime{
+            .num{ color: #9b59b6; }
+          }
+          .credit{
+            .price{ color: #9b59b6; }
+          }
+        }
+        &.tamamlandi{
+          .identity-datetime{
+            .num{ color: #3498db; }
+          }
+          .credit{
+            .price{ color: #3498db; }
+          }
+        }
+        &.iptal-edildi{
+          .identity-datetime{
+            .num{ color: #e74c3c; }
+          }
+          .credit{
+            .price{ color: #e74c3c; }
+          }
+        }
+        &.kapatildi{
+          .identity-datetime{
+            .num{ color: #e1e1e1; }
+          }
+          .credit{
+            .price{ color: #e1e1e1; }
+          }
         }
         &.active,&:hover{
           .identity-datetime{
-            .num{ color: #FF2B00; }
+            .num{ color: #34495e; }
           }
           .credit{
-            .price{ color: #FF2B00; }
+            .price{ color: #34495e; }
           }
         }
       }
@@ -161,7 +207,7 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
       }
     }
     h2{ font-size: 24px; color: #26436B; font-weight: 400; }
-  }
+  }/* location-content */
   .connect-content{ margin: -20px -20px 0; min-height: calc(100vh - 100px); text-align: center; position: relative; box-sizing: border-box; background: #EFF4FA; border-radius: 0; padding-bottom: 1px;  display: flex; align-items: center; justify-content: center;
     .back-repeat{ display: flex; align-items: center; justify-content: space-between; margin-bottom: 50px; 
       .back{
@@ -195,7 +241,75 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
     .connect-lower{ padding: 50px 10px 20px; margin-bottom: 50px;
       p{ font-size: 5.5vw; color: #26436B; font-weight: 500; margin-bottom: 0; }
     }
-  }
+  }/* connect-content */
+  .order-detail{ background: #EFF4FA; margin: 0 -20px; padding: 20px 20px 100px;
+    h1{ font-size: 28px; font-weight: 500; color: #6F93C5; padding: 10px 30px; }
+    ul{ margin-bottom: 40px;
+      li{ display: flex; justify-content: space-between; font-size: 18px; font-weight: 500; color: #0075FF; 
+        span{ display: block; padding: 5px;         
+          &:nth-child(1){ font-size: 16px; color: #6793c8; }
+        }
+        &:nth-child(even){ background: #EFF4FA; }
+        &:nth-child(odd){ background: #ffffff; }
+      }
+    }
+    .table-responsive{ width: 100%; overflow-x: auto; margin-bottom: 40px; 
+      table{ width: 100%; padding: 0; margin: 0; 
+        tr{
+          th,
+          td{ font-weight: 500; color: #26436B; padding: 10px;  font-size: 14px; 
+            &:nth-child(1){ text-align: left; } 
+            &:nth-last-child(1){ text-align: right; }
+          }
+          th{ font-size: 16px; color: #6793c8; }
+          &:nth-child(even){
+            th,td{  background: #EFF4FA; }
+          }
+          &:nth-child(odd){ 
+            th,td{  background: #ffffff; } }
+        }
+      }
+    }
+  }/* order-detail */
+  .refund-form{ background: #EFF4FA; margin: 0 -20px; padding: 20px 20px 100px;
+    .steps{ position: relative;
+      h1{ font-size: 28px; font-weight: 500; color: #6F93C5; padding: 10px 30px; }
+      .step{ position: absolute; opacity: 0; pointer-events: none; transition: .4s; width: 100%; transform: translateY(-50%); 
+        .form{ margin: 0 auto; width: 100%; max-width: 500px; 
+          .form-group{ margin-bottom: 20px; 
+            h3{ font-size: 18px; font-weight: 500; color: #26436B; padding: 10px 30px;
+              span{ font-size: 22px; display: block; }
+            }
+            label{ display: block; padding: 0 15px; text-align: left; font-size: 16px; color: #26436B; }
+            input,
+            textarea{ background: #fff; border: none; width: 100%; padding: 10px 15px; box-sizing: border-box; font-size: 16px; color: #26436B; border-radius: 5px; }
+            textarea{ height: 140px; }
+            button{ background: #26436B; border: 1px solid #26436B; color: #fff; font-weight: 500; padding: 10px 30px; width: 100%; box-sizing: border-box; transition: .4s; border-radius: 5px; 
+              &:hover{ background: #fff; color: #26436B; }
+            }
+          }
+        }
+        .form-result{ background: #fff; padding: 50px; width: 500px; max-width: 100%; margin: 0 auto; 
+          h2{ font-size: 22px; font-weight: 500; color: #26436B; padding: 10px 30px; }
+          p{ font-size: 16px; color: #26436B; margin-bottom: 10px; }
+        }
+        &-1{}
+        &-2{
+          .form{
+            .form-group{
+              input{ font-size: 28px; font-weight: 500; text-align: center;  }
+            }
+            .suc-group.disable{ cursor: no-drop;
+              button{ background: #000; opacity: .25; pointer-events: none; }
+            }
+          }
+          a{ display: block; margin-top: 50px; color: #26436B; }
+        }
+        &-3{}
+        &.active{ position: relative; opacity: 1; pointer-events: all; transform: translateX(0); }
+      }
+    }
+  }/* refund-form */
 }/* content */
 .fixed-footer{ position: fixed; left: 0; right: 0; bottom: 0; background: #fff; z-index: 55;
   &-overlay{ position: fixed; left: 0; top: 0; right: 0; bottom: 0; z-index: 54; background: rgba(111,147,197,.54); pointer-events: none; opacity: 0; transition: .4s; 
@@ -208,7 +322,15 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
   }
   .footer-up{ display: flex; justify-content: space-between; align-items: center; 
     .clean{ 
-      button{ cursor: pointer; border: none; background: transparent; padding: 5px; color: #FF2B00; }
+      button,a{ cursor: pointer; border: none; background: transparent; padding: 5px; color: #FF2B00; }
+      svg{ display: block; width: 40px; height: 40px; margin: 0 auto; }
+      span{ padding-top: 5px; display: block; color: #6F93C5; font-size: 12px; }
+      &-2{
+        button,a{ color: #0075FF; }
+      }
+    }
+    .ingenico-btn{ cursor: pointer; border: none; background: transparent; padding: 5px; color: #0075FF;
+      a{ display: block; color: #0075FF; }
       svg{ display: block; width: 40px; height: 40px; margin: 0 auto; }
       span{ padding-top: 5px; display: block; color: #6F93C5; font-size: 12px; }
     }
@@ -217,9 +339,12 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
       .piece{ font-size: 12px; color: #6F93C5; }
     }
     .payment{
-      button{ cursor: pointer; display: block; border: none; background: transparent; color: #0075FF;
+      button,a{ cursor: pointer; display: block; border: none; background: transparent; color: #0075FF;
         svg{ display: block; width: 40px; height: 40px; margin: 0 auto; }
         span{ padding-top: 5px; display: block; color: #6F93C5; font-size: 12px; }
+      }
+      &-2{
+        button,a{ color: #FF2B00; }
       }
     }
   }

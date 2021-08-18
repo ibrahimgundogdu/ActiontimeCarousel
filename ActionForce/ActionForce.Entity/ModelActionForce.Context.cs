@@ -312,6 +312,8 @@ namespace ActionForce.Entity
         public virtual DbSet<ActionTypeExpense> ActionTypeExpense { get; set; }
         public virtual DbSet<PosPaymentSubType> PosPaymentSubType { get; set; }
         public virtual DbSet<PosPaymentType> PosPaymentType { get; set; }
+        public virtual DbSet<VTicketSalePosPaymentSummary> VTicketSalePosPaymentSummary { get; set; }
+        public virtual DbSet<VTicketSaleSummary> VTicketSaleSummary { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

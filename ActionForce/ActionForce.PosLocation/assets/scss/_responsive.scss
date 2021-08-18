@@ -83,7 +83,10 @@
             ul{
                 li{
                     a{ padding: 10px; 
-                        .identity-datetime{
+                        .environment{ 
+                            svg{ width: 30px; height: 30px; }
+                        }
+                        .identity-datetime{ padding-left: 40px; 
                             .num{ font-size: 16px; }
                             .datetime{ font-size: 12px; }
                         }
@@ -91,15 +94,24 @@
                             .piece{ font-size: 16px; }
                             .name{ font-size: 12px; }
                         }
-                        .credit{
+                        .credit{ padding-right: 40px; 
                             .price{ font-size: 16px; }
                             .text{ font-size: 12px; }
+                        }
+                        .detail{ 
+                          svg{ width: 30px; height: 30px; }
                         }
                     }
                 }
             }
-        }
-    }
+        }/* sales-list */
+        .order-detail{
+            h1{ font-size: 24px; }
+        }/* order-detail */
+        .refund-form{
+            h1{ font-size: 24px; }
+        }/* refund-form */
+    }/* content */
     .modal{
         &#userModal{
             .modal-body{ padding: 20px; 

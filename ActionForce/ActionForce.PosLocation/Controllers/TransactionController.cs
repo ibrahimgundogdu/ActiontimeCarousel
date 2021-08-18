@@ -44,7 +44,7 @@ namespace ActionForce.PosLocation.Controllers
                 orderID = Db.AddPosOrder(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID, OrderNumber, null, null, null, null, null, PosManager.GetIPAddress()).FirstOrDefault();
 
                 model.Result.IsSuccess = true;
-                model.Result.Message = $"{OrderNumber} Nolu Sipariş Eklendi";
+                model.Result.Message = $"{orderID} ID'li Sipariş Eklendi";
 
                 var clean = Db.CleanBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID);
 

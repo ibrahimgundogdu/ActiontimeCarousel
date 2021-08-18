@@ -35,5 +35,6 @@ namespace ActionForce.Entity
         public string AuthorizationCode { get; set; }
         public string MaskedPan { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
+        public string Currency { get; set; }
     }
 }
