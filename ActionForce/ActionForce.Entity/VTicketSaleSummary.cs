@@ -27,5 +27,7 @@ namespace ActionForce.Entity
         public string Currency { get; set; }
         public string Sign { get; set; }
         public string FullName { get; set; }
+        public Nullable<double> PaymentAmount { get; set; }
+        public string PosStatusName { get; set; }
     }
 }

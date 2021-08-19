@@ -51,13 +51,37 @@
                         <li><span>ID</span><span> @(Model.TicketSale.ID)</span></li>
                         <li><span>SİPARİŞ NO</span><span> @(Model.TicketSale.OrderNumber)</span></li>
                         <li><span>SİPARİŞ TARİHİ</span><span> @(Model.TicketSale.Date?.ToShortDateString())</span></li>
-                        <li><span>DURUM</span><span>@(Model.TicketSalePosStatus.FirstOrDefault(x=> x.ID == Model.TicketSale.StatusID)?.PosStatusName)</span></li>
+                        <li><span>DURUM</span><span>@(Model.TicketSalePosStatus.FirstOrDefault(x=> x.ID == Model.TicketSale.PosStatusID)?.PosStatusName)</span></li>
                         <li><span>TUTAR</span><span>@(Model.TicketSaleSummary.Total?.ToString("N2")) @(Model.TicketSaleSummary.Sign)</span></li>
-                        <li><span>TAHSİLAT</span><span>@((Model.TicketSalePosPaymentSummary.Sum(x => x.PaymentAmount)?? 0).ToString("N2")) @(Model.TicketSaleSummary.Sign)</span></li>
+                        <li><span>TAHSİLAT</span><span>@((Model.TicketSaleSummary.PaymentAmount ?? 0).ToString("N2")) @(Model.TicketSaleSummary.Sign)</span></li>
                         <li><span>BİLET ADEDİ</span><span>@(Model.TicketSaleSummary.Quantity)</span></li>
                         <li><span>ORTAM BİLGİSİ</span><span>@(Model.Environments.FirstOrDefault(x=> x.ID == Model.TicketSaleSummary.EnvironmentID)?.Environment1)</span></li>
                         <li><span>KAYIT TARİHİ</span><span> @(Model.TicketSaleSummary.RecordDate.ToString())</span></li>
                         <li><span>KAYDEDEN</span><span>@(Model.TicketSaleSummary.FullName)</span></li>
+                        <li>
+                            <span>CARİ KAYIT</span>
+                            <span>
+                                @if (Model.TicketSale.PosStatusID == 3)
+                                {
+                                    if (Model.DocumentActions.Count > 0)
+                                    {
+                                        @(Model.DocumentNumbers.ToString());
+                                    }
+                                    else
+                                    {
+                                        <a href="/Sales/CheckDocument/@(Model.TicketSale.ID)">EKLE</a>
+                                    }
+                                }
+                                else
+                                {
+                                    if (Model.DocumentActions.Count > 0)
+                                    {
+                                        @(Model.DocumentNumbers.ToString());
+                                    }
+                                }
+
+                            </span>
+                        </li>
                     </ul>
 
                     <h1>SİPARİŞ DETAYI</h1>
@@ -72,10 +96,10 @@
                             @foreach (var item in Model.TicketSaleRows)
                             {
                                 <tr>
-                                    <td style="color:@($"#{item.StatusColor}");">@(item.ProductName)</td>
+                                    <td>@(item.ProductName)</td>
                                     <td>@(item.TaxRate) %</td>
-                                    <td>@(item.Unit) dk</td>
-                                    <td>@(item.RowTotal) @(Model.Currencys.FirstOrDefault(x=> x.Code == item.Currency)?.Sign)</td>
+                                    <td>@(item.SaleRowUnit) dk</td>
+                                    <td>@(item.RowTotal?.ToString("N2")) @(item.Sign)</td>
                                 </tr>
                             }
                         </table>
@@ -94,8 +118,8 @@
                                 <tr>
                                     <td>@(item.PaymentTypeName.ToUpper())</td>
                                     <td>@(item.PaymentAmount?.ToString("N2")) @(item.Sign)</td>
-                                    <td>@(item.NumberOfInstallment)</td>
-                                    <td></td>
+                                    <td>@(item.PaymentType == 4 ? item.NumberOfInstallment.ToString() : "")</td>
+                                    <td>@(item.BankName)</td>
                                 </tr>
                             }
 
@@ -116,16 +140,33 @@
                                 <span>GERİ</span>
                             </a>
                         </div>
-                        <div class="ingenico-btn">
-                            <a href="/Transaction/Index/@(Model.TicketSale.ID)">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="271.72" height="271.72" viewBox="0 0 271.72 271.72">
-                                    <path d="M87.252,9H19.322A11.355,11.355,0,0,0,8,20.322v135.86A11.355,11.355,0,0,0,19.322,167.5h67.93a11.355,11.355,0,0,0,11.322-11.322V20.322A11.355,11.355,0,0,0,87.252,9ZM75.93,144.86H30.643V31.643H75.93Z" transform="translate(82.573 92.895)" fill="currentColor" />
-                                    <ellipse cx="11" cy="11.5" rx="11" ry="11.5" transform="translate(124.687 136.687)" fill="currentColor" />
-                                    <path d="M36.26,68.5,52.224,84.46a56.853,56.853,0,0,1,80.157,0L148.345,68.5a79.265,79.265,0,0,0-112.084,0ZM92.3,0A124.147,124.147,0,0,0,4.22,36.456L20.184,52.419a101.952,101.952,0,0,1,144.125.113l15.964-15.964A123.313,123.313,0,0,0,92.3,0Z" transform="translate(43.557)" fill="currentColor" />
-                                </svg>
-                                <span>Ingenico</span>
-                            </a>
-                        </div>
+                        @if (Model.TicketSale.PosStatusID == 4)
+                        {
+                            <div class="ingenico-btn">
+                                <a href="/Transaction/Retry/@(Model.TicketSale.ID)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="271.72" height="271.72" viewBox="0 0 271.72 271.72">
+                                        <path d="M87.252,9H19.322A11.355,11.355,0,0,0,8,20.322v135.86A11.355,11.355,0,0,0,19.322,167.5h67.93a11.355,11.355,0,0,0,11.322-11.322V20.322A11.355,11.355,0,0,0,87.252,9ZM75.93,144.86H30.643V31.643H75.93Z" transform="translate(82.573 92.895)" fill="currentColor" />
+                                        <ellipse cx="11" cy="11.5" rx="11" ry="11.5" transform="translate(124.687 136.687)" fill="currentColor" />
+                                        <path d="M36.26,68.5,52.224,84.46a56.853,56.853,0,0,1,80.157,0L148.345,68.5a79.265,79.265,0,0,0-112.084,0ZM92.3,0A124.147,124.147,0,0,0,4.22,36.456L20.184,52.419a101.952,101.952,0,0,1,144.125.113l15.964-15.964A123.313,123.313,0,0,0,92.3,0Z" transform="translate(43.557)" fill="currentColor" />
+                                    </svg>
+                                    <span>TEKRAR DENE</span>
+                                </a>
+                            </div>
+                        }
+                        else if (Model.TicketSale.PosStatusID < 3)
+                        {
+                            <div class="ingenico-btn">
+                                <a href="/Transaction/Index/@(Model.TicketSale.ID)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="271.72" height="271.72" viewBox="0 0 271.72 271.72">
+                                        <path d="M87.252,9H19.322A11.355,11.355,0,0,0,8,20.322v135.86A11.355,11.355,0,0,0,19.322,167.5h67.93a11.355,11.355,0,0,0,11.322-11.322V20.322A11.355,11.355,0,0,0,87.252,9ZM75.93,144.86H30.643V31.643H75.93Z" transform="translate(82.573 92.895)" fill="currentColor" />
+                                        <ellipse cx="11" cy="11.5" rx="11" ry="11.5" transform="translate(124.687 136.687)" fill="currentColor" />
+                                        <path d="M36.26,68.5,52.224,84.46a56.853,56.853,0,0,1,80.157,0L148.345,68.5a79.265,79.265,0,0,0-112.084,0ZM92.3,0A124.147,124.147,0,0,0,4.22,36.456L20.184,52.419a101.952,101.952,0,0,1,144.125.113l15.964-15.964A123.313,123.313,0,0,0,92.3,0Z" transform="translate(43.557)" fill="currentColor" />
+                                    </svg>
+                                    <span>OKC POS</span>
+                                </a>
+                            </div>
+                        }
+
                         <div class="payment payment-2">
                             @if (Model.TicketSale.Date == Model.DocumentDate)
                             {
@@ -149,6 +190,7 @@
                     </div>
                 </div>
             </div><!-- fixed-footer -->
+
         </div>
     </div><!-- main -->
     <script src="/assets/js/jquery-3.5.1.min.js"></script>

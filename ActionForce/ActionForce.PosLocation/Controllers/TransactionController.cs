@@ -63,5 +63,19 @@ namespace ActionForce.PosLocation.Controllers
             }
 
         }
+
+        public ActionResult Retry(long? id)
+        {
+            try
+            {
+                Db.SetTicketSalePosStatus(id, 1);
+                return RedirectToAction("Index", new { id = id });
+            }
+            catch (Exception ex)
+            {
+                return RedirectToAction("Index", "Sales");
+            }
+        }
+
     }
 }

@@ -227,6 +227,7 @@
     <Compile Include="Models\DataModel\DataEmployee.cs" />
     <Compile Include="Models\DataModel\TicketInfo.cs" />
     <Compile Include="Models\DifferentList.cs" />
+    <Compile Include="Models\FormModels\RefundFormModel.cs" />
     <Compile Include="Models\FormModels\SerialFormModel.cs" />
     <Compile Include="Models\FormModels\UserLoginFormModel.cs" />
     <Compile Include="Models\LockedEmployee.cs" />
@@ -247,6 +248,7 @@
     <Content Include="Views\Transaction\Index.cshtml" />
     <Content Include="Views\Sales\Index.cshtml" />
     <Content Include="Views\Sales\Detail.cshtml" />
+    <Content Include="Views\Sales\Refund.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

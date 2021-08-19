@@ -23,6 +23,7 @@ namespace ActionForce.Entity
         public int ID { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
+        public Nullable<int> EFTCode { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
         public string SortBy { get; set; }
         public Nullable<bool> IsActive { get; set; }

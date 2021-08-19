@@ -322,7 +322,7 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
   }
   .footer-up{ display: flex; justify-content: space-between; align-items: center; 
     .clean{ 
-      button,a{ cursor: pointer; border: none; background: transparent; padding: 5px; color: #FF2B00; }
+      button,a{ display: block;  cursor: pointer; border: none; background: transparent; padding: 5px; color: #FF2B00; }
       svg{ display: block; width: 40px; height: 40px; margin: 0 auto; }
       span{ padding-top: 5px; display: block; color: #6F93C5; font-size: 12px; }
       &-2{
@@ -339,7 +339,7 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
       .piece{ font-size: 12px; color: #6F93C5; }
     }
     .payment{
-      button,a{ cursor: pointer; display: block; border: none; background: transparent; color: #0075FF;
+      button,a{ display: block; cursor: pointer; display: block; border: none; background: transparent; color: #0075FF;
         svg{ display: block; width: 40px; height: 40px; margin: 0 auto; }
         span{ padding-top: 5px; display: block; color: #6F93C5; font-size: 12px; }
       }

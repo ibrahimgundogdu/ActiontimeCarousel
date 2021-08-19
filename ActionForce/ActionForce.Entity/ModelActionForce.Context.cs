@@ -43,7 +43,6 @@ namespace ActionForce.Entity
         public virtual DbSet<Animal> Animal { get; set; }
         public virtual DbSet<AnimalType> AnimalType { get; set; }
         public virtual DbSet<AuthorizedIP> AuthorizedIP { get; set; }
-        public virtual DbSet<Bank> Bank { get; set; }
         public virtual DbSet<BankAccount> BankAccount { get; set; }
         public virtual DbSet<BankAccountType> BankAccountType { get; set; }
         public virtual DbSet<BankActionType> BankActionType { get; set; }
@@ -314,6 +313,10 @@ namespace ActionForce.Entity
         public virtual DbSet<PosPaymentType> PosPaymentType { get; set; }
         public virtual DbSet<VTicketSalePosPaymentSummary> VTicketSalePosPaymentSummary { get; set; }
         public virtual DbSet<VTicketSaleSummary> VTicketSaleSummary { get; set; }
+        public virtual DbSet<Bank> Bank { get; set; }
+        public virtual DbSet<VAdisyonRowsSummary> VAdisyonRowsSummary { get; set; }
+        public virtual DbSet<VTicketSaleRowSummary> VTicketSaleRowSummary { get; set; }
+        public virtual DbSet<VTicketSaleDocumentAction> VTicketSaleDocumentAction { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -2011,6 +2014,28 @@ namespace ActionForce.Entity
                 new ObjectParameter("SicilNo", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetTicketSaleStatus", orderIDParameter, statusIDParameter, sicilNoParameter);
+        }
+    
+        public virtual int SetTicketSalePosStatus(Nullable<long> orderID, Nullable<int> statusID)
+        {
+            var orderIDParameter = orderID.HasValue ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(long));
+    
+            var statusIDParameter = statusID.HasValue ?
+                new ObjectParameter("StatusID", statusID) :
+                new ObjectParameter("StatusID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetTicketSalePosStatus", orderIDParameter, statusIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetTicketSalePaymentAmount(Nullable<long> saleID)
+        {
+            var saleIDParameter = saleID.HasValue ?
+                new ObjectParameter("SaleID", saleID) :
+                new ObjectParameter("SaleID", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetTicketSalePaymentAmount", saleIDParameter);
         }
     }
 }

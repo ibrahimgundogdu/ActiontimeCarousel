@@ -23,5 +23,6 @@ namespace ActionForce.Entity
         public Nullable<double> PaymentAmount { get; set; }
         public string Currency { get; set; }
         public string Sign { get; set; }
+        public string BankName { get; set; }
     }
 }

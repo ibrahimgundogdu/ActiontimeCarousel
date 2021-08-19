@@ -159,7 +159,7 @@ namespace ActionForce.PosService.Controllers
                                 detail.SalesItemizerList = null;
 
                                 detail.SaleItemList = new List<SaleItem>();
-                                var orderrows = Db.VTicketSaleRowsAll.Where(x => x.OrderID == order.ID).ToList();
+                                var orderrows = Db.VAdisyonRowsSummary.Where(x => x.SaleID == order.ID).ToList();
                                 foreach (var item in orderrows)
                                 {
                                     detail.SaleItemList.Add(new SaleItem()
@@ -167,8 +167,8 @@ namespace ActionForce.PosService.Controllers
                                         Quantity = item.Quantity,
                                         QuantityType = 1,
                                         TaxRate = Convert.ToInt32(item.TaxRate * 100),
-                                        Title = item.ProductName,
-                                        UnitAmount = Convert.ToInt64(item.RowTotal * 100)
+                                        Title = item.TicketProductName,
+                                        UnitAmount = Convert.ToInt64(item.Total * 100)
                                     });
                                 }
 
