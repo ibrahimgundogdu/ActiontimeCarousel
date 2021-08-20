@@ -173,6 +173,9 @@
     <Compile Include="ComputeEmployeeSalary_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="ConfirmMessage.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="Costume.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -195,6 +198,27 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="CustomerActions.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerActionType.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerCard.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerCardStatus.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerScorePointBatch.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerScorePointRules.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerScorePoints.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CustomerTansactions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="DateList.cs">
@@ -240,6 +264,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="DocumentEmployeePermit.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="DocumentExpenseSlip.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="DocumentNumber.cs">

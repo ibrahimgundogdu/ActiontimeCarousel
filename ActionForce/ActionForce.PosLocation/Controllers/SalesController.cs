@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ActionForce.Entity;
+using ActionForce.Service;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -94,7 +96,64 @@ namespace ActionForce.PosLocation.Controllers
             SalesControlModel model = new SalesControlModel();
             model.Authentication = this.AuthenticationData;
 
+            if (form == null)
+            {
+                return RedirectToAction("Index");
+            }
 
+
+            string phonenumber = form.CustomerPhone.Replace("(", "").Replace(")", "").Replace(" ", "");
+
+
+            int CustomerID = Db.CheckCustomer(form.CustomerIdentityNumber.Trim(), form.CustomerName.Trim(), form.CustomerMail, form.PhoneNumberCountry.Trim(), form.CountryCode.Trim(), phonenumber, 2).FirstOrDefault() ?? 2;
+
+            model.TicketSaleSummary = Db.VTicketSaleSummary.FirstOrDefault(x => x.ID == form.OrderID);
+            var ResultID = Db.GetDayResultID(model.Authentication.CurrentLocation.ID,form.DocumentDate,1,3,model.Authentication.CurrentEmployee.EmployeeID,string.Empty,PosManager.GetIPAddress()).FirstOrDefault();
+            var PaymentAmount = Db.GetTicketSalePaymentAmount(form.OrderID).FirstOrDefault() ?? 0;
+
+            DocumentExpenseSlip slip = new DocumentExpenseSlip();
+
+            slip.ActionTypeID = 41;
+            slip.ActionTypeName = "Gider Pusulası";
+            slip.Amount = PaymentAmount;
+            slip.Currency = model.TicketSaleSummary.Currency;
+            slip.Description = form.Description;
+            slip.DocumentDate = form.DocumentDate;
+            slip.DocumentNumber = form.DocumentNumber;
+            slip.EnvironmentID = 7;
+            slip.ExchangeRate = 1;
+            slip.IsActive = true;
+            slip.IsConfirmed = false;
+            slip.LocationID = model.Authentication.CurrentLocation.ID;
+            slip.OurCompanyID = model.Authentication.CurrentLocation.OurCompanyID;
+            slip.RecordDate = DateTime.UtcNow.AddHours(3);
+            slip.RecordEmployeeID = model.Authentication.CurrentEmployee.EmployeeID;
+            slip.RecordIP = PosManager.GetIPAddress();
+            slip.ReferenceID = form.OrderID;
+            slip.ResultID = ResultID;
+            slip.SystemAmount = PaymentAmount;
+            slip.SystemCurrency = model.TicketSaleSummary.Currency;
+            slip.UID = Guid.NewGuid();
+
+            try
+            {
+                Db.DocumentExpenseSlip.Add(slip);
+                Db.SaveChanges();
+
+
+
+                // burdan devam
+            }
+            catch (Exception ex)
+            {
+
+            }
+
+
+
+
+            SMSManager smsmanager = new SMSManager();
+            smsmanager.SendSMS("Deneme Mesajıdır.", "5335975566", null);
 
 
             return View(model);

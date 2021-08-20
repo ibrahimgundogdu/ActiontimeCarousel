@@ -150,7 +150,6 @@ namespace ActionForce.Entity
         public virtual DbSet<DocumentTicketSales> DocumentTicketSales { get; set; }
         public virtual DbSet<VDocumentCashCollections> VDocumentCashCollections { get; set; }
         public virtual DbSet<Currency> Currency { get; set; }
-        public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<Exchange> Exchange { get; set; }
         public virtual DbSet<BankActions> BankActions { get; set; }
         public virtual DbSet<CashActions> CashActions { get; set; }
@@ -317,6 +316,16 @@ namespace ActionForce.Entity
         public virtual DbSet<VAdisyonRowsSummary> VAdisyonRowsSummary { get; set; }
         public virtual DbSet<VTicketSaleRowSummary> VTicketSaleRowSummary { get; set; }
         public virtual DbSet<VTicketSaleDocumentAction> VTicketSaleDocumentAction { get; set; }
+        public virtual DbSet<ConfirmMessage> ConfirmMessage { get; set; }
+        public virtual DbSet<CustomerActionType> CustomerActionType { get; set; }
+        public virtual DbSet<CustomerCard> CustomerCard { get; set; }
+        public virtual DbSet<CustomerCardStatus> CustomerCardStatus { get; set; }
+        public virtual DbSet<CustomerScorePointBatch> CustomerScorePointBatch { get; set; }
+        public virtual DbSet<CustomerScorePointRules> CustomerScorePointRules { get; set; }
+        public virtual DbSet<CustomerScorePoints> CustomerScorePoints { get; set; }
+        public virtual DbSet<CustomerTansactions> CustomerTansactions { get; set; }
+        public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<DocumentExpenseSlip> DocumentExpenseSlip { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -2036,6 +2045,39 @@ namespace ActionForce.Entity
                 new ObjectParameter("SaleID", typeof(long));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetTicketSalePaymentAmount", saleIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> CheckCustomer(string identityNumber, string fullName, string email, string countryCode, string phoneCode, string phoneNumber, Nullable<int> ourCompanyID)
+        {
+            var identityNumberParameter = identityNumber != null ?
+                new ObjectParameter("IdentityNumber", identityNumber) :
+                new ObjectParameter("IdentityNumber", typeof(string));
+    
+            var fullNameParameter = fullName != null ?
+                new ObjectParameter("FullName", fullName) :
+                new ObjectParameter("FullName", typeof(string));
+    
+            var emailParameter = email != null ?
+                new ObjectParameter("Email", email) :
+                new ObjectParameter("Email", typeof(string));
+    
+            var countryCodeParameter = countryCode != null ?
+                new ObjectParameter("CountryCode", countryCode) :
+                new ObjectParameter("CountryCode", typeof(string));
+    
+            var phoneCodeParameter = phoneCode != null ?
+                new ObjectParameter("PhoneCode", phoneCode) :
+                new ObjectParameter("PhoneCode", typeof(string));
+    
+            var phoneNumberParameter = phoneNumber != null ?
+                new ObjectParameter("PhoneNumber", phoneNumber) :
+                new ObjectParameter("PhoneNumber", typeof(string));
+    
+            var ourCompanyIDParameter = ourCompanyID.HasValue ?
+                new ObjectParameter("OurCompanyID", ourCompanyID) :
+                new ObjectParameter("OurCompanyID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("CheckCustomer", identityNumberParameter, fullNameParameter, emailParameter, countryCodeParameter, phoneCodeParameter, phoneNumberParameter, ourCompanyIDParameter);
         }
     }
 }

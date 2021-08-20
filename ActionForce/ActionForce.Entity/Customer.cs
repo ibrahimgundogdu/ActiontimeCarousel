@@ -16,11 +16,15 @@ namespace ActionForce.Entity
     {
         public int ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
+        public string CustomerNumber { get; set; }
+        public string IdentityNumber { get; set; }
         public string FullName { get; set; }
         public string EMail { get; set; }
-        public string Phone { get; set; }
-        public Nullable<bool> IsActive { get; set; }
-        public string CustomerNumber { get; set; }
+        public string CountryCode { get; set; }
+        public string PhoneCode { get; set; }
+        public string PhoneNumber { get; set; }
+        public string SMSNumber { get; set; }
+        public string Password { get; set; }
         public Nullable<bool> IsSendSMS { get; set; }
         public Nullable<bool> IsSendMail { get; set; }
         public Nullable<bool> IsAcceptGDPR { get; set; }
@@ -28,7 +32,7 @@ namespace ActionForce.Entity
         public Nullable<bool> IsValidMail { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
         public string RecordIP { get; set; }
-        public string Password { get; set; }
         public Nullable<System.Guid> UID { get; set; }
+        public Nullable<bool> IsActive { get; set; }
     }
 }

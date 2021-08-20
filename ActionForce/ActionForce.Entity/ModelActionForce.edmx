@@ -641,6 +641,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Property Name="SortBy" Type="char" MaxLength="2" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="ConfirmMessage">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentUID" Type="uniqueidentifier" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="15" />
+          <Property Name="ConfirmCode" Type="int" />
+          <Property Name="IsConfirmed" Type="bit" />
+          <Property Name="DateSend" Type="datetime" />
+          <Property Name="DateConfirm" Type="datetime" />
+        </EntityType>
         <EntityType Name="Costume">
           <Key>
             <PropertyRef Name="ID" />
@@ -711,10 +723,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OurCompanyID" Type="int" />
           <Property Name="CustomerNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="IdentityNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="FullName" Type="nvarchar" MaxLength="120" />
           <Property Name="EMail" Type="nvarchar" MaxLength="120" />
-          <Property Name="Phone" Type="nvarchar" MaxLength="20" />
-          <Property Name="IsActive" Type="bit" />
+          <Property Name="CountryCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="PhoneCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="SMSNumber" Type="nvarchar" MaxLength="30" StoreGeneratedPattern="Computed" />
+          <Property Name="Password" Type="nvarchar" MaxLength="40" />
           <Property Name="IsSendSMS" Type="bit" />
           <Property Name="IsSendMail" Type="bit" />
           <Property Name="IsAcceptGDPR" Type="bit" />
@@ -722,8 +738,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Property Name="IsValidMail" Type="bit" />
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
-          <Property Name="Password" Type="nvarchar" MaxLength="40" />
           <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="CustomerActions">
           <Key>
@@ -753,6 +769,109 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="UpdateEmployeeID" Type="int" />
           <Property Name="UpdateDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CustomerActionType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Module" Type="nvarchar" MaxLength="10" />
+          <Property Name="Code" Type="nvarchar" MaxLength="20" />
+          <Property Name="NameEN" Type="nvarchar" MaxLength="50" />
+          <Property Name="NameTR" Type="nvarchar" MaxLength="50" />
+          <Property Name="Multiply" Type="float" />
+          <Property Name="SortBy" Type="char" MaxLength="4" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="CustomerCard">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="CardStatus" Type="nvarchar" MaxLength="20" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsMaster" Type="bit" />
+          <Property Name="DateRecord" Type="datetime" />
+          <Property Name="Token" Type="uniqueidentifier" />
+          <Property Name="TokenExpire" Type="datetime" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="CustomerCardStatus">
+          <Key>
+            <PropertyRef Name="StatusLevel" />
+          </Key>
+          <Property Name="ID" Type="int" />
+          <Property Name="StatusLevel" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CardStatus" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="CustomerScorePointBatch">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="TicketTypeID" Type="int" />
+          <Property Name="BatchDate" Type="datetime" />
+          <Property Name="QuantityPoint" Type="int" />
+          <Property Name="QuantityTicket" Type="int" />
+          <Property Name="DateRecord" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CustomerScorePointRules">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="TicketTypeID" Type="int" />
+          <Property Name="DateStart" Type="date" />
+          <Property Name="QuantityPoint" Type="int" />
+          <Property Name="QuantityTicket" Type="int" />
+        </EntityType>
+        <EntityType Name="CustomerScorePoints">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="DocumentUID" Type="uniqueidentifier" />
+          <Property Name="ProcessName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProcessDate" Type="datetime" />
+          <Property Name="TicketTypeID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="ActionTypeID" Type="int" />
+          <Property Name="BatchID" Type="int" />
+          <Property Name="PointLevel" Type="smallint" />
+          <Property Name="RequiredQuantity" Type="int" />
+          <Property Name="RequiredLevel" Type="int" />
+          <Property Name="CollectQuantity" Type="int" />
+          <Property Name="SpendQuantity" Type="int" />
+          <Property Name="Quantity" Type="int" StoreGeneratedPattern="Computed" />
+          <Property Name="RecordDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CustomerTansactions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="MerchandName" Type="nvarchar" MaxLength="50" />
+          <Property Name="TransactionDate" Type="datetime" />
+          <Property Name="TransactionNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Commission" Type="float" />
+          <Property Name="TotalAmount" Type="float" StoreGeneratedPattern="Computed" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="CardPan" Type="nvarchar" MaxLength="20" />
+          <Property Name="HolderName" Type="nvarchar" MaxLength="120" />
+          <Property Name="ExpDate" Type="nvarchar" MaxLength="10" />
+          <Property Name="CCV2" Type="nvarchar" MaxLength="4" />
+          <Property Name="ResultMessage" Type="nvarchar" MaxLength="500" />
+          <Property Name="IsSuccess" Type="bit" />
         </EntityType>
         <EntityType Name="DateList">
           <Key>
@@ -1176,6 +1295,39 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Property Name="ResultID" Type="bigint" />
           <Property Name="EnvironmentID" Type="int" />
           <Property Name="UID" Type="uniqueidentifier" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentExpenseSlip' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="DocumentExpenseSlip">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="DocumentDate" Type="date" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="ToCustomerID" Type="int" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="ExchangeRate" Type="float" />
+          <Property Name="SystemAmount" Type="float" />
+          <Property Name="SystemCurrency" Type="nvarchar" MaxLength="4" />
+          <Property Name="ReferenceID" Type="bigint" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
+          <Property Name="ActionTypeID" Type="int" />
+          <Property Name="Description" Type="nvarchar" MaxLength="250" />
+          <Property Name="ResultID" Type="bigint" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="UpdateEmployee" Type="int" />
+          <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsConfirmed" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="DocumentNumber">
           <Key>
@@ -6666,6 +6818,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="ReceiptTime" Type="time" Mode="In" />
           <Parameter Name="TicketType" Type="int" Mode="In" />
         </Function>
+        <Function Name="CheckCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IdentityNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="FullName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Email" Type="nvarchar" Mode="In" />
+          <Parameter Name="CountryCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="PhoneCode" Type="nvarchar" Mode="In" />
+          <Parameter Name="PhoneNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="OurCompanyID" Type="int" Mode="In" />
+        </Function>
         <Function Name="CheckLocationPosTicketSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SaleID" Type="bigint" Mode="In" />
         </Function>
@@ -6947,6 +7108,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="CollectionType" EntityType="Self.CollectionType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Company" EntityType="Self.Company" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CompanyCategory" EntityType="Self.CompanyCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ConfirmMessage" EntityType="Self.ConfirmMessage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Costume" EntityType="Self.Costume" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CostumeType" EntityType="Self.CostumeType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
@@ -6955,6 +7117,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Currency" EntityType="Self.Currency" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Customer" EntityType="Self.Customer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CustomerActions" EntityType="Self.CustomerActions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerActionType" EntityType="Self.CustomerActionType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerCard" EntityType="Self.CustomerCard" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerCardStatus" EntityType="Self.CustomerCardStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerScorePointBatch" EntityType="Self.CustomerScorePointBatch" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerScorePointRules" EntityType="Self.CustomerScorePointRules" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerScorePoints" EntityType="Self.CustomerScorePoints" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CustomerTansactions" EntityType="Self.CustomerTansactions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DateList" EntityType="Self.DateList" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DayResult" EntityType="Self.DayResult" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DayResultCheckPrice" EntityType="Self.DayResultCheckPrice" Schema="dbo" store:Type="Tables" />
@@ -7143,6 +7312,36 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [City].[SortBy] AS [SortBy], 
     [City].[IsActive] AS [IsActive]
     FROM [dbo].[City] AS [City]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="DocumentExpenseSlip" EntityType="Self.DocumentExpenseSlip" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [DocumentExpenseSlip].[ID] AS [ID], 
+    [DocumentExpenseSlip].[OurCompanyID] AS [OurCompanyID], 
+    [DocumentExpenseSlip].[LocationID] AS [LocationID], 
+    [DocumentExpenseSlip].[DocumentDate] AS [DocumentDate], 
+    [DocumentExpenseSlip].[DocumentNumber] AS [DocumentNumber], 
+    [DocumentExpenseSlip].[ToCustomerID] AS [ToCustomerID], 
+    [DocumentExpenseSlip].[Amount] AS [Amount], 
+    [DocumentExpenseSlip].[Currency] AS [Currency], 
+    [DocumentExpenseSlip].[ExchangeRate] AS [ExchangeRate], 
+    [DocumentExpenseSlip].[SystemAmount] AS [SystemAmount], 
+    [DocumentExpenseSlip].[SystemCurrency] AS [SystemCurrency], 
+    [DocumentExpenseSlip].[ReferenceID] AS [ReferenceID], 
+    [DocumentExpenseSlip].[ActionTypeName] AS [ActionTypeName], 
+    [DocumentExpenseSlip].[ActionTypeID] AS [ActionTypeID], 
+    [DocumentExpenseSlip].[Description] AS [Description], 
+    [DocumentExpenseSlip].[ResultID] AS [ResultID], 
+    [DocumentExpenseSlip].[EnvironmentID] AS [EnvironmentID], 
+    [DocumentExpenseSlip].[UID] AS [UID], 
+    [DocumentExpenseSlip].[RecordDate] AS [RecordDate], 
+    [DocumentExpenseSlip].[RecordEmployeeID] AS [RecordEmployeeID], 
+    [DocumentExpenseSlip].[RecordIP] AS [RecordIP], 
+    [DocumentExpenseSlip].[UpdateDate] AS [UpdateDate], 
+    [DocumentExpenseSlip].[UpdateEmployee] AS [UpdateEmployee], 
+    [DocumentExpenseSlip].[UpdateIP] AS [UpdateIP], 
+    [DocumentExpenseSlip].[IsConfirmed] AS [IsConfirmed], 
+    [DocumentExpenseSlip].[IsActive] AS [IsActive]
+    FROM [dbo].[DocumentExpenseSlip] AS [DocumentExpenseSlip]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="EmployeeShiftX" EntityType="Self.EmployeeShiftX" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -9614,7 +9813,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="Currency" EntityType="db293_ActionTimeDbModel.Currency" />
-          <EntitySet Name="Customer" EntityType="db293_ActionTimeDbModel.Customer" />
           <FunctionImport Name="GetDocumentNumber" ReturnType="Collection(String)">
             <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
             <Parameter Name="Prefix" Mode="In" Type="String" />
@@ -10269,8 +10467,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VTicketSaleRowSummary" EntityType="db293_ActionTimeDbModel.VTicketSaleRowSummary" />
           <EntitySet Name="VTicketSaleDocumentAction" EntityType="db293_ActionTimeDbModel.VTicketSaleDocumentAction" />
           <FunctionImport Name="GetTicketSalePaymentAmount" ReturnType="Collection(Double)">
-            <Parameter Name="SaleID" Mode="In" Type="Int64" />
+          <Parameter Name="SaleID" Mode="In" Type="Int64" />
           </FunctionImport>
+          <EntitySet Name="ConfirmMessage" EntityType="db293_ActionTimeDbModel.ConfirmMessage" />
+          <EntitySet Name="CustomerActionType" EntityType="db293_ActionTimeDbModel.CustomerActionType" />
+          <EntitySet Name="CustomerCard" EntityType="db293_ActionTimeDbModel.CustomerCard" />
+          <EntitySet Name="CustomerCardStatus" EntityType="db293_ActionTimeDbModel.CustomerCardStatus" />
+          <EntitySet Name="CustomerScorePointBatch" EntityType="db293_ActionTimeDbModel.CustomerScorePointBatch" />
+          <EntitySet Name="CustomerScorePointRules" EntityType="db293_ActionTimeDbModel.CustomerScorePointRules" />
+          <EntitySet Name="CustomerScorePoints" EntityType="db293_ActionTimeDbModel.CustomerScorePoints" />
+          <EntitySet Name="CustomerTansactions" EntityType="db293_ActionTimeDbModel.CustomerTansactions" />
+          <FunctionImport Name="CheckCustomer" ReturnType="Collection(Int32)">
+            <Parameter Name="IdentityNumber" Mode="In" Type="String" />
+            <Parameter Name="FullName" Mode="In" Type="String" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="CountryCode" Mode="In" Type="String" />
+            <Parameter Name="PhoneCode" Mode="In" Type="String" />
+            <Parameter Name="PhoneNumber" Mode="In" Type="String" />
+            <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Customer" EntityType="db293_ActionTimeDbModel.Customer" />
+          <EntitySet Name="DocumentExpenseSlip" EntityType="db293_ActionTimeDbModel.DocumentExpenseSlip" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -12450,27 +12667,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Code" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="Name" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
-        </EntityType>
-        <EntityType Name="Customer">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="FullName" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
-          <Property Name="EMail" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
-          <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="CustomerNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="IsSendSMS" Type="Boolean" />
-          <Property Name="IsSendMail" Type="Boolean" />
-          <Property Name="IsAcceptGDPR" Type="Boolean" />
-          <Property Name="IsValidPhone" Type="Boolean" />
-          <Property Name="IsValidMail" Type="Boolean" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Password" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
-          <Property Name="UID" Type="Guid" />
         </EntityType>
         <EntityType Name="Exchange">
           <Key>
@@ -17145,6 +17341,177 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
           <Property Name="SaleID" Type="Int64" />
         </EntityType>
+        <EntityType Name="ConfirmMessage">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentUID" Type="Guid" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="ConfirmCode" Type="Int32" />
+          <Property Name="IsConfirmed" Type="Boolean" />
+          <Property Name="DateSend" Type="DateTime" Precision="3" />
+          <Property Name="DateConfirm" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CustomerActionType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Module" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Code" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="NameEN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NameTR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Multiply" Type="Double" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="CustomerCard">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="CardStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsMaster" Type="Boolean" />
+          <Property Name="DateRecord" Type="DateTime" Precision="3" />
+          <Property Name="Token" Type="Guid" />
+          <Property Name="TokenExpire" Type="DateTime" Precision="3" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="CustomerCardStatus">
+          <Key>
+            <PropertyRef Name="StatusLevel" />
+          </Key>
+          <Property Name="ID" Type="Int32" />
+          <Property Name="StatusLevel" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CardStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CustomerScorePointBatch">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="TicketTypeID" Type="Int32" />
+          <Property Name="BatchDate" Type="DateTime" Precision="3" />
+          <Property Name="QuantityPoint" Type="Int32" />
+          <Property Name="QuantityTicket" Type="Int32" />
+          <Property Name="DateRecord" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CustomerScorePointRules">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="TicketTypeID" Type="Int32" />
+          <Property Name="DateStart" Type="DateTime" Precision="0" />
+          <Property Name="QuantityPoint" Type="Int32" />
+          <Property Name="QuantityTicket" Type="Int32" />
+        </EntityType>
+        <EntityType Name="CustomerScorePoints">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="DocumentUID" Type="Guid" />
+          <Property Name="ProcessName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessDate" Type="DateTime" Precision="3" />
+          <Property Name="TicketTypeID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="BatchID" Type="Int32" />
+          <Property Name="PointLevel" Type="Int16" />
+          <Property Name="RequiredQuantity" Type="Int32" />
+          <Property Name="RequiredLevel" Type="Int32" />
+          <Property Name="CollectQuantity" Type="Int32" />
+          <Property Name="SpendQuantity" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CustomerTansactions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="MerchandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TransactionDate" Type="DateTime" Precision="3" />
+          <Property Name="TransactionNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Commission" Type="Double" />
+          <Property Name="TotalAmount" Type="Double" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="CardPan" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="HolderName" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
+          <Property Name="ExpDate" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CCV2" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="ResultMessage" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="IsSuccess" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="Customer">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="CustomerNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IdentityNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
+          <Property Name="EMail" Type="String" MaxLength="120" FixedLength="false" Unicode="true" />
+          <Property Name="CountryCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SMSNumber" Type="String" MaxLength="30" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Password" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="IsSendSMS" Type="Boolean" />
+          <Property Name="IsSendMail" Type="Boolean" />
+          <Property Name="IsAcceptGDPR" Type="Boolean" />
+          <Property Name="IsValidPhone" Type="Boolean" />
+          <Property Name="IsValidMail" Type="Boolean" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="DocumentExpenseSlip">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="DocumentDate" Type="DateTime" Precision="0" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="ToCustomerID" Type="Int32" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="ExchangeRate" Type="Double" />
+          <Property Name="SystemAmount" Type="Double" />
+          <Property Name="SystemCurrency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="ReferenceID" Type="Int64" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ResultID" Type="Int64" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployee" Type="Int32" />
+          <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsConfirmed" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -19264,28 +19631,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="Sign" ColumnName="Sign" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Customer">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Customer">
-              <MappingFragment StoreEntitySet="Customer">
-                <ScalarProperty Name="UID" ColumnName="UID" />
-                <ScalarProperty Name="Password" ColumnName="Password" />
-                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="IsValidMail" ColumnName="IsValidMail" />
-                <ScalarProperty Name="IsValidPhone" ColumnName="IsValidPhone" />
-                <ScalarProperty Name="IsAcceptGDPR" ColumnName="IsAcceptGDPR" />
-                <ScalarProperty Name="IsSendMail" ColumnName="IsSendMail" />
-                <ScalarProperty Name="IsSendSMS" ColumnName="IsSendSMS" />
-                <ScalarProperty Name="CustomerNumber" ColumnName="CustomerNumber" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="Phone" ColumnName="Phone" />
-                <ScalarProperty Name="EMail" ColumnName="EMail" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -23778,6 +24123,188 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetTicketSalePaymentAmount" FunctionName="db293_ActionTimeDbModel.Store.GetTicketSalePaymentAmount" />
+          <EntitySetMapping Name="ConfirmMessage">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ConfirmMessage">
+              <MappingFragment StoreEntitySet="ConfirmMessage">
+                <ScalarProperty Name="DateConfirm" ColumnName="DateConfirm" />
+                <ScalarProperty Name="DateSend" ColumnName="DateSend" />
+                <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
+                <ScalarProperty Name="ConfirmCode" ColumnName="ConfirmCode" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="DocumentUID" ColumnName="DocumentUID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerActionType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CustomerActionType">
+              <MappingFragment StoreEntitySet="CustomerActionType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="Multiply" ColumnName="Multiply" />
+                <ScalarProperty Name="NameTR" ColumnName="NameTR" />
+                <ScalarProperty Name="NameEN" ColumnName="NameEN" />
+                <ScalarProperty Name="Code" ColumnName="Code" />
+                <ScalarProperty Name="Module" ColumnName="Module" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerCard">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CustomerCard">
+              <MappingFragment StoreEntitySet="CustomerCard">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="TokenExpire" ColumnName="TokenExpire" />
+                <ScalarProperty Name="Token" ColumnName="Token" />
+                <ScalarProperty Name="DateRecord" ColumnName="DateRecord" />
+                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="CardStatus" ColumnName="CardStatus" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerCardStatus">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CustomerCardStatus">
+              <MappingFragment StoreEntitySet="CustomerCardStatus">
+                <ScalarProperty Name="CardStatus" ColumnName="CardStatus" />
+                <ScalarProperty Name="StatusLevel" ColumnName="StatusLevel" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerScorePointBatch">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CustomerScorePointBatch">
+              <MappingFragment StoreEntitySet="CustomerScorePointBatch">
+                <ScalarProperty Name="DateRecord" ColumnName="DateRecord" />
+                <ScalarProperty Name="QuantityTicket" ColumnName="QuantityTicket" />
+                <ScalarProperty Name="QuantityPoint" ColumnName="QuantityPoint" />
+                <ScalarProperty Name="BatchDate" ColumnName="BatchDate" />
+                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerScorePointRules">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CustomerScorePointRules">
+              <MappingFragment StoreEntitySet="CustomerScorePointRules">
+                <ScalarProperty Name="QuantityTicket" ColumnName="QuantityTicket" />
+                <ScalarProperty Name="QuantityPoint" ColumnName="QuantityPoint" />
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerScorePoints">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CustomerScorePoints">
+              <MappingFragment StoreEntitySet="CustomerScorePoints">
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="SpendQuantity" ColumnName="SpendQuantity" />
+                <ScalarProperty Name="CollectQuantity" ColumnName="CollectQuantity" />
+                <ScalarProperty Name="RequiredLevel" ColumnName="RequiredLevel" />
+                <ScalarProperty Name="RequiredQuantity" ColumnName="RequiredQuantity" />
+                <ScalarProperty Name="PointLevel" ColumnName="PointLevel" />
+                <ScalarProperty Name="BatchID" ColumnName="BatchID" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
+                <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
+                <ScalarProperty Name="ProcessName" ColumnName="ProcessName" />
+                <ScalarProperty Name="DocumentUID" ColumnName="DocumentUID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerTansactions">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CustomerTansactions">
+              <MappingFragment StoreEntitySet="CustomerTansactions">
+                <ScalarProperty Name="IsSuccess" ColumnName="IsSuccess" />
+                <ScalarProperty Name="ResultMessage" ColumnName="ResultMessage" />
+                <ScalarProperty Name="CCV2" ColumnName="CCV2" />
+                <ScalarProperty Name="ExpDate" ColumnName="ExpDate" />
+                <ScalarProperty Name="HolderName" ColumnName="HolderName" />
+                <ScalarProperty Name="CardPan" ColumnName="CardPan" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="TotalAmount" ColumnName="TotalAmount" />
+                <ScalarProperty Name="Commission" ColumnName="Commission" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="TransactionNumber" ColumnName="TransactionNumber" />
+                <ScalarProperty Name="TransactionDate" ColumnName="TransactionDate" />
+                <ScalarProperty Name="MerchandName" ColumnName="MerchandName" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CheckCustomer" FunctionName="db293_ActionTimeDbModel.Store.CheckCustomer" />
+          <EntitySetMapping Name="Customer">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Customer">
+              <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="IsValidMail" ColumnName="IsValidMail" />
+                <ScalarProperty Name="IsValidPhone" ColumnName="IsValidPhone" />
+                <ScalarProperty Name="IsAcceptGDPR" ColumnName="IsAcceptGDPR" />
+                <ScalarProperty Name="IsSendMail" ColumnName="IsSendMail" />
+                <ScalarProperty Name="IsSendSMS" ColumnName="IsSendSMS" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="SMSNumber" ColumnName="SMSNumber" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="PhoneCode" ColumnName="PhoneCode" />
+                <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="IdentityNumber" ColumnName="IdentityNumber" />
+                <ScalarProperty Name="CustomerNumber" ColumnName="CustomerNumber" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DocumentExpenseSlip">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentExpenseSlip">
+              <MappingFragment StoreEntitySet="DocumentExpenseSlip">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
+                <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
+                <ScalarProperty Name="UpdateEmployee" ColumnName="UpdateEmployee" />
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="ResultID" ColumnName="ResultID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
+                <ScalarProperty Name="SystemCurrency" ColumnName="SystemCurrency" />
+                <ScalarProperty Name="SystemAmount" ColumnName="SystemAmount" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="ToCustomerID" ColumnName="ToCustomerID" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -284,8 +284,12 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
             input,
             textarea{ background: #fff; border: none; width: 100%; padding: 10px 15px; box-sizing: border-box; font-size: 16px; color: #26436B; border-radius: 5px; }
             textarea{ height: 140px; }
+            select{ max-width: 100%; background: #fff; border: none; width: 100%; padding: 10px 15px; box-sizing: border-box; font-size: 16px; color: #26436B; border-radius: 5px; }
             button{ background: #26436B; border: 1px solid #26436B; color: #fff; font-weight: 500; padding: 10px 30px; width: 100%; box-sizing: border-box; transition: .4s; border-radius: 5px; 
               &:hover{ background: #fff; color: #26436B; }
+            }
+            .phone-number{ display: flex; align-items: center; 
+              &-prefix{ padding: 0 10px 0 0; }
             }
           }
         }
