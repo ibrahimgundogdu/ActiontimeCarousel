@@ -47,103 +47,22 @@
                 <div class="refund-form">
                     <div class="steps">
                         <h1>İPTAL İADE FORMU</h1>
-                        <div class="step step-1 active">
-                            @using (Html.BeginForm("AddRefund", "Sales", FormMethod.Post, new { role = "form" }))
+                        <div class="step step-2 active">
+                            @using (Html.BeginForm("CheckConfirm", "Sales", FormMethod.Post, new { role = "form" }))
                             {
                                 <div class="form">
-                                    <input id="ExpenseSlipID" name="ExpenseSlipID" type="hidden" value="@(Model.ExpenseSlip != null ? Model.ExpenseSlip.ID : (long?)null)" />
-                                    <input id="OrderID" name="OrderID" type="hidden" value="@(Model.TicketSaleSummary.ID)" />
-
                                     <div class="form-group">
-                                        <input type="text" name="OrderNumber" class="form-control" value="@(Model.TicketSaleSummary.OrderNumber)" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" name="PaymentAmount" class="form-control" style="text-align:right; font-weight:bold;" value="@(Model.PaymentAmount.ToString("N2")) ₺" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" name="DocumentNumber" class="form-control" placeholder="Gider Pusulası Evrak No" value="@(Model.ExpenseSlip != null ? Model.ExpenseSlip.DocumentNumber : "")" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="date" name="DocumentDate" class="form-control" placeholder="Evrak Tarihi" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-5">
-                                            <div class="form-group">
-                                                <select class="form-control" id="phone-number-country" name="PhoneNumberCountry" autocomplete="off">
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-7">
-                                            <div class="form-group">
-                                                <div class="phone-number">
-                                                    <div class="form-control phone-number-prefix"></div>
-                                                    <input class="form-control" id="phone-number" name="CustomerPhone" type="tel" autocomplete="off" style="font-weight:bold;" value="@(Model.Customer != null ? Model.Customer.PhoneNumber : "")">
-                                                    <input type="hidden" id="phone-number-full" name="PhoneNumberFull" />
-                                                    <input type="hidden" id="phone-number-code" name="CountryCode"  value="@(Model.Customer != null ? Model.Customer.PhoneCode : "90")" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input type="text" id="CustomerName" name="CustomerName" class="form-control" placeholder="Müşteri Adı Soyadı"  value="@(Model.Customer != null ? Model.Customer.FullName : "")" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" id="CustomerIdentityNumber" name="CustomerIdentityNumber" class="form-control" placeholder="TCKN" value="@(Model.Customer != null ? Model.Customer.IdentityNumber : "")" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="email" id="CustomerMail" name="CustomerMail" class="form-control" placeholder="E-Mail" value="@(Model.Customer != null ? Model.Customer.EMail : "")" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <textarea class="form-control" id="PostAddress" name="PostAddress" placeholder="Posta Adresi" required rows="1">@(Model.ExpenseSlip != null ? Model.ExpenseSlip.CustomerAddress : "")</textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <textarea class="form-control" name="Description" placeholder="Açıklama" required>@(Model.ExpenseSlip != null ? Model.ExpenseSlip.Description : "")</textarea>
-                                    </div>
-                                    @if (Model.ExpenseSlip != null && Model.ExpenseSlip.IsConfirmed == true)
-                                    {
-                                        <div class="form-group">
-                                            <button type="button" class="btn btn-light">KAPATILDI</button>
-                                        </div>
-                                    }
-                                    else if (Model.ExpenseSlip != null && Model.ExpenseSlip.IsConfirmed == false)
-                                    {
-                                        <div class="form-group">
-                                            <button type="submit" class="btn btn-light">TEKRAR DOĞRULA</button>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="form-group">
-                                            <button type="submit">SMS GÖNDER</button>
-                                        </div>
-                                    }
-
-
-                                </div>
-                            }
-                        </div>
-                        <div class="step step-2">
-                            <form action="#">
-                                <div class="form">
-                                    <div class="form-group">
-                                        <h3><span>1010101010</span> numaralı siparişin iptali için onay kodunu giriniz.</h3>
+                                        <h3><span>@(Model.TicketSaleSummary.OrderNumber)</span> numaralı siparişin iptali için onay kodunu giriniz.</h3>
                                         <p id="note"><span id="timer">240</span> saniye içinde sms kodunu giriniz.</p>
-                                        <input type="text" class="form-control" placeholder="Müşteri SMS Onay Kodu">
+                                        <input type="text" class="form-control" name="SMSCode" placeholder="Müşteri SMS Onay Kodu" maxlength="6" required>
+                                        <input id="OrderID" type="hidden" name="OrderID" value="@(Model.TicketSaleSummary.ID)" />
+                                        <input id="SlipID" type="hidden" name="SlipID" value="@(Model.ExpenseSlip.ID)" />
                                     </div>
                                     <div class="form-group suc-group">
-                                        <button type="button">ONAYLA</button>
+                                        <button type="submit">ONAYLA</button>
                                     </div>
                                 </div>
-                            </form>
-                            <a href="javascript:;">TEKRAR GÖNDER</a>
-                        </div>
-                        <div class="step step-3">
-                            <div class="form-result">
-                                <h2>İşleminiz başarıyla tamamlandı.</h2>
-                                <p>Lorem ipsum dolor sit amet</p>
-                            </div>
+                            }
                         </div>
                     </div>
                 </div>
@@ -152,13 +71,13 @@
                 <div class="container">
                     <div class="footer-up">
                         <div class="clean clean-2">
-                            <a href="/sales/Detail/@(Model.TicketSaleSummary.ID)">
+                            <button>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="87.52" height="65.64" viewBox="0 0 87.52 65.64">
                                     <path d="M80.227,3h-54.7a6.864,6.864,0,0,0-5.8,3.209L0,35.82,19.728,65.394a6.9,6.9,0,0,0,5.8,3.246h54.7a7.315,7.315,0,0,0,7.293-7.293V10.293A7.315,7.315,0,0,0,80.227,3Zm0,58.347H25.782L8.752,35.82,25.745,10.293H80.227ZM37.962,54.053,51.053,40.962,64.145,54.053l5.142-5.142L56.2,35.82,69.287,22.728l-5.142-5.142L51.053,30.678,37.962,17.587,32.82,22.728,45.912,35.82,32.82,48.912Z" transform="translate(0 -3)" fill="currentColor" />
                                 </svg>
                                 <!-- clean -->
                                 <span>GERİ</span>
-                            </a>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -169,6 +88,7 @@
     <script src="/assets/js/global.js"></script>
     <script>
         $(function () {
+
             const open = 'open';
             const $menu = $('.header .menu');
             const $listBtn = $('.bot-list-btn');
@@ -220,6 +140,18 @@
                     $input.change();
                     return false;
                 });
+
+                var countdownNumberEl = document.getElementById('timer');
+                var countdown = 240;
+                countdownNumberEl.textContent = countdown;
+                setInterval(function () {
+                    countdown = --countdown <= 0 ? 0 : countdown;
+                    countdownNumberEl.textContent = countdown;
+                    if (countdown == 0) {
+                        document.getElementById("note").innerHTML = "Kodunuzun süresi doldu. Lütfen tekrar giriniz.";
+                        $('.suc-group').addClass('disable');
+                    }
+                }, 1000);
             });
 
         });

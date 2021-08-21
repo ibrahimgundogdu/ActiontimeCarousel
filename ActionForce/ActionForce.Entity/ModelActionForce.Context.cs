@@ -316,7 +316,6 @@ namespace ActionForce.Entity
         public virtual DbSet<VAdisyonRowsSummary> VAdisyonRowsSummary { get; set; }
         public virtual DbSet<VTicketSaleRowSummary> VTicketSaleRowSummary { get; set; }
         public virtual DbSet<VTicketSaleDocumentAction> VTicketSaleDocumentAction { get; set; }
-        public virtual DbSet<ConfirmMessage> ConfirmMessage { get; set; }
         public virtual DbSet<CustomerActionType> CustomerActionType { get; set; }
         public virtual DbSet<CustomerCard> CustomerCard { get; set; }
         public virtual DbSet<CustomerCardStatus> CustomerCardStatus { get; set; }
@@ -325,6 +324,7 @@ namespace ActionForce.Entity
         public virtual DbSet<CustomerScorePoints> CustomerScorePoints { get; set; }
         public virtual DbSet<CustomerTansactions> CustomerTansactions { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<ConfirmMessage> ConfirmMessage { get; set; }
         public virtual DbSet<DocumentExpenseSlip> DocumentExpenseSlip { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
@@ -2047,7 +2047,7 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetTicketSalePaymentAmount", saleIDParameter);
         }
     
-        public virtual ObjectResult<Nullable<int>> CheckCustomer(string identityNumber, string fullName, string email, string countryCode, string phoneCode, string phoneNumber, Nullable<int> ourCompanyID)
+        public virtual ObjectResult<Nullable<int>> CheckCustomer(string identityNumber, string fullName, string email, string countryCode, string phoneCode, string phoneNumber, string postAddress, Nullable<int> ourCompanyID)
         {
             var identityNumberParameter = identityNumber != null ?
                 new ObjectParameter("IdentityNumber", identityNumber) :
@@ -2073,11 +2073,61 @@ namespace ActionForce.Entity
                 new ObjectParameter("PhoneNumber", phoneNumber) :
                 new ObjectParameter("PhoneNumber", typeof(string));
     
+            var postAddressParameter = postAddress != null ?
+                new ObjectParameter("PostAddress", postAddress) :
+                new ObjectParameter("PostAddress", typeof(string));
+    
             var ourCompanyIDParameter = ourCompanyID.HasValue ?
                 new ObjectParameter("OurCompanyID", ourCompanyID) :
                 new ObjectParameter("OurCompanyID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("CheckCustomer", identityNumberParameter, fullNameParameter, emailParameter, countryCodeParameter, phoneCodeParameter, phoneNumberParameter, ourCompanyIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("CheckCustomer", identityNumberParameter, fullNameParameter, emailParameter, countryCodeParameter, phoneCodeParameter, phoneNumberParameter, postAddressParameter, ourCompanyIDParameter);
+        }
+    
+        public virtual ObjectResult<AddConfirmMessage_Result> AddConfirmMessage(Nullable<int> documentTypeID, Nullable<System.Guid> documentUID, string phoneNumber, Nullable<int> confirmCode, Nullable<System.DateTime> dateSend)
+        {
+            var documentTypeIDParameter = documentTypeID.HasValue ?
+                new ObjectParameter("DocumentTypeID", documentTypeID) :
+                new ObjectParameter("DocumentTypeID", typeof(int));
+    
+            var documentUIDParameter = documentUID.HasValue ?
+                new ObjectParameter("DocumentUID", documentUID) :
+                new ObjectParameter("DocumentUID", typeof(System.Guid));
+    
+            var phoneNumberParameter = phoneNumber != null ?
+                new ObjectParameter("PhoneNumber", phoneNumber) :
+                new ObjectParameter("PhoneNumber", typeof(string));
+    
+            var confirmCodeParameter = confirmCode.HasValue ?
+                new ObjectParameter("ConfirmCode", confirmCode) :
+                new ObjectParameter("ConfirmCode", typeof(int));
+    
+            var dateSendParameter = dateSend.HasValue ?
+                new ObjectParameter("DateSend", dateSend) :
+                new ObjectParameter("DateSend", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AddConfirmMessage_Result>("AddConfirmMessage", documentTypeIDParameter, documentUIDParameter, phoneNumberParameter, confirmCodeParameter, dateSendParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> ExpenseSlipMessageConfirmed(Nullable<long> confirmID, Nullable<long> documentID, Nullable<long> orderID, Nullable<System.DateTime> dateConfirm)
+        {
+            var confirmIDParameter = confirmID.HasValue ?
+                new ObjectParameter("ConfirmID", confirmID) :
+                new ObjectParameter("ConfirmID", typeof(long));
+    
+            var documentIDParameter = documentID.HasValue ?
+                new ObjectParameter("DocumentID", documentID) :
+                new ObjectParameter("DocumentID", typeof(long));
+    
+            var orderIDParameter = orderID.HasValue ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(long));
+    
+            var dateConfirmParameter = dateConfirm.HasValue ?
+                new ObjectParameter("DateConfirm", dateConfirm) :
+                new ObjectParameter("DateConfirm", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("ExpenseSlipMessageConfirmed", confirmIDParameter, documentIDParameter, orderIDParameter, dateConfirmParameter);
         }
     }
 }

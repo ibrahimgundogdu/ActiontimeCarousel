@@ -7,6 +7,7 @@ namespace ActionForce.PosLocation
 {
     public class RefundFormModel
     {
+        public long? ExpenseSlipID { get; set; } //
         public long OrderID { get; set; } //
         public string OrderNumber { get; set; }
         public string PaymentAmount { get; set; }
@@ -17,7 +18,7 @@ namespace ActionForce.PosLocation
         public string CustomerPhone { get; set; }
         public string PhoneNumberFull { get; set; }
         public string PhoneNumberCountry { get; set; }
-
+        public string PostAddress { get; set; }
 
         public string CustomerName { get; set; } 
         public string CustomerIdentityNumber { get; set; }

@@ -11,6 +11,8 @@ namespace ActionForce.PosLocation
         public List<VTicketSaleSummary> SaleSummary { get; set; }
         public VTicketSaleSummary TicketSaleSummary { get; set; }
         public TicketSale TicketSale { get; set; }
+        public DocumentExpenseSlip ExpenseSlip { get; set; }
+        public Customer Customer { get; set; }
 
         public List<VTicketSaleRowSummary> TicketSaleRows { get; set; }
         public List<TicketSalePosPayment> TicketSalePosPayment { get; set; }

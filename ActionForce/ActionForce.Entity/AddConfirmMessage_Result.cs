@@ -10,11 +10,10 @@
 namespace ActionForce.Entity
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class ConfirmMessage
+    public partial class AddConfirmMessage_Result
     {
-        public long ID { get; set; }
+        public int ID { get; set; }
         public Nullable<int> DocumentTypeID { get; set; }
         public Nullable<System.Guid> DocumentUID { get; set; }
         public string PhoneNumber { get; set; }

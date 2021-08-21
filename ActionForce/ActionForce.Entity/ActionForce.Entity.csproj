@@ -95,6 +95,9 @@
     <Compile Include="ActionTypeExpense.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="AddConfirmMessage_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="AddressType.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

@@ -645,7 +645,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Key>
             <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocumentTypeID" Type="int" />
           <Property Name="DocumentUID" Type="uniqueidentifier" />
           <Property Name="PhoneNumber" Type="nvarchar" MaxLength="15" />
           <Property Name="ConfirmCode" Type="int" />
@@ -730,6 +731,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Property Name="PhoneCode" Type="nvarchar" MaxLength="10" />
           <Property Name="PhoneNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="SMSNumber" Type="nvarchar" MaxLength="30" StoreGeneratedPattern="Computed" />
+          <Property Name="PostAddress" Type="nvarchar" MaxLength="350" />
           <Property Name="Password" Type="nvarchar" MaxLength="40" />
           <Property Name="IsSendSMS" Type="bit" />
           <Property Name="IsSendMail" Type="bit" />
@@ -1296,8 +1298,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Property Name="EnvironmentID" Type="int" />
           <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentExpenseSlip' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="DocumentExpenseSlip">
           <Key>
             <PropertyRef Name="ID" />
@@ -1307,7 +1307,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.DocumentExpenseSlip' does n
           <Property Name="LocationID" Type="int" />
           <Property Name="DocumentDate" Type="date" />
           <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
-          <Property Name="ToCustomerID" Type="int" />
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="CustomerAddress" Type="nvarchar" MaxLength="350" />
           <Property Name="Amount" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="ExchangeRate" Type="float" />
@@ -6669,6 +6670,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="RecordDate" Type="datetime" Mode="In" />
           <Parameter Name="ProcessUID" Type="uniqueidentifier" Mode="In" />
         </Function>
+        <Function Name="AddConfirmMessage" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="DocumentTypeID" Type="int" Mode="In" />
+          <Parameter Name="DocumentUID" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="PhoneNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="ConfirmCode" Type="int" Mode="In" />
+          <Parameter Name="DateSend" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="AddCustomerAction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CustomerID" Type="int" Mode="In" />
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -6825,6 +6833,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="CountryCode" Type="nvarchar" Mode="In" />
           <Parameter Name="PhoneCode" Type="nvarchar" Mode="In" />
           <Parameter Name="PhoneNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="PostAddress" Type="nvarchar" Mode="In" />
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
         </Function>
         <Function Name="CheckLocationPosTicketSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -6851,6 +6860,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="Week" Type="int" Mode="In" />
           <Parameter Name="Year" Type="int" Mode="In" />
           <Parameter Name="LocationID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="ExpenseSlipMessageConfirmed" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ConfirmID" Type="bigint" Mode="In" />
+          <Parameter Name="DocumentID" Type="bigint" Mode="In" />
+          <Parameter Name="OrderID" Type="bigint" Mode="In" />
+          <Parameter Name="DateConfirm" Type="datetime" Mode="In" />
         </Function>
         <Function Name="GetActiveLocations" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ProcessDate" Type="date" Mode="In" />
@@ -7139,6 +7154,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="DocumentCashPayments" EntityType="Self.DocumentCashPayments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentCashRecorderSlip" EntityType="Self.DocumentCashRecorderSlip" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentEmployeePermit" EntityType="Self.DocumentEmployeePermit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DocumentExpenseSlip" EntityType="Self.DocumentExpenseSlip" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentNumber" EntityType="Self.DocumentNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentPosCancel" EntityType="Self.DocumentPosCancel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="DocumentPosCollections" EntityType="Self.DocumentPosCollections" Schema="dbo" store:Type="Tables" />
@@ -7312,36 +7328,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [City].[SortBy] AS [SortBy], 
     [City].[IsActive] AS [IsActive]
     FROM [dbo].[City] AS [City]</DefiningQuery>
-          </EntitySet>
-          <EntitySet Name="DocumentExpenseSlip" EntityType="Self.DocumentExpenseSlip" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [DocumentExpenseSlip].[ID] AS [ID], 
-    [DocumentExpenseSlip].[OurCompanyID] AS [OurCompanyID], 
-    [DocumentExpenseSlip].[LocationID] AS [LocationID], 
-    [DocumentExpenseSlip].[DocumentDate] AS [DocumentDate], 
-    [DocumentExpenseSlip].[DocumentNumber] AS [DocumentNumber], 
-    [DocumentExpenseSlip].[ToCustomerID] AS [ToCustomerID], 
-    [DocumentExpenseSlip].[Amount] AS [Amount], 
-    [DocumentExpenseSlip].[Currency] AS [Currency], 
-    [DocumentExpenseSlip].[ExchangeRate] AS [ExchangeRate], 
-    [DocumentExpenseSlip].[SystemAmount] AS [SystemAmount], 
-    [DocumentExpenseSlip].[SystemCurrency] AS [SystemCurrency], 
-    [DocumentExpenseSlip].[ReferenceID] AS [ReferenceID], 
-    [DocumentExpenseSlip].[ActionTypeName] AS [ActionTypeName], 
-    [DocumentExpenseSlip].[ActionTypeID] AS [ActionTypeID], 
-    [DocumentExpenseSlip].[Description] AS [Description], 
-    [DocumentExpenseSlip].[ResultID] AS [ResultID], 
-    [DocumentExpenseSlip].[EnvironmentID] AS [EnvironmentID], 
-    [DocumentExpenseSlip].[UID] AS [UID], 
-    [DocumentExpenseSlip].[RecordDate] AS [RecordDate], 
-    [DocumentExpenseSlip].[RecordEmployeeID] AS [RecordEmployeeID], 
-    [DocumentExpenseSlip].[RecordIP] AS [RecordIP], 
-    [DocumentExpenseSlip].[UpdateDate] AS [UpdateDate], 
-    [DocumentExpenseSlip].[UpdateEmployee] AS [UpdateEmployee], 
-    [DocumentExpenseSlip].[UpdateIP] AS [UpdateIP], 
-    [DocumentExpenseSlip].[IsConfirmed] AS [IsConfirmed], 
-    [DocumentExpenseSlip].[IsActive] AS [IsActive]
-    FROM [dbo].[DocumentExpenseSlip] AS [DocumentExpenseSlip]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="EmployeeShiftX" EntityType="Self.EmployeeShiftX" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -10469,7 +10455,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImport Name="GetTicketSalePaymentAmount" ReturnType="Collection(Double)">
           <Parameter Name="SaleID" Mode="In" Type="Int64" />
           </FunctionImport>
-          <EntitySet Name="ConfirmMessage" EntityType="db293_ActionTimeDbModel.ConfirmMessage" />
           <EntitySet Name="CustomerActionType" EntityType="db293_ActionTimeDbModel.CustomerActionType" />
           <EntitySet Name="CustomerCard" EntityType="db293_ActionTimeDbModel.CustomerCard" />
           <EntitySet Name="CustomerCardStatus" EntityType="db293_ActionTimeDbModel.CustomerCardStatus" />
@@ -10477,6 +10462,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="CustomerScorePointRules" EntityType="db293_ActionTimeDbModel.CustomerScorePointRules" />
           <EntitySet Name="CustomerScorePoints" EntityType="db293_ActionTimeDbModel.CustomerScorePoints" />
           <EntitySet Name="CustomerTansactions" EntityType="db293_ActionTimeDbModel.CustomerTansactions" />
+          <EntitySet Name="Customer" EntityType="db293_ActionTimeDbModel.Customer" />
           <FunctionImport Name="CheckCustomer" ReturnType="Collection(Int32)">
             <Parameter Name="IdentityNumber" Mode="In" Type="String" />
             <Parameter Name="FullName" Mode="In" Type="String" />
@@ -10484,9 +10470,23 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="CountryCode" Mode="In" Type="String" />
             <Parameter Name="PhoneCode" Mode="In" Type="String" />
             <Parameter Name="PhoneNumber" Mode="In" Type="String" />
+            <Parameter Name="PostAddress" Mode="In" Type="String" />
             <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
           </FunctionImport>
-          <EntitySet Name="Customer" EntityType="db293_ActionTimeDbModel.Customer" />
+          <FunctionImport Name="AddConfirmMessage" ReturnType="Collection(db293_ActionTimeDbModel.AddConfirmMessage_Result)">
+            <Parameter Name="DocumentTypeID" Mode="In" Type="Int32" />
+            <Parameter Name="DocumentUID" Mode="In" Type="Guid" />
+            <Parameter Name="PhoneNumber" Mode="In" Type="String" />
+            <Parameter Name="ConfirmCode" Mode="In" Type="Int32" />
+            <Parameter Name="DateSend" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <EntitySet Name="ConfirmMessage" EntityType="db293_ActionTimeDbModel.ConfirmMessage" />
+          <FunctionImport Name="ExpenseSlipMessageConfirmed" ReturnType="Collection(Int64)">
+            <Parameter Name="ConfirmID" Mode="In" Type="Int64" />
+            <Parameter Name="DocumentID" Mode="In" Type="Int64" />
+            <Parameter Name="OrderID" Mode="In" Type="Int64" />
+            <Parameter Name="DateConfirm" Mode="In" Type="DateTime" />
+          </FunctionImport>
           <EntitySet Name="DocumentExpenseSlip" EntityType="db293_ActionTimeDbModel.DocumentExpenseSlip" />
         
           </EntityContainer>
@@ -17341,18 +17341,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
           <Property Name="SaleID" Type="Int64" />
         </EntityType>
-        <EntityType Name="ConfirmMessage">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="DocumentUID" Type="Guid" />
-          <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
-          <Property Name="ConfirmCode" Type="Int32" />
-          <Property Name="IsConfirmed" Type="Boolean" />
-          <Property Name="DateSend" Type="DateTime" Precision="3" />
-          <Property Name="DateConfirm" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="CustomerActionType">
           <Key>
             <PropertyRef Name="ID" />
@@ -17480,6 +17468,30 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
           <Property Name="IsActive" Type="Boolean" />
+          <Property Name="PostAddress" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <ComplexType Name="AddConfirmMessage_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="DocumentTypeID" Nullable="true" />
+          <Property Type="Guid" Name="DocumentUID" Nullable="true" />
+          <Property Type="String" Name="PhoneNumber" Nullable="true" MaxLength="15" />
+          <Property Type="Int32" Name="ConfirmCode" Nullable="true" />
+          <Property Type="Boolean" Name="IsConfirmed" Nullable="true" />
+          <Property Type="DateTime" Name="DateSend" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="DateConfirm" Nullable="true" Precision="23" />
+        </ComplexType>
+        <EntityType Name="ConfirmMessage">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocumentTypeID" Type="Int32" />
+          <Property Name="DocumentUID" Type="Guid" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="ConfirmCode" Type="Int32" />
+          <Property Name="IsConfirmed" Type="Boolean" />
+          <Property Name="DateSend" Type="DateTime" Precision="3" />
+          <Property Name="DateConfirm" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="DocumentExpenseSlip">
           <Key>
@@ -17490,7 +17502,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="LocationID" Type="Int32" />
           <Property Name="DocumentDate" Type="DateTime" Precision="0" />
           <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
-          <Property Name="ToCustomerID" Type="Int32" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="CustomerAddress" Type="String" MaxLength="350" FixedLength="false" Unicode="true" />
           <Property Name="Amount" Type="Double" />
           <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="ExchangeRate" Type="Double" />
@@ -24123,19 +24136,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetTicketSalePaymentAmount" FunctionName="db293_ActionTimeDbModel.Store.GetTicketSalePaymentAmount" />
-          <EntitySetMapping Name="ConfirmMessage">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ConfirmMessage">
-              <MappingFragment StoreEntitySet="ConfirmMessage">
-                <ScalarProperty Name="DateConfirm" ColumnName="DateConfirm" />
-                <ScalarProperty Name="DateSend" ColumnName="DateSend" />
-                <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
-                <ScalarProperty Name="ConfirmCode" ColumnName="ConfirmCode" />
-                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
-                <ScalarProperty Name="DocumentUID" ColumnName="DocumentUID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CustomerActionType">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CustomerActionType">
               <MappingFragment StoreEntitySet="CustomerActionType">
@@ -24246,10 +24246,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="CheckCustomer" FunctionName="db293_ActionTimeDbModel.Store.CheckCustomer" />
           <EntitySetMapping Name="Customer">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Customer">
               <MappingFragment StoreEntitySet="Customer">
+                <ScalarProperty Name="PostAddress" ColumnName="PostAddress" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
@@ -24273,6 +24273,36 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CheckCustomer" FunctionName="db293_ActionTimeDbModel.Store.CheckCustomer" />
+          <FunctionImportMapping FunctionImportName="AddConfirmMessage" FunctionName="db293_ActionTimeDbModel.Store.AddConfirmMessage">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.AddConfirmMessage_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="DocumentTypeID" ColumnName="DocumentTypeID" />
+                <ScalarProperty Name="DocumentUID" ColumnName="DocumentUID" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="ConfirmCode" ColumnName="ConfirmCode" />
+                <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
+                <ScalarProperty Name="DateSend" ColumnName="DateSend" />
+                <ScalarProperty Name="DateConfirm" ColumnName="DateConfirm" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="ConfirmMessage">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ConfirmMessage">
+              <MappingFragment StoreEntitySet="ConfirmMessage">
+                <ScalarProperty Name="DateConfirm" ColumnName="DateConfirm" />
+                <ScalarProperty Name="DateSend" ColumnName="DateSend" />
+                <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
+                <ScalarProperty Name="ConfirmCode" ColumnName="ConfirmCode" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="DocumentUID" ColumnName="DocumentUID" />
+                <ScalarProperty Name="DocumentTypeID" ColumnName="DocumentTypeID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ExpenseSlipMessageConfirmed" FunctionName="db293_ActionTimeDbModel.Store.ExpenseSlipMessageConfirmed" />
           <EntitySetMapping Name="DocumentExpenseSlip">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentExpenseSlip">
               <MappingFragment StoreEntitySet="DocumentExpenseSlip">
@@ -24296,7 +24326,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
                 <ScalarProperty Name="Amount" ColumnName="Amount" />
-                <ScalarProperty Name="ToCustomerID" ColumnName="ToCustomerID" />
+                <ScalarProperty Name="CustomerAddress" ColumnName="CustomerAddress" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
                 <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
                 <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />

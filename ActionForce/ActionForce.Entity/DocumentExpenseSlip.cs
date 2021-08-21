@@ -19,7 +19,8 @@ namespace ActionForce.Entity
         public Nullable<int> LocationID { get; set; }
         public Nullable<System.DateTime> DocumentDate { get; set; }
         public string DocumentNumber { get; set; }
-        public Nullable<int> ToCustomerID { get; set; }
+        public Nullable<int> CustomerID { get; set; }
+        public string CustomerAddress { get; set; }
         public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
         public Nullable<double> ExchangeRate { get; set; }

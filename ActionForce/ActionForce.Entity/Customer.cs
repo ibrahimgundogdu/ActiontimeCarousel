@@ -34,5 +34,6 @@ namespace ActionForce.Entity
         public string RecordIP { get; set; }
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public string PostAddress { get; set; }
     }
 }
