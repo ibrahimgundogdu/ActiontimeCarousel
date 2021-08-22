@@ -1,0 +1,123 @@
+﻿@model LocationControlModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFE POS</title>
+    <meta name="description" content="UFE POS">
+    <meta name="keywords" content="UFE POS">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/scss/global.css">
+</head>
+<body>
+    <div class="main">
+        <div class="container">
+            <div class="header">
+                <div class="menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="49.778" viewBox="0 0 64 49.778">
+                        <path d="M59.889,40.556v7.111H10.111V40.556H59.889M67,5H3v7.111H67Zm0,14.222H3v7.111H67Zm0,14.222H3V54.778H67Z" transform="translate(-3 -5)" fill="currentColor" />
+                    </svg>
+                    <!-- menu -->
+                </div>
+                <div class="logo">
+                    <a href="javascript:;">UFE POS</a>
+                    <div class="date">@(DateTime.Now.ToLongDateString())</div>
+                </div>
+                <div class="homepage">
+                    <a href="/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                            <path d="M4,16.5H16.5V4H4ZM22.75,54h12.5V41.5H22.75ZM4,54H16.5V41.5H4ZM4,35.25H16.5V22.75H4Zm18.75,0h12.5V22.75H22.75ZM41.5,4V16.5H54V4ZM22.75,16.5h12.5V4H22.75ZM41.5,35.25H54V22.75H41.5ZM41.5,54H54V41.5H41.5Z" transform="translate(-4 -4)" fill="currentColor" />
+                        </svg>
+                        <!-- homepage -->
+                    </a>
+                </div>
+            </div><!-- header -->
+            <div class="side-menu-overlay"></div>
+            <div class="side-menu">
+                @{ Html.RenderPartial("_PartialMenu");}
+            </div><!-- side-menu -->
+            <div class="content">
+                <div class="location-content">
+                    <p>Akbatı Trampoline İstanbul</p>
+                    <div class="loc-set">
+                        <div class="time-set">
+                            <div class="upper">@(Model.Schedule != null ? Html.Raw(Model.Schedule.DateStart.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</div>
+                            <div class="lower">@(Model.Shift != null ? Html.Raw(Model.Shift.DateStart.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</div>
+                        </div>
+                        <div class="loc-icon">
+
+                            <a href="@(Model.Shift == null ? "/Location/LocationShiftStart" : Model?.Shift?.DateEnd  == null && Model?.Shift?.Duration == null ? "/Location/LocationShiftEnd":"#")" style="color:@( Model.Shift == null ? "#57575f" : Model?.Shift?.DateEnd  == null && Model?.Shift?.Duration == null ? "#8c695d":"#37afa9")">
+
+                                @if (Model.Shift == null)
+                                {
+                                    // cloud
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="136.5" height="136.5" viewBox="0 0 136.5 136.5">
+                                        <path d="M33.76,24.949,23.522,14.769,15.5,22.788,25.684,32.969ZM1,57.141H18.062V68.516H1ZM57.875.55H69.25V17.328H57.875ZM103.6,14.74l8.008,8L101.43,32.923l-8-8.008ZM93.365,100.707l10.181,10.237,8.019-8.019L101.328,92.744Zm15.7-43.566h17.063V68.516H109.062ZM63.563,28.7A34.125,34.125,0,1,0,97.687,62.828,34.152,34.152,0,0,0,63.563,28.7Zm0,56.875a22.75,22.75,0,1,1,22.75-22.75A22.744,22.744,0,0,1,63.563,85.578Zm-5.688,22.75H69.25v16.778H57.875ZM15.5,102.868l8.019,8.019L33.7,100.65l-8.019-8.019Z" transform="translate(4.688 2.578)" fill="currentColor" />
+                                    </svg>
+                                }
+                                else if (Model?.Shift?.DateEnd == null && Model?.Shift?.Duration == null)
+                                {
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="136.5" height="136.5" viewBox="0 0 136.5 136.5">
+                                        <path d="M33.76,24.949,23.522,14.769,15.5,22.788,25.684,32.969ZM1,57.141H18.062V68.516H1ZM57.875.55H69.25V17.328H57.875ZM103.6,14.74l8.008,8L101.43,32.923l-8-8.008ZM93.365,100.707l10.181,10.237,8.019-8.019L101.328,92.744Zm15.7-43.566h17.063V68.516H109.062ZM63.563,28.7A34.125,34.125,0,1,0,97.687,62.828,34.152,34.152,0,0,0,63.563,28.7Zm0,56.875a22.75,22.75,0,1,1,22.75-22.75A22.744,22.744,0,0,1,63.563,85.578Zm-5.688,22.75H69.25v16.778H57.875ZM15.5,102.868l8.019,8.019L33.7,100.65l-8.019-8.019Z" transform="translate(4.688 2.578)" fill="currentColor" />
+                                    </svg>
+                                }
+                                else
+                                {
+                                    // moon
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="136.5" height="136.5" viewBox="0 0 136.5 136.5">
+                                        <path d="M33.76,24.949,23.522,14.769,15.5,22.788,25.684,32.969ZM1,57.141H18.062V68.516H1ZM57.875.55H69.25V17.328H57.875ZM103.6,14.74l8.008,8L101.43,32.923l-8-8.008ZM93.365,100.707l10.181,10.237,8.019-8.019L101.328,92.744Zm15.7-43.566h17.063V68.516H109.062ZM63.563,28.7A34.125,34.125,0,1,0,97.687,62.828,34.152,34.152,0,0,0,63.563,28.7Zm0,56.875a22.75,22.75,0,1,1,22.75-22.75A22.744,22.744,0,0,1,63.563,85.578Zm-5.688,22.75H69.25v16.778H57.875ZM15.5,102.868l8.019,8.019L33.7,100.65l-8.019-8.019Z" transform="translate(4.688 2.578)" fill="currentColor" />
+                                    </svg>
+                                }
+                            </a>
+
+                        </div>
+                        <div class="time-set">
+                            <div class="upper">@(Model.Schedule != null ? Html.Raw(Model.Schedule.DateEnd?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</div>
+                            <div class="lower">@(Model.Shift != null ? Html.Raw(Model.Shift.DateEnd?.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</div>
+                        </div>
+                    </div>
+                    <h2>@(Model.Authentication.CurrentEmployee.FullName?.ToUpper())</h2>
+                </div>
+            </div><!-- content -->
+
+
+
+
+
+
+
+        </div>
+    </div><!-- main -->
+    <script src="/assets/js/jquery-3.5.1.min.js"></script>
+    <script src="/assets/js/global.js"></script>
+    <script>
+        $(function () {
+            const open = 'open';
+            const $menu = $('.header .menu');
+            const $listBtn = $('.bot-list-btn');
+
+            $menu.on('click', function () {
+                let $this = $(this);
+                if (($this).hasClass(open)) {
+                    $this.removeClass(open);
+                    $('.side-menu,.side-menu-overlay').removeClass(open);
+                } else {
+                    $this.addClass(open);
+                    $('.side-menu,.side-menu-overlay').addClass(open);
+                }
+            });
+            $('.side-menu-overlay').on('click', function () {
+                $menu.removeClass(open);
+                $('.side-menu,.side-menu-overlay').removeClass(open);
+            });
+
+        });</script>
+</body>
+</html>

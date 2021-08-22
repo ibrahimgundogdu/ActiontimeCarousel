@@ -278,12 +278,38 @@ namespace ActionForce.PosLocation.Controllers
                     if (confirm.ConfirmCode.ToString() == form.SMSCode)
                     {
                         var DocumentDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
-                        Db.ExpenseSlipMessageConfirmed(confirm.ID, expenseslip.ID, form.OrderID, DocumentDate);
+                        var resuldid = Db.ExpenseSlipMessageConfirmed(confirm.ID, expenseslip.ID, form.OrderID, DocumentDate).FirstOrDefault();
+                        
+                        if (resuldid > 0 )
+                        {
+                            model.Result.IsSuccess = true;
+                            model.Result.Message = "Gider Pusulası Eklendi";
+                        }
+                        else
+                        {
+                            model.Result.IsSuccess = false;
+                            model.Result.Message = "Gider Pusulası Eklenemedi";
+                        }
+                    }
+                    else
+                    {
+                        model.Result.IsSuccess = false;
+                        model.Result.Message = "Doğrulama Kodu hatalı";
                     }
                 }
+                else
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = "Doğrulama Kaydı Bulunamadı";
+                }
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Gider Pusulası Bulunamadı";
             }
 
-            return View(model);
+            return RedirectToAction("Refund",new { id = form.OrderID});
         }
 
         

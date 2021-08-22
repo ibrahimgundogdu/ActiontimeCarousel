@@ -80,14 +80,14 @@
                                                     <div class="form-control phone-number-prefix"></div>
                                                     <input class="form-control" id="phone-number" name="CustomerPhone" type="tel" autocomplete="off" style="font-weight:bold;" value="@(Model.Customer != null ? Model.Customer.PhoneNumber : "")">
                                                     <input type="hidden" id="phone-number-full" name="PhoneNumberFull" />
-                                                    <input type="hidden" id="phone-number-code" name="CountryCode"  value="@(Model.Customer != null ? Model.Customer.PhoneCode : "90")" />
+                                                    <input type="hidden" id="phone-number-code" name="CountryCode" value="@(Model.Customer != null ? Model.Customer.PhoneCode : "90")" />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="text" id="CustomerName" name="CustomerName" class="form-control" placeholder="Müşteri Adı Soyadı"  value="@(Model.Customer != null ? Model.Customer.FullName : "")" required>
+                                        <input type="text" id="CustomerName" name="CustomerName" class="form-control" placeholder="Müşteri Adı Soyadı" value="@(Model.Customer != null ? Model.Customer.FullName : "")" required>
                                     </div>
                                     <div class="form-group">
                                         <input type="text" id="CustomerIdentityNumber" name="CustomerIdentityNumber" class="form-control" placeholder="TCKN" value="@(Model.Customer != null ? Model.Customer.IdentityNumber : "")" required>
@@ -139,12 +139,16 @@
                             </form>
                             <a href="javascript:;">TEKRAR GÖNDER</a>
                         </div>
-                        <div class="step step-3">
-                            <div class="form-result">
-                                <h2>İşleminiz başarıyla tamamlandı.</h2>
-                                <p>Lorem ipsum dolor sit amet</p>
+                        @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message))
+                        {
+                            <div>
+                                <div class="form-result">
+                                    <h2>@(Model.Result.IsSuccess ? "İşleminiz başarıyla tamamlandı." : "İşlem Başarısız")</h2>
+                                    <p>@(Model.Result.Message)</p>
+                                </div>
                             </div>
-                        </div>
+                        }
+
                     </div>
                 </div>
             </div><!-- content -->

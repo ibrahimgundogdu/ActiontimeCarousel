@@ -1,0 +1,166 @@
+﻿@model ScheduleControlModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFE POS</title>
+    <meta name="description" content="UFE POS">
+    <meta name="keywords" content="UFE POS">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/scss/global.css">
+</head>
+<body>
+    <div class="main">
+        <div class="container">
+            <div class="header">
+                <div class="menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="49.778" viewBox="0 0 64 49.778">
+                        <path d="M59.889,40.556v7.111H10.111V40.556H59.889M67,5H3v7.111H67Zm0,14.222H3v7.111H67Zm0,14.222H3V54.778H67Z" transform="translate(-3 -5)" fill="currentColor" />
+                    </svg>
+                    <!-- menu -->
+                </div>
+                <div class="logo">
+                    <a href="javascript:;">UFE POS</a>
+                    <div class="date">@(DateTime.Now.ToLongDateString())</div>
+                </div>
+                <div class="homepage">
+                    <a href="/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                            <path d="M4,16.5H16.5V4H4ZM22.75,54h12.5V41.5H22.75ZM4,54H16.5V41.5H4ZM4,35.25H16.5V22.75H4Zm18.75,0h12.5V22.75H22.75ZM41.5,4V16.5H54V4ZM22.75,16.5h12.5V4H22.75ZM41.5,35.25H54V22.75H41.5ZM41.5,54H54V41.5H41.5Z" transform="translate(-4 -4)" fill="currentColor" />
+                        </svg>
+                        <!-- homepage -->
+                    </a>
+                </div>
+            </div><!-- header -->
+            <div class="side-menu-overlay"></div>
+            <div class="side-menu">
+                @{ Html.RenderPartial("_PartialMenu");}
+            </div><!-- side-menu -->
+            <div class="content">
+                <div class="order-detail">
+
+                    <h1>Lokasyon Takvimi</h1>
+                    <div class="scroll-y mb-0">
+                        <div class="row no-gutters">
+                            <div class="col-md-12 p-2">
+                                <div class="table-responsive scrollable scroll-x">
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="bg-body p-2" colspan="3" style="text-align:left;">@(Model.Authentication.CurrentLocation.FullName) Takvimi</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Başlama</th>
+                                                <th>Bitiş</th>
+                                                <th>Süre</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.DateList)
+                                            {
+                                                var locationschedule = Model.LocationSchedules.FirstOrDefault(x => x.ShiftDate == item.DateKey);
+                                                <tr>
+                                                    <td colspan="3" style="text-align:left">
+                                                        @(item.DateKey.ToLongDateString())
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="p-2 text-center">@(locationschedule?.ShiftDateStart?.ToString("HH\\:mm\\:ss"))</td>
+                                                    <td class="p-2 text-center">@(locationschedule?.ShiftdateEnd?.ToString("HH\\:mm\\:ss"))</td>
+                                                    <td class="p-2 text-center">@(locationschedule?.ShiftDuration?.ToString())</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h1>Çalışan Takvimi</h1>
+                    <div class="scroll-y mb-0">
+                        <div class="row no-gutters">
+                            <div class="col-md-12 p-2">
+                                <div class="table-responsive scrollable scroll-x">
+                                    <table class="table mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th class="bg-body p-2" colspan="9" style="text-align:left;">@(Model.DateList.FirstOrDefault()?.Week). Hafta Çalışanlar Takvimi</th>
+                                            </tr>
+                                            <tr>
+                                                <th>Çalışan</th>
+                                                @foreach (var item in Model.DateList)
+                                                {
+                                                    <th>@(item.DateKey.ToLongDateString())</th>
+                                                }
+                                                <th>Süre</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                            @foreach (var item in Model.Employees)
+                                            {
+                                                int durationminutes = 0;
+
+                                                <tr>
+                                                    <td class="p-2 text-center">@(item.EmployeeFullname)</td>
+                                                    @foreach (var date in Model.DateList)
+                                                    {
+                                                        var employeechedule = Model.EmployeeSchedules.FirstOrDefault(x => x.ShiftDate == date.DateKey && x.EmployeeID == item.EmployeeID);
+                                                        if (employeechedule != null)
+                                                        {
+                                                            durationminutes += employeechedule?.DurationMinute ?? 0;
+                                                        }
+
+                                                        <td class="p-2 text-center">@(employeechedule?.ShiftDateStart?.ToString("HH\\:mm\\:ss")) <br /> @(employeechedule?.ShiftdateEnd?.ToString("HH\\:mm\\:ss")) </td>
+                                                    }
+                                                    <td class="p-2 text-center">@(durationminutes) Dk</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div><!-- content -->
+
+
+        </div>
+    </div><!-- main -->
+    <script src="/assets/js/jquery-3.5.1.min.js"></script>
+    <script src="/assets/js/global.js"></script>
+    <script>
+        $(function () {
+            const open = 'open';
+            const $menu = $('.header .menu');
+            const $listBtn = $('.bot-list-btn');
+
+            $menu.on('click', function () {
+                let $this = $(this);
+                if (($this).hasClass(open)) {
+                    $this.removeClass(open);
+                    $('.side-menu,.side-menu-overlay').removeClass(open);
+                } else {
+                    $this.addClass(open);
+                    $('.side-menu,.side-menu-overlay').addClass(open);
+                }
+            });
+            $('.side-menu-overlay').on('click', function () {
+                $menu.removeClass(open);
+                $('.side-menu,.side-menu-overlay').removeClass(open);
+            });
+
+        });</script>
+</body>
+</html>

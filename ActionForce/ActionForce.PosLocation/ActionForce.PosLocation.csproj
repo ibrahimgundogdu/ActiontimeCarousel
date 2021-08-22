@@ -121,6 +121,8 @@
     <Content Include="assets\img\clean.svg" />
     <Content Include="assets\img\dots.svg" />
     <Content Include="assets\img\exit.svg" />
+    <Content Include="assets\img\hezarfen.jpg" />
+    <Content Include="assets\img\hezarfen1.jpg" />
     <Content Include="assets\img\homepage.svg" />
     <Content Include="assets\img\location-icon.svg" />
     <Content Include="assets\img\lock.svg" />
@@ -139,6 +141,7 @@
     <Content Include="assets\js\global.js" />
     <Content Include="assets\js\intlTelInput.js" />
     <Content Include="assets\js\jquery-3.5.1.min.js" />
+    <Content Include="assets\js\jquery.mask.js" />
     <Content Include="assets\js\modal.js" />
     <Content Include="assets\js\prism.js" />
     <Content Include="assets\js\slick.min.js" />
@@ -209,25 +212,42 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
+    <Compile Include="Controllers\EmployeesController.cs" />
+    <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
+    <Compile Include="Controllers\SchedulesController.cs" />
     <Compile Include="Controllers\SetupController.cs" />
+    <Compile Include="Controllers\ShiftsController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\ControlModels\DefaultControlModel.cs" />
+    <Compile Include="Models\ControlModels\EmployeesControlModel.cs" />
     <Compile Include="Models\ControlModels\LayoutControlModel.cs" />
+    <Compile Include="Models\ControlModels\LocationControlModel.cs" />
     <Compile Include="Models\ControlModels\LoginControlModel.cs" />
     <Compile Include="Models\ControlModels\SalesControlModel.cs" />
+    <Compile Include="Models\ControlModels\ScheduleControlModel.cs" />
     <Compile Include="Models\ControlModels\SetupControlModel.cs" />
+    <Compile Include="Models\ControlModels\ShiftControlModel.cs" />
+    <Compile Include="Models\ControlModels\SummaryControlModel.cs" />
     <Compile Include="Models\ControlModels\TransactionControlModel.cs" />
     <Compile Include="Models\CurrentEmployee.cs" />
     <Compile Include="Models\CurrentLocation.cs" />
     <Compile Include="Models\DataModel\BasketTotal.cs" />
     <Compile Include="Models\DataModel\CurrentPriceList.cs" />
     <Compile Include="Models\DataModel\DataEmployee.cs" />
+    <Compile Include="Models\DataModel\EmployeeBreakModel.cs" />
+    <Compile Include="Models\DataModel\EmployeeModel.cs" />
+    <Compile Include="Models\DataModel\EmployeeScheduleModel.cs" />
+    <Compile Include="Models\DataModel\EmployeeShiftLocationModel.cs" />
+    <Compile Include="Models\DataModel\LocationBalance.cs" />
+    <Compile Include="Models\DataModel\LocationScheduleInfo.cs" />
+    <Compile Include="Models\DataModel\LocationShiftInfo.cs" />
     <Compile Include="Models\DataModel\TicketInfo.cs" />
+    <Compile Include="Models\DataModel\TotalModel.cs" />
     <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\FormModels\ConfirmFormModel.cs" />
     <Compile Include="Models\FormModels\RefundFormModel.cs" />
@@ -253,6 +273,10 @@
     <Content Include="Views\Sales\Detail.cshtml" />
     <Content Include="Views\Sales\Refund.cshtml" />
     <Content Include="Views\Sales\ConfirmRefund.cshtml" />
+    <Content Include="Views\Employees\Index.cshtml" />
+    <Content Include="Views\Location\Index.cshtml" />
+    <Content Include="Views\Schedules\Index.cshtml" />
+    <Content Include="Views\Shifts\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
