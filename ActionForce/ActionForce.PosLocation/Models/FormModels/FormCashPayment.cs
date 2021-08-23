@@ -1,0 +1,18 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace ActionForce.PosLocation
+{
+    public class FormCashPayment
+    {
+        public Guid? UID { get; set; }
+        public string Amount { get; set; }
+        public string Currency { get; set; }
+        public string Description { get; set; }
+        public DateTime DocumentDate { get; set; }
+        public int? IsActive { get; set; }
+
+    }
+}

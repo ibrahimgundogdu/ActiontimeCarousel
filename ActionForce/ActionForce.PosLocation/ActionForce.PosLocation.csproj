@@ -54,8 +54,8 @@
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
@@ -146,6 +146,7 @@
     <Content Include="assets\js\prism.js" />
     <Content Include="assets\js\slick.min.js" />
     <Content Include="assets\js\swiper.min.js" />
+    <Content Include="assets\notie\dist\notie.min.js" />
     <Content Include="assets\plugins\aos\aos-2.3.1.min.css" />
     <Content Include="assets\plugins\aos\aos-2.3.1.min.js" />
     <Content Include="assets\plugins\aos\aos-2.3.1.minApp.js" />
@@ -211,6 +212,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CashController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
@@ -223,6 +225,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AuthenticationModel.cs" />
+    <Compile Include="Models\ControlModels\CashControlModel.cs" />
     <Compile Include="Models\ControlModels\DefaultControlModel.cs" />
     <Compile Include="Models\ControlModels\EmployeesControlModel.cs" />
     <Compile Include="Models\ControlModels\LayoutControlModel.cs" />
@@ -236,6 +239,7 @@
     <Compile Include="Models\ControlModels\TransactionControlModel.cs" />
     <Compile Include="Models\CurrentEmployee.cs" />
     <Compile Include="Models\CurrentLocation.cs" />
+    <Compile Include="Models\DataModel\BankTransfer.cs" />
     <Compile Include="Models\DataModel\BasketTotal.cs" />
     <Compile Include="Models\DataModel\CurrentPriceList.cs" />
     <Compile Include="Models\DataModel\DataEmployee.cs" />
@@ -246,10 +250,14 @@
     <Compile Include="Models\DataModel\LocationBalance.cs" />
     <Compile Include="Models\DataModel\LocationScheduleInfo.cs" />
     <Compile Include="Models\DataModel\LocationShiftInfo.cs" />
+    <Compile Include="Models\DataModel\SalaryPayment.cs" />
     <Compile Include="Models\DataModel\TicketInfo.cs" />
     <Compile Include="Models\DataModel\TotalModel.cs" />
     <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\FormModels\ConfirmFormModel.cs" />
+    <Compile Include="Models\FormModels\FormCashCollect.cs" />
+    <Compile Include="Models\FormModels\FormCashExpense.cs" />
+    <Compile Include="Models\FormModels\FormCashPayment.cs" />
     <Compile Include="Models\FormModels\RefundFormModel.cs" />
     <Compile Include="Models\FormModels\SerialFormModel.cs" />
     <Compile Include="Models\FormModels\UserLoginFormModel.cs" />
@@ -277,6 +285,17 @@
     <Content Include="Views\Location\Index.cshtml" />
     <Content Include="Views\Schedules\Index.cshtml" />
     <Content Include="Views\Shifts\Index.cshtml" />
+    <Content Include="Views\Cash\Index.cshtml" />
+    <Content Include="Views\Cash\_PartialCashMenu.cshtml" />
+    <Content Include="Views\Shared\_PartialCashSummary.cshtml" />
+    <Content Include="Views\Cash\CashCollect.cshtml" />
+    <Content Include="Views\Cash\NewCashCollect.cshtml" />
+    <Content Include="Views\Cash\CollectDetail.cshtml" />
+    <Content Include="Views\Cash\CashPayment.cshtml" />
+    <Content Include="Views\Cash\NewCashPayment.cshtml" />
+    <Content Include="Views\Cash\PaymentDetail.cshtml" />
+    <Content Include="Views\Cash\Expense.cshtml" />
+    <Content Include="Views\Cash\NewExpense.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -286,6 +305,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Documents\" />
     <Folder Include="Filters\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\Lock\" />
