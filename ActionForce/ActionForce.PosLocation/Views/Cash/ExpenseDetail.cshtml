@@ -45,25 +45,24 @@
             <div class="content">
                 <div class="card-transactions">
                     <div class="head">
-                        <h1>Nakit Tahsilat</h1>
+                        <h1>Nakit Ödeme Detayı</h1>
                     </div>
                     <div class="currency-exchange-information">
                         <div class="cei dolar"><b>$</b>: <span>@(Model.Exchange.USDA?.ToString("N4"))</span></div>
                         <div class="cei euro"><b>€</b>: <span>@(Model.Exchange.EURA?.ToString("N4"))</span></div>
                     </div>
 
-                    @using (Html.BeginForm("UpdateCashCollect", "Cash", FormMethod.Post, new { role = "form", @class = "form" }))
+                    @using (Html.BeginForm("UpdateCashExpense", "Cash", FormMethod.Post, new { role = "form", @class = "form", enctype = "multipart/form-data" }))
                     {
 
-                        <input id="Hidden1" name="UID" type="hidden" value="@(Model.CashCollection.UID)" />
-
                         <div class="form-group">
                             <div class="row">
                                 <div class="col col-4">
-                                    <label>Doküman No</label>
+                                    <label>Numarası</label>
                                 </div>
                                 <div class="col col-8">
-                                    <input type="text" name="DocumentNumber" value="@(Model.CashCollection.DocumentNumber)" readonly>
+                                    <input id="DocumentNumber" type="text" name="DocumentNumber" value="@(Model.CashExpense.DocumentNumber)" readonly />
+                                    <input id="Hidden1" name="UID" type="hidden" value="@(Model.CashExpense.UID)" />
                                 </div>
                             </div>
                         </div>
@@ -71,10 +70,28 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col col-4">
-                                    <label>Fiş Tarihi</label>
+                                    <label>Tarihi</label>
                                 </div>
                                 <div class="col col-8">
-                                    <input class="shiftdate" name="DocumentDate" type="date" value="@(Model.CashCollection.Date?.ToString("yyyy-MM-dd"))" required>
+                                    <label class="form-control font-weight-bold mb-0 bg-body"> @(Model.CashExpense.Date?.ToString("yyyy-MM-dd"))</label>
+                                    <input id="DocumentDate" name="DocumentDate" type="hidden" value="@(Model.CashExpense.Date?.ToString("yyyy-MM-dd"))">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col col-4">
+                                    <label>Masraf Türü</label>
+                                </div>
+                                <div class="col col-8">
+                                    <select name="TypeID">
+                                        @foreach (var item in Model.ExpenseTypes)
+                                        {
+                                            <option value="@(item.ID)" @(item.ID == Model.CashExpense.ExpenseTypeID ? "selected" : "")>@(item.ExpenseName)</option>
+                                        }
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -82,18 +99,18 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col col-4">
-                                    <label>Tutar</label>
+                                    <label>Tutarı</label>
                                 </div>
                                 <div class="col col-8">
                                     <div class="row">
                                         <div class="col col-8">
-                                            <input id="Amount" name="Amount" class="money" type="text" placeholder="0,00" value="@(Model.CashCollection?.Amount?.ToString("N2"))" required>
+                                            <input id="Amount" name="Amount" class="money" type="text" placeholder="0,00" value="@(Model.CashExpense.Amount?.ToString("N2"))" required>
                                         </div>
                                         <div class="col col-4">
                                             <select name="Currency">
                                                 @foreach (var item in Model.Currencies)
                                                 {
-                                                    <option value="@(item.Code)" @(item.Code == Model.CashCollection.Currency ? "selected" : "")>@(item.Sign)</option>
+                                                    <option value="@(item.Code)" @(item.Code == Model.CashExpense.Currency ? "selected" : "")>@(item.Sign)</option>
                                                 }
                                             </select>
                                         </div>
@@ -105,13 +122,65 @@
                         <div class="form-group">
                             <div class="row">
                                 <div class="col col-4">
-                                    <label>Açıklama</label>
+                                    <label>Fiş No</label>
                                 </div>
                                 <div class="col col-8">
-                                    <textarea name="Description" rows="2">@(Model.CashCollection.Description)</textarea>
+                                    <input id="ReceiptNumber" type="text" name="ReceiptNumber" class="form-control font-weight-bold" value="@(Model.CashExpense.SlipNumber)" required />
                                 </div>
                             </div>
                         </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col col-4">
+                                    <label>Fiş Tarihi</label>
+                                </div>
+                                <div class="col col-8">
+                                    <input id="ReceiptDate" name="ReceiptDate" type="date" class="fshiftdate" placeholder="Date" value="@(Model.CashExpense.SlipDate?.ToString("yyyy-MM-dd"))" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col col-4">
+                                    <label>Fiş Saati</label>
+                                </div>
+                                <div class="col col-8">
+                                    <input id="ReceiptTime" name="ReceiptTime" type="time" class="hour" step="1" placeholder="Time" value="@(Model.CashExpense.SlipDate?.ToString("HH\\:mm\\:ss"))" required>
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col col-4">
+                                    <label>Açıklama</label>
+                                </div>
+                                <div class="col col-8">
+                                    <textarea name="Description" rows="2">@(Model.CashExpense.Description)</textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-12">
+                                @if (!Request.IsLocal)
+                                {
+                                    <img src="@($"http://action.ufegrup.com/Document/Expense/{Model.CashExpense.SlipDocument}")" alt="@(Model.CashExpense.SlipDocument)" style="width:100%" />
+                                }
+                                else
+                                {
+                                    <img src="@($"/Documents/{Model.CashExpense.SlipDocument}")" alt="@(Model.CashExpense.SlipDocument)" style="width:100%" />
+                                }
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <input id="ReceiptFile" name="ReceiptFile" type="file" />
+                        </div>
+
 
                         <div class="form-group">
                             <div class="row">
@@ -121,12 +190,14 @@
                                 <div class="col col-8">
                                     <div class="checkbox-group">
                                         <label for="inp-active">
-                                            <input type="checkbox" id="inp-active" name="IsActive" value="1" @(Model.CashCollection.IsActive == true ? "checked" : "")><span>Aktif</span>
+                                            <input type="checkbox" id="inp-active" name="IsActive" value="1" @(Model.CashExpense.IsActive == true ? "checked" : "")><span>Aktif</span>
                                         </label>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
+
 
                         <div class="form-group-btn">
                             <div class="row">
@@ -144,156 +215,18 @@
                                 </div>
                             </div>
                         </div>
+
+
                         <div class="form-group row">
                             <div class="col-12" style="text-align:center; padding:5px; margin-top:20px;">
-                                <small class="text-muted"> @($"{Model.EmployeeRecorded} - {Model.CashCollection.RecordDate}")</small>
+                                <small class="text-muted"> @($"{Model.EmployeeRecorded} - {Model.CashExpense.RecordDate}")</small>
                             </div>
                         </div>
                         <div class="form-group row mb-1">
                             <div class="col-12" style="text-align:center; padding:5px;">
-                                <small class="text-muted"> @($"{Model.EmployeeUpdated} - {Model.CashCollection.UpdateDate}")</small>
+                                <small class="text-muted"> @($"{Model.EmployeeUpdated} - {Model.CashExpense.UpdateDate}")</small>
                             </div>
                         </div>
-
-
-                        @*<div class="form-group">
-                <div class="row">
-                    <div class="col col-4">
-                        <label>Çalışan</label>
-                    </div>
-                    <div class="col col-8">
-                        <select>
-                            <option value="1">İbrahim Gündoğdu</option>
-                            <option value="1">Faruk Çelik</option>
-                            <option value="1">İbrahim Yılmaz</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col col-4">
-                        <label>Alınan Döviz</label>
-                    </div>
-                    <div class="col col-8">
-                        <div class="row">
-                            <div class="col col-8">
-                                <input class="money" type="text" placeholder="0,00">
-                            </div>
-                            <div class="col col-4">
-                                <select>
-                                    <option value="1">₺</option>
-                                    <option value="1">$</option>
-                                    <option value="1">€</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col col-4">
-                        <label>Tutar</label>
-                    </div>
-                    <div class="col col-8">
-                        <div class="row">
-                            <div class="col col-8">
-                                <input class="money" type="text" placeholder="0,00">
-                            </div>
-                            <div class="col col-4">
-                                <select>
-                                    <option value="1">₺</option>
-                                    <option value="1">$</option>
-                                    <option value="1">€</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col col-4">
-                        <label>Masraf Türü</label>
-                    </div>
-                    <div class="col col-8">
-                        <select>
-                            <option value="1">Temizlik Malemesi1</option>
-                            <option value="1">Temizlik Malemesi2</option>
-                            <option value="1">Temizlik Malemesi3</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col col-4">
-                        <label>Komisyon</label>
-                    </div>
-                    <div class="col col-8">
-                        <div class="row">
-                            <div class="col col-8">
-                                <input class="money" type="text" placeholder="0,00">
-                            </div>
-                            <div class="col col-4"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col col-4">
-                        <label>Fiş No</label>
-                    </div>
-                    <div class="col col-8">
-                        <input type="text">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col col-4">
-                        <label>Fiş Tarihi</label>
-                    </div>
-                    <div class="col col-8">
-                        <input class="shiftdate" type="date">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col col-4">
-                        <label>Fiş Saati</label>
-                    </div>
-                    <div class="col col-8">
-                        <input class="hour" type="time">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col col-4">
-                        <label>Açıklama</label>
-                    </div>
-                    <div class="col col-8">
-                        <textarea></textarea>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <input type="file">
-            </div>
-            <div class="form-group-btn">
-                <div class="row">
-                    <div class="col col-4"></div>
-                    <div class="col col-8">
-                        <button type="button">Kaydet</button>
-                    </div>
-                </div>
-            </div>*@
-
-
                     }
                 </div>
             </div><!-- content -->
@@ -301,7 +234,7 @@
                 <div class="container">
                     <div class="footer-up">
                         <div class="clean clean-2">
-                            <a href="/Cash/CashCollect">
+                            <a href="/Cash/Expense">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="87.52" height="65.64" viewBox="0 0 87.52 65.64">
                                     <path d="M80.227,3h-54.7a6.864,6.864,0,0,0-5.8,3.209L0,35.82,19.728,65.394a6.9,6.9,0,0,0,5.8,3.246h54.7a7.315,7.315,0,0,0,7.293-7.293V10.293A7.315,7.315,0,0,0,80.227,3Zm0,58.347H25.782L8.752,35.82,25.745,10.293H80.227ZM37.962,54.053,51.053,40.962,64.145,54.053l5.142-5.142L56.2,35.82,69.287,22.728l-5.142-5.142L51.053,30.678,37.962,17.587,32.82,22.728,45.912,35.82,32.82,48.912Z" transform="translate(0 -3)" fill="currentColor" />
                                 </svg>

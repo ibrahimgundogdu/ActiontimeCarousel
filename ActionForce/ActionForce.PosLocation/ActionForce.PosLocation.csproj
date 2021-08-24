@@ -146,6 +146,7 @@
     <Content Include="assets\js\prism.js" />
     <Content Include="assets\js\slick.min.js" />
     <Content Include="assets\js\swiper.min.js" />
+    <Content Include="assets\notie\dist\notie.css" />
     <Content Include="assets\notie\dist\notie.min.js" />
     <Content Include="assets\plugins\aos\aos-2.3.1.min.css" />
     <Content Include="assets\plugins\aos\aos-2.3.1.min.js" />
@@ -258,6 +259,7 @@
     <Compile Include="Models\FormModels\FormCashCollect.cs" />
     <Compile Include="Models\FormModels\FormCashExpense.cs" />
     <Compile Include="Models\FormModels\FormCashPayment.cs" />
+    <Compile Include="Models\FormModels\FormExchangeSell.cs" />
     <Compile Include="Models\FormModels\RefundFormModel.cs" />
     <Compile Include="Models\FormModels\SerialFormModel.cs" />
     <Compile Include="Models\FormModels\UserLoginFormModel.cs" />
@@ -296,6 +298,13 @@
     <Content Include="Views\Cash\PaymentDetail.cshtml" />
     <Content Include="Views\Cash\Expense.cshtml" />
     <Content Include="Views\Cash\NewExpense.cshtml" />
+    <Content Include="Views\Cash\ExpenseDetail.cshtml" />
+    <Content Include="Views\Cash\ExchangeSell.cshtml" />
+    <Content Include="Views\Cash\NewExchangeSell.cshtml" />
+    <Content Include="Views\Cash\ExchangeBuy.cshtml" />
+    <Content Include="Views\Cash\NewExchangeBuy.cshtml" />
+    <Content Include="Views\Cash\ExchangeSellDetail.cshtml" />
+    <Content Include="Views\Cash\ExchangeBuyDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

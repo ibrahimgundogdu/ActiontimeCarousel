@@ -512,6 +512,7 @@ namespace ActionForce.PosLocation.Controllers
 
             model.Currencies = Db.Currency.ToList();
             model.ExpenseTypes = Db.ExpenseType.Where(x => x.IsLocation == true && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
 
             return View(model);
         }
@@ -536,7 +537,7 @@ namespace ActionForce.PosLocation.Controllers
                 Currency = "TRL",
                 TimeZone = 3
             }
-        );
+            );
 
             var amount = PosManager.GetStringToAmount(expense.Amount);
             var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
@@ -609,6 +610,23 @@ namespace ActionForce.PosLocation.Controllers
         public ActionResult UpdateCashExpense(FormCashExpense expense)
         {
             CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            documentManager = new DocumentManager(
+               new ProcessEmployee()
+               {
+                   ID = model.Authentication.CurrentEmployee.EmployeeID,
+                   FullName = model.Authentication.CurrentEmployee.FullName
+               },
+               PosManager.GetIPAddress(),
+               new ProcessCompany()
+               {
+                   ID = 2,
+                   Name = "UFE GRUP",
+                   Currency = "TRL",
+                   TimeZone = 3
+               }
+           );
 
             var amount = PosManager.GetStringToAmount(expense.Amount);
             var documentDate = expense.DocumentDate;
@@ -675,8 +693,550 @@ namespace ActionForce.PosLocation.Controllers
             return RedirectToAction("ExpenseDetail", new { id = expense.UID });
         }
 
+        //ExchangeSell
+
+        [AllowAnonymous]
+        public ActionResult ExchangeSell()
+        {
+            CashControlModel model = new CashControlModel();
+
+            model.Authentication = this.AuthenticationData;
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            model.ReceiptDate = documentDate;
+            model.Currencies = Db.Currency.ToList();
+            model.CashSaleExchanges = Db.DocumentSaleExchange.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == documentDate).OrderByDescending(x => x.RecordDate).ToList();
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
+
+            return View(model);
+        }
+
+        //NewExchangeSell
+        public ActionResult NewExchangeSell()
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
+            model.Currencies = Db.Currency.ToList();
+
+            return View(model);
+        }
 
 
+        public ActionResult ExchangeSellDetail(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            if (id != null)
+            {
+                model.CashSaleExchange = Db.DocumentSaleExchange.FirstOrDefault(x => x.UID == id);
+
+                if (model.CashSaleExchange != null)
+                {
+                    model.EmployeeRecorded = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashSaleExchange.RecordEmployeeID)?.FullName;
+                    model.EmployeeUpdated = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashSaleExchange.UpdateEmployee)?.FullName;
+
+                    if (model.CashSaleExchange.Date == documentDate)
+                    {
+                        model.IsUpdatible = true;
+                    }
+                    else
+                    {
+                        model.Result.Message = "Doküman bugüne ait değildir. Merkezden güncellenebilir.";
+                        TempData["Result"] = model.Result;
+                    }
+                }
+                else
+                {
+                    model.Result.Message = "Doküman bilgisine ulaşılamadı.";
+                    TempData["Result"] = model.Result;
+
+                    return RedirectToAction("ExchangeSell");
+                }
+            }
+            else
+            {
+                model.Result.Message = "Doküman bilgisi yok.";
+                TempData["Result"] = model.Result;
+
+                return RedirectToAction("ExchangeSell");
+            }
+
+            model.Currencies = Db.Currency.ToList();
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult AddCashExchangeSell(FormExchangeSell exchange)
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            documentManager = new DocumentManager(
+            new ProcessEmployee()
+            {
+                ID = model.Authentication.CurrentEmployee.EmployeeID,
+                FullName = model.Authentication.CurrentEmployee.FullName
+            },
+            PosManager.GetIPAddress(),
+            new ProcessCompany()
+            {
+                ID = 2,
+                Name = "UFE GRUP",
+                Currency = "TRL",
+                TimeZone = 3
+            }
+            );
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+
+            var amount = PosManager.GetStringToAmount(exchange.Amount);
+            var toAmount = PosManager.GetStringToAmount(exchange.ToAmount);
+            var SaleExchangeRate = PosManager.GetStringToAmount(exchange.SaleExchangeRate.Replace(".",","));
+
+            var processDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
+            var dayResultID = PosManager.GetDayResultID(model.Authentication.CurrentLocation.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", PosManager.GetIPAddress());
+
+
+            DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);
+            string fileName = string.Empty;
+
+            // dosya işlemleri yapılır
+            if (exchange.ReceiptFile != null && exchange.ReceiptFile.ContentLength > 0)
+            {
+                fileName = Guid.NewGuid().ToString() + Path.GetExtension(exchange.ReceiptFile.FileName);
+
+                string mappath = Server.MapPath("/Documents");
+
+                try
+                {
+                    //Kaydetme
+                    exchange.ReceiptFile.SaveAs(Path.Combine(mappath, fileName));
+
+                    //Kopyalama
+                    if (!Request.IsLocal)
+                    {
+                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Exchange";
+                        string sourcePath = @"C:\inetpub\wwwroot\location\Documents";
+                        string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
+                        string destFile = System.IO.Path.Combine(targetPath, fileName);
+                        System.IO.File.Copy(sourceFile, destFile, true);
+                        //System.IO.File.Delete(sourceFile);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            CashExchangeModel documentModel = new CashExchangeModel()
+            {
+                ActionTypeID = 25,
+                ActionTypeName = "Döviz Satışı",
+                Amount = amount,
+                Currency = exchange.Currency,
+                ToAmount = toAmount,
+                ToCurrency = exchange.ToCurrency,
+                SaleExchangeRate = SaleExchangeRate,
+                Description = exchange.Description,
+                DocumentDate = documentDate,
+                EnvironmentID = 3,
+                IsActive = true,
+                LocationID = model.Authentication.CurrentLocation.ID,
+                ResultID = dayResultID,
+                UID = Guid.NewGuid(),
+                ProcessDate = processDate,
+                SlipDate = slipdate,
+                SlipNumber = exchange.ReceiptNumber,
+                SlipPath = @"\Document\Exchange",
+                SlipDocument = fileName
+            };
+
+
+            var result = documentManager.AddCashSellExchange(documentModel);
+
+            TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return RedirectToAction("ExchangeSell");
+        }
+
+        [HttpPost]
+        public ActionResult UpdateCashExchangeSell(FormExchangeSell exchange)
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            documentManager = new DocumentManager(
+            new ProcessEmployee()
+            {
+                ID = model.Authentication.CurrentEmployee.EmployeeID,
+                FullName = model.Authentication.CurrentEmployee.FullName
+            },
+            PosManager.GetIPAddress(),
+            new ProcessCompany()
+            {
+                ID = 2,
+                Name = "UFE GRUP",
+                Currency = "TRL",
+                TimeZone = 3
+            }
+            );
+
+            var amount = PosManager.GetStringToAmount(exchange.Amount);
+            var toAmount = PosManager.GetStringToAmount(exchange.ToAmount);
+            var SaleExchangeRate = PosManager.GetStringToAmount(exchange.SaleExchangeRate);
+
+            var processDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
+
+            DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);
+            string fileName = string.Empty;
+
+            // dosya işlemleri yapılır
+            if (exchange.ReceiptFile != null && exchange.ReceiptFile.ContentLength > 0)
+            {
+                fileName = Guid.NewGuid().ToString() + Path.GetExtension(exchange.ReceiptFile.FileName);
+
+                string mappath = Server.MapPath("/Documents");
+
+                try
+                {
+                    //Kaydetme
+                    exchange.ReceiptFile.SaveAs(Path.Combine(mappath, fileName));
+
+                    //Kopyalama
+                    if (!Request.IsLocal)
+                    {
+                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Exchange";
+                        string sourcePath = @"C:\inetpub\wwwroot\location\Documents";
+                        string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
+                        string destFile = System.IO.Path.Combine(targetPath, fileName);
+                        System.IO.File.Copy(sourceFile, destFile, true);
+                        //System.IO.File.Delete(sourceFile);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            CashExchangeModel documentModel = new CashExchangeModel()
+            {
+                ActionTypeID = 25,
+                ActionTypeName = "Döviz Satışı",
+                Amount = amount,
+                Currency = exchange.Currency,
+                ToAmount = toAmount,
+                ToCurrency = exchange.ToCurrency,
+                SaleExchangeRate = SaleExchangeRate,
+                Description = exchange.Description,
+                DocumentDate = exchange.DocumentDate,
+                IsActive = exchange.IsActive == 1 ? true : false,
+                LocationID = model.Authentication.CurrentLocation.ID,
+                UID = exchange.UID,
+                ProcessDate = processDate,
+                SlipDate = slipdate,
+                SlipNumber = exchange.ReceiptNumber,
+                SlipPath = @"\Document\Exchange",
+                SlipDocument = fileName
+
+            };
+
+            var result = documentManager.UpdateCashSellExchange(documentModel);
+
+            TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return RedirectToAction("ExchangeSellDetail", new { id = exchange.UID });
+        }
+
+        //ExchangeBuy
+        //NewExchangeSell
+
+        public ActionResult ExchangeBuy()
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            model.ReceiptDate = documentDate;
+            model.Currencies = Db.Currency.ToList();
+            model.CashBuyExchanges = Db.DocumentBuyExchange.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == documentDate).OrderByDescending(x => x.RecordDate).ToList();
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
+
+            return View(model);
+        }
+
+        public ActionResult NewExchangeBuy()
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
+            model.Currencies = Db.Currency.ToList();
+
+            return View(model);
+        }
+
+        public ActionResult ExchangeBuyDetail(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            if (id != null)
+            {
+                model.CashBuyExchange = Db.DocumentBuyExchange.FirstOrDefault(x => x.UID == id);
+
+                if (model.CashBuyExchange != null)
+                {
+                    model.EmployeeRecorded = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashBuyExchange.RecordEmployeeID)?.FullName;
+                    model.EmployeeUpdated = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.CashBuyExchange.UpdateEmployee)?.FullName;
+
+                    if (model.CashBuyExchange.Date == documentDate)
+                    {
+                        model.IsUpdatible = true;
+                    }
+                    else
+                    {
+                        model.Result.Message = "Doküman bugüne ait değildir. Merkezden güncellenebilir.";
+                        TempData["Result"] = model.Result;
+                    }
+                }
+                else
+                {
+                    model.Result.Message = "Doküman bilgisine ulaşılamadı.";
+                    TempData["Result"] = model.Result;
+
+                    return RedirectToAction("ExchangeBuy");
+                }
+            }
+            else
+            {
+                model.Result.Message = "Doküman bilgisi yok.";
+                TempData["Result"] = model.Result;
+
+                return RedirectToAction("ExchangeBuy");
+            }
+
+            model.Currencies = Db.Currency.ToList();
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult AddCashExchangeBuy(FormExchangeSell exchange)
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            documentManager = new DocumentManager(
+           new ProcessEmployee()
+           {
+               ID = model.Authentication.CurrentEmployee.EmployeeID,
+               FullName = model.Authentication.CurrentEmployee.FullName
+           },
+           PosManager.GetIPAddress(),
+           new ProcessCompany()
+           {
+               ID = 2,
+               Name = "UFE GRUP",
+               Currency = "TRL",
+               TimeZone = 3
+           }
+           );
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+            var amount = PosManager.GetStringToAmount(exchange.Amount);
+            var toAmount = PosManager.GetStringToAmount(exchange.ToAmount);
+            var SaleExchangeRate = PosManager.GetStringToAmount(exchange.SaleExchangeRate.Replace(".", ","));
+
+            var processDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
+            var dayResultID = PosManager.GetDayResultID(model.Authentication.CurrentLocation.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", PosManager.GetIPAddress());
+
+
+            DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);
+            string fileName = string.Empty;
+
+            // dosya işlemleri yapılır
+            if (exchange.ReceiptFile != null && exchange.ReceiptFile.ContentLength > 0)
+            {
+                fileName = Guid.NewGuid().ToString() + Path.GetExtension(exchange.ReceiptFile.FileName);
+
+                string mappath = Server.MapPath("/Documents");
+
+                try
+                {
+                    //Kaydetme
+                    exchange.ReceiptFile.SaveAs(Path.Combine(mappath, fileName));
+
+                    //Kopyalama
+                    if (!Request.IsLocal)
+                    {
+                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Exchange";
+                        string sourcePath = @"C:\inetpub\wwwroot\location\Documents";
+                        string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
+                        string destFile = System.IO.Path.Combine(targetPath, fileName);
+                        System.IO.File.Copy(sourceFile, destFile, true);
+                        //System.IO.File.Delete(sourceFile);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            CashExchangeModel documentModel = new CashExchangeModel()
+            {
+                ActionTypeID = 40,
+                ActionTypeName = "Döviz Alışı",
+                Amount = amount,
+                Currency = exchange.Currency,
+                ToAmount = toAmount,
+                ToCurrency = exchange.ToCurrency,
+                SaleExchangeRate = SaleExchangeRate,
+                Description = exchange.Description,
+                DocumentDate = documentDate,
+                EnvironmentID = 3,
+                IsActive = true,
+                LocationID = model.Authentication.CurrentLocation.ID,
+                ResultID = dayResultID,
+                UID = Guid.NewGuid(),
+                ProcessDate = processDate,
+                SlipDate = slipdate,
+                SlipNumber = exchange.ReceiptNumber,
+                SlipPath = @"\Document\Exchange",
+                SlipDocument = fileName
+            };
+
+            var result = documentManager.AddCashBuyExchange(documentModel);
+
+            TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return RedirectToAction("ExchangeBuy");
+        }
+
+        [HttpPost]
+        public ActionResult UpdateCashExchangeBuy(FormExchangeSell exchange)
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            documentManager = new DocumentManager(
+           new ProcessEmployee()
+           {
+               ID = model.Authentication.CurrentEmployee.EmployeeID,
+               FullName = model.Authentication.CurrentEmployee.FullName
+           },
+           PosManager.GetIPAddress(),
+           new ProcessCompany()
+           {
+               ID = 2,
+               Name = "UFE GRUP",
+               Currency = "TRL",
+               TimeZone = 3
+           }
+           );
+
+            var amount = PosManager.GetStringToAmount(exchange.Amount);
+            var toAmount = PosManager.GetStringToAmount(exchange.ToAmount);
+            var SaleExchangeRate = PosManager.GetStringToAmount(exchange.SaleExchangeRate);
+
+            var processDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
+
+            DateTime slipdate = exchange.ReceiptDate.Add(exchange.ReceiptTime.TimeOfDay);
+            string fileName = string.Empty;
+
+            // dosya işlemleri yapılır
+            if (exchange.ReceiptFile != null && exchange.ReceiptFile.ContentLength > 0)
+            {
+                fileName = Guid.NewGuid().ToString() + Path.GetExtension(exchange.ReceiptFile.FileName);
+
+                string mappath = Server.MapPath("/Documents");
+
+                try
+                {
+                    //Kaydetme
+                    exchange.ReceiptFile.SaveAs(Path.Combine(mappath, fileName));
+
+                    //Kopyalama
+                    if (!Request.IsLocal)
+                    {
+                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Exchange";
+                        string sourcePath = @"C:\inetpub\wwwroot\location\Documents";
+                        string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
+                        string destFile = System.IO.Path.Combine(targetPath, fileName);
+                        System.IO.File.Copy(sourceFile, destFile, true);
+                        // System.IO.File.Delete(sourceFile);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            CashExchangeModel documentModel = new CashExchangeModel()
+            {
+                ActionTypeID = 40,
+                ActionTypeName = "Döviz Alışı",
+                Amount = amount,
+                Currency = exchange.Currency,
+                ToAmount = toAmount,
+                ToCurrency = exchange.ToCurrency,
+                SaleExchangeRate = SaleExchangeRate,
+                Description = exchange.Description,
+                DocumentDate = exchange.DocumentDate,
+                IsActive = exchange.IsActive == 1 ? true : false,
+                LocationID = model.Authentication.CurrentLocation.ID,
+                UID = exchange.UID,
+                ProcessDate = processDate,
+                SlipDate = slipdate,
+                SlipNumber = exchange.ReceiptNumber,
+                SlipPath = @"\Document\Exchange",
+                SlipDocument = fileName
+
+            };
+
+            var result = documentManager.UpdateCashBuyExchange(documentModel);
+
+            TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return RedirectToAction("ExchangeBuyDetail", new { id = exchange.UID });
+        }
 
 
 
