@@ -812,7 +812,7 @@ namespace ActionForce.PosLocation.Controllers
 
             var amount = PosManager.GetStringToAmount(exchange.Amount);
             var toAmount = PosManager.GetStringToAmount(exchange.ToAmount);
-            var SaleExchangeRate = PosManager.GetStringToAmount(exchange.SaleExchangeRate.Replace(".",","));
+            var SaleExchangeRate = PosManager.GetStringToAmount(exchange.SaleExchangeRate.Replace(".", ","));
 
             var processDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
             var dayResultID = PosManager.GetDayResultID(model.Authentication.CurrentLocation.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", PosManager.GetIPAddress());
@@ -1240,8 +1240,514 @@ namespace ActionForce.PosLocation.Controllers
 
 
 
+        public ActionResult BankTransfer()
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            model.ReceiptDate = documentDate;
+            model.Currencies = Db.Currency.ToList();
+            model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.CurrentLocation.OurCompanyID && x.AccountTypeID == 1).ToList();
+
+            model.BankTransfers = Db.DocumentBankTransfer.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == documentDate).OrderByDescending(x => x.RecordDate).Select(x => new BankTransfer()
+            {
+                Amount = x.Amount,
+                Commission = x.Commission,
+                Currency = x.Currency,
+                Date = x.Date,
+                DocumentNumber = x.DocumentNumber,
+                ID = x.ID,
+                IsActive = x.IsActive.Value,
+                ToBankAccountID = x.ToBankAccountID.Value,
+                UID = x.UID.Value
+            }).ToList();
+
+            foreach (var item in model.BankTransfers)
+            {
+                item.BankAccountName = model.BankAccountList.FirstOrDefault(x => x.ID == item.ToBankAccountID).Name;
+            }
+
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
+
+            return View(model);
+        }  
+
+        public ActionResult NewBankTransfer()
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+            model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.CurrentLocation.OurCompanyID && x.AccountTypeID == 1).ToList();
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
+            model.Currencies = Db.Currency.ToList();
+
+            return View(model);
+        }
 
 
+        public ActionResult TransferDetail(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.CurrentLocation.OurCompanyID && x.AccountTypeID == 1).ToList();
+
+            if (id != null)
+            {
+                model.BankTransfer = Db.DocumentBankTransfer.FirstOrDefault(x => x.UID == id);
+                model.TransferStatus = Db.BankTransferStatus.Where(x => x.LevelNumber <= 3).ToList();
+
+                if (model.BankTransfer != null)
+                {
+                    model.EmployeeRecorded = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.BankTransfer.RecordEmployeeID)?.FullName;
+                    model.EmployeeUpdated = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.BankTransfer.UpdateEmployee)?.FullName;
+
+                    if (model.BankTransfer.Date == documentDate)
+                    {
+                        model.IsUpdatible = true;
+                    }
+                    else
+                    {
+                        model.Result.Message = "Doküman bugüne ait değildir. Merkezden güncellenebilir.";
+                        TempData["Result"] = model.Result;
+                    }
+
+                }
+                else
+                {
+                    model.Result.Message = "Doküman bilgisine ulaşılamadı.";
+                    TempData["Result"] = model.Result;
+
+                    return RedirectToAction("Transfer");
+                }
+            }
+            else
+            {
+                model.Result.Message = "Doküman bilgisi yok.";
+                TempData["Result"] = model.Result;
+
+                return RedirectToAction("Transfer");
+            }
+
+            model.Currencies = Db.Currency.ToList();
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult AddTransfer(FormBankTransfer transfer)
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            documentManager = new DocumentManager(
+           new ProcessEmployee()
+           {
+               ID = model.Authentication.CurrentEmployee.EmployeeID,
+               FullName = model.Authentication.CurrentEmployee.FullName
+           },
+           PosManager.GetIPAddress(),
+           new ProcessCompany()
+           {
+               ID = 2,
+               Name = "UFE GRUP",
+               Currency = "TRL",
+               TimeZone = 3
+           }
+           );
+
+            var amount = PosManager.GetStringToAmount(transfer.Amount);
+            var commission = PosManager.GetStringToAmount(transfer.Commission);
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+            var processDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
+            var dayResultID = PosManager.GetDayResultID(model.Authentication.CurrentLocation.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", PosManager.GetIPAddress());
+
+            DateTime slipdate = transfer.ReceiptDate.Add(transfer.ReceiptTime.TimeOfDay);
+            string fileName = string.Empty;
+
+            // dosya işlemleri yapılır
+            if (transfer.ReceiptFile != null && transfer.ReceiptFile.ContentLength > 0)
+            {
+                fileName = Guid.NewGuid().ToString() + Path.GetExtension(transfer.ReceiptFile.FileName);
+
+                string mappath = Server.MapPath("/Documents");
+
+                try
+                {
+                    //Kaydetme
+                    transfer.ReceiptFile.SaveAs(Path.Combine(mappath, fileName));
+
+                    //Kopyalama
+                    if (!Request.IsLocal)
+                    {
+                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Bank"; //"C:\inetpub\wwwroot\Action\Document\Bank"
+                        string sourcePath = @"C:\inetpub\wwwroot\location\Documents";
+                        string sourceFile = System.IO.Path.Combine(sourcePath, fileName);
+                        string destFile = System.IO.Path.Combine(targetPath, fileName);
+                        System.IO.File.Copy(sourceFile, destFile, true);
+                        //System.IO.File.Delete(sourceFile);
+
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            BankTransferModel documentModel = new BankTransferModel()
+            {
+                ActionTypeID = 30,
+                ActionTypeName = "Havale / Eft İşlemi",
+                Amount = amount,
+                Commission = commission,
+                Currency = transfer.Currency,
+                StatusID = 1,
+                Description = transfer.Description,
+                DocumentDate = documentDate,
+                EnvironmentID = 3,
+                ToBankID = transfer.BankAccountID,
+                IsActive = true,
+                LocationID = model.Authentication.CurrentLocation.ID,
+                ResultID = dayResultID,
+                UID = Guid.NewGuid(),
+                ProcessDate = processDate,
+                SlipDate = slipdate,
+                SlipNumber = transfer.ReceiptNumber,
+                SlipPath = @"/Document/Bank",
+                SlipDocument = fileName,
+                ReferanceCode = ""
+            };
+
+
+            var result = documentManager.AddBankTransfer(documentModel);
+
+            TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return RedirectToAction("BankTransfer");
+        }
+
+        [HttpPost]
+        public ActionResult UpdateTransfer(FormBankTransfer transfer)
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            documentManager = new DocumentManager(
+           new ProcessEmployee()
+           {
+               ID = model.Authentication.CurrentEmployee.EmployeeID,
+               FullName = model.Authentication.CurrentEmployee.FullName
+           },
+           PosManager.GetIPAddress(),
+           new ProcessCompany()
+           {
+               ID = 2,
+               Name = "UFE GRUP",
+               Currency = "TRL",
+               TimeZone = 3
+           }
+           );
+
+            var amount = PosManager.GetStringToAmount(transfer.Amount);
+            var commission = PosManager.GetStringToAmount(transfer.Commission);
+            var processDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
+
+            DateTime slipdate = transfer.ReceiptDate.Add(transfer.ReceiptTime.TimeOfDay);
+
+            BankTransferModel documentModel = new BankTransferModel()
+            {
+                ActionTypeID = 30,
+                ActionTypeName = "Havale / Eft İşlemi",
+                Amount = amount,
+                Commission = commission,
+                Currency = transfer.Currency,
+                StatusID = transfer.StatusID,
+                Description = transfer.Description,
+                DocumentDate = transfer.DocumentDate,
+                EnvironmentID = 3,
+                ToBankID = transfer.BankAccountID,
+                IsActive = transfer.IsActive == 1 ? true : false,
+                LocationID = model.Authentication.CurrentLocation.ID,
+                UID = transfer.UID.Value,
+                ProcessDate = processDate,
+                SlipDate = slipdate,
+                SlipNumber = transfer.ReceiptNumber,
+                SlipPath = @"/Document/Bank",
+                SlipDocument = string.Empty,
+                ReferanceCode = transfer.ReferenceCode,
+                TrackingNumber = transfer.TrackingNumber
+            };
+
+            // dosya işlemleri yapılır
+            if (transfer.ReceiptFile != null && transfer.ReceiptFile.ContentLength > 0)
+            {
+                documentModel.SlipDocument = Guid.NewGuid().ToString() + Path.GetExtension(transfer.ReceiptFile.FileName);
+
+                string mappath = Server.MapPath("/Documents");
+
+                try
+                {
+                    //Kaydetme
+                    transfer.ReceiptFile.SaveAs(Path.Combine(mappath, documentModel.SlipDocument));
+
+                    //Kopyalama
+                    if (!Request.IsLocal)
+                    {
+                        string targetPath = @"C:\inetpub\wwwroot\Action\Document\Bank";
+                        string sourcePath = @"C:\inetpub\wwwroot\location\Documents";
+                        string sourceFile = System.IO.Path.Combine(sourcePath, documentModel.SlipDocument);
+                        string destFile = System.IO.Path.Combine(targetPath, documentModel.SlipDocument);
+                        System.IO.File.Copy(sourceFile, destFile, true);
+                        //System.IO.File.Delete(sourceFile);
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+
+            var result = documentManager.UpdateBankTransfer(documentModel);
+
+            TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return RedirectToAction("TransferDetail", new { id = transfer.UID });
+        }
+
+
+
+        public ActionResult SalaryPay()
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            List<int> scheduledempids = Db.Schedule.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ShiftDate == documentDate).Select(x => x.EmployeeID.Value).ToList();
+            model.Employees = Db.Employee.Where(x => scheduledempids.Contains(x.EmployeeID)).ToList();
+
+            model.Currencies = Db.Currency.ToList();
+            model.SalaryPayments = Db.DocumentSalaryPayment.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == documentDate).OrderByDescending(x => x.RecordDate).Select(x => new SalaryPayment()
+            {
+                Amount = x.Amount.Value,
+                Currency = x.Currency,
+                Date = x.Date.Value,
+                EmployeeID = x.ToEmployeeID.Value,
+                ID = x.ID,
+                IsActive = x.IsActive.Value,
+                UID = x.UID.Value,
+                DocumentNumber = x.DocumentNumber
+            }).ToList();
+
+            foreach (var salary in model.SalaryPayments)
+            {
+                salary.EmployeeName = model.Employees.FirstOrDefault(y => y.EmployeeID == salary.EmployeeID).FullName ?? string.Empty;
+            }
+
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
+            return View(model);
+        }
+
+        public ActionResult NewSalaryPay()
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+            List<int> scheduledempids = Db.Schedule.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ShiftDate == documentDate).Select(x => x.EmployeeID.Value).ToList();
+            model.Employees = Db.Employee.Where(x => scheduledempids.Contains(x.EmployeeID)).ToList();
+
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
+            model.Currencies = Db.Currency.ToList();
+
+            return View(model);
+        }
+        public ActionResult SalaryPayDetail(Guid? id)
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            List<int> scheduledempids = Db.Schedule.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ShiftDate == documentDate).Select(x => x.EmployeeID.Value).ToList();
+            model.Employees = Db.Employee.Where(x => scheduledempids.Contains(x.EmployeeID)).ToList();
+
+            if (id != null)
+            {
+                model.SalaryPayment = Db.DocumentSalaryPayment.FirstOrDefault(x => x.UID == id);
+
+                if (model.SalaryPayment != null)
+                {
+                    model.EmployeeRecorded = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.SalaryPayment.RecordEmployeeID)?.FullName;
+                    model.EmployeeUpdated = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.SalaryPayment.UpdateEmployee)?.FullName;
+
+                    if (model.SalaryPayment.Date == documentDate)
+                    {
+                        model.IsUpdatible = true;
+                    }
+                    else
+                    {
+                        model.Result.Message = "Doküman bugüne ait değildir. Merkezden güncellenebilir.";
+                        TempData["Result"] = model.Result;
+                    }
+                }
+                else
+                {
+                    model.Result.Message = "Doküman bilgisine ulaşılamadı.";
+                    TempData["Result"] = model.Result;
+
+                    return RedirectToAction("SalaryPay");
+                }
+            }
+            else
+            {
+                model.Result.Message = "Doküman bilgisi yok.";
+                TempData["Result"] = model.Result;
+
+                return RedirectToAction("SalaryPay");
+            }
+
+            model.Currencies = Db.Currency.ToList();
+            model.Exchange = ServiceHelper.GetExchange(documentDate);
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult AddCashSalaryPay(FormSalaryPay salary)
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            documentManager = new DocumentManager(
+           new ProcessEmployee()
+           {
+               ID = model.Authentication.CurrentEmployee.EmployeeID,
+               FullName = model.Authentication.CurrentEmployee.FullName
+           },
+           PosManager.GetIPAddress(),
+           new ProcessCompany()
+           {
+               ID = 2,
+               Name = "UFE GRUP",
+               Currency = "TRL",
+               TimeZone = 3
+           }
+           );
+
+            var documentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone));
+
+            var amount = PosManager.GetStringToAmount(salary.Amount);
+            var processDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
+            var dayResultID = PosManager.GetDayResultID(model.Authentication.CurrentLocation.ID, documentDate, 1, 2, model.Authentication.CurrentEmployee.EmployeeID, "", PosManager.GetIPAddress());
+            var cash = ServiceHelper.GetCash(model.Authentication.CurrentLocation.ID, salary.Currency);
+
+            SalaryPaymentModel documentModel = new SalaryPaymentModel()
+            {
+                ActionTypeID = 31,
+                ActionTypeName = "Maaş Avans Ödemesi",
+                Amount = amount,
+                Currency = salary.Currency,
+                Description = salary.Description,
+                DocumentDate = documentDate,
+                EnvironmentID = 3,
+                IsActive = true,
+                LocationID = model.Authentication.CurrentLocation.ID,
+                ResultID = dayResultID,
+                UID = Guid.NewGuid(),
+                ProcessDate = processDate,
+                CategoryID = 8,
+                EmployeeID = salary.EmployeeID,
+                SalaryTypeID = 2,
+                FromCashID = cash.ID
+            };
+
+            var result = documentManager.AddSalaryPayment(documentModel);
+
+            TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return RedirectToAction("SalaryPay");
+        }
+
+        [HttpPost]
+        public ActionResult UpdateCashSalaryPay(FormSalaryPay salary)
+        {
+            CashControlModel model = new CashControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            documentManager = new DocumentManager(
+           new ProcessEmployee()
+           {
+               ID = model.Authentication.CurrentEmployee.EmployeeID,
+               FullName = model.Authentication.CurrentEmployee.FullName
+           },
+           PosManager.GetIPAddress(),
+           new ProcessCompany()
+           {
+               ID = 2,
+               Name = "UFE GRUP",
+               Currency = "TRL",
+               TimeZone = 3
+           }
+           );
+
+            var amount = PosManager.GetStringToAmount(salary.Amount);
+            var processDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
+            var cash = ServiceHelper.GetCash(model.Authentication.CurrentLocation.ID, salary.Currency);
+
+
+            SalaryPaymentModel documentModel = new SalaryPaymentModel()
+            {
+                ActionTypeID = 31,
+                ActionTypeName = "Maaş Avans Ödemesi",
+                Amount = amount,
+                Currency = salary.Currency,
+                Description = salary.Description,
+                DocumentDate = salary.DocumentDate,
+                EnvironmentID = 3,
+                IsActive = salary.IsActive == 1 ? true : false,
+                LocationID = model.Authentication.CurrentLocation.ID,
+                UID = salary.UID,
+                ProcessDate = processDate,
+                CategoryID = 8,
+                EmployeeID = salary.EmployeeID,
+                SalaryTypeID = 2,
+                FromCashID = cash.ID
+            };
+
+
+            var result = documentManager.UpdateSalaryPayment(documentModel);
+
+            TempData["Result"] = new Result() { IsSuccess = result.IsSuccess, Message = result.Message };
+
+            return RedirectToAction("SalaryPayDetail", new { id = salary.UID });
+        }
 
 
 

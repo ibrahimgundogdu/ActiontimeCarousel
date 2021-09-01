@@ -353,5 +353,27 @@ namespace ActionForce.PosLocation
             return resultlist;
         }
 
+        public List<LocationTicketSaleInfo> GetLocationTicketsToday(DateTime DocumentDate, Location _location)
+        {
+
+            List<LocationTicketSaleInfo> list = new List<LocationTicketSaleInfo>();
+
+            list = _db.GetLocationTicketsToday(_location.LocationID, DocumentDate).Select(x => new LocationTicketSaleInfo()
+            {
+                Currency = x.Currency,
+                IsActive = x.IsActive.Value,
+                Part = x.Part,
+                PayMethodID = x.PaymethodID.Value,
+                RecordDate = x.RecordDate.Value,
+                RowID = x.RowID,
+                SaleID = x.SaleID,
+                StatusID = x.StatusID.Value,
+                Total = (float)x.Total,
+                Unit = x.Unit.Value,
+                Uid = x.UID
+            }).ToList();
+
+            return list;
+        }
     }
 }

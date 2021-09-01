@@ -1,0 +1,493 @@
+﻿@model DayResultControlModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFE POS</title>
+    <meta name="description" content="UFE POS">
+    <meta name="keywords" content="UFE POS">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/scss/global.css">
+</head>
+<body>
+    <div class="main">
+        <div class="container">
+            <div class="header">
+                <div class="menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="49.778" viewBox="0 0 64 49.778">
+                        <path d="M59.889,40.556v7.111H10.111V40.556H59.889M67,5H3v7.111H67Zm0,14.222H3v7.111H67Zm0,14.222H3V54.778H67Z" transform="translate(-3 -5)" fill="currentColor" />
+                    </svg>
+                    <!-- menu -->
+                </div>
+                <div class="logo">
+                    <a href="javascript:;">UFE POS</a>
+                    <div class="date">@(DateTime.Now.ToLongDateString())</div>
+                </div>
+                <div class="homepage">
+                    <a href="/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                            <path d="M4,16.5H16.5V4H4ZM22.75,54h12.5V41.5H22.75ZM4,54H16.5V41.5H4ZM4,35.25H16.5V22.75H4Zm18.75,0h12.5V22.75H22.75ZM41.5,4V16.5H54V4ZM22.75,16.5h12.5V4H22.75ZM41.5,35.25H54V22.75H41.5ZM41.5,54H54V41.5H41.5Z" transform="translate(-4 -4)" fill="currentColor" />
+                        </svg>
+                        <!-- homepage -->
+                    </a>
+                </div>
+            </div><!-- header -->
+            <div class="side-menu-overlay"></div>
+            <div class="side-menu">
+                @{ Html.RenderPartial("_PartialMenu");}
+            </div><!-- side-menu -->
+            <div class="content">
+                <div class="card-transactions">
+                    <div class="head">
+                        <h1>Lokasyon Takvim ve Mesaisi</h1>
+                    </div>
+                    <div class="table-responsive">
+                        <table cellpadding="0" cellspacing="0" class="calendar-overtime">
+                            <tr>
+                                <td>@(Model.Schedule?.DateStart.ToShortTimeString())</td>
+                                <td>@(Model.Schedule?.DateEnd?.ToShortTimeString())</td>
+                                <td>@(Model.Schedule?.Duration?.ToString(@"hh\:mm"))</td>
+                            </tr>
+                            <tr>
+                                <td class="color-green">@(Model.Shift?.DateStart.ToString("HH\\:mm\\:ss"))</td>
+                                <td class="color-green">@(Model.Shift?.DateEnd?.ToString("HH\\:mm\\:ss"))</td>
+                                <td class="color-green">@(Model.Shift?.Duration?.ToString(@"hh\:mm\:ss"))</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="head">
+                        <h1>Çalışanlar Mesai ve Hakedişler</h1>
+                        <span class="flex"></span>
+                        <div style="padding: 2px;">
+                            <a href="/DayResult/CalculateSalary" class="font-weight-bold pl-2" title="Mesai ve Hakediş Hesapla">
+                                Hesapla
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive">
+
+                        @foreach (var item in Model.EmployeeActions.Where(x => x.ActionTypeID == 32))
+                        {
+                            var shiftModel = Model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+
+                            <table cellpadding="0" cellspacing="0" class="shift-deserve">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">@(item.FullName)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Takvimi</td>
+                                        <th>@(shiftModel?.ScheduleDateStart?.ToString("HH\\:mm\\:ss"))</th>
+                                        <th>@(shiftModel?.ScheduleDateEnd?.ToString("HH\\:mm\\:ss"))</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Mesaisi</td>
+                                        <th>@(shiftModel?.ShiftDateStart?.ToString("HH\\:mm\\:ss"))</th>
+                                        <th>@(shiftModel?.ShiftDateEnd?.ToString("HH\\:mm\\:ss"))</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Mesai Süresi (Saat)</td>
+                                        <th>@(shiftModel?.ShiftDuration?.ToString(@"hh\:mm"))</th>
+                                        <th>@(item.QuantityHour?.ToString("N2"))</th>
+                                    </tr>
+                                    @*<tr>
+                                            <td class="bg-body p-1 pl-3">Birimi - Hakedişi</td>
+                                            <td class="p-1 text-right">@(item.UnitPrice?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</td>
+                                            <th class="p-1 text-right">@(item.TotalAmount?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</th>
+                                        </tr>
+                                        <tr>
+                                            <td class="bg-body p-1 pl-3">Setcard - Maaş</td>
+                                            <td class="p-1 text-right">@(item.TotalAmountFood?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</td>
+                                            <td class="p-1 text-right">@(item.TotalAmountSalary?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</td>
+                                        </tr>*@
+
+                                </tbody>
+                            </table>
+                        }
+                    </div>
+
+                    <div class="head">
+                        <h1>Biletler ve Satışlar</h1>
+                    </div>
+                    <div class="table-responsive">
+                        <table cellpadding="0" cellspacing="0" class="tickets-sales-cash">
+                            <tr>
+                                <td class="bg-cash">Dk.</td>
+                                <td class="bg-cash">₺</td>
+                                <td class="bg-cash" colspan="2">Satış</td>
+                                <td class="bg-cash" colspan="2">İade</td>
+                                <td class="bg-cash">₺</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>15,00</td>
+                                <td class="color-cash font-bold">1</td>
+                                <td class="color-cash font-bold">15,00</td>
+                                <td class="color-red font-bold">0</td>
+                                <td class="color-red font-bold">0,00</td>
+                                <td class="font-bold">15,00</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>20,00</td>
+                                <td class="color-cash font-bold">1</td>
+                                <td class="color-cash font-bold">20,00</td>
+                                <td class="color-red font-bold">0</td>
+                                <td class="color-red font-bold">0,00</td>
+                                <td class="font-bold">20,00</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>25,00</td>
+                                <td class="color-cash font-bold">1</td>
+                                <td class="color-cash font-bold">25,00</td>
+                                <td class="color-red font-bold">0</td>
+                                <td class="color-red font-bold">0,00</td>
+                                <td class="font-bold">25,00</td>
+                            </tr>
+                            <tr>
+                                <td class="color-cash font-bold" colspan="6">Nakit</td>
+                                <td class="font-bold">60,00</td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" class="tickets-sales-credit">
+                            <tr>
+                                <td class="bg-credit">Dk.</td>
+                                <td class="bg-credit">₺</td>
+                                <td class="bg-credit" colspan="2">Satış</td>
+                                <td class="bg-credit" colspan="2">İade</td>
+                                <td class="bg-credit">₺</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>15,00</td>
+                                <td class="color-credit font-bold">1</td>
+                                <td class="color-credit font-bold">15,00</td>
+                                <td class="color-red font-bold">0</td>
+                                <td class="color-red font-bold">0,00</td>
+                                <td class="font-bold">15,00</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td>20,00</td>
+                                <td class="color-credit font-bold">1</td>
+                                <td class="color-credit font-bold">20,00</td>
+                                <td class="color-red font-bold">0</td>
+                                <td class="color-red font-bold">0,00</td>
+                                <td class="font-bold">20,00</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td>25,00</td>
+                                <td class="color-credit font-bold">1</td>
+                                <td class="color-credit font-bold">25,00</td>
+                                <td class="color-red font-bold">0</td>
+                                <td class="color-red font-bold">0,00</td>
+                                <td class="font-bold">25,00</td>
+                            </tr>
+                            <tr>
+                                <td class="color-credit font-bold" colspan="6">Kredi Kartı</td>
+                                <td class="font-bold">60,00</td>
+                            </tr>
+                        </table>
+                        <table cellpadding="0" cellspacing="0" class="tickets-sales-total">
+                            <tr>
+                                <td class="color-cash">Nakit</td>
+                                <td class="color-credit">Kredi Kartı</td>
+                                <td class="font-bold">Hasılat</td>
+                            </tr>
+                            <tr>
+                                <td class="font-bold">60,00 ₺</td>
+                                <td class="font-bold">0,00 ₺</td>
+                                <td class="font-bold">60,00 ₺</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="head">
+                        <h1>Günlük Kasa Özeti</h1>
+                    </div>
+                    <div class="sub-head">
+                        <p>Kasa Parası (i)</p>
+                        <p>280,00</p>
+                    </div>
+                    <div class="table-responsive">
+                        <table cellpadding="0" cellspacing="0" class="daily-summary">
+                            <tr>
+                                <th></th>
+                                <th>$</th>
+                                <th>€</th>
+                                <th>₺</th>
+                            </tr>
+                            <tr>
+                                <td class="color-red bg-default">Kasa Deviri</td>
+                                <td class="bg-default">-1,00</td>
+                                <td class="bg-default">0,00</td>
+                                <td class="bg-default">-680,27</td>
+                            </tr>
+                            <tr>
+                                <td class="color-red bg-default">Ciro Deviri</td>
+                                <td class="bg-default">0,00</td>
+                                <td class="bg-default">0,00</td>
+                                <td class="bg-default">-960,27</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4">Bugünkü</th>
+                            </tr>
+                            <tr>
+                                <td class="color-cash">Nakit Satış</td>
+                                <td>0,00</td>
+                                <td>0,00</td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td class="color-credit">Kredili Satış</td>
+                                <td>0,00</td>
+                                <td>0,00</td>
+                                <td>0,00</td>
+                            </tr>
+                            <tr>
+                                <td>Kasa İşlemi</td>
+                                <td>0,00</td>
+                                <td>0,00</td>
+                                <td>0,00</td>
+                            </tr>
+                            <tr>
+                                <td>İşçilik</td>
+                                <td>0,00</td>
+                                <td>0,00</td>
+                                <td>0,00</td>
+                            </tr>
+                            <tr>
+                                <td>Masraf</td>
+                                <td>0,00</td>
+                                <td>0,00</td>
+                                <td>0,00</td>
+                            </tr>
+                            <tr>
+                                <td>Döviz</td>
+                                <td>0,00</td>
+                                <td>0,00</td>
+                                <td>0,00</td>
+                            </tr>
+                            <tr>
+                                <td>Havale / EFT</td>
+                                <td>0,00</td>
+                                <td>0,00</td>
+                                <td>0,00</td>
+                            </tr>
+                            <tr>
+                                <td class="bg-cash">Nakit Bakiye</td>
+                                <td class="bg-cash">0,00</td>
+                                <td class="bg-cash">0,00</td>
+                                <td class="bg-cash">20,00</td>
+                            </tr>
+                            <tr>
+                                <td class="bg-credit">Kart Bakiye</td>
+                                <td class="bg-credit">0,00</td>
+                                <td class="bg-credit">0,00</td>
+                                <td class="bg-credit">0,00</td>
+                            </tr>
+                            <tr>
+                                <td class="bg-default">Toplam Bakiye</td>
+                                <td class="bg-default">0,00</td>
+                                <td class="bg-default">0,00</td>
+                                <td class="bg-default">20,00</td>
+                            </tr>
+                            <tr>
+                                <th colspan="4">Genel Toplam</th>
+                            </tr>
+                            <tr>
+                                <td class="bg-total">Nakit</td>
+                                <td class="bg-total">-1,00</td>
+                                <td class="bg-total">0,00</td>
+                                <td class="bg-total">-660,27</td>
+                            </tr>
+                            <tr>
+                                <td class="bg-total">Kasa</td>
+                                <td class="bg-total">-1,00</td>
+                                <td class="bg-total">0,00</td>
+                                <td class="bg-total">-660,27</td>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th>$</th>
+                                <th>€</th>
+                                <th>₺</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="head">
+                        <h1>Z Raporu</h1>
+                    </div>
+                    <div class="table-responsive">
+                        <table cellpadding="0" cellspacing="0" class="z-report">
+                            <tr>
+                                <td class="font-bold">No</td>
+                                <td class="font-bold">Tarih</td>
+                                <td class="font-bold">Tutar</td>
+                                <td class="font-bold"></td>
+                            </tr>
+                            <tr>
+                                <td><a href="javascript:;">CR00017800</a></td>
+                                <td>22.08.2021</td>
+                                <td><b>12.312,41</b></td>
+                                <td>₺</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="head">
+                        <h1>Gün Sonu Zarfı</h1>
+                    </div>
+                    <div class="daily-end-adverb-form">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col col-4">
+                                    <input type="file">
+                                    <button type="button">Ekle</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table cellpadding="0" cellspacing="0" class="daily-end-adverb">
+                            <tr>
+                                <td class="font-bold">No</td>
+                                <td class="font-bold">Tarih</td>
+                                <td class="font-bold">Doc</td>
+                            </tr>
+                            <tr>
+                                <td><a href="javascript:;">CR00017800</a></td>
+                                <td>22.08.2021</td>
+                                <td><a href="javascript:;">Detay</a></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="head">
+                        <h1>Gün Sonu Kapama</h1>
+                    </div>
+                    <div class="daily-end-close-form">
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col col-4">
+                                    <label>Durum</label>
+                                </div>
+                                <div class="col col-8">
+                                    <select>
+                                        <option value="1">İlk Kayıt</option>
+                                        <option value="1">Lokasyon Onay</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Açıklama</label>
+                            <textarea></textarea>
+                        </div>
+                        <div class="form-group">
+                            <button type="button">Durumu Onayla</button>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- content -->
+            <div class="fixed-footer">
+                <div class="container">
+                    <div class="footer-up">
+                        <div class="clean clean-2">
+                            <a href="/Cash">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="87.52" height="65.64" viewBox="0 0 87.52 65.64">
+                                    <path d="M80.227,3h-54.7a6.864,6.864,0,0,0-5.8,3.209L0,35.82,19.728,65.394a6.9,6.9,0,0,0,5.8,3.246h54.7a7.315,7.315,0,0,0,7.293-7.293V10.293A7.315,7.315,0,0,0,80.227,3Zm0,58.347H25.782L8.752,35.82,25.745,10.293H80.227ZM37.962,54.053,51.053,40.962,64.145,54.053l5.142-5.142L56.2,35.82,69.287,22.728l-5.142-5.142L51.053,30.678,37.962,17.587,32.82,22.728,45.912,35.82,32.82,48.912Z" transform="translate(0 -3)" fill="currentColor" />
+                                </svg>
+                                <!-- clean -->
+                                <span>GERİ</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- fixed-footer -->
+        </div>
+    </div><!-- main -->
+    <script src="/assets/js/jquery-3.5.1.min.js"></script>
+    <script src="/assets/js/global.js"></script>
+    <script>
+        $(function () {
+
+
+            const open = 'open';
+            const $menu = $('.header .menu');
+            const $listBtn = $('.bot-list-btn');
+
+            $menu.on('click', function () {
+                let $this = $(this);
+                if (($this).hasClass(open)) {
+                    $this.removeClass(open);
+                    $('.side-menu,.side-menu-overlay').removeClass(open);
+                } else {
+                    $this.addClass(open);
+                    $('.side-menu,.side-menu-overlay').addClass(open);
+                }
+            });
+            $('.side-menu-overlay').on('click', function () {
+                $menu.removeClass(open);
+                $('.side-menu,.side-menu-overlay').removeClass(open);
+            });
+
+            $listBtn.on('click', function () {
+                let $this = $(this);
+                if ($this.hasClass(open)) {
+                    $this.removeClass(open);
+                    $('.fixed-footer-overlay').removeClass(open);
+                    $('.footer-basket').stop().slideUp();
+                } else {
+                    $this.addClass(open);
+                    $('.fixed-footer-overlay').addClass(open);
+                    $('.footer-basket').stop().slideDown();
+                }
+            });
+            $('.fixed-footer-overlay').on('click', function () {
+                $listBtn.removeClass(open);
+                $('.fixed-footer-overlay').removeClass(open);
+                $('.footer-basket').stop().slideUp();
+            });
+            $(document).ready(function () {
+                $('.piece-options .minus').click(function () {
+                    var $input = $(this).parent().find('input');
+                    var count = parseInt($input.val()) - 1;
+                    count = count < 1 ? 1 : count;
+                    $input.val(count);
+                    $input.change();
+                    return false;
+                });
+                $('.piece-options .plus').click(function () {
+                    var $input = $(this).parent().find('input');
+                    $input.val(parseInt($input.val()) + 1);
+                    $input.change();
+                    return false;
+                });
+            });
+        });
+    </script>
+    <script src="/assets/notie/dist/notie.min.js"></script>
+    @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
+    {
+        <script>
+                $(function () {
+                    notie.setOptions({
+                        alertTime: 5
+                    })
+                    notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
+                    noticed = true;
+                });
+        </script>
+    }
+</body>
+</html>

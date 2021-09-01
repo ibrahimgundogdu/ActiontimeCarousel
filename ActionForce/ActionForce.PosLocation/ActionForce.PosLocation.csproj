@@ -214,6 +214,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CashController.cs" />
+    <Compile Include="Controllers\DayResultController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\EmployeesController.cs" />
     <Compile Include="Controllers\LocationController.cs" />
@@ -227,6 +228,7 @@
     </Compile>
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\ControlModels\CashControlModel.cs" />
+    <Compile Include="Models\ControlModels\DayResultControlModel.cs" />
     <Compile Include="Models\ControlModels\DefaultControlModel.cs" />
     <Compile Include="Models\ControlModels\EmployeesControlModel.cs" />
     <Compile Include="Models\ControlModels\LayoutControlModel.cs" />
@@ -248,18 +250,25 @@
     <Compile Include="Models\DataModel\EmployeeModel.cs" />
     <Compile Include="Models\DataModel\EmployeeScheduleModel.cs" />
     <Compile Include="Models\DataModel\EmployeeShiftLocationModel.cs" />
+    <Compile Include="Models\DataModel\EmployeeShiftModel.cs" />
     <Compile Include="Models\DataModel\LocationBalance.cs" />
     <Compile Include="Models\DataModel\LocationScheduleInfo.cs" />
     <Compile Include="Models\DataModel\LocationShiftInfo.cs" />
+    <Compile Include="Models\DataModel\LocationTicketSaleInfo.cs" />
     <Compile Include="Models\DataModel\SalaryPayment.cs" />
     <Compile Include="Models\DataModel\TicketInfo.cs" />
     <Compile Include="Models\DataModel\TotalModel.cs" />
     <Compile Include="Models\DifferentList.cs" />
     <Compile Include="Models\FormModels\ConfirmFormModel.cs" />
+    <Compile Include="Models\FormModels\FormBankTransfer.cs" />
     <Compile Include="Models\FormModels\FormCashCollect.cs" />
     <Compile Include="Models\FormModels\FormCashExpense.cs" />
     <Compile Include="Models\FormModels\FormCashPayment.cs" />
+    <Compile Include="Models\FormModels\FormCashRecorder.cs" />
     <Compile Include="Models\FormModels\FormExchangeSell.cs" />
+    <Compile Include="Models\FormModels\FormResultDocument.cs" />
+    <Compile Include="Models\FormModels\FormResultState.cs" />
+    <Compile Include="Models\FormModels\FormSalaryPay.cs" />
     <Compile Include="Models\FormModels\RefundFormModel.cs" />
     <Compile Include="Models\FormModels\SerialFormModel.cs" />
     <Compile Include="Models\FormModels\UserLoginFormModel.cs" />
@@ -305,6 +314,13 @@
     <Content Include="Views\Cash\NewExchangeBuy.cshtml" />
     <Content Include="Views\Cash\ExchangeSellDetail.cshtml" />
     <Content Include="Views\Cash\ExchangeBuyDetail.cshtml" />
+    <Content Include="Views\Cash\BankTransfer.cshtml" />
+    <Content Include="Views\Cash\NewBankTransfer.cshtml" />
+    <Content Include="Views\Cash\TransferDetail.cshtml" />
+    <Content Include="Views\Cash\SalaryPay.cshtml" />
+    <Content Include="Views\Cash\NewSalaryPay.cshtml" />
+    <Content Include="Views\Cash\SalaryPayDetail.cshtml" />
+    <Content Include="Views\DayResult\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
