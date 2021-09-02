@@ -123,81 +123,58 @@
                         <table cellpadding="0" cellspacing="0" class="tickets-sales-cash">
                             <tr>
                                 <td class="bg-cash">Dk.</td>
-                                <td class="bg-cash">₺</td>
+                                <td class="bg-cash">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
                                 <td class="bg-cash" colspan="2">Satış</td>
                                 <td class="bg-cash" colspan="2">İade</td>
-                                <td class="bg-cash">₺</td>
+                                <td class="bg-cash">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>15,00</td>
-                                <td class="color-cash font-bold">1</td>
-                                <td class="color-cash font-bold">15,00</td>
-                                <td class="color-red font-bold">0</td>
-                                <td class="color-red font-bold">0,00</td>
-                                <td class="font-bold">15,00</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>20,00</td>
-                                <td class="color-cash font-bold">1</td>
-                                <td class="color-cash font-bold">20,00</td>
-                                <td class="color-red font-bold">0</td>
-                                <td class="color-red font-bold">0,00</td>
-                                <td class="font-bold">20,00</td>
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>25,00</td>
-                                <td class="color-cash font-bold">1</td>
-                                <td class="color-cash font-bold">25,00</td>
-                                <td class="color-red font-bold">0</td>
-                                <td class="color-red font-bold">0,00</td>
-                                <td class="font-bold">25,00</td>
-                            </tr>
+
+                            @foreach (var item in Model.PriceList.OrderBy(x => x.Unit).ToList())
+                            {
+                                var saletotal = Model.TicketList.Where(x => x.PayMethodID == 1 && x.Unit == item.Unit && (new List<int> { 1, 2, 3 }).Contains(x.StatusID)).ToList();
+                                var salereftotal = Model.TicketList.Where(x => x.PayMethodID == 1 && x.Unit == item.Unit && (new List<int> { 5 }).Contains(x.StatusID)).ToList();
+
+                                <tr>
+                                    <td>@(item.Unit)</td>
+                                    <td>@(item.Price?.ToString("N2"))</td>
+                                    <th class="color-cash font-bold">@(saletotal.Count)</th>
+                                    <th class="color-cash font-bold">@(saletotal.Sum(x=> x.Total).ToString("N2"))</th>
+                                    <th class="color-red font-bold">@(salereftotal.Count)</th>
+                                    <th class="color-red font-bold">@(salereftotal.Sum(x=> x.Total).ToString("N2"))</th>
+                                    <th class="font-bold">@((saletotal.Sum(x => x.Total) - salereftotal.Sum(x => x.Total)).ToString("N2") )</th>
+                                </tr>
+                            }
                             <tr>
                                 <td class="color-cash font-bold" colspan="6">Nakit</td>
-                                <td class="font-bold">60,00</td>
+                                <td class="font-bold">@(Model.LocationBalance.CashTotal.ToString("N2"))</td>
                             </tr>
                         </table>
                         <table cellpadding="0" cellspacing="0" class="tickets-sales-credit">
                             <tr>
                                 <td class="bg-credit">Dk.</td>
-                                <td class="bg-credit">₺</td>
+                                <td class="bg-credit">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
                                 <td class="bg-credit" colspan="2">Satış</td>
                                 <td class="bg-credit" colspan="2">İade</td>
-                                <td class="bg-credit">₺</td>
+                                <td class="bg-credit">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>15,00</td>
-                                <td class="color-credit font-bold">1</td>
-                                <td class="color-credit font-bold">15,00</td>
-                                <td class="color-red font-bold">0</td>
-                                <td class="color-red font-bold">0,00</td>
-                                <td class="font-bold">15,00</td>
-                            </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>20,00</td>
-                                <td class="color-credit font-bold">1</td>
-                                <td class="color-credit font-bold">20,00</td>
-                                <td class="color-red font-bold">0</td>
-                                <td class="color-red font-bold">0,00</td>
-                                <td class="font-bold">20,00</td>
-                            </tr>
-                            <tr>
-                                <td>7</td>
-                                <td>25,00</td>
-                                <td class="color-credit font-bold">1</td>
-                                <td class="color-credit font-bold">25,00</td>
-                                <td class="color-red font-bold">0</td>
-                                <td class="color-red font-bold">0,00</td>
-                                <td class="font-bold">25,00</td>
-                            </tr>
+                            @foreach (var item in Model.PriceList.OrderBy(x => x.Unit).ToList())
+                            {
+                                var saletotal = Model.TicketList.Where(x => x.PayMethodID == 2 && x.Unit == item.Unit && (new List<int> { 1, 2, 3 }).Contains(x.StatusID)).ToList();
+                                var salereftotal = Model.TicketList.Where(x => x.PayMethodID == 2 && x.Unit == item.Unit && (new List<int> { 5 }).Contains(x.StatusID)).ToList();
+
+                                <tr>
+                                    <td>@(item.Unit)</td>
+                                    <td>@(item.Price?.ToString("N2"))</td>
+                                    <th class="color-credit font-bold">@(saletotal.Count)</th>
+                                    <th class="color-credit font-bold">@(saletotal.Sum(x=> x.Total).ToString("N2"))</th>
+                                    <th class="color-red font-bold">@(salereftotal.Count)</th>
+                                    <th class="color-red font-bold">@(salereftotal.Sum(x=> x.Total).ToString("N2"))</th>
+                                    <th class="font-bold">@((saletotal.Sum(x => x.Total) - salereftotal.Sum(x => x.Total)).ToString("N2") )</th>
+                                </tr>
+                            }
                             <tr>
                                 <td class="color-credit font-bold" colspan="6">Kredi Kartı</td>
-                                <td class="font-bold">60,00</td>
+                                <td class="font-bold">@(Model.LocationBalance.CreditTotal.ToString("N2"))</td>
                             </tr>
                         </table>
                         <table cellpadding="0" cellspacing="0" class="tickets-sales-total">
@@ -207,127 +184,30 @@
                                 <td class="font-bold">Hasılat</td>
                             </tr>
                             <tr>
-                                <td class="font-bold">60,00 ₺</td>
-                                <td class="font-bold">0,00 ₺</td>
-                                <td class="font-bold">60,00 ₺</td>
+                                <th class="font-bold">@($"{Model.LocationBalance?.CashTotal.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
+                                <th class="font-bold">@($"{Model.LocationBalance?.CreditTotal.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
+                                <th class="font-bold">@($"{Model.LocationBalance?.Balance.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
                             </tr>
                         </table>
                     </div>
+
                     <div class="head">
                         <h1>Günlük Kasa Özeti</h1>
                     </div>
-                    <div class="sub-head">
-                        <p>Kasa Parası (i)</p>
-                        <p>280,00</p>
+                    <div>
+                        @{ Html.RenderPartial("_PartialCashSummary", Model.Summary);}
                     </div>
-                    <div class="table-responsive">
-                        <table cellpadding="0" cellspacing="0" class="daily-summary">
-                            <tr>
-                                <th></th>
-                                <th>$</th>
-                                <th>€</th>
-                                <th>₺</th>
-                            </tr>
-                            <tr>
-                                <td class="color-red bg-default">Kasa Deviri</td>
-                                <td class="bg-default">-1,00</td>
-                                <td class="bg-default">0,00</td>
-                                <td class="bg-default">-680,27</td>
-                            </tr>
-                            <tr>
-                                <td class="color-red bg-default">Ciro Deviri</td>
-                                <td class="bg-default">0,00</td>
-                                <td class="bg-default">0,00</td>
-                                <td class="bg-default">-960,27</td>
-                            </tr>
-                            <tr>
-                                <th colspan="4">Bugünkü</th>
-                            </tr>
-                            <tr>
-                                <td class="color-cash">Nakit Satış</td>
-                                <td>0,00</td>
-                                <td>0,00</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td class="color-credit">Kredili Satış</td>
-                                <td>0,00</td>
-                                <td>0,00</td>
-                                <td>0,00</td>
-                            </tr>
-                            <tr>
-                                <td>Kasa İşlemi</td>
-                                <td>0,00</td>
-                                <td>0,00</td>
-                                <td>0,00</td>
-                            </tr>
-                            <tr>
-                                <td>İşçilik</td>
-                                <td>0,00</td>
-                                <td>0,00</td>
-                                <td>0,00</td>
-                            </tr>
-                            <tr>
-                                <td>Masraf</td>
-                                <td>0,00</td>
-                                <td>0,00</td>
-                                <td>0,00</td>
-                            </tr>
-                            <tr>
-                                <td>Döviz</td>
-                                <td>0,00</td>
-                                <td>0,00</td>
-                                <td>0,00</td>
-                            </tr>
-                            <tr>
-                                <td>Havale / EFT</td>
-                                <td>0,00</td>
-                                <td>0,00</td>
-                                <td>0,00</td>
-                            </tr>
-                            <tr>
-                                <td class="bg-cash">Nakit Bakiye</td>
-                                <td class="bg-cash">0,00</td>
-                                <td class="bg-cash">0,00</td>
-                                <td class="bg-cash">20,00</td>
-                            </tr>
-                            <tr>
-                                <td class="bg-credit">Kart Bakiye</td>
-                                <td class="bg-credit">0,00</td>
-                                <td class="bg-credit">0,00</td>
-                                <td class="bg-credit">0,00</td>
-                            </tr>
-                            <tr>
-                                <td class="bg-default">Toplam Bakiye</td>
-                                <td class="bg-default">0,00</td>
-                                <td class="bg-default">0,00</td>
-                                <td class="bg-default">20,00</td>
-                            </tr>
-                            <tr>
-                                <th colspan="4">Genel Toplam</th>
-                            </tr>
-                            <tr>
-                                <td class="bg-total">Nakit</td>
-                                <td class="bg-total">-1,00</td>
-                                <td class="bg-total">0,00</td>
-                                <td class="bg-total">-660,27</td>
-                            </tr>
-                            <tr>
-                                <td class="bg-total">Kasa</td>
-                                <td class="bg-total">-1,00</td>
-                                <td class="bg-total">0,00</td>
-                                <td class="bg-total">-660,27</td>
-                            </tr>
-                            <tr>
-                                <th></th>
-                                <th>$</th>
-                                <th>€</th>
-                                <th>₺</th>
-                            </tr>
-                        </table>
-                    </div>
+
+
+
                     <div class="head">
                         <h1>Z Raporu</h1>
+                        <span class="flex"></span>
+                        <div style="margin-right:10px;">
+                            <a href="javascript:;" class="font-weight-bold pl-2" title="Add Cash Collect" data-toggle="modal" data-target="#modalcashrecorder">
+                                Ekle
+                            </a>
+                        </div>
                     </div>
                     <div class="table-responsive">
                         <table cellpadding="0" cellspacing="0" class="z-report">
@@ -337,26 +217,36 @@
                                 <td class="font-bold">Tutar</td>
                                 <td class="font-bold"></td>
                             </tr>
-                            <tr>
-                                <td><a href="javascript:;">CR00017800</a></td>
-                                <td>22.08.2021</td>
-                                <td><b>12.312,41</b></td>
-                                <td>₺</td>
-                            </tr>
+                            @foreach (var item in Model.CashRecordSlip)
+                            {
+                                <tr>
+                                    <td><a href="javascript:;" class="@(item.IsActive == false ? "text-danger":"")" data-toggle="modal" data-target="#modalcashrecorderedit" onclick="GetCashRecorderModal(@(item.ID))">@(item.DocumentNumber)</a></td>
+                                    <td>@(item.Date?.ToShortDateString())</td>
+                                    <td class="@(item.IsActive == false ? "text-muted":"text-dark") font-weight-bold pr-0"><b>@(item.CashAmount?.ToString("N2"))</b></td>
+                                    <td> @(item.Currency == "TRL" ? "₺" : item.Currency == "USD" ? "$":"€")</td>
+                                </tr>
+                            }
                         </table>
                     </div>
+
+
                     <div class="head">
                         <h1>Gün Sonu Zarfı</h1>
                     </div>
                     <div class="daily-end-adverb-form">
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col col-4">
-                                    <input type="file">
-                                    <button type="button">Ekle</button>
+
+                        @using (Html.BeginForm("AddResultDocument", "DayResult", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
+                        {
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col col-4">
+                                        <input id="ResultFile" name="ResultFile" class="form-control" type="file" style="width:100%;" />
+                                        <input id="DayResultID" name="DayResultID" type="hidden" value="@(Model.CurrentDayResult.ID)" />
+                                        <button type="submit" id="btn-save" class="btn btn-block bg-primary text-white input-group-btn">Ekle</button>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        }
                     </div>
                     <div class="table-responsive">
                         <table cellpadding="0" cellspacing="0" class="daily-end-adverb">
@@ -365,38 +255,63 @@
                                 <td class="font-bold">Tarih</td>
                                 <td class="font-bold">Doc</td>
                             </tr>
-                            <tr>
-                                <td><a href="javascript:;">CR00017800</a></td>
-                                <td>22.08.2021</td>
-                                <td><a href="javascript:;">Detay</a></td>
-                            </tr>
+                            @foreach (var item in Model.ResultDocuments)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="javascript:;" class="@(item.IsActive == false ? "text-danger":"")" data-toggle="modal" data-target="#modalResultDocument" onclick="GetResultDocument(@(item.ID))">@(item.ID)</a>
+                                    </td>
+                                    <td>@(item.Date.ToShortDateString())</td>
+                                    <td class="@(item.IsActive == false ? "text-muted":"text-dark")">
+                                        <b>
+                                            <a href="javascript:;" class="@(item.IsActive == false ? "text-danger":"")" data-toggle="modal" data-target="#modalResultDocument" onclick="GetResultDocument(@(item.ID))">Detay</a>
+                                        </b>
+                                    </td>
+                                </tr>
+                            }
                         </table>
                     </div>
+
+
                     <div class="head">
                         <h1>Gün Sonu Kapama</h1>
                     </div>
-                    <div class="daily-end-close-form">
-                        <div class="form-group">
-                            <div class="row">
-                                <div class="col col-4">
-                                    <label>Durum</label>
-                                </div>
-                                <div class="col col-8">
-                                    <select>
-                                        <option value="1">İlk Kayıt</option>
-                                        <option value="1">Lokasyon Onay</option>
-                                    </select>
+                    @using (Html.BeginForm("SetResultState", "DayResult", FormMethod.Post))
+                    {
+                        <div class="daily-end-close-form">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col col-4">
+                                        <label>Durum</label>
+                                        <input name="DayresultID" type="hidden" value="@(Model.CurrentDayResult.ID)" />
+                                    </div>
+                                    <div class="col col-8">
+                                        <select class="form-control" name="StateID" required>
+                                            @foreach (var item in Model.ResultStates)
+                                            {
+                                                <option value="@item.StateID" @(item.StateID == Model.CurrentDayResult.StateID ? "selected" : "")>@(Html.Raw($"{item.StateName}"))</option>
+                                            }
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label>Açıklama</label>
+                                <textarea id="ResultDescription" name="Description" class="form-control" rows="4" style="width:100%">@(Model.CurrentDayResult?.Description)</textarea>
+                            </div>
+                            <div class="form-group">
+                                @if (Model?.Shift != null && Model?.Shift?.Duration != null)
+                                {
+                                    <button id="btnResultStateSubmit" type="submit">Durumu Onayla</button>
+                                }
+                                else
+                                {
+                                    <button id="btnResultStateSubmit" type="button">Lokasyon Kapanmalıdır</button>
+
+                                }
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Açıklama</label>
-                            <textarea></textarea>
-                        </div>
-                        <div class="form-group">
-                            <button type="button">Durumu Onayla</button>
-                        </div>
-                    </div>
+                    }
                 </div>
             </div><!-- content -->
             <div class="fixed-footer">
@@ -416,9 +331,143 @@
             </div><!-- fixed-footer -->
         </div>
     </div><!-- main -->
+
+
+
+    <div id="modalcashrecorder" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header"><div class="modal-title font-weight-500 text-dark">Cash Payment</div><button class="close" data-dismiss="modal">×</button></div>
+                <div class="modal-body form mt-0 mb-0 pb-4 pt-4">
+                    @using (Html.BeginForm("AddCashRecordSlip", "DayResult", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
+                    {
+                        <div class="form-group row mb-1">
+                            <label class="col-4 col-form-label pr-0">ZRapor No</label>
+                            <div class="col-8">
+                                <input id="ReceiptNumber" type="text" name="ReceiptNumber" class="form-control font-weight-bold" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-1">
+                            <label class="col-4 col-form-label">Fiş Tarihi</label>
+                            <div class="col-8">
+                                <input id="ReceiptDate" name="ReceiptDate" type="date" class="form-control font-weight-bold" placeholder="Date" value="@(Model.DocumentDate.ToString("yyyy-MM-dd"))" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-1">
+                            <label class="col-4 col-form-label">Fiş Saati</label>
+                            <div class="col-8">
+                                <input id="ReceiptTime" name="ReceiptTime" type="time" class="form-control font-weight-bold" step="1" placeholder="Time" value="@(Model.DocumentDate.ToString("HH\\:mm\\:ss"))" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-1">
+                            <label class="col-4 col-form-label">Nakit</label>
+                            <div class="col-8">
+                                <input id="CashAmount" name="CashAmount" type="text" class="form-control font-weight-bold text-right money" onkeyup="SumCashRecorder()" placeholder="0,00" required>
+                            </div>
+                        </div>
+                        <div class="form-group row mb-1">
+                            <label class="col-4 col-form-label">Kredi</label>
+                            <div class="col-8">
+                                <input id="CreditAmount" name="CreditAmount" type="text" class="form-control font-weight-bold text-right money" onkeyup="SumCashRecorder()" placeholder="0,00" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-1">
+                            <label class="col-4 col-form-label pr-0">Fiş Tutarı</label>
+                            <div class="col-8">
+                                <input id="NetAmount" name="NetAmount" type="text" class="form-control font-weight-bold text-right money" placeholder="0,00" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row mb-1">
+                            <label class="col-4 col-form-label pr-0">Genel Tutar</label>
+                            <div class="col-8">
+                                <input id="TotalAmount" name="TotalAmount" type="text" class="form-control font-weight-bold text-right money" placeholder="0,00" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col-12">
+                                <input id="ReceiptFile" name="ReceiptFile" class="form-control" type="file" style="width:100%;" />
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-4 col-form-label"></label>
+                            <div class="col-8">
+                                <button type="submit" id="btn-save" class="btn btn-block btn-rounded btn-primary">Kaydet</button>
+                            </div>
+                        </div>
+
+                    }
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-rounded btn-light" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+    </div>
+
+    <div id="modalcashrecorderedit" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header"><div class="modal-title">Cash Recorder Slip</div><button class="close" data-dismiss="modal">×</button></div>
+                <div class="modal-body mt-0 mb-0 pb-0 pt-0">
+                    <div class="p-0" id="modalcashContent">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-block btn-rounded btn-light text-info" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+    </div>
+
+    <div id="modalResultDocument" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header"><div class="modal-title">Envelope File</div><button class="close" data-dismiss="modal">×</button></div>
+                <div class="modal-body mt-0 mb-0 pb-0 pt-0">
+                    <div class="p-0" id="modalResultDocumentContent">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-block btn-rounded btn-light text-info" data-dismiss="modal">Close</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <script src="/assets/js/jquery-3.5.1.min.js"></script>
+    <script src="/assets/js/modal.js"></script>
     <script src="/assets/js/global.js"></script>
+    <script src="/assets/js/jquery.mask.js"></script>
     <script>
+
         $(function () {
 
 
@@ -474,7 +523,60 @@
                     return false;
                 });
             });
+
+
+
+
+
         });
+
+        $(function () {
+            $('.shiftbegintime').mask('00:00');
+            $('.hour').mask('00:00');
+            $('.hourfull').mask('00:00:00');
+            $('.shiftdate').mask('0000-00-00');
+            $('.postcode').mask('00000-000');
+            $('.money').mask("#.##0,00", { reverse: true });
+            $('.money4').mask("#.##0,0000", { reverse: true });
+        });
+
+
+        function SumCashRecorder() {
+
+            var cashamount = $("#CashAmount").val().replace('.', '').replace(',', '.');
+            var creditamount = $("#CreditAmount").val().replace('.', '').replace(',', '.');
+
+            var rate = parseFloat(cashamount) + parseFloat(creditamount) || 0.00;
+
+            $("#NetAmount").val(rate.toFixed(2).replace('.', ',').toString());
+        };
+
+        function GetCashRecorderModal(id) {
+
+            $("#modalcashContent").html('Loading.');
+
+            $.ajax({
+                method: "GET",
+                url: "/DayResult/GetCashRecorder",
+                data: { ID: id }
+            }).done(function (d) {
+                $("#modalcashContent").html(d);
+            });
+        };
+
+
+        function GetResultDocument(id) {
+
+            $("#modalResultDocumentContent").html('Loading.');
+
+            $.ajax({
+                method: "GET",
+                url: "/DayResult/GetResultDocument",
+                data: { ID: id }
+            }).done(function (d) {
+                $("#modalResultDocumentContent").html(d);
+            });
+        };
     </script>
     <script src="/assets/notie/dist/notie.min.js"></script>
     @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //

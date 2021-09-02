@@ -355,7 +355,9 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
       .btn-set{ display: flex; align-items: center; 
         .btn{ display: block; padding: 10px; color: #6F93C5;
           svg{ width: 20px; height: 20px; display: block; }
-          &.btn-plus{ color: limegreen; }
+          &.btn-plus{ color: limegreen; 
+            &.btn-plus-bg{ background: #4caf50; color: #fff; }
+          }
         }
       }
     }

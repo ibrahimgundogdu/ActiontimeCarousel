@@ -321,6 +321,8 @@
     <Content Include="Views\Cash\NewSalaryPay.cshtml" />
     <Content Include="Views\Cash\SalaryPayDetail.cshtml" />
     <Content Include="Views\DayResult\Index.cshtml" />
+    <Content Include="Views\DayResult\_PartialCashRecorder.cshtml" />
+    <Content Include="Views\DayResult\_PartialResultDocument.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -65,8 +65,8 @@
                                             </div>
                                         </div>
                                         @*<div class="m-0 p-0">
-                                <a href="#" class="btn btn-block btn-warning font-weight-bold"><i class="font-weight-bold" data-feather="coffee"></i> &nbsp; Molada</a>
-                            </div>*@
+                                                <a href="#" class="btn btn-block btn-warning font-weight-bold"><i class="font-weight-bold" data-feather="coffee"></i> &nbsp; Molada</a>
+                                            </div>*@
                                         <div class="card-body m-0 p-0">
                                             <div class="table-responsive scrollable scroll-x">
                                                 <table class="table mb-0">
@@ -81,7 +81,11 @@
                                                         </tr>
                                                         <tr>
                                                             <th class="bg-success--lt p-2" colspan="2">Mesaisi</th>
-                                                            <th class="bg-success--lt p-0 m-0 text-right" style="vertical-align: middle;"><a href="@(item.Shift != null && item.Shift.Duration == null ? $"/Employees/EmployeeShiftEnd?EmployeeID={item.ID}&Token={item.Token}" : item.Shift == null ? $"/Employees/EmployeeShiftStart?EmployeeID={item.ID}&Token={item.Token}" :"#" )" class="btn btn-block  font-weight-bold text-success"><i class="font-weight-bold" data-feather="clock"></i></a></th>
+                                                            <th class="bg-success--lt p-0 m-0 text-right" style="vertical-align: middle;">
+                                                                <a href="@(item.Shift != null && item.Shift.Duration == null ? $"/Employees/EmployeeShiftEnd?EmployeeID={item.ID}&Token={item.Token}" : item.Shift == null ? $"/Employees/EmployeeShiftStart?EmployeeID={item.ID}&Token={item.Token}" :"#" )" class="btn btn-block  font-weight-bold text-success">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="36px" viewBox="0 0 24 24" width="36px" fill="#000000"><g><rect fill="none" height="24" width="24" x="0" /></g><g><g><path d="M12,2C6.5,2,2,6.5,2,12s4.5,10,10,10s10-4.5,10-10S17.5,2,12,2z M12,20c-4.41,0-8-3.59-8-8s3.59-8,8-8s8,3.59,8,8 S16.41,20,12,20z M12.5,7H11v6l5.2,3.2l0.8-1.3l-4.5-2.7V7z" /></g></g></svg>
+                                                                </a>
+                                                            </th>
 
                                                         </tr>
                                                         <tr>
@@ -92,7 +96,11 @@
                                                         </tr>
                                                         <tr>
                                                             <th class="bg-warning--lt p-2" colspan="2">Molaları</th>
-                                                            <th class="bg-warning--lt p-0 m-0 text-right" style="vertical-align: middle;"><a href="@(item.Shift != null && item.Shift.Duration == null && item.Breaks.Any() && item.Breaks.Any(x=> x.Duration == null) ? $"/Employees/EmployeeBreakEnd?EmployeeID={item.ID}&Token={item.Token}" : item.Shift != null && item.Shift.Duration == null  && !item.Breaks.Any(x=> x.Duration == null) ? $"/Employees/EmployeeBreakStart?EmployeeID={item.ID}&Token={item.Token}" :"#" )" class="btn btn-block font-weight-bold text-warning"><i class="font-weight-bold" data-feather="coffee"></i></a></th>
+                                                            <th class="bg-warning--lt p-0 m-0 text-right" style="vertical-align: middle;">
+                                                                <a href="@(item.Shift != null && item.Shift.Duration == null && item.Breaks.Any() && item.Breaks.Any(x=> x.Duration == null) ? $"/Employees/EmployeeBreakEnd?EmployeeID={item.ID}&Token={item.Token}" : item.Shift != null && item.Shift.Duration == null  && !item.Breaks.Any(x=> x.Duration == null) ? $"/Employees/EmployeeBreakStart?EmployeeID={item.ID}&Token={item.Token}" :"#" )" class="btn btn-block font-weight-bold text-warning">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" height="36px" viewBox="0 0 24 24" width="36px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M16 5v8c0 1.1-.9 2-2 2H8c-1.1 0-2-.9-2-2V5h10m4-2H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.89 2-2V5c0-1.11-.89-2-2-2zm-2 5V5h2v3h-2zm2 11H2v2h18v-2z" /></svg>
+                                                                </a>
+                                                            </th>
 
                                                         </tr>
                                                         @foreach (var b in item.Breaks)

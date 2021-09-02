@@ -83,7 +83,6 @@ namespace ActionForce.PosLocation.Controllers
 
 
 
-        [AllowAnonymous]
         public ActionResult CalculateSalary()
         {
             DayResultControlModel model = new DayResultControlModel();
@@ -122,9 +121,7 @@ namespace ActionForce.PosLocation.Controllers
             return RedirectToAction("Index");
         }
 
-        [AllowAnonymous]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult AddCashRecordSlip(FormCashRecorder cashrecorder)
         {
             DayResultControlModel model = new DayResultControlModel();
@@ -215,9 +212,7 @@ namespace ActionForce.PosLocation.Controllers
             return RedirectToAction("Index");
         }
 
-        [AllowAnonymous]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult UpdateCashRecordSlip(FormCashRecorder cashrecorder)
         {
             DayResultControlModel model = new DayResultControlModel();
@@ -307,7 +302,6 @@ namespace ActionForce.PosLocation.Controllers
             return RedirectToAction("Index");
         }
 
-        [AllowAnonymous]
         public PartialViewResult GetCashRecorder(long ID)
         {
             DayResultControlModel model = new DayResultControlModel();
@@ -318,7 +312,6 @@ namespace ActionForce.PosLocation.Controllers
             return PartialView("_PartialCashRecorder", model);
         }
 
-        [AllowAnonymous]
         public PartialViewResult GetResultDocument(long ID)
         {
             DayResultControlModel model = new DayResultControlModel();
@@ -330,9 +323,7 @@ namespace ActionForce.PosLocation.Controllers
         }
 
 
-        [AllowAnonymous]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult AddResultDocument(FormResultDocument document)
         {
             DayResultControlModel model = new DayResultControlModel();
@@ -394,9 +385,7 @@ namespace ActionForce.PosLocation.Controllers
             return RedirectToAction("Index");
         }
 
-        [AllowAnonymous]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public ActionResult SetResultState(FormResultState result)
         {
             DayResultControlModel model = new DayResultControlModel();
