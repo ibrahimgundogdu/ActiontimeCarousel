@@ -185,7 +185,6 @@ namespace ActionForce.Entity
         public virtual DbSet<VEmployeeSalary> VEmployeeSalary { get; set; }
         public virtual DbSet<VEmployeeSalaryDist> VEmployeeSalaryDist { get; set; }
         public virtual DbSet<CashRecorders> CashRecorders { get; set; }
-        public virtual DbSet<PosTerminal> PosTerminal { get; set; }
         public virtual DbSet<VCashRecorders> VCashRecorders { get; set; }
         public virtual DbSet<VPosTerminal> VPosTerminal { get; set; }
         public virtual DbSet<BankTransferStatus> BankTransferStatus { get; set; }
@@ -298,7 +297,6 @@ namespace ActionForce.Entity
         public virtual DbSet<DocumentBuyExchange> DocumentBuyExchange { get; set; }
         public virtual DbSet<VCashExpense> VCashExpense { get; set; }
         public virtual DbSet<LocationPosTerminal> LocationPosTerminal { get; set; }
-        public virtual DbSet<VLocationPosTerminal> VLocationPosTerminal { get; set; }
         public virtual DbSet<TicketSale> TicketSale { get; set; }
         public virtual DbSet<TicketSaleRows> TicketSaleRows { get; set; }
         public virtual DbSet<VTicketSaleRowsAll> VTicketSaleRowsAll { get; set; }
@@ -318,7 +316,6 @@ namespace ActionForce.Entity
         public virtual DbSet<VTicketSaleDocumentAction> VTicketSaleDocumentAction { get; set; }
         public virtual DbSet<CustomerActionType> CustomerActionType { get; set; }
         public virtual DbSet<CustomerCard> CustomerCard { get; set; }
-        public virtual DbSet<CustomerCardStatus> CustomerCardStatus { get; set; }
         public virtual DbSet<CustomerScorePointBatch> CustomerScorePointBatch { get; set; }
         public virtual DbSet<CustomerScorePointRules> CustomerScorePointRules { get; set; }
         public virtual DbSet<CustomerScorePoints> CustomerScorePoints { get; set; }
@@ -326,6 +323,9 @@ namespace ActionForce.Entity
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<ConfirmMessage> ConfirmMessage { get; set; }
         public virtual DbSet<DocumentExpenseSlip> DocumentExpenseSlip { get; set; }
+        public virtual DbSet<CustomerCardStatus> CustomerCardStatus { get; set; }
+        public virtual DbSet<PosTerminal> PosTerminal { get; set; }
+        public virtual DbSet<VLocationPosTerminal> VLocationPosTerminal { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

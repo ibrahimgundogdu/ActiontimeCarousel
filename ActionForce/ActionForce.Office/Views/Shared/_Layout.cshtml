@@ -169,7 +169,7 @@
                     </ul>
                 </li>
 
-                
+
                 <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Location" || this.ViewContext.RouteData.Values["controller"].ToString() == "Mall"  ? "show" : "")">
                     <a href="/Employee" class="nav-link"><i data-feather="map-pin"></i> <span>AVM - Lokasyon</span></a>
                     <ul>
@@ -179,7 +179,16 @@
                 </li>
 
                 <li class="nav-item"><a href="/Employee" class="nav-link"><i data-feather="users"></i> <span>Çalışanlar</span></a></li>
-                             
+
+                <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Inventory" ? "show" : "")">
+                    <a href="/Employee" class="nav-link"><i data-feather="archive"></i> <span>Envanter</span></a>
+                    <ul>
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Inventory" && this.ViewContext.RouteData.Values["action"].ToString() == "Pos" ? "class=active" : "")><a href="/Inventory/Pos">01 ÖKC POS Cihazları</a></li>
+                        @*<li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Inventory" && this.ViewContext.RouteData.Values["action"].ToString() == "Index" ? "class=active" : "")><a href="/Mall/Index">02 AVM</a></li>*@
+                    </ul>
+                </li>
+
+
                 <li class="nav-label mg-t-10 active">Satış - Fiyat</li>
 
 

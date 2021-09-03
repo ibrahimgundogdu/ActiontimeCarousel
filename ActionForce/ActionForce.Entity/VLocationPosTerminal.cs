@@ -26,5 +26,7 @@ namespace ActionForce.Entity
         public Nullable<int> BankAccountID { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<bool> IsMaster { get; set; }
+        public string SicilNumber { get; set; }
+        public string AccountName { get; set; }
     }
 }

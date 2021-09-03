@@ -25,7 +25,7 @@ namespace ActionForce.PosService.Controllers
                 if (isAuthentication)
                 {
 
-                    var POSTerminalInfo = Db.VLocationPosTerminal.FirstOrDefault(x => x.SerialNumber == request.SerialNo && x.IsActive == true && x.IsMaster == true);
+                    var POSTerminalInfo = Db.VLocationPosTerminal.FirstOrDefault(x => x.SicilNumber == request.SerialNo && x.IsActive == true && x.IsMaster == true);
 
                     if (POSTerminalInfo != null)
                     {
@@ -130,7 +130,7 @@ namespace ActionForce.PosService.Controllers
                 if (isAuthentication)
                 {
 
-                    var POSTerminalInfo = Db.VLocationPosTerminal.FirstOrDefault(x => x.SerialNumber == request.SerialNo && x.IsActive == true && x.IsMaster == true);
+                    var POSTerminalInfo = Db.VLocationPosTerminal.FirstOrDefault(x => x.SicilNumber == request.SerialNo && x.IsActive == true && x.IsMaster == true);
 
                     if (POSTerminalInfo != null)
                     {
@@ -247,7 +247,7 @@ namespace ActionForce.PosService.Controllers
                 if (isAuthentication)
                 {
 
-                    var POSTerminalInfo = Db.VLocationPosTerminal.FirstOrDefault(x => x.SerialNumber == request.SerialNo && x.IsActive == true && x.IsMaster == true);
+                    var POSTerminalInfo = Db.VLocationPosTerminal.FirstOrDefault(x => x.SicilNumber == request.SerialNo && x.IsActive == true && x.IsMaster == true);
 
                     if (POSTerminalInfo != null)
                     {
@@ -364,7 +364,7 @@ namespace ActionForce.PosService.Controllers
                 if (isAuthentication)
                 {
 
-                    var POSTerminalInfo = Db.VLocationPosTerminal.FirstOrDefault(x => x.SerialNumber == request.SerialNo && x.IsActive == true && x.IsMaster == true);
+                    var POSTerminalInfo = Db.VLocationPosTerminal.FirstOrDefault(x => x.SicilNumber == request.SerialNo && x.IsActive == true && x.IsMaster == true);
 
                     if (POSTerminalInfo != null)
                     {

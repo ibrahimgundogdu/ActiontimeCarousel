@@ -367,9 +367,10 @@ namespace ActionForce.Office
         public int LocationID { get; set; }
         public int BankAccountID { get; set; }
         public string ClientID { get; set; }
-        public string TerminalID { get; set; }
+        public int ID { get; set; }
         public string BrandName { get; set; }
         public string ModelName { get; set; }
+        public string SicilNumber { get; set; }
         public string SerialNumber { get; set; }
 
     }

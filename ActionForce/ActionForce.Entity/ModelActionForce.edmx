@@ -802,9 +802,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
         </EntityType>
         <EntityType Name="CustomerCardStatus">
           <Key>
-            <PropertyRef Name="StatusLevel" />
+            <PropertyRef Name="ID" />
           </Key>
-          <Property Name="ID" Type="int" />
+          <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="StatusLevel" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CardStatus" Type="nvarchar" MaxLength="20" />
         </EntityType>
@@ -2776,11 +2776,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="TerminalID" Type="nvarchar" MaxLength="50" />
           <Property Name="ClientID" Type="nvarchar" MaxLength="50" />
           <Property Name="BankAccountID" Type="int" />
           <Property Name="BrandName" Type="nvarchar" MaxLength="50" />
           <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SicilNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="SerialNumber" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="PrePaidCampaign">
@@ -5549,6 +5549,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPosTerminal' does 
           <Property Name="BankAccountID" Type="int" />
           <Property Name="IsActive" Type="bit" />
           <Property Name="IsMaster" Type="bit" />
+          <Property Name="SicilNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="AccountName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPriceCategory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5732,8 +5734,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPosTerminal' does not have
           <Property Name="BankID" Type="int" />
           <Property Name="BranchName" Type="nvarchar" MaxLength="50" />
           <Property Name="AccountName" Type="nvarchar" MaxLength="50" />
-          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Name" Type="nvarchar" MaxLength="80" />
           <Property Name="OurCompanyID" Type="int" />
+          <Property Name="SicilNumber" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPrice' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -8844,7 +8847,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocationPosTerminal].[TerminalID] AS [TerminalID], 
     [VLocationPosTerminal].[BankAccountID] AS [BankAccountID], 
     [VLocationPosTerminal].[IsActive] AS [IsActive], 
-    [VLocationPosTerminal].[IsMaster] AS [IsMaster]
+    [VLocationPosTerminal].[IsMaster] AS [IsMaster], 
+    [VLocationPosTerminal].[SicilNumber] AS [SicilNumber], 
+    [VLocationPosTerminal].[AccountName] AS [AccountName]
     FROM [dbo].[VLocationPosTerminal] AS [VLocationPosTerminal]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VLocationPriceCategory" EntityType="Self.VLocationPriceCategory" store:Type="Views" store:Schema="dbo">
@@ -9006,7 +9011,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VPosTerminal].[BranchName] AS [BranchName], 
     [VPosTerminal].[AccountName] AS [AccountName], 
     [VPosTerminal].[Name] AS [Name], 
-    [VPosTerminal].[OurCompanyID] AS [OurCompanyID]
+    [VPosTerminal].[OurCompanyID] AS [OurCompanyID], 
+    [VPosTerminal].[SicilNumber] AS [SicilNumber]
     FROM [dbo].[VPosTerminal] AS [VPosTerminal]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VPrice" EntityType="Self.VPrice" store:Type="Views" store:Schema="dbo">
@@ -9894,7 +9900,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VEmployeeSalary" EntityType="db293_ActionTimeDbModel.VEmployeeSalary" />
           <EntitySet Name="VEmployeeSalaryDist" EntityType="db293_ActionTimeDbModel.VEmployeeSalaryDist" />
           <EntitySet Name="CashRecorders" EntityType="db293_ActionTimeDbModel.CashRecorders" />
-          <EntitySet Name="PosTerminal" EntityType="db293_ActionTimeDbModel.PosTerminal" />
           <EntitySet Name="VCashRecorders" EntityType="db293_ActionTimeDbModel.VCashRecorders" />
           <EntitySet Name="VPosTerminal" EntityType="db293_ActionTimeDbModel.VPosTerminal" />
           <EntitySet Name="BankTransferStatus" EntityType="db293_ActionTimeDbModel.BankTransferStatus" />
@@ -10337,7 +10342,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="Date" Mode="In" Type="DateTime" />
           </FunctionImport>
           <EntitySet Name="LocationPosTerminal" EntityType="db293_ActionTimeDbModel.LocationPosTerminal" />
-          <EntitySet Name="VLocationPosTerminal" EntityType="db293_ActionTimeDbModel.VLocationPosTerminal" />
           <FunctionImport Name="GetTicketProduct" ReturnType="Collection(db293_ActionTimeDbModel.GetTicketProduct_Result)">
             <Parameter Name="TicketTypeID" Mode="In" Type="Int32" />
             <Parameter Name="PriceCategoryID" Mode="In" Type="Int32" />
@@ -10457,7 +10461,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="CustomerActionType" EntityType="db293_ActionTimeDbModel.CustomerActionType" />
           <EntitySet Name="CustomerCard" EntityType="db293_ActionTimeDbModel.CustomerCard" />
-          <EntitySet Name="CustomerCardStatus" EntityType="db293_ActionTimeDbModel.CustomerCardStatus" />
           <EntitySet Name="CustomerScorePointBatch" EntityType="db293_ActionTimeDbModel.CustomerScorePointBatch" />
           <EntitySet Name="CustomerScorePointRules" EntityType="db293_ActionTimeDbModel.CustomerScorePointRules" />
           <EntitySet Name="CustomerScorePoints" EntityType="db293_ActionTimeDbModel.CustomerScorePoints" />
@@ -10488,6 +10491,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="DateConfirm" Mode="In" Type="DateTime" />
           </FunctionImport>
           <EntitySet Name="DocumentExpenseSlip" EntityType="db293_ActionTimeDbModel.DocumentExpenseSlip" />
+          <EntitySet Name="CustomerCardStatus" EntityType="db293_ActionTimeDbModel.CustomerCardStatus" />
+          <EntitySet Name="PosTerminal" EntityType="db293_ActionTimeDbModel.PosTerminal" />
+          <EntitySet Name="VLocationPosTerminal" EntityType="db293_ActionTimeDbModel.VLocationPosTerminal" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -13715,18 +13721,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="PosTerminal">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="TerminalID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ClientID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BankAccountID" Type="Int32" />
-          <Property Name="BrandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="VCashRecorders">
           <Key>
             <PropertyRef Name="LocationID" />
@@ -13755,8 +13749,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="BankID" Type="Int32" />
           <Property Name="BranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
           <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="SicilNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="BankTransferStatus">
           <Key>
@@ -16920,25 +16915,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsMaster" Type="Boolean" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
         </EntityType>
-        <EntityType Name="VLocationPosTerminal">
-          <Key>
-            <PropertyRef Name="ID" />
-            <PropertyRef Name="LocationID" />
-            <PropertyRef Name="OurCompanyID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="LocationID" Type="Int32" Nullable="false" />
-          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
-          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
-          <Property Name="BrandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ClientID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="TerminalID" Type="Int32" />
-          <Property Name="BankAccountID" Type="Int32" />
-          <Property Name="IsActive" Type="Boolean" />
-          <Property Name="IsMaster" Type="Boolean" />
-        </EntityType>
         <ComplexType Name="GetTicketProduct_Result">
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="Int32" Name="OurCompanyID" Nullable="true" />
@@ -17369,14 +17345,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TokenExpire" Type="DateTime" Precision="3" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
-        <EntityType Name="CustomerCardStatus">
-          <Key>
-            <PropertyRef Name="StatusLevel" />
-          </Key>
-          <Property Name="ID" Type="Int32" />
-          <Property Name="StatusLevel" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CardStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-        </EntityType>
         <EntityType Name="CustomerScorePointBatch">
           <Key>
             <PropertyRef Name="ID" />
@@ -17524,6 +17492,47 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="IsConfirmed" Type="Boolean" />
           <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="CustomerCardStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="StatusLevel" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CardStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PosTerminal">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ClientID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankAccountID" Type="Int32" />
+          <Property Name="BrandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SicilNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VLocationPosTerminal">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="LocationID" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="BrandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ClientID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TerminalID" Type="Int32" />
+          <Property Name="BankAccountID" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="IsMaster" Type="Boolean" />
+          <Property Name="SicilNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -20702,19 +20711,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="PosTerminal">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PosTerminal">
-              <MappingFragment StoreEntitySet="PosTerminal">
-                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
-                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
-                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
-                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
-                <ScalarProperty Name="TerminalID" ColumnName="TerminalID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="VCashRecorders">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCashRecorders">
               <MappingFragment StoreEntitySet="VCashRecorders">
@@ -20731,6 +20727,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VPosTerminal">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPosTerminal">
               <MappingFragment StoreEntitySet="VPosTerminal">
+                <ScalarProperty Name="SicilNumber" ColumnName="SicilNumber" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="AccountName" ColumnName="AccountName" />
@@ -23708,24 +23705,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="VLocationPosTerminal">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationPosTerminal">
-              <MappingFragment StoreEntitySet="VLocationPosTerminal">
-                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
-                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
-                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
-                <ScalarProperty Name="TerminalID" ColumnName="TerminalID" />
-                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
-                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
-                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
-                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="GetTicketProduct" FunctionName="db293_ActionTimeDbModel.Store.GetTicketProduct">
             <ResultMapping>
               <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetTicketProduct_Result">
@@ -24166,15 +24145,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="CustomerCardStatus">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CustomerCardStatus">
-              <MappingFragment StoreEntitySet="CustomerCardStatus">
-                <ScalarProperty Name="CardStatus" ColumnName="CardStatus" />
-                <ScalarProperty Name="StatusLevel" ColumnName="StatusLevel" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CustomerScorePointBatch">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CustomerScorePointBatch">
               <MappingFragment StoreEntitySet="CustomerScorePointBatch">
@@ -24332,6 +24302,48 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="DocumentDate" ColumnName="DocumentDate" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CustomerCardStatus">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CustomerCardStatus">
+              <MappingFragment StoreEntitySet="CustomerCardStatus">
+                <ScalarProperty Name="CardStatus" ColumnName="CardStatus" />
+                <ScalarProperty Name="StatusLevel" ColumnName="StatusLevel" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PosTerminal">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PosTerminal">
+              <MappingFragment StoreEntitySet="PosTerminal">
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="SicilNumber" ColumnName="SicilNumber" />
+                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VLocationPosTerminal">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationPosTerminal">
+              <MappingFragment StoreEntitySet="VLocationPosTerminal">
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="SicilNumber" ColumnName="SicilNumber" />
+                <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
+                <ScalarProperty Name="TerminalID" ColumnName="TerminalID" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

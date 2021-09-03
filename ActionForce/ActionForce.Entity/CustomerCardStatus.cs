@@ -14,7 +14,7 @@ namespace ActionForce.Entity
     
     public partial class CustomerCardStatus
     {
-        public Nullable<int> ID { get; set; }
+        public int ID { get; set; }
         public int StatusLevel { get; set; }
         public string CardStatus { get; set; }
     }

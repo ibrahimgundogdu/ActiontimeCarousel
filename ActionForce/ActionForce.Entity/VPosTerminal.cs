@@ -26,5 +26,6 @@ namespace ActionForce.Entity
         public string AccountName { get; set; }
         public string Name { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
+        public string SicilNumber { get; set; }
     }
 }

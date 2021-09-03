@@ -770,38 +770,40 @@ namespace ActionForce.Office.Controllers
 
             if (newPos != null)
             {
-                var loc = newPos.LocationID;
-                var terminal = Convert.ToInt32(newPos.TerminalID);
-                var ter = newPos.TerminalID;
+               
+                var ps = Db.PosTerminal.FirstOrDefault(x => x.SicilNumber == newPos.SicilNumber);
 
-                var isLocPos = Db.LocationPosTerminal.FirstOrDefault(x => x.LocationID == loc && x.TerminalID == terminal);
+                if (ps == null)
+                {
+                    ps = new PosTerminal();
+                    ps.ClientID = newPos.ClientID;
+                    ps.BankAccountID = newPos.BankAccountID;
+                    ps.BrandName = newPos.BrandName;
+                    ps.ModelName = newPos.ModelName;
+                    ps.SerialNumber = newPos.SerialNumber;
+                    ps.SicilNumber = newPos.SicilNumber;
+
+                    Db.PosTerminal.Add(ps);
+                    Db.SaveChanges();
+
+                    // log atılır
+                    OfficeHelper.AddApplicationLog("Office", "Definition", "Insert", ps.ID.ToString(), "Definition", "PosTerminal", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, ps);
+                }
+
+
+
+
+                var isLocPos = Db.LocationPosTerminal.FirstOrDefault(x => x.LocationID == newPos.LocationID && x.TerminalID == ps.ID);
 
                 if (isLocPos == null)
                 {
                     try
                     {
-                        var isPos = Db.PosTerminal.FirstOrDefault(x => x.TerminalID == ter);
                         
-                        if (isPos == null)
-                        {
-                            PosTerminal ps = new PosTerminal();
-                            ps.TerminalID = newPos.TerminalID;
-                            ps.ClientID = newPos.ClientID;
-                            ps.BankAccountID = newPos.BankAccountID;
-                            ps.BrandName = newPos.BrandName;
-                            ps.ModelName = newPos.ModelName;
-                            ps.SerialNumber = newPos.SerialNumber;
-
-                            Db.PosTerminal.Add(ps);
-                            Db.SaveChanges();
-
-                            // log atılır
-                            OfficeHelper.AddApplicationLog("Office", "Definition", "Insert", isPos.ID.ToString(), "Definition", "PosTerminal", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isPos);
-                        }
                         LocationPosTerminal locPos = new LocationPosTerminal();
 
-                        locPos.LocationID = loc;
-                        locPos.TerminalID = terminal;
+                        locPos.LocationID = newPos.LocationID;
+                        locPos.TerminalID = ps.ID;
                         locPos.IsMaster = true;
                         locPos.IsActive = true;
 
@@ -809,18 +811,18 @@ namespace ActionForce.Office.Controllers
                         Db.SaveChanges();
 
                         result.IsSuccess = true;
-                        result.Message = $"{newPos.TerminalID} { newPos.SerialNumber } serial numaralı pos Cihazı başarı ile eklendi";
+                        result.Message = $"{newPos.SicilNumber} [{ newPos.SerialNumber }] serial numaralı pos Cihazı başarı ile eklendi";
 
                         // log atılır
                         OfficeHelper.AddApplicationLog("Office", "Definition", "Insert", isLocPos.ID.ToString(), "Definition", "LocationPosTerminal", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, isLocPos);
                     }
                     catch (Exception ex)
                     {
-                        result.Message = $"{newPos.TerminalID} { newPos.SerialNumber } serial numaralı pos cihazı eklenemedi : {ex.Message}";
+                        result.Message = $"{newPos.SicilNumber} [{ newPos.SerialNumber }] serial numaralı pos cihazı eklenemedi : {ex.Message}";
                         OfficeHelper.AddApplicationLog("Office", "Definition", "Insert", "-1", "Definition", "LocationPosTerminal", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
                     }
                 }
-                model.LocPosTerminalList = Db.VLocationPosTerminal.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == loc).ToList();
+                model.LocPosTerminalList = Db.VLocationPosTerminal.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.LocationID == newPos.LocationID).ToList();
 
             }
 

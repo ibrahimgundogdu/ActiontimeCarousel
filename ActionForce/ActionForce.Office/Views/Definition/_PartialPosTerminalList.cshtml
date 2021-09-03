@@ -10,25 +10,25 @@
                         <th>Banka Hesap</th>
                         <th>Marka</th>
                         <th>Model</th>
+                        <th>Sicil No</th>
                         <th>Seri No</th>
                         <th class="tx-right">Terminal</th>
                         <th class="tx-right">Client</th>
-                        @*<th></th>*@
 
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var pos in Model.LocPosTerminalList)
                     {
-                    <tr>
-                        <td>@(pos.AccountName)</td>
-                        <td>@(pos.BrandName)</td>
-                        <td>@(pos.ModelName)</td>
-                        <td>@(pos.SerialNumber)</td>
-                        <td class="font-weight-bold">@(pos.TerminalID)</td>
-                        <td class="font-weight-bold">@(pos.ClientID)</td>
-                        @*<td class="tx-right font-weight-bold"><a href="#" class="text-danger" onclick="if(confirm('@cash.Name isimli yazarkasayı silmek istediğine emin misin? Bu işlem geri alınamaz')) DeleteCashRecorded(@cash.ID)"><i class="fas fa-trash"></i></a></td>*@
-                    </tr>
+                        <tr>
+                            <td>@(pos.AccountName)</td>
+                            <td>@(pos.BrandName)</td>
+                            <td>@(pos.ModelName)</td>
+                            <td>@(pos.SicilNumber)</td>
+                            <td>@(pos.SerialNumber)</td>
+                            <td class="font-weight-bold">@(pos.TerminalID)</td>
+                            <td class="font-weight-bold">@(pos.ClientID)</td>
+                        </tr>
                     }
                 </tbody>
             </table>
