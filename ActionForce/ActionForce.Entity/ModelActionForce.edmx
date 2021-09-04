@@ -5551,6 +5551,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPosTerminal' does 
           <Property Name="IsMaster" Type="bit" />
           <Property Name="SicilNumber" Type="nvarchar" MaxLength="50" />
           <Property Name="AccountName" Type="nvarchar" MaxLength="50" />
+          <Property Name="RecordDate" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPriceCategory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5723,11 +5724,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VPosTerminal' does not have
         <EntityType Name="VPosTerminal">
           <Key>
             <PropertyRef Name="ID" />
+            
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
-          <Property Name="TerminalID" Type="nvarchar" MaxLength="50" />
           <Property Name="ClientID" Type="nvarchar" MaxLength="50" />
-          <Property Name="BankAccountID" Type="int" />
+          <Property Name="BankAccountID" Type="int" Nullable="false" />
           <Property Name="BrandName" Type="nvarchar" MaxLength="50" />
           <Property Name="ModelName" Type="nvarchar" MaxLength="50" />
           <Property Name="SerialNumber" Type="nvarchar" MaxLength="50" />
@@ -7019,6 +7020,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         </Function>
         <Function Name="RemoveEmployeePhone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AddressID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RemovePosTerminal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TerminalID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RemovePosTerminalMaster" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="TerminalID" Type="int" Mode="In" />
+          <Parameter Name="LocationID" Type="int" Mode="In" />
         </Function>
         <Function Name="SetBasketCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -8849,7 +8857,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocationPosTerminal].[IsActive] AS [IsActive], 
     [VLocationPosTerminal].[IsMaster] AS [IsMaster], 
     [VLocationPosTerminal].[SicilNumber] AS [SicilNumber], 
-    [VLocationPosTerminal].[AccountName] AS [AccountName]
+    [VLocationPosTerminal].[AccountName] AS [AccountName], 
+    [VLocationPosTerminal].[RecordDate] AS [RecordDate]
     FROM [dbo].[VLocationPosTerminal] AS [VLocationPosTerminal]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VLocationPriceCategory" EntityType="Self.VLocationPriceCategory" store:Type="Views" store:Schema="dbo">
@@ -9001,7 +9010,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VPosTerminal" EntityType="Self.VPosTerminal" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VPosTerminal].[ID] AS [ID], 
-    [VPosTerminal].[TerminalID] AS [TerminalID], 
     [VPosTerminal].[ClientID] AS [ClientID], 
     [VPosTerminal].[BankAccountID] AS [BankAccountID], 
     [VPosTerminal].[BrandName] AS [BrandName], 
@@ -9901,7 +9909,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VEmployeeSalaryDist" EntityType="db293_ActionTimeDbModel.VEmployeeSalaryDist" />
           <EntitySet Name="CashRecorders" EntityType="db293_ActionTimeDbModel.CashRecorders" />
           <EntitySet Name="VCashRecorders" EntityType="db293_ActionTimeDbModel.VCashRecorders" />
-          <EntitySet Name="VPosTerminal" EntityType="db293_ActionTimeDbModel.VPosTerminal" />
           <EntitySet Name="BankTransferStatus" EntityType="db293_ActionTimeDbModel.BankTransferStatus" />
           <EntitySet Name="DocumentBankTransfer" EntityType="db293_ActionTimeDbModel.DocumentBankTransfer" />
           <EntitySet Name="VDocumentBankTransfer" EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" />
@@ -10494,6 +10501,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="CustomerCardStatus" EntityType="db293_ActionTimeDbModel.CustomerCardStatus" />
           <EntitySet Name="PosTerminal" EntityType="db293_ActionTimeDbModel.PosTerminal" />
           <EntitySet Name="VLocationPosTerminal" EntityType="db293_ActionTimeDbModel.VLocationPosTerminal" />
+          <EntitySet Name="VPosTerminal" EntityType="db293_ActionTimeDbModel.VPosTerminal" />
+          <FunctionImport Name="RemovePosTerminalMaster">
+            <Parameter Name="TerminalID" Mode="In" Type="Int32" />
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="RemovePosTerminal">
+            <Parameter Name="TerminalID" Mode="In" Type="Int32" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -13734,24 +13749,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ID" Type="Int32" Nullable="false" />
-        </EntityType>
-        <EntityType Name="VPosTerminal">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" />
-          <Property Name="TerminalID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ClientID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BankAccountID" Type="Int32" />
-          <Property Name="BrandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="BankID" Type="Int32" />
-          <Property Name="BranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="AccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Name" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="SicilNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="BankTransferStatus">
           <Key>
@@ -17533,6 +17530,24 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsMaster" Type="Boolean" />
           <Property Name="SicilNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="AccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="VPosTerminal">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="ClientID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankAccountID" Type="Int32" Nullable="false" />
+          <Property Name="BrandName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankID" Type="Int32" />
+          <Property Name="BranchName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AccountName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="SicilNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -20721,25 +20736,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="VPosTerminal">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPosTerminal">
-              <MappingFragment StoreEntitySet="VPosTerminal">
-                <ScalarProperty Name="SicilNumber" ColumnName="SicilNumber" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
-                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
-                <ScalarProperty Name="BankID" ColumnName="BankID" />
-                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
-                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
-                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
-                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
-                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
-                <ScalarProperty Name="TerminalID" ColumnName="TerminalID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -24331,6 +24327,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VLocationPosTerminal">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationPosTerminal">
               <MappingFragment StoreEntitySet="VLocationPosTerminal">
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
                 <ScalarProperty Name="AccountName" ColumnName="AccountName" />
                 <ScalarProperty Name="SicilNumber" ColumnName="SicilNumber" />
                 <ScalarProperty Name="IsMaster" ColumnName="IsMaster" />
@@ -24348,6 +24345,26 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="VPosTerminal">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VPosTerminal">
+              <MappingFragment StoreEntitySet="VPosTerminal">
+                <ScalarProperty Name="SicilNumber" ColumnName="SicilNumber" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="AccountName" ColumnName="AccountName" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="BankID" ColumnName="BankID" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="ModelName" ColumnName="ModelName" />
+                <ScalarProperty Name="BrandName" ColumnName="BrandName" />
+                <ScalarProperty Name="BankAccountID" ColumnName="BankAccountID" />
+                <ScalarProperty Name="ClientID" ColumnName="ClientID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="RemovePosTerminalMaster" FunctionName="db293_ActionTimeDbModel.Store.RemovePosTerminalMaster" />
+          <FunctionImportMapping FunctionImportName="RemovePosTerminal" FunctionName="db293_ActionTimeDbModel.Store.RemovePosTerminal" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

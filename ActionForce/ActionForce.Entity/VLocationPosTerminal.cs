@@ -28,5 +28,6 @@ namespace ActionForce.Entity
         public Nullable<bool> IsMaster { get; set; }
         public string SicilNumber { get; set; }
         public string AccountName { get; set; }
+        public Nullable<System.DateTime> RecordDate { get; set; }
     }
 }

@@ -186,7 +186,6 @@ namespace ActionForce.Entity
         public virtual DbSet<VEmployeeSalaryDist> VEmployeeSalaryDist { get; set; }
         public virtual DbSet<CashRecorders> CashRecorders { get; set; }
         public virtual DbSet<VCashRecorders> VCashRecorders { get; set; }
-        public virtual DbSet<VPosTerminal> VPosTerminal { get; set; }
         public virtual DbSet<BankTransferStatus> BankTransferStatus { get; set; }
         public virtual DbSet<DocumentBankTransfer> DocumentBankTransfer { get; set; }
         public virtual DbSet<VDocumentBankTransfer> VDocumentBankTransfer { get; set; }
@@ -326,6 +325,7 @@ namespace ActionForce.Entity
         public virtual DbSet<CustomerCardStatus> CustomerCardStatus { get; set; }
         public virtual DbSet<PosTerminal> PosTerminal { get; set; }
         public virtual DbSet<VLocationPosTerminal> VLocationPosTerminal { get; set; }
+        public virtual DbSet<VPosTerminal> VPosTerminal { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -2128,6 +2128,28 @@ namespace ActionForce.Entity
                 new ObjectParameter("DateConfirm", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("ExpenseSlipMessageConfirmed", confirmIDParameter, documentIDParameter, orderIDParameter, dateConfirmParameter);
+        }
+    
+        public virtual int RemovePosTerminalMaster(Nullable<int> terminalID, Nullable<int> locationID)
+        {
+            var terminalIDParameter = terminalID.HasValue ?
+                new ObjectParameter("TerminalID", terminalID) :
+                new ObjectParameter("TerminalID", typeof(int));
+    
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemovePosTerminalMaster", terminalIDParameter, locationIDParameter);
+        }
+    
+        public virtual int RemovePosTerminal(Nullable<int> terminalID)
+        {
+            var terminalIDParameter = terminalID.HasValue ?
+                new ObjectParameter("TerminalID", terminalID) :
+                new ObjectParameter("TerminalID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemovePosTerminal", terminalIDParameter);
         }
     }
 }
