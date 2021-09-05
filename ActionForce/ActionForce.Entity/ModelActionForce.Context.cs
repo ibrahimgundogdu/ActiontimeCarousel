@@ -326,6 +326,11 @@ namespace ActionForce.Entity
         public virtual DbSet<PosTerminal> PosTerminal { get; set; }
         public virtual DbSet<VLocationPosTerminal> VLocationPosTerminal { get; set; }
         public virtual DbSet<VPosTerminal> VPosTerminal { get; set; }
+        public virtual DbSet<VLocationAnimals> VLocationAnimals { get; set; }
+        public virtual DbSet<LocationMallMoto> LocationMallMoto { get; set; }
+        public virtual DbSet<MallMoto> MallMoto { get; set; }
+        public virtual DbSet<MallMotoColor> MallMotoColor { get; set; }
+        public virtual DbSet<VLocationMallMoto> VLocationMallMoto { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

@@ -1,0 +1,145 @@
+﻿@model InventoryControlModel
+@{
+    ViewBag.Title = "Pos Ekle";
+}
+
+@section style{
+    <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
+}
+
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">Lokasyon MallMotoları Detayı</span>
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div>
+<div class="content-body">
+    <div class="pd-x-0 tx-13">
+        <div class="media d-block d-lg-flex">
+            <div class="media-body  mg-t-40 mg-lg-t-0">
+                <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+                    <div>
+                        <h4 class="mg-b-0 tx-spacing--1">@(Model.Location?.LocationName)</h4>
+                    </div>
+                    <div class="d-none d-md-block">
+
+                        <a href="/Inventory/Mallmoto?LocationID=@(Model.LocationID)" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; MallMoto Listesi</a>
+                    </div>
+                </div>
+                @using (Html.BeginForm("AddLocationMallMotos", "Inventory", FormMethod.Post))
+                {
+
+                    <div class="row row-xs">
+                        <div class="col-lg-12">
+                            <input id="LocationID" name="LocationID" type="hidden" value="@(Model.LocationID)" />
+
+                            <div class="form-group row mg-b-5">
+                                <label for="MallMotoColorID" class="col-sm-3 col-form-label">MallMoto Renk Türleri</label>
+                                <div class="col-sm-6">
+                                    <select multiple="" class="form-control tx-13" id="MallMotoColorID" name="MallMotoColorID" style="height: 250px;">
+                                        @foreach (var item in Model.MallMotoColors.OrderBy(x => x.ColorNameEN))
+                                        {
+                                            <option value="@item.ID">@(item.ColorNameEN) - @(item.ColorNameTR)</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="col-sm-3"> </div>
+                            </div>
+                            <div class="form-group row mg-b-0">
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-6">
+                                    <button type="submit" class="btn btn-primary btn-block">Lokasyona MallMoto Ekle</button>
+                                </div>
+                                <div class="col-sm-3">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                }
+
+                <div class="row no-gutters">
+                    <h4>Lokasyon MallMoto Listesi</h4>
+                    <div class="table-responsive" id="MallMotoList">
+                        <table class="table table-primary table-hover mg-b-0">
+                            <thead>
+                                <tr class="table-active">
+                                    <th>#</th>
+                                    <th scope="col">MallMoto (EN) - (TR) </th>
+                                    <th scope="col">Lokasyon </th>
+                                    <th scope="col">Ülke </th>
+                                    <th scope="col">Başlama </th>
+                                    <th scope="col">SeriNo </th>
+                                    <th scope="col"></th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var location in Model.Locations)
+                                {
+                                    var locationmallmotos = Model.LocationMallMotos.Where(x => x.LocationID == location.LocationID).ToList();
+                                    <tr>
+                                        <th colspan="6"><a href="/Inventory/Mallmoto/?LocationID=@(location.LocationID)" class="text-muted tx-16"><b>@(location.LocationName)</b></a></th>
+                                        <th> <a href="/Inventory/LocationMalMotos/@(location.LocationID)" class="tx-16 text-primary float-right"><i data-feather="folder-plus"></i></a></th>
+                                    </tr>
+
+                                    foreach (var item in locationmallmotos.OrderBy(x => x.ColorNameEN))
+                                    {
+                                        <tr class="table-light @(item.IsActive != true ? "text-danger":"")">
+                                            <td><span>@(item.ID)</span></td>
+                                            <td><a href="/Inventory/Mallmoto/@(item.MallMotoColorID)"><b>@(item.ColorNameEN) - @(item.ColorNameTR)</b></a></td>
+                                            <td><a href="/Inventory/Mallmoto/?LocationID=@(item.LocationID)"><b>@(item.LocationFullName)</b></a></td>
+                                            <td scope="row">@(item.OurCompanyID == 1 ? "USA" : item.OurCompanyID == 2 ? "TUR" : "")</td>
+                                            <td scope="row">@(item.StartDate?.ToShortDateString())</td>
+                                            <td scope="row">@(item.MotoNumber)</td>
+                                            <td scope="row"><a href="/Inventory/RemoveMalMoto/@(item.ID)" class="tx-16 text-danger float-right" onclick="return confirm('Silmek İstediğinizden Emin misiniz?')"><i data-feather="folder-minus"></i></a></td>
+                                        </tr>
+                                    }
+
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts {
+    <script>
+        $(function () {
+            'use strict'
+            $('.select2').select2({
+                placeholder: 'Lokasyon Seçiminiz',
+                searchInputPlaceholder: 'Lokasyon Seçimi'
+            });
+
+        });
+
+    </script>
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}
+
+
+

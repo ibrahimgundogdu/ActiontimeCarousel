@@ -5,14 +5,14 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="9994b25f60eb42c19af558a806d4e321" Name="Diagram1" ZoomLevel="84">
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Action" Width="1.5" PointX="10" PointY="20.375" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Action" Width="1.5" PointX="10.625" PointY="20" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionAccounts" Width="1.5" PointX="2.75" PointY="16.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRow" Width="1.5" PointX="12.25" PointY="18.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowDocument" Width="1.5" PointX="15" PointY="7.125" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowExpense" Width="1.5" PointX="4.75" PointY="16.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowLabors" Width="1.5" PointX="14.75" PointY="17.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowLabors" Width="1.5" PointX="15.125" PointY="17.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowProcess" Width="1.5" PointX="16.75" PointY="17.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowResult" Width="1.5" PointX="10" PointY="11.5" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowResult" Width="1.5" PointX="9.5" PointY="11.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowResultChild" Width="1.5" PointX="17.75" PointY="5.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowResultCR" Width="1.5" PointX="6.75" PointY="19.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowSale" Width="1.5" PointX="17.75" PointY="11.75" />
@@ -22,11 +22,11 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.AnimalType" Width="1.5" PointX="19.75" PointY="5.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.AuthorizedIP" Width="1.5" PointX="19.75" PointY="14.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankAccount" Width="1.5" PointX="15" PointY="13" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankAccountType" Width="1.5" PointX="18.75" PointY="20.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankAccountType" Width="1.5" PointX="13.25" PointY="16.25" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankActionType" Width="1.5" PointX="20.75" PointY="17.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankNotification" Width="1.5" PointX="20.75" PointY="20.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankNotificationStatus" Width="1.5" PointX="21.75" PointY="1.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.BreakTypes" Width="1.5" PointX="2.75" PointY="22.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.BreakTypes" Width="1.5" PointX="2.75" PointY="21.125" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Cash" Width="1.5" PointX="21.75" PointY="4.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CashActionType" Width="1.5" PointX="21.75" PointY="14.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Chassis" Width="1.5" PointX="12.75" PointY="23.75" />
@@ -38,7 +38,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentNumber" Width="1.5" PointX="23.75" PointY="1.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentType" Width="1.5" PointX="12.75" PointY="8.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeCashActions" Width="1.5" PointX="23.75" PointY="4.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeDismissal" Width="1.5" PointX="8.75" PointY="24.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeDismissal" Width="1.5" PointX="8.75" PointY="20.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeDismissalStage" Width="1.5" PointX="23.75" PointY="10.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeLocation" Width="1.5" PointX="11.25" PointY="5.125" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeSalary" Width="1.5" PointX="24.75" PointY="21.75" />
@@ -63,7 +63,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationTrampoline" Width="1.5" PointX="26.75" PointY="28.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationType" Width="1.5" PointX="0.75" PointY="29.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationWareHouse" Width="1.5" PointX="2.375" PointY="29.875" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LoginLog" Width="1.5" PointX="8.75" PointY="29.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LoginLog" Width="1.5" PointX="8.875" PointY="30.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.MobileLog" Width="1.5" PointX="28.75" PointY="14.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.MobileLoginLog" Width="1.5" PointX="28.75" PointY="18.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.OurCompanyPartner" Width="1.5" PointX="28.75" PointY="26.75" />
@@ -224,9 +224,9 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Revenue" Width="1.5" PointX="52.75" PointY="52.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.RevenueLines" Width="1.5" PointX="53.75" PointY="0.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.RevenueParameter" Width="1.5" PointX="0.75" PointY="25.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VRevenue" Width="1.5" PointX="53.375" PointY="6.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VRevenue" Width="1.5" PointX="53.375" PointY="7.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VRevenueLines" Width="1.5" PointX="11.375" PointY="53.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationParamCalculate" Width="1.5" PointX="53.375" PointY="13.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationParamCalculate" Width="1.5" PointX="53.375" PointY="14.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmpShift" Width="1.5" PointX="53.375" PointY="16.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentSalaryEarn" Width="1.5" PointX="17.375" PointY="54.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentSalaryEarn" Width="1.5" PointX="54.375" PointY="22.75" />
@@ -292,7 +292,7 @@
 =======
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.MallLocationContract" Width="1.5" PointX="31.375" PointY="57.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Company" Width="1.5" PointX="62.25" PointY="58.25" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowCheck" Width="1.5" PointX="10.25" PointY="34.875" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowCheck" Width="1.5" PointX="9.25" PointY="33.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VMall" Width="1.5" PointX="2.625" PointY="37.25" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentBuyExchange" Width="1.5" PointX="0.75" PointY="0.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCashExpense" Width="1.5" PointX="9.375" PointY="8.875" />
@@ -308,11 +308,11 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionTypeExpense" Width="1.5" PointX="9.625" PointY="2.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PosPaymentSubType" Width="1.5" PointX="13" PointY="5.125" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PosPaymentType" Width="1.5" PointX="68.5" PointY="32.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSalePosPaymentSummary" Width="1.5" PointX="2.5" PointY="24.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSalePosPaymentSummary" Width="1.5" PointX="2.5" PointY="25.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleSummary" Width="1.5" PointX="5.125" PointY="4.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Bank" Width="1.5" PointX="61.125" PointY="26.5" />
         <AssociationConnector Association="db293_ActionTimeDbModel.FK_BankAccount_BankAccount" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VAdisyonRowsSummary" Width="1.5" PointX="11.65606075136739" PointY="11.183571731291512" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VAdisyonRowsSummary" Width="1.5" PointX="11.5" PointY="10.5" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowSummary" Width="1.5" PointX="67.875" PointY="18.5" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleDocumentAction" Width="1.5" PointX="2.75" PointY="0.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerActionType" Width="1.5" PointX="63" PointY="42.125" />
@@ -322,12 +322,17 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerScorePoints" Width="1.5" PointX="67.75" PointY="12" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerTansactions" Width="1.5" PointX="62.25" PointY="10.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Customer" Width="1.5" PointX="8.8822461445267535" PointY="25.345832508684058" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ConfirmMessage" Width="1.5" PointX="2.5294810452170116" PointY="23.922340836339789" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ConfirmMessage" Width="1.5" PointX="2.75" PointY="23" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentExpenseSlip" Width="1.5" PointX="5.25" PointY="9.25" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerCardStatus" Width="1.5" PointX="9.20472101550769" PointY="31.11364634293767" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.PosTerminal" Width="1.5" PointX="4.1523058117145233" PointY="23.791882391922123" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerCardStatus" Width="1.5" PointX="11.375" PointY="36.25" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.PosTerminal" Width="1.5" PointX="4.75" PointY="21.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationPosTerminal" Width="1.5" PointX="0.519894780833225" PointY="29.353415517766688" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPosTerminal" Width="1.5" PointX="10.444320195561424" PointY="13.480954832155701" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VPosTerminal" Width="1.5" PointX="11.625" PointY="13.25" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationAnimals" Width="1.5" PointX="19" PointY="17.625" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationMallMoto" Width="1.5" PointX="18.125" PointY="0.5" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.MallMoto" Width="1.5" PointX="13.25" PointY="14" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.MallMotoColor" Width="1.5" PointX="11.25" PointY="33.875" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationMallMoto" Width="1.5" PointX="6.8294920506093142" PointY="19.159210452418407" />
         
         
         

@@ -215,7 +215,6 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Pos", "Inventory");
         }
 
-        //EditPosTerminal
         [HttpPost]
         [AllowAnonymous]
         public ActionResult EditPosTerminal(PosFormModel form)
@@ -334,8 +333,6 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("Pos", "Inventory");
         }
 
-
-        //Detail
         [AllowAnonymous]
         public ActionResult Detail(string id)
         {
@@ -398,7 +395,7 @@ namespace ActionForce.Office.Controllers
             {
                 return RedirectToAction("Pos", "Inventory");
             }
-            
+
 
 
             return View(model);
@@ -429,7 +426,7 @@ namespace ActionForce.Office.Controllers
             catch (Exception ex)
             {
                 model.Result.IsSuccess = false;
-                model.Result.Message = "Terminal Bilgisi Silinemedi! : "+ex.Message;
+                model.Result.Message = "Terminal Bilgisi Silinemedi! : " + ex.Message;
             }
 
 
@@ -437,5 +434,536 @@ namespace ActionForce.Office.Controllers
 
             return RedirectToAction("Pos", "Inventory");
         }
+
+
+
+
+
+        [AllowAnonymous]
+        public ActionResult Animal(int? id, int? LocationID)
+        {
+            InventoryControlModel model = new InventoryControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            model.CostumeList = Db.Costume.ToList();
+            model.CostumeTypeList = Db.CostumeType.ToList();
+
+            model.Locations = Db.Location.Where(x => x.LocationTypeID == 3 && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).Select(x => new LocationDataModel()
+            {
+                LocationID = x.LocationID,
+                LocationName = x.LocationFullName ?? x.SortBy + " " + x.LocationName,
+                SortCode = x.SortBy
+            }).OrderBy(z => z.SortCode).ToList();
+
+            model.FilterLocations = model.Locations;
+
+            model.LocationAnimals = Db.VLocationAnimals.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            if (id != null && id > 0)
+            {
+                model.LocationAnimals = model.LocationAnimals.Where(x => x.CostumeTypeID == id).ToList();
+                model.CostumeTypeID = id;
+            }
+
+            if (LocationID != null && LocationID > 0)
+            {
+                model.LocationAnimals = model.LocationAnimals.Where(x => x.LocationID == LocationID).ToList();
+                model.Locations = model.Locations.Where(x => x.LocationID == LocationID).ToList();
+                model.LocationID = LocationID;
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddCostumeType(CostumeTypeFormModel form)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            InventoryControlModel model = new InventoryControlModel();
+
+            if (form != null)
+            {
+
+                var isCostume = Db.CostumeType.FirstOrDefault(x => x.TypeNameEN.Trim() == form.TypeNameEN.Trim());
+
+                if (isCostume == null)
+                {
+                    try
+                    {
+                        CostumeType newCostumeType = new CostumeType();
+
+                        newCostumeType.TypeNameEN = form.TypeNameEN;
+                        newCostumeType.TypeNameTR = form.TypeNameTR;
+                        newCostumeType.IsActive = true;
+                        newCostumeType.SortBy = "9999";
+
+                        Db.CostumeType.Add(newCostumeType);
+                        Db.SaveChanges();
+
+                        newCostumeType.SortBy = newCostumeType.ID.ToString();
+                        Db.SaveChanges();
+
+                        result.IsSuccess = true;
+                        result.Message = $"{form.TypeNameEN} - { form.TypeNameTR } kostüm türü başarı ile eklendi";
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Inventory", "Insert", newCostumeType.ID.ToString(), "Inventory", "CostumeType", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newCostumeType);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"{form.TypeNameEN} - { form.TypeNameTR } kostüm türü eklenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Inventory", "Insert", "-1", "Inventory", "PosTerminal", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+                else
+                {
+                    result.IsSuccess = false;
+                    result.Message = $"{form.TypeNameEN} - { form.TypeNameTR } kostüm türü daha önce zaten kaydedilmiş.";
+                }
+            }
+
+            TempData["result"] = result;
+
+            return RedirectToAction("Animal", "Inventory");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult FilterLocationAnimal(AnimalFilterModel filter)
+        {
+            if (filter != null)
+            {
+                return RedirectToAction("Animal", "Inventory", new { id = filter.CostumeTypeID, LocationID = filter.LocationID });
+            }
+            return RedirectToAction("Animal");
+        }
+
+        [AllowAnonymous]
+        public ActionResult RemoveAnimal(int? id)
+        {
+            if (id != null)
+            {
+                var locationAnimal = Db.LocationAnimals.FirstOrDefault(x => x.ID == id);
+
+                if (locationAnimal != null)
+                {
+                    int LocationID = locationAnimal.LocationID.Value;
+
+                    Db.LocationAnimals.Remove(locationAnimal);
+                    Db.SaveChanges();
+
+                    return RedirectToAction("Animal", "Inventory", new { LocationID = LocationID });
+
+                }
+
+            }
+            return RedirectToAction("Animal");
+        }
+
+        [AllowAnonymous]
+        public ActionResult LocationAnimals(int? id)
+        {
+            InventoryControlModel model = new InventoryControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            if (id != null && id > 0)
+            {
+
+
+                model.CostumeTypeList = Db.CostumeType.ToList();
+
+                model.Location = Db.Location.Where(x => x.LocationID == id).Select(x => new LocationDataModel()
+                {
+                    LocationID = x.LocationID,
+                    LocationName = x.LocationFullName ?? x.SortBy + " " + x.LocationName,
+                    SortCode = x.SortBy
+                }).OrderBy(z => z.SortCode).FirstOrDefault();
+
+                model.LocationID = model.Location?.LocationID ?? id;
+                model.LocationAnimals = Db.VLocationAnimals.Where(x => x.LocationID == model.LocationID).ToList();
+
+                model.Locations = Db.Location.Where(x => x.LocationID == model.LocationID).Select(x => new LocationDataModel()
+                {
+                    LocationID = x.LocationID,
+                    LocationName = x.LocationFullName ?? x.SortBy + " " + x.LocationName,
+                    SortCode = x.SortBy
+                }).OrderBy(z => z.SortCode).ToList();
+            }
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddLocationAnimals(LocationAnimalFormModel form)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            InventoryControlModel model = new InventoryControlModel();
+
+            if (form != null)
+            {
+
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == form.LocationID);
+
+                if (location != null)
+                {
+                    try
+                    {
+                        foreach (var item in form.CostumeTypeID)
+                        {
+                            //Chassis
+                            Chassis newChasis = new Chassis();
+                            newChasis.ChassisNumber = "0000";
+                            newChasis.SerialNumber = "0000";
+                            newChasis.ChassisTypeID = 2;
+                            newChasis.ConstractDate = DateTime.UtcNow.AddHours(3).Date;
+                            newChasis.IsActive = true;
+
+                            Db.Chassis.Add(newChasis);
+                            Db.SaveChanges();
+
+                            //Costume
+                            Costume newCostume = new Costume();
+                            newCostume.CostumeTypeID = item;
+                            newCostume.ConstractDate = DateTime.UtcNow.AddHours(3).Date;
+                            newCostume.IsActive = true;
+                            newCostume.SerialNumber = "0000";
+
+                            Db.Costume.Add(newCostume);
+                            Db.SaveChanges();
+
+
+                            //Animal
+                            Animal newAnimal = new Animal();
+
+                            newAnimal.ChassisID = newChasis.ID;
+                            newAnimal.ConstractDate = DateTime.UtcNow.AddHours(3).Date;
+                            newAnimal.CostumeID = newCostume.ID;
+                            newAnimal.IsActive = true;
+                            newAnimal.Number = string.Empty;
+
+                            Db.Animal.Add(newAnimal);
+                            Db.SaveChanges();
+
+                            //LocationAnimal
+                            LocationAnimals newLocAnimal = new LocationAnimals();
+
+                            newLocAnimal.AnimalID = newAnimal.ID;
+                            newLocAnimal.IsActive = true;
+                            newLocAnimal.LocationID = form.LocationID;
+                            newLocAnimal.StartDate = DateTime.UtcNow.AddHours(3).Date;
+
+                            Db.LocationAnimals.Add(newLocAnimal);
+                            Db.SaveChanges();
+
+                            result.Message += $"{item} - { form.LocationID } kostüm türü lokasyona başarı ile eklendi";
+
+                        }
+
+                        result.IsSuccess = true;
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Inventory", "Insert", "", "Inventory", "LocationAnimals", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"Seçilenler - { form.LocationID } kostüm türü lokasyona eklenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Inventory", "Insert", "-1", "Inventory", "LocationAnimals", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+                else
+                {
+                    result.IsSuccess = false;
+                    result.Message = $"Lokasyon bulunamadı.";
+                }
+            }
+
+            TempData["result"] = result;
+
+            return RedirectToAction("LocationAnimals", "Inventory", new { id = form.LocationID});
+        }
+
+
+
+        [AllowAnonymous]
+        public ActionResult Mallmoto(int? id, int? LocationID)
+        {
+            InventoryControlModel model = new InventoryControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            model.MallMotoColors = Db.MallMotoColor.ToList();
+            model.MallMotos = Db.MallMoto.ToList();
+
+            model.Locations = Db.Location.Where(x => x.LocationTypeID == 11 && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).Select(x => new LocationDataModel()
+            {
+                LocationID = x.LocationID,
+                LocationName = x.LocationFullName ?? x.SortBy + " " + x.LocationName,
+                SortCode = x.SortBy
+            }).OrderBy(z => z.SortCode).ToList();
+
+            model.FilterLocations = model.Locations;
+
+            model.LocationMallMotos = Db.VLocationMallMoto.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            if (id != null && id > 0)
+            {
+                model.LocationMallMotos = model.LocationMallMotos.Where(x => x.MallMotoColorID == id).ToList();
+                model.MallMotoColorID = id;
+            }
+
+            if (LocationID != null && LocationID > 0)
+            {
+                model.LocationMallMotos = model.LocationMallMotos.Where(x => x.LocationID == LocationID).ToList();
+                model.Locations = model.Locations.Where(x => x.LocationID == LocationID).ToList();
+                model.LocationID = LocationID;
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddMallMotoColor(MallMotoColorFormModel form)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            InventoryControlModel model = new InventoryControlModel();
+
+            if (form != null)
+            {
+
+                var isColor = Db.MallMotoColor.FirstOrDefault(x => x.ColorNameEN.Trim() == form.ColorNameEN.Trim());
+
+                if (isColor == null)
+                {
+                    try
+                    {
+                        MallMotoColor newColor = new MallMotoColor();
+
+                        newColor.ColorNameEN = form.ColorNameEN;
+                        newColor.ColorNameTR = form.ColorNameTR;
+                        newColor.IsActive = true;
+
+                        Db.MallMotoColor.Add(newColor);
+                        Db.SaveChanges();
+
+                        result.IsSuccess = true;
+                        result.Message = $"{form.ColorNameEN} - { form.ColorNameTR } renk türü başarı ile eklendi";
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Inventory", "Insert", newColor.ID.ToString(), "Inventory", "MallMotoColor", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, newColor);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"{form.ColorNameEN} - { form.ColorNameTR } renk türü eklenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Inventory", "Insert", "-1", "Inventory", "MallMotoColor", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+                else
+                {
+                    result.IsSuccess = false;
+                    result.Message = $"{form.ColorNameEN} - { form.ColorNameTR } renk türü daha önce zaten kaydedilmiş.";
+                }
+            }
+
+            TempData["result"] = result;
+
+            return RedirectToAction("Mallmoto", "Inventory");
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult FilterLocationMallMoto(MallMotoFilterModel filter)
+        {
+            if (filter != null)
+            {
+                return RedirectToAction("Mallmoto", "Inventory", new { id = filter.MallMotoColorID, LocationID = filter.LocationID });
+            }
+            return RedirectToAction("Mallmoto");
+        }
+
+        [AllowAnonymous]
+        public ActionResult LocationMalMotos(int? id)
+        {
+            InventoryControlModel model = new InventoryControlModel();
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result ?? null;
+            }
+
+            if (id != null && id > 0)
+            {
+
+
+                model.MallMotoColors = Db.MallMotoColor.ToList();
+
+                model.Location = Db.Location.Where(x => x.LocationID == id).Select(x => new LocationDataModel()
+                {
+                    LocationID = x.LocationID,
+                    LocationName = x.LocationFullName ?? x.SortBy + " " + x.LocationName,
+                    SortCode = x.SortBy
+                }).OrderBy(z => z.SortCode).FirstOrDefault();
+
+                model.LocationID = model.Location?.LocationID ?? id;
+
+                model.LocationMallMotos = Db.VLocationMallMoto.Where(x => x.LocationID == model.LocationID).ToList();
+
+                model.Locations = Db.Location.Where(x => x.LocationID == model.LocationID).Select(x => new LocationDataModel()
+                {
+                    LocationID = x.LocationID,
+                    LocationName = x.LocationFullName ?? x.SortBy + " " + x.LocationName,
+                    SortCode = x.SortBy
+                }).OrderBy(z => z.SortCode).ToList();
+            }
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult AddLocationMallMotos(LocationMallMotoFormModel form)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            InventoryControlModel model = new InventoryControlModel();
+
+            if (form != null)
+            {
+
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == form.LocationID);
+
+                if (location != null)
+                {
+                    try
+                    {
+                        foreach (var item in form.MallMotoColorID)
+                        {
+
+                            //MallMoto
+                            MallMoto newMallmoto = new MallMoto();
+
+                            newMallmoto.MallMotoColorID = item;
+                            newMallmoto.ConstractDate = DateTime.UtcNow.AddHours(3).Date;
+                            newMallmoto.IsActive = true;
+                            newMallmoto.MotoNumber = "000";
+
+                            Db.MallMoto.Add(newMallmoto);
+                            Db.SaveChanges();
+
+                            newMallmoto.MotoNumber = "00" + newMallmoto.ID.ToString();
+                            Db.SaveChanges();
+
+
+                            //LocationMallmoto
+                            LocationMallMoto newLocMallMoto = new LocationMallMoto();
+
+                            newLocMallMoto.MallMotoID = newMallmoto.ID;
+                            newLocMallMoto.IsActive = true;
+                            newLocMallMoto.LocationID = form.LocationID;
+                            newLocMallMoto.StartDate = DateTime.UtcNow.AddHours(3).Date;
+
+                            Db.LocationMallMoto.Add(newLocMallMoto);
+                            Db.SaveChanges();
+
+                            result.Message += $"{item} - { form.LocationID } Renk MallMoto lokasyona başarı ile eklendi";
+
+                        }
+
+                        result.IsSuccess = true;
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Inventory", "Insert", "", "Inventory", "LocationMallMoto", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Message = $"Seçilenler - { form.LocationID } id li lokasyona eklenemedi : {ex.Message}";
+                        OfficeHelper.AddApplicationLog("Office", "Inventory", "Insert", "-1", "Inventory", "LocationMallMoto", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                    }
+                }
+                else
+                {
+                    result.IsSuccess = false;
+                    result.Message = $"Lokasyon bulunamadı.";
+                }
+            }
+
+            TempData["result"] = result;
+
+            return RedirectToAction("LocationMalMotos", "Inventory", new { id = form.LocationID });
+        }
+
+        //RemoveMalMoto
+        [AllowAnonymous]
+        public ActionResult RemoveMalMoto(int? id)
+        {
+            if (id != null)
+            {
+                var locationmallmoto = Db.LocationMallMoto.FirstOrDefault(x => x.ID == id);
+
+                if (locationmallmoto != null)
+                {
+                    int LocationID = locationmallmoto.LocationID.Value;
+
+                    Db.LocationMallMoto.Remove(locationmallmoto);
+                    Db.SaveChanges();
+
+                    return RedirectToAction("Mallmoto", "Inventory", new { LocationID = LocationID });
+
+                }
+
+            }
+            return RedirectToAction("Mallmoto");
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

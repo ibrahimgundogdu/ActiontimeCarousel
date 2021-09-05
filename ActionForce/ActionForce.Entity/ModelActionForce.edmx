@@ -2272,6 +2272,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
         </EntityType>
+        <EntityType Name="LocationMallMoto">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="MallMotoID" Type="int" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="FinishDate" Type="date" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="LocationParam">
           <Key>
             <PropertyRef Name="ID" />
@@ -2567,6 +2578,26 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ContractDateBegin" Type="date" />
           <Property Name="ContractDateEnd" Type="date" />
           <Property Name="ContractFile" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="MallMoto">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MallMotoColorID" Type="int" />
+          <Property Name="MotoNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="ConstractDate" Type="date" />
+          <Property Name="Photo" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="MallMotoColor">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ColorNameTR" Type="nvarchar" MaxLength="50" />
+          <Property Name="ColorNameEN" Type="nvarchar" MaxLength="50" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
         <EntityType Name="MallSegment">
@@ -5530,6 +5561,63 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocation' does not have a 
           <Property Name="TaxRate" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationAnimals' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VLocationAnimals">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="AnimalID" />
+            <PropertyRef Name="ChassisID" />
+            <PropertyRef Name="CostumeID" />
+            <PropertyRef Name="SerialID" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="LocationName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Description" Type="nvarchar" MaxLength="500" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="10" />
+          <Property Name="LocationTypeID" Type="int" />
+          <Property Name="LocalDate" Type="date" />
+          <Property Name="LocalDateTime" Type="datetime" />
+          <Property Name="AnimalID" Type="int" Nullable="false" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="FinishDate" Type="date" />
+          <Property Name="ChassisID" Type="int" Nullable="false" />
+          <Property Name="CostumeID" Type="int" Nullable="false" />
+          <Property Name="Number" Type="nvarchar" MaxLength="50" />
+          <Property Name="ChassisTypeID" Type="int" />
+          <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CostumeTypeID" Type="int" />
+          <Property Name="TypeNameTR" Type="nvarchar" MaxLength="50" />
+          <Property Name="TypeNameEN" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="SerialNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="SerialID" Type="int" Nullable="false" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+          <Property Name="OurCompanyID" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationMallMoto' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VLocationMallMoto">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="MallMotoID" Type="int" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="FinishDate" Type="date" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="MotoNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="ConstractDate" Type="date" />
+          <Property Name="ColorNameTR" Type="nvarchar" MaxLength="50" />
+          <Property Name="ColorNameEN" Type="nvarchar" MaxLength="50" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+          <Property Name="MallMotoColorID" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPosTerminal' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VLocationPosTerminal">
           <Key>
@@ -7213,6 +7301,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="LocationAnimals" EntityType="Self.LocationAnimals" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationCR" EntityType="Self.LocationCR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationGoals" EntityType="Self.LocationGoals" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LocationMallMoto" EntityType="Self.LocationMallMoto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationParam" EntityType="Self.LocationParam" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationParamCalculate" EntityType="Self.LocationParamCalculate" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationPeriods" EntityType="Self.LocationPeriods" Schema="dbo" store:Type="Tables" />
@@ -7231,6 +7320,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Mall" EntityType="Self.Mall" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MallContact" EntityType="Self.MallContact" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MallLocationContract" EntityType="Self.MallLocationContract" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MallMoto" EntityType="Self.MallMoto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MallMotoColor" EntityType="Self.MallMotoColor" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MallSegment" EntityType="Self.MallSegment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MobileLog" EntityType="Self.MobileLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MobileLoginLog" EntityType="Self.MobileLoginLog" Schema="dbo" store:Type="Tables" />
@@ -8841,6 +8932,52 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocation].[CategoryName] AS [CategoryName], 
     [VLocation].[TaxRate] AS [TaxRate]
     FROM [dbo].[VLocation] AS [VLocation]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VLocationAnimals" EntityType="Self.VLocationAnimals" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VLocationAnimals].[ID] AS [ID], 
+    [VLocationAnimals].[LocationID] AS [LocationID], 
+    [VLocationAnimals].[LocationName] AS [LocationName], 
+    [VLocationAnimals].[Description] AS [Description], 
+    [VLocationAnimals].[State] AS [State], 
+    [VLocationAnimals].[SortBy] AS [SortBy], 
+    [VLocationAnimals].[LocationTypeID] AS [LocationTypeID], 
+    [VLocationAnimals].[LocalDate] AS [LocalDate], 
+    [VLocationAnimals].[LocalDateTime] AS [LocalDateTime], 
+    [VLocationAnimals].[AnimalID] AS [AnimalID], 
+    [VLocationAnimals].[StartDate] AS [StartDate], 
+    [VLocationAnimals].[FinishDate] AS [FinishDate], 
+    [VLocationAnimals].[ChassisID] AS [ChassisID], 
+    [VLocationAnimals].[CostumeID] AS [CostumeID], 
+    [VLocationAnimals].[Number] AS [Number], 
+    [VLocationAnimals].[ChassisTypeID] AS [ChassisTypeID], 
+    [VLocationAnimals].[TypeName] AS [TypeName], 
+    [VLocationAnimals].[CostumeTypeID] AS [CostumeTypeID], 
+    [VLocationAnimals].[TypeNameTR] AS [TypeNameTR], 
+    [VLocationAnimals].[TypeNameEN] AS [TypeNameEN], 
+    [VLocationAnimals].[IsActive] AS [IsActive], 
+    [VLocationAnimals].[SerialNumber] AS [SerialNumber], 
+    [VLocationAnimals].[SerialID] AS [SerialID], 
+    [VLocationAnimals].[LocationFullName] AS [LocationFullName], 
+    [VLocationAnimals].[OurCompanyID] AS [OurCompanyID]
+    FROM [dbo].[VLocationAnimals] AS [VLocationAnimals]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VLocationMallMoto" EntityType="Self.VLocationMallMoto" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VLocationMallMoto].[ID] AS [ID], 
+    [VLocationMallMoto].[LocationID] AS [LocationID], 
+    [VLocationMallMoto].[MallMotoID] AS [MallMotoID], 
+    [VLocationMallMoto].[StartDate] AS [StartDate], 
+    [VLocationMallMoto].[FinishDate] AS [FinishDate], 
+    [VLocationMallMoto].[IsActive] AS [IsActive], 
+    [VLocationMallMoto].[MotoNumber] AS [MotoNumber], 
+    [VLocationMallMoto].[ConstractDate] AS [ConstractDate], 
+    [VLocationMallMoto].[ColorNameTR] AS [ColorNameTR], 
+    [VLocationMallMoto].[ColorNameEN] AS [ColorNameEN], 
+    [VLocationMallMoto].[OurCompanyID] AS [OurCompanyID], 
+    [VLocationMallMoto].[LocationFullName] AS [LocationFullName], 
+    [VLocationMallMoto].[MallMotoColorID] AS [MallMotoColorID]
+    FROM [dbo].[VLocationMallMoto] AS [VLocationMallMoto]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VLocationPosTerminal" EntityType="Self.VLocationPosTerminal" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -10507,8 +10644,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="RemovePosTerminal">
-            <Parameter Name="TerminalID" Mode="In" Type="Int32" />
+          <Parameter Name="TerminalID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="VLocationAnimals" EntityType="db293_ActionTimeDbModel.VLocationAnimals" />
+          <EntitySet Name="LocationMallMoto" EntityType="db293_ActionTimeDbModel.LocationMallMoto" />
+          <EntitySet Name="MallMoto" EntityType="db293_ActionTimeDbModel.MallMoto" />
+          <EntitySet Name="MallMotoColor" EntityType="db293_ActionTimeDbModel.MallMotoColor" />
+          <EntitySet Name="VLocationMallMoto" EntityType="db293_ActionTimeDbModel.VLocationMallMoto" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -17549,6 +17691,90 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="OurCompanyID" Type="Int32" />
           <Property Name="SicilNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="VLocationAnimals">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="AnimalID" />
+            <PropertyRef Name="ChassisID" />
+            <PropertyRef Name="CostumeID" />
+            <PropertyRef Name="SerialID" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="LocationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="LocationTypeID" Type="Int32" />
+          <Property Name="LocalDate" Type="DateTime" Precision="0" />
+          <Property Name="LocalDateTime" Type="DateTime" Precision="3" />
+          <Property Name="AnimalID" Type="Int32" Nullable="false" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="FinishDate" Type="DateTime" Precision="0" />
+          <Property Name="ChassisID" Type="Int32" Nullable="false" />
+          <Property Name="CostumeID" Type="Int32" Nullable="false" />
+          <Property Name="Number" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ChassisTypeID" Type="Int32" />
+          <Property Name="TypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CostumeTypeID" Type="Int32" />
+          <Property Name="TypeNameTR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TypeNameEN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="SerialNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SerialID" Type="Int32" Nullable="false" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="LocationMallMoto">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="MallMotoID" Type="Int32" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="FinishDate" Type="DateTime" Precision="0" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="MallMoto">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MallMotoColorID" Type="Int32" />
+          <Property Name="MotoNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ConstractDate" Type="DateTime" Precision="0" />
+          <Property Name="Photo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="MallMotoColor">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ColorNameTR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ColorNameEN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="VLocationMallMoto">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="MallMotoID" Type="Int32" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="FinishDate" Type="DateTime" Precision="0" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="MotoNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ConstractDate" Type="DateTime" Precision="0" />
+          <Property Name="ColorNameTR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ColorNameEN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="MallMotoColorID" Type="Int32" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -24365,6 +24591,90 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="RemovePosTerminalMaster" FunctionName="db293_ActionTimeDbModel.Store.RemovePosTerminalMaster" />
           <FunctionImportMapping FunctionImportName="RemovePosTerminal" FunctionName="db293_ActionTimeDbModel.Store.RemovePosTerminal" />
+          <EntitySetMapping Name="VLocationAnimals">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationAnimals">
+              <MappingFragment StoreEntitySet="VLocationAnimals">
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="SerialID" ColumnName="SerialID" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="TypeNameEN" ColumnName="TypeNameEN" />
+                <ScalarProperty Name="TypeNameTR" ColumnName="TypeNameTR" />
+                <ScalarProperty Name="CostumeTypeID" ColumnName="CostumeTypeID" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="ChassisTypeID" ColumnName="ChassisTypeID" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="CostumeID" ColumnName="CostumeID" />
+                <ScalarProperty Name="ChassisID" ColumnName="ChassisID" />
+                <ScalarProperty Name="FinishDate" ColumnName="FinishDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="AnimalID" ColumnName="AnimalID" />
+                <ScalarProperty Name="LocalDateTime" ColumnName="LocalDateTime" />
+                <ScalarProperty Name="LocalDate" ColumnName="LocalDate" />
+                <ScalarProperty Name="LocationTypeID" ColumnName="LocationTypeID" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LocationMallMoto">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationMallMoto">
+              <MappingFragment StoreEntitySet="LocationMallMoto">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="FinishDate" ColumnName="FinishDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="MallMotoID" ColumnName="MallMotoID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MallMoto">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.MallMoto">
+              <MappingFragment StoreEntitySet="MallMoto">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Photo" ColumnName="Photo" />
+                <ScalarProperty Name="ConstractDate" ColumnName="ConstractDate" />
+                <ScalarProperty Name="MotoNumber" ColumnName="MotoNumber" />
+                <ScalarProperty Name="MallMotoColorID" ColumnName="MallMotoColorID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MallMotoColor">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.MallMotoColor">
+              <MappingFragment StoreEntitySet="MallMotoColor">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="ColorNameEN" ColumnName="ColorNameEN" />
+                <ScalarProperty Name="ColorNameTR" ColumnName="ColorNameTR" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VLocationMallMoto">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationMallMoto">
+              <MappingFragment StoreEntitySet="VLocationMallMoto">
+                <ScalarProperty Name="MallMotoColorID" ColumnName="MallMotoColorID" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ColorNameEN" ColumnName="ColorNameEN" />
+                <ScalarProperty Name="ColorNameTR" ColumnName="ColorNameTR" />
+                <ScalarProperty Name="ConstractDate" ColumnName="ConstractDate" />
+                <ScalarProperty Name="MotoNumber" ColumnName="MotoNumber" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="FinishDate" ColumnName="FinishDate" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="MallMotoID" ColumnName="MallMotoID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

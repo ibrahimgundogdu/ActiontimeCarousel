@@ -2366,7 +2366,10 @@
     <Compile Include="Models\DataModels\BankDataModel.cs" />
     <Compile Include="Models\DataModels\LocationDataModel.cs" />
     <Compile Include="Models\DataModels\PosTerminalDataModel.cs" />
+    <Compile Include="Models\FilterModel\AnimalFilterModel.cs" />
+    <Compile Include="Models\FilterModel\MallMotoFilterModel.cs" />
     <Compile Include="Models\FilterModel\PosFilterModel.cs" />
+    <Compile Include="Models\FormModels\CostumeTypeFormModel.cs" />
     <Compile Include="Models\FormModels\FormLocation.cs" />
     <Compile Include="Models\FormModels\FormMall.cs" />
     <Compile Include="Models\FormModels\FormPrice.cs" />
@@ -2403,6 +2406,9 @@
     <Compile Include="Models\EmployeeShiftModel.cs" />
     <Compile Include="Models\CheckEmployee.cs" />
     <Compile Include="Models\FormModels\FormLocationPriceCategory.cs" />
+    <Compile Include="Models\FormModels\LocationAnimalFormModel.cs" />
+    <Compile Include="Models\FormModels\LocationMallMotoFormModel.cs" />
+    <Compile Include="Models\FormModels\MallMotoColorFormModel.cs" />
     <Compile Include="Models\FormModels\PosFormModel.cs" />
     <Compile Include="Models\Location\LocationEmployeeModel.cs" />
     <Compile Include="Models\Location\LocationFilterModel.cs" />
@@ -2762,6 +2768,10 @@
     <Content Include="Views\Inventory\Pos.cshtml" />
     <Content Include="Views\Inventory\AddPos.cshtml" />
     <Content Include="Views\Inventory\Detail.cshtml" />
+    <Content Include="Views\Inventory\Animal.cshtml" />
+    <Content Include="Views\Inventory\LocationAnimals.cshtml" />
+    <Content Include="Views\Inventory\Mallmoto.cshtml" />
+    <Content Include="Views\Inventory\LocationMalMotos.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

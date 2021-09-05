@@ -1,0 +1,148 @@
+﻿@model InventoryControlModel
+@{
+    ViewBag.Title = "Hayvanlar";
+}
+
+@section style{
+
+}
+
+<div class="row no-gutters">
+
+
+
+    <div class="col-md-4 mg-t-0 pd-r-0 pd-l-0 pd-t-0">
+        <div class="contact-list">
+
+            <div class="row p-4">
+                @using (Html.BeginForm("AddMallMotoColor", "Inventory", FormMethod.Post, new { @class = "form-inline" }))
+                {
+                    <div class="form-group">
+                        <input id="ColorNameEN" name="ColorNameEN" type="text" class="form-control form-control-sm" placeholder="Renk EN" required>
+                    </div>
+                    <div class="form-group mx-sm-1">
+                        <input id="ColorNameTR" name="ColorNameTR" type="text" class="form-control form-control-sm" placeholder="Renk TR" required>
+                    </div>
+                    <button class="btn btn-sm btn-primary" type="submit"><i data-feather="corner-right-down"></i></button>
+                }
+            </div>
+
+            <div class="table-responsive" id="AnimalList">
+                <table class="table table-primary table-hover table-striped mg-b-0">
+                    <thead>
+                        <tr class="table-active">
+                            <th>#</th>
+                            <th scope="col">Renk (EN) </th>
+                            <th scope="col">Renk (TR) </th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.MallMotoColors.OrderBy(x => x.ColorNameEN))
+                        {
+                            <tr>
+                                <td><span>@(item.ID)</span></td>
+                                <td scope="row" class="@(item.IsActive == true ? "":"tx-danger")"><a href="/Inventory/Mallmoto/@(item.ID)"><b>@(item.ColorNameEN)</b></a></td>
+                                <td scope="row" class="@(item.IsActive == true ? "":"tx-danger")"><a href="/Inventory/Mallmoto/@(item.ID)"><b>@(item.ColorNameTR)</b></a></td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="col-md-8 mg-t-0 pd-r-0 pd-l-0 pd-t-0">
+        <div class="df-example demo-forms pd-5 pt-0">
+            <div class="card ht-100p" id="Animals">
+                <div class="row p-4">
+                    @using (Html.BeginForm("FilterLocationMallMoto", "Inventory", FormMethod.Post, new { @class = "form-inline" }))
+                    {
+                        <div class="form-group">
+                            <select class="form-control form-control-sm" name="LocationID">
+                                <option value="">Lokasyon Seçimi</option>
+                                @foreach (var item in Model.FilterLocations)
+                                {
+                                    <option value="@item.LocationID" @(item.LocationID == Model.LocationID ? "selected" : "")>@(item.LocationName )</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group mx-sm-1">
+                            <select class="form-control form-control-sm" name="MallMotoColorID">
+                                <option value="">Renk Seçimi</option>
+                                @foreach (var item in Model.MallMotoColors.OrderBy(x => x.ColorNameEN))
+                                {
+                                    <option value="@item.ID" @(item.ID == Model.MallMotoColorID ? "selected" : "")>@(item.ColorNameEN) - @(item.ColorNameTR)</option>
+                                }
+                            </select>
+                        </div>
+                        <button class="btn btn-sm btn-primary" type="submit"><i data-feather="filter"></i></button>
+                    }
+                </div>
+                <div class="table-responsive" id="AnimalList">
+                    <table class="table table-primary table-hover mg-b-0">
+                        <thead>
+                            <tr class="table-active">
+                                <th>#</th>
+                                <th scope="col">Renk (EN) - (TR) </th>
+                                <th scope="col">Lokasyon </th>
+                                <th scope="col">Ülke </th>
+                                <th scope="col">Başlama </th>
+                                <th scope="col">SeriNo </th>
+                                <th scope="col"></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var location in Model.Locations)
+                            {
+                                var locationmalmotos = Model.LocationMallMotos.Where(x => x.LocationID == location.LocationID).ToList();
+                                <tr>
+                                    <th colspan="6"><a href="/Inventory/Mallmoto/?LocationID=@(location.LocationID)" class="text-muted tx-16"><b>@(location.LocationName)</b></a></th>
+                                    <th> <a href="/Inventory/LocationMalMotos/@(location.LocationID)" class="tx-16 text-primary float-right"><i data-feather="folder-plus"></i></a></th>
+                                </tr>
+
+                                foreach (var item in locationmalmotos.OrderBy(x => x.ColorNameEN))
+                                {
+                                    <tr class="table-light @(item.IsActive != true ? "text-danger":"")">
+                                        <td><span>@(item.ID)</span></td>
+                                        <td><a href="/Inventory/Mallmoto/@(item.MallMotoColorID)"><b>@(item.ColorNameEN) - @(item.ColorNameTR)</b></a></td>
+                                        <td><a href="/Inventory/Mallmoto/?LocationID=@(item.LocationID)"><b>@(item.LocationFullName)</b></a></td>
+                                        <td scope="row">@(item.OurCompanyID == 1 ? "USA" : item.OurCompanyID == 2 ? "TUR" : "")</td>
+                                        <td scope="row">@(item.StartDate?.ToShortDateString())</td>
+                                        <td scope="row">@(item.MotoNumber)</td>
+                                        <td scope="row"><a href="/Inventory/RemoveMalMoto/@(item.ID)" class="tx-16 text-danger float-right" onclick="return confirm('Silmek İstediğinizden Emin misiniz?')"><i data-feather="folder-minus"></i></a></td>
+                                    </tr>
+                                }
+
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+
+@section scripts {
+
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}
+
