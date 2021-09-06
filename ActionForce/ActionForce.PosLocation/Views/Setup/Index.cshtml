@@ -31,23 +31,16 @@
                 </div>
             </div><!-- img-date-area -->
             <div class="location-area">
-                <h2>LOKASYON SEÇİNİZ...</h2>
+                <h2>POS CİHAZI SİCİL NO GİRİNİZ...</h2>
                 @using (Html.BeginForm("SetLocation", "Setup", FormMethod.Post, new { role = "form" }))
                 {
                     @Html.AntiForgeryToken()
                     <div class="form">
                         <div class="form-group location-group">
-                            <select name="LocationUID" required>
-
-                                <option value="">Lokasyonlar</option>
-                                @foreach (var item in Model.LocationList)
-                                {
-                                    <option value="@(item.LocationUID)">@(item.LocationFullName)</option>
-                                }
-                            </select>
+                            <input type="text" id="location-input" autocomplete="off" name="SicilNumber" value="@(Model.PosTerminalSerial)" style="text-align:center;" required>
                         </div>
                         <div class="mt-3">
-                            <button type="submit" style="padding:10px; width:100%; margin-top : 10px;">Kaydet</button>
+                            <button type="submit" class="btn btn-primary" style="padding:10px; width:100%; margin-top : 10px;">Kontrol Et</button>
                         </div>
 
                     </div>

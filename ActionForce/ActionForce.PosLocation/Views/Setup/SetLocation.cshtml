@@ -1,0 +1,89 @@
+﻿@model SetupControlModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFE POS</title>
+    <meta name="description" content="UFE POS">
+    <meta name="keywords" content="UFE POS">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/scss/global.css">
+</head>
+<body>
+    <div class="main">
+        <div class="container">
+            <div class="logo">
+                <h1>UFE POS</h1>
+            </div><!-- logo -->
+            <div class="img-date-area">
+                <div class="img">
+                    <img src="/assets/img/main-img.png" alt="">
+                </div>
+                <div class="date">
+                    @(DateTime.Now.ToLongDateString())
+                </div>
+            </div><!-- img-date-area -->
+            <div class="location-area">
+                <h2>POS SİCİL NO DOĞRULAMA</h2>
+
+                @using (Html.BeginForm("ConfirmSerial", "Setup", FormMethod.Post, new { role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form">
+                        <h3>@(Model.Result.IsSuccess == true ? Model.Location?.LocationFullName?.ToUpper() : Model.Result.Message)</h3>
+                        <div class="form-group registry-group">
+                            <input type="text" id="location-input" name="location-input" value="@(Model.PosTerminalSerial)" style="text-align:center;" required readonly>
+                            <button type="button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="84" height="84" viewBox="0 0 84 84">
+                                    <path d="M62,2H22a8.024,8.024,0,0,0-8,8v8a8.024,8.024,0,0,0,8,8H62a8.024,8.024,0,0,0,8-8V10A8.024,8.024,0,0,0,62,2Zm0,16H22V10H62ZM74,82H10a8.024,8.024,0,0,1-8-8V70H82v4A8.024,8.024,0,0,1,74,82ZM68.12,34.76A8.034,8.034,0,0,0,60.8,30H23.2a8.034,8.034,0,0,0-7.32,4.76L2,66H82ZM32,58H28a2,2,0,0,1,0-4h4a2,2,0,0,1,0,4Zm0-8H28a2,2,0,0,1,0-4h4a2,2,0,0,1,0,4Zm0-8H28a2,2,0,0,1,0-4h4a2,2,0,0,1,0,4ZM44,58H40a2,2,0,0,1,0-4h4a2,2,0,0,1,0,4Zm0-8H40a2,2,0,0,1,0-4h4a2,2,0,0,1,0,4Zm0-8H40a2,2,0,0,1,0-4h4a2,2,0,0,1,0,4ZM56,58H52a2,2,0,0,1,0-4h4a2,2,0,0,1,0,4Zm0-8H52a2,2,0,0,1,0-4h4a2,2,0,0,1,0,4Zm0-8H52a2,2,0,0,1,0-4h4a2,2,0,0,1,0,4Z" fill="#26436b" />
+                                </svg>
+                                <!-- yazar-kasa-icon -->
+                            </button>
+                        </div>
+                        <input id="LocationID" name="LocationID" value="@(Model.Location.LocationID)" type="hidden" />
+                        <input id="PosTerminalSerial" name="PosTerminalSerial" value="@(Model.PosTerminalSerial)" type="hidden" />
+                    </div>
+                    <div class="list">
+                        <ul>
+                            @if (Model.Location != null)
+                            {
+                                <li class="active">
+                                    <button type="submit" name="Correct" value="1" class="btn-block">Lokasyon - Sicil Numarası Doğru</button>
+                                </li>
+                                <li class="active">
+                                    <button type="submit" name="Fail" value="1" class="btn-block btn-danger">Lokasyon - Sicil Numarası Hatalı</button>
+                                </li>
+                            }
+                            else
+                            {
+                                <li>
+                                    <button type="button" class="btn-block">@(Model.Result.Message)</button>
+                                </li>
+                            }
+
+                        </ul>
+                        @if (string.IsNullOrEmpty(Model.PosTerminalSerial))
+                        {
+                            <div class="notes">
+                                <p>Lütfen Ofisi Arayıp</p>
+                                <p>Sicil Numarasını Tanımlatınız.</p>
+                            </div>
+                        }
+                    </div>
+                }
+
+            </div><!-- location-area -->
+        </div>
+    </div><!-- main -->
+    <script src="/assets/js/jquery-3.5.1.min.js"></script>
+    <script src="/assets/js/modal.js"></script>
+    <script src="/assets/js/global.js"></script>
+</body>
+</html>

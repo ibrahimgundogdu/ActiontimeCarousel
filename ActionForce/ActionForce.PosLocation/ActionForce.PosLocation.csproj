@@ -323,6 +323,7 @@
     <Content Include="Views\DayResult\Index.cshtml" />
     <Content Include="Views\DayResult\_PartialCashRecorder.cshtml" />
     <Content Include="Views\DayResult\_PartialResultDocument.cshtml" />
+    <Content Include="Views\Setup\SetLocation.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
