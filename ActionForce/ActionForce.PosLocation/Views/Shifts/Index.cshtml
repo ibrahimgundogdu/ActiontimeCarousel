@@ -129,7 +129,7 @@
                                                     @foreach (var date in Model.DateList)
                                                     {
                                                         var employeechedule = Model.EmployeeSchedules.FirstOrDefault(x => x.ShiftDate == date.DateKey && x.EmployeeID == item.EmployeeID);
-                                                        var employeeshift = Model.EmployeeShifts.FirstOrDefault(x => x.ShiftDate == date.DateKey);
+                                                        var employeeshift = Model.EmployeeShifts.FirstOrDefault(x => x.ShiftDate == date.DateKey && x.EmployeeID == item.EmployeeID);
 
                                                         if (employeechedule != null)
                                                         {

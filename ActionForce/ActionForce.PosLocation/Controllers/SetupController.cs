@@ -288,16 +288,25 @@ namespace ActionForce.PosLocation.Controllers
             return View(model);
         }
 
-
-        public ActionResult Lock()
+        public ActionResult Logout()
         {
             SetupControlModel model = new SetupControlModel();
-            if (TempData["Result"] != null)
-            {
-                model.Result = (Result)TempData["Result"];
-            }
 
-            return View(model);
+            HttpCookie authCookie = System.Web.HttpContext.Current.Request.Cookies["AuthenticationToken"];
+            authCookie.Expires = DateTime.Now.AddDays(-1);
+            Response.SetCookie(authCookie);
+
+
+            return RedirectToAction("Employee");
+        }
+
+        public ActionResult LockMe()
+        {
+            HttpCookie authCookie = System.Web.HttpContext.Current.Request.Cookies["AuthenticationToken"];
+            authCookie.Expires = DateTime.Now.AddDays(-1);
+            Response.SetCookie(authCookie);
+
+            return RedirectToAction("Employee");
         }
 
     }

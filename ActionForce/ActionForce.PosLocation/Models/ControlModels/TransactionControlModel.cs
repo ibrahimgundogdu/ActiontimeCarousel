@@ -9,5 +9,6 @@ namespace ActionForce.PosLocation
     public class TransactionControlModel : LayoutControlModel
     {
         public TicketSale Order { get; set; }
+        public string SicilNumber { get; set; }
     }
 }

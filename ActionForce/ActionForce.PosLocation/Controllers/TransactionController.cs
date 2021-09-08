@@ -17,6 +17,7 @@ namespace ActionForce.PosLocation.Controllers
             }
 
             TransactionControlModel model = new TransactionControlModel();
+            model.Authentication = this.AuthenticationData;
 
             if (TempData["Result"] != null)
             {
@@ -25,6 +26,20 @@ namespace ActionForce.PosLocation.Controllers
 
             var order = Db.TicketSale.FirstOrDefault(x => x.ID == id);
             model.Order = order;
+
+            HttpCookie locationPosCookie = System.Web.HttpContext.Current.Request.Cookies["PosTerminal"];
+            if (locationPosCookie != null && !string.IsNullOrEmpty(locationPosCookie.Value))
+            {
+                model.SicilNumber = locationPosCookie.Value;
+            }
+            else
+            {
+                var poslocation = Db.VLocationPosTerminal.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.IsActive == true && x.IsMaster == true).OrderByDescending(x => x.RecordDate).FirstOrDefault();
+                if (poslocation != null)
+                {
+                    model.SicilNumber = poslocation.SicilNumber;
+                }
+            }
 
             return View(model);
         }

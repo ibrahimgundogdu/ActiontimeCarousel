@@ -45,7 +45,7 @@
             </div><!-- side-menu -->
             <div class="content">
                 <div class="location-content">
-                    <p>Akbatı Trampoline İstanbul</p>
+                    <p>@(Model.Authentication.CurrentLocation.FullName?.ToUpper())</p>
                     <div class="loc-set">
                         <div class="time-set">
                             <div class="upper">@(Model.Schedule != null ? Html.Raw(Model.Schedule.DateStart.ToString("HH\\:mm")) : Html.Raw("&nbsp;"))</div>

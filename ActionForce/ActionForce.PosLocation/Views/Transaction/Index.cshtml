@@ -152,7 +152,9 @@
         });
 
         connection.on('ReceiveMessage', (serial, message) => {
-            $("#MessageArea").html("<p>" + message + "</p>");
+            if (serial == '@(Model.SicilNumber)') {
+                $("#MessageArea").html("<p>" + message + "</p>");
+            }
         })
 
         connection.on('finished', (update) => {
