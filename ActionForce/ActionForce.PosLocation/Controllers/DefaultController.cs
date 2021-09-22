@@ -23,6 +23,7 @@ namespace ActionForce.PosLocation.Controllers
         {
             DefaultControlModel model = new DefaultControlModel();
             model.Authentication = this.AuthenticationData;
+
             _EmployeeID = this.AuthenticationData.CurrentEmployee.EmployeeID;
             _LocationID = this.AuthenticationData.CurrentLocation.ID;
             _Currency = this.AuthenticationData.CurrentLocation.Currency;
@@ -31,7 +32,10 @@ namespace ActionForce.PosLocation.Controllers
             //{
             //    var invoices = connection.Query<CurrentPriceList>(sql);
             //}
-
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
 
 
             model.PriceList = Db.GetLocationCurrentPrices(_LocationID).ToList();
@@ -83,6 +87,7 @@ namespace ActionForce.PosLocation.Controllers
 
             model.Result.IsSuccess = true;
             model.Result.Message = $"{model.Price.ProductName} sepete eklendi.";
+            TempData["Result"] = model.Result;
 
             return PartialView("_PartialBasketList", model);
         }
@@ -113,6 +118,8 @@ namespace ActionForce.PosLocation.Controllers
             model.Result.IsSuccess = true;
             model.Result.Message = $"Bilet sepetten kaldırıldı.";
 
+            TempData["Result"] = model.Result;
+
             return PartialView("_PartialBasketList", model);
         }
 
@@ -133,6 +140,8 @@ namespace ActionForce.PosLocation.Controllers
             model.BasketList = Db.GetLocationCurrentBasket(_LocationID, _EmployeeID).ToList();
             model.Result.IsSuccess = true;
             model.Result.Message = $"{model.Promotion.ProductName} sepete eklendi.";
+
+            TempData["Result"] = model.Result;
 
             return PartialView("_PartialBasketList", model);
         }
@@ -163,6 +172,7 @@ namespace ActionForce.PosLocation.Controllers
 
             model.Result.IsSuccess = true;
             model.Result.Message = $"Sepet temizlendi.";
+            TempData["Result"] = model.Result;
 
             return PartialView("_PartialBasketList", model);
         }

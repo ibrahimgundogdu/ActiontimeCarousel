@@ -52,27 +52,38 @@ namespace ActionForce.PosLocation.Controllers
             long? orderID = null;
 
             DateTime date = DateTime.UtcNow.AddHours(this.AuthenticationData.CurrentLocation.TimeZone).Date;
-            try
+
+            if (Db.TicketBasket.Any(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == date))
             {
-                var OrderNumber = "S" + Db.GetPosOrderNumber().FirstOrDefault().ToString();
+                try
+                {
+                    var OrderNumber = "S" + Db.GetPosOrderNumber().FirstOrDefault().ToString();
 
-                orderID = Db.AddPosOrder(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID, OrderNumber, null, null, null, null, null, PosManager.GetIPAddress()).FirstOrDefault();
+                    orderID = Db.AddPosOrder(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID, OrderNumber, null, null, null, null, null, PosManager.GetIPAddress()).FirstOrDefault();
 
-                model.Result.IsSuccess = true;
-                model.Result.Message = $"{orderID} ID'li Sipariş Eklendi";
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = $"{orderID} ID'li Sipariş Eklendi";
 
-                var clean = Db.CleanBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID);
+                    var clean = Db.CleanBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID);
 
-                PosManager.AddApplicationLog("Location", "TicketSale", "Insert", orderID.ToString(), "Default", "CreateOrder", null, true, model.Result.Message, string.Empty, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone), $"{model.Authentication.CurrentEmployee.EmployeeID} {model.Authentication.CurrentEmployee.FullName}", PosManager.GetIPAddress(), string.Empty, null);
+                    PosManager.AddApplicationLog("Location", "TicketSale", "Insert", orderID.ToString(), "Default", "CreateOrder", null, true, model.Result.Message, string.Empty, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone), $"{model.Authentication.CurrentEmployee.EmployeeID} {model.Authentication.CurrentEmployee.FullName}", PosManager.GetIPAddress(), string.Empty, null);
 
-                TempData["Result"] = model.Result;
+                    TempData["Result"] = model.Result;
 
-                return RedirectToAction("Index", new { id = orderID });
+                    return RedirectToAction("Index", new { id = orderID });
+                }
+                catch (Exception ex)
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = $"Sipariş Eklenemedi. Hata :" + ex.Message;
+                    TempData["Result"] = model.Result;
+                    return RedirectToAction("Index", "Default");
+                }
             }
-            catch (Exception ex)
+            else
             {
                 model.Result.IsSuccess = false;
-                model.Result.Message = $"Sipariş Eklenemedi. Hata :" + ex.Message;
+                model.Result.Message = $"Sepetiniz boş olamaz";
                 TempData["Result"] = model.Result;
                 return RedirectToAction("Index", "Default");
             }
