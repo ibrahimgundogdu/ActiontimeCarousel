@@ -68,6 +68,9 @@
                         </a>
                     }
                 </div><!-- box-list -->
+                @*<div>
+                    <button class="btn btn-success" onclick="openCashReader()"> KASA AÇ </button>
+                </div>*@
             </div><!-- content -->
 
             <div class="fixed-footer-overlay"></div>
@@ -91,7 +94,13 @@
             </div><!-- fixed-footer -->
         </div>
     </div><!-- main -->
-    <script src="/assets/js/jquery-3.5.1.min.js"></script>
+    @*<script src="/assets/js/jquery-3.5.1.min.js"></script>*@
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    @*<script type="text/javascript">
+        function openCashReader() {
+            Android.openCashBox();
+        }
+    </script>*@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
         // Default Configuration
@@ -117,6 +126,9 @@
             {
                 @(Html.Raw( $"toastr.info('{Model.Result.Message}')" ));
             }
+
+
+
         });
 
         // Toast Type
@@ -132,6 +144,14 @@
         $('#warning').click(function (event) {
             toastr.warning('You clicked Warning Toast')
         });
+
+
+        function openCashReader() {
+            Android.openCashBox();
+        }
+
+
+
     </script>
     <script src="/assets/js/modal.js"></script>
     <script src="/assets/js/global.js"></script>
@@ -194,6 +214,7 @@
             });
 
         });
+
 
 
         function AddBasket(priceid) {

@@ -154,6 +154,10 @@
         connection.on('ReceiveMessage', (serial, message) => {
             if (serial == '@(Model.SicilNumber)') {
                 $("#MessageArea").html("<p>" + message + "</p>");
+
+                if (message.includes('Ödendi')) {
+                    openCashReader();
+                }
             }
         })
 
@@ -162,8 +166,9 @@
         });
 
 
-
-
+        function openCashReader() {
+            Android.openCashBox();
+        }
 
         //$(document).ready(() => {
         //    //configureLogging(signalR.LogLevel.Information)
