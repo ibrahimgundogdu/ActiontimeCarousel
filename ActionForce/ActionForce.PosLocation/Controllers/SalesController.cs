@@ -214,6 +214,12 @@ namespace ActionForce.PosLocation.Controllers
             {
                 var Customer = Db.Customer.FirstOrDefault(x => x.ID == slip.CustomerID);
 
+                if (Customer.PhoneNumber != phonenumber)
+                {
+                    Customer.PhoneNumber = phonenumber;
+                    Db.ChangeCustomerPhone(Customer.ID, phonenumber);
+                }
+
                 Random _random = new Random();
                 var code = _random.Next(100000, 999999);
 
@@ -227,7 +233,6 @@ namespace ActionForce.PosLocation.Controllers
                 // SMS gönderme
                 SMSManager smsmanager = new SMSManager();
                 smsmanager.SendSMS(Message, smsphonenumber, isinternational);
-
 
                 return RedirectToAction("ConfirmRefund", new { id = slip.ID });
 

@@ -15,16 +15,26 @@ namespace ActionForce.Entity
     public partial class Product
     {
         public int StockID { get; set; }
-        public Nullable<int> CatID { get; set; }
-        public Nullable<int> TypeID { get; set; }
+        public string SKU { get; set; }
+        public string ProductCode { get; set; }
         public string StockCode { get; set; }
+        public string ItemCode { get; set; }
+        public Nullable<int> OurCompanyID { get; set; }
+        public Nullable<int> CategoryID { get; set; }
+        public Nullable<int> ModelID { get; set; }
+        public Nullable<int> ProductTypeID { get; set; }
         public string Barcode { get; set; }
-        public string FullName { get; set; }
+        public string ProductName { get; set; }
         public string Property { get; set; }
-        public string Unit { get; set; }
+        public string PropertyValue { get; set; }
+        public Nullable<int> CardTypeID { get; set; }
+        public Nullable<int> UnitID { get; set; }
+        public string UnitCode { get; set; }
+        public string MainImage { get; set; }
         public Nullable<bool> IsZeroStock { get; set; }
         public Nullable<bool> IsSale { get; set; }
         public Nullable<bool> IsEnvanter { get; set; }
+        public Nullable<bool> IsTrackSerial { get; set; }
         public Nullable<bool> IsActive { get; set; }
     }
 }

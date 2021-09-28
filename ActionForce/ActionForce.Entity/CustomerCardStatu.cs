@@ -12,14 +12,10 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class CustomerScorePointBatch
+    public partial class CustomerCardStatu
     {
         public int ID { get; set; }
-        public Nullable<int> OurCompanyID { get; set; }
-        public Nullable<int> TicketTypeID { get; set; }
-        public Nullable<System.DateTime> BatchDate { get; set; }
-        public Nullable<int> QuantityPoint { get; set; }
-        public Nullable<int> QuantityTicket { get; set; }
-        public Nullable<System.DateTime> DateRecord { get; set; }
+        public int StatuLevel { get; set; }
+        public string CardStatuName { get; set; }
     }
 }

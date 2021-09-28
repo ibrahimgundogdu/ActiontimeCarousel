@@ -15,20 +15,25 @@ namespace ActionForce.Entity
     public partial class CustomerActions
     {
         public long ID { get; set; }
+        public Nullable<int> OurCompanyID { get; set; }
         public Nullable<int> CustomerID { get; set; }
+        public Nullable<int> CustomerCardID { get; set; }
         public Nullable<int> LocationID { get; set; }
         public Nullable<int> EmployeeID { get; set; }
         public Nullable<int> ActionTypeID { get; set; }
         public Nullable<System.DateTime> ActionDate { get; set; }
-        public string ProcessName { get; set; }
         public Nullable<long> ProcessID { get; set; }
+        public Nullable<System.Guid> ProcessUID { get; set; }
+        public Nullable<long> OrderID { get; set; }
+        public Nullable<long> OrderRowID { get; set; }
+        public Nullable<System.Guid> OrderRowUID { get; set; }
         public Nullable<System.DateTime> ProcessDate { get; set; }
+        public string ProcessName { get; set; }
         public string DocumentNumber { get; set; }
         public string Description { get; set; }
-        public Nullable<short> Direction { get; set; }
-        public Nullable<double> Collection { get; set; }
-        public Nullable<double> Payment { get; set; }
-        public Nullable<double> Amount { get; set; }
+        public Nullable<double> CreditCollect { get; set; }
+        public Nullable<double> CreditSpend { get; set; }
+        public Nullable<double> CreditAmount { get; set; }
         public string Currency { get; set; }
         public Nullable<double> Latitude { get; set; }
         public Nullable<double> Longitude { get; set; }
@@ -36,7 +41,5 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
-        public Nullable<System.Guid> ProcessUID { get; set; }
-        public Nullable<int> OurCompanyID { get; set; }
     }
 }

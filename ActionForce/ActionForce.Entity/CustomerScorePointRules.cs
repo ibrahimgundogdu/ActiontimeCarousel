@@ -16,9 +16,12 @@ namespace ActionForce.Entity
     {
         public int ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
-        public Nullable<int> TicketTypeID { get; set; }
-        public Nullable<System.DateTime> DateStart { get; set; }
-        public Nullable<int> QuantityPoint { get; set; }
-        public Nullable<int> QuantityTicket { get; set; }
+        public Nullable<System.DateTime> DateBegin { get; set; }
+        public Nullable<System.DateTime> DateEnd { get; set; }
+        public Nullable<int> FromScoreItemID { get; set; }
+        public Nullable<int> ToScroreItemID { get; set; }
+        public Nullable<double> QuantityFrom { get; set; }
+        public Nullable<double> QuantityTo { get; set; }
+        public Nullable<System.DateTime> DateRecord { get; set; }
     }
 }

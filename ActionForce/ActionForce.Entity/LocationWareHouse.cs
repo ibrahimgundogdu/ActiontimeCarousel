@@ -16,7 +16,7 @@ namespace ActionForce.Entity
     {
         public int ID { get; set; }
         public Nullable<int> LocationID { get; set; }
-        public Nullable<int> TypeID { get; set; }
+        public Nullable<int> WarehouseTypeID { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
         public string SortBy { get; set; }

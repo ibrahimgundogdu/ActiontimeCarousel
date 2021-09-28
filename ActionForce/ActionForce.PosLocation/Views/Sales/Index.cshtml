@@ -44,6 +44,37 @@
                 @{ Html.RenderPartial("_PartialMenu");}
             </div><!-- side-menu -->
             <div class="content">
+            <div class="table-responsive row" style="margin-bottom: 20px;">
+                <table class="table table-responsive">
+                    <tbody>
+                        <tr>
+                            <th style="width: 200px; text-align: left;">Satış Ciro</th>
+                            <td style="width: 10px; text-align: center;">:</td>
+                            <td style="width: 150px; text-align:right;">@(Model.SaleSummary.Sum(x=> x.Total)?.ToString("N2"))</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 200px; text-align: left;">Tahsilat</th>
+                            <td style="width: 10px; text-align: center;">:</td>
+                            <td style="width: 150px; text-align: right;">@(Model.SaleSummary.Where(x=> x.PosStatusID == 3).Sum(x=> x.Total)?.ToString("N2"))</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 200px; text-align: left;">Bekleyen</th>
+                            <td style="width: 10px; text-align: center;">:</td>
+                            <td style="width: 150px; text-align: right;">@(Model.SaleSummary.Where(x=> x.PosStatusID <= 2).Sum(x=> x.Total)?.ToString("N2"))</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 200px; text-align: left;">İptal</th>
+                            <td style="width: 10px; text-align: center;">:</td>
+                            <td style="width: 150px; text-align: right;">@(Model.SaleSummary.Where(x=> x.PosStatusID == 4).Sum(x=> x.Total)?.ToString("N2"))</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 200px; text-align: left;">Kapatıldı</th>
+                            <td style="width: 10px; text-align: center;">:</td>
+                            <td style="width: 150px; text-align: right;">@(Model.SaleSummary.Where(x=> x.PosStatusID == 5).Sum(x=> x.Total)?.ToString("N2"))</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
                 <div class="sales-list">
                     <ul>
                         @foreach (var item in Model.SaleSummary.OrderByDescending(x => x.RecordDate).ToList())
@@ -67,7 +98,7 @@
                                             <!-- mobile icon -->
                                         </div>
                                         <div class="num">@(item.OrderNumber)</div>
-                                        <div class="datetime">@(item.RecordDate)</div>
+                                        <div class="datetime">@(item.RecordDate) @(item.FullName)</div>
                                     </div>
                                     <div class="piece-name">
                                         <div class="piece">@(item.Quantity) Adet.</div>

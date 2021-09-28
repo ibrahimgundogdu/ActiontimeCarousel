@@ -12,25 +12,28 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class CustomerScorePoints
+    public partial class CustomerScorePointActions
     {
         public int ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
         public Nullable<int> CustomerID { get; set; }
+        public Nullable<int> CustomerCardID { get; set; }
+        public Nullable<int> LocationID { get; set; }
+        public Nullable<long> DocumentID { get; set; }
         public Nullable<System.Guid> DocumentUID { get; set; }
+        public Nullable<long> OrderID { get; set; }
+        public Nullable<long> OrderRowID { get; set; }
+        public Nullable<System.Guid> OrderRowUID { get; set; }
         public string ProcessName { get; set; }
         public Nullable<System.DateTime> ProcessDate { get; set; }
-        public Nullable<int> TicketTypeID { get; set; }
-        public Nullable<int> LocationID { get; set; }
-        public Nullable<int> EmployeeID { get; set; }
         public Nullable<int> ActionTypeID { get; set; }
-        public Nullable<int> BatchID { get; set; }
-        public Nullable<short> PointLevel { get; set; }
-        public Nullable<int> RequiredQuantity { get; set; }
-        public Nullable<int> RequiredLevel { get; set; }
+        public string ActionTypeName { get; set; }
+        public Nullable<int> RuleID { get; set; }
+        public Nullable<int> ToScroreItemID { get; set; }
         public Nullable<int> CollectQuantity { get; set; }
         public Nullable<int> SpendQuantity { get; set; }
         public Nullable<int> Quantity { get; set; }
+        public Nullable<int> EmployeeID { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
     }
 }

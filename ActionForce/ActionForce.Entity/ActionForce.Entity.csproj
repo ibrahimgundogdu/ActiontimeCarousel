@@ -209,16 +209,13 @@
     <Compile Include="CustomerCard.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
-    <Compile Include="CustomerCardStatus.cs">
+    <Compile Include="CustomerCardStatu.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
-    <Compile Include="CustomerScorePointBatch.cs">
+    <Compile Include="CustomerScorePointActions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="CustomerScorePointRules.cs">
-      <DependentUpon>ModelActionForce.tt</DependentUpon>
-    </Compile>
-    <Compile Include="CustomerScorePoints.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="CustomerTansactions.cs">

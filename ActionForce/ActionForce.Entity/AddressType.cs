@@ -15,7 +15,7 @@ namespace ActionForce.Entity
     public partial class AddressType
     {
         public int ID { get; set; }
-        public string TypeName { get; set; }
+        public string AddressTypeName { get; set; }
         public string SortBy { get; set; }
         public Nullable<bool> IsActive { get; set; }
     }

@@ -30,5 +30,6 @@ namespace ActionForce.Entity
         public string CCV2 { get; set; }
         public string ResultMessage { get; set; }
         public Nullable<bool> IsSuccess { get; set; }
+        public Nullable<int> CustomerCardID { get; set; }
     }
 }

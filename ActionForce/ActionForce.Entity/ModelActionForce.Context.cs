@@ -84,7 +84,6 @@ namespace ActionForce.Entity
         public virtual DbSet<LocationTicketType> LocationTicketType { get; set; }
         public virtual DbSet<LocationTrampoline> LocationTrampoline { get; set; }
         public virtual DbSet<LocationType> LocationType { get; set; }
-        public virtual DbSet<LocationWareHouse> LocationWareHouse { get; set; }
         public virtual DbSet<LoginLog> LoginLog { get; set; }
         public virtual DbSet<MobileLog> MobileLog { get; set; }
         public virtual DbSet<MobileLoginLog> MobileLoginLog { get; set; }
@@ -96,7 +95,6 @@ namespace ActionForce.Entity
         public virtual DbSet<Permission> Permission { get; set; }
         public virtual DbSet<PrePaidCampaign> PrePaidCampaign { get; set; }
         public virtual DbSet<PrePaidCampaignPrices> PrePaidCampaignPrices { get; set; }
-        public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductCategory> ProductCategory { get; set; }
         public virtual DbSet<ProductType> ProductType { get; set; }
         public virtual DbSet<PromotionBlackOut> PromotionBlackOut { get; set; }
@@ -205,7 +203,6 @@ namespace ActionForce.Entity
         public virtual DbSet<VEmployeeLocation> VEmployeeLocation { get; set; }
         public virtual DbSet<VEmployeeLocationList> VEmployeeLocationList { get; set; }
         public virtual DbSet<SetcardParameter> SetcardParameter { get; set; }
-        public virtual DbSet<CustomerActions> CustomerActions { get; set; }
         public virtual DbSet<Department> Department { get; set; }
         public virtual DbSet<Employee> Employee { get; set; }
         public virtual DbSet<EmployeeAreaCategory> EmployeeAreaCategory { get; set; }
@@ -249,7 +246,6 @@ namespace ActionForce.Entity
         public virtual DbSet<IdentityType> IdentityType { get; set; }
         public virtual DbSet<VEmployeeAll> VEmployeeAll { get; set; }
         public virtual DbSet<EmployeeAddress> EmployeeAddress { get; set; }
-        public virtual DbSet<AddressType> AddressType { get; set; }
         public virtual DbSet<LocationEmployeeCheck> LocationEmployeeCheck { get; set; }
         public virtual DbSet<VEmployeeLocationPosition> VEmployeeLocationPosition { get; set; }
         public virtual DbSet<Country> Country { get; set; }
@@ -314,15 +310,10 @@ namespace ActionForce.Entity
         public virtual DbSet<VTicketSaleRowSummary> VTicketSaleRowSummary { get; set; }
         public virtual DbSet<VTicketSaleDocumentAction> VTicketSaleDocumentAction { get; set; }
         public virtual DbSet<CustomerActionType> CustomerActionType { get; set; }
-        public virtual DbSet<CustomerCard> CustomerCard { get; set; }
-        public virtual DbSet<CustomerScorePointBatch> CustomerScorePointBatch { get; set; }
-        public virtual DbSet<CustomerScorePointRules> CustomerScorePointRules { get; set; }
-        public virtual DbSet<CustomerScorePoints> CustomerScorePoints { get; set; }
         public virtual DbSet<CustomerTansactions> CustomerTansactions { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<ConfirmMessage> ConfirmMessage { get; set; }
         public virtual DbSet<DocumentExpenseSlip> DocumentExpenseSlip { get; set; }
-        public virtual DbSet<CustomerCardStatus> CustomerCardStatus { get; set; }
         public virtual DbSet<PosTerminal> PosTerminal { get; set; }
         public virtual DbSet<VLocationPosTerminal> VLocationPosTerminal { get; set; }
         public virtual DbSet<VPosTerminal> VPosTerminal { get; set; }
@@ -331,6 +322,14 @@ namespace ActionForce.Entity
         public virtual DbSet<MallMoto> MallMoto { get; set; }
         public virtual DbSet<MallMotoColor> MallMotoColor { get; set; }
         public virtual DbSet<VLocationMallMoto> VLocationMallMoto { get; set; }
+        public virtual DbSet<CustomerCardStatu> CustomerCardStatu { get; set; }
+        public virtual DbSet<LocationWareHouse> LocationWareHouse { get; set; }
+        public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<CustomerActions> CustomerActions { get; set; }
+        public virtual DbSet<AddressType> AddressType { get; set; }
+        public virtual DbSet<CustomerCard> CustomerCard { get; set; }
+        public virtual DbSet<CustomerScorePointActions> CustomerScorePointActions { get; set; }
+        public virtual DbSet<CustomerScorePointRules> CustomerScorePointRules { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -2155,6 +2154,19 @@ namespace ActionForce.Entity
                 new ObjectParameter("TerminalID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemovePosTerminal", terminalIDParameter);
+        }
+    
+        public virtual int ChangeCustomerPhone(Nullable<int> customerID, string phoneNumber)
+        {
+            var customerIDParameter = customerID.HasValue ?
+                new ObjectParameter("CustomerID", customerID) :
+                new ObjectParameter("CustomerID", typeof(int));
+    
+            var phoneNumberParameter = phoneNumber != null ?
+                new ObjectParameter("PhoneNumber", phoneNumber) :
+                new ObjectParameter("PhoneNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ChangeCustomerPhone", customerIDParameter, phoneNumberParameter);
         }
     }
 }
