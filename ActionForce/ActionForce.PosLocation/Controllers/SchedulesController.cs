@@ -19,8 +19,8 @@ namespace ActionForce.PosLocation.Controllers
             var isdatekey = Db.DateList.FirstOrDefault(x => x.DateKey == processDate);
 
             model.DateList = Db.DateList.Where(x => x.WeekKey == isdatekey.WeekKey).ToList();
-            model.LocationSchedules = Db.LocationSchedule.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Year == isdatekey.Year && x.Month == isdatekey.Month && x.Week == isdatekey.Week).ToList();
-            model.EmployeeSchedules = Db.Schedule.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Year == isdatekey.Year && x.Month == isdatekey.Month && x.Week == isdatekey.Week).ToList();
+            model.LocationSchedules = Db.LocationSchedule.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Year == isdatekey.Year && x.Week == isdatekey.Week).ToList();
+            model.EmployeeSchedules = Db.Schedule.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Year == isdatekey.Year && x.Week == isdatekey.Week).ToList();
             var employees = Db.GetLocationEmployees(model.Authentication.CurrentLocation.ID).Where(x=> x.Active == true).ToList();
             model.Employees = employees.Select(x => new DataEmployee()
             {

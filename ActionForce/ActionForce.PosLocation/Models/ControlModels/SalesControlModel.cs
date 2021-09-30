@@ -13,7 +13,7 @@ namespace ActionForce.PosLocation
         public TicketSale TicketSale { get; set; }
         public DocumentExpenseSlip ExpenseSlip { get; set; }
         public Customer Customer { get; set; }
-
+        public TicketSalePosReceipt TicketSalePosReceipt { get; set; }
         public List<VTicketSaleRowSummary> TicketSaleRows { get; set; }
         public List<TicketSalePosPayment> TicketSalePosPayment { get; set; }
         public List<VTicketSalePosPaymentSummary> TicketSalePosPaymentSummary { get; set; }
@@ -26,6 +26,7 @@ namespace ActionForce.PosLocation
         public DateTime DocumentDate { get; set; }
         public string DocumentNumbers { get; set; }
         public double PaymentAmount { get; set; }
+        public double BalanceAmount { get; set; }
 
     }
 }

@@ -1878,43 +1878,6 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddTicketSalePosPayment", saleIDParameter, paymentTypeParameter, paymentSubTypeParameter, numberOfInstallmentParameter, paymentAmountParameter, paymentDescParameter, paymentCurrencyParameter, paymentInfoParameter, paymentDateTimeParameter, paymentDateParameter, paymentTimeParameter, bankBKMIDParameter, batchNumberParameter, stanNumberParameter, merchantIDParameter, terminalIDParameter, referenceNumberParameter, authorizationCodeParameter, maskedPanParameter);
         }
     
-        public virtual int AddTicketSalePosReceipt(Nullable<long> saleID, Nullable<short> receiptNo, Nullable<short> zNo, Nullable<short> ekuNo, string transDateTime, Nullable<System.DateTime> receiptDate, Nullable<System.TimeSpan> receiptTime, Nullable<int> ticketType)
-        {
-            var saleIDParameter = saleID.HasValue ?
-                new ObjectParameter("SaleID", saleID) :
-                new ObjectParameter("SaleID", typeof(long));
-    
-            var receiptNoParameter = receiptNo.HasValue ?
-                new ObjectParameter("ReceiptNo", receiptNo) :
-                new ObjectParameter("ReceiptNo", typeof(short));
-    
-            var zNoParameter = zNo.HasValue ?
-                new ObjectParameter("ZNo", zNo) :
-                new ObjectParameter("ZNo", typeof(short));
-    
-            var ekuNoParameter = ekuNo.HasValue ?
-                new ObjectParameter("EkuNo", ekuNo) :
-                new ObjectParameter("EkuNo", typeof(short));
-    
-            var transDateTimeParameter = transDateTime != null ?
-                new ObjectParameter("TransDateTime", transDateTime) :
-                new ObjectParameter("TransDateTime", typeof(string));
-    
-            var receiptDateParameter = receiptDate.HasValue ?
-                new ObjectParameter("ReceiptDate", receiptDate) :
-                new ObjectParameter("ReceiptDate", typeof(System.DateTime));
-    
-            var receiptTimeParameter = receiptTime.HasValue ?
-                new ObjectParameter("ReceiptTime", receiptTime) :
-                new ObjectParameter("ReceiptTime", typeof(System.TimeSpan));
-    
-            var ticketTypeParameter = ticketType.HasValue ?
-                new ObjectParameter("TicketType", ticketType) :
-                new ObjectParameter("TicketType", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddTicketSalePosReceipt", saleIDParameter, receiptNoParameter, zNoParameter, ekuNoParameter, transDateTimeParameter, receiptDateParameter, receiptTimeParameter, ticketTypeParameter);
-        }
-    
         public virtual ObjectResult<GetLocationEmployees_Result> GetLocationEmployees(Nullable<int> locationID)
         {
             var locationIDParameter = locationID.HasValue ?
@@ -2167,6 +2130,47 @@ namespace ActionForce.Entity
                 new ObjectParameter("PhoneNumber", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ChangeCustomerPhone", customerIDParameter, phoneNumberParameter);
+        }
+    
+        public virtual int AddTicketSalePosReceipt(Nullable<long> saleID, Nullable<short> receiptNo, Nullable<short> zNo, Nullable<short> ekuNo, string transDateTime, Nullable<System.DateTime> receiptDate, Nullable<System.TimeSpan> receiptTime, Nullable<int> ticketType, Nullable<double> paidAmount)
+        {
+            var saleIDParameter = saleID.HasValue ?
+                new ObjectParameter("SaleID", saleID) :
+                new ObjectParameter("SaleID", typeof(long));
+    
+            var receiptNoParameter = receiptNo.HasValue ?
+                new ObjectParameter("ReceiptNo", receiptNo) :
+                new ObjectParameter("ReceiptNo", typeof(short));
+    
+            var zNoParameter = zNo.HasValue ?
+                new ObjectParameter("ZNo", zNo) :
+                new ObjectParameter("ZNo", typeof(short));
+    
+            var ekuNoParameter = ekuNo.HasValue ?
+                new ObjectParameter("EkuNo", ekuNo) :
+                new ObjectParameter("EkuNo", typeof(short));
+    
+            var transDateTimeParameter = transDateTime != null ?
+                new ObjectParameter("TransDateTime", transDateTime) :
+                new ObjectParameter("TransDateTime", typeof(string));
+    
+            var receiptDateParameter = receiptDate.HasValue ?
+                new ObjectParameter("ReceiptDate", receiptDate) :
+                new ObjectParameter("ReceiptDate", typeof(System.DateTime));
+    
+            var receiptTimeParameter = receiptTime.HasValue ?
+                new ObjectParameter("ReceiptTime", receiptTime) :
+                new ObjectParameter("ReceiptTime", typeof(System.TimeSpan));
+    
+            var ticketTypeParameter = ticketType.HasValue ?
+                new ObjectParameter("TicketType", ticketType) :
+                new ObjectParameter("TicketType", typeof(int));
+    
+            var paidAmountParameter = paidAmount.HasValue ?
+                new ObjectParameter("PaidAmount", paidAmount) :
+                new ObjectParameter("PaidAmount", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddTicketSalePosReceipt", saleIDParameter, receiptNoParameter, zNoParameter, ekuNoParameter, transDateTimeParameter, receiptDateParameter, receiptTimeParameter, ticketTypeParameter, paidAmountParameter);
         }
     }
 }

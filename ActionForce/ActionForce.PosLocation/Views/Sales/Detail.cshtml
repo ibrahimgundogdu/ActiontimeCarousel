@@ -52,8 +52,8 @@
                         <li><span>SİPARİŞ NO</span><span> @(Model.TicketSale.OrderNumber)</span></li>
                         <li><span>SİPARİŞ TARİHİ</span><span> @(Model.TicketSale.Date?.ToShortDateString())</span></li>
                         <li><span>DURUM</span><span>@(Model.TicketSalePosStatus.FirstOrDefault(x=> x.ID == Model.TicketSale.PosStatusID)?.PosStatusName)</span></li>
-                        <li><span>TUTAR</span><span>@(Model.TicketSaleSummary.Total?.ToString("N2")) @(Model.TicketSaleSummary.Sign)</span></li>
-                        <li><span>TAHSİLAT</span><span>@((Model.TicketSaleSummary.PaymentAmount ?? 0).ToString("N2")) @(Model.TicketSaleSummary.Sign)</span></li>
+                        <li><span>TUTAR</span><span>@(Model.TicketSaleSummary.Total.ToString("N2")) @(Model.TicketSaleSummary.Sign)</span></li>
+                        <li><span>TAHSİLAT</span><span>@((Model.TicketSaleSummary.PaymentAmount).ToString("N2")) @(Model.TicketSaleSummary.Sign)</span></li>
                         <li><span>BİLET ADEDİ</span><span>@(Model.TicketSaleSummary.Quantity)</span></li>
                         <li><span>ORTAM BİLGİSİ</span><span>@(Model.Environments.FirstOrDefault(x=> x.ID == Model.TicketSaleSummary.EnvironmentID)?.Environment1)</span></li>
                         <li><span>KAYIT TARİHİ</span><span> @(Model.TicketSaleSummary.RecordDate.ToString())</span></li>
@@ -79,6 +79,21 @@
                                         @(Model.DocumentNumbers.ToString());
                                     }
                                 }
+
+                            </span>
+                        </li>
+                        <li>
+                            <span>ÖDEME TAMAMLA</span>
+                            <span>
+                                @if ((Model.TicketSaleSummary.BalanceAmount) > 0)
+                                {
+                                    <a href="/Sales/Payment/@(Model.TicketSale.ID)" class="btn btn-success">TAMAMLA</a>
+                                }
+                                else
+                                {
+                                    <span>Kalan: @(Model.TicketSaleSummary.BalanceAmount.ToString("N2")) ₺</span>
+                                }
+
 
                             </span>
                         </li>

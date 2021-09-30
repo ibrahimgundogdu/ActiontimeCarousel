@@ -3526,6 +3526,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ReceiptNo" Type="smallint" />
           <Property Name="ZNo" Type="smallint" />
           <Property Name="EkuNo" Type="smallint" />
+          <Property Name="PaidAmount" Type="float" />
           <Property Name="TransDateTime" Type="nvarchar" MaxLength="30" />
           <Property Name="ReceiptDate" Type="date" />
           <Property Name="ReceiptTime" Type="time" Precision="0" />
@@ -6268,8 +6269,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleDocumentAction' 
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSalePosPaymentSummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VTicketSalePosPaymentSummary">
           <Key>
+            <PropertyRef Name="ID" />
             <PropertyRef Name="Currency" />
           </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
           <Property Name="SaleID" Type="bigint" />
           <Property Name="PaymentType" Type="int" />
           <Property Name="PaymentTypeName" Type="nvarchar" MaxLength="50" />
@@ -6429,6 +6432,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleSummary' does no
           <Key>
             <PropertyRef Name="ID" />
             <PropertyRef Name="UID" />
+            
+            
+            <PropertyRef Name="BalanceAmount" />
           </Key>
           <Property Name="ID" Type="bigint" Nullable="false" />
           <Property Name="OrderNumber" Type="nvarchar" MaxLength="50" />
@@ -6439,12 +6445,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleSummary' does no
           <Property Name="UID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="Quantity" Type="int" />
-          <Property Name="Total" Type="float" />
+          <Property Name="Total" Type="float" Nullable="false" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="Sign" Type="nvarchar" MaxLength="1" />
           <Property Name="FullName" Type="nvarchar" MaxLength="150" />
-          <Property Name="PaymentAmount" Type="float" />
+          <Property Name="PaymentAmount" Type="float" Nullable="false" />
+          <Property Name="BalanceAmount" Type="float" Nullable="false" />
           <Property Name="PosStatusName" Type="nvarchar" MaxLength="40" />
+          <Property Name="IsSendPosTerminal" Type="bit" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6928,6 +6936,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="ReceiptDate" Type="date" Mode="In" />
           <Parameter Name="ReceiptTime" Type="time" Mode="In" />
           <Parameter Name="TicketType" Type="int" Mode="In" />
+          <Parameter Name="PaidAmount" Type="float" Mode="In" />
         </Function>
         <Function Name="ChangeCustomerPhone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CustomerID" Type="int" Mode="In" />
@@ -9539,6 +9548,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySet>
           <EntitySet Name="VTicketSalePosPaymentSummary" EntityType="Self.VTicketSalePosPaymentSummary" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
+    [VTicketSalePosPaymentSummary].[ID] AS [ID], 
     [VTicketSalePosPaymentSummary].[SaleID] AS [SaleID], 
     [VTicketSalePosPaymentSummary].[PaymentType] AS [PaymentType], 
     [VTicketSalePosPaymentSummary].[PaymentTypeName] AS [PaymentTypeName], 
@@ -9682,7 +9692,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketSaleSummary].[Sign] AS [Sign], 
     [VTicketSaleSummary].[FullName] AS [FullName], 
     [VTicketSaleSummary].[PaymentAmount] AS [PaymentAmount], 
-    [VTicketSaleSummary].[PosStatusName] AS [PosStatusName]
+    [VTicketSaleSummary].[BalanceAmount] AS [BalanceAmount], 
+    [VTicketSaleSummary].[PosStatusName] AS [PosStatusName], 
+    [VTicketSaleSummary].[IsSendPosTerminal] AS [IsSendPosTerminal]
     FROM [dbo].[VTicketSaleSummary] AS [VTicketSaleSummary]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="WeekList" EntityType="Self.WeekList" store:Type="Views" store:Schema="dbo">
@@ -10544,16 +10556,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="AuthorizationCode" Mode="In" Type="String" />
             <Parameter Name="MaskedPan" Mode="In" Type="String" />
           </FunctionImport>
-          <FunctionImport Name="AddTicketSalePosReceipt">
-            <Parameter Name="SaleID" Mode="In" Type="Int64" />
-            <Parameter Name="ReceiptNo" Mode="In" Type="Int16" />
-            <Parameter Name="ZNo" Mode="In" Type="Int16" />
-            <Parameter Name="EkuNo" Mode="In" Type="Int16" />
-            <Parameter Name="TransDateTime" Mode="In" Type="String" />
-            <Parameter Name="ReceiptDate" Mode="In" Type="DateTime" />
-            <Parameter Name="ReceiptTime" Mode="In" Type="Time" />
-            <Parameter Name="TicketType" Mode="In" Type="Int32" />
-          </FunctionImport>
           <FunctionImport Name="GetLocationEmployees" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationEmployees_Result)">
           <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -10661,6 +10663,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="CustomerCard" EntityType="db293_ActionTimeDbModel.CustomerCard" />
           <EntitySet Name="CustomerScorePointActions" EntityType="db293_ActionTimeDbModel.CustomerScorePointActions" />
           <EntitySet Name="CustomerScorePointRules" EntityType="db293_ActionTimeDbModel.CustomerScorePointRules" />
+          <FunctionImport Name="AddTicketSalePosReceipt">
+            <Parameter Name="SaleID" Mode="In" Type="Int64" />
+            <Parameter Name="ReceiptNo" Mode="In" Type="Int16" />
+            <Parameter Name="ZNo" Mode="In" Type="Int16" />
+            <Parameter Name="EkuNo" Mode="In" Type="Int16" />
+            <Parameter Name="TransDateTime" Mode="In" Type="String" />
+            <Parameter Name="ReceiptDate" Mode="In" Type="DateTime" />
+            <Parameter Name="ReceiptTime" Mode="In" Type="Time" />
+            <Parameter Name="TicketType" Mode="In" Type="Int32" />
+            <Parameter Name="PaidAmount" Mode="In" Type="Double" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -17258,6 +17271,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ReceiptTime" Type="Time" Precision="0" />
           <Property Name="TicketType" Type="Int32" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="PaidAmount" Type="Double" />
         </EntityType>
         <ComplexType Name="GetLocationEmployees_Result">
           <Property Type="Int32" Name="EmployeeID" Nullable="false" />
@@ -17295,6 +17309,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <EntityType Name="VTicketSalePosPaymentSummary">
           <Key>
             <PropertyRef Name="Currency" />
+            <PropertyRef Name="ID" />
           </Key>
           <Property Name="SaleID" Type="Int64" />
           <Property Name="PaymentType" Type="Int32" />
@@ -17306,11 +17321,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Currency" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
           <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
           <Property Name="BankName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="ID" Type="Int64" Nullable="false" />
         </EntityType>
         <EntityType Name="VTicketSaleSummary">
           <Key>
             <PropertyRef Name="ID" />
             <PropertyRef Name="UID" />
+            <PropertyRef Name="BalanceAmount" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" />
           <Property Name="OrderNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
@@ -17321,12 +17338,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UID" Type="Guid" Nullable="false" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
           <Property Name="Quantity" Type="Int32" />
-          <Property Name="Total" Type="Double" />
+          <Property Name="Total" Type="Double" Nullable="false" />
           <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
           <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="PaymentAmount" Type="Double" />
+          <Property Name="PaymentAmount" Type="Double" Nullable="false" />
           <Property Name="PosStatusName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="IsSendPosTerminal" Type="Boolean" />
+          <Property Name="BalanceAmount" Type="Double" Nullable="false" />
         </EntityType>
         <EntityType Name="Bank">
           <Key>
@@ -24135,6 +24154,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketSalePosReceipt">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketSalePosReceipt">
               <MappingFragment StoreEntitySet="TicketSalePosReceipt">
+                <ScalarProperty Name="PaidAmount" ColumnName="PaidAmount" />
                 <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
                 <ScalarProperty Name="TicketType" ColumnName="TicketType" />
                 <ScalarProperty Name="ReceiptTime" ColumnName="ReceiptTime" />
@@ -24149,7 +24169,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddTicketSalePosPayment" FunctionName="db293_ActionTimeDbModel.Store.AddTicketSalePosPayment" />
-          <FunctionImportMapping FunctionImportName="AddTicketSalePosReceipt" FunctionName="db293_ActionTimeDbModel.Store.AddTicketSalePosReceipt" />
           <FunctionImportMapping FunctionImportName="GetLocationEmployees" FunctionName="db293_ActionTimeDbModel.Store.GetLocationEmployees">
             <ResultMapping>
               <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetLocationEmployees_Result">
@@ -24198,6 +24217,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VTicketSalePosPaymentSummary">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketSalePosPaymentSummary">
               <MappingFragment StoreEntitySet="VTicketSalePosPaymentSummary">
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="BankName" ColumnName="BankName" />
                 <ScalarProperty Name="Sign" ColumnName="Sign" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
@@ -24214,6 +24234,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VTicketSaleSummary">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketSaleSummary">
               <MappingFragment StoreEntitySet="VTicketSaleSummary">
+                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
+                <ScalarProperty Name="IsSendPosTerminal" ColumnName="IsSendPosTerminal" />
                 <ScalarProperty Name="PosStatusName" ColumnName="PosStatusName" />
                 <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
                 <ScalarProperty Name="FullName" ColumnName="FullName" />
@@ -24711,6 +24733,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddTicketSalePosReceipt" FunctionName="db293_ActionTimeDbModel.Store.AddTicketSalePosReceipt" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

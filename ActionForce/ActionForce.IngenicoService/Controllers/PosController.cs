@@ -266,8 +266,9 @@ namespace ActionForce.PosService.Controllers
                                 try
                                 {
                                     //receipt kaydı
+                                    var paidamount = Convert.ToDouble(receipt.PaidAmount / 100);
 
-                                    var receiptid = Db.AddTicketSalePosReceipt(order.ID, receipt.ReceiptNo, receipt.ZNo, receipt.EkuNo, receipt.TransDateTime, receiptdate.Date, receiptdate.TimeOfDay, receipt.TicketType);
+                                    var receiptid = Db.AddTicketSalePosReceipt(order.ID, receipt.ReceiptNo, receipt.ZNo, receipt.EkuNo, receipt.TransDateTime, receiptdate.Date, receiptdate.TimeOfDay, receipt.TicketType, paidamount);
 
                                     if (receipt.PaymentList != null && receipt.PaymentList.Count() > 0)
                                     {
@@ -280,10 +281,10 @@ namespace ActionForce.PosService.Controllers
                                             var paymentid = Db.AddTicketSalePosPayment(order.ID, payment.PaymentType, payment.PaymentSubType, noi, paymentamount, payment.PaymentDesc, payment.PaymentCurrency, payment.PaymentInfo, payment.PaymentDateTime, paymentdate.Date, paymentdate.TimeOfDay, payment.BankBKMID, payment.BatchNumber, payment.StanNumber, payment.MerchantID, payment.TerminalID, payment.ReferenceNumber, payment.AuthorizationCode, payment.MaskedPan);
                                         }
 
-
                                         order.PosStatusID = 1;
                                         Db.SaveChanges();
                                     }
+
 
                                     if (receipt.DiscountList != null && receipt.DiscountList.Count() > 0)
                                     {
@@ -382,6 +383,12 @@ namespace ActionForce.PosService.Controllers
                                 {
                                     Db.SetTicketSaleStatus(order.ID, request.Status, request.SerialNo);
 
+                                    if (request.Status == 3 || request.Status == 4)
+                                    {
+                                        //var sendResult = mqClient.SendPosResult("DocumentProcess", request.AdisyonId, request.SerialNo, request.Status);
+                                        Db.CheckLocationPosTicketSale(order.ID);
+                                    }
+
                                     result.ResultCode = 0;
                                     result.ResultMessage = $"Adisyon Durumu : {ApiHelper.GetStatusCode(request.Status)}";
                                 }
@@ -419,11 +426,7 @@ namespace ActionForce.PosService.Controllers
                     result.ResultMessage = $"Servis kullanıcısı bulunamadı";
                 }
 
-                if (request.Status == 3 || request.Status == 4)
-                {
-                    var sendResult = mqClient.SendPosResult("DocumentProcess", request.AdisyonId, request.SerialNo, request.Status);
 
-                }
 
             }
             catch (Exception ex)
@@ -434,7 +437,7 @@ namespace ActionForce.PosService.Controllers
 
             string data = Newtonsoft.Json.JsonConvert.SerializeObject(request);
             data = data.Replace(request.Header_Info.UserName, "*").Replace(request.Header_Info.Password, "*");
-            ApiHelper.AddPosServiceLog(LocationID, request.SerialNo, request.AdisyonId.ToString(), request.Header_Info.UserName, ApiHelper.PasswordMD5_Pan(request.Header_Info.Password), "TSM_lR_SendAdisyonPayment", data, result.ResultCode.ToString(), result.ResultMessage);
+            ApiHelper.AddPosServiceLog(LocationID, request.SerialNo, request.AdisyonId.ToString(), request.Header_Info.UserName, ApiHelper.PasswordMD5_Pan(request.Header_Info.Password), "TSM_IR_SetStatus", data, result.ResultCode.ToString(), result.ResultMessage);
 
             PushClient pushService = new PushClient();
             pushService.SendMessage(request.SerialNo, result.ResultMessage);

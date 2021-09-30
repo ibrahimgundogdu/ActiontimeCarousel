@@ -24,5 +24,6 @@ namespace ActionForce.Entity
         public Nullable<System.TimeSpan> ReceiptTime { get; set; }
         public Nullable<int> TicketType { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
+        public Nullable<double> PaidAmount { get; set; }
     }
 }

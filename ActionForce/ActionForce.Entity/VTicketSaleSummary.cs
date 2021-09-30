@@ -23,11 +23,13 @@ namespace ActionForce.Entity
         public System.Guid UID { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<int> Quantity { get; set; }
-        public Nullable<double> Total { get; set; }
+        public double Total { get; set; }
         public string Currency { get; set; }
         public string Sign { get; set; }
         public string FullName { get; set; }
-        public Nullable<double> PaymentAmount { get; set; }
+        public double PaymentAmount { get; set; }
         public string PosStatusName { get; set; }
+        public Nullable<bool> IsSendPosTerminal { get; set; }
+        public double BalanceAmount { get; set; }
     }
 }

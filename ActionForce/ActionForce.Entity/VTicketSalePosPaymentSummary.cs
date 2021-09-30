@@ -24,5 +24,6 @@ namespace ActionForce.Entity
         public string Currency { get; set; }
         public string Sign { get; set; }
         public string BankName { get; set; }
+        public long ID { get; set; }
     }
 }

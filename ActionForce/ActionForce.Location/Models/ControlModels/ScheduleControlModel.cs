@@ -7,7 +7,7 @@ namespace ActionForce.Location
 {
     public class ScheduleControlModel : LayoutControlModel
     {
-        public Result Result { get; set; }
+     
 
     }
 }

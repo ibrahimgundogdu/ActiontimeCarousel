@@ -124,9 +124,9 @@ namespace ActionForce.PosLocation.Controllers
             else
             {
                 code = "90";
-                number = id.Substring(2,id.Length-2).Replace(")", "").Replace(" ", "").Replace("(", "");
+                number = id.Substring(2, id.Length - 2).Replace(")", "").Replace(" ", "").Replace("(", "");
             }
-            
+
 
             customer = Db.Customer.FirstOrDefault(x => x.IsActive == true && x.PhoneCode == code && x.PhoneNumber == number);
 
@@ -157,7 +157,7 @@ namespace ActionForce.PosLocation.Controllers
 
             DocumentExpenseSlip slip = new DocumentExpenseSlip();
 
-            if (form.ExpenseSlipID >0)
+            if (form.ExpenseSlipID > 0)
             {
                 slip = Db.DocumentExpenseSlip.FirstOrDefault(x => x.ID == form.ExpenseSlipID);
                 slip.CustomerAddress = form.PostAddress;
@@ -276,7 +276,7 @@ namespace ActionForce.PosLocation.Controllers
 
             if (expenseslip != null)
             {
-                var confirm = Db.ConfirmMessage.Where(x => x.DocumentUID == expenseslip.UID && x.DocumentTypeID == 12).OrderByDescending(x=> x.DateSend).FirstOrDefault();
+                var confirm = Db.ConfirmMessage.Where(x => x.DocumentUID == expenseslip.UID && x.DocumentTypeID == 12).OrderByDescending(x => x.DateSend).FirstOrDefault();
 
                 if (confirm != null)
                 {
@@ -284,8 +284,8 @@ namespace ActionForce.PosLocation.Controllers
                     {
                         var DocumentDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
                         var resuldid = Db.ExpenseSlipMessageConfirmed(confirm.ID, expenseslip.ID, form.OrderID, DocumentDate).FirstOrDefault();
-                        
-                        if (resuldid > 0 )
+
+                        if (resuldid > 0)
                         {
                             model.Result.IsSuccess = true;
                             model.Result.Message = "Gider Pusulası Eklendi";
@@ -314,9 +314,33 @@ namespace ActionForce.PosLocation.Controllers
                 model.Result.Message = "Gider Pusulası Bulunamadı";
             }
 
-            return RedirectToAction("Refund",new { id = form.OrderID});
+            return RedirectToAction("Refund", new { id = form.OrderID });
         }
 
-        
+        public ActionResult Payment(long? id)
+        {
+            if (id <= 0 || id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            SalesControlModel model = new SalesControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            model.TicketSaleSummary = Db.VTicketSaleSummary.FirstOrDefault(x => x.ID == id);
+
+            model.TicketSalePosReceipt = Db.TicketSalePosReceipt.FirstOrDefault(x => x.SaleID == id);
+            model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => x.SaleID == id).ToList();
+            model.PaymentAmount = model.TicketSaleSummary.Total;
+            model.BalanceAmount = model.TicketSaleSummary.BalanceAmount;
+
+
+            return View(model);
+        }
     }
 }
