@@ -20,5 +20,7 @@ namespace ActionForce.Entity
         public string OrderNumber { get; set; }
         public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
+        public double PaidAmount { get; set; }
+        public double BalanceAmount { get; set; }
     }
 }

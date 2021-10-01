@@ -44,8 +44,8 @@ namespace ActionForce.PosService.Controllers
                                 AdisyonNo = x.OrderNumber.ToString(),
                                 AdisyonName = POSTerminalInfo.LocationFullName,
                                 TableNo = x.LocationID.ToString(),
-                                NetAmount = Convert.ToInt64(x.Amount * 100),
-                                TotalAmount = Convert.ToInt64(x.Amount * 100)
+                                NetAmount = Convert.ToInt64(x.BalanceAmount * 100),
+                                TotalAmount = Convert.ToInt64(x.BalanceAmount * 100)
                             }).ToList();
 
                         }
@@ -63,8 +63,8 @@ namespace ActionForce.PosService.Controllers
                                     AdisyonNo = x.OrderNumber.ToString(),
                                     AdisyonName = POSTerminalInfo.LocationFullName,
                                     TableNo = x.LocationID.ToString(),
-                                    NetAmount = Convert.ToInt64(x.Amount * 10),
-                                    TotalAmount = Convert.ToInt64(x.Amount * 10)
+                                    NetAmount = Convert.ToInt64(x.BalanceAmount * 10),
+                                    TotalAmount = Convert.ToInt64(x.BalanceAmount * 10)
                                 }).ToList();
                             }
                             else
@@ -278,7 +278,7 @@ namespace ActionForce.PosService.Controllers
                                             var paymentamount = Convert.ToDouble(payment.PaymentAmount / 100);
                                             var paymentdate = Convert.ToDateTime(payment.PaymentDateTime);
 
-                                            var paymentid = Db.AddTicketSalePosPayment(order.ID, payment.PaymentType, payment.PaymentSubType, noi, paymentamount, payment.PaymentDesc, payment.PaymentCurrency, payment.PaymentInfo, payment.PaymentDateTime, paymentdate.Date, paymentdate.TimeOfDay, payment.BankBKMID, payment.BatchNumber, payment.StanNumber, payment.MerchantID, payment.TerminalID, payment.ReferenceNumber, payment.AuthorizationCode, payment.MaskedPan);
+                                            var paymentid = Db.AddTicketSalePosPayment(order.ID, payment.PaymentType, payment.PaymentSubType, noi, paymentamount, payment.PaymentDesc, payment.PaymentCurrency, payment.PaymentInfo, payment.PaymentDateTime, paymentdate.Date, paymentdate.TimeOfDay, payment.BankBKMID, payment.BatchNumber, payment.StanNumber, payment.MerchantID, payment.TerminalID, payment.ReferenceNumber, payment.AuthorizationCode, payment.MaskedPan, true);
                                         }
 
                                         order.PosStatusID = 1;

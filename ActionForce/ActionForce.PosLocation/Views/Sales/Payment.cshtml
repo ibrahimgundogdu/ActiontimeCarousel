@@ -46,76 +46,220 @@
             <div class="content">
                 <div class="refund-form">
                     <div class="steps">
-                        <h1>SATIŞ ÖDEME FORMU</h1>
+                        <h1>SATIŞ ÖDEME FİŞİ</h1>
+                        <div class="step step-1 active">
+                            @if (Model.TicketSalePosReceipt != null)
+                            {
 
-                        @using (Html.BeginForm("AddPayment", "Sales", FormMethod.Post, new { role = "form" }))
-                        {
+                                using (Html.BeginForm("EditPayment", "Sales", FormMethod.Post, new { role = "form" }))
+                                {
                             <div class="form">
-                                <input id="PosReceiptID" name="PosReceiptID" type="hidden" value="@(Model.TicketSalePosReceipt != null ? Model.TicketSalePosReceipt?.ID : (long?)null)" />
+                                <input id="PosReceiptID" name="PosReceiptID" type="hidden" value="@(Model.TicketSalePosReceipt.ID)" />
                                 <input id="OrderID" name="OrderID" type="hidden" value="@(Model.TicketSaleSummary.ID)" />
 
-                                <div class="form-group">
-                                    <input type="text" name="OrderNumber" class="form-control" value="@(Model.TicketSaleSummary.OrderNumber)" readonly>
+                                <div class="form-group mb-0">
+                                    <input type="text" name="OrderNumber" class="form-control" style=" background-color: lightgray;" value="@(Model.TicketSaleSummary.OrderNumber)" readonly>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" name="PaymentAmount" class="form-control" style="text-align:right; font-weight:bold;" value="@(Model.PaymentAmount.ToString("N2")) ₺" readonly>
+                                    <input type="text" name="WillPaymentAmount" class="form-control form-control-plaintext" style="text-align:right; font-weight:bold; background-color:lightgray;" value="@($"Tutar : {Model.PaymentAmount.ToString("N2")} ₺")" readonly>
                                 </div>
                                 <div class="form-group">
-                                    <input type="text" name="BalanceAmount" class="form-control" style="text-align:right; font-weight:bold;" value="@(Model.BalanceAmount.ToString("N2")) ₺" readonly>
-                                </div>
-
-
-
-                                <div class="form-group">
-                                    <input type="number" name="ReceiptNo" class="form-control" placeholder="Fiş No" value="@(Model.TicketSalePosReceipt != null ? Model.TicketSalePosReceipt.ReceiptNo : (short?)null)">
+                                    <input type="text" name="BalanceAmount" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: lightgray;" value="@($"Kalan : {Model.BalanceAmount.ToString("N2")} ₺")" readonly>
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="number" name="ZNo" class="form-control" placeholder="Fiş No" value="@(Model.TicketSalePosReceipt != null ? Model.TicketSalePosReceipt.ZNo : (short?)null)">
+                                    <input type="number" name="ReceiptNo" class="form-control" placeholder="FİŞ NO" value="@(Model.TicketSalePosReceipt.ReceiptNo)">
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="number" name="EkuNo" class="form-control" placeholder="Fiş No" value="@(Model.TicketSalePosReceipt != null ? Model.TicketSalePosReceipt.EkuNo : (short?)null)">
+                                    <input type="number" name="ZNo" class="form-control" placeholder="Z NO" value="@(Model.TicketSalePosReceipt.ZNo)">
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="date" name="ReceiptDate" class="form-control" placeholder="Fiş Tarihi" value="@(Model.TicketSalePosReceipt != null ? Model.TicketSalePosReceipt.ReceiptDate?.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                                    <input type="number" name="EkuNo" class="form-control" placeholder="EKÜ NO" value="@(Model.TicketSalePosReceipt.EkuNo)">
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="time" name="ReceiptTime" class="form-control" placeholder="Fiş Saati" value="@(Model.TicketSalePosReceipt != null ? Model.TicketSalePosReceipt.ReceiptTime?.ToString("HH\\:mm\\:ss") : DateTime.Now.TimeOfDay.ToString("HH\\:mm\\:ss"))">
+                                    <input type="date" name="ReceiptDate" class="form-control" placeholder="Fiş Tarihi" value="@(Model.TicketSalePosReceipt.ReceiptDate != null ? Model.TicketSalePosReceipt.ReceiptDate?.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))" required>
                                 </div>
 
+                                <div class="form-group">
+                                    <input type="time" name="ReceiptTime" class="form-control" placeholder="Fiş Saati" value="@(Model.TicketSalePosReceipt.ReceiptTime != null ? Model.TicketSalePosReceipt.ReceiptTime?.ToString(@"hh\:mm\:ss") : DateTime.Now.ToString("HH\\:mm"))">
+                                </div>
 
-
-                                @if (Model.TicketSalePosReceipt != null)
+                                @if (Model.BalanceAmount > 0)
                                 {
+                                    <p>ÖDEME BİLGİSİ </p>
+
+
                                     <div class="form-group">
-                                        <button type="Submit" class="btn btn-primary">GÜNCELLE</button>
+                                        <input type="text" name="PaymentAmount" class="form-control money" style="text-align:right; font-weight:bold;" value="@(Model.BalanceAmount.ToString("N2"))" required>
                                     </div>
+                                    <div class="form-group">
+                                        <select id="PosPaymentType" name="PosPaymentType" class="form-control" required>
+                                            <option value="">Ödeme Yöntemi Seçiniz</option>
+                                            @foreach (var item in Model.PosPaymentType.ToList())
+                                            {
+                                                <option value="@(item.PaymentTypeID)">@(item.PaymentTypeName)</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group" id="divBankId" style="display:none;">
+                                        <select id="BankId" name="BankId" class="form-control">
+                                            <option value="">Kartın Bankasını Seçiniz</option>
+                                            @foreach (var item in Model.Banks.OrderBy(x => x.Name).ToList())
+                                            {
+                                                <option value="@(item.EFTCode)">@(item.Name.ToUpper())</option>
+                                            }
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group" id="divInstallment" style="display:none;">
+                                        <select id="Installment" name="Installment" class="form-control">
+                                            <option value="">Taksit Sayısı Seçiniz</option>
+                                            <option value="1">Tek Çekim</option>
+                                            <option value="2">2 Taksit</option>
+                                            <option value="3">3 Taksit</option>
+                                            <option value="4">4 Taksit</option>
+                                            <option value="5">5 Taksit</option>
+                                            <option value="6">6 Taksit</option>
+                                            <option value="7">7 Taksit</option>
+                                            <option value="8">8 Taksit</option>
+                                            <option value="9">9 Taksit</option>
+                                            <option value="10">10 Taksit</option>
+                                            <option value="11">11 Taksit</option>
+                                            <option value="12">12 Taksit</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button type="Submit" class="btn btn-primary">KALAN ÖDEMEYİ EKLE</button>
+                                    </div>
+
                                 }
                                 else
                                 {
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-info">EKLE</button>
-                                    </div>
+                                    if (Model.TicketSaleSummary.IsSendPosTerminal == false)
+                                    {
+                                        <div class="form-group">
+                                            <button type="Submit" class="btn btn-primary">GÜNCELLE</button>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="form-group">
+                                            <button type="button" class="btn btn-primary">GÜNCELLENEMEZ</button>
+                                        </div>
+                                    }
+
                                 }
 
-
                             </div>
-                        }
+                                }
+                            }
+                            else
+                            {
+                                using (Html.BeginForm("AddPayment", "Sales", FormMethod.Post, new { role = "form" }))
+                                {
+                                    <div class="form">
+                                        <input id="PosReceiptID" name="PosReceiptID" type="hidden" value="0" />
+                                        <input id="OrderID" name="OrderID" type="hidden" value="@(Model.TicketSaleSummary.ID)" />
+
+                                        <div class="form-group mb-0">
+                                            <input type="text" name="OrderNumber" class="form-control" style=" background-color: lightgray;" value="@(Model.TicketSaleSummary.OrderNumber)" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" name="WillPaymentAmount" class="form-control form-control-plaintext" style="text-align:right; font-weight:bold; background-color:lightgray;" value="@($"Tutar : {Model.PaymentAmount.ToString("N2")} ₺")" readonly>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="text" name="BalanceAmount" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: lightgray;" value="@($"Kalan : {Model.BalanceAmount.ToString("N2")} ₺")" readonly>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="number" name="ReceiptNo" class="form-control" placeholder="FİŞ NO" value="">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="number" name="ZNo" class="form-control" placeholder="Z NO" value="">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="number" name="EkuNo" class="form-control" placeholder="EKÜ NO" value="">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="date" name="ReceiptDate" class="form-control" placeholder="Fiş Tarihi" value="@(DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input type="time" name="ReceiptTime" class="form-control" placeholder="Fiş Saati" value="@(DateTime.Now.ToString("HH\\:mm"))">
+                                        </div>
+
+                                        <p>ÖDEME BİLGİSİ </p>
 
 
-                        @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message))
-                        {
-                            <div>
-                                <div class="form-result">
-                                    <h2>@(Model.Result.IsSuccess ? "İşleminiz başarıyla tamamlandı." : "İşlem Başarısız")</h2>
-                                    <p>@(Model.Result.Message)</p>
+                                        <div class="form-group">
+                                            <input type="text" name="PaymentAmount" class="form-control money" style="text-align:right; font-weight:bold;" value="@(Model.BalanceAmount.ToString("N2"))" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <select id="PosPaymentType" name="PosPaymentType" class="form-control" required>
+                                                <option value="">Ödeme Yöntemi Seçiniz</option>
+                                                @foreach (var item in Model.PosPaymentType.ToList())
+                                                {
+                                                    <option value="@(item.PaymentTypeID)">@(item.PaymentTypeName)</option>
+                                                }
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group" id="divBankId" style="display:none;">
+                                            <select id="BankId" name="BankId" class="form-control">
+                                                <option value="">Kartın Bankasını Seçiniz</option>
+                                                @foreach (var item in Model.Banks.OrderBy(x => x.Name).ToList())
+                                                {
+                                                    <option value="@(item.EFTCode)">@(item.Name.ToUpper())</option>
+                                                }
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group" id="divInstallment" style="display:none;">
+                                            <select id="Installment" name="Installment" class="form-control">
+                                                <option value="">Taksit Sayısı Seçiniz</option>
+                                                <option value="1">Tek Çekim</option>
+                                                <option value="2">2 Taksit</option>
+                                                <option value="3">3 Taksit</option>
+                                                <option value="4">4 Taksit</option>
+                                                <option value="5">5 Taksit</option>
+                                                <option value="6">6 Taksit</option>
+                                                <option value="7">7 Taksit</option>
+                                                <option value="8">8 Taksit</option>
+                                                <option value="9">9 Taksit</option>
+                                                <option value="10">10 Taksit</option>
+                                                <option value="11">11 Taksit</option>
+                                                <option value="12">12 Taksit</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-info">EKLE</button>
+                                        </div>
+
+
+                                    </div>
+                                }
+                            }
+
+                            @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message))
+                            {
+                                <div>
+                                    <div class="form-result">
+                                        <h2>@(Model.Result.IsSuccess ? "İşleminiz başarıyla tamamlandı." : "İşlem Başarısız")</h2>
+                                        <p>@(Model.Result.Message)</p>
+                                    </div>
                                 </div>
-                            </div>
-                        }
+                            }
 
+                        </div>
                     </div>
                 </div>
             </div><!-- content -->
@@ -176,24 +320,53 @@
                 $('.fixed-footer-overlay').removeClass(open);
                 $('.footer-basket').stop().slideUp();
             });
-            $(document).ready(function () {
-                $('.piece-options .minus').click(function () {
-                    var $input = $(this).parent().find('input');
-                    var count = parseInt($input.val()) - 1;
-                    count = count < 1 ? 1 : count;
-                    $input.val(count);
-                    $input.change();
-                    return false;
-                });
-                $('.piece-options .plus').click(function () {
-                    var $input = $(this).parent().find('input');
-                    $input.val(parseInt($input.val()) + 1);
-                    $input.change();
-                    return false;
-                });
-            });
+
 
         });
+
+        $("#PosPaymentType").on('change', function () {
+            var itemId = $("#PosPaymentType").val();
+
+            if (itemId == 4) {
+                $("#divBankId").show();
+                $("#divInstallment").show();
+
+                $('#Installment').attr('required');
+                $('#BankId').attr('required');
+            }
+            else {
+                $("#divBankId").hide();
+                $("#divInstallment").hide();
+
+                $('#Installment').removeAttr('required');
+                $('#BankId').removeAttr('required');
+            }
+        });
     </script>
+    <script src="/assets/js/jquery.mask.js"></script>
+    <script>
+        $(function () {
+            $('.shiftbegintime').mask('00:00');
+            $('.hour').mask('00:00');
+            $('.hourfull').mask('00:00:00');
+            $('.shiftdate').mask('0000-00-00');
+            $('.postcode').mask('00000-000');
+            $('.money').mask("#.##0,00", { reverse: true });
+            $('.money4').mask("#.##0,0000", { reverse: true });
+        });
+        function SumExchangeRate() {
+            var amount = $("#Amount").val().replace('.', '').replace(',', '.');
+            var toamount = $("#ToAmount").val().replace('.', '').replace(',', '.');
+            var rate = parseFloat(toamount) / parseFloat(amount) || 0.0000;
+            $("#SaleExchangeRate").val(rate.toFixed(4).toString());
+        };
+        function SumExchangeToAmount() {
+            var amount = $("#Amount").val().replace('.', '').replace(',', '.');
+            var rate = $("#SaleExchangeRate").val().replace('.', '').replace(',', '.');
+            var toamount = parseFloat(amount) * parseFloat(rate) || 0.00;
+            $("#ToAmount").val(toamount.toFixed(2).toString());
+        };</script>
+
+
 </body>
 </html>

@@ -1797,87 +1797,6 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddTicketSalePosDiscount", saleIDParameter, indexOffItemParameter, discountTextParameter, discountTypeParameter, discountValueParameter, orjinParameter);
         }
     
-        public virtual int AddTicketSalePosPayment(Nullable<long> saleID, Nullable<int> paymentType, string paymentSubType, Nullable<int> numberOfInstallment, Nullable<double> paymentAmount, string paymentDesc, Nullable<int> paymentCurrency, string paymentInfo, string paymentDateTime, Nullable<System.DateTime> paymentDate, Nullable<System.TimeSpan> paymentTime, Nullable<short> bankBKMID, string batchNumber, string stanNumber, string merchantID, string terminalID, string referenceNumber, string authorizationCode, string maskedPan)
-        {
-            var saleIDParameter = saleID.HasValue ?
-                new ObjectParameter("SaleID", saleID) :
-                new ObjectParameter("SaleID", typeof(long));
-    
-            var paymentTypeParameter = paymentType.HasValue ?
-                new ObjectParameter("PaymentType", paymentType) :
-                new ObjectParameter("PaymentType", typeof(int));
-    
-            var paymentSubTypeParameter = paymentSubType != null ?
-                new ObjectParameter("PaymentSubType", paymentSubType) :
-                new ObjectParameter("PaymentSubType", typeof(string));
-    
-            var numberOfInstallmentParameter = numberOfInstallment.HasValue ?
-                new ObjectParameter("NumberOfInstallment", numberOfInstallment) :
-                new ObjectParameter("NumberOfInstallment", typeof(int));
-    
-            var paymentAmountParameter = paymentAmount.HasValue ?
-                new ObjectParameter("PaymentAmount", paymentAmount) :
-                new ObjectParameter("PaymentAmount", typeof(double));
-    
-            var paymentDescParameter = paymentDesc != null ?
-                new ObjectParameter("PaymentDesc", paymentDesc) :
-                new ObjectParameter("PaymentDesc", typeof(string));
-    
-            var paymentCurrencyParameter = paymentCurrency.HasValue ?
-                new ObjectParameter("PaymentCurrency", paymentCurrency) :
-                new ObjectParameter("PaymentCurrency", typeof(int));
-    
-            var paymentInfoParameter = paymentInfo != null ?
-                new ObjectParameter("PaymentInfo", paymentInfo) :
-                new ObjectParameter("PaymentInfo", typeof(string));
-    
-            var paymentDateTimeParameter = paymentDateTime != null ?
-                new ObjectParameter("PaymentDateTime", paymentDateTime) :
-                new ObjectParameter("PaymentDateTime", typeof(string));
-    
-            var paymentDateParameter = paymentDate.HasValue ?
-                new ObjectParameter("PaymentDate", paymentDate) :
-                new ObjectParameter("PaymentDate", typeof(System.DateTime));
-    
-            var paymentTimeParameter = paymentTime.HasValue ?
-                new ObjectParameter("PaymentTime", paymentTime) :
-                new ObjectParameter("PaymentTime", typeof(System.TimeSpan));
-    
-            var bankBKMIDParameter = bankBKMID.HasValue ?
-                new ObjectParameter("BankBKMID", bankBKMID) :
-                new ObjectParameter("BankBKMID", typeof(short));
-    
-            var batchNumberParameter = batchNumber != null ?
-                new ObjectParameter("BatchNumber", batchNumber) :
-                new ObjectParameter("BatchNumber", typeof(string));
-    
-            var stanNumberParameter = stanNumber != null ?
-                new ObjectParameter("StanNumber", stanNumber) :
-                new ObjectParameter("StanNumber", typeof(string));
-    
-            var merchantIDParameter = merchantID != null ?
-                new ObjectParameter("MerchantID", merchantID) :
-                new ObjectParameter("MerchantID", typeof(string));
-    
-            var terminalIDParameter = terminalID != null ?
-                new ObjectParameter("TerminalID", terminalID) :
-                new ObjectParameter("TerminalID", typeof(string));
-    
-            var referenceNumberParameter = referenceNumber != null ?
-                new ObjectParameter("ReferenceNumber", referenceNumber) :
-                new ObjectParameter("ReferenceNumber", typeof(string));
-    
-            var authorizationCodeParameter = authorizationCode != null ?
-                new ObjectParameter("AuthorizationCode", authorizationCode) :
-                new ObjectParameter("AuthorizationCode", typeof(string));
-    
-            var maskedPanParameter = maskedPan != null ?
-                new ObjectParameter("MaskedPan", maskedPan) :
-                new ObjectParameter("MaskedPan", typeof(string));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddTicketSalePosPayment", saleIDParameter, paymentTypeParameter, paymentSubTypeParameter, numberOfInstallmentParameter, paymentAmountParameter, paymentDescParameter, paymentCurrencyParameter, paymentInfoParameter, paymentDateTimeParameter, paymentDateParameter, paymentTimeParameter, bankBKMIDParameter, batchNumberParameter, stanNumberParameter, merchantIDParameter, terminalIDParameter, referenceNumberParameter, authorizationCodeParameter, maskedPanParameter);
-        }
-    
         public virtual ObjectResult<GetLocationEmployees_Result> GetLocationEmployees(Nullable<int> locationID)
         {
             var locationIDParameter = locationID.HasValue ?
@@ -2171,6 +2090,113 @@ namespace ActionForce.Entity
                 new ObjectParameter("PaidAmount", typeof(double));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddTicketSalePosReceipt", saleIDParameter, receiptNoParameter, zNoParameter, ekuNoParameter, transDateTimeParameter, receiptDateParameter, receiptTimeParameter, ticketTypeParameter, paidAmountParameter);
+        }
+    
+        public virtual int AddTicketSalePosPayment(Nullable<long> saleID, Nullable<int> paymentType, string paymentSubType, Nullable<int> numberOfInstallment, Nullable<double> paymentAmount, string paymentDesc, Nullable<int> paymentCurrency, string paymentInfo, string paymentDateTime, Nullable<System.DateTime> paymentDate, Nullable<System.TimeSpan> paymentTime, Nullable<short> bankBKMID, string batchNumber, string stanNumber, string merchantID, string terminalID, string referenceNumber, string authorizationCode, string maskedPan, Nullable<bool> fromPosTerminal)
+        {
+            var saleIDParameter = saleID.HasValue ?
+                new ObjectParameter("SaleID", saleID) :
+                new ObjectParameter("SaleID", typeof(long));
+    
+            var paymentTypeParameter = paymentType.HasValue ?
+                new ObjectParameter("PaymentType", paymentType) :
+                new ObjectParameter("PaymentType", typeof(int));
+    
+            var paymentSubTypeParameter = paymentSubType != null ?
+                new ObjectParameter("PaymentSubType", paymentSubType) :
+                new ObjectParameter("PaymentSubType", typeof(string));
+    
+            var numberOfInstallmentParameter = numberOfInstallment.HasValue ?
+                new ObjectParameter("NumberOfInstallment", numberOfInstallment) :
+                new ObjectParameter("NumberOfInstallment", typeof(int));
+    
+            var paymentAmountParameter = paymentAmount.HasValue ?
+                new ObjectParameter("PaymentAmount", paymentAmount) :
+                new ObjectParameter("PaymentAmount", typeof(double));
+    
+            var paymentDescParameter = paymentDesc != null ?
+                new ObjectParameter("PaymentDesc", paymentDesc) :
+                new ObjectParameter("PaymentDesc", typeof(string));
+    
+            var paymentCurrencyParameter = paymentCurrency.HasValue ?
+                new ObjectParameter("PaymentCurrency", paymentCurrency) :
+                new ObjectParameter("PaymentCurrency", typeof(int));
+    
+            var paymentInfoParameter = paymentInfo != null ?
+                new ObjectParameter("PaymentInfo", paymentInfo) :
+                new ObjectParameter("PaymentInfo", typeof(string));
+    
+            var paymentDateTimeParameter = paymentDateTime != null ?
+                new ObjectParameter("PaymentDateTime", paymentDateTime) :
+                new ObjectParameter("PaymentDateTime", typeof(string));
+    
+            var paymentDateParameter = paymentDate.HasValue ?
+                new ObjectParameter("PaymentDate", paymentDate) :
+                new ObjectParameter("PaymentDate", typeof(System.DateTime));
+    
+            var paymentTimeParameter = paymentTime.HasValue ?
+                new ObjectParameter("PaymentTime", paymentTime) :
+                new ObjectParameter("PaymentTime", typeof(System.TimeSpan));
+    
+            var bankBKMIDParameter = bankBKMID.HasValue ?
+                new ObjectParameter("BankBKMID", bankBKMID) :
+                new ObjectParameter("BankBKMID", typeof(short));
+    
+            var batchNumberParameter = batchNumber != null ?
+                new ObjectParameter("BatchNumber", batchNumber) :
+                new ObjectParameter("BatchNumber", typeof(string));
+    
+            var stanNumberParameter = stanNumber != null ?
+                new ObjectParameter("StanNumber", stanNumber) :
+                new ObjectParameter("StanNumber", typeof(string));
+    
+            var merchantIDParameter = merchantID != null ?
+                new ObjectParameter("MerchantID", merchantID) :
+                new ObjectParameter("MerchantID", typeof(string));
+    
+            var terminalIDParameter = terminalID != null ?
+                new ObjectParameter("TerminalID", terminalID) :
+                new ObjectParameter("TerminalID", typeof(string));
+    
+            var referenceNumberParameter = referenceNumber != null ?
+                new ObjectParameter("ReferenceNumber", referenceNumber) :
+                new ObjectParameter("ReferenceNumber", typeof(string));
+    
+            var authorizationCodeParameter = authorizationCode != null ?
+                new ObjectParameter("AuthorizationCode", authorizationCode) :
+                new ObjectParameter("AuthorizationCode", typeof(string));
+    
+            var maskedPanParameter = maskedPan != null ?
+                new ObjectParameter("MaskedPan", maskedPan) :
+                new ObjectParameter("MaskedPan", typeof(string));
+    
+            var fromPosTerminalParameter = fromPosTerminal.HasValue ?
+                new ObjectParameter("FromPosTerminal", fromPosTerminal) :
+                new ObjectParameter("FromPosTerminal", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddTicketSalePosPayment", saleIDParameter, paymentTypeParameter, paymentSubTypeParameter, numberOfInstallmentParameter, paymentAmountParameter, paymentDescParameter, paymentCurrencyParameter, paymentInfoParameter, paymentDateTimeParameter, paymentDateParameter, paymentTimeParameter, bankBKMIDParameter, batchNumberParameter, stanNumberParameter, merchantIDParameter, terminalIDParameter, referenceNumberParameter, authorizationCodeParameter, maskedPanParameter, fromPosTerminalParameter);
+        }
+    
+        public virtual ObjectResult<string> GetLocationCurrentPosTerminal(Nullable<int> locationID)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetLocationCurrentPosTerminal", locationIDParameter);
+        }
+    
+        public virtual int SetTicketSalePosSend(Nullable<long> orderID, Nullable<bool> isSend)
+        {
+            var orderIDParameter = orderID.HasValue ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(long));
+    
+            var isSendParameter = isSend.HasValue ?
+                new ObjectParameter("IsSend", isSend) :
+                new ObjectParameter("IsSend", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetTicketSalePosSend", orderIDParameter, isSendParameter);
         }
     }
 }

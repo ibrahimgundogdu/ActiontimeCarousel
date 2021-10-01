@@ -16,6 +16,11 @@ namespace ActionForce.PosLocation.Controllers
             SalesControlModel model = new SalesControlModel();
             model.Authentication = this.AuthenticationData;
 
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
             var DocumentDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone).Date;
 
             model.SaleSummary = Db.VTicketSaleSummary.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == DocumentDate).ToList();
@@ -33,6 +38,11 @@ namespace ActionForce.PosLocation.Controllers
 
             SalesControlModel model = new SalesControlModel();
             model.Authentication = this.AuthenticationData;
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
 
             model.DocumentDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone).Date;
 
@@ -333,14 +343,212 @@ namespace ActionForce.PosLocation.Controllers
             }
 
             model.TicketSaleSummary = Db.VTicketSaleSummary.FirstOrDefault(x => x.ID == id);
-
+            
             model.TicketSalePosReceipt = Db.TicketSalePosReceipt.FirstOrDefault(x => x.SaleID == id);
             model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => x.SaleID == id).ToList();
+
+            model.IsManuel = model.TicketSalePosPaymentSummary.Any(x => x.FromPosTerminal == false);
+
             model.PaymentAmount = model.TicketSaleSummary.Total;
             model.BalanceAmount = model.TicketSaleSummary.BalanceAmount;
-
+            model.PosPaymentType = Db.PosPaymentType.Where(x => x.IsManual == true).ToList();
+            model.Banks = Db.Bank.Where(x => x.EFTCode != null).ToList();
 
             return View(model);
         }
+
+        [HttpPost]
+        public ActionResult AddPayment(PaymentFormModel form)
+        {
+            SalesControlModel model = new SalesControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            if (form == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var order = Db.VTicketSaleSummary.FirstOrDefault(x => x.ID == form.OrderID);
+
+            if (order != null)
+            {
+                try
+                {
+                    DateTime receiptdate = form.ReceiptDate;
+                    TimeSpan receipttime = (TimeSpan)form.ReceiptTime.TimeOfDay;
+
+                    var paymentdate = Convert.ToDateTime(receiptdate.Add(receipttime));
+
+                    var receiptid = Db.AddTicketSalePosReceipt(order.ID, form.ReceiptNo, form.ZNo, form.EkuNo, paymentdate.ToString(), paymentdate.Date, paymentdate.TimeOfDay, 1, order.Total);
+
+                    if (!string.IsNullOrEmpty(form.PaymentAmount))
+                    {
+                        var amount = PosManager.GetStringToAmount(form.PaymentAmount);
+
+                        if (amount <= 0)
+                        {
+                            model.Result.Message = "Tutar 0 veya daha küçük olamaz!";
+                            TempData["Result"] = model.Result;
+
+                            return RedirectToAction("Detail", new { id = form.OrderID });
+                        }
+
+                        if (amount > order.BalanceAmount)
+                        {
+                            amount = order.BalanceAmount;
+                        }
+
+                        var paymenttype = form.PosPaymentType;
+                        var subpaymenttype = 0;
+                        var noi = 0;
+                        short bkmid = 0;
+
+                        if (form.PosPaymentType == 4)
+                        {
+                            subpaymenttype = 1;
+                            noi = form.Installment ?? 1;
+                            bkmid = (short?)form.BankId ?? (short)46;
+                        }
+
+                        var paymentid = Db.AddTicketSalePosPayment(order.ID, paymenttype, subpaymenttype.ToString(), noi, amount, null, 949, null, paymentdate.ToString(), paymentdate.Date, paymentdate.TimeOfDay, bkmid, "0", "0", null, null, null, null, "", false);
+
+                        var posStatusID = 3;
+
+                        var paidamount = Db.GetTicketSalePaymentAmount(form.OrderID).FirstOrDefault() ?? (double)0;
+                        if (paidamount < order.Total)
+                        {
+                            posStatusID = 1;
+                        }
+
+                        using (ActionTimeEntities _db = new ActionTimeEntities())
+                        {
+                            _db.CheckLocationPosTicketSale(order.ID);
+                        }
+
+                        var sicilno = Db.GetLocationCurrentPosTerminal(model.Authentication.CurrentLocation.ID).FirstOrDefault();
+
+                        Db.SetTicketSaleStatus(order.ID, posStatusID, sicilno);
+                        Db.SetTicketSalePosSend(order.ID, false);
+
+                        model.Result.IsSuccess = true;
+                        model.Result.Message = "Ödeme Bilgisi Eklendi";
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    model.Result.Message = "Ödeme Bilgisi Eklenemedi : " + ex.Message;
+                }
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", new { id = form.OrderID });
+        }
+
+
+        [HttpPost]
+        public ActionResult EditPayment(PaymentFormModel form)
+        {
+            SalesControlModel model = new SalesControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            if (form == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var order = Db.VTicketSaleSummary.FirstOrDefault(x => x.ID == form.OrderID);
+            var receipt = Db.TicketSalePosReceipt.FirstOrDefault(x => x.ID == form.PosReceiptID);
+
+            if (order != null && receipt != null)
+            {
+                try
+                {
+                    DateTime receiptdate = form.ReceiptDate;
+                    TimeSpan receipttime = (TimeSpan)form.ReceiptTime.TimeOfDay;
+                    var paymentdate = Convert.ToDateTime(receiptdate.Add(receipttime));
+
+                    if (order.IsSendPosTerminal == false)
+                    {
+                        receipt.EkuNo = form.EkuNo;
+                        receipt.ReceiptNo = form.ReceiptNo;
+                        receipt.ZNo = form.ZNo;
+                        receipt.TransDateTime = $"{paymentdate.ToString("yyyy-MM-dd")}T{paymentdate.ToString("hh:mm:ss:fffffff")}";
+                        receipt.ReceiptDate = paymentdate.Date;
+                        receipt.ReceiptTime = paymentdate.TimeOfDay;
+
+                        Db.SaveChanges();
+                    }
+                    
+                    if (!string.IsNullOrEmpty(form.PaymentAmount))
+                    {
+                        var amount = PosManager.GetStringToAmount(form.PaymentAmount);
+
+                        if (amount <= 0)
+                        {
+                            model.Result.Message = "Tutar 0 veya daha küçük olamaz!";
+                            TempData["Result"] = model.Result;
+
+                            return RedirectToAction("Detail", new { id = form.OrderID });
+                        }
+
+                        if (amount > order.BalanceAmount)
+                        {
+                            amount = order.BalanceAmount;
+                        }
+
+                        var paymenttype = form.PosPaymentType;
+                        var subpaymenttype = 0;
+                        var noi = 0;
+                        short bkmid = 0;
+
+                        if (form.PosPaymentType == 4)
+                        {
+                            subpaymenttype = 1;
+                            noi = form.Installment ?? 1;
+                            bkmid = (short?)form.BankId ?? (short)46;
+                        }
+
+                        var paymentid = Db.AddTicketSalePosPayment(order.ID, paymenttype, subpaymenttype.ToString(), noi, amount, null, 949, null, paymentdate.ToString(), paymentdate.Date, paymentdate.TimeOfDay, bkmid, "0", "0", null, null, null, null, "", false);
+
+                        var posStatusID = 3;
+
+                        var paidamount = Db.GetTicketSalePaymentAmount(form.OrderID).FirstOrDefault() ?? (double)0;
+                        if (paidamount < order.Total)
+                        {
+                            posStatusID = 1;
+                        }
+
+                        using (ActionTimeEntities _db = new ActionTimeEntities())
+                        {
+                            _db.CheckLocationPosTicketSale(order.ID);
+                        }
+
+                        var sicilno = Db.GetLocationCurrentPosTerminal(model.Authentication.CurrentLocation.ID).FirstOrDefault();
+
+                        Db.SetTicketSaleStatus(order.ID, posStatusID, sicilno);
+                        Db.SetTicketSalePosSend(order.ID, false);
+
+                        model.Result.IsSuccess = true;
+                        model.Result.Message = "Ödeme Bilgisi Eklendi";
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    model.Result.Message = "Ödeme Bilgisi Eklenemedi : " + ex.Message;
+                }
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", new { id = form.OrderID });
+        }
+
+
+
+
+
     }
 }

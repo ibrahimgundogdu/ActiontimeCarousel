@@ -22,11 +22,13 @@ namespace ActionForce.PosLocation
         public List<PosPaymentSubType> PosPaymentSubType { get; set; }
         public List<Entity.Environment> Environments { get; set; }
         public List<Currency> Currencys { get; set; }
+        public List<Bank> Banks { get; set; }
         public List<VTicketSaleDocumentAction> DocumentActions { get; set; }
         public DateTime DocumentDate { get; set; }
         public string DocumentNumbers { get; set; }
         public double PaymentAmount { get; set; }
         public double BalanceAmount { get; set; }
+        public bool IsManuel { get; set; } = false;
 
     }
 }

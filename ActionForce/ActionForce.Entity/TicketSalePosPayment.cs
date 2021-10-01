@@ -36,5 +36,6 @@ namespace ActionForce.Entity
         public string MaskedPan { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
         public string Currency { get; set; }
+        public Nullable<bool> FromPosTerminal { get; set; }
     }
 }

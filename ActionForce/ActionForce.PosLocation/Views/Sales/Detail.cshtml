@@ -14,6 +14,7 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link rel="stylesheet" href="/assets/scss/global.css">
 </head>
 <body>
@@ -91,7 +92,7 @@
                                 }
                                 else
                                 {
-                                    <span>Kalan: @(Model.TicketSaleSummary.BalanceAmount.ToString("N2")) ₺</span>
+                                    <a href="/Sales/Payment/@(Model.TicketSale.ID)" class="btn btn-info">Kalan: @(Model.TicketSaleSummary.BalanceAmount.ToString("N2")) ₺</a>
                                 }
 
 
@@ -265,5 +266,34 @@
                 });
             });
         });</script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+    <script type="text/javascript">
+        // Default Configuration
+        $(document).ready(function () {
+            toastr.options = {
+                'closeButton': true,
+                'debug': false,
+                'newestOnTop': false,
+                'progressBar': false,
+                'positionClass': 'toast-top-center',
+                'preventDuplicates': false,
+                'showDuration': '1000',
+                'hideDuration': '1000',
+                'timeOut': '5000',
+                'extendedTimeOut': '1000',
+                'showEasing': 'swing',
+                'hideEasing': 'linear',
+                'showMethod': 'fadeIn',
+                'hideMethod': 'fadeOut',
+            }
+
+            @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message))
+            {
+                @(Html.Raw( $"toastr.info('{Model.Result.Message}')" ));
+            }
+        });
+
+    </script>
 </body>
 </html>

@@ -269,6 +269,7 @@
     <Compile Include="Models\FormModels\FormResultDocument.cs" />
     <Compile Include="Models\FormModels\FormResultState.cs" />
     <Compile Include="Models\FormModels\FormSalaryPay.cs" />
+    <Compile Include="Models\FormModels\PaymentFormModel.cs" />
     <Compile Include="Models\FormModels\RefundFormModel.cs" />
     <Compile Include="Models\FormModels\SerialFormModel.cs" />
     <Compile Include="Models\FormModels\UserLoginFormModel.cs" />

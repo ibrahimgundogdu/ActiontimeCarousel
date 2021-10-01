@@ -25,5 +25,6 @@ namespace ActionForce.Entity
         public string Sign { get; set; }
         public string BankName { get; set; }
         public long ID { get; set; }
+        public Nullable<bool> FromPosTerminal { get; set; }
     }
 }
