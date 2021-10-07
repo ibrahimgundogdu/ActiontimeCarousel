@@ -11,6 +11,9 @@ namespace ActionForce.PosLocation
         public List<VTicketSaleSummary> SaleSummary { get; set; }
         public VTicketSaleSummary TicketSaleSummary { get; set; }
         public TicketSale TicketSale { get; set; }
+        public TicketSaleRows TicketSaleRow { get; set; }
+        public Price Price { get; set; }
+        public TicketProduct TicketProduct { get; set; }
         public DocumentExpenseSlip ExpenseSlip { get; set; }
         public Customer Customer { get; set; }
         public TicketSalePosReceipt TicketSalePosReceipt { get; set; }
@@ -21,6 +24,7 @@ namespace ActionForce.PosLocation
         public List<PosPaymentType> PosPaymentType { get; set; }
         public List<PosPaymentSubType> PosPaymentSubType { get; set; }
         public List<Entity.Environment> Environments { get; set; }
+        public List<Price> Prices { get; set; }
         public List<Currency> Currencys { get; set; }
         public List<Bank> Banks { get; set; }
         public List<VTicketSaleDocumentAction> DocumentActions { get; set; }
@@ -29,6 +33,6 @@ namespace ActionForce.PosLocation
         public double PaymentAmount { get; set; }
         public double BalanceAmount { get; set; }
         public bool IsManuel { get; set; } = false;
-
+        public string PosStatusName { get; set; }
     }
 }

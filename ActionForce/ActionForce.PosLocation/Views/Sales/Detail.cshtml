@@ -98,6 +98,21 @@
 
                             </span>
                         </li>
+                        <li>
+                            <span>SİPARİŞ SİLME</span>
+                            <span>
+                                @if (Model.TicketSale.PosStatusID == 0)
+                                {
+                                    <a href="/Sales/Remove/@(Model.TicketSale.ID)" class="btn btn-danger" onclick="return confirm('Silmek istediğinize emin misiniz?')">SİL</a>
+                                }
+                                else
+                                {
+                                    <a href="javascript:;" class="btn btn-danger">Silinemez: @(Model.TicketSalePosStatus.FirstOrDefault(x=> x.ID == Model.TicketSale.PosStatusID)?.PosStatusName)</a>
+                                }
+
+
+                            </span>
+                        </li>
                     </ul>
 
                     <h1>SİPARİŞ DETAYI</h1>
@@ -112,14 +127,15 @@
                             @foreach (var item in Model.TicketSaleRows)
                             {
                                 <tr>
-                                    <td>@(item.ProductName)</td>
+                                    <td><a href="/Sales/RowDetail/@(item.ID)?OrderID=@(Model.TicketSale.ID)" class="btn btn-light" style="font-weight:500; color:darkblue;">@(item.ProductName)</a></td>
                                     <td>@(item.TaxRate) %</td>
-                                    <td>@(item.SaleRowUnit) dk</td>
-                                    <td>@(item.RowTotal?.ToString("N2")) @(item.Sign)</td>
+                                    <td>@(item.SaleRowUnit) dk @(item.ExtraUnit > 0 ? $" + {item.ExtraUnit} dk, {item.ExtraPrice?.ToString("N2")} {item.Sign}":"")</td>
+                                    <td><a href="/Sales/RowDetail/@(item.ID)?OrderID=@(Model.TicketSale.ID)" class="btn btn-light" style="font-weight:500; color:darkblue;">@(item.RowTotal?.ToString("N2")) @(item.Sign)</a></td>
                                 </tr>
                             }
                         </table>
                     </div>
+
                     <h1>TAHSİLAT DETAYI</h1>
                     <div class="table-responsive">
                         <table>
@@ -189,7 +205,7 @@
                                 <a href="/Sales/Refund/@(Model.TicketSale.ID)">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z" /></svg>
                                     <!-- payment -->
-                                    <span>İPTAL</span>
+                                    <span>İADE ET</span>
                                 </a>
                             }
                             else
@@ -197,7 +213,7 @@
                                 <a href="/Sales/Refund/@(Model.TicketSale.ID)">
                                     <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path fill="currentColor" d="M16,5l-1.42,1.42l-1.59-1.59V16h-1.98V4.83L9.42,6.42L8,5l4-4L16,5z M20,10v11c0,1.1-0.9,2-2,2H6c-1.11,0-2-0.9-2-2V10 c0-1.11,0.89-2,2-2h3v2H6v11h12V10h-3V8h3C19.1,8,20,8.89,20,10z" /></svg>
                                     <!-- payment -->
-                                    <span>İADE</span>
+                                    <span>İADE ET</span>
                                 </a>
                             }
 

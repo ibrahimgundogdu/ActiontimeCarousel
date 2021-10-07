@@ -481,7 +481,5 @@ namespace ActionForce.PosLocation.Controllers
         }
 
 
-
-
     }
 }

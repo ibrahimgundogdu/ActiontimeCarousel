@@ -27,5 +27,7 @@ namespace ActionForce.Entity
         public Nullable<double> TaxRate { get; set; }
         public string Sign { get; set; }
         public string ProductName { get; set; }
+        public Nullable<int> ExtraUnit { get; set; }
+        public Nullable<double> ExtraPrice { get; set; }
     }
 }

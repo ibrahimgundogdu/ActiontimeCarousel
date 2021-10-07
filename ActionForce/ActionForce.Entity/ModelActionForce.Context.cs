@@ -330,6 +330,7 @@ namespace ActionForce.Entity
         public virtual DbSet<CustomerCard> CustomerCard { get; set; }
         public virtual DbSet<CustomerScorePointActions> CustomerScorePointActions { get; set; }
         public virtual DbSet<CustomerScorePointRules> CustomerScorePointRules { get; set; }
+        public virtual DbSet<ScoreItem> ScoreItem { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -2197,6 +2198,49 @@ namespace ActionForce.Entity
                 new ObjectParameter("IsSend", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetTicketSalePosSend", orderIDParameter, isSendParameter);
+        }
+    
+        public virtual int RemoveTicketSale(Nullable<long> saleID, Nullable<int> employeeID, Nullable<System.DateTime> updateDate, string updateIP)
+        {
+            var saleIDParameter = saleID.HasValue ?
+                new ObjectParameter("SaleID", saleID) :
+                new ObjectParameter("SaleID", typeof(long));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            var updateDateParameter = updateDate.HasValue ?
+                new ObjectParameter("UpdateDate", updateDate) :
+                new ObjectParameter("UpdateDate", typeof(System.DateTime));
+    
+            var updateIPParameter = updateIP != null ?
+                new ObjectParameter("UpdateIP", updateIP) :
+                new ObjectParameter("UpdateIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("RemoveTicketSale", saleIDParameter, employeeIDParameter, updateDateParameter, updateIPParameter);
+        }
+    
+        public virtual int SetTicketSaleAmount(Nullable<long> saleID)
+        {
+            var saleIDParameter = saleID.HasValue ?
+                new ObjectParameter("SaleID", saleID) :
+                new ObjectParameter("SaleID", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetTicketSaleAmount", saleIDParameter);
+        }
+    
+        public virtual int SetTicketSalePosStatusUpgrade(Nullable<long> orderID, Nullable<int> statusID)
+        {
+            var orderIDParameter = orderID.HasValue ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(long));
+    
+            var statusIDParameter = statusID.HasValue ?
+                new ObjectParameter("StatusID", statusID) :
+                new ObjectParameter("StatusID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetTicketSalePosStatusUpgrade", orderIDParameter, statusIDParameter);
         }
     }
 }

@@ -343,7 +343,7 @@ namespace ActionForce.PosLocation.Controllers
             }
 
             model.TicketSaleSummary = Db.VTicketSaleSummary.FirstOrDefault(x => x.ID == id);
-            
+
             model.TicketSalePosReceipt = Db.TicketSalePosReceipt.FirstOrDefault(x => x.SaleID == id);
             model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => x.SaleID == id).ToList();
 
@@ -480,7 +480,7 @@ namespace ActionForce.PosLocation.Controllers
 
                         Db.SaveChanges();
                     }
-                    
+
                     if (!string.IsNullOrEmpty(form.PaymentAmount))
                     {
                         var amount = PosManager.GetStringToAmount(form.PaymentAmount);
@@ -546,9 +546,139 @@ namespace ActionForce.PosLocation.Controllers
             return RedirectToAction("Detail", new { id = form.OrderID });
         }
 
+        public ActionResult Remove(long? id)
+        {
+            if (id <= 0 || id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            SalesControlModel model = new SalesControlModel();
+            model.Authentication = this.AuthenticationData;
+            var updateDate = DateTime.UtcNow.AddHours(3);
+
+            var sale = Db.TicketSale.FirstOrDefault(x => x.ID == id);
+
+            if (sale != null && sale.PosStatusID == 0)
+            {
+                Db.RemoveTicketSale(id, model.Authentication.CurrentEmployee.EmployeeID, updateDate, PosManager.GetIPAddress());
+
+                model.Result.IsSuccess = true;
+                model.Result.Message = "Sipariş Kaldırıldı";
+                TempData["Result"] = model.Result;
+
+                return RedirectToAction("Index");
+            }
+            else
+            {
+
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Sipariş Bulunamadı veya Uygun Değil";
+
+                TempData["Result"] = model.Result;
+
+                return RedirectToAction("Detail", new { id });
+            }
+
+        }
+
+        public ActionResult RowDetail(long? id, long? OrderID)
+        {
+            if (id <= 0 || id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            SalesControlModel model = new SalesControlModel();
+            model.Authentication = this.AuthenticationData;
+            var updateDate = DateTime.UtcNow.AddHours(3);
+
+            model.TicketSalePosStatus = Db.TicketSalePosStatus.ToList();
+            model.TicketSaleRow = Db.TicketSaleRows.FirstOrDefault(x => x.ID == id && x.SaleID == OrderID);
+            model.TicketSale = Db.TicketSale.FirstOrDefault(x => x.ID == OrderID);
+            if (model.TicketSaleRow != null)
+            {
+                model.Price = Db.Price.FirstOrDefault(x => x.ID == model.TicketSaleRow.PriceID);
+
+                if (model.Price != null)
+                {
+                    model.TicketProduct = Db.TicketProduct.FirstOrDefault(x => x.ID == model.Price.ProductID);
+                    model.Prices = Db.Price.Where(x => x.PriceCategoryID == model.Price.PriceCategoryID && x.Unit >= model.Price.Unit).ToList();
+                }
+                else
+                {
+                    model.TicketProduct = new TicketProduct();
+                    model.Prices = new List<Price>();
+                }
+            }
+            else
+            {
+                model.Price = new Price();
+            }
 
 
+            model.PosStatusName = model.TicketSalePosStatus.FirstOrDefault(x => x.ID == model.TicketSale.PosStatusID)?.PosStatusName;
+
+            return View(model);
+        }
 
 
+        [HttpPost]
+        public ActionResult EditSaleRow(SaleRowFormModel form)
+        {
+            SalesControlModel model = new SalesControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            if (form == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            var ticketSaleRow = Db.TicketSaleRows.FirstOrDefault(x => x.ID == form.OrderRowID && x.SaleID == form.OrderID);
+            var ticketSale = Db.TicketSale.FirstOrDefault(x => x.ID == form.OrderID);
+
+            if (ticketSale != null && ticketSaleRow != null)
+            {
+                try
+                {
+                    DateTime receiptdate = form.ReceiptDate;
+                    TimeSpan receipttime = (TimeSpan)form.ReceiptTime;
+                    var saledate = Convert.ToDateTime(receiptdate.Add(receipttime));
+
+                    var price = Db.Price.FirstOrDefault(x => x.ID == ticketSaleRow.PriceID);
+                    ticketSaleRow.Date = saledate;
+
+                    if (ticketSaleRow.PriceID != form.PriceID)
+                    {
+                        price = Db.Price.FirstOrDefault(x => x.ID == form.PriceID);
+                    }
+
+                    ticketSaleRow.PriceID = price.ID;
+                    ticketSaleRow.Unit = price.Unit;
+                    ticketSaleRow.ExtraUnit = form.ExtraUnit;
+                    ticketSaleRow.Price = price.Price1.Value;
+                    ticketSaleRow.ExtraPrice = (form.ExtraUnit * price.ExtraMultiple);
+                    ticketSaleRow.Description = form.Description;
+
+                    Db.SaveChanges();
+
+                    Db.SetTicketSaleAmount(form.OrderID);
+
+                    Db.SetTicketSalePosStatusUpgrade(form.OrderID, 1);
+
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = "Satır Güncellendi";
+
+                }
+                catch (Exception ex)
+                {
+                    model.Result.Message = "Satır Güncellenemedi : " + ex.Message;
+                }
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", new { id = form.OrderID });
+        }
     }
 }

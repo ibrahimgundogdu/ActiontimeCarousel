@@ -1,5 +1,8 @@
-﻿using System;
+﻿using ActionForce.PosLocation.Models.Dapper;
+using ActionForce.PosLocation.Models.DataModel;
+using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -31,7 +34,8 @@ namespace ActionForce.PosLocation.Controllers
         public ActionResult SetLocation(string SicilNumber)
         {
             SetupControlModel model = new SetupControlModel();
-            model.Result = new Result() {
+            model.Result = new Result()
+            {
                 IsSuccess = false,
                 Message = string.Empty
             };
@@ -48,7 +52,7 @@ namespace ActionForce.PosLocation.Controllers
 
             //Response.SetCookie(locationCookie);
 
-            var posTerminal = Db.VLocationPosTerminal.Where(x => (x.SicilNumber == SicilNumber  || x.SerialNumber == SicilNumber) && x.IsMaster == true && x.IsActive == true).OrderByDescending(x=> x.RecordDate).FirstOrDefault();
+            var posTerminal = Db.VLocationPosTerminal.Where(x => (x.SicilNumber == SicilNumber || x.SerialNumber == SicilNumber) && x.IsMaster == true && x.IsActive == true).OrderByDescending(x => x.RecordDate).FirstOrDefault();
 
             if (posTerminal != null)
             {
@@ -63,7 +67,7 @@ namespace ActionForce.PosLocation.Controllers
                 model.Result.Message = "Sicil Numarasına Ait Bir Lokasyon Bulunamadı!";
                 model.PosTerminalSerial = SicilNumber;
             }
-            
+
 
             return View(model);
         }
@@ -234,7 +238,7 @@ namespace ActionForce.PosLocation.Controllers
             SetupControlModel model = new SetupControlModel();
             PosManager manager = new PosManager();
 
-            var employeecheck = manager.GetLocationEmployeesToday(form.LocationID).Where(x=> x.EmployeeID == form.EmployeeID).FirstOrDefault();
+            var employeecheck = manager.GetLocationEmployeesToday(form.LocationID).Where(x => x.EmployeeID == form.EmployeeID).FirstOrDefault();
             if (employeecheck != null)
             {
                 string password = PosManager.makeMD5(form.Password.Trim());
@@ -257,7 +261,7 @@ namespace ActionForce.PosLocation.Controllers
 
                     Response.SetCookie(authCookie);
 
-                    return RedirectToAction("Index","Default");
+                    return RedirectToAction("Index", "Default");
                 }
                 else
                 {
@@ -308,6 +312,125 @@ namespace ActionForce.PosLocation.Controllers
 
             return RedirectToAction("Employee");
         }
+
+
+        // Document
+        public ActionResult Document()
+        {
+            HttpCookie authCookie = System.Web.HttpContext.Current.Request.Cookies["AuthenticationToken"];
+
+            if (authCookie != null)
+            {
+                string[] token = authCookie.Value.Split('|');
+
+                string locUID = token[0];
+                string empUID = token[1];
+
+                var rotativa = new Rotativa.ActionAsPdf("DocumentCatalog", new { LocationUID = locUID, EmployeeUID = empUID });
+                rotativa.PageOrientation = Rotativa.Options.Orientation.Portrait;
+                rotativa.IsLowQuality = false;
+
+                return rotativa;
+            }
+
+            return null;
+        }
+
+        [AllowAnonymous]
+        public ActionResult DocumentCatalog(string LocationUID, string EmployeeUID)
+        {
+            EnvelopeDataModel model = new EnvelopeDataModel();
+            DataService service = new DataService();
+            List<EnvelopeCheck> checkList = new List<EnvelopeCheck>();
+
+            model.Location = service.GetLocation(LocationUID);
+            model.Employee = service.GetEmployee(EmployeeUID);
+            model.ShiftDate = service.GetDateInfo(model.Location.LocalDate.Value.Date);
+            model.DayResult = service.GetDayResult(model.Location.LocationID, model.Location.LocalDate.Value.Date);
+
+            //if (model.DayResult == null)
+            //{
+            //    model.DayResult = service.CreateDayResult(model.Location.LocationID, model.Location.LocalDate.Value.Date);
+            //}
+
+
+
+
+
+            // var documentManager = new DocumentManager(
+            //    new ProcessEmployee()
+            //    {
+            //        ID = model.Authentication.CurrentEmployee.EmployeeID,
+            //        FullName = model.Authentication.CurrentEmployee.FullName  //http://localhost:44305/Setup/Document
+            //    },
+            //    PosManager.GetIPAddress(),
+            //    new ProcessCompany()
+            //    {
+            //        ID = 2,
+            //        Name = "UFE GRUP",
+            //        Currency = "TRL",
+            //        TimeZone = 3
+            //    }
+            //);
+
+            // PosManager manager = new PosManager();
+
+            // if (TempData["Result"] != null)
+            // {
+            //     model.Result = TempData["Result"] as Result;
+            // }
+
+            // var location = Db.Location.FirstOrDefault(x => x.LocationID == model.Authentication.CurrentLocation.ID);
+
+            // model.DocumentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(3));
+            // model.CurrentDayResult = Db.DayResult.FirstOrDefault(x => x.Date == model.DocumentDate && x.LocationID == model.Authentication.CurrentLocation.ID);
+            // model.EmployeeActions = Db.VEmployeeCashActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ProcessDate == model.DocumentDate.Date).ToList();
+            // model.EmployeeShifts = documentManager.GetEmployeeShifts(model.DocumentDate, model.Authentication.CurrentLocation.ID);
+            // //model.TicketList = manager.GetLocationTicketsToday(model.DocumentDate, location).Where(x => x.StatusID != 4).ToList();
+            // model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
+            // model.LocationBalance = manager.GetLocationSaleBalanceToday(model.DocumentDate, location);
+            // model.Summary = manager.GetLocationSummary(model.DocumentDate, model.Authentication.CurrentEmployee, location);
+            // model.CashRecordSlip = Db.DocumentCashRecorderSlip.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == model.DocumentDate).OrderByDescending(x => x.RecordDate).ToList();
+
+            // if (model.CurrentDayResult != null)
+            // {
+            //     model.ResultDocuments = Db.DayResultDocuments.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == model.DocumentDate && x.ResultID == model.CurrentDayResult.ID).ToList();
+            // }
+
+            // model.ResultStates = Db.ResultState.Where(x => x.StateID <= 2).ToList();
+
+            // model.Schedule = Db.LocationSchedule.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ShiftDate == location.LocalDate).Select(x => new LocationScheduleInfo()
+            // {
+            //     LocationID = x.LocationID.Value,
+            //     ScheduleDate = x.ShiftDate.Value,
+            //     DateStart = x.ShiftDateStart.Value,
+            //     DateEnd = x.ShiftdateEnd,
+            //     Duration = x.ShiftDuration
+            // }).FirstOrDefault();
+
+            // model.Shift = Db.LocationShift.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ShiftDate == location.LocalDate).Select(x => new LocationShiftInfo()
+            // {
+            //     LocationID = x.LocationID,
+            //     ScheduleDate = x.ShiftDate,
+            //     DateStart = x.ShiftDateStart.Value,
+            //     DateEnd = x.ShiftDateFinish,
+            //     Duration = x.ShiftDuration
+            // }).FirstOrDefault();
+
+
+
+
+
+
+
+
+
+
+
+            return View();
+        }
+
+
 
     }
 }

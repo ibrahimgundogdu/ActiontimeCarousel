@@ -83,7 +83,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.RefundTypes" Width="1.5" PointX="30.75" PointY="30.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ResultState" Width="1.5" PointX="7.75" PointY="16.25" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Resultstatus" Width="1.5" PointX="31.75" PointY="1.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Role" Width="1.5" PointX="3" PointY="2.625" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.Role" Width="1.5" PointX="2.75" PointY="2.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.RoleGroup" Width="1.5" PointX="3" PointY="6.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.RoleGroupMembers" Width="1.5" PointX="31.75" PointY="4.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.RoleGroupPermissions" Width="1.5" PointX="9.25" PointY="5.125" />
@@ -332,6 +332,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerCard" Width="1.5" PointX="0.625" PointY="18.125" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerScorePointActions" Width="1.5" PointX="14.875" PointY="0.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerScorePointRules" Width="1.5" PointX="4.625" PointY="0.5" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ScoreItem" Width="1.5" PointX="6.1372810984669623" PointY="15.60959834587276" />
         
         
         

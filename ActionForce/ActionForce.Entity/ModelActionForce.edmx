@@ -3111,6 +3111,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ChannelName" Type="nvarchar" MaxLength="50" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="ScoreItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ScoreItemName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="smallint" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="Serials">
           <Key>
             <PropertyRef Name="ID" />
@@ -6432,6 +6441,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleRowSummary' does
           <Property Name="TaxRate" Type="float" />
           <Property Name="Sign" Type="nvarchar" MaxLength="1" />
           <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ExtraUnit" Type="int" />
+          <Property Name="ExtraPrice" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleSummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -7151,6 +7162,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="TerminalID" Type="int" Mode="In" />
           <Parameter Name="LocationID" Type="int" Mode="In" />
         </Function>
+        <Function Name="RemoveTicketSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SaleID" Type="bigint" Mode="In" />
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+          <Parameter Name="UpdateDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateIP" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="SetBasketCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
@@ -7171,11 +7188,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
         </Function>
         <Function Name="SetShiftDates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="SetTicketSaleAmount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SaleID" Type="bigint" Mode="In" />
+        </Function>
         <Function Name="SetTicketSalePosSend" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OrderID" Type="bigint" Mode="In" />
           <Parameter Name="IsSend" Type="bit" Mode="In" />
         </Function>
         <Function Name="SetTicketSalePosStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderID" Type="bigint" Mode="In" />
+          <Parameter Name="StatusID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SetTicketSalePosStatusUpgrade" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OrderID" Type="bigint" Mode="In" />
           <Parameter Name="StatusID" Type="int" Mode="In" />
         </Function>
@@ -7402,6 +7426,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="SalaryCategory" EntityType="Self.SalaryCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SalaryType" EntityType="Self.SalaryType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SaleChannel" EntityType="Self.SaleChannel" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ScoreItem" EntityType="Self.ScoreItem" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Serials" EntityType="Self.Serials" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SerialsHistory" EntityType="Self.SerialsHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SetcardParameter" EntityType="Self.SetcardParameter" Schema="dbo" store:Type="Tables" />
@@ -9691,7 +9716,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketSaleRowSummary].[SaleRowUnit] AS [SaleRowUnit], 
     [VTicketSaleRowSummary].[TaxRate] AS [TaxRate], 
     [VTicketSaleRowSummary].[Sign] AS [Sign], 
-    [VTicketSaleRowSummary].[ProductName] AS [ProductName]
+    [VTicketSaleRowSummary].[ProductName] AS [ProductName], 
+    [VTicketSaleRowSummary].[ExtraUnit] AS [ExtraUnit], 
+    [VTicketSaleRowSummary].[ExtraPrice] AS [ExtraPrice]
     FROM [dbo].[VTicketSaleRowSummary] AS [VTicketSaleRowSummary]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VTicketSaleSummary" EntityType="Self.VTicketSaleSummary" store:Type="Views" store:Schema="dbo">
@@ -10699,6 +10726,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImport Name="SetTicketSalePosSend">
             <Parameter Name="OrderID" Mode="In" Type="Int64" />
             <Parameter Name="IsSend" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <EntitySet Name="ScoreItem" EntityType="db293_ActionTimeDbModel.ScoreItem" />
+          <FunctionImport Name="RemoveTicketSale">
+            <Parameter Name="SaleID" Mode="In" Type="Int64" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="UpdateDate" Mode="In" Type="DateTime" />
+            <Parameter Name="UpdateIP" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SetTicketSaleAmount">
+          <Parameter Name="SaleID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="SetTicketSalePosStatusUpgrade">
+            <Parameter Name="OrderID" Mode="In" Type="Int64" />
+            <Parameter Name="StatusID" Mode="In" Type="Int32" />
           </FunctionImport>
         
           </EntityContainer>
@@ -17442,6 +17483,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="TaxRate" Type="Double" />
           <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
           <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ExtraUnit" Type="Int32" />
+          <Property Name="ExtraPrice" Type="Double" />
         </EntityType>
         <EntityType Name="VTicketSaleDocumentAction">
           <Key>
@@ -17849,6 +17892,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="QuantityFrom" Type="Double" />
           <Property Name="QuantityTo" Type="Double" />
           <Property Name="DateRecord" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="ScoreItem">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ScoreItemName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="Int16" />
+          <Property Name="IsActive" Type="Boolean" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -24322,6 +24374,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VTicketSaleRowSummary">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketSaleRowSummary">
               <MappingFragment StoreEntitySet="VTicketSaleRowSummary">
+                <ScalarProperty Name="ExtraPrice" ColumnName="ExtraPrice" />
+                <ScalarProperty Name="ExtraUnit" ColumnName="ExtraUnit" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
                 <ScalarProperty Name="Sign" ColumnName="Sign" />
                 <ScalarProperty Name="TaxRate" ColumnName="TaxRate" />
@@ -24774,6 +24828,19 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImportMapping FunctionImportName="AddTicketSalePosPayment" FunctionName="db293_ActionTimeDbModel.Store.AddTicketSalePosPayment" />
           <FunctionImportMapping FunctionImportName="GetLocationCurrentPosTerminal" FunctionName="db293_ActionTimeDbModel.Store.GetLocationCurrentPosTerminal" />
           <FunctionImportMapping FunctionImportName="SetTicketSalePosSend" FunctionName="db293_ActionTimeDbModel.Store.SetTicketSalePosSend" />
+          <EntitySetMapping Name="ScoreItem">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.ScoreItem">
+              <MappingFragment StoreEntitySet="ScoreItem">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="ScoreItemName" ColumnName="ScoreItemName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="RemoveTicketSale" FunctionName="db293_ActionTimeDbModel.Store.RemoveTicketSale" />
+          <FunctionImportMapping FunctionImportName="SetTicketSaleAmount" FunctionName="db293_ActionTimeDbModel.Store.SetTicketSaleAmount" />
+          <FunctionImportMapping FunctionImportName="SetTicketSalePosStatusUpgrade" FunctionName="db293_ActionTimeDbModel.Store.SetTicketSalePosStatusUpgrade" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

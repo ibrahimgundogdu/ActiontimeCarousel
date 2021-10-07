@@ -160,17 +160,39 @@ namespace ActionForce.PosService.Controllers
 
                                 detail.SaleItemList = new List<SaleItem>();
                                 var orderrows = Db.VAdisyonRowsSummary.Where(x => x.SaleID == order.ID).ToList();
-                                foreach (var item in orderrows)
+
+                                var paidamount = Db.GetTicketSalePaymentAmount(order.ID).FirstOrDefault() ?? 0;
+                                var soldamount = orderrows.Sum(x => x.Total) ?? 0;
+
+                                if (paidamount >= 0  && (soldamount - paidamount) > 0)
                                 {
+                                    var orderrow = orderrows.FirstOrDefault();
+                                    var unitamount = orderrows.Sum(x => x.Total) ?? 0 - paidamount;
+
                                     detail.SaleItemList.Add(new SaleItem()
                                     {
-                                        Quantity = item.Quantity,
+                                        Quantity = 1,
                                         QuantityType = 1,
-                                        TaxRate = Convert.ToInt32(item.TaxRate * 100),
-                                        Title = item.TicketProductName,
-                                        UnitAmount = Convert.ToInt64(item.Total * 100)
+                                        TaxRate = Convert.ToInt32(orderrow.TaxRate * 100),
+                                        Title = orderrow.TicketProductName,
+                                        UnitAmount = Convert.ToInt64((soldamount - paidamount) * 100)
                                     });
                                 }
+                                else
+                                {
+                                    foreach (var item in orderrows)
+                                    {
+                                        detail.SaleItemList.Add(new SaleItem()
+                                        {
+                                            Quantity = item.Quantity,
+                                            QuantityType = 1,
+                                            TaxRate = Convert.ToInt32(item.TaxRate * 100),
+                                            Title = item.TicketProductName,
+                                            UnitAmount = Convert.ToInt64(item.Total * 100)
+                                        });
+                                    }
+                                }
+                                
 
 
                                 detail.PaymentList = null;
