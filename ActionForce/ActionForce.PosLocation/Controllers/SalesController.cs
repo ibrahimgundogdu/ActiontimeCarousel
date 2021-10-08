@@ -110,7 +110,6 @@ namespace ActionForce.PosLocation.Controllers
             return View(model);
         }
 
-
         [HttpPost]
         public JsonResult GetCustomerInfo(string id)
         {
@@ -142,7 +141,6 @@ namespace ActionForce.PosLocation.Controllers
 
             return Json(customer, JsonRequestBehavior.AllowGet);
         }
-
 
         [HttpPost]
         public ActionResult AddRefund(RefundFormModel form)
@@ -446,7 +444,6 @@ namespace ActionForce.PosLocation.Controllers
             return RedirectToAction("Detail", new { id = form.OrderID });
         }
 
-
         [HttpPost]
         public ActionResult EditPayment(PaymentFormModel form)
         {
@@ -531,13 +528,13 @@ namespace ActionForce.PosLocation.Controllers
                         Db.SetTicketSalePosSend(order.ID, false);
 
                         model.Result.IsSuccess = true;
-                        model.Result.Message = "Ödeme Bilgisi Eklendi";
+                        model.Result.Message = "Ödeme Bilgisi Güncellendi";
 
                     }
                 }
                 catch (Exception ex)
                 {
-                    model.Result.Message = "Ödeme Bilgisi Eklenemedi : " + ex.Message;
+                    model.Result.Message = "Ödeme Bilgisi Güncellenemedi : " + ex.Message;
                 }
             }
 
@@ -621,7 +618,6 @@ namespace ActionForce.PosLocation.Controllers
 
             return View(model);
         }
-
 
         [HttpPost]
         public ActionResult EditSaleRow(SaleRowFormModel form)
