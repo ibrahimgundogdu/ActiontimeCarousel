@@ -117,85 +117,63 @@
                     </div>
 
                     <div class="head">
-                        <h1>Biletler ve Satışlar</h1>
+                        <h1>Bilet Satış</h1>
                     </div>
                     <div class="table-responsive">
                         <table cellpadding="0" cellspacing="0" class="tickets-sales-cash">
                             <tr>
-                                <td class="bg-cash">Dk.</td>
-                                <td class="bg-cash">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
-                                <td class="bg-cash" colspan="2">Satış</td>
-                                <td class="bg-cash" colspan="2">İade</td>
-                                <td class="bg-cash">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
+                                <td class="bg-cash">Bilet - Dk</td>
+                                <td class="bg-cash" style="text-align:right">Fiyat</td>
+                                <td class="bg-cash" style="text-align:right">Ad.</td>
+                                <td class="bg-cash" style="text-align:right">Satış</td>
+                                <td class="bg-cash" style="text-align:right">İptal</td>
+                                <td class="bg-cash" style="text-align:right">İade</td>
+                                <td class="bg-cash" style="text-align:right">Satış(₺)</td>
                             </tr>
 
-                            @foreach (var item in Model.PriceList.OrderBy(x => x.Unit).ToList())
+                            @foreach (var item in Model.Prices.OrderBy(x => x.Unit).ToList())
                             {
-                                var saletotal = Model.TicketList.Where(x => x.PayMethodID == 1 && x.Unit == item.Unit && (new List<int> { 1, 2, 3 }).Contains(x.StatusID)).ToList();
-                                var salereftotal = Model.TicketList.Where(x => x.PayMethodID == 1 && x.Unit == item.Unit && (new List<int> { 5 }).Contains(x.StatusID)).ToList();
+                                var saletotal = Model.TicketSaleRowSummary.Where(x => x.PriceID == item.ID && (new List<int> { 3, 4, 5 }).Contains(x.PosStatusID.Value)).ToList();
+                                var sale = Model.TicketSaleRowSummary.Where(x => x.PriceID == item.ID && x.PosStatusID == 3).ToList();
+                                var cancel = Model.TicketSaleRowSummary.Where(x => x.PriceID == item.ID && x.PosStatusID == 4).ToList();
+                                var refund = Model.TicketSaleRowSummary.Where(x => x.PriceID == item.ID && x.PosStatusID == 5).ToList();
 
                                 <tr>
-                                    <td>@(item.Unit)</td>
-                                    <td>@(item.Price?.ToString("N2"))</td>
-                                    <th class="color-cash font-bold">@(saletotal.Count)</th>
-                                    <th class="color-cash font-bold">@(saletotal.Sum(x=> x.Total).ToString("N2"))</th>
-                                    <th class="color-red font-bold">@(salereftotal.Count)</th>
-                                    <th class="color-red font-bold">@(salereftotal.Sum(x=> x.Total).ToString("N2"))</th>
-                                    <th class="font-bold">@((saletotal.Sum(x => x.Total) - salereftotal.Sum(x => x.Total)).ToString("N2") )</th>
+                                    <td>@(item.ProductName) <br />@(item.Unit) Dk.</td>
+                                    <td style="text-align:right">@(item.Price?.ToString("N2")) ₺</td>
+                                    <th class="color-cash font-bold" style="text-align:right">@(saletotal.Sum(x=> x.Quantity))</th>
+                                    <th class="color-cash font-bold" style="text-align:right">@(sale.Sum(x=> x.Quantity))</th>
+                                    <th class="color-cash font-bold" style="text-align:right">@(cancel.Sum(x=> x.Quantity))</th>
+                                    <th class="color-cash font-bold" style="text-align:right">@(refund.Sum(x=> x.Quantity))</th>
+                                    <th class="font-bold" style="text-align:right">@((sale.Sum(x => x.Total))?.ToString("N2") ) ₺</th>
                                 </tr>
                             }
                             <tr>
-                                <td class="color-cash font-bold" colspan="6">Nakit</td>
-                                <td class="font-bold">@(Model.LocationBalance.CashTotal.ToString("N2"))</td>
+                                <td class="color-cash font-bold" colspan="6"></td>
+                                <td class="font-bold">@((Model.TicketSaleRowSummary.Where(x=> x.PosStatusID == 3).Sum(x => x.Total))?.ToString("N2")) ₺</td>
                             </tr>
                         </table>
-                        <table cellpadding="0" cellspacing="0" class="tickets-sales-credit">
-                            <tr>
-                                <td class="bg-credit">Dk.</td>
-                                <td class="bg-credit">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
-                                <td class="bg-credit" colspan="2">Satış</td>
-                                <td class="bg-credit" colspan="2">İade</td>
-                                <td class="bg-credit">@(Model.PriceList.FirstOrDefault()?.Sign)</td>
-                            </tr>
-                            @foreach (var item in Model.PriceList.OrderBy(x => x.Unit).ToList())
-                            {
-                                var saletotal = Model.TicketList.Where(x => x.PayMethodID == 2 && x.Unit == item.Unit && (new List<int> { 1, 2, 3 }).Contains(x.StatusID)).ToList();
-                                var salereftotal = Model.TicketList.Where(x => x.PayMethodID == 2 && x.Unit == item.Unit && (new List<int> { 5 }).Contains(x.StatusID)).ToList();
 
-                                <tr>
-                                    <td>@(item.Unit)</td>
-                                    <td>@(item.Price?.ToString("N2"))</td>
-                                    <th class="color-credit font-bold">@(saletotal.Count)</th>
-                                    <th class="color-credit font-bold">@(saletotal.Sum(x=> x.Total).ToString("N2"))</th>
-                                    <th class="color-red font-bold">@(salereftotal.Count)</th>
-                                    <th class="color-red font-bold">@(salereftotal.Sum(x=> x.Total).ToString("N2"))</th>
-                                    <th class="font-bold">@((saletotal.Sum(x => x.Total) - salereftotal.Sum(x => x.Total)).ToString("N2") )</th>
-                                </tr>
-                            }
-                            <tr>
-                                <td class="color-credit font-bold" colspan="6">Kredi Kartı</td>
-                                <td class="font-bold">@(Model.LocationBalance.CreditTotal.ToString("N2"))</td>
-                            </tr>
-                        </table>
                         <table cellpadding="0" cellspacing="0" class="tickets-sales-total">
                             <tr>
-                                <td class="color-cash">Nakit</td>
-                                <td class="color-credit">Kredi Kartı</td>
-                                <td class="font-bold">Hasılat</td>
+                                <td style="text-align:left;">Tahsilat</td>
+                                <td class="color-cash" style="text-align:right;">Nakit</td>
+                                <td class="color-credit" style="text-align:right;">Kart</td>
+                                <td class="font-bold" style="text-align:right;">Toplam</td>
                             </tr>
                             <tr>
-                                <th class="font-bold">@($"{Model.LocationBalance?.CashTotal.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
-                                <th class="font-bold">@($"{Model.LocationBalance?.CreditTotal.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
-                                <th class="font-bold">@($"{Model.LocationBalance?.Balance.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
+                                <th style="text-align:left;">Fiş</th>
+                                <th class="font-bold" style="text-align:right;">@(Model.TicketSalePaymentSummary.Where(x => x.PaymentType == 1 && x.PosStatusID == 3).Sum(x => x.PaymentAmount)?.ToString("N2")) ₺</th>
+                                <th class="font-bold" style="text-align:right;">@(Model.TicketSalePaymentSummary.Where(x => x.PaymentType == 4 && x.PosStatusID == 3).Sum(x => x.PaymentAmount)?.ToString("N2")) ₺</th>
+                                <th class="font-bold" style="text-align:right;">@(Model.TicketSalePaymentSummary.Where(x => x.PosStatusID == 3).Sum(x => x.PaymentAmount)?.ToString("N2")) ₺</th>
+                            </tr>
+                            <tr>
+                                <th style="text-align:left;">Kasa</th>
+                                <th class="font-bold" style="text-align:right;">@((Model.CashActions.Sum(x => x.Amount) ?? 0).ToString("N2")) ₺</th>
+                                <th class="font-bold" style="text-align:right;">@((Model.BankActions.Sum(x => x.Amount) ?? 0).ToString("N2")) ₺</th>
+                                <th class="font-bold" style="text-align:right;">@(((Model.CashActions.Sum(x => x.Amount) ?? 0) + (Model.BankActions.Sum(x => x.Amount) ?? 0 )).ToString("N2")) ₺</th>
                             </tr>
                         </table>
-                    </div>
-
-                    <div class="head">
-                        <h1>Günlük Kasa Özeti</h1>
-                    </div>
-                    <div>
-                        @{ Html.RenderPartial("_PartialCashSummary", Model.Summary);}
                     </div>
 
 

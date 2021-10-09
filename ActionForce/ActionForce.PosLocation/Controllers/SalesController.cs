@@ -11,7 +11,7 @@ namespace ActionForce.PosLocation.Controllers
     public class SalesController : BaseController
     {
         // GET: Sales
-        public ActionResult Index()
+        public ActionResult Index(string id)
         {
             SalesControlModel model = new SalesControlModel();
             model.Authentication = this.AuthenticationData;
@@ -21,9 +21,32 @@ namespace ActionForce.PosLocation.Controllers
                 model.Result = TempData["Result"] as Result;
             }
 
-            var DocumentDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone).Date;
+            DateTime DocumentDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone).Date;
+
+            if (!string.IsNullOrEmpty(id))
+            {
+                DateTime.TryParse(id, out DocumentDate);
+            }
+
+            model.DocumentDate = DocumentDate;
 
             model.SaleSummary = Db.VTicketSaleSummary.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == DocumentDate).ToList();
+
+            model.TicketSaleRowSummary = Db.VTicketSaleSaleRowSummary.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == DocumentDate).ToList();
+
+            List<int> priceCategorieIds = model.TicketSaleRowSummary.Select(x => x.PriceCategoryID.Value).Distinct().ToList();
+            List<int> priceIds = model.TicketSaleRowSummary.Select(x => x.PriceID).Distinct().ToList();
+
+            model.VPrices = Db.VPrice.Where(x => priceCategorieIds.Contains(x.PriceCategoryID.Value)).ToList();
+            model.VPrices.AddRange(Db.VPrice.Where(x => priceIds.Contains(x.ID)).ToList());
+            model.VPrices = model.VPrices.Distinct().ToList();
+
+            int[] cashtypes = new int[] { 10, 21, 24, 28 }.ToArray();
+            int[] cardtypes = new int[] { 1, 3, 5 }.ToArray();
+
+            model.TicketSalePaymentSummary = Db.VTicketSalePaymentSummary.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == DocumentDate).ToList();
+            model.CashActions = Db.CashActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ProcessDate == DocumentDate && cashtypes.Contains(x.CashActionTypeID.Value)).ToList();
+            model.BankActions = Db.BankActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ProcessDate == DocumentDate && cardtypes.Contains(x.BankActionTypeID.Value)).ToList();
 
 
             return View(model);
@@ -63,6 +86,41 @@ namespace ActionForce.PosLocation.Controllers
             return View(model);
         }
 
+        public ActionResult Control(string id)
+        {
+            SalesControlModel model = new SalesControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            DateTime DocumentDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone).Date;
+            int counter = 0;
+
+            try
+            {
+                
+
+                if (!string.IsNullOrEmpty(id))
+                {
+                    DateTime.TryParse(id, out DocumentDate);
+                }
+
+                var SaleIds = Db.TicketSale.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == DocumentDate).Select(x=> x.ID).Distinct().ToList();
+
+                foreach (var item in SaleIds)
+                {
+                    Db.CheckLocationPosTicketSale(item);
+                    counter++;
+                }
+
+            }
+            catch (Exception)
+            {
+            }
+
+            model.Result.Message = $"{counter} adet Satış kontrol edildi";
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Index", new { id = DocumentDate.ToString("yyyy-MM-dd") });
+        }
         public ActionResult CheckDocument(long? id)
         {
             if (id <= 0 || id == null)

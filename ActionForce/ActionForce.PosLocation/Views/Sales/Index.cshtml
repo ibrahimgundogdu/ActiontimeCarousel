@@ -29,7 +29,7 @@
                 </div>
                 <div class="logo">
                     <a href="javascript:;">UFE POS</a>
-                    <div class="date">@(DateTime.Now.ToLongDateString())</div>
+                    <div class="date">@(Model.DocumentDate.ToLongDateString())</div>
                 </div>
                 <div class="homepage">
                     <a href="/">
@@ -45,37 +45,95 @@
                 @{ Html.RenderPartial("_PartialMenu");}
             </div><!-- side-menu -->
             <div class="content">
-                <div class="table-responsive row" style="margin-bottom: 20px;">
-                    <table class="table table-responsive">
-                        <tbody>
-                            <tr>
-                                <th style="width: 200px; text-align: left;">İşlem Hacmi</th>
-                                <td style="width: 10px; text-align: center;">:</td>
-                                <td style="width: 150px; text-align:right;">@(Model.SaleSummary.Sum(x=> x.Total).ToString("N2"))</td>
-                            </tr>
-                            <tr>
-                                <th style="width: 200px; text-align: left;">Tahsilatlı Satış</th>
-                                <td style="width: 10px; text-align: center;">:</td>
-                                <td style="width: 150px; text-align: right;">@(Model.SaleSummary.Where(x=> x.PosStatusID == 3).Sum(x=> x.Total).ToString("N2"))</td>
-                            </tr>
-                            <tr>
-                                <th style="width: 200px; text-align: left;">Bekleyen</th>
-                                <td style="width: 10px; text-align: center;">:</td>
-                                <td style="width: 150px; text-align: right;">@(Model.SaleSummary.Where(x=> x.PosStatusID <= 2).Sum(x=> x.Total).ToString("N2"))</td>
-                            </tr>
-                            <tr>
-                                <th style="width: 200px; text-align: left;">İptal</th>
-                                <td style="width: 10px; text-align: center;">:</td>
-                                <td style="width: 150px; text-align: right;">@(Model.SaleSummary.Where(x=> x.PosStatusID == 4).Sum(x=> x.Total).ToString("N2"))</td>
-                            </tr>
-                            <tr>
-                                <th style="width: 200px; text-align: left;">İade </th>
-                                <td style="width: 10px; text-align: center;">:</td>
-                                <td style="width: 150px; text-align: right;">@(Model.SaleSummary.Where(x=> x.PosStatusID == 5).Sum(x=> x.Total).ToString("N2"))</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="card-transactions" style="padding: 0px 20px 0px;">
+
+                    <div class="head-date">
+                        <div class="yesterday">
+                            <a href="/Sales/Index/@(Model.DocumentDate.AddDays(-1).ToString("yyyy-MM-dd"))">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                            </a>
+                        </div>
+                        <div class="today">
+                            <a href="/Sales/Index/@(DateTime.Now.ToString("yyyy-MM-dd"))">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+                            </a>
+                        </div>
+                        <div class="tomorrow">
+                            <a href="/Sales/Index/@(Model.DocumentDate.AddDays(1).ToString("yyyy-MM-dd"))">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="table-responsive" style="margin-bottom: 20px;">
+                        <div class="table-responsive">
+                            <table cellpadding="0" cellspacing="0" class="tickets-sales-cash">
+                                <tr>
+                                    <td class="bg-cash">Bilet - Dk</td>
+                                    <td class="bg-cash" style="text-align:right">Fiyat</td>
+                                    <td class="bg-cash" style="text-align:right">Ad.</td>
+                                    <td class="bg-cash" style="text-align:right">Satış</td>
+                                    <td class="bg-cash" style="text-align:right">İptal</td>
+                                    <td class="bg-cash" style="text-align:right">İade</td>
+                                    <td class="bg-cash" style="text-align:right">Satış(₺)</td>
+                                </tr>
+
+                                @foreach (var item in Model.VPrices.OrderBy(x => x.Unit).ToList())
+                                {
+                                    var saletotal = Model.TicketSaleRowSummary.Where(x => x.PriceID == item.ID && (new List<int> { 3, 4, 5 }).Contains(x.PosStatusID.Value)).ToList();
+                                    var sale = Model.TicketSaleRowSummary.Where(x => x.PriceID == item.ID && x.PosStatusID == 3).ToList();
+                                    var cancel = Model.TicketSaleRowSummary.Where(x => x.PriceID == item.ID && x.PosStatusID == 4).ToList();
+                                    var refund = Model.TicketSaleRowSummary.Where(x => x.PriceID == item.ID && x.PosStatusID == 5).ToList();
+
+                                    <tr>
+                                        <td>@(item.ProductName) <br />@(item.Unit) Dk.</td>
+                                        <td style="text-align:right">@(item.Price?.ToString("N2")) ₺</td>
+                                        <th class="color-cash font-bold" style="text-align:right">@(saletotal.Sum(x=> x.Quantity))</th>
+                                        <th class="color-cash font-bold" style="text-align:right">@(sale.Sum(x=> x.Quantity))</th>
+                                        <th class="color-cash font-bold" style="text-align:right">@(cancel.Sum(x=> x.Quantity))</th>
+                                        <th class="color-cash font-bold" style="text-align:right">@(refund.Sum(x=> x.Quantity))</th>
+                                        <th class="font-bold" style="text-align:right">@((sale.Sum(x => x.Total))?.ToString("N2") ) ₺</th>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td class="color-cash font-bold" colspan="5"></td>
+                                    <td class="font-bold" colspan="2">@((Model.TicketSaleRowSummary.Where(x=> x.PosStatusID == 3).Sum(x => x.Total))?.ToString("N2")) ₺</td>
+                                </tr>
+                            </table>
+
+                            <table cellpadding="0" cellspacing="0" class="tickets-sales-total">
+                                <tr>
+                                    <td style="text-align:left;">Tahsilat</td>
+                                    <td class="color-cash" style="text-align:right;">Nakit</td>
+                                    <td class="color-credit" style="text-align:right;">Kart</td>
+                                    <td class="font-bold" style="text-align:right;">Toplam</td>
+                                </tr>
+                                <tr>
+                                    <th style="text-align:left;">Fiş</th>
+                                    <th class="font-bold" style="text-align:right;">@(Model.TicketSalePaymentSummary.Where(x => x.PaymentType == 1 && x.PosStatusID == 3).Sum(x => x.PaymentAmount)?.ToString("N2")) ₺</th>
+                                    <th class="font-bold" style="text-align:right;">@(Model.TicketSalePaymentSummary.Where(x => x.PaymentType == 4 && x.PosStatusID == 3).Sum(x => x.PaymentAmount)?.ToString("N2")) ₺</th>
+                                    <th class="font-bold" style="text-align:right;">@(Model.TicketSalePaymentSummary.Where(x => x.PosStatusID == 3).Sum(x => x.PaymentAmount)?.ToString("N2")) ₺</th>
+                                </tr>
+                                <tr>
+                                    <th style="text-align:left;">Kasa</th>
+                                    <th class="font-bold" style="text-align:right;">@((Model.CashActions.Sum(x => x.Amount) ?? 0).ToString("N2")) ₺</th>
+                                    <th class="font-bold" style="text-align:right;">@((Model.BankActions.Sum(x => x.Amount) ?? 0).ToString("N2")) ₺</th>
+                                    <th class="font-bold" style="text-align:right;">@(((Model.CashActions.Sum(x => x.Amount) ?? 0) + (Model.BankActions.Sum(x => x.Amount) ?? 0 )).ToString("N2")) ₺</th>
+                                </tr>
+                                <tr>
+                                    <th style="text-align:left;" colspan="3">Kontrol</th>
+                                    <th style="text-align:right;">
+                                        <a href="/Sales/Control/@(Model.DocumentDate.ToString("yyyy-MM-dd"))">
+                                            <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><g><rect fill="none" height="24" width="24" /></g><g><g><path d="M19,3H5C3.9,3,3,3.9,3,5v14c0,1.1,0.9,2,2,2h14c1.1,0,2-0.9,2-2V5C21,3.9,20.1,3,19,3z M19,19H5V5h14V19z" /><rect height="1.5" width="5" x="6.25" y="7.72" /><rect height="1.5" width="5" x="13" y="15.75" /><rect height="1.5" width="5" x="13" y="13.25" /><polygon points="8,18 9.5,18 9.5,16 11.5,16 11.5,14.5 9.5,14.5 9.5,12.5 8,12.5 8,14.5 6,14.5 6,16 8,16" /><polygon points="14.09,10.95 15.5,9.54 16.91,10.95 17.97,9.89 16.56,8.47 17.97,7.06 16.91,6 15.5,7.41 14.09,6 13.03,7.06 14.44,8.47 13.03,9.89" /></g></g></svg>
+                                        </a>
+                                    </th>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
+
+
                 <div class="sales-list">
                     <ul>
                         @foreach (var item in Model.SaleSummary.OrderByDescending(x => x.RecordDate).ToList())
@@ -99,7 +157,7 @@
                                             <!-- mobile icon -->
                                         </div>
                                         <div class="num">@(item.OrderNumber)</div>
-                                        <div class="datetime">@(item.FullName) @(item.RecordDate)</div>
+                                        <div class="datetime">@(item.FullName) <br />@(item.RecordDate)</div>
                                     </div>
                                     <div class="piece-name">
                                         <div class="piece">@(item.Quantity) Adet.</div>

@@ -331,6 +331,8 @@ namespace ActionForce.Entity
         public virtual DbSet<CustomerScorePointActions> CustomerScorePointActions { get; set; }
         public virtual DbSet<CustomerScorePointRules> CustomerScorePointRules { get; set; }
         public virtual DbSet<ScoreItem> ScoreItem { get; set; }
+        public virtual DbSet<VTicketSaleSaleRowSummary> VTicketSaleSaleRowSummary { get; set; }
+        public virtual DbSet<VTicketSalePaymentSummary> VTicketSalePaymentSummary { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

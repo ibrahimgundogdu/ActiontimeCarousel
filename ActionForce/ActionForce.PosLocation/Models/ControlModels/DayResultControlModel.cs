@@ -25,5 +25,13 @@ namespace ActionForce.PosLocation
 
         public LocationScheduleInfo Schedule { get; set; }
         public LocationShiftInfo Shift { get; set; }
+
+        public List<VTicketSaleSaleRowSummary> TicketSaleRowSummary { get; set; }
+        public List<VPrice> Prices { get; set; }
+
+        public List<VTicketSalePaymentSummary> TicketSalePaymentSummary { get; set; }
+        public List<CashActions> CashActions { get; set; }
+        public List<BankActions> BankActions { get; set; }
+
     }
 }

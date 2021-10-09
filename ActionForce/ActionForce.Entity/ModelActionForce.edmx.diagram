@@ -333,6 +333,8 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerScorePointActions" Width="1.5" PointX="14.875" PointY="0.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerScorePointRules" Width="1.5" PointX="4.625" PointY="0.5" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ScoreItem" Width="1.5" PointX="6.1372810984669623" PointY="15.60959834587276" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleSaleRowSummary" Width="1.5" PointX="25.75" PointY="1.875" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSalePaymentSummary" Width="1.5" PointX="4.7618685722173506" PointY="23.271300431001606" />
         
         
         

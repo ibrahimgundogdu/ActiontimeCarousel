@@ -11,7 +11,7 @@ namespace ActionForce.PosLocation.Controllers
 {
     public class DayResultController : BaseController
     {
-        public ActionResult Index()
+        public ActionResult Index(string id)
         {
             DayResultControlModel model = new DayResultControlModel();
             model.Authentication = this.AuthenticationData;
@@ -40,15 +40,21 @@ namespace ActionForce.PosLocation.Controllers
             }
 
             var location = Db.Location.FirstOrDefault(x => x.LocationID == model.Authentication.CurrentLocation.ID);
+            var ResultDate = location.LocalDate.Value;
+            if (!string.IsNullOrEmpty(id))
+            {
+                DateTime.TryParse(id, out ResultDate);
+            }
 
-            model.DocumentDate = PosManager.GetLocationScheduledDate(model.Authentication.CurrentLocation.ID, DateTime.UtcNow.AddHours(3));
+
+            model.DocumentDate = ResultDate;
             model.CurrentDayResult = Db.DayResult.FirstOrDefault(x => x.Date == model.DocumentDate && x.LocationID == model.Authentication.CurrentLocation.ID);
             model.EmployeeActions = Db.VEmployeeCashActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ProcessDate == model.DocumentDate.Date).ToList();
             model.EmployeeShifts = documentManager.GetEmployeeShifts(model.DocumentDate, model.Authentication.CurrentLocation.ID);
             model.TicketList = manager.GetLocationTicketsToday(model.DocumentDate, location).Where(x => x.StatusID != 4).ToList();
-            model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
-            model.LocationBalance = manager.GetLocationSaleBalanceToday(model.DocumentDate, location);
-            model.Summary = manager.GetLocationSummary(model.DocumentDate, model.Authentication.CurrentEmployee, location);
+            //model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
+            //model.LocationBalance = manager.GetLocationSaleBalanceToday(model.DocumentDate, location);
+            //model.Summary = manager.GetLocationSummary(model.DocumentDate, model.Authentication.CurrentEmployee, location);
             model.CashRecordSlip = Db.DocumentCashRecorderSlip.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == model.DocumentDate).OrderByDescending(x => x.RecordDate).ToList();
 
             if (model.CurrentDayResult != null)
@@ -58,7 +64,7 @@ namespace ActionForce.PosLocation.Controllers
 
             model.ResultStates = Db.ResultState.Where(x => x.StateID <= 2).ToList();
 
-            model.Schedule = Db.LocationSchedule.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ShiftDate == location.LocalDate).Select(x => new LocationScheduleInfo()
+            model.Schedule = Db.LocationSchedule.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ShiftDate == ResultDate).Select(x => new LocationScheduleInfo()
             {
                 LocationID = x.LocationID.Value,
                 ScheduleDate = x.ShiftDate.Value,
@@ -67,7 +73,7 @@ namespace ActionForce.PosLocation.Controllers
                 Duration = x.ShiftDuration
             }).FirstOrDefault();
 
-            model.Shift = Db.LocationShift.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ShiftDate == location.LocalDate).Select(x => new LocationShiftInfo()
+            model.Shift = Db.LocationShift.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ShiftDate == ResultDate).Select(x => new LocationShiftInfo()
             {
                 LocationID = x.LocationID,
                 ScheduleDate = x.ShiftDate,
@@ -76,6 +82,23 @@ namespace ActionForce.PosLocation.Controllers
                 Duration = x.ShiftDuration
             }).FirstOrDefault();
 
+
+
+            model.TicketSaleRowSummary = Db.VTicketSaleSaleRowSummary.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == ResultDate).ToList();
+
+            List<int> priceCategorieIds = model.TicketSaleRowSummary.Select(x => x.PriceCategoryID.Value).Distinct().ToList();
+            List<int> priceIds = model.TicketSaleRowSummary.Select(x => x.PriceID).Distinct().ToList();
+
+            model.Prices = Db.VPrice.Where(x => priceCategorieIds.Contains(x.PriceCategoryID.Value)).ToList();
+            model.Prices.AddRange(Db.VPrice.Where(x => priceIds.Contains(x.ID)).ToList());
+            model.Prices = model.Prices.Distinct().ToList();
+
+            int[] cashtypes = new int[] { 10, 21, 24, 28 }.ToArray();
+            int[] cardtypes = new int[] { 1, 3, 5 }.ToArray();
+
+            model.TicketSalePaymentSummary = Db.VTicketSalePaymentSummary.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == ResultDate).ToList();
+            model.CashActions = Db.CashActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ProcessDate == ResultDate && cashtypes.Contains(x.CashActionTypeID.Value)).ToList();
+            model.BankActions = Db.BankActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ProcessDate == ResultDate && cardtypes.Contains(x.BankActionTypeID.Value)).ToList();
 
             return View(model);
         }

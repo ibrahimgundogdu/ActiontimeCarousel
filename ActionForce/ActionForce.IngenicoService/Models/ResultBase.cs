@@ -5,8 +5,9 @@ using System.Web;
 
 namespace ActionForce.PosService
 {
-    public class ResultSummary : ResultBase
+    public class ResultBase
     {
-        public IEnumerable<AdisyonSummary> SummaryList { get; set; }
+        public int ResultCode { get; set; }
+        public string ResultMessage { get; set; }
     }
 }

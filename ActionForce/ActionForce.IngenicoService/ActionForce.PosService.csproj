@@ -177,6 +177,7 @@
     <Compile Include="Models\Invoice.cs" />
     <Compile Include="Models\Payment.cs" />
     <Compile Include="Models\Receipt.cs" />
+    <Compile Include="Models\ResultBase.cs" />
     <Compile Include="Models\ResultDetail.cs" />
     <Compile Include="Models\ResultMQ.cs" />
     <Compile Include="Models\ResultPayment.cs" />

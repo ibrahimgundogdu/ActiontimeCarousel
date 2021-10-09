@@ -34,5 +34,13 @@ namespace ActionForce.PosLocation
         public double BalanceAmount { get; set; }
         public bool IsManuel { get; set; } = false;
         public string PosStatusName { get; set; }
+
+        public List<VTicketSaleSaleRowSummary> TicketSaleRowSummary { get; set; }
+        public List<VPrice> VPrices { get; set; }
+
+
+        public List<VTicketSalePaymentSummary> TicketSalePaymentSummary { get; set; }
+        public List<CashActions> CashActions { get; set; }
+        public List<BankActions> BankActions { get; set; }
     }
 }

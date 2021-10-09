@@ -38,5 +38,6 @@ namespace ActionForce.Entity
         public Nullable<double> Collection { get; set; }
         public Nullable<short> Direction { get; set; }
         public Nullable<System.Guid> ProcessUID { get; set; }
+        public Nullable<long> TicketSalePosPaymentID { get; set; }
     }
 }

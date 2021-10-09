@@ -227,6 +227,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\ActionsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\CashController.cs" />
     <Compile Include="Controllers\DayResultController.cs" />
@@ -242,6 +243,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AuthenticationModel.cs" />
+    <Compile Include="Models\ControlModels\ActionsControlModel.cs" />
     <Compile Include="Models\ControlModels\CashControlModel.cs" />
     <Compile Include="Models\ControlModels\DayResultControlModel.cs" />
     <Compile Include="Models\ControlModels\DefaultControlModel.cs" />
@@ -348,6 +350,7 @@
     <Content Include="Views\Sales\Payment.cshtml" />
     <Content Include="Views\Setup\DocumentCatalog.cshtml" />
     <Content Include="Views\Sales\RowDetail.cshtml" />
+    <Content Include="Views\Actions\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -15,6 +15,9 @@ namespace ActionForce.PosService.Controllers
         public HttpResponseMessage TSM_IR_GetAdisyonSummary([FromBody] SummaryRequest request)
         {
             ResultSummary result = new ResultSummary();
+            ResultBase resultbase = new ResultBase();
+            List<AdisyonSummary> adisyonlist = new List<AdisyonSummary>();
+
             DateTime localdate = DateTime.UtcNow.AddHours(3).Date;
             int LocationID = 0;
 
@@ -35,18 +38,30 @@ namespace ActionForce.PosService.Controllers
                         {
 
                             var ticketlist = Db.VAdisyonSummary.Where(x => x.LocationID == POSTerminalInfo.LocationID && x.Date == localdate).ToList();
-
-                            result.ResultCode = 0;
-                            result.ResultMessage = $"{ticketlist.Count} adet adisyon bulundu";
-                            result.SummaryList = ticketlist.Select(x => new AdisyonSummary()
+                            if (ticketlist != null && ticketlist.Count > 0)
                             {
-                                AdisyonID = x.ID,
-                                AdisyonNo = x.OrderNumber.ToString(),
-                                AdisyonName = POSTerminalInfo.LocationFullName,
-                                TableNo = x.LocationID.ToString(),
-                                NetAmount = Convert.ToInt64(x.BalanceAmount * 100),
-                                TotalAmount = Convert.ToInt64(x.BalanceAmount * 100)
-                            }).ToList();
+                                resultbase.ResultCode = 0;
+                                resultbase.ResultMessage = $"{ticketlist.Count} adet adisyon bulundu";
+
+                                var SummaryList = ticketlist.Select(x => new AdisyonSummary()
+                                {
+                                    AdisyonID = x.ID,
+                                    AdisyonNo = x.OrderNumber.ToString(),
+                                    AdisyonName = POSTerminalInfo.LocationFullName,
+                                    TableNo = x.LocationID.ToString(),
+                                    NetAmount = Convert.ToInt64(x.BalanceAmount * 100),
+                                    TotalAmount = Convert.ToInt64(x.BalanceAmount * 100)
+                                }).ToList();
+
+                                adisyonlist.AddRange(SummaryList);
+                            }
+                            else
+                            {
+                                resultbase.ResultCode = 2;
+                                resultbase.ResultMessage = $"Bekleyen Adisyon Yok";
+                            }
+
+                            
 
                         }
                         else if (!string.IsNullOrEmpty(request.AdisyonNo) && request.AdisyonNo != "0")
@@ -55,9 +70,9 @@ namespace ActionForce.PosService.Controllers
 
                             if (ticketlist != null && ticketlist.Count > 0)
                             {
-                                result.ResultCode = 0;
-                                result.ResultMessage = $"{ticketlist.Count} adet adisyon bulundu";
-                                result.SummaryList = ticketlist.Select(x => new AdisyonSummary()
+                                resultbase.ResultCode = 0;
+                                resultbase.ResultMessage = $"{ticketlist.Count} adet adisyon bulundu";
+                                var SummaryList = ticketlist.Select(x => new AdisyonSummary()
                                 {
                                     AdisyonID = x.ID,
                                     AdisyonNo = x.OrderNumber.ToString(),
@@ -66,54 +81,61 @@ namespace ActionForce.PosService.Controllers
                                     NetAmount = Convert.ToInt64(x.BalanceAmount * 10),
                                     TotalAmount = Convert.ToInt64(x.BalanceAmount * 10)
                                 }).ToList();
+
+                                adisyonlist.AddRange(SummaryList);
                             }
                             else
                             {
-                                result.ResultCode = 2;
-                                result.ResultMessage = $"adisyon bulunamadı";
-                                result.SummaryList = null;
+                                resultbase.ResultCode = 2;
+                                resultbase.ResultMessage = $"Bekleyen Böyle Bir Adisyon Yok";
                             }
                         }
                         else
                         {
-                            result.ResultCode = 2;
-                            result.ResultMessage = $"adisyon no gelmedi";
-                            result.SummaryList = null;
+                            resultbase.ResultCode = 2;
+                            resultbase.ResultMessage = $"adisyon no gelmedi";
                         }
                     }
                     else
                     {
-                        result.ResultCode = 2;
-                        result.ResultMessage = $"POS Terminal bilgisi bulunamadı";
-                        result.SummaryList = null;
+                        resultbase.ResultCode = 2;
+                        resultbase.ResultMessage = $"POS Terminal bilgisi bulunamadı";
                     }
                 }
                 else
                 {
-                    result.ResultCode = 2;
-                    result.ResultMessage = $"Servis kullanıcısı bulunamadı";
-                    result.SummaryList = null;
+                    resultbase.ResultCode = 2;
+                    resultbase.ResultMessage = $"Servis kullanıcısı bulunamadı";
                 }
 
             }
             catch (Exception ex)
             {
-                result.ResultCode = 1;
-                result.ResultMessage = $"sistem hatası oluştu : " + ex.Message;
-                result.SummaryList = null;
+                resultbase.ResultCode = 1;
+                resultbase.ResultMessage = $"sistem hatası oluştu : " + ex.Message;
             }
 
             // Log Alma
             string data = Newtonsoft.Json.JsonConvert.SerializeObject(request);
             data = data.Replace(request.Header_Info.UserName, "*").Replace(request.Header_Info.Password, "*");
 
-            ApiHelper.AddPosServiceLog(LocationID, request.SerialNo, request.AdisyonNo, request.Header_Info.UserName, ApiHelper.PasswordMD5_Pan(request.Header_Info.Password), "TSM_IR_GetAdisyonSummary", data, result.ResultCode.ToString(), result.ResultMessage);
+            ApiHelper.AddPosServiceLog(LocationID, request.SerialNo, request.AdisyonNo, request.Header_Info.UserName, ApiHelper.PasswordMD5_Pan(request.Header_Info.Password), "TSM_IR_GetAdisyonSummary", data, resultbase.ResultCode.ToString(), resultbase.ResultMessage);
 
             PushClient pushService = new PushClient();
-            pushService.SendMessage(request.SerialNo, result.ResultMessage);
+            pushService.SendMessage(request.SerialNo, resultbase.ResultMessage);
 
+            if (adisyonlist != null && adisyonlist.Count > 0)
+            {
+                result.ResultCode = resultbase.ResultCode;
+                result.ResultMessage = resultbase.ResultMessage;
+                result.SummaryList = adisyonlist;
 
-            return Request.CreateResponse(HttpStatusCode.OK, result);
+                return Request.CreateResponse(HttpStatusCode.OK, result);
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.OK, resultbase);
+            }
 
         }
 
