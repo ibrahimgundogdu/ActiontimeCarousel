@@ -76,6 +76,7 @@
         function PriceTypeEdit(id) {
 
             var priceval = $('#Price_' + id).val();
+            var extraval = $('#Extra_' + id).val();
             var datebeginval = $('#DateBegin_' + id).val();
             var datebeginhourval = $('#DateBeginHour_' + id).val();
             var usesaleval = 0;
@@ -91,6 +92,7 @@
             var data = new FormData();
             data.append('id', id);
             data.append('_price', priceval);
+            data.append('_extra', extraval);
             data.append('_datebegin', datebeginval);
             data.append('_datebeginhour', datebeginhourval);
             data.append('_usesale', usesaleval);

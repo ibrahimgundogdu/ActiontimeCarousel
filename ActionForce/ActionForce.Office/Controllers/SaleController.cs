@@ -143,6 +143,7 @@ namespace ActionForce.Office.Controllers
                     var isUseSale = item.UseSale != null && item.UseSale == "1" ? true : false;
                     var isActive = item.IsActive != null && item.IsActive == "1" ? true : false;
                     double? price = Convert.ToDouble(item.Price.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                    double? extra = Convert.ToDouble(item.Extra.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                     int? productID = item.productID;
                     var product = Db.TicketProduct.FirstOrDefault(x => x.ID == productID);
                     int? categoryID = item.categoryID;
@@ -150,7 +151,7 @@ namespace ActionForce.Office.Controllers
                     Price newprice = new Price();
 
                     newprice.Currency = model.Authentication.ActionEmployee.OurCompany.Currency;
-                    newprice.ExtraMultiple = 1;
+                    newprice.ExtraMultiple = extra ?? 1;
                     newprice.IsActive = isActive;
                     newprice.OurCompanyID = model.Authentication.ActionEmployee.OurCompany.CompanyID;
                     newprice.Price1 = price;
@@ -340,6 +341,7 @@ namespace ActionForce.Office.Controllers
                     };
 
                     double? price1 = Convert.ToDouble(frmprice.Price.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                    double? extra = Convert.ToDouble(frmprice.Extra.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                     DateTime? date = Convert.ToDateTime(frmprice.DateBegin);
                     TimeSpan? time = Convert.ToDateTime(frmprice.DateBeginHour).TimeOfDay;
                     DateTime? startdatetime = date.Value.Add(time.Value);
@@ -348,6 +350,7 @@ namespace ActionForce.Office.Controllers
                     isPrice.UseToSale = !string.IsNullOrEmpty(frmprice.UseSale) && frmprice.UseSale == "1" ? true : false;
                     isPrice.StartDate = startdatetime;
                     isPrice.Price1 = price1;
+                    isPrice.ExtraMultiple = extra ?? 1;
                     isPrice.UpdateDate = DateTime.UtcNow;
                     isPrice.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                     isPrice.UpdateIP = OfficeHelper.GetIPAddress();
@@ -404,6 +407,7 @@ namespace ActionForce.Office.Controllers
                     };
 
                     double? price1 = Convert.ToDouble(ajPrice._price.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                    double? extra = Convert.ToDouble(ajPrice._extra.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                     DateTime? date = Convert.ToDateTime(ajPrice._datebegin);
                     TimeSpan? time = Convert.ToDateTime(ajPrice._datebeginhour).TimeOfDay;
                     DateTime? startdatetime = date.Value.Add(time.Value);
@@ -412,6 +416,7 @@ namespace ActionForce.Office.Controllers
                     isPrice.UseToSale = ajPrice._usesale != null && ajPrice._usesale == 1 ? true : false;
                     isPrice.StartDate = startdatetime;
                     isPrice.Price1 = price1;
+                    isPrice.ExtraMultiple = extra ?? 1;
                     isPrice.UpdateDate = DateTime.UtcNow;
                     isPrice.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                     isPrice.UpdateIP = OfficeHelper.GetIPAddress();
@@ -468,6 +473,7 @@ namespace ActionForce.Office.Controllers
                     };
 
                     double? price1 = Convert.ToDouble(ajPrice._price.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                    double? extra = Convert.ToDouble(ajPrice._extra.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                     DateTime? date = Convert.ToDateTime(ajPrice._datebegin);
                     TimeSpan? time = Convert.ToDateTime(ajPrice._datebeginhour).TimeOfDay;
                     DateTime? startdatetime = date.Value.Add(time.Value);
@@ -476,6 +482,7 @@ namespace ActionForce.Office.Controllers
                     isPrice.UseToSale = ajPrice._usesale != null && ajPrice._usesale == 1 ? true : false;
                     isPrice.StartDate = startdatetime;
                     isPrice.Price1 = price1;
+                    isPrice.ExtraMultiple = extra ?? 1;
                     isPrice.UpdateDate = DateTime.UtcNow;
                     isPrice.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                     isPrice.UpdateIP = OfficeHelper.GetIPAddress();

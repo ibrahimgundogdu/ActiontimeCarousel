@@ -11,6 +11,7 @@
                 <th class="tx-right">Başlangıç Tarihi</th>
                 <th class="tx-right">Geçerli Fiyatı</th>
                 <th class="tx-right bd-l">Yeni Fiyat</th>
+                <th class="tx-right bd-l">Extra</th>
                 <th></th>
                 <th class="tx-center">Satışta Kullan</th>
                 <th class="tx-center">Aktif</th>
@@ -42,6 +43,9 @@
 
                         <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right wd-10p">
                             <input name="pricelist[@index].Price" type="text" class="form-control money tx-right" autocomplete="off" placeholder="0,00">
+                        </td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right wd-10p">
+                            <input name="pricelist[@index].Extra" type="text" class="form-control money tx-right" autocomplete="off" placeholder="0,00">
                         </td>
                         <td>@(lastprice?.Currency)</td>
                         <td class="tx-sm-13 font-weight-bold tx-center">

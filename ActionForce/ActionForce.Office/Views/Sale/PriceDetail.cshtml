@@ -76,6 +76,14 @@
                                     <label for="Price" class="col-sm-3 col-form-label">@(Model.Price.Currency)</label>
                                 </div>
 
+                                <div class="form-group row mg-b-5 bg-gray-100">
+                                    <label for="Extra" class="col-sm-3 col-form-label">Extra</label>
+                                    <div class="col-sm-6 tx-right">
+                                        <input id="Extra" name="Extra" type="text" class="form-control money" autocomplete="off" placeholder="Fiyatı" value="@(Model.Price.ExtraMultiple?.ToString("N2"))" required>
+                                    </div>
+                                    <label for="Price" class="col-sm-3 col-form-label">@(Model.Price.Currency)</label>
+                                </div>
+
                                 <div class="form-group row">
                                     <label for="DateBegin" class="col-sm-3 col-form-label">Fiyat Başlangıç Tarih Saati</label>
                                     <div class="col-sm-3">

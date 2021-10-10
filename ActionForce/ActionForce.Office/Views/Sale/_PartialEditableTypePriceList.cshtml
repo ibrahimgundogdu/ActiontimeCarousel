@@ -31,6 +31,9 @@
                     <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right wd-10p">
                         <input id="Price_@(cat.ID)" name="Price" type="text" class="form-control money tx-right" autocomplete="off" placeholder="Fiyatı" value="@(cat.Price?.ToString("N2"))" required>
                     </td>
+                    <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right wd-10p">
+                        <input id="Extra_@(cat.ID)" name="Extra" type="text" class="form-control money tx-right" autocomplete="off" placeholder="Extra" value="@(cat.ExtraMultiple?.ToString("N2"))" required>
+                    </td>
                     <td>@(cat.Currency)</td>
                     <td class="tx-sm-13 bg-primary-light font-weight-bold wd-10p">
                         <input id="DateBegin_@(cat.ID)" name="DateBegin" type="text" class="form-control shiftdate" autocomplete="off" placeholder="Tarih" value="@(cat.StartDate?.ToString("yyyy-MM-dd"))" required>

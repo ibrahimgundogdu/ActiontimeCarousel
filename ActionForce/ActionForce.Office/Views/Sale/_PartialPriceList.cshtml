@@ -10,6 +10,7 @@
                 <th>Bilet Ürün Adı</th>
                 <th class="tx-center">Birimi (Dk)</th>
                 <th class="tx-right">Fiyatı</th>
+                <th class="tx-right">Extra</th>
                 <th class="tx-center">Geçerlilik Tarihi</th>
                 <th class="tx-center">Satışta Kullan</th>
                 <th>Aktif</th>
@@ -31,6 +32,9 @@
                         <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right">
                             <a href="/Sale/PriceDetail/@(cat.ID)"><span class="d-none d-sm-inline"> @($"{cat.Price?.ToString("N2")}")</span> @(cat.Currency)</a>
                         </td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right">
+                            <a href="/Sale/PriceDetail/@(cat.ID)"><span class="d-none d-sm-inline"> @($"{cat.ExtraMultiple?.ToString("N2")}")</span> @(cat.Currency)</a>
+                        </td>
                         <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.StartDate?.ToShortDateString())</td>
                         <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.UseToSale)</td>
                         <td class="tx-sm-13">@(cat.IsActive)</td>
@@ -43,20 +47,23 @@
             <tbody>
                 @foreach (var cat in Model.PriceList.OrderByDescending(x => x.StartDate))
                 {
-                <tr>
-                    <td>@(cat.ID)</td>
-                    <td>@(cat.CompanyName)</td>
-                    <td><a href="/Sale/PriceTypeDetail/@(cat.TicketTypeID)"><span class="d-none d-sm-inline"> @($"{cat.TicketTypeName}")</span></a> </td>
-                    <td><a href="/Sale/PriceCategoryDetail/@(cat.PriceCategoryID)"><span class="d-none d-sm-inline"> @($"{cat.CategoryName}")</span></a> </td>
-                    <td>@(cat.ProductName)</td>
-                    <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.Unit)</td>
-                    <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right">
-                        <a href="/Sale/PriceDetail/@(cat.ID)"><span class="d-none d-sm-inline"> @($"{cat.Price?.ToString("N2")}")</span> @(cat.Currency)</a>
-                    </td>
-                    <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.StartDate?.ToShortDateString())</td>
-                    <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.UseToSale)</td>
-                    <td class="tx-sm-13">@(cat.IsActive)</td>
-                </tr>
+                    <tr>
+                        <td>@(cat.ID)</td>
+                        <td>@(cat.CompanyName)</td>
+                        <td><a href="/Sale/PriceTypeDetail/@(cat.TicketTypeID)"><span class="d-none d-sm-inline"> @($"{cat.TicketTypeName}")</span></a> </td>
+                        <td><a href="/Sale/PriceCategoryDetail/@(cat.PriceCategoryID)"><span class="d-none d-sm-inline"> @($"{cat.CategoryName}")</span></a> </td>
+                        <td>@(cat.ProductName)</td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.Unit)</td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right">
+                            <a href="/Sale/PriceDetail/@(cat.ID)"><span class="d-none d-sm-inline"> @($"{cat.Price?.ToString("N2")}")</span> @(cat.Currency)</a>
+                        </td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-right">
+                            <a href="/Sale/PriceDetail/@(cat.ID)"><span class="d-none d-sm-inline"> @($"{cat.ExtraMultiple?.ToString("N2")}")</span> @(cat.Currency)</a>
+                        </td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.StartDate?.ToShortDateString())</td>
+                        <td class="tx-sm-13 bg-primary-light font-weight-bold tx-center"> @(cat.UseToSale)</td>
+                        <td class="tx-sm-13">@(cat.IsActive)</td>
+                    </tr>
                 }
             </tbody>
         }

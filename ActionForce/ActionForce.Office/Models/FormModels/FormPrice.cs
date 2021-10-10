@@ -8,6 +8,7 @@ namespace ActionForce.Office
     public class FormPrice
     {
         public string Price { get; set; }
+        public string Extra { get; set; }
         public string DateBegin { get; set; }
         public string DateBeginHour { get; set; }
         public string UseSale { get; set; }
@@ -23,6 +24,7 @@ namespace ActionForce.Office
     public class FormAjaxPrice
     {
         public string _price { get; set; }
+        public string _extra { get; set; }
         public string _datebegin { get; set; }
         public string _datebeginhour { get; set; }
         public int? _usesale { get; set; }
@@ -38,6 +40,7 @@ namespace ActionForce.Office
         public int? productID { get; set; }
         public int? categoryID { get; set; }
         public string Price { get; set; }
+        public string Extra { get; set; }
         public string UseSale { get; set; }
         public string IsActive { get; set; }
     }
