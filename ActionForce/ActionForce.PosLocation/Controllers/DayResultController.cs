@@ -47,6 +47,7 @@ namespace ActionForce.PosLocation.Controllers
             }
 
 
+            model.Employees = manager.GetLocationEmployeesToday(model.Authentication.CurrentLocation.ID);
             model.DocumentDate = ResultDate;
             model.CurrentDayResult = Db.DayResult.FirstOrDefault(x => x.Date == model.DocumentDate && x.LocationID == model.Authentication.CurrentLocation.ID);
             model.EmployeeActions = Db.VEmployeeCashActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ProcessDate == model.DocumentDate.Date).ToList();

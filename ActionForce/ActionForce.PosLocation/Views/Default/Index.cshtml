@@ -52,7 +52,10 @@
                     {
                         <a class="box" href="javascript:;" onclick="AddBasket(@(price.ID))">
                             <div class="name"> @(price.ProductName) </div>
-                            <div class="time">@(price.Unit) Dk</div>
+                            @if (Model.Authentication.CurrentLocation?.LocationTypeID != 10)
+                            {
+                                <div class="time">@(price.Unit) Dk</div>
+                            }
                             <div class="price">@(price.Price?.ToString("N2")) <span>@(price.Sign)</span></div>
                             <div class="subname">@(price.TicketTypeName)</div>
                         </a>
@@ -62,15 +65,18 @@
                     {
                         <a class="box" href="javascript:;" onclick="AddBasket(@(price.ID))">
                             <div class="name"> @(price.ProductName) </div>
-                            <div class="time">@(price.Unit) Dk</div>
+                            @if (Model.Authentication.CurrentLocation?.LocationTypeID != 10)
+                            {
+                                <div class="time">@(price.Unit) Dk</div>
+                            }
                             <div class="price">@(price.Price?.ToString("N2")) <span>@(price.Sign)</span></div>
                             <div class="subname">@(price.TicketTypeName)</div>
                         </a>
                     }
                 </div><!-- box-list -->
                 @*<div>
-                    <button class="btn btn-success" onclick="openCashReader()"> KASA AÇ </button>
-                </div>*@
+                        <button class="btn btn-success" onclick="openCashReader()"> KASA AÇ </button>
+                    </div>*@
             </div><!-- content -->
 
             <div class="fixed-footer-overlay"></div>
@@ -97,10 +103,10 @@
     @*<script src="/assets/js/jquery-3.5.1.min.js"></script>*@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     @*<script type="text/javascript">
-        function openCashReader() {
-            Android.openCashBox();
-        }
-    </script>*@
+            function openCashReader() {
+                Android.openCashBox();
+            }
+        </script>*@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <script type="text/javascript">
         // Default Configuration

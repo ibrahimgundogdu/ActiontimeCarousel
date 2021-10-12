@@ -33,5 +33,6 @@ namespace ActionForce.PosLocation
         public List<CashActions> CashActions { get; set; }
         public List<BankActions> BankActions { get; set; }
 
+        public List<DataEmployee> Employees { get; set; }
     }
 }

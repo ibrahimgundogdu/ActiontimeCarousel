@@ -67,7 +67,8 @@ namespace ActionForce.PosLocation.Controllers
                             ID = location.LocationID,
                             OurCompanyID = location.OurCompanyID,
                             TimeZone = location.Timezone ?? 3,
-                            UID = location.LocationUID
+                            UID = location.LocationUID,
+                            LocationTypeID = location.LocationTypeID ?? 0
                         };
 
                         return;
