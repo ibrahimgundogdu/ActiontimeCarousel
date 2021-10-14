@@ -18,5 +18,6 @@ namespace ActionForce.Entity
         public Nullable<int> PaymentTypeID { get; set; }
         public string PaymentTypeName { get; set; }
         public Nullable<bool> IsManual { get; set; }
+        public string Code { get; set; }
     }
 }

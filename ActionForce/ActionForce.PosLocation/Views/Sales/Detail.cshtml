@@ -58,6 +58,7 @@
                         <li><span>BİLET ADEDİ</span><span>@(Model.TicketSaleSummary.Quantity)</span></li>
                         <li><span>ORTAM BİLGİSİ</span><span>@(Model.Environments.FirstOrDefault(x=> x.ID == Model.TicketSaleSummary.EnvironmentID)?.Environment1)</span></li>
                         <li><span>KAYIT TARİHİ</span><span> @(Model.TicketSaleSummary.RecordDate.ToString())</span></li>
+                        <li><span>SONLANMA</span><span> @(Model.TicketSaleSummary.IsSendPosTerminal == true ? "Ingenico":"Manuel")</span></li>
                         <li><span>KAYDEDEN</span><span>@(Model.TicketSaleSummary.FullName)</span></li>
                         <li>
                             <span>CARİ KAYIT</span>
@@ -144,15 +145,17 @@
                                 <th>TUTAR</th>
                                 <th>TAKSİT</th>
                                 <th>BANKA</th>
+                                <th>NEREDEN</th>
                             </tr>
                             @foreach (var item in Model.TicketSalePosPaymentSummary)
                             {
-                                <tr>
-                                    <td>@(item.PaymentTypeName.ToUpper())</td>
-                                    <td>@(item.PaymentAmount?.ToString("N2")) @(item.Sign)</td>
-                                    <td>@(item.PaymentType == 4 ? item.NumberOfInstallment.ToString() : "")</td>
-                                    <td>@(item.BankName)</td>
-                                </tr>
+                        <tr>
+                            <td>@(item.PaymentTypeName.ToUpper())</td>
+                            <td>@(item.PaymentAmount?.ToString("N2")) @(item.Sign)</td>
+                            <td>@(item.PaymentType == 4 ? item.NumberOfInstallment.ToString() : "")</td>
+                            <td>@(item.BankName)</td>
+                            <td>@(item.FromPosTerminal == true ? "Ingenico":"Manuel")</td>
+                        </tr>
                             }
 
 

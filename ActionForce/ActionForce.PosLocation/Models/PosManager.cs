@@ -62,7 +62,8 @@ namespace ActionForce.PosLocation
                     EmployeeID = x.EmployeeID,
                     EmployeeFullname = x.FullName,
                     IsScheduled = schedules.Any(y => y.EmployeeID == x.EmployeeID),
-                    PhotoFile = x.PhotoFile
+                    PhotoFile = x.PhotoFile,
+                    Token = x.EmployeeUID
                 }).ToList();
 
             }

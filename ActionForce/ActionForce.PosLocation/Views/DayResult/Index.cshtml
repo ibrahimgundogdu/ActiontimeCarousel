@@ -66,7 +66,15 @@
                                 <td style="font-size:20px;">@(Model.Schedule?.Duration?.ToString(@"hh\:mm"))</td>
                                 <td></td>
                                 <td style="text-align:right;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#27ae60"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z" /></svg>
+                                    @if (Model.Schedule != null && Model.Schedule?.Duration != null)
+                                    {
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#27ae60"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z" /></svg>
+                                    }
+                                    else
+                                    {
+                                        Model.IsSuccess = false;
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#c0392b"><path d="M11 15h2v2h-2v-2zm0-8h2v6h-2V7zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" /></svg>
+                                    }
                                 </td>
                             </tr>
                             <tr>
@@ -76,7 +84,15 @@
                                 <td style="font-size:20px;" class="color-green">@(Model.Shift?.Duration?.ToString(@"hh\:mm"))</td>
                                 <td></td>
                                 <td style="text-align:right;">
-                                    <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#c0392b"><path d="M11 15h2v2h-2v-2zm0-8h2v6h-2V7zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" /></svg>
+                                    @if (Model.Shift != null && Model.Shift?.Duration != null)
+                                    {
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#27ae60"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z" /></svg>
+                                    }
+                                    else
+                                    {
+                                        Model.IsSuccess = false;
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#c0392b"><path d="M11 15h2v2h-2v-2zm0-8h2v6h-2V7zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" /></svg>
+                                    }
                                 </td>
 
                             </tr>
@@ -95,12 +111,12 @@
                                     </th>
                                 </tr>
                                 <tr>
-                                    <th>Çalışan</th>
+                                    <th></th>
                                     <th></th>
                                     <th>Başlama</th>
                                     <th>Bitiş</th>
                                     <th>Süre</th>
-                                    <th></th>
+                                    <th>Saatlik</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -108,6 +124,8 @@
                             @foreach (var item in Model.Employees.Where(x => x.IsScheduled == true))
                             {
                                 var shiftModel = Model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+                                var salaryModel = Model.EmployeeSalaries.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+
                                 <tr>
                                     <td rowspan="2" style="text-align:left; font-size:16px;">@(item.EmployeeFullname)</td>
                                     <td style="text-align:left;"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M7 11h2v2H7v-2zm14-5v14c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2l.01-14c0-1.1.88-2 1.99-2h1V2h2v2h8V2h2v2h1c1.1 0 2 .9 2 2zM5 8h14V6H5v2zm14 12V10H5v10h14zm-4-7h2v-2h-2v2zm-4 0h2v-2h-2v2z" /></svg></td>
@@ -116,18 +134,39 @@
                                     <td style="font-size: 20px;">@(shiftModel?.ScheduleDuration?.ToString(@"hh\:mm"))</td>
                                     <td></td>
                                     <td style="text-align:right;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#27ae60"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z" /></svg>
+                                        @if (shiftModel != null && shiftModel?.ScheduleDuration != null)
+                                        {
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#27ae60"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z" /></svg>
+                                        }
+                                        else
+                                        {
+                                            Model.IsSuccess = false;
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#c0392b"><path d="M11 15h2v2h-2v-2zm0-8h2v6h-2V7zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" /></svg>
+                                        }
                                     </td>
                                 </tr>
 
                                 <tr>
-                                    <td style="text-align:left;"><svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79zM1 10.5h3v2H1zM11 .55h2V3.5h-2zm8.04 2.495l1.408 1.407-1.79 1.79-1.407-1.408zm-1.8 15.115l1.79 1.8 1.41-1.41-1.8-1.79zM20 10.5h3v2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm-1 4h2v2.95h-2zm-7.45-.96l1.41 1.41 1.79-1.8-1.41-1.41z" /></svg></td>
+                                    <td style="text-align:left;">
+                                        <a href="@(shiftModel.ShiftDateStart != null && shiftModel.ShiftDuration == null ? $"/DayResult/EmployeeShiftEnd?EmployeeID={item.EmployeeID}&Token={item.Token}" : shiftModel.ShiftDateStart == null ? $"/DayResult/EmployeeShiftStart?EmployeeID={item.EmployeeID}&Token={item.Token}" :"#" )" class="btn btn-block  font-weight-bold text-success">
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#000000"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79zM1 10.5h3v2H1zM11 .55h2V3.5h-2zm8.04 2.495l1.408 1.407-1.79 1.79-1.407-1.408zm-1.8 15.115l1.79 1.8 1.41-1.41-1.8-1.79zM20 10.5h3v2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm-1 4h2v2.95h-2zm-7.45-.96l1.41 1.41 1.79-1.8-1.41-1.41z" /></svg>
+                                        </a>
+                                    </td>
                                     <td style="font-size: 20px;">@(shiftModel?.ShiftDateStart?.ToString("HH\\:mm"))</td>
                                     <td style="font-size: 20px;">@(shiftModel?.ShiftDateEnd?.ToString("HH\\:mm"))</td>
                                     <td style="font-size: 20px;">@(shiftModel?.ShiftDuration?.ToString(@"hh\:mm"))</td>
-                                    <td></td>
+                                    <td>@(salaryModel != null && salaryModel.Hourly != null ? "**,** ₺":"-")</td>
                                     <td style="text-align:right;">
-                                        <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#c0392b"><path d="M11 15h2v2h-2v-2zm0-8h2v6h-2V7zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" /></svg>
+
+                                        @if (shiftModel != null && shiftModel?.ShiftDuration != null && salaryModel != null && salaryModel.Hourly != null)
+                                        {
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#27ae60"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z" /></svg>
+                                        }
+                                        else
+                                        {
+                                            Model.IsSuccess = false;
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#c0392b"><path d="M11 15h2v2h-2v-2zm0-8h2v6h-2V7zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" /></svg>
+                                        }
                                     </td>
                                 </tr>
 
@@ -209,6 +248,11 @@
                     </div>
 
 
+                    <div class="head">
+                        <h1>@(Model.DocumentDate.ToLongDateString()) Günlük Kasa Özeti</h1>
+                    </div>
+
+                    @{ Html.RenderPartial("_PartialCashSummary", Model.Summary);}
 
                     <div class="head">
                         <h1>Z Raporu</h1>
@@ -310,13 +354,13 @@
                                 <textarea id="ResultDescription" name="Description" class="form-control" rows="4" style="width:100%">@(Model.CurrentDayResult?.Description)</textarea>
                             </div>
                             <div class="form-group">
-                                @if (Model?.Shift != null && Model?.Shift?.Duration != null)
+                                @if (Model.IsSuccess == true)
                                 {
                                     <button id="btnResultStateSubmit" type="submit">Durumu Onayla</button>
                                 }
                                 else
                                 {
-                                    <button id="btnResultStateSubmit" type="button">Lokasyon Kapanmalıdır</button>
+                                    <button id="btnResultStateSubmit" type="button">Uyarılar Giderilmelidir</button>
 
                                 }
                             </div>

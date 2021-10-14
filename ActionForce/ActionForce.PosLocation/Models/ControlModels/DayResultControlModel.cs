@@ -34,5 +34,8 @@ namespace ActionForce.PosLocation
         public List<BankActions> BankActions { get; set; }
 
         public List<DataEmployee> Employees { get; set; }
+        public List<EmployeeSalary> EmployeeSalaries { get; set; }
+
+        public bool IsSuccess { get; set; } = true;
     }
 }

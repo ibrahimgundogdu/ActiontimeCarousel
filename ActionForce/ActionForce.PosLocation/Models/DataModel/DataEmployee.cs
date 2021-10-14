@@ -9,6 +9,7 @@ namespace ActionForce.PosLocation
     {
         public int LocationID { get; set; }
         public int EmployeeID { get; set; }
+        public Guid? Token { get; set; }
         public string EmployeeFullname { get; set; }
         public bool IsScheduled { get; set; }
         public string PhotoFile { get; set; }

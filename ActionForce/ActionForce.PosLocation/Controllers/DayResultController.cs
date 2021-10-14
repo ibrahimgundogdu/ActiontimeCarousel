@@ -11,6 +11,8 @@ namespace ActionForce.PosLocation.Controllers
 {
     public class DayResultController : BaseController
     {
+        public DocumentManager documentManager;
+
         public ActionResult Index(string id)
         {
             DayResultControlModel model = new DayResultControlModel();
@@ -48,6 +50,9 @@ namespace ActionForce.PosLocation.Controllers
 
 
             model.Employees = manager.GetLocationEmployeesToday(model.Authentication.CurrentLocation.ID);
+            List<int> employeeIds = model.Employees.Select(x => x.EmployeeID).ToList();
+            model.EmployeeSalaries = Db.EmployeeSalary.Where(x => employeeIds.Contains(x.EmployeeID)).OrderByDescending(x => x.DateStart).ToList();
+
             model.DocumentDate = ResultDate;
             model.CurrentDayResult = Db.DayResult.FirstOrDefault(x => x.Date == model.DocumentDate && x.LocationID == model.Authentication.CurrentLocation.ID);
             model.EmployeeActions = Db.VEmployeeCashActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ProcessDate == model.DocumentDate.Date).ToList();
@@ -55,7 +60,7 @@ namespace ActionForce.PosLocation.Controllers
             model.TicketList = manager.GetLocationTicketsToday(model.DocumentDate, location).Where(x => x.StatusID != 4).ToList();
             //model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
             //model.LocationBalance = manager.GetLocationSaleBalanceToday(model.DocumentDate, location);
-            //model.Summary = manager.GetLocationSummary(model.DocumentDate, model.Authentication.CurrentEmployee, location);
+            model.Summary = manager.GetLocationSummary(model.DocumentDate, model.Authentication.CurrentEmployee, location);
             model.CashRecordSlip = Db.DocumentCashRecorderSlip.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == model.DocumentDate).OrderByDescending(x => x.RecordDate).ToList();
 
             if (model.CurrentDayResult != null)
@@ -504,6 +509,106 @@ namespace ActionForce.PosLocation.Controllers
 
         }
 
+        public ActionResult EmployeeShiftEnd(int EmployeeID, string Token)
+        {
+            DayResultControlModel model = new DayResultControlModel();
+            model.Authentication = this.AuthenticationData;
 
+            DateTime processDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
+
+            var breakresult = EmployeeBreakEnd(EmployeeID, Token);
+
+
+            documentManager = new DocumentManager(
+               new ProcessEmployee()
+               {
+                   ID = model.Authentication.CurrentEmployee.EmployeeID,
+                   FullName = model.Authentication.CurrentEmployee.FullName
+               },
+               PosManager.GetIPAddress(),
+               new ProcessCompany()
+               {
+                   ID = model.Authentication.CurrentLocation.OurCompanyID,
+                   Name = "UFE GRUP",
+                   Currency = "TRL",
+                   TimeZone = 3
+               }
+           );
+
+            var result = documentManager.EmployeeShiftEnd(Token, processDate, model.Authentication.CurrentLocation.ID, EmployeeID);
+
+            model.Result.IsSuccess = result.IsSuccess;
+            model.Result.Message = result.Message;
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult EmployeeShiftStart(int EmployeeID, string Token)
+        {
+            DayResultControlModel model = new DayResultControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            DateTime processDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
+
+            documentManager = new DocumentManager(
+               new ProcessEmployee()
+               {
+                   ID = model.Authentication.CurrentEmployee.EmployeeID,
+                   FullName = model.Authentication.CurrentEmployee.FullName
+               },
+               PosManager.GetIPAddress(),
+               new ProcessCompany()
+               {
+                   ID = model.Authentication.CurrentLocation.OurCompanyID,
+                   Name = "UFE GRUP",
+                   Currency = "TRL",
+                   TimeZone = 3
+               }
+           );
+
+            var result = documentManager.EmployeeShiftStart(Token, processDate, model.Authentication.CurrentLocation.ID, EmployeeID);
+
+            model.Result.IsSuccess = result.IsSuccess;
+            model.Result.Message = result.Message;
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult EmployeeBreakEnd(int EmployeeID, string Token)
+        {
+            DayResultControlModel model = new DayResultControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            DateTime processDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone);
+
+            documentManager = new DocumentManager(
+               new ProcessEmployee()
+               {
+                   ID = model.Authentication.CurrentEmployee.EmployeeID,
+                   FullName = model.Authentication.CurrentEmployee.FullName
+               },
+               PosManager.GetIPAddress(),
+               new ProcessCompany()
+               {
+                   ID = model.Authentication.CurrentLocation.OurCompanyID,
+                   Name = "UFE GRUP",
+                   Currency = "TRL",
+                   TimeZone = 3
+               }
+           );
+
+            var result = documentManager.EmployeeBreakEnd(Token, processDate, model.Authentication.CurrentLocation.ID, EmployeeID);
+
+            model.Result.IsSuccess = result.IsSuccess;
+            model.Result.Message = result.Message;
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Index");
+        }
     }
 }

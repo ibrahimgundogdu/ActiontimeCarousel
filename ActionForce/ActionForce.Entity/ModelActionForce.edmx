@@ -2804,6 +2804,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="PaymentTypeID" Type="int" />
           <Property Name="PaymentTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Code" Type="nvarchar" MaxLength="4" />
           <Property Name="IsManual" Type="bit" />
         </EntityType>
         <EntityType Name="PosTerminal">
@@ -6512,6 +6513,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleSummary' does no
           <Property Name="BalanceAmount" Type="float" Nullable="false" />
           <Property Name="PosStatusName" Type="nvarchar" MaxLength="40" />
           <Property Name="IsSendPosTerminal" Type="bit" />
+          <Property Name="PayMethodList" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -9809,7 +9811,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketSaleSummary].[PaymentAmount] AS [PaymentAmount], 
     [VTicketSaleSummary].[BalanceAmount] AS [BalanceAmount], 
     [VTicketSaleSummary].[PosStatusName] AS [PosStatusName], 
-    [VTicketSaleSummary].[IsSendPosTerminal] AS [IsSendPosTerminal]
+    [VTicketSaleSummary].[IsSendPosTerminal] AS [IsSendPosTerminal], 
+    [VTicketSaleSummary].[PayMethodList] AS [PayMethodList]
     FROM [dbo].[VTicketSaleSummary] AS [VTicketSaleSummary]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="WeekList" EntityType="Self.WeekList" store:Type="Views" store:Schema="dbo">
@@ -17453,6 +17456,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="PaymentTypeID" Type="Int32" />
           <Property Name="PaymentTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="IsManual" Type="Boolean" />
+          <Property Name="Code" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VTicketSalePosPaymentSummary">
           <Key>
@@ -17495,6 +17499,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="PosStatusName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="IsSendPosTerminal" Type="Boolean" />
           <Property Name="BalanceAmount" Type="Double" Nullable="false" />
+          <Property Name="PayMethodList" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="Bank">
           <Key>
@@ -24405,6 +24410,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="PosPaymentType">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.PosPaymentType">
               <MappingFragment StoreEntitySet="PosPaymentType">
+                <ScalarProperty Name="Code" ColumnName="Code" />
                 <ScalarProperty Name="IsManual" ColumnName="IsManual" />
                 <ScalarProperty Name="PaymentTypeName" ColumnName="PaymentTypeName" />
                 <ScalarProperty Name="PaymentTypeID" ColumnName="PaymentTypeID" />
@@ -24435,6 +24441,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VTicketSaleSummary">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketSaleSummary">
               <MappingFragment StoreEntitySet="VTicketSaleSummary">
+                <ScalarProperty Name="PayMethodList" ColumnName="PayMethodList" />
                 <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
                 <ScalarProperty Name="IsSendPosTerminal" ColumnName="IsSendPosTerminal" />
                 <ScalarProperty Name="PosStatusName" ColumnName="PosStatusName" />
