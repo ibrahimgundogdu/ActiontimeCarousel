@@ -2773,6 +2773,9 @@
     <Content Include="Views\Inventory\Mallmoto.cshtml" />
     <Content Include="Views\Inventory\LocationMalMotos.cshtml" />
     <Content Include="Views\Sale\Index.cshtml" />
+    <Content Include="Views\Sale\Detail.cshtml" />
+    <Content Include="Views\Sale\_PartialSaleSideBar.cshtml" />
+    <Content Include="Views\Sale\SaleAction.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

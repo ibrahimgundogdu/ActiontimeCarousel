@@ -26,5 +26,7 @@ namespace ActionForce.Entity
         public string BankName { get; set; }
         public long ID { get; set; }
         public Nullable<bool> FromPosTerminal { get; set; }
+        public Nullable<System.DateTime> PaymentDate { get; set; }
+        public Nullable<System.TimeSpan> PaymentTime { get; set; }
     }
 }

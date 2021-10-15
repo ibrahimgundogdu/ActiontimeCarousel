@@ -21,10 +21,10 @@
     {
         @Html.AntiForgeryToken()
         <div class="form-row align-items-end">
-            <div class="form-group col-md-2 d-flex align-items-end">
+            <div class="form-group col-md-2 d-flex align-items-end bd-r pr-3">
                 <input id="SearchKey" name="SearchKey" type="text" class="form-control" autocomplete="off" placeholder="Arama" value="@(Model.Filters?.SearchKey)">
             </div>
-            <div class="form-group col-md-3 d-flex align-items-end">
+            <div class="form-group col-md-3 d-flex align-items-end pl-3">
                 <select class="form-control select2" id="locationId" name="LocationID">
                     <option value="" label="Lokasyon Seçiminiz"></option>
                     @foreach (var item in Model.LocationList)
@@ -34,7 +34,7 @@
                 </select>
             </div>
             <div class="form-group col-md-2 d-flex align-items-end">
-                <input type="text" id="dateFrom" name="filterDate" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.Filters.Date.Value.ToString("yyyy-MM-dd"))">
+                <input type="text" id="DocumentDate" name="filterDate" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.Filters.Date.Value.ToString("yyyy-MM-dd"))">
             </div>
 
             <div class="form-group col-md-1 d-flex align-items-end ">
@@ -78,8 +78,8 @@
                         <tr style='@(item.IsActive == false ? "color: red" : "")'>
                             <td class="tx-sm-13 bold">@item.ID</td>
                             <td class="tx-sm-13 font-weight-bold"><a href="@("/Sale/Detail/" + @item.UID)">@item.OrderNumber</a></td>
-                            <td class="tx-sm-13">@(item.SortBy)</td>
-                            <td class="tx-sm-13">@(item.Date?.ToShortDateString())</td>
+                            <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)">@(item.SortBy)</a></td>
+                            <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)">@(item.Date?.ToShortDateString())</a></td>
                             <td class="tx-sm-13 @(item.PosStatusID == 3 ? "font-weight-bold":"")">@item.PosStatusName</td>
                             <td class="tx-sm-13">@(item.Environment)</td>
                             <td class="tx-sm-13">@(item.Quantity)</td>
@@ -194,15 +194,6 @@
 
         });
 
-        //function DeleteCashSale(id) {
-        //    $.ajax({
-        //        method: "GET",
-        //        url: "/Cash/DeleteCashSale",
-        //        data: { id: id }
-        //    }).done(function (d) {
-        //        $("#DeleteCashSale").html(d);
-        //    });
-        //}
 
     </script>
     <script>

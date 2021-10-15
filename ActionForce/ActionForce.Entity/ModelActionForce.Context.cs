@@ -334,6 +334,8 @@ namespace ActionForce.Entity
         public virtual DbSet<VTicketSaleSaleRowSummary> VTicketSaleSaleRowSummary { get; set; }
         public virtual DbSet<VTicketSalePaymentSummary> VTicketSalePaymentSummary { get; set; }
         public virtual DbSet<VTicketSaleAllSummary> VTicketSaleAllSummary { get; set; }
+        public virtual DbSet<VDocumentsAllSummaryUnion> VDocumentsAllSummaryUnion { get; set; }
+        public virtual DbSet<VSaleActionsSummaryUnion> VSaleActionsSummaryUnion { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

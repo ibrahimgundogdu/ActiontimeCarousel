@@ -1,0 +1,36 @@
+﻿@model SaleControlModel
+<div class="col-lg">
+    <div class="avatar avatar-xxxl mg-b-20 ht-100p">
+        <img src="http://action.ufegrup.com/images/ticket.png" class="rounded-10 w-100" alt="">
+    </div>
+
+</div><!-- col -->
+<div class="col-sm-8 col-md-7 col-lg mg-t-10 mg-sm-t-0 mg-lg-t-15">
+    <div class="d-flex">
+        <h4 class="mg-b-2 tx-center flex-fill">@(Model.TicketSale.OrderNumber)</h4>
+    </div>
+    <div class="d-flex py-4">
+        <h5 class="mg-b-2 tx-center flex-fill">@(Model.CurrentTicketSaleSummary.PosStatusName)</h5>
+    </div>
+    <div class="d-flex">
+        <p class="mg-b-2 tx-color-03 tx-center flex-fill">@(Model.TicketSale.RecordDate)</p><br />
+    </div>
+    <div class="d-flex mg-b-10">
+        <p class="mg-b-2 tx-color-03 tx-center flex-fill">@(Model.CurrentTicketSaleSummary.FullName)</p>
+    </div>
+
+    <hr />
+    <div class="d-flex mg-b-20">
+        <div class="profile-skillset flex-fill">
+            <h4><a href="" class="link-01">@(Model.CurrentTicketSaleSummary.Total.ToString("N2")) @(Model.CurrentTicketSaleSummary.Sign)</a></h4>
+            <label>Satış</label>
+        </div>
+        <div class="profile-skillset flex-fill tx-right">
+            <h4><a href="" class="link-01">@(Model.CurrentTicketSaleSummary.PaymentAmount.ToString("N2")) @(Model.CurrentTicketSaleSummary.Sign)</a></h4>
+            <label class="pd-l-15">Tahsilat</label>
+        </div>
+    </div>
+    <hr />
+    <a href="@($"/Sale/Index?LocationID={Model.TicketSale.LocationID}&Date={Model.TicketSale.Date?.ToString("yyyy-MM-dd")}")" class="btn btn-block btn-primary">Satış Listesi</a>
+</div>
+

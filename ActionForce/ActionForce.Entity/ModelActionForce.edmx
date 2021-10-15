@@ -4929,6 +4929,25 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentSaleExchange' does
           <Property Name="SlipPath" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentsAllSummaryUnion' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VDocumentsAllSummaryUnion">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="Amount" />
+            <PropertyRef Name="Currency" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="Date" Type="date" />
+          <Property Name="Amount" Type="float" Nullable="false" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" Nullable="false" />
+          <Property Name="ReferenceID" Type="bigint" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
+          <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentTicketSaleReturn' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VDocumentTicketSaleReturn">
           <Key>
@@ -6031,6 +6050,23 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VRevenueLines' does not hav
           <Property Name="VAT" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSaleActionsSummaryUnion' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VSaleActionsSummaryUnion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="ActionTypeID" Type="int" />
+          <Property Name="ProcessName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProcessID" Type="bigint" />
+          <Property Name="ProcessDate" Type="date" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="ProcessUID" Type="uniqueidentifier" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSchedule' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VSchedule">
           <Key>
@@ -6305,6 +6341,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleAllSummary' does
           <Property Name="IsActive" Type="bit" />
           <Property Name="Environment" Type="nvarchar" MaxLength="20" />
           <Property Name="SortBy" Type="char" MaxLength="10" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleDocumentAction' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6352,6 +6390,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSalePosPaymentSummar
           <Property Name="Sign" Type="nvarchar" MaxLength="1" />
           <Property Name="BankName" Type="nvarchar" MaxLength="80" />
           <Property Name="FromPosTerminal" Type="bit" />
+          <Property Name="PaymentDate" Type="date" />
+          <Property Name="PaymentTime" Type="time" Precision="0" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleRowCheck' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6496,6 +6536,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleRowSummary' does
           <Property Name="ProductName" Type="nvarchar" MaxLength="50" />
           <Property Name="ExtraUnit" Type="int" />
           <Property Name="ExtraPrice" Type="float" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleSaleRowSummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -8470,6 +8511,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentSaleExchange].[SlipPath] AS [SlipPath]
     FROM [dbo].[VDocumentSaleExchange] AS [VDocumentSaleExchange]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VDocumentsAllSummaryUnion" EntityType="Self.VDocumentsAllSummaryUnion" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VDocumentsAllSummaryUnion].[ID] AS [ID], 
+    [VDocumentsAllSummaryUnion].[DocumentNumber] AS [DocumentNumber], 
+    [VDocumentsAllSummaryUnion].[LocationID] AS [LocationID], 
+    [VDocumentsAllSummaryUnion].[Date] AS [Date], 
+    [VDocumentsAllSummaryUnion].[Amount] AS [Amount], 
+    [VDocumentsAllSummaryUnion].[Currency] AS [Currency], 
+    [VDocumentsAllSummaryUnion].[ReferenceID] AS [ReferenceID], 
+    [VDocumentsAllSummaryUnion].[ActionTypeName] AS [ActionTypeName], 
+    [VDocumentsAllSummaryUnion].[UID] AS [UID], 
+    [VDocumentsAllSummaryUnion].[IsActive] AS [IsActive]
+    FROM [dbo].[VDocumentsAllSummaryUnion] AS [VDocumentsAllSummaryUnion]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VDocumentTicketSaleReturn" EntityType="Self.VDocumentTicketSaleReturn" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VDocumentTicketSaleReturn].[ID] AS [ID], 
@@ -9448,6 +9503,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VRevenueLines].[VAT] AS [VAT]
     FROM [dbo].[VRevenueLines] AS [VRevenueLines]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VSaleActionsSummaryUnion" EntityType="Self.VSaleActionsSummaryUnion" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VSaleActionsSummaryUnion].[ID] AS [ID], 
+    [VSaleActionsSummaryUnion].[LocationID] AS [LocationID], 
+    [VSaleActionsSummaryUnion].[ActionTypeID] AS [ActionTypeID], 
+    [VSaleActionsSummaryUnion].[ProcessName] AS [ProcessName], 
+    [VSaleActionsSummaryUnion].[ProcessID] AS [ProcessID], 
+    [VSaleActionsSummaryUnion].[ProcessDate] AS [ProcessDate], 
+    [VSaleActionsSummaryUnion].[DocumentNumber] AS [DocumentNumber], 
+    [VSaleActionsSummaryUnion].[Amount] AS [Amount], 
+    [VSaleActionsSummaryUnion].[Currency] AS [Currency], 
+    [VSaleActionsSummaryUnion].[ProcessUID] AS [ProcessUID]
+    FROM [dbo].[VSaleActionsSummaryUnion] AS [VSaleActionsSummaryUnion]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VSchedule" EntityType="Self.VSchedule" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VSchedule].[Id] AS [Id], 
@@ -9679,7 +9748,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketSaleAllSummary].[PayMethodList] AS [PayMethodList], 
     [VTicketSaleAllSummary].[IsActive] AS [IsActive], 
     [VTicketSaleAllSummary].[Environment] AS [Environment], 
-    [VTicketSaleAllSummary].[SortBy] AS [SortBy]
+    [VTicketSaleAllSummary].[SortBy] AS [SortBy], 
+    [VTicketSaleAllSummary].[LocationFullName] AS [LocationFullName], 
+    [VTicketSaleAllSummary].[Name] AS [Name]
     FROM [dbo].[VTicketSaleAllSummary] AS [VTicketSaleAllSummary]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VTicketSaleDocumentAction" EntityType="Self.VTicketSaleDocumentAction" store:Type="Views" store:Schema="dbo">
@@ -9716,7 +9787,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketSalePosPaymentSummary].[Currency] AS [Currency], 
     [VTicketSalePosPaymentSummary].[Sign] AS [Sign], 
     [VTicketSalePosPaymentSummary].[BankName] AS [BankName], 
-    [VTicketSalePosPaymentSummary].[FromPosTerminal] AS [FromPosTerminal]
+    [VTicketSalePosPaymentSummary].[FromPosTerminal] AS [FromPosTerminal], 
+    [VTicketSalePosPaymentSummary].[PaymentDate] AS [PaymentDate], 
+    [VTicketSalePosPaymentSummary].[PaymentTime] AS [PaymentTime]
     FROM [dbo].[VTicketSalePosPaymentSummary] AS [VTicketSalePosPaymentSummary]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VTicketSaleRowCheck" EntityType="Self.VTicketSaleRowCheck" store:Type="Views" store:Schema="dbo">
@@ -9833,7 +9906,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketSaleRowSummary].[Sign] AS [Sign], 
     [VTicketSaleRowSummary].[ProductName] AS [ProductName], 
     [VTicketSaleRowSummary].[ExtraUnit] AS [ExtraUnit], 
-    [VTicketSaleRowSummary].[ExtraPrice] AS [ExtraPrice]
+    [VTicketSaleRowSummary].[ExtraPrice] AS [ExtraPrice], 
+    [VTicketSaleRowSummary].[CategoryName] AS [CategoryName]
     FROM [dbo].[VTicketSaleRowSummary] AS [VTicketSaleRowSummary]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VTicketSaleSaleRowSummary" EntityType="Self.VTicketSaleSaleRowSummary" store:Type="Views" store:Schema="dbo">
@@ -10874,6 +10948,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VTicketSaleSaleRowSummary" EntityType="db293_ActionTimeDbModel.VTicketSaleSaleRowSummary" />
           <EntitySet Name="VTicketSalePaymentSummary" EntityType="db293_ActionTimeDbModel.VTicketSalePaymentSummary" />
           <EntitySet Name="VTicketSaleAllSummary" EntityType="db293_ActionTimeDbModel.VTicketSaleAllSummary" />
+          <EntitySet Name="VDocumentsAllSummaryUnion" EntityType="db293_ActionTimeDbModel.VDocumentsAllSummaryUnion" />
+          <EntitySet Name="VSaleActionsSummaryUnion" EntityType="db293_ActionTimeDbModel.VSaleActionsSummaryUnion" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -17533,6 +17609,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="BankName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
           <Property Name="ID" Type="Int64" Nullable="false" />
           <Property Name="FromPosTerminal" Type="Boolean" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="0" />
+          <Property Name="PaymentTime" Type="Time" Precision="0" />
         </EntityType>
         <EntityType Name="VTicketSaleSummary">
           <Key>
@@ -17623,6 +17701,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ProductName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ExtraUnit" Type="Int32" />
           <Property Name="ExtraPrice" Type="Double" />
+          <Property Name="CategoryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VTicketSaleDocumentAction">
           <Key>
@@ -18103,6 +18182,40 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="Environment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="SortBy" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VDocumentsAllSummaryUnion">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="Amount" />
+            <PropertyRef Name="Currency" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="Amount" Type="Double" Nullable="false" />
+          <Property Name="Currency" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="ReferenceID" Type="Int64" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="VSaleActionsSummaryUnion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="ProcessName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessID" Type="Int64" />
+          <Property Name="ProcessDate" Type="DateTime" Precision="0" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessUID" Type="Guid" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -24511,6 +24624,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VTicketSalePosPaymentSummary">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketSalePosPaymentSummary">
               <MappingFragment StoreEntitySet="VTicketSalePosPaymentSummary">
+                <ScalarProperty Name="PaymentTime" ColumnName="PaymentTime" />
+                <ScalarProperty Name="PaymentDate" ColumnName="PaymentDate" />
                 <ScalarProperty Name="FromPosTerminal" ColumnName="FromPosTerminal" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="BankName" ColumnName="BankName" />
@@ -24581,6 +24696,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VTicketSaleRowSummary">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketSaleRowSummary">
               <MappingFragment StoreEntitySet="VTicketSaleRowSummary">
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
                 <ScalarProperty Name="ExtraPrice" ColumnName="ExtraPrice" />
                 <ScalarProperty Name="ExtraUnit" ColumnName="ExtraUnit" />
                 <ScalarProperty Name="ProductName" ColumnName="ProductName" />
@@ -25083,6 +25199,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VTicketSaleAllSummary">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketSaleAllSummary">
               <MappingFragment StoreEntitySet="VTicketSaleAllSummary">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
                 <ScalarProperty Name="SortBy" ColumnName="SortBy" />
                 <ScalarProperty Name="Environment" ColumnName="Environment" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -25103,6 +25221,38 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
                 <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VDocumentsAllSummaryUnion">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentsAllSummaryUnion">
+              <MappingFragment StoreEntitySet="VDocumentsAllSummaryUnion">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="ReferenceID" ColumnName="ReferenceID" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VSaleActionsSummaryUnion">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VSaleActionsSummaryUnion">
+              <MappingFragment StoreEntitySet="VSaleActionsSummaryUnion">
+                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="ProcessName" ColumnName="ProcessName" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>

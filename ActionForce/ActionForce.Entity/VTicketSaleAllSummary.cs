@@ -35,5 +35,7 @@ namespace ActionForce.Entity
         public Nullable<bool> IsActive { get; set; }
         public string Environment { get; set; }
         public string SortBy { get; set; }
+        public string LocationFullName { get; set; }
+        public string Name { get; set; }
     }
 }

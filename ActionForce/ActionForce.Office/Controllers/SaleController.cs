@@ -11,9 +11,10 @@ namespace ActionForce.Office.Controllers
     public class SaleController : BaseController
     {
         [AllowAnonymous]
-        public ActionResult Index()
+        public ActionResult Index(int? LocationID, string Date)
         {
             SaleControlModel model = new SaleControlModel();
+            DateTime SelectedDate = new DateTime().Date;
 
             if (TempData["filter"] != null)
             {
@@ -25,9 +26,17 @@ namespace ActionForce.Office.Controllers
                 model.Filters = filterModel;
             }
 
+            if (LocationID != null && !string.IsNullOrEmpty(Date))
+            {
+                DateTime.TryParse(Date, out SelectedDate);
+
+                model.Filters.LocationID = LocationID;
+                model.Filters.Date = SelectedDate.Date;
+            }
+
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
-            if (model.Filters?.LocationID != null )
+            if (model.Filters?.LocationID != null)
             {
                 model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
                 model.Filters.Date = model.Filters.Date != null ? model.Filters.Date : model.CurrentLocation.LocalDate;
@@ -60,6 +69,92 @@ namespace ActionForce.Office.Controllers
 
             return RedirectToAction("Index", "Sale");
         }
+
+        [AllowAnonymous]
+        public ActionResult Detail(string id)
+        {
+            SaleControlModel model = new SaleControlModel();
+            DateTime SelectedDate = new DateTime().Date;
+
+            if (string.IsNullOrEmpty(id))
+            {
+                return RedirectToAction("Index");
+            }
+
+            model.TicketSale = Db.TicketSale.FirstOrDefault(x => x.UID.ToString() == id);
+
+            if (model.TicketSale != null)
+            {
+                model.CurrentTicketSaleSummary = Db.VTicketSaleAllSummary.FirstOrDefault(x => x.ID == model.TicketSale.ID);
+                model.TicketSaleRows = Db.VTicketSaleRowSummary.Where(x => x.SaleID == model.TicketSale.ID).ToList();
+                model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => x.SaleID == model.TicketSale.ID).ToList();
+            }
+
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
+        public ActionResult SaleAction(int? LocationID, string Date)
+        {
+            SaleControlModel model = new SaleControlModel();
+            DateTime SelectedDate = new DateTime().Date;
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+                model.Filters = filterModel;
+            }
+
+            if (LocationID != null && !string.IsNullOrEmpty(Date))
+            {
+                DateTime.TryParse(Date, out SelectedDate);
+
+                model.Filters.LocationID = LocationID;
+                model.Filters.Date = SelectedDate.Date;
+            }
+
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            if (model.Filters?.LocationID != null)
+            {
+                model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+                model.Filters.Date = model.Filters.Date != null ? model.Filters.Date : model.CurrentLocation.LocalDate;
+                model.TicketSaleSummary = Db.VTicketSaleAllSummary.Where(x => x.LocationID == model.Filters.LocationID && x.Date == model.Filters.Date).ToList();
+                List<long> saleIds = model.TicketSaleSummary.Select(x => x.ID).ToList();
+
+                model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => saleIds.Contains(x.SaleID.Value)).ToList();
+                model.DocumentsAllSummary = Db.VDocumentsAllSummaryUnion.Where(x => x.LocationID == model.Filters.LocationID && x.Date == model.Filters.Date).ToList();
+                model.SaleActionsAllSummary = Db.VSaleActionsSummaryUnion.Where(x => x.LocationID == model.Filters.LocationID && x.ProcessDate == model.Filters.Date).ToList();
+
+            }
+            else
+            {
+                model.Filters.Date = DateTime.UtcNow.Date;
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult FilterSaleAction(int? LocationID, DateTime? filterDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = LocationID;
+            model.Date = filterDate;
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("SaleAction", "Sale");
+        }
+
+
 
         #region Price
 
@@ -578,10 +673,10 @@ namespace ActionForce.Office.Controllers
 
                 TempData["Result"] = model.Result;
 
-                return RedirectToAction("PriceDetail","Sale",new { id });
+                return RedirectToAction("PriceDetail", "Sale", new { id });
             }
 
-            
+
         }
 
 
@@ -901,7 +996,7 @@ namespace ActionForce.Office.Controllers
                         TicketTypeID = prod.TicketTypeID,
                         Description = prod.Description,
                         TaxRate = prod.TaxRate
-                        
+
                     };
 
                     prod.CategoryID = ticketproduct.CategoryID;

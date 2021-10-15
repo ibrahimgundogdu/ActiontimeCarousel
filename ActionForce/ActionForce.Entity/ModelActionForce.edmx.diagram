@@ -8,18 +8,18 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Action" Width="1.5" PointX="10.625" PointY="20" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionAccounts" Width="1.5" PointX="2.75" PointY="16.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRow" Width="1.5" PointX="12.25" PointY="18.375" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowDocument" Width="1.5" PointX="15" PointY="7.125" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowDocument" Width="1.5" PointX="14.75" PointY="5.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowExpense" Width="1.5" PointX="4.75" PointY="16.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowLabors" Width="1.5" PointX="14" PointY="18.5" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowProcess" Width="1.5" PointX="17.375" PointY="19" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowResult" Width="1.5" PointX="9.5" PointY="11.375" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowResultChild" Width="1.5" PointX="17.75" PointY="5.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowResultChild" Width="1.5" PointX="19.625" PointY="7" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowResultCR" Width="1.5" PointX="6.75" PointY="19.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionRowSale" Width="1.5" PointX="17.75" PointY="11.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionState" Width="1.5" PointX="9.625" PointY="0.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ActionType" Width="1.5" PointX="3" PointY="9.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Animal" Width="1.5" PointX="19.75" PointY="1.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.AnimalType" Width="1.5" PointX="19.75" PointY="5.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.AnimalType" Width="1.5" PointX="19.75" PointY="4.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.AuthorizedIP" Width="1.5" PointX="19.75" PointY="14.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankAccount" Width="1.5" PointX="15" PointY="13" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankAccountType" Width="1.5" PointX="13.25" PointY="16.25" />
@@ -327,7 +327,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerCardStatu" Width="1.5" PointX="12.375" PointY="21.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationWareHouse" Width="1.5" PointX="11.25" PointY="10.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Product" Width="1.5" PointX="15.75" PointY="17.25" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerActions" Width="1.5" PointX="7.8074498101172267" PointY="27.675666568649778" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerActions" Width="1.5" PointX="14.75" PointY="29.5" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.AddressType" Width="1.5" PointX="11.25" PointY="8.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerCard" Width="1.5" PointX="0.625" PointY="18.125" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CustomerScorePointActions" Width="1.5" PointX="14.875" PointY="0.625" />
@@ -335,7 +335,10 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ScoreItem" Width="1.5" PointX="6.1372810984669623" PointY="15.60959834587276" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleSaleRowSummary" Width="1.5" PointX="25.75" PointY="1.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSalePaymentSummary" Width="1.5" PointX="4.7618685722173506" PointY="23.271300431001606" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleAllSummary" Width="1.5" PointX="1.7337381717440386" PointY="12.683137631361902" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleAllSummary" Width="1.5" PointX="17.375" PointY="5.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentsAllSummaryUnion" Width="1.5" PointX="4.2103819233413695" PointY="31.277401506564303" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSaleActionsSummaryUnion" Width="1.5" PointX="11.062660250376286" PointY="1.44523635573929" />
+        
         
         
         
@@ -344,6 +347,54 @@
         
         
 &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
+      &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
       &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
       &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24
       &gt;&gt;&gt;&gt;&gt;&gt;&gt; 7fb01975f0bcf7e36fec9c2ad361191e517aee24

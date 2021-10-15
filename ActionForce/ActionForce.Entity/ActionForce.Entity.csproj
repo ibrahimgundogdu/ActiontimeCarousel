@@ -927,6 +927,9 @@
     <Compile Include="VDocumentSaleExchange.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VDocumentsAllSummaryUnion.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VDocumentTicketSaleReturn.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -1018,6 +1021,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VRevenueLines.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VSaleActionsSummaryUnion.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VSchedule.cs">

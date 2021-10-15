@@ -29,5 +29,15 @@ namespace ActionForce.Office
         public Location CurrentLocation { get; set; }
         public IEnumerable<Location> LocationList { get; set; }
         public List<VTicketSaleAllSummary> TicketSaleSummary { get; set; }
+        public VTicketSaleAllSummary CurrentTicketSaleSummary { get; set; }
+
+        public TicketSale TicketSale { get; set; }
+
+        public List<VTicketSaleRowSummary> TicketSaleRows { get; set; }
+        public List<VTicketSalePosPaymentSummary> TicketSalePosPaymentSummary { get; set; }
+        public List<VDocumentsAllSummaryUnion> DocumentsAllSummary { get; set; }
+        public List<VSaleActionsSummaryUnion> SaleActionsAllSummary { get; set; }
+
+
     }
 }
