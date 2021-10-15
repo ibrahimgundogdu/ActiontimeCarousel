@@ -24,5 +24,10 @@ namespace ActionForce.Office
 
         public VPriceCategory CurrentPriceCategory { get; set; }
         public TicketType CurrentTicketType { get; set; }
+
+        public FilterModel Filters { get; set; }
+        public Location CurrentLocation { get; set; }
+        public IEnumerable<Location> LocationList { get; set; }
+        public List<VTicketSaleAllSummary> TicketSaleSummary { get; set; }
     }
 }

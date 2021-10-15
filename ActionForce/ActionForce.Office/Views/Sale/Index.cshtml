@@ -1,0 +1,251 @@
+﻿@model SaleControlModel
+@{
+    ViewBag.Title = "Satışlar";
+}
+
+@section style{
+
+}
+
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">Satışlar</span>
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div>
+<div class="content-body">
+
+    @using (Html.BeginForm("FilterSale", "Sale", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-row align-items-end">
+            <div class="form-group col-md-2 d-flex align-items-end">
+                <input id="SearchKey" name="SearchKey" type="text" class="form-control" autocomplete="off" placeholder="Arama" value="@(Model.Filters?.SearchKey)">
+            </div>
+            <div class="form-group col-md-3 d-flex align-items-end">
+                <select class="form-control select2" id="locationId" name="LocationID">
+                    <option value="" label="Lokasyon Seçiminiz"></option>
+                    @foreach (var item in Model.LocationList)
+                    {
+                        <option value="@item.LocationID" @(Model.Filters.LocationID == item.LocationID ? "selected" : "")>@(Html.Raw($"<strong>{item.SortBy}</strong> {item.LocationName} {item.Description} {item.State}"))</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-2 d-flex align-items-end">
+                <input type="text" id="dateFrom" name="filterDate" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.Filters.Date.Value.ToString("yyyy-MM-dd"))">
+            </div>
+
+            <div class="form-group col-md-1 d-flex align-items-end ">
+                <button class="btn btn-primary" type="submit" id="btnsearch">Ara</button>
+            </div>
+        </div>
+
+    }
+
+
+
+    <div>
+        @if (Model.TicketSaleSummary != null)
+        {
+            <div class="table">
+                <table class="table table-sm table-hover">
+                    <thead>
+
+                        <tr>
+                            <th>#</th>
+                            <th>Sipariş No</th>
+                            <th>Şube</th>
+                            <th>Tarih</th>
+                            <th>Durum</th>
+                            <th>Kaynak</th>
+                            <th>Adet</th>
+                            <th class="bd-l text-right">Satış</th>
+                            <th class="text-right">Tahsilat</th>
+                            <th class="text-right">Bakiye</th>
+                            <th class=" bd-l">Ödeme</th>
+                            <th>İşlendi</th>
+                            <th>Kaydeden</th>
+                            <th>Kayıt Tarihi</th>
+                            <th>Aktif</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model.TicketSaleSummary)
+                        {
+                        <tr style='@(item.IsActive == false ? "color: red" : "")'>
+                            <td class="tx-sm-13 bold">@item.ID</td>
+                            <td class="tx-sm-13 font-weight-bold"><a href="@("/Sale/Detail/" + @item.UID)">@item.OrderNumber</a></td>
+                            <td class="tx-sm-13">@(item.SortBy)</td>
+                            <td class="tx-sm-13">@(item.Date?.ToShortDateString())</td>
+                            <td class="tx-sm-13 @(item.PosStatusID == 3 ? "font-weight-bold":"")">@item.PosStatusName</td>
+                            <td class="tx-sm-13">@(item.Environment)</td>
+                            <td class="tx-sm-13">@(item.Quantity)</td>
+
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold  bd-l">@(item.Total.ToString("N2")) @(item.Sign)</td>
+                            <td class="tx-sm-13 text-right bg-primary-light @(item.PaymentAmount != 0 ? "font-weight-bold":"")">@(item.PaymentAmount.ToString("N2")) @(item.Sign)</td>
+                            <td class="tx-sm-13 text-right bg-primary-light @(item.BalanceAmount != 0 ? "font-weight-bold":"")">@(item.BalanceAmount.ToString("N2")) @(item.Sign)</td>
+
+                            <td class="tx-sm-13 bd-l">@item.PayMethodList</td>
+                            <td class="tx-sm-13">@(item.IsSendPosTerminal == true ? "Ingenico":"Manuel")</td>
+                            <td class="tx-sm-13">@(item.FullName)</td>
+                            <td class="tx-sm-13">@item.RecordDate</td>
+                            <td class="tx-sm-13">@(item.IsActive)</td>
+
+                        </tr>
+                        }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th class="text-right bg-light bd-l">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3).Sum(x=> x.Total)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
+                            <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3).Sum(x=> x.PaymentAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
+                            <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3).Sum(x=> x.BalanceAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
+                            <th class="bd-l"></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="table">
+                Lütfen filtreleme yapınız.
+            </div>
+        }
+
+        <footer class="content-footer">
+            <div>
+                <span>&copy; @DateTime.Now.Year UFE Group LLC </span>
+            </div>
+
+        </footer>
+
+    </div>
+</div>
+
+
+@section scripts {
+
+    <script>
+        $(function () {
+
+            $('.select2').select2({
+                placeholder: 'Lokasyon Seçiminiz',
+                searchInputPlaceholder: 'Search options'
+            });
+
+            var dateFormat = 'yy-mm-dd',
+                from = $('#dateFrom')
+                    .datepicker({
+                        defaultDate: '+1w',
+                        numberOfMonths: 2,
+                        dateFormat: "yy-mm-dd",
+                        dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                        monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                        firstDay: 1
+                    })
+                    .on('change', function () {
+                        to.datepicker('option', 'minDate', getDate(this));
+                    }),
+                to = $('#dateTo').datepicker({
+                    defaultDate: '+1w',
+                    numberOfMonths: 2,
+                    dateFormat: "yy-mm-dd",
+                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                    firstDay: 1
+                })
+                    .on('change', function () {
+                        from.datepicker('option', 'maxDate', getDate(this));
+                    });
+
+            $('#DocumentDate').datepicker({
+                dateFormat: "yy-mm-dd",
+                dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                firstDay: 1
+            });
+
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+
+            }
+
+        });
+
+        //function DeleteCashSale(id) {
+        //    $.ajax({
+        //        method: "GET",
+        //        url: "/Cash/DeleteCashSale",
+        //        data: { id: id }
+        //    }).done(function (d) {
+        //        $("#DeleteCashSale").html(d);
+        //    });
+        //}
+
+    </script>
+    <script>
+        $(function () {
+            'use strict'
+
+            $('.off-canvas-menu').on('click', function (e) {
+                e.preventDefault();
+                var target = $(this).attr('href');
+                $(target).addClass('show');
+            });
+
+
+            $('.off-canvas .close').on('click', function (e) {
+                e.preventDefault();
+                $(this).closest('.off-canvas').removeClass('show');
+            })
+
+            $(document).on('click touchstart', function (e) {
+                e.stopPropagation();
+
+                if (!$(e.target).closest('.off-canvas-menu').length) {
+                    var offCanvas = $(e.target).closest('.off-canvas').length;
+                    if (!offCanvas) {
+                        $('.off-canvas.show').addClass('show');
+                    }
+                }
+            });
+
+
+        });
+    </script>
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+}

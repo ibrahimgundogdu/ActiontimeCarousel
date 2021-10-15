@@ -1041,6 +1041,9 @@
     <Compile Include="VTicketPromotion.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VTicketSaleAllSummary.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VTicketSaleDocumentAction.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

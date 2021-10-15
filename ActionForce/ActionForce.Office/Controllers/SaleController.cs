@@ -15,7 +15,50 @@ namespace ActionForce.Office.Controllers
         {
             SaleControlModel model = new SaleControlModel();
 
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+                model.Filters = filterModel;
+            }
+
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            if (model.Filters?.LocationID != null )
+            {
+                model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+                model.Filters.Date = model.Filters.Date != null ? model.Filters.Date : model.CurrentLocation.LocalDate;
+                model.TicketSaleSummary = Db.VTicketSaleAllSummary.Where(x => x.LocationID == model.Filters.LocationID && x.Date == model.Filters.Date).ToList();
+            }
+            else
+            {
+                model.Filters.Date = DateTime.UtcNow.Date;
+            }
+
+            if (!string.IsNullOrEmpty(model.Filters.SearchKey))
+            {
+                model.TicketSaleSummary = Db.VTicketSaleAllSummary.Where(x => x.OrderNumber.Contains(model.Filters.SearchKey)).ToList();
+            }
+
             return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult FilterSale(string SearchKey, int? LocationID, DateTime? filterDate)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = LocationID;
+            model.Date = filterDate;
+            model.SearchKey = SearchKey;
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("Index", "Sale");
         }
 
         #region Price

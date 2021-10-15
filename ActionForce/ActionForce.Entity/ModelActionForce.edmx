@@ -6275,6 +6275,38 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketPromotion' does not 
           <Property Name="ProductDescription" Type="nvarchar" MaxLength="500" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleAllSummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VTicketSaleAllSummary">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="UID" />
+            <PropertyRef Name="Total" />
+            <PropertyRef Name="PaymentAmount" />
+            <PropertyRef Name="BalanceAmount" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="OrderNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="Date" Type="date" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="PosStatusID" Type="int" />
+          <Property Name="EnvironmentID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="Quantity" Type="int" />
+          <Property Name="Total" Type="float" Nullable="false" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="Sign" Type="nvarchar" MaxLength="1" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="PaymentAmount" Type="float" Nullable="false" />
+          <Property Name="BalanceAmount" Type="float" Nullable="false" />
+          <Property Name="PosStatusName" Type="nvarchar" MaxLength="40" />
+          <Property Name="IsSendPosTerminal" Type="bit" />
+          <Property Name="PayMethodList" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsActive" Type="bit" />
+          <Property Name="Environment" Type="nvarchar" MaxLength="20" />
+          <Property Name="SortBy" Type="char" MaxLength="10" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleDocumentAction' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VTicketSaleDocumentAction">
           <Key>
@@ -9625,6 +9657,31 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketPromotion].[ProductDescription] AS [ProductDescription]
     FROM [dbo].[VTicketPromotion] AS [VTicketPromotion]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VTicketSaleAllSummary" EntityType="Self.VTicketSaleAllSummary" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VTicketSaleAllSummary].[ID] AS [ID], 
+    [VTicketSaleAllSummary].[OrderNumber] AS [OrderNumber], 
+    [VTicketSaleAllSummary].[Date] AS [Date], 
+    [VTicketSaleAllSummary].[LocationID] AS [LocationID], 
+    [VTicketSaleAllSummary].[PosStatusID] AS [PosStatusID], 
+    [VTicketSaleAllSummary].[EnvironmentID] AS [EnvironmentID], 
+    [VTicketSaleAllSummary].[UID] AS [UID], 
+    [VTicketSaleAllSummary].[RecordDate] AS [RecordDate], 
+    [VTicketSaleAllSummary].[Quantity] AS [Quantity], 
+    [VTicketSaleAllSummary].[Total] AS [Total], 
+    [VTicketSaleAllSummary].[Currency] AS [Currency], 
+    [VTicketSaleAllSummary].[Sign] AS [Sign], 
+    [VTicketSaleAllSummary].[FullName] AS [FullName], 
+    [VTicketSaleAllSummary].[PaymentAmount] AS [PaymentAmount], 
+    [VTicketSaleAllSummary].[BalanceAmount] AS [BalanceAmount], 
+    [VTicketSaleAllSummary].[PosStatusName] AS [PosStatusName], 
+    [VTicketSaleAllSummary].[IsSendPosTerminal] AS [IsSendPosTerminal], 
+    [VTicketSaleAllSummary].[PayMethodList] AS [PayMethodList], 
+    [VTicketSaleAllSummary].[IsActive] AS [IsActive], 
+    [VTicketSaleAllSummary].[Environment] AS [Environment], 
+    [VTicketSaleAllSummary].[SortBy] AS [SortBy]
+    FROM [dbo].[VTicketSaleAllSummary] AS [VTicketSaleAllSummary]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VTicketSaleDocumentAction" EntityType="Self.VTicketSaleDocumentAction" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VTicketSaleDocumentAction].[ID] AS [ID], 
@@ -10816,6 +10873,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="VTicketSaleSaleRowSummary" EntityType="db293_ActionTimeDbModel.VTicketSaleSaleRowSummary" />
           <EntitySet Name="VTicketSalePaymentSummary" EntityType="db293_ActionTimeDbModel.VTicketSalePaymentSummary" />
+          <EntitySet Name="VTicketSaleAllSummary" EntityType="db293_ActionTimeDbModel.VTicketSaleAllSummary" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -18016,6 +18074,36 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Date" Type="DateTime" Precision="0" />
           <Property Name="PosStatusID" Type="Int32" />
         </EntityType>
+        <EntityType Name="VTicketSaleAllSummary">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="UID" />
+            <PropertyRef Name="Total" />
+            <PropertyRef Name="PaymentAmount" />
+            <PropertyRef Name="BalanceAmount" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="OrderNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="PosStatusID" Type="Int32" />
+          <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="UID" Type="Guid" Nullable="false" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="Quantity" Type="Int32" />
+          <Property Name="Total" Type="Double" Nullable="false" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="PaymentAmount" Type="Double" Nullable="false" />
+          <Property Name="BalanceAmount" Type="Double" Nullable="false" />
+          <Property Name="PosStatusName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="IsSendPosTerminal" Type="Boolean" />
+          <Property Name="PayMethodList" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Environment" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="10" FixedLength="true" Unicode="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -24988,6 +25076,33 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="PaymentType" ColumnName="PaymentType" />
                 <ScalarProperty Name="FromPosTerminal" ColumnName="FromPosTerminal" />
                 <ScalarProperty Name="SaleID" ColumnName="SaleID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VTicketSaleAllSummary">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketSaleAllSummary">
+              <MappingFragment StoreEntitySet="VTicketSaleAllSummary">
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="Environment" ColumnName="Environment" />
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="PayMethodList" ColumnName="PayMethodList" />
+                <ScalarProperty Name="IsSendPosTerminal" ColumnName="IsSendPosTerminal" />
+                <ScalarProperty Name="PosStatusName" ColumnName="PosStatusName" />
+                <ScalarProperty Name="BalanceAmount" ColumnName="BalanceAmount" />
+                <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Sign" ColumnName="Sign" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
+                <ScalarProperty Name="PosStatusID" ColumnName="PosStatusID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="OrderNumber" ColumnName="OrderNumber" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
