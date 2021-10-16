@@ -12,9 +12,22 @@ namespace ActionForce.Office.Controllers
     {
         // GET: Actions
         [AllowAnonymous]
-        public ActionResult Index(int? locationId)
+        public ActionResult Index(int? locationId, string dateBegin, string dateEnd)
         {
             ActionControlModel model = new ActionControlModel();
+
+            var DateBegin = DateTime.Now.AddMonths(-1).Date;
+            var DateEnd = DateTime.Now.Date;
+
+            if (!string.IsNullOrEmpty(dateBegin))
+            {
+                DateTime.TryParse(dateBegin, out DateBegin);
+            }
+            if (!string.IsNullOrEmpty(dateEnd))
+            {
+                DateTime.TryParse(dateEnd, out DateEnd);
+            }
+
 
             if (TempData["filter"] != null)
             {
@@ -25,8 +38,8 @@ namespace ActionForce.Office.Controllers
                 FilterModel filterModel = new FilterModel();
 
                 filterModel.LocationID = locationId != null ? locationId : Db.Location.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).LocationID;
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
+                filterModel.DateBegin = DateBegin;
+                filterModel.DateEnd = DateEnd;
                 model.Filters = filterModel;
             }
 

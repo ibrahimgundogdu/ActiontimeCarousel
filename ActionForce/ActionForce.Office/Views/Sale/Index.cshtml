@@ -52,7 +52,14 @@
             <div class="table">
                 <table class="table table-sm table-hover">
                     <thead>
-
+                        <tr>
+                            <th colspan="13">
+                                @(Model.Filters.Date?.ToLongDateString()) &nbsp;&nbsp; - &nbsp;&nbsp; @(Model.CurrentLocation.LocationFullName)
+                            </th>
+                            <th colspan="2" class="text-right">
+                                <a href="@($"/Action/Index?locationID={Model.CurrentLocation.LocationID}&DateBegin={Model.Filters.Date?.ToString("yyyy-MM-dd")}&&DateEnd={Model.Filters.Date?.ToString("yyyy-MM-dd")}")" class="btn btn-block btn-primary btn-xs" target="_blank">Cari Hesap Ekstresi</a>
+                            </th>
+                        </tr>
                         <tr>
                             <th>#</th>
                             <th>Sipariş No</th>
@@ -106,9 +113,9 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th class="text-right bg-light bd-l">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3).Sum(x=> x.Total)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
-                            <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3).Sum(x=> x.PaymentAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
-                            <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3).Sum(x=> x.BalanceAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
+                            <th class="text-right bg-light bd-l">@((Model.TicketSaleSummary.Where(x=> (x.PosStatusID == 3 || x.PosStatusID == 2)).Sum(x=> x.Total)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
+                            <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> (x.PosStatusID == 3)).Sum(x=> x.PaymentAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
+                            <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> (x.PosStatusID > 0)).Sum(x=> x.BalanceAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
                             <th class="bd-l"></th>
                             <th></th>
                             <th></th>
