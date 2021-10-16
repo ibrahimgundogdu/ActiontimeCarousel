@@ -82,26 +82,26 @@
 
                         @foreach (var item in Model.TicketSaleSummary)
                         {
-                        <tr style='@(item.IsActive == false ? "color: red" : "")'>
-                            <td class="tx-sm-13 bold">@item.ID</td>
-                            <td class="tx-sm-13 font-weight-bold"><a href="@("/Sale/Detail/" + @item.UID)">@item.OrderNumber</a></td>
-                            <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)">@(item.SortBy)</a></td>
-                            <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)">@(item.Date?.ToShortDateString())</a></td>
-                            <td class="tx-sm-13 @(item.PosStatusID == 3 ? "font-weight-bold":"")">@item.PosStatusName</td>
-                            <td class="tx-sm-13">@(item.Environment)</td>
-                            <td class="tx-sm-13">@(item.Quantity)</td>
+                            <tr style='@(item.IsActive == false ? "color: red" : "")'>
+                                <td class="tx-sm-13 bold">@item.ID</td>
+                                <td class="tx-sm-13 font-weight-bold"><a href="@("/Sale/Detail/" + @item.UID)">@item.OrderNumber</a></td>
+                                <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)">@(item.SortBy)</a></td>
+                                <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)">@(item.Date?.ToShortDateString())</a></td>
+                                <td class="tx-sm-13 @(item.PosStatusID == 3 ? "font-weight-bold":"")">@item.PosStatusName</td>
+                                <td class="tx-sm-13">@(item.Environment)</td>
+                                <td class="tx-sm-13">@(item.Quantity)</td>
 
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold  bd-l">@(item.Total.ToString("N2")) @(item.Sign)</td>
-                            <td class="tx-sm-13 text-right bg-primary-light @(item.PaymentAmount != 0 ? "font-weight-bold":"")">@(item.PaymentAmount.ToString("N2")) @(item.Sign)</td>
-                            <td class="tx-sm-13 text-right bg-primary-light @(item.BalanceAmount != 0 ? "font-weight-bold":"")">@(item.BalanceAmount.ToString("N2")) @(item.Sign)</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold  bd-l">@(item.Total.ToString("N2")) @(item.Sign)</td>
+                                <td class="tx-sm-13 text-right bg-primary-light @(item.PaymentAmount != 0 ? "font-weight-bold":"")">@(item.PaymentAmount.ToString("N2")) @(item.Sign)</td>
+                                <td class="tx-sm-13 text-right bg-primary-light @(item.BalanceAmount != 0 ? "font-weight-bold":"")">@(item.BalanceAmount.ToString("N2")) @(item.Sign)</td>
 
-                            <td class="tx-sm-13 bd-l">@item.PayMethodList</td>
-                            <td class="tx-sm-13">@(item.IsSendPosTerminal == true ? "Ingenico":"Manuel")</td>
-                            <td class="tx-sm-13">@(item.FullName)</td>
-                            <td class="tx-sm-13">@item.RecordDate</td>
-                            <td class="tx-sm-13">@(item.IsActive)</td>
+                                <td class="tx-sm-13 bd-l">@item.PayMethodList</td>
+                                <td class="tx-sm-13">@(item.IsSendPosTerminal == true ? "Ingenico":"Manuel")</td>
+                                <td class="tx-sm-13">@(item.FullName)</td>
+                                <td class="tx-sm-13">@item.RecordDate</td>
+                                <td class="tx-sm-13">@(item.IsActive)</td>
 
-                        </tr>
+                            </tr>
                         }
                     </tbody>
                     <tfoot>
@@ -113,9 +113,9 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th class="text-right bg-light bd-l">@((Model.TicketSaleSummary.Where(x=> (x.PosStatusID == 3 || x.PosStatusID == 2)).Sum(x=> x.Total)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
-                            <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> (x.PosStatusID == 3)).Sum(x=> x.PaymentAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
-                            <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> (x.PosStatusID > 0)).Sum(x=> x.BalanceAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
+                            <th class="text-right bg-light bd-l">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID <= 3 && x.IsActive == true).Sum(x=> x.Total)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
+                            <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.PaymentAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
+                            <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID <= 3 && x.IsActive == true).Sum(x=> x.BalanceAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
                             <th class="bd-l"></th>
                             <th></th>
                             <th></th>
