@@ -28,5 +28,6 @@ namespace ActionForce.Entity
         public Nullable<bool> FromPosTerminal { get; set; }
         public Nullable<System.DateTime> PaymentDate { get; set; }
         public Nullable<System.TimeSpan> PaymentTime { get; set; }
+        public Nullable<int> PosStatusID { get; set; }
     }
 }

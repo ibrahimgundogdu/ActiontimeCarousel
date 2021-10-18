@@ -154,6 +154,90 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("SaleAction", "Sale");
         }
 
+        [AllowAnonymous]
+        public ActionResult RemovePayment(long? id)
+        {
+            if (id == null)
+            {
+                return Redirect("Index");
+            }
+
+            Guid? saleUid = null;
+
+            SaleControlModel model = new SaleControlModel();
+            model.Result = new Result();
+
+            DateTime SelectedDate = new DateTime().Date;
+
+            var payment = Db.TicketSalePosPayment.FirstOrDefault(x => x.ID == id);
+
+            if (payment != null)
+            {
+                var sale = Db.TicketSale.FirstOrDefault(x => x.ID == payment.SaleID);
+                var allpayment = Db.TicketSalePosPayment.Where(x => x.SaleID == payment.SaleID).ToList();
+
+                saleUid = sale.UID;
+
+                if (allpayment.Sum(x=> x.PaymentAmount) > sale.Amount && payment.FromPosTerminal != true  )
+                {
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = $"{sale.ID} ID'li satışın {payment.ID} ID'li ödemesi silindi.";
+
+                    OfficeHelper.AddApplicationLog("Office", "Sale", "Delete", payment.ID.ToString(), "Sale", "RemovePayment", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow, model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, payment);
+
+                    sale.PosStatusID = 1;
+
+                    Db.TicketSalePosPayment.Remove(payment);
+                    Db.SaveChanges();
+
+                    Db.CheckLocationPosTicketSale(sale.ID);
+
+                    TempData["Result"] = model.Result;
+                }
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = $"Sipariş ödemesi Bulunamadı.";
+                TempData["Result"] = model.Result;
+            }
+
+            return RedirectToAction("Detail", new { id = saleUid });
+        }
+
+        [AllowAnonymous]
+        public ActionResult CheckSale(Guid? id)
+        {
+            if (id == null)
+            {
+                return Redirect("Index");
+            }
+
+            SaleControlModel model = new SaleControlModel();
+            model.Result = new Result();
+
+            var sale = Db.TicketSale.FirstOrDefault(x => x.UID == id);
+
+            if (sale != null)
+            {
+               
+                Db.CheckLocationPosTicketSale(sale.ID);
+
+                model.Result.IsSuccess = true;
+                model.Result.Message = $"{sale.ID} ID'li sipariş kontrol edildi.";
+
+                TempData["Result"] = model.Result;
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = $"Sipariş Bulunamadı.";
+                TempData["Result"] = model.Result;
+            }
+
+            return RedirectToAction("Detail", new { id = id.ToString() });
+        }
+        
 
 
         #region Price

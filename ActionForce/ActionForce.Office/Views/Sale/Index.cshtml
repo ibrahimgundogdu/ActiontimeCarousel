@@ -112,7 +112,7 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th></th>
+                            <th>@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.Quantity)))</th>
                             <th class="text-right bg-light bd-l">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID <= 3 && x.IsActive == true).Sum(x=> x.Total)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
                             <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.PaymentAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
                             <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID <= 3 && x.IsActive == true).Sum(x=> x.BalanceAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>

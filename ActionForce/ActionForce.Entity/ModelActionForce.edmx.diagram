@@ -72,7 +72,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PerformanceX" Width="1.5" PointX="10.75" PointY="30.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Permission" Width="1.5" PointX="7.25" PointY="0.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PrePaidCampaign" Width="1.5" PointX="13.125" PointY="2.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.PrePaidCampaignPrices" Width="1.5" PointX="17.25" PointY="3" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.PrePaidCampaignPrices" Width="1.5" PointX="17.25" PointY="3.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ProductCategory" Width="1.5" PointX="16.75" PointY="30.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ProductType" Width="1.5" PointX="18.75" PointY="30.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.PromotionBlackOut" Width="1.5" PointX="28.75" PointY="30.75" />
@@ -337,7 +337,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSalePaymentSummary" Width="1.5" PointX="4.7618685722173506" PointY="23.271300431001606" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleAllSummary" Width="1.5" PointX="17.375" PointY="5.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentsAllSummaryUnion" Width="1.5" PointX="4.2103819233413695" PointY="31.277401506564303" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSaleActionsSummaryUnion" Width="1.5" PointX="11.062660250376286" PointY="1.44523635573929" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSaleActionsSummaryUnion" Width="1.5" PointX="16.5" PointY="0.625" />
         
         
         

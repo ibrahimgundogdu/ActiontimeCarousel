@@ -1,6 +1,10 @@
 ﻿@model SaleControlModel
 @{
     ViewBag.Title = "Detail";
+
+    var paymenttotalamount = Model.TicketSalePosPaymentSummary.Sum(x => x.PaymentAmount) ?? 0;
+    var saletotalamount = Model.TicketSale.Amount ?? 0;
+
 }
 @section style{
     <link rel="stylesheet" href="/lib/animate.css/animate.min.css">
@@ -125,6 +129,15 @@
                                     <td>Aktif</td>
                                     <td>@(Model.TicketSale.IsActive == true ? "Aktif":"Pasif")</td>
                                 </tr>
+                                <tr>
+                                    <td>Kontrol</td>
+                                    <td>
+                                        <a href="@($"/Sale/CheckSale/{Model.TicketSale.UID}")" class="btn btn-xs btn-primary" onclick="return confirm('Kontrol işlemi yapılacak emin misiniz?') ? true : false">Kontrol Et</a>
+                                    </td>
+                                </tr>
+
+
+
                             </tbody>
                         </table>
                     </div>
@@ -188,6 +201,7 @@
                                     <th>TAKSİT</th>
                                     <th>BANKA</th>
                                     <th>NEREDEN</th>
+                                    <th></th>
                                 </tr>
                                 @foreach (var item in Model.TicketSalePosPaymentSummary)
                                 {
@@ -197,6 +211,12 @@
                                         <td>@(item.PaymentType == 4 ? item.NumberOfInstallment.ToString() : "")</td>
                                         <td>@(item.BankName)</td>
                                         <td>@(item.FromPosTerminal == true ? "Ingenico":"Manuel")</td>
+                                        <td>
+                                            @if (item.FromPosTerminal != true && paymenttotalamount > saletotalamount)
+                                            {
+                                                <a href="@($"/Sale/RemovePayment/{item.ID}")" onclick="return confirm('Silmek istediğinize emin misiniz?') ? true : false">Sil</a>
+                                            }
+                                        </td>
                                     </tr>
                                 }
 
@@ -210,3 +230,23 @@
         </div>
     </div>
 </div>
+
+@section scripts{
+
+    @if (Model.Result != null) //
+    {
+        <script type="text/javascript">
+        $.toast({
+            heading: 'Information',
+            text: '@Model.Result.Message ',
+            showHideTransition: 'slide',
+            icon: 'info',
+            hideAfter: 5000,
+            position: 'bottom-right',
+        });
+        </script>
+    }
+
+
+
+}

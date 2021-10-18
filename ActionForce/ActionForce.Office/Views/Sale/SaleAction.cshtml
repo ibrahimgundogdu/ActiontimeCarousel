@@ -1,6 +1,7 @@
 ﻿@model SaleControlModel
 @{
     ViewBag.Title = "Satış Tahsilat Cari";
+    var sign = Model.Authentication.ActionEmployee.OurCompanyID == 2 ? "₺" : Model.Authentication.ActionEmployee.OurCompanyID == 1 ? "$" : "";
 }
 
 @section style{
@@ -50,12 +51,12 @@
                 <table class="table table-sm table-hover">
                     <thead>
                         <tr>
-                            <th colspan="15">
+                            <th colspan="16">
                                 @(Model.Filters.Date?.ToLongDateString()) &nbsp;&nbsp; - &nbsp;&nbsp; @(Model.CurrentLocation.LocationFullName)
                             </th>
                         </tr>
                         <tr>
-                            <th colspan="5">Satış</th>
+                            <th colspan="6">Satış</th>
                             <th colspan="4" class="bd-l">Tahsilat</th>
                             <th colspan="4" class="bd-l">Doküman</th>
                             <th colspan="2" class="bd-l">Cari</th>
@@ -63,7 +64,8 @@
                         <tr>
                             <th class="">Sipariş No</th>
                             <th>Durum</th>
-                            <th class="bd-l text-right">Tutar</th>
+                            <th class="bd-l text-right">Ad.</th>
+                            <th class="bd-r text-right">Tutar</th>
                             <th>Kaynak</th>
                             <th class="text-right">Saat</th>
 
@@ -75,7 +77,7 @@
                             <th class="bd-l">No</th>
                             <th class="text-right">Tutar</th>
                             <th>Tür</th>
-                            <th class="text-right">Aktif</th>
+                            <th class="text-right">Aktif</th> 
 
                             <th class="bd-l">No</th>
                             <th class="text-right">Tutar</th>
@@ -83,7 +85,7 @@
                     </thead>
                     <tbody>
 
-                        @foreach (var item in Model.TicketSaleSummary)
+                        @foreach (var item in Model.TicketSaleSummary.OrderBy(x=> x.RecordDate))
                         {
                             var payments = Model.TicketSalePosPaymentSummary.Where(x => x.SaleID == item.ID).ToList();
                             var documents = Model.DocumentsAllSummary.Where(x => x.ReferenceID == item.ID).ToList();
@@ -91,71 +93,129 @@
                             var actions = Model.SaleActionsAllSummary.Where(x => uids.Contains(x.ProcessUID)).ToList();
 
 
-                            <tr>
-                                <td class="tx-sm-13 font-weight-bold @(item.IsActive == false ? "text-danger" : "")">
-                                    <a href="@("/Sale/Detail/" + @item.UID)">@item.OrderNumber</a>
-                                </td>
-                                <td class="tx-sm-13 @(item.PosStatusID == 3 ? "font-weight-bold":"")">@item.PosStatusName</td>
-                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Total.ToString("N2")) @(item.Sign)</td>
-                                <td class="tx-sm-13">@(item.IsSendPosTerminal == true ? "Ingenico":"Manuel")</td>
-                                <td class="tx-sm-13 text-right">@(item.RecordDate?.ToString(@"T"))</td>
+                        <tr>
+                            <td class="tx-sm-13 font-weight-bold @(item.IsActive == false ? "text-danger" : "")">
+                                <a href="@("/Sale/Detail/" + @item.UID)">@item.OrderNumber</a>
+                            </td>
+                            <td class="tx-sm-13 @(item.PosStatusID == 3 ? "font-weight-bold":"")">@item.PosStatusName</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Quantity)</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Total.ToString("N2")) @(item.Sign)</td>
 
-                                <td class="tx-sm-13 bd-l " colspan="4">
-                                    @if (payments != null)
-                                    {
-                                        <table class="table table-borderless m-0 p-0">
-                                            @foreach (var payment in payments)
-                                            {
-                                                <tr>
-                                                    <td class="tx-sm-13" style="width:25%;">@(payment.PaymentTypeName)</td>
-                                                    <td class="tx-sm-13 text-right font-weight-bold" style="width:20%;">@(payment.PaymentAmount?.ToString("N2")) @(payment.Sign) </td>
-                                                    <td class="tx-sm-13" style="width:20%;">@(payment.FromPosTerminal == true ? "Ingenico":"Manuel")</td>
-                                                    <td class="tx-sm-13 text-right">@(payment.PaymentTime?.ToString("T"))</td>
-                                                </tr>
-                                            }
+                            <td class="tx-sm-13">@(item.IsSendPosTerminal == true ? "Ingenico":"Manuel")</td>
+                            <td class="tx-sm-13 text-right">@(item.RecordDate?.ToString(@"T"))</td>
 
-                                        </table>
-                                    }
-                                </td>
+                            <td class="tx-sm-13 bd-l " colspan="4">
+                                @if (payments != null)
+                                {
+                                    <table class="table table-borderless m-0 p-0">
+                                        @foreach (var payment in payments)
+                                        {
+                                            <tr>
+                                                <td class="tx-sm-13" style="width:30%;">@(payment.PaymentTypeName)</td>
+                                                <td class="tx-sm-13 text-right font-weight-bold" style="width:30%;">@(payment.PaymentAmount?.ToString("N2")) @(payment.Sign) </td>
+                                                <td class="tx-sm-13" style="width:20%;">@(payment.FromPosTerminal == true ? "Ingenico":"Manuel")</td>
+                                                <td class="tx-sm-13 text-right">@(payment.PaymentTime?.ToString("T"))</td>
+                                            </tr>
+                                        }
 
-                                <td class="tx-sm-13 bd-l " colspan="4">
-                                    @if (documents != null)
-                                    {
-                                        <table class="table table-borderless m-0 p-0">
-                                            @foreach (var document in documents)
-                                            {
-                                                <tr>
-                                                    <td class="tx-sm-13" style="width:30%;">
-                                                        <a href="@(document.DocumentNumber.StartsWith("PC") ? $"/Bank/Detail/{document.UID}" : document.DocumentNumber.StartsWith("TS") ? $"/Cash/SaleDetail/{document.UID}" : document.DocumentNumber.StartsWith("TSR") ? $"/Cash/SaleRefundDetail/{document.UID}" : document.DocumentNumber.StartsWith("PCN") ? $"/Bank/PosCancelDetail/{document.UID}" : "#")">@(document.DocumentNumber)</a>
-                                                    </td>
-                                                    <td class="tx-sm-13 text-right font-weight-bold" style="width:20%;">@(document.Amount.ToString("N2")) @(document.Currency == "TRL" ? "₺": document.Currency == "USD" ? "$" :"")  </td>
-                                                    <td class="tx-sm-13" style="width:35%;">@(document.ActionTypeName)</td>
-                                                    <td class="tx-sm-13 text-right">@(document.IsActive == true ? "A":"P")</td>
-                                                </tr>
-                                            }
+                                    </table>
+                                }
+                            </td>
 
-                                        </table>
-                                    }
-                                </td>
+                            <td class="tx-sm-13 bd-l " colspan="4">
+                                @if (documents != null)
+                                {
+                                    <table class="table table-borderless m-0 p-0">
+                                        @foreach (var document in documents)
+                                        {
+                                            <tr>
+                                                <td class="tx-sm-13" style="width:30%;">
+                                                    <a href="@(document.DocumentNumber.StartsWith("PCN") ? $"/Bank/PosCancelDetail/{document.UID}" : document.DocumentNumber.StartsWith("PC") ? $"/Bank/Detail/{document.UID}" :  document.DocumentNumber.StartsWith("TSR") ? $"/Cash/SaleRefundDetail/{document.UID}" : document.DocumentNumber.StartsWith("TS") ? $"/Cash/SaleDetail/{document.UID}" : "#")" target="_blank">@(document.DocumentNumber)</a>
+                                                </td>
+                                                <td class="tx-sm-13 text-right font-weight-bold" style="width:20%;">@(document.Amount.ToString("N2")) @(document.Currency == "TRL" ? "₺": document.Currency == "USD" ? "$" :"")  </td>
+                                                <td class="tx-sm-13" style="width:35%;">@(document.ActionTypeName)</td>
+                                                <td class="tx-sm-13 text-right">@(document.IsActive == true ? "A":"P")</td>
+                                            </tr>
+                                        }
 
-                                <td class="tx-sm-13 bd-l " colspan="3">
-                                    @if (actions != null)
-                                    {
-                                        <table class="table table-borderless m-0 p-0">
-                                            @foreach (var action in actions)
-                                            {
-                                                <tr>
-                                                    <td class="tx-sm-13" style="width:30%;">@(action.DocumentNumber)</td>
-                                                    <td class="tx-sm-13 text-right font-weight-bold">@(action.Amount?.ToString("N2")) @(action.Currency == "TRL" ? "₺": action.Currency == "USD" ? "$" :"")  </td>
-                                                </tr>
-                                            }
+                                    </table>
+                                }
+                            </td>
 
-                                        </table>
-                                    }
-                                </td>
-                            </tr>
+                            <td class="tx-sm-13 bd-l " colspan="3">
+                                @if (actions != null)
+                                {
+                                    <table class="table table-borderless m-0 p-0">
+                                        @foreach (var action in actions)
+                                        {
+                                            <tr>
+                                                <td class="tx-sm-13" style="width:30%;">@(action.DocumentNumber)</td>
+                                                <td class="tx-sm-13 text-right font-weight-bold">@(action.Amount?.ToString("N2")) @(action.Currency == "TRL" ? "₺": action.Currency == "USD" ? "$" :"")  </td>
+                                            </tr>
+                                        }
+
+                                    </table>
+                                }
+                            </td>
+                        </tr>
                         }
                     </tbody>
+                    <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td class="bd-l"></td>
+                            <td></td>
+                            <td class="bd-l"></td>
+                            <td></td>
+                            <td class="bd-l">Nakit</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.TicketSalePosPaymentSummary.Where(x=> x.PaymentType == 1 && x.PosStatusID == 3).Sum(x=> x.PaymentAmount)?.ToString("N2")) @(sign)</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="bd-l">Nakit</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SaleActionsAllSummary.Where(x=> x.ActionTypeID == 24 || x.ActionTypeID == 28).Sum(x=> x.Amount)?.ToString("N2")) @(sign)</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td class="bd-l"></td>
+                            <td></td>
+                            <td class="bd-l"></td>
+                            <td></td>
+                            <td class="bd-l">Banka Kartı</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.TicketSalePosPaymentSummary.Where(x=> x.PaymentType == 4 && x.PosStatusID == 3).Sum(x=> x.PaymentAmount)?.ToString("N2")) @(sign)</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="bd-l">Banka Kartı</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SaleActionsAllSummary.Where(x=> x.ActionTypeID == 1 || x.ActionTypeID == 5).Sum(x=> x.Amount)?.ToString("N2")) @(sign)</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold bd-l">@(Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.Quantity))</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.Total).ToString("N2")) @(sign)</td>
+                            <td class="bd-l"></td>
+                            <td></td>
+                            <td class="bd-l">Toplam</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.TicketSalePosPaymentSummary.Where(x=> x.PosStatusID == 3).Sum(x=> x.PaymentAmount)?.ToString("N2")) @(sign)</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="bd-l">Toplam</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SaleActionsAllSummary.Sum(x=> x.Amount)?.ToString("N2")) @(sign)</td>
+                        </tr>
+                    </tfoot>
                 </table>
             </div>
         }
