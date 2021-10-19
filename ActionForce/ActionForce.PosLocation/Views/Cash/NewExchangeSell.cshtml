@@ -267,13 +267,15 @@
             var amount = $("#Amount").val().replace('.', '').replace(',', '.');
             var toamount = $("#ToAmount").val().replace('.', '').replace(',', '.');
             var rate = parseFloat(toamount) / parseFloat(amount) || 0.0000;
-            $("#SaleExchangeRate").val(rate.toFixed(4).toString());
+            var ratescreen = rate.toFixed(4).replace(',', '').replace('.', ',').toString();
+            $("#SaleExchangeRate").val(ratescreen);
         };
         function SumExchangeToAmount() {
             var amount = $("#Amount").val().replace('.', '').replace(',', '.');
             var rate = $("#SaleExchangeRate").val().replace('.', '').replace(',', '.');
             var toamount = parseFloat(amount) * parseFloat(rate) || 0.00;
-            $("#ToAmount").val(toamount.toFixed(2).toString());
+            var toamountscreen = toamount.toFixed(2).replace(',', '').replace('.', ',').toString();
+            $("#ToAmount").val(toamountscreen);
         };
     </script>
 </body>

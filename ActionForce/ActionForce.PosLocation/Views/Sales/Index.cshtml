@@ -156,7 +156,7 @@
                                             }
                                             <!-- mobile icon -->
                                         </div>
-                                        <div class="num">@(item.OrderNumber)</div>
+                                        <div class="num" style="color:@(item.PosStatusID == 4 ? "#ff0000": item.PosStatusID == 3 ? "#0094ff" : item.PosStatusID == 5 ? "#927c00":"darkslategray")">@(item.OrderNumber)</div>
                                         <div class="datetime">@(item.FullName) <br />@(item.RecordDate)</div>
                                     </div>
                                     <div class="piece-name">

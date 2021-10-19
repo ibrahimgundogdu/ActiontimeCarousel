@@ -13,6 +13,7 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     <link rel="stylesheet" href="/assets/scss/global.css">
 </head>
 <body>
@@ -170,18 +171,6 @@
                                     </td>
                                 </tr>
 
-
-
-                                @*<tr>
-                                        <td class="bg-body p-1 pl-3">Birimi - Hakedişi</td>
-                                        <td class="p-1 text-right">@(item.UnitPrice?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</td>
-                                        <th class="p-1 text-right">@(item.TotalAmount?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</th>
-                                    </tr>
-                                    <tr>
-                                        <td class="bg-body p-1 pl-3">Setcard - Maaş</td>
-                                        <td class="p-1 text-right">@(item.TotalAmountFood?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</td>
-                                        <td class="p-1 text-right">@(item.TotalAmountSalary?.ToString("N2")) @(item.Currency == "USD" ? "$": item.Currency == "EUR" ? "€" : "₺")</td>
-                                    </tr>*@
                             }
                         </table>
                     </div>
@@ -254,37 +243,144 @@
 
                     @{ Html.RenderPartial("_PartialCashSummary", Model.Summary);}
 
-                    <div class="head">
-                        <h1>Z Raporu</h1>
-                        <span class="flex"></span>
-                        <div style="margin-right:10px;">
-                            <a href="javascript:;" class="font-weight-bold pl-2" title="Add Cash Collect" data-toggle="modal" data-target="#modalcashrecorder">
-                                Ekle
-                            </a>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table cellpadding="0" cellspacing="0" class="z-report">
-                            <tr>
-                                <td class="font-bold">No</td>
-                                <td class="font-bold">Tarih</td>
-                                <td class="font-bold">Tutar</td>
-                                <td class="font-bold"></td>
-                            </tr>
+
+
+
+
+                    <div class="" style="border-radius:6px;">
+                        <table cellpadding="0" cellspacing="0" class="tickets-sales-cash">
+                            <thead>
+                                <tr>
+                                    <td colspan="6" class="bg-cash" style="color: #14bae4; font-size: 20px; text-align: left; ">Z Raporu</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="6">
+
+
+                                        @using (Html.BeginForm("AddCashRecordSlip", "DayResult", FormMethod.Post, new { role = "form", @class = "form", enctype = "multipart/form-data" }))
+                                        {
+                                            <div class="form-group mb-1">
+                                                <div class="row">
+                                                    <label class="col-4 col-form-label pr-0">ZRapor No</label>
+                                                    <div class="col-8">
+                                                        <input id="ReceiptNumber" type="text" name="ReceiptNumber" class="form-control font-weight-bold" required />
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row mb-1">
+                                                <label class="col-4 col-form-label">Fiş Tarihi</label>
+                                                <div class="col-8">
+                                                    <input id="ReceiptDate" name="ReceiptDate" type="date" class="form-control font-weight-bold" placeholder="Date" value="@(Model.DocumentDate.ToString("yyyy-MM-dd"))" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row mb-1">
+                                                <label class="col-4 col-form-label">Fiş Saati</label>
+                                                <div class="col-8">
+                                                    <input id="ReceiptTime" name="ReceiptTime" type="time" class="form-control font-weight-bold" step="1" placeholder="Time" value="@(Model.DocumentDate.ToString("HH\\:mm\\:ss"))" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row mb-1">
+                                                <label class="col-4 col-form-label">Nakit</label>
+                                                <div class="col-8">
+                                                    <input id="CashAmount" name="CashAmount" type="text" class="form-control font-weight-bold text-right money" onkeyup="SumCashRecorder()" placeholder="0,00" required>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row mb-1">
+                                                <label class="col-4 col-form-label">Kredi</label>
+                                                <div class="col-8">
+                                                    <input id="CreditAmount" name="CreditAmount" type="text" class="form-control font-weight-bold text-right money" onkeyup="SumCashRecorder()" placeholder="0,00" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row mb-1">
+                                                <label class="col-4 col-form-label pr-0">Fiş Tutarı</label>
+                                                <div class="col-8">
+                                                    <input id="NetAmount" name="NetAmount" type="text" class="form-control font-weight-bold text-right money" placeholder="0,00" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row mb-1">
+                                                <label class="col-4 col-form-label pr-0">Genel Tutar</label>
+                                                <div class="col-8">
+                                                    <input id="TotalAmount" name="TotalAmount" type="text" class="form-control font-weight-bold text-right money" placeholder="0,00" required>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <div class="col-12">
+                                                    <input id="ReceiptFile" name="ReceiptFile" class="form-control" type="file" style="width:100%;" />
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-4 col-form-label"></label>
+                                                <div class="col-8">
+                                                    <button type="submit" id="btn-save" class="btn btn-block btn-rounded btn-primary">Kaydet</button>
+                                                </div>
+                                            </div>
+
+                                        }
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="font-bold">No</th>
+                                    <th class="font-bold">Tarih</th>
+                                    <th class="font-bold">Nakit</th>
+                                    <th class="font-bold">Kredi</th>
+                                    <th class="font-bold">Tutar</th>
+                                    <th class="font-bold">GenelTutar</th>
+                                </tr>
+                            </thead>
+
                             @foreach (var item in Model.CashRecordSlip)
                             {
                                 <tr>
                                     <td><a href="javascript:;" class="@(item.IsActive == false ? "text-danger":"")" data-toggle="modal" data-target="#modalcashrecorderedit" onclick="GetCashRecorderModal(@(item.ID))">@(item.DocumentNumber)</a></td>
-                                    <td>@(item.Date?.ToShortDateString())</td>
-                                    <td class="@(item.IsActive == false ? "text-muted":"text-dark") font-weight-bold pr-0"><b>@(item.CashAmount?.ToString("N2"))</b></td>
-                                    <td> @(item.Currency == "TRL" ? "₺" : item.Currency == "USD" ? "$":"€")</td>
+                                    <td>@(item.SlipDate?.ToString())</td>
+                                    <td class="@(item.IsActive == false ? "text-muted":"text-dark") font-weight-bold pr-0"><b>@(item.CashAmount?.ToString("N2")) @(item.Currency == "TRL" ? "₺" : item.Currency == "USD" ? "$":"€")</b></td>
+                                    <td class="@(item.IsActive == false ? "text-muted":"text-dark") font-weight-bold pr-0"><b>@(item.CreditAmount?.ToString("N2")) @(item.Currency == "TRL" ? "₺" : item.Currency == "USD" ? "$":"€")</b></td>
+                                    <td class="@(item.IsActive == false ? "text-muted":"text-dark") font-weight-bold pr-0"><b>@(item.NetAmount?.ToString("N2")) @(item.Currency == "TRL" ? "₺" : item.Currency == "USD" ? "$":"€")</b></td>
+                                    <td class="@(item.IsActive == false ? "text-muted":"text-dark") font-weight-bold pr-0"><b>@(item.TotalAmount?.ToString("N2")) @(item.Currency == "TRL" ? "₺" : item.Currency == "USD" ? "$":"€")</b></td>
+
                                 </tr>
                             }
+
+                            <tfoot>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="text-align:right;">
+
+                                        @if (Model.CashRecordSlip.Count() > 0)
+                                        {
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#27ae60"><path d="M0 0h24v24H0V0z" fill="none" /><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm4.59-12.42L10 14.17l-2.59-2.58L6 13l4 4 8-8z" /></svg>
+                                        }
+                                        else
+                                        {
+                                            Model.IsSuccess = false;
+                                            <svg xmlns="http://www.w3.org/2000/svg" height="30px" viewBox="0 0 24 24" width="30px" fill="#c0392b"><path d="M11 15h2v2h-2v-2zm0-8h2v6h-2V7zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" /></svg>
+                                        }
+                                    </td>
+                                </tr>
+                            </tfoot>
                         </table>
+
+
                     </div>
 
 
-                    <div class="head">
+
+
+
+
+                    <div class="head" style="margin-bottom: 0px; background-color: #bdecf7; padding:10px 0px;">
                         <h1>Gün Sonu Zarfı</h1>
                     </div>
                     <div class="daily-end-adverb-form">
@@ -293,9 +389,13 @@
                         {
                             <div class="form-group">
                                 <div class="row">
-                                    <div class="col col-4">
+                                    <div class="col col-12">
                                         <input id="ResultFile" name="ResultFile" class="form-control" type="file" style="width:100%;" />
                                         <input id="DayResultID" name="DayResultID" type="hidden" value="@(Model.CurrentDayResult.ID)" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col col-12">
                                         <button type="submit" id="btn-save" class="btn btn-block bg-primary text-white input-group-btn">Ekle</button>
                                     </div>
                                 </div>
@@ -327,7 +427,7 @@
                     </div>
 
 
-                    <div class="head">
+                    <div class="head" style="margin-bottom: 0px; background-color: #bdecf7; padding:10px 0px;">
                         <h1>Gün Sonu Kapama</h1>
                     </div>
                     @using (Html.BeginForm("SetResultState", "DayResult", FormMethod.Post))
@@ -388,82 +488,6 @@
 
 
 
-    <div id="modalcashrecorder" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header"><div class="modal-title font-weight-500 text-dark">Cash Payment</div><button class="close" data-dismiss="modal">×</button></div>
-                <div class="modal-body form mt-0 mb-0 pb-4 pt-4">
-                    @using (Html.BeginForm("AddCashRecordSlip", "DayResult", FormMethod.Post, new { role = "form", enctype = "multipart/form-data" }))
-                    {
-                        <div class="form-group row mb-1">
-                            <label class="col-4 col-form-label pr-0">ZRapor No</label>
-                            <div class="col-8">
-                                <input id="ReceiptNumber" type="text" name="ReceiptNumber" class="form-control font-weight-bold" required />
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-1">
-                            <label class="col-4 col-form-label">Fiş Tarihi</label>
-                            <div class="col-8">
-                                <input id="ReceiptDate" name="ReceiptDate" type="date" class="form-control font-weight-bold" placeholder="Date" value="@(Model.DocumentDate.ToString("yyyy-MM-dd"))" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-1">
-                            <label class="col-4 col-form-label">Fiş Saati</label>
-                            <div class="col-8">
-                                <input id="ReceiptTime" name="ReceiptTime" type="time" class="form-control font-weight-bold" step="1" placeholder="Time" value="@(Model.DocumentDate.ToString("HH\\:mm\\:ss"))" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-1">
-                            <label class="col-4 col-form-label">Nakit</label>
-                            <div class="col-8">
-                                <input id="CashAmount" name="CashAmount" type="text" class="form-control font-weight-bold text-right money" onkeyup="SumCashRecorder()" placeholder="0,00" required>
-                            </div>
-                        </div>
-                        <div class="form-group row mb-1">
-                            <label class="col-4 col-form-label">Kredi</label>
-                            <div class="col-8">
-                                <input id="CreditAmount" name="CreditAmount" type="text" class="form-control font-weight-bold text-right money" onkeyup="SumCashRecorder()" placeholder="0,00" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-1">
-                            <label class="col-4 col-form-label pr-0">Fiş Tutarı</label>
-                            <div class="col-8">
-                                <input id="NetAmount" name="NetAmount" type="text" class="form-control font-weight-bold text-right money" placeholder="0,00" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-1">
-                            <label class="col-4 col-form-label pr-0">Genel Tutar</label>
-                            <div class="col-8">
-                                <input id="TotalAmount" name="TotalAmount" type="text" class="form-control font-weight-bold text-right money" placeholder="0,00" required>
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <div class="col-12">
-                                <input id="ReceiptFile" name="ReceiptFile" class="form-control" type="file" style="width:100%;" />
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label class="col-4 col-form-label"></label>
-                            <div class="col-8">
-                                <button type="submit" id="btn-save" class="btn btn-block btn-rounded btn-primary">Kaydet</button>
-                            </div>
-                        </div>
-
-                    }
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-rounded btn-light" data-dismiss="modal">Close</button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div>
-    </div>
 
     <div id="modalcashrecorderedit" class="modal fade" data-backdrop="true" style="display: none;" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -496,25 +520,6 @@
             </div><!-- /.modal-content -->
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     <script src="/assets/js/jquery-3.5.1.min.js"></script>
     <script src="/assets/js/modal.js"></script>
@@ -632,18 +637,36 @@
             });
         };
     </script>
-    <script src="/assets/notie/dist/notie.min.js"></script>
-    @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
-    {
-        <script>
-                $(function () {
-                    notie.setOptions({
-                        alertTime: 5
-                    })
-                    notie.alert({ type: 2, text: '@(Html.Raw(Model.Result.Message))', position: 'bottom' });
-                    noticed = true;
-                });
-        </script>
-    }
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <script type="text/javascript">
+        // Default Configuration
+        $(document).ready(function () {
+            toastr.options = {
+                'closeButton': true,
+                'debug': false,
+                'newestOnTop': false,
+                'progressBar': false,
+                'positionClass': 'toast-top-right',
+                'preventDuplicates': false,
+                'showDuration': '1000',
+                'hideDuration': '1000',
+                'timeOut': '5000',
+                'extendedTimeOut': '1000',
+                'showEasing': 'swing',
+                'hideEasing': 'linear',
+                'showMethod': 'fadeIn',
+                'hideMethod': 'fadeOut',
+            }
+
+            @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message))
+            {
+                @(Html.Raw( $"toastr.info('{Model.Result.Message}')" ));
+            }
+
+
+
+        });
+
+    </script>
 </body>
 </html>

@@ -259,18 +259,27 @@
             $('.money').mask("#.##0,00", { reverse: true });
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
+
         function SumExchangeRate() {
             var amount = $("#Amount").val().replace('.', '').replace(',', '.');
             var toamount = $("#ToAmount").val().replace('.', '').replace(',', '.');
             var rate = parseFloat(toamount) / parseFloat(amount) || 0.0000;
-            $("#SaleExchangeRate").val(rate.toFixed(4).toString());
+            console.log(rate);
+            var ratescreen = rate.toFixed(4).replace(',', '').replace('.', ',').toString();
+            console.log(ratescreen);
+            $("#SaleExchangeRate").val(ratescreen);
         };
+
         function SumExchangeToAmount() {
             var amount = $("#Amount").val().replace('.', '').replace(',', '.');
             var rate = $("#SaleExchangeRate").val().replace('.', '').replace(',', '.');
             var toamount = parseFloat(amount) * parseFloat(rate) || 0.00;
-            $("#ToAmount").val(toamount.toFixed(2).toString());
+            console.log(toamount);
+            var toamountscreen = toamount.toFixed(2).replace(',', '').replace('.', ',').toString();
+            console.log(toamountscreen);
+            $("#ToAmount").val(toamountscreen);
         };
+
     </script>
 </body>
 </html>

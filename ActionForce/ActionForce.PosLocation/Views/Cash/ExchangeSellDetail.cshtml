@@ -339,14 +339,16 @@
             var amount = $("#Amount").val().replace('.', '').replace(',', '.');
             var toamount = $("#ToAmount").val().replace('.', '').replace(',', '.');
             var rate = parseFloat(toamount) / parseFloat(amount) || 0.0000;
-            $("#SaleExchangeRate").val(rate.toFixed(4).toString());
+            $("#SaleExchangeRate").val(rate.toFixed(4).replace(',', '').replace('.', ',').toString());
         };
         function SumExchangeToAmount() {
             var amount = $("#Amount").val().replace('.', '').replace(',', '.');
             var rate = $("#SaleExchangeRate").val().replace('.', '').replace(',', '.');
             var toamount = parseFloat(amount) * parseFloat(rate) || 0.00;
-            $("#ToAmount").val(toamount.toFixed(2).toString());
-        };</script>
+            $("#ToAmount").val(toamount.toFixed(2).replace(',', '').replace('.', ',').toString());
+        };
+    </script>
+
     <script src="/assets/notie/dist/notie.min.js"></script>
     @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message)) //
     {
