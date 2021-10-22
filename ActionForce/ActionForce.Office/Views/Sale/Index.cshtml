@@ -54,10 +54,10 @@
                     <thead>
                         <tr>
                             <th colspan="13">
-                                @(Model.Filters.Date?.ToLongDateString()) &nbsp;&nbsp; - &nbsp;&nbsp; @(Model.CurrentLocation.LocationFullName)
+                                @(Model.Filters.Date?.ToLongDateString()) &nbsp;&nbsp; - &nbsp;&nbsp; @(Model.CurrentLocation != null ? Model.CurrentLocation?.LocationFullName : "")
                             </th>
                             <th colspan="2" class="text-right">
-                                <a href="@($"/Action/Index?locationID={Model.CurrentLocation.LocationID}&DateBegin={Model.Filters.Date?.ToString("yyyy-MM-dd")}&&DateEnd={Model.Filters.Date?.ToString("yyyy-MM-dd")}")" class="btn btn-block btn-primary btn-xs" target="_blank">Cari Hesap Ekstresi</a>
+                                <a href="@($"/Action/Index?locationID={Model.Filters.LocationID}&DateBegin={Model.Filters.Date?.ToString("yyyy-MM-dd")}&&DateEnd={Model.Filters.Date?.ToString("yyyy-MM-dd")}")" class="btn btn-block btn-primary btn-xs" target="_blank">Cari Hesap Ekstresi</a>
                             </th>
                         </tr>
                         <tr>
@@ -80,7 +80,7 @@
                     </thead>
                     <tbody>
 
-                        @foreach (var item in Model.TicketSaleSummary)
+                        @foreach (var item in Model.TicketSaleSummary.OrderBy(x=> x.RecordDate))
                         {
                             <tr style='@(item.IsActive == false ? "color: red" : "")'>
                                 <td class="tx-sm-13 bold">@item.ID</td>
@@ -151,7 +151,8 @@
 
             $('.select2').select2({
                 placeholder: 'Lokasyon Seçiminiz',
-                searchInputPlaceholder: 'Search options'
+                searchInputPlaceholder: 'Search options',
+                allowClear: true
             });
 
             var dateFormat = 'yy-mm-dd',

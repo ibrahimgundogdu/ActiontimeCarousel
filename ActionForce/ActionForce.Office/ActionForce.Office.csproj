@@ -2350,6 +2350,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Hubs\ChatHub.cs" />
+    <Compile Include="Models\BankTransferStatusCount.cs" />
     <Compile Include="Models\CashRecorder\LocationList.cs" />
     <Compile Include="Models\CashRecorder\MonthList.cs" />
     <Compile Include="Models\ControlModels\ActionControlModel.cs" />
@@ -2776,6 +2777,7 @@
     <Content Include="Views\Sale\Detail.cshtml" />
     <Content Include="Views\Sale\_PartialSaleSideBar.cshtml" />
     <Content Include="Views\Sale\SaleAction.cshtml" />
+    <Content Include="Views\Bank\BankTransfer.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

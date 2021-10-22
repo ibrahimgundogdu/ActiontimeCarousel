@@ -133,6 +133,11 @@
 
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Bank" && this.ViewContext.RouteData.Values["action"].ToString() == "PosCancel" ? "class=active" : "")><a href="/Bank/PosCancel">01 Pos İptal (Aynı Gün)</a></li>
                         <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Bank" && this.ViewContext.RouteData.Values["action"].ToString() == "PosRefund" ? "class=active" : "")><a href="/Bank/PosRefund">02 Pos İade</a></li>
+                        
+                        <li class="nav-label">Havale / EFT</li>
+
+                        <li @(this.ViewContext.RouteData.Values["controller"].ToString() == "Bank" && this.ViewContext.RouteData.Values["action"].ToString() == "BankTransfer" ? "class=active" : "")><a href="/Bank/BankTransfer">01 Havale / EFT Kontrol</a></li>
+
                     </ul>
                 </li>
                 <li class="nav-item with-sub @(this.ViewContext.RouteData.Values["controller"].ToString() == "Salary" ? "show" : "")">

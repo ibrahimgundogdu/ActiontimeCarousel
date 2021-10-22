@@ -27,5 +27,14 @@ namespace ActionForce.Office
         public Result<BankActions> Result { get; set; }
         public IEnumerable<ApplicationLog> History { get; set; }
 
+        public List<VDocumentBankTransfer> DocumentBankTransfers { get; set; }
+        public List<BankTransferStatus> BankTransferStatus { get; set; }
+        public IEnumerable<VBankAccount> BankAccounts { get; set; }
+        public DateTime SelectedDate { get; set; }
+        public DateTime PrevDate { get; set; }
+        public DateTime NextDate { get; set; }
+        public List<BankTransferStatusCount> StatusCounts { get; set; }
+
+
     }
 }

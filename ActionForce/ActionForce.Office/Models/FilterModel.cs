@@ -18,6 +18,8 @@ namespace ActionForce.Office
         public DateTime? DateEnd { get; set; }
         public string IsActive { get; set; }
         public string SearchKey { get; set; }
+        public int? StatusID { get; set; }
+
     }
 
     public class ResultFilterModel

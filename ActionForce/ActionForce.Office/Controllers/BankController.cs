@@ -101,7 +101,7 @@ namespace ActionForce.Office.Controllers
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
-            
+
             model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "A").ToList();
 
             return View(model);
@@ -161,7 +161,7 @@ namespace ActionForce.Office.Controllers
                 {
                     docDate = Convert.ToDateTime(posCollect.DocumentDate).Date;
                 }
-                
+
                 var exchange = OfficeHelper.GetExchange(docDate);
 
                 if (amount > 0 && quantity > 0)
@@ -191,8 +191,8 @@ namespace ActionForce.Office.Controllers
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-                
+
+
 
             }
 
@@ -269,7 +269,7 @@ namespace ActionForce.Office.Controllers
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
+
             }
 
 
@@ -279,7 +279,7 @@ namespace ActionForce.Office.Controllers
             TempData["result"] = messageresult;
             return RedirectToAction("Detail", new { id = posCollect.UID });
         }
-        
+
         [AllowAnonymous]
         public ActionResult DeletePosCollection(string id)
         {
@@ -296,7 +296,7 @@ namespace ActionForce.Office.Controllers
             {
                 DocumentManager documentManager = new DocumentManager();
                 result = documentManager.DeletePosCollection(Guid.Parse(id), model.Authentication);
-                
+
             }
 
             Result<BankActions> messageresult = new Result<BankActions>();
@@ -439,8 +439,8 @@ namespace ActionForce.Office.Controllers
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
-                
+
+
 
             }
 
@@ -539,7 +539,7 @@ namespace ActionForce.Office.Controllers
                     result.IsSuccess = true;
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
-                
+
             }
 
             Result<BankActions> messageresult = new Result<BankActions>();
@@ -709,8 +709,8 @@ namespace ActionForce.Office.Controllers
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
 
-                
-                
+
+
 
             }
 
@@ -811,7 +811,7 @@ namespace ActionForce.Office.Controllers
                     result.Message = $"Tutar 0'dan büyük olmalıdır.";
                 }
 
-                
+
             }
 
             Result<BankActions> messageresult = new Result<BankActions>();
@@ -984,5 +984,98 @@ namespace ActionForce.Office.Controllers
 
             return RedirectToAction("Current", "Bank");
         }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult BankTransferFilters(int? LocationId, DateTime? Date, int? StatusID, int? BankAccountID)
+        {
+            FilterModel model = new FilterModel();
+
+            model.LocationID = LocationId;
+            model.Date = Date;
+            model.StatusID = StatusID;
+            model.BankAccountID = BankAccountID;
+
+            if (Date == null)
+            {
+                model.Date = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("BankTransfer", "Bank");
+        }
+
+
+        //BankTransfer
+        [AllowAnonymous]
+        public ActionResult BankTransfer(int? LocationId, string Date, int? StatusID, int? BankAccountID)
+        {
+            BankControlModel model = new BankControlModel();
+            var _date = DateTime.Now.Date;
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result<BankActions> ?? null;
+            }
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                if (!string.IsNullOrEmpty(Date))
+                    DateTime.TryParse(Date, out _date);
+
+                filterModel.Date = _date.Date;
+                model.Filters = filterModel;
+            }
+
+            model.BankAccounts = Db.VBankAccount.Where(x => x.AccountTypeID == 1 && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.CurrencyList = OfficeHelper.GetCurrency();
+            model.BankTransferStatus = Db.BankTransferStatus.OrderBy(x => x.LevelNumber).ToList();
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+
+            model.DocumentBankTransfers = Db.VDocumentBankTransfer.Where(x => x.Date == model.Filters.Date && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+
+            if (model.Filters.LocationID > 0)
+            {
+                model.DocumentBankTransfers = model.DocumentBankTransfers.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            }
+
+            if (model.Filters.BankAccountID > 0)
+            {
+                model.DocumentBankTransfers = model.DocumentBankTransfers.Where(x => x.ToBankAccountID == model.Filters.BankAccountID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            }
+
+            List<BankTransferStatusCount> countlist = new List<BankTransferStatusCount>();
+
+            foreach (var item in model.BankTransferStatus)
+            {
+                countlist.Add(new BankTransferStatusCount()
+                {
+                    StatusID = item.ID,
+                    StatusName = item.StatusName,
+                    Count = model.DocumentBankTransfers.Where(x => x.StatusID == item.ID).Count(),
+                    Amount = model.DocumentBankTransfers.Where(x => x.StatusID == item.ID).Sum(y => y.Amount) ?? 0,
+                    Commission = model.DocumentBankTransfers.Where(x => x.StatusID == item.ID).Sum(y => y.Commission) ?? 0,
+                    Currency = model.DocumentBankTransfers.Where(x => x.StatusID == item.ID).FirstOrDefault()?.Currency
+                });
+            }
+
+            model.StatusCounts = countlist;
+            model.SelectedDate = model.Filters.Date.Value;
+            model.PrevDate = model.SelectedDate.AddDays(-1).Date;
+            model.NextDate = model.SelectedDate.AddDays(1).Date;
+
+            return View(model);
+        }
+
     }
 }
