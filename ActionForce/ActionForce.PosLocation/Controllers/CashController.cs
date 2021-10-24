@@ -1348,6 +1348,12 @@ namespace ActionForce.PosLocation.Controllers
 
             model.Currencies = Db.Currency.ToList();
             model.Exchange = ServiceHelper.GetExchange(documentDate);
+
+            if (model.BankTransfer.StatusID > 3)
+            {
+                model.IsUpdatible = false;
+            }
+
             return View(model);
         }
 

@@ -7287,6 +7287,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="UpdateDate" Type="datetime" Mode="In" />
           <Parameter Name="UpdateIP" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="SetBankTransferStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="bigint" Mode="In" />
+          <Parameter Name="StatusID" Type="int" Mode="In" />
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+        </Function>
         <Function Name="SetBasketCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
@@ -10954,6 +10959,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VTicketSaleAllSummary" EntityType="db293_ActionTimeDbModel.VTicketSaleAllSummary" />
           <EntitySet Name="VDocumentsAllSummaryUnion" EntityType="db293_ActionTimeDbModel.VDocumentsAllSummaryUnion" />
           <EntitySet Name="VSaleActionsSummaryUnion" EntityType="db293_ActionTimeDbModel.VSaleActionsSummaryUnion" />
+          <FunctionImport Name="SetBankTransferStatus">
+            <Parameter Name="ID" Mode="In" Type="Int64" />
+            <Parameter Name="StatusID" Mode="In" Type="Int32" />
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -25267,6 +25277,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SetBankTransferStatus" FunctionName="db293_ActionTimeDbModel.Store.SetBankTransferStatus" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

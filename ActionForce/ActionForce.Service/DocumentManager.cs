@@ -1687,82 +1687,14 @@ namespace ActionForce.Service
 
                         Db.SaveChanges();
 
+                        Db.SetBankTransferStatus(isTransfer.ID, isTransfer.StatusID, _employee.ID);
+
                         result.IsSuccess = true;
                         result.Message += "Banka Havale / EFT işlemi Güncellendi";
 
                         var isequal = ServiceHelper.PublicInstancePropertiesEqual<DocumentBankTransfer>(self, isTransfer, ServiceHelper.getIgnorelist());
                         ServiceHelper.AddApplicationLog("Office", "Cash", "Update", isTransfer.ID.ToString(), "Cash", "BankTransfer", isequal, true, $"{result.Message}", string.Empty, transfer.ProcessDate, _employee.FullName, _ip, string.Empty, null);
 
-
-                        // 01. mevcut kasa çıkış hareketi, banka giriş hareketi ve kasa masraf hareketi varsa sil
-                        Db.RemoveAllAccountActions(isTransfer.ID, isTransfer.UID);
-                        // masraf hareketi.
-                        var isexpenseexists = Db.DocumentCashExpense.FirstOrDefault(x => x.ReferenceID == self.ID && x.Date == self.Date && x.LocationID == self.LocationID);
-
-                        if (isexpenseexists != null)
-                        {
-                            Db.RemoveAllAccountActions(isexpenseexists.ID, isexpenseexists.UID);
-                        }
-
-                        // 02. yeni kasa çıkış hareketlerini ekle
-                        if (isTransfer.IsActive == true)
-                        {
-                            if (new int?[] { 2, 3, 4, 5 }.Contains(isTransfer.StatusID))
-                            {
-                                // 01. yeni kasa çıkış hareketi komisyonsuz tutar miktarınca eklenir
-                                var mainamount = (isTransfer.Amount - isTransfer.Commission);
-
-                                ServiceHelper.AddCashAction(isTransfer.FromCashID, isTransfer.LocationID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, -1, 0, mainamount, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate, isTransfer.UID.Value);
-                                result.Message += $" kasa çıkış işlemi yapıldı. ";
-
-                                if (transfer.Commission > 0)  // komisyonlu işlem ise
-                                {
-
-                                    // 02. yeni kasa masraf evrağı komisyon tutarı miktarınca eklenir 
-
-                                    CashExpenseModel expense = new CashExpenseModel();
-
-                                    expense.ActionTypeID = 29;
-                                    expense.ActionTypeName = "Masraf Ödeme Fişi";
-                                    expense.Amount = isTransfer.Commission.Value;
-                                    expense.Currency = isTransfer.Currency;
-                                    expense.Description = isTransfer.Description;
-                                    expense.DocumentDate = isTransfer.Date.Value;
-                                    expense.EnvironmentID = isTransfer.EnvironmentID;
-                                    expense.CashID = cash.ID;
-                                    expense.LocationID = location.LocationID;
-                                    expense.SlipDate = isTransfer.SlipDate;
-                                    expense.SlipNumber = isTransfer.SlipNumber;
-                                    expense.SlipDocument = isTransfer.SlipDocument;
-                                    expense.UID = Guid.NewGuid();
-                                    expense.ExpenseTypeID = 25;
-                                    expense.ReferanceID = isTransfer.ID;
-                                    expense.ResultID = isTransfer.ResultID;
-                                    expense.ToBankAccountID = isTransfer.ToBankAccountID;
-                                    expense.SlipPath = isTransfer.SlipPath;
-                                    expense.IsActive = isTransfer.IsActive.Value;
-                                    expense.ProcessDate = transfer.ProcessDate;
-
-                                    var expenseresult = AddCashExpense(expense);
-                                    result.Message += $" {expenseresult.Message}";
-                                }
-                            }
-                            if (new int?[] { 7 }.Contains(isTransfer.StatusID))
-                            {
-                                isTransfer.IsActive = false;
-
-                                Db.SaveChanges();
-                            }
-                            if (new int?[] { 5 }.Contains(isTransfer.StatusID))
-                            {
-                                ServiceHelper.AddBankAction(isTransfer.LocationID, null, isTransfer.ToBankAccountID, null, isTransfer.ActionTypeID, isTransfer.Date, isTransfer.ActionTypeName, isTransfer.ID, isTransfer.Date, isTransfer.DocumentNumber, isTransfer.Description, 1, isTransfer.NetAmount, 0, isTransfer.Currency, null, null, isTransfer.RecordEmployeeID, isTransfer.RecordDate, isTransfer.UID.Value);
-                                result.Message += $" banka giriş işlemi yapıldı. ";
-                            }
-                        }
-                        else
-                        {
-                            result.Message += $" Havale / EFT bilgisi pasife çekildi. ";
-                        }
                     }
                     catch (Exception ex)
                     {
@@ -1803,30 +1735,11 @@ namespace ActionForce.Service
                             bankTransfer.UpdateDate = processdate;
                             bankTransfer.UpdateEmployee = _employee.ID;
                             bankTransfer.UpdateIP = _ip;
+                            bankTransfer.StatusID = 7;
 
                             Db.SaveChanges();
 
-                            var isexpenseexists = Db.DocumentCashExpense.FirstOrDefault(x => x.ReferenceID == bankTransfer.ID && x.Date == bankTransfer.Date && x.LocationID == bankTransfer.LocationID);
-
-                            if (isexpenseexists != null)
-                            {
-                                var iscashexpenseexit = Db.CashActions.FirstOrDefault(x => x.LocationID == isexpenseexists.LocationID && x.CashActionTypeID == isexpenseexists.ActionTypeID && x.ProcessID == isexpenseexists.ID && x.ProcessUID == isexpenseexists.UID);
-                                if (iscashexpenseexit != null)
-                                {
-                                    isexpenseexists.IsActive = false;
-                                    isexpenseexists.UpdateDate = processdate;
-                                    isexpenseexists.UpdateEmployee = _employee.ID;
-                                    isexpenseexists.UpdateIP = _ip;
-                                    Db.SaveChanges();
-                                }
-
-                                Db.DocumentCashExpense.Remove(isexpenseexists);
-                                Db.SaveChanges();
-                            }
-
-                            Db.RemoveAllAccountActions(bankTransfer.ID, bankTransfer.UID);
-                            Db.RemoveAllAccountActions(isexpenseexists.ID, isexpenseexists.UID);
-
+                            Db.SetBankTransferStatus(bankTransfer.ID, bankTransfer.StatusID, _employee.ID);
 
                             result.IsSuccess = true;
                             result.Message = $"{bankTransfer.ID} ID li {bankTransfer.Date} tarihli {bankTransfer.Amount} {bankTransfer.Currency} tutarındaki havale eft başarı ile iptal edildi";
@@ -2733,7 +2646,7 @@ namespace ActionForce.Service
                     List<int> cardsales = new int[] { 1, 3, 5 }.ToList();
                     List<int> maas = new int[] { 3, 31 }.ToList();
                     List<int> hakedisid = new int[] { 32, 36, 39 }.ToList();
-                    List<int> cashexpense = new int[] { 4, 29 }.ToList();
+                    List<int> cashexpense = new int[] { 4, 29, 42 }.ToList();
                     List<int> cashexchange = new int[] { 25, 40 }.ToList();
                     List<int> bankeft = new int[] { 11, 30 }.ToList();
 

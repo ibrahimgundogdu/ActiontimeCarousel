@@ -5,6 +5,7 @@
 
 @section style{
     <link rel="stylesheet" href="/assets/css/dashforge.profile.css">
+    <link href="/assets/css/confirm.css" rel="stylesheet" />
 }
 
 <div class="content-header">
@@ -24,7 +25,11 @@
         @Html.AntiForgeryToken()
         <div class="form-row align-items-end">
 
-            <div class="form-group col-md-3 d-flex align-items-end">
+            <div class="form-group col-md-2 d-flex align-items-end bd-r pr-3">
+                <input id="SearchKey" name="SearchKey" type="text" class="form-control" autocomplete="off" placeholder="Arama" value="@(Model.Filters?.SearchKey)">
+            </div>
+
+            <div class="form-group col-md-3 d-flex align-items-end pl-3">
                 <select class="form-control select2" id="locationId" name="LocationId">
                     <option value="" label="Lokasyon Seçiminiz"></option>
                     @foreach (var item in Model.LocationList)
@@ -55,7 +60,7 @@
             </div>
 
             <div class="form-group col-md-2 d-flex align-items-end">
-                <input type="text" id="DocumentDate" name="Date" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.Filters.Date.Value.ToString("yyyy-MM-dd"))">
+                <input type="text" id="DocumentDate" name="Date" class="form-control" autocomplete="off" placeholder="Tarih" value="@(Model.Filters.Date != null ? Model.Filters.Date?.ToString("yyyy-MM-dd") : "")">
             </div>
 
             <div class="form-group col-md-1 d-flex align-items-end ">
@@ -97,7 +102,7 @@
 
                 <div class="card mg-b-20 mg-lg-b-25">
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
-                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Hafta</h6>
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@(Model.DocumentBankTransfers.Count > 0 ? $"{Model.DocumentBankTransfers.Count} Adet Kayıt Bulundu":"Kayıt Bulunamadı")</h6>
                         <nav class="nav">
                         </nav>
                     </div><!-- card-header -->
@@ -114,12 +119,11 @@
                                         <th>Referans</th>
                                         <th>Tahsilat</th>
                                         <th>Komisyon</th>
-                                        <th>Para Br.</th>
+                                        <th></th>
                                         <th>Kaydeden</th>
-                                        <th>Fiş Tarihi</th>
-                                        <th>Fiş Nr.</th>
+                                        <th>Fiş Nr. / Tarihi</th>
                                         <th>Döküman</th>
-
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -128,18 +132,17 @@
                                     {
                                         <tr style='@(item.IsActive == false ? "color: red" : "")'>
 
-                                            <td class="tx-sm-13">@(item.Date?.ToString("dd.MM.yyyy"))</td>
-                                            <td class="tx-sm-13 bold"><a href="@("/Cash/TransferDetail/" + @item.UID)" target="_blank">@item.DocumentNumber</a></td>
+                                            <td class="tx-sm-13"><a href="@($"/Bank/BankTransfer?Date={item.Date?.ToString("yyyy-MM-dd")}")">@(item.Date?.ToString("dd.MM.yyyy"))</a></td>
+                                            <td class="tx-sm-13"><a href="@("/Cash/TransferDetail/" + @item.UID)" target="_blank" class="font-weight-bold">@item.DocumentNumber</a></td>
                                             <td class="tx-sm-13">@item.StatusName</td>
-                                            <td class="tx-sm-13">@item.LocationFullName</td>
+                                            <td class="tx-sm-13"><a href="@($"/Bank/BankTransfer?Date={item.Date?.ToString("yyyy-MM-dd")}&&LocationID={item.LocationID}")">@(item.LocationFullName)</a></td>
                                             <td class="tx-sm-13">@item.BankAccountName </td>
-                                            <td class="tx-sm-13 text-right">@item.ReferenceCode</td>
+                                            <td class="tx-sm-13 text-right text-indigo font-weight-bold">@item.ReferenceCode</td>
                                             <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
                                             <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Commission?.ToString("N2"))</td>
                                             <td class="tx-sm-13">@(item.Currency)</td>
-                                            <td class="tx-sm-13">@item.RecorderFullName<br />@item.RecordDate</td>
-                                            <td class="tx-sm-13">@($"{item.SlipDate?.ToShortDateString()} {item.SlipDate?.ToString("HH:mm:ss")}")</td>
-                                            <td class="tx-sm-13 text-right">@item.SlipNumber</td>
+                                            <td class="tx-sm-13">@(item.RecorderFullName)<br />@item.RecordDate</td>
+                                            <td class="tx-sm-13">@(item.SlipNumber) <br />@($"{item.SlipDate?.ToShortDateString()} {item.SlipDate?.ToString("HH:mm:ss")}")</td>
                                             <td>
                                                 @if (item.SlipDocument != null)
                                                 {
@@ -148,7 +151,23 @@
                                             </td>
 
 
+                                            <td class="tx-sm-13 text-right">
+                                                @if (Model.Authentication.ActionEmployee.RoleGroup.RoleLevel >= 3)
+                                                {
+                                                    <div class="dropup mg-b-15 mg-sm-b-0 mg-sm-r-auto">
+                                                        <button type="button" class="btn btn-block bd bd-gray-300" data-toggle="dropdown" aria-expanded="false">Durum Değiştir <i class="icon ion-ios-arrow-up mg-l-5"></i></button>
 
+                                                        <div class="dropdown-menu tx-13" style="">
+                                                            @foreach (var status in Model.BankTransferStatus.OrderBy(x => x.LevelNumber))
+                                                            {
+                                                                <a href="javascript:;" onclick="ChangeStatus('@(item.UID)',@(status.ID))" class="dropdown-item @(status.ID < item.StatusID ? "text-secondary": status.ID == item.StatusID ? "font-weight-bold" : "text-primary font-weight-bold")">@(status.StatusName)</a>
+                                                            }
+                                                        </div>
+
+                                                    </div>
+                                                }
+
+                                            </td>
                                         </tr>
                                     }
 
@@ -213,6 +232,7 @@
 
 @section scripts {
 
+    <script src="/assets/js/confirm.js"></script>
 
     <script>
         $(function () {
@@ -237,10 +257,48 @@
         });
 
 
+        function ChangeStatus(uid,statusId) {
 
+            $.confirm({
+                animation: 'zoom',
+                closeAnimation: 'scale',
+                title: 'Emin misiniz?',
+                content: 'Bu işlemin durumunu değiştirmek istediğinize emin misiniz??',
+                buttons: {
+                    succes: {
+                        text: 'Evet',
+                        btnClass: 'btn-yes',
+                        action: function () {
+
+                            window.location = '/Bank/ChangeTransferStatus?UID=' + uid + '&StatusID=' + statusId;
+                            //$.ajax({
+                            //    method: "GET",
+                            //    url: "/Bank/ChangeTransferStatus",
+                            //    data: { UID: uid, StatusID =  statusId}
+                            //}).done(function (d) {
+                            //    $("#BasketContent").html(d);
+                            //});
+                        }
+                    },
+                    danger: {
+                        text: 'Hayır',
+                        btnClass: 'btn-no',
+                        action: function () {
+                            console.log('no');
+                        }
+                    },
+                }
+            });
+
+
+
+
+
+        };
 
 
     </script>
+
 
 
 

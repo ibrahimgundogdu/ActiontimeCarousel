@@ -306,6 +306,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="assets\css\confirm.css" />
     <Content Include="assets\css\dashforge.auth.css" />
     <Content Include="assets\css\dashforge.calendar.css" />
     <Content Include="assets\css\dashforge.chat.css" />
@@ -343,6 +344,7 @@
     <Content Include="assets\js\chart.morris.js" />
     <Content Include="assets\js\chart.peity.js" />
     <Content Include="assets\js\chart.sparkline.js" />
+    <Content Include="assets\js\confirm.js" />
     <Content Include="assets\js\dashforge.aside.js" />
     <Content Include="assets\js\dashforge.calendar.js" />
     <Content Include="assets\js\dashforge.chat.js" />

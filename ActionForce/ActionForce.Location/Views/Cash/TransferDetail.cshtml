@@ -164,9 +164,17 @@
 
                             <div class="form-group row">
                                 <div class="col-12">
-                                    @if (Model.IsUpdatible)
+                                    @if (Model.BankTransfer.StatusID <= 3)
                                     {
-                                        <button type="submit" id="btn-save" class="btn btn-block bg-primary text-white btn-rounded">Save</button>
+                                        if (Model.IsUpdatible)
+                                        {
+                                            <button type="submit" id="btn-save" class="btn btn-block bg-primary text-white btn-rounded">Save</button>
+                                        }
+                                        else
+                                        {
+                                            <button type="button" id="btn-save" class="btn btn-block bg-secondary text-white btn-rounded">Readonly</button>
+                                        }
+
                                     }
                                     else
                                     {

@@ -2247,5 +2247,22 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetTicketSalePosStatusUpgrade", orderIDParameter, statusIDParameter);
         }
+    
+        public virtual int SetBankTransferStatus(Nullable<long> iD, Nullable<int> statusID, Nullable<int> employeeID)
+        {
+            var iDParameter = iD.HasValue ?
+                new ObjectParameter("ID", iD) :
+                new ObjectParameter("ID", typeof(long));
+    
+            var statusIDParameter = statusID.HasValue ?
+                new ObjectParameter("StatusID", statusID) :
+                new ObjectParameter("StatusID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetBankTransferStatus", iDParameter, statusIDParameter, employeeIDParameter);
+        }
     }
 }

@@ -1285,6 +1285,11 @@ namespace ActionForce.Location.Controllers
 
             model.Currencies = Db.Currency.ToList();
 
+            if (model.BankTransfer.StatusID > 3)
+            {
+                model.IsUpdatible = false;
+            }
+
             return View(model);
         }
 

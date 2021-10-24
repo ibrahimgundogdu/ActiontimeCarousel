@@ -988,7 +988,7 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult BankTransferFilters(int? LocationId, DateTime? Date, int? StatusID, int? BankAccountID)
+        public ActionResult BankTransferFilters(string SearchKey, int? LocationId, DateTime? Date, int? StatusID, int? BankAccountID)
         {
             FilterModel model = new FilterModel();
 
@@ -996,11 +996,12 @@ namespace ActionForce.Office.Controllers
             model.Date = Date;
             model.StatusID = StatusID;
             model.BankAccountID = BankAccountID;
+            model.SearchKey = SearchKey;
 
-            if (Date == null)
-            {
-                model.Date = DateTime.Now.Date;
-            }
+            //if (Date == null)
+            //{
+            //    model.Date = DateTime.Now.Date;
+            //}
 
             TempData["filter"] = model;
 
@@ -1032,6 +1033,7 @@ namespace ActionForce.Office.Controllers
                     DateTime.TryParse(Date, out _date);
 
                 filterModel.Date = _date.Date;
+                filterModel.LocationID = LocationId ?? 0;
                 model.Filters = filterModel;
             }
 
@@ -1042,18 +1044,37 @@ namespace ActionForce.Office.Controllers
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
 
-            model.DocumentBankTransfers = Db.VDocumentBankTransfer.Where(x => x.Date == model.Filters.Date && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-
-            if (model.Filters.LocationID > 0)
+            if (!string.IsNullOrEmpty(model.Filters.SearchKey))
             {
-                model.DocumentBankTransfers = model.DocumentBankTransfers.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+                model.DocumentBankTransfers = Db.VDocumentBankTransfer.Where(x => x.ReferenceCode.Contains(model.Filters.SearchKey) && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             }
-
-            if (model.Filters.BankAccountID > 0)
+            else
             {
-                model.DocumentBankTransfers = model.DocumentBankTransfers.Where(x => x.ToBankAccountID == model.Filters.BankAccountID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-            }
+                if (model.Filters.Date != null)
+                {
+                    model.DocumentBankTransfers = Db.VDocumentBankTransfer.Where(x => x.Date == model.Filters.Date && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+                }
+                else
+                {
+                    model.DocumentBankTransfers = Db.VDocumentBankTransfer.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+                }
 
+                if (model.Filters.LocationID > 0)
+                {
+                    model.DocumentBankTransfers = model.DocumentBankTransfers.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+                }
+
+                if (model.Filters.BankAccountID > 0)
+                {
+                    model.DocumentBankTransfers = model.DocumentBankTransfers.Where(x => x.ToBankAccountID == model.Filters.BankAccountID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+                }
+
+                if (model.Filters.StatusID > 0)
+                {
+                    model.DocumentBankTransfers = model.DocumentBankTransfers.Where(x => x.StatusID == model.Filters.StatusID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+                }
+
+            }
             List<BankTransferStatusCount> countlist = new List<BankTransferStatusCount>();
 
             foreach (var item in model.BankTransferStatus)
@@ -1070,11 +1091,43 @@ namespace ActionForce.Office.Controllers
             }
 
             model.StatusCounts = countlist;
-            model.SelectedDate = model.Filters.Date.Value;
+            model.SelectedDate = model.Filters.Date ?? _date;
             model.PrevDate = model.SelectedDate.AddDays(-1).Date;
             model.NextDate = model.SelectedDate.AddDays(1).Date;
 
             return View(model);
+        }
+
+
+        //ChangeTransferStatus
+
+        [AllowAnonymous]
+        public ActionResult ChangeTransferStatus(Guid? UID, int? StatusID)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            if (UID == null || StatusID == null || StatusID == 0)
+            {
+                return RedirectToAction("BankTransfer");
+            }
+
+            BankControlModel model = new BankControlModel();
+
+            var bankTransfer = Db.DocumentBankTransfer.FirstOrDefault(x => x.UID == UID);
+
+            if (bankTransfer != null)
+            {
+                DocumentManager documentManager = new DocumentManager();
+                result = documentManager.EditBankTransferStatus(bankTransfer, model.Authentication, StatusID.Value);
+            }
+
+            TempData["result"] = result;
+            return RedirectToAction("BankTransfer", new { LocationId = bankTransfer.LocationID, Date = bankTransfer.Date?.ToString("yyyy-MM-dd") });
+
         }
 
     }
