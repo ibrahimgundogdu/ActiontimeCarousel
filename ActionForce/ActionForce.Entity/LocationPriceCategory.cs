@@ -24,5 +24,12 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> UpdateDate { get; set; }
         public Nullable<int> UpdateEmployeeID { get; set; }
         public string UpdateIP { get; set; }
+        public Nullable<int> MondayPCID { get; set; }
+        public Nullable<int> TuesdayPCID { get; set; }
+        public Nullable<int> WednesdayPCID { get; set; }
+        public Nullable<int> ThursdayPCID { get; set; }
+        public Nullable<int> FridayPCID { get; set; }
+        public Nullable<int> SaturdayPCID { get; set; }
+        public Nullable<int> SundayPCID { get; set; }
     }
 }

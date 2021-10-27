@@ -2354,6 +2354,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LocationID" Type="int" />
           <Property Name="PriceCategoryID" Type="int" />
+          <Property Name="MondayPCID" Type="int" />
+          <Property Name="TuesdayPCID" Type="int" />
+          <Property Name="WednesdayPCID" Type="int" />
+          <Property Name="ThursdayPCID" Type="int" />
+          <Property Name="FridayPCID" Type="int" />
+          <Property Name="SaturdayPCID" Type="int" />
+          <Property Name="SundayPCID" Type="int" />
           <Property Name="StartDate" Type="datetime" />
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="RecordEmployeeID" Type="int" />
@@ -16156,6 +16163,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UpdateDate" Type="DateTime" Precision="3" />
           <Property Name="UpdateEmployeeID" Type="Int32" />
           <Property Name="UpdateIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MondayPCID" Type="Int32" />
+          <Property Name="TuesdayPCID" Type="Int32" />
+          <Property Name="WednesdayPCID" Type="Int32" />
+          <Property Name="ThursdayPCID" Type="Int32" />
+          <Property Name="FridayPCID" Type="Int32" />
+          <Property Name="SaturdayPCID" Type="Int32" />
+          <Property Name="SundayPCID" Type="Int32" />
         </EntityType>
         <EntityType Name="MallContact">
           <Key>
@@ -23208,6 +23222,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="LocationPriceCategory">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationPriceCategory">
               <MappingFragment StoreEntitySet="LocationPriceCategory">
+                <ScalarProperty Name="SundayPCID" ColumnName="SundayPCID" />
+                <ScalarProperty Name="SaturdayPCID" ColumnName="SaturdayPCID" />
+                <ScalarProperty Name="FridayPCID" ColumnName="FridayPCID" />
+                <ScalarProperty Name="ThursdayPCID" ColumnName="ThursdayPCID" />
+                <ScalarProperty Name="WednesdayPCID" ColumnName="WednesdayPCID" />
+                <ScalarProperty Name="TuesdayPCID" ColumnName="TuesdayPCID" />
+                <ScalarProperty Name="MondayPCID" ColumnName="MondayPCID" />
                 <ScalarProperty Name="UpdateIP" ColumnName="UpdateIP" />
                 <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
                 <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />

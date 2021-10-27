@@ -48,7 +48,7 @@
 
 
 
-                    @foreach (var price in Model.PriceList)
+                    @foreach (var price in Model.PriceList.OrderBy(x=> x.Unit))
                     {
                         <a class="box" href="javascript:;" onclick="AddBasket(@(price.ID))">
                             <div class="name"> @(price.ProductName) </div>
@@ -61,7 +61,7 @@
                         </a>
 
                     }
-                    @foreach (var price in Model.PromotionList)
+                    @foreach (var price in Model.PromotionList.OrderBy(x => x.Unit))
                     {
                         <a class="box" href="javascript:;" onclick="AddBasket(@(price.ID))">
                             <div class="name"> @(price.ProductName) </div>
