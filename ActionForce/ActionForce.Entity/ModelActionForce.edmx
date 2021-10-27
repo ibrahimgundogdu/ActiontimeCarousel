@@ -5721,6 +5721,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPriceCategory' doe
           <Property Name="UEmployeeName" Type="nvarchar" MaxLength="150" />
           <Property Name="TicketTypeID" Type="int" />
           <Property Name="TicketTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="CategoryName1" Type="nvarchar" MaxLength="50" />
+          <Property Name="CategoryName2" Type="nvarchar" MaxLength="50" />
+          <Property Name="CategoryName3" Type="nvarchar" MaxLength="50" />
+          <Property Name="CategoryName4" Type="nvarchar" MaxLength="50" />
+          <Property Name="CategoryName5" Type="nvarchar" MaxLength="50" />
+          <Property Name="CategoryName6" Type="nvarchar" MaxLength="50" />
+          <Property Name="CategoryName7" Type="nvarchar" MaxLength="50" />
+          <Property Name="MondayPCID" Type="int" />
+          <Property Name="TuesdayPCID" Type="int" />
+          <Property Name="WednesdayPCID" Type="int" />
+          <Property Name="ThursdayPCID" Type="int" />
+          <Property Name="FridayPCID" Type="int" />
+          <Property Name="SaturdayPCID" Type="int" />
+          <Property Name="SundayPCID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationSchedule' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -9218,7 +9232,21 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocationPriceCategory].[REmployeeName] AS [REmployeeName], 
     [VLocationPriceCategory].[UEmployeeName] AS [UEmployeeName], 
     [VLocationPriceCategory].[TicketTypeID] AS [TicketTypeID], 
-    [VLocationPriceCategory].[TicketTypeName] AS [TicketTypeName]
+    [VLocationPriceCategory].[TicketTypeName] AS [TicketTypeName], 
+    [VLocationPriceCategory].[CategoryName1] AS [CategoryName1], 
+    [VLocationPriceCategory].[CategoryName2] AS [CategoryName2], 
+    [VLocationPriceCategory].[CategoryName3] AS [CategoryName3], 
+    [VLocationPriceCategory].[CategoryName4] AS [CategoryName4], 
+    [VLocationPriceCategory].[CategoryName5] AS [CategoryName5], 
+    [VLocationPriceCategory].[CategoryName6] AS [CategoryName6], 
+    [VLocationPriceCategory].[CategoryName7] AS [CategoryName7], 
+    [VLocationPriceCategory].[MondayPCID] AS [MondayPCID], 
+    [VLocationPriceCategory].[TuesdayPCID] AS [TuesdayPCID], 
+    [VLocationPriceCategory].[WednesdayPCID] AS [WednesdayPCID], 
+    [VLocationPriceCategory].[ThursdayPCID] AS [ThursdayPCID], 
+    [VLocationPriceCategory].[FridayPCID] AS [FridayPCID], 
+    [VLocationPriceCategory].[SaturdayPCID] AS [SaturdayPCID], 
+    [VLocationPriceCategory].[SundayPCID] AS [SundayPCID]
     FROM [dbo].[VLocationPriceCategory] AS [VLocationPriceCategory]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VLocationSchedule" EntityType="Self.VLocationSchedule" store:Type="Views" store:Schema="dbo">
@@ -16603,6 +16631,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UEmployeeName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="TicketTypeID" Type="Int32" />
           <Property Name="TicketTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryName1" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryName2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryName3" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryName4" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryName5" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryName6" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryName7" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MondayPCID" Type="Int32" />
+          <Property Name="TuesdayPCID" Type="Int32" />
+          <Property Name="WednesdayPCID" Type="Int32" />
+          <Property Name="ThursdayPCID" Type="Int32" />
+          <Property Name="FridayPCID" Type="Int32" />
+          <Property Name="SaturdayPCID" Type="Int32" />
+          <Property Name="SundayPCID" Type="Int32" />
         </EntityType>
         <EntityType Name="TicketBasketCounter">
           <Key>
@@ -23677,6 +23719,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VLocationPriceCategory">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationPriceCategory">
               <MappingFragment StoreEntitySet="VLocationPriceCategory">
+                <ScalarProperty Name="SundayPCID" ColumnName="SundayPCID" />
+                <ScalarProperty Name="SaturdayPCID" ColumnName="SaturdayPCID" />
+                <ScalarProperty Name="FridayPCID" ColumnName="FridayPCID" />
+                <ScalarProperty Name="ThursdayPCID" ColumnName="ThursdayPCID" />
+                <ScalarProperty Name="WednesdayPCID" ColumnName="WednesdayPCID" />
+                <ScalarProperty Name="TuesdayPCID" ColumnName="TuesdayPCID" />
+                <ScalarProperty Name="MondayPCID" ColumnName="MondayPCID" />
+                <ScalarProperty Name="CategoryName7" ColumnName="CategoryName7" />
+                <ScalarProperty Name="CategoryName6" ColumnName="CategoryName6" />
+                <ScalarProperty Name="CategoryName5" ColumnName="CategoryName5" />
+                <ScalarProperty Name="CategoryName4" ColumnName="CategoryName4" />
+                <ScalarProperty Name="CategoryName3" ColumnName="CategoryName3" />
+                <ScalarProperty Name="CategoryName2" ColumnName="CategoryName2" />
+                <ScalarProperty Name="CategoryName1" ColumnName="CategoryName1" />
                 <ScalarProperty Name="TicketTypeName" ColumnName="TicketTypeName" />
                 <ScalarProperty Name="TicketTypeID" ColumnName="TicketTypeID" />
                 <ScalarProperty Name="UEmployeeName" ColumnName="UEmployeeName" />

@@ -29,5 +29,19 @@ namespace ActionForce.Entity
         public string UEmployeeName { get; set; }
         public Nullable<int> TicketTypeID { get; set; }
         public string TicketTypeName { get; set; }
+        public string CategoryName1 { get; set; }
+        public string CategoryName2 { get; set; }
+        public string CategoryName3 { get; set; }
+        public string CategoryName4 { get; set; }
+        public string CategoryName5 { get; set; }
+        public string CategoryName6 { get; set; }
+        public string CategoryName7 { get; set; }
+        public Nullable<int> MondayPCID { get; set; }
+        public Nullable<int> TuesdayPCID { get; set; }
+        public Nullable<int> WednesdayPCID { get; set; }
+        public Nullable<int> ThursdayPCID { get; set; }
+        public Nullable<int> FridayPCID { get; set; }
+        public Nullable<int> SaturdayPCID { get; set; }
+        public Nullable<int> SundayPCID { get; set; }
     }
 }

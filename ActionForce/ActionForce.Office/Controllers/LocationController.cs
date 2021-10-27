@@ -679,6 +679,13 @@ namespace ActionForce.Office.Controllers
                         {
                             LocationID = getModel.LocationID,
                             PriceCategoryID = getModel.PriceCategoryID,
+                            MondayPCID = getModel.MondayPCID,
+                            TuesdayPCID = getModel.TuesdayPCID,
+                            WednesdayPCID = getModel.WednesdayPCID,
+                            ThursdayPCID = getModel.ThursdayPCID,
+                            FridayPCID = getModel.FridayPCID,
+                            SaturdayPCID = getModel.SaturdayPCID,
+                            SundayPCID = getModel.SundayPCID,
                             StartDate = getModel.StartDate,
                             RecordDate = daterecord,
                             RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID,
@@ -732,66 +739,73 @@ namespace ActionForce.Office.Controllers
 
                     if (isLocationPrice != null)
                     {
-                        var isCheck = Db.LocationPriceCategory.Where(x => (x.PriceCategoryID == getModel.PriceCategoryID) && x.ID != isLocationPrice.ID && x.LocationID == getModel.LocationID).ToList();
-
-                        if (isCheck.Count == 0)
+                        try
                         {
-                            if (isLocationPrice != null)
+                            #region SelfModel
+                            LocationPriceCategory self = new LocationPriceCategory()
                             {
-                                try
-                                {
-                                    #region SelfModel
-                                    LocationPriceCategory self = new LocationPriceCategory()
-                                    {
-                                        LocationID = isLocationPrice.LocationID,
-                                        PriceCategoryID = isLocationPrice.PriceCategoryID,
-                                        StartDate = isLocationPrice.StartDate,
-                                        RecordDate = isLocationPrice.RecordDate,
-                                        RecordEmployeeID = isLocationPrice.RecordEmployeeID,
-                                        RecordIP = isLocationPrice.RecordIP
-                                    };
-                                    #endregion
-                                    #region UpdateModel
-                                    isLocationPrice.LocationID = getModel.LocationID;
-                                    isLocationPrice.PriceCategoryID = getModel.PriceCategoryID;
-                                    isLocationPrice.StartDate = getModel.StartDate;
-                                    isLocationPrice.UpdateDate = daterecord;
-                                    isLocationPrice.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                                    isLocationPrice.UpdateIP = OfficeHelper.GetIPAddress();
-                                    #endregion
+                                LocationID = isLocationPrice.LocationID,
+                                PriceCategoryID = isLocationPrice.PriceCategoryID,
+                                StartDate = isLocationPrice.StartDate,
+                                RecordDate = isLocationPrice.RecordDate,
+                                RecordEmployeeID = isLocationPrice.RecordEmployeeID,
+                                RecordIP = isLocationPrice.RecordIP,
+                                MondayPCID = isLocationPrice.MondayPCID,
+                                SundayPCID = isLocationPrice.SundayPCID,
+                                SaturdayPCID = isLocationPrice.SaturdayPCID,
+                                FridayPCID = isLocationPrice.FridayPCID,
+                                ThursdayPCID = isLocationPrice.ThursdayPCID,
+                                TuesdayPCID = isLocationPrice.TuesdayPCID,
+                                WednesdayPCID = isLocationPrice.WednesdayPCID,
+                                UpdateDate = isLocationPrice.UpdateDate,
+                                UpdateEmployeeID = isLocationPrice.UpdateEmployeeID,
+                                UpdateIP = isLocationPrice.UpdateIP
+                            };
+                            #endregion
+                            #region UpdateModel
+                            isLocationPrice.LocationID = getModel.LocationID;
+                            isLocationPrice.PriceCategoryID = getModel.PriceCategoryID;
 
-                                    Db.SaveChanges();
+                            isLocationPrice.MondayPCID = getModel.MondayPCID;
+                            isLocationPrice.TuesdayPCID = getModel.TuesdayPCID;
+                            isLocationPrice.WednesdayPCID = getModel.WednesdayPCID;
+                            isLocationPrice.ThursdayPCID = getModel.ThursdayPCID;
+                            isLocationPrice.FridayPCID = getModel.FridayPCID;
+                            isLocationPrice.SaturdayPCID = getModel.SaturdayPCID;
+                            isLocationPrice.SundayPCID = getModel.SundayPCID;
 
-                                    Db.CheckLocationPriceCategory(getModel.LocationID);
+                            isLocationPrice.StartDate = getModel.StartDate;
+                            isLocationPrice.UpdateDate = daterecord;
+                            isLocationPrice.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                            isLocationPrice.UpdateIP = OfficeHelper.GetIPAddress();
+                            #endregion
 
-                                    #region ResultMessage
-                                    model.Result.IsSuccess = true;
-                                    model.Result.Message = $"Lokasyon fiyat kategorisi güncellendi.";
-                                    #endregion
-                                    #region AddLog
-                                    var isequal = OfficeHelper.PublicInstancePropertiesEqual<LocationPriceCategory>(self, isLocationPrice, OfficeHelper.getIgnorelist());
-                                    OfficeHelper.AddApplicationLog("Office", "LocationPriceCategory", "Update", isLocationPrice.LocationID.ToString(), "Location", "UpdatePriceCat", isequal, true, $"{model.Result.Message}", string.Empty, daterecord, model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
-                                    #endregion
-                                }
-                                catch (Exception ex)
-                                {
-                                    model.Result.Message = ex.Message;
-                                    model.Result.IsSuccess = false;
-                                }
+                            Db.SaveChanges();
 
-                                TempData["result"] = model.Result;
-                            }
+                            Db.CheckLocationPriceCategory(getModel.LocationID);
+
+                            #region ResultMessage
+                            model.Result.IsSuccess = true;
+                            model.Result.Message = $"Lokasyon fiyat kategorisi güncellendi.";
+                            #endregion
+                            #region AddLog
+                            var isequal = OfficeHelper.PublicInstancePropertiesEqual<LocationPriceCategory>(self, isLocationPrice, OfficeHelper.getIgnorelist());
+                            OfficeHelper.AddApplicationLog("Office", "LocationPriceCategory", "Update", isLocationPrice.LocationID.ToString(), "Location", "UpdatePriceCat", isequal, true, $"{model.Result.Message}", string.Empty, daterecord, model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                            #endregion
                         }
-                        else
+                        catch (Exception ex)
                         {
+                            model.Result.Message = ex.Message;
                             model.Result.IsSuccess = false;
-                            model.Result.Message = $"Benzer kayıtlar bulundu.";
-
-                            //TempData["checkLocation"] = location;
-                            TempData["result"] = model.Result;
-
-                            //return RedirectToAction("Edit", "Location", new { id = location.LocationUID });
                         }
+
+                        TempData["result"] = model.Result;
+                    }
+                    else
+                    {
+                        model.Result.Message = "Lokasyon Fiyat Kategori Bilgisi Bulunamadı";
+                        model.Result.IsSuccess = false;
+                        TempData["result"] = model.Result;
                     }
 
                     model.LocationPriceCategoryList = Db.VLocationPriceCategory.Where(x => x.LocationID == getModel.LocationID).ToList();

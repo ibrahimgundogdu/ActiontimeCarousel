@@ -3,7 +3,14 @@
 <table class="table table-hover">
     <thead>
         <tr>
-            <th>Adı</th>
+            <th>Kategori Adı</th>
+            <th>Pazartesi</th>
+            <th>Salı</th>
+            <th>Çarşamba</th>
+            <th>Perşembe</th>
+            <th>Cuma</th>
+            <th>Cumartesi</th>
+            <th>Pazar</th>
             <th>Başlangıç Tarihi</th>
             <th>Kayıt Tarihi</th>
             <th>Kaydeden</th>
@@ -18,16 +25,23 @@
         {
             foreach (var item in Model.LocationPriceCategoryList.OrderByDescending(x => x.StartDate))
             {
-                <tr>
-                    <td class="tx-sm-13 bold">@($"{item.TicketTypeName} {item.CategoryName}")</td>
-                    <td class="tx-sm-13">@(item.StartDate)</td>
-                    <td class="tx-sm-13">@(item.RecordDate)</td>
-                    <td class="tx-sm-13">@(item.REmployeeName)</td>
-                    <td class="tx-sm-13">@(item.UpdateDate)</td>
-                    <td class="tx-sm-13">@(item.UEmployeeName)</td>
-                    <td class="tx-sm-13 text-center"><a href="#modelLocationPriceCategoryEdit" data-toggle="modal" class="text-primary" onclick="EditPriceCat(@(item.ID));"><i class="wd-15" data-feather="edit"></i></a></td>
-                    <td class="tx-sm-13 text-center"><a href="javascript:void(0)" data-toggle="modal" class="text-danger" onclick="return confirm('Silmek istediğinize emin misiniz ?') ? DeletePriceCat(@item.ID):false;"><i class="wd-15" data-feather="trash"></i></a></td>
-                </tr>
+        <tr>
+            <td class="tx-sm-13 bold">@($"{item.TicketTypeName} {item.CategoryName}")</td>
+            <td class="tx-sm-13 bold">@($"{item.CategoryName1}")</td>
+            <td class="tx-sm-13 bold">@($"{item.CategoryName2}")</td>
+            <td class="tx-sm-13 bold">@($"{item.CategoryName3}")</td>
+            <td class="tx-sm-13 bold">@($"{item.CategoryName4}")</td>
+            <td class="tx-sm-13 bold">@($"{item.CategoryName5}")</td>
+            <td class="tx-sm-13 bold">@($"{item.CategoryName6}")</td>
+            <td class="tx-sm-13 bold">@($"{item.CategoryName7}")</td>
+            <td class="tx-sm-13">@(item.StartDate)</td>
+            <td class="tx-sm-13">@(item.RecordDate)</td>
+            <td class="tx-sm-13">@(item.REmployeeName)</td>
+            <td class="tx-sm-13">@(item.UpdateDate)</td>
+            <td class="tx-sm-13">@(item.UEmployeeName)</td>
+            <td class="tx-sm-13 text-center"><a href="#modelLocationPriceCategoryEdit" data-toggle="modal" class="text-primary" onclick="EditPriceCat(@(item.ID));"><i class="wd-15" data-feather="edit"></i></a></td>
+            <td class="tx-sm-13 text-center"><a href="javascript:void(0)" data-toggle="modal" class="text-danger" onclick="return confirm('Silmek istediğinize emin misiniz ?') ? DeletePriceCat(@item.ID):false;"><i class="wd-15" data-feather="trash"></i></a></td>
+        </tr>
             }
         }
     </tbody>
