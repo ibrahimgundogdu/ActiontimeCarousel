@@ -497,6 +497,94 @@
           <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="Card">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="CardTypeID" Type="smallint" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="ExpireDate" Type="date" />
+          <Property Name="Credit" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="CardStatusID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="ActivateDate" Type="datetime" />
+          <Property Name="UID" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="CardActions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="CardID" Type="bigint" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="OrderID" Type="bigint" />
+          <Property Name="OrderRowID" Type="bigint" />
+          <Property Name="OrderRowUID" Type="uniqueidentifier" />
+          <Property Name="ActionTypeID" Type="smallint" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ActionDate" Type="datetime" />
+          <Property Name="CreditCharge" Type="float" />
+          <Property Name="CreditSpend" Type="float" />
+          <Property Name="Credit" Type="float" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+        </EntityType>
+        <EntityType Name="CardActionType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NameEN" Type="nvarchar" MaxLength="50" />
+          <Property Name="NameTR" Type="nvarchar" MaxLength="50" />
+          <Property Name="SortBy" Type="char" MaxLength="4" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="CardCreditOption">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreditOptionName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Credit" Type="int" />
+          <Property Name="SortBy" Type="char" MaxLength="3" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="CardNumber">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="CardTypeID" Type="smallint" />
+          <Property Name="Prefix" Type="nvarchar" MaxLength="6" />
+          <Property Name="Counter" Type="bigint" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="CardStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CardStatusName" Type="nvarchar" MaxLength="40" />
+          <Property Name="SortBy" Type="int" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
+        <EntityType Name="CardType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CardTypeName" Type="nvarchar" MaxLength="40" />
+          <Property Name="AllowLoading" Type="bit" />
+          <Property Name="IsSale" Type="bit" />
+          <Property Name="IsInventory" Type="bit" />
+          <Property Name="IsZeroStock" Type="bit" />
+          <Property Name="IsActive" Type="bit" />
+        </EntityType>
         <EntityType Name="Cash">
           <Key>
             <PropertyRef Name="ID" />
@@ -7421,6 +7509,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="BankNotificationStatus" EntityType="Self.BankNotificationStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BankTransferStatus" EntityType="Self.BankTransferStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="BreakTypes" EntityType="Self.BreakTypes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Card" EntityType="Self.Card" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardActions" EntityType="Self.CardActions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardActionType" EntityType="Self.CardActionType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardCreditOption" EntityType="Self.CardCreditOption" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardNumber" EntityType="Self.CardNumber" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardStatus" EntityType="Self.CardStatus" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardType" EntityType="Self.CardType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Cash" EntityType="Self.Cash" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CashActions" EntityType="Self.CashActions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CashActionType" EntityType="Self.CashActionType" Schema="dbo" store:Type="Tables" />
@@ -10999,6 +11094,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="StatusID" Mode="In" Type="Int32" />
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="Card" EntityType="db293_ActionTimeDbModel.Card" />
+          <EntitySet Name="CardActions" EntityType="db293_ActionTimeDbModel.CardActions" />
+          <EntitySet Name="CardActionType" EntityType="db293_ActionTimeDbModel.CardActionType" />
+          <EntitySet Name="CardCreditOption" EntityType="db293_ActionTimeDbModel.CardCreditOption" />
+          <EntitySet Name="CardNumber" EntityType="db293_ActionTimeDbModel.CardNumber" />
+          <EntitySet Name="CardStatus" EntityType="db293_ActionTimeDbModel.CardStatus" />
+          <EntitySet Name="CardType" EntityType="db293_ActionTimeDbModel.CardType" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -18290,6 +18392,94 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="ProcessUID" Type="Guid" />
         </EntityType>
+        <EntityType Name="Card">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="CardTypeID" Type="Int16" />
+          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ExpireDate" Type="DateTime" Precision="0" />
+          <Property Name="Credit" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="CardStatusID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="ActivateDate" Type="DateTime" Precision="3" />
+          <Property Name="UID" Type="Guid" />
+        </EntityType>
+        <EntityType Name="CardActions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="CardID" Type="Int64" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="OrderID" Type="Int64" />
+          <Property Name="OrderRowID" Type="Int64" />
+          <Property Name="OrderRowUID" Type="Guid" />
+          <Property Name="ActionTypeID" Type="Int16" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ActionDate" Type="DateTime" Precision="3" />
+          <Property Name="CreditCharge" Type="Double" />
+          <Property Name="CreditSpend" Type="Double" />
+          <Property Name="Credit" Type="Double" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CardActionType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NameEN" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="NameTR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="String" MaxLength="4" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="CardCreditOption">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreditOptionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Credit" Type="Int32" />
+          <Property Name="SortBy" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="CardNumber">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="CardTypeID" Type="Int16" />
+          <Property Name="Prefix" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="Counter" Type="Int64" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="CardStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CardStatusName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="SortBy" Type="Int32" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="CardType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CardTypeName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="AllowLoading" Type="Boolean" />
+          <Property Name="IsSale" Type="Boolean" />
+          <Property Name="IsInventory" Type="Boolean" />
+          <Property Name="IsZeroStock" Type="Boolean" />
+          <Property Name="IsActive" Type="Boolean" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -25355,6 +25545,101 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="SetBankTransferStatus" FunctionName="db293_ActionTimeDbModel.Store.SetBankTransferStatus" />
+          <EntitySetMapping Name="Card">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Card">
+              <MappingFragment StoreEntitySet="Card">
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="ActivateDate" ColumnName="ActivateDate" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="CardStatusID" ColumnName="CardStatusID" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="ExpireDate" ColumnName="ExpireDate" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="CardTypeID" ColumnName="CardTypeID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CardActions">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardActions">
+              <MappingFragment StoreEntitySet="CardActions">
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="CreditSpend" ColumnName="CreditSpend" />
+                <ScalarProperty Name="CreditCharge" ColumnName="CreditCharge" />
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="OrderRowUID" ColumnName="OrderRowUID" />
+                <ScalarProperty Name="OrderRowID" ColumnName="OrderRowID" />
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="CardID" ColumnName="CardID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CardActionType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardActionType">
+              <MappingFragment StoreEntitySet="CardActionType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="NameTR" ColumnName="NameTR" />
+                <ScalarProperty Name="NameEN" ColumnName="NameEN" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CardCreditOption">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardCreditOption">
+              <MappingFragment StoreEntitySet="CardCreditOption">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="CreditOptionName" ColumnName="CreditOptionName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CardNumber">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardNumber">
+              <MappingFragment StoreEntitySet="CardNumber">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="Counter" ColumnName="Counter" />
+                <ScalarProperty Name="Prefix" ColumnName="Prefix" />
+                <ScalarProperty Name="CardTypeID" ColumnName="CardTypeID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CardStatus">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardStatus">
+              <MappingFragment StoreEntitySet="CardStatus">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="SortBy" ColumnName="SortBy" />
+                <ScalarProperty Name="CardStatusName" ColumnName="CardStatusName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CardType">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardType">
+              <MappingFragment StoreEntitySet="CardType">
+                <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+                <ScalarProperty Name="IsZeroStock" ColumnName="IsZeroStock" />
+                <ScalarProperty Name="IsInventory" ColumnName="IsInventory" />
+                <ScalarProperty Name="IsSale" ColumnName="IsSale" />
+                <ScalarProperty Name="AllowLoading" ColumnName="AllowLoading" />
+                <ScalarProperty Name="CardTypeName" ColumnName="CardTypeName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -10,9 +10,15 @@
   
 }/* (max-width : 600px) */
 
+
+@media only screen and (min-width : 480px){
+    .content .ufe-card-detail .card-information .card-credit{ flex: 0 0 200px; max-width: 200px; }
+    .content .ufe-card-detail .card-information .card-info{ flex: 0 0 calc(100% - 200px); max-width: calc(100% - 200px); }
+}
+
 @media only screen and (min-width : 480px){ /* (min-width : 480px) */
     .content{ 
-        .connect-content{ margin: 0 -20px; min-height: calc(100vh - 120px); 
+        .connect-content{ margin: 0 -20px; min-height: calc(100vh - 200px); 
           .order-box{  
             h3{ font-size: 26px; line-height: 1.25; }
             .order-no{ margin-bottom: 50px; 
@@ -20,9 +26,6 @@
             }
             .order-amount{
               p{ font-size: 70px; line-height: 1; }
-            }
-            .order-icon{ 
-              svg{ width: 200px; height: 200px; }
             }
           }
           .connect-lower{ 

@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="210.625" height="211" viewBox="0 0 210.625 211">
+  <g>
+    <path d="M3,96.565H96.565V3H3ZM26.391,26.391H73.174V73.174H26.391Z" transform="translate(-3 -3)" fill="#1ac5cc"/>
+    <path d="M3,106.565H96.565V13H3ZM26.391,36.391H73.174V83.174H26.391Z" transform="translate(-3 103.956)" fill="#1ac5cc"/>
+    <path d="M13,3V96.565h93.565V3ZM83.174,73.174H36.391V26.391H83.174Z" transform="translate(103.956 -3)" fill="#1ac5cc"/>
+    <rect width="23" height="24" transform="translate(187.625 187)" fill="#1ac5cc"/>
+    <rect width="23" height="24" transform="translate(117.625 117)" fill="#1ac5cc"/>
+    <rect width="22" height="22" transform="translate(140.625 141)" fill="#1ac5cc"/>
+    <rect width="23" height="24" transform="translate(117.625 163)" fill="#1ac5cc"/>
+    <rect width="22" height="24" transform="translate(140.625 187)" fill="#1ac5cc"/>
+    <rect width="25" height="24" transform="translate(162.625 163)" fill="#1ac5cc"/>
+    <rect width="25" height="24" transform="translate(162.625 117)" fill="#1ac5cc"/>
+    <rect width="23" height="22" transform="translate(187.625 141)" fill="#1ac5cc"/>
+  </g>
+</svg>

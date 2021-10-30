@@ -124,11 +124,13 @@
     <Content Include="assets\fancybox\js\thumbs.js" />
     <Content Include="assets\fancybox\js\wheel.js" />
     <Content Include="assets\img\clean.svg" />
+    <Content Include="assets\img\dialpad.svg" />
     <Content Include="assets\img\dots.svg" />
     <Content Include="assets\img\exit.svg" />
     <Content Include="assets\img\hezarfen.jpg" />
     <Content Include="assets\img\hezarfen1.jpg" />
     <Content Include="assets\img\homepage.svg" />
+    <Content Include="assets\img\kredi-yukle.svg" />
     <Content Include="assets\img\location-icon.svg" />
     <Content Include="assets\img\lock.svg" />
     <Content Include="assets\img\main-img.png" />
@@ -137,7 +139,10 @@
     <Content Include="assets\img\order-connect.svg" />
     <Content Include="assets\img\payment.svg" />
     <Content Include="assets\img\people-icon.svg" />
+    <Content Include="assets\img\plus.svg" />
     <Content Include="assets\img\sun.svg" />
+    <Content Include="assets\img\ufe-pos-barcode.svg" />
+    <Content Include="assets\img\ufe-white.svg" />
     <Content Include="assets\img\user-icon.svg" />
     <Content Include="assets\img\yazar-kasa-icon.svg" />
     <Content Include="assets\js\aos-2.3.1.min.js" />
@@ -239,6 +244,7 @@
     <Compile Include="Controllers\SetupController.cs" />
     <Compile Include="Controllers\ShiftsController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
+    <Compile Include="Controllers\UfePlusCardController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -257,6 +263,7 @@
     <Compile Include="Models\ControlModels\ShiftControlModel.cs" />
     <Compile Include="Models\ControlModels\SummaryControlModel.cs" />
     <Compile Include="Models\ControlModels\TransactionControlModel.cs" />
+    <Compile Include="Models\ControlModels\UfePlusCardControlModel.cs" />
     <Compile Include="Models\CurrentEmployee.cs" />
     <Compile Include="Models\CurrentLocation.cs" />
     <Compile Include="Models\Dapper\DataService.cs" />
@@ -351,6 +358,7 @@
     <Content Include="Views\Setup\DocumentCatalog.cshtml" />
     <Content Include="Views\Sales\RowDetail.cshtml" />
     <Content Include="Views\Actions\Index.cshtml" />
+    <Content Include="Views\UfePlusCard\Payment.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

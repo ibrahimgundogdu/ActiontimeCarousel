@@ -1,0 +1,144 @@
+﻿@model UfePlusCardControlModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFE POS</title>
+    <meta name="description" content="UFE POS">
+    <meta name="keywords" content="UFE POS">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/assets/scss/global.css">
+</head>
+<body>
+    <div class="main">
+        <div class="container">
+            <div class="header">
+                <div class="menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="49.778" viewBox="0 0 64 49.778">
+                        <path d="M59.889,40.556v7.111H10.111V40.556H59.889M67,5H3v7.111H67Zm0,14.222H3v7.111H67Zm0,14.222H3V54.778H67Z" transform="translate(-3 -5)" fill="currentColor" />
+                    </svg>
+                    <!-- menu -->
+                </div>
+                <div class="logo">
+                    <a href="javascript:;">UFE POS</a>
+                    <div class="date">@(DateTime.Now.ToLongDateString())</div>
+                </div>
+                <div class="homepage">
+                    <a href="/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                            <path d="M4,16.5H16.5V4H4ZM22.75,54h12.5V41.5H22.75ZM4,54H16.5V41.5H4ZM4,35.25H16.5V22.75H4Zm18.75,0h12.5V22.75H22.75ZM41.5,4V16.5H54V4ZM22.75,16.5h12.5V4H22.75ZM41.5,35.25H54V22.75H41.5ZM41.5,54H54V41.5H41.5Z" transform="translate(-4 -4)" fill="currentColor" />
+                        </svg>
+                        <!-- homepage -->
+                    </a>
+                </div>
+            </div><!-- header -->
+            <div class="side-menu-overlay"></div>
+            <div class="side-menu">
+                @{ Html.RenderPartial("_PartialMenu");}
+            </div><!-- side-menu -->
+            <div class="content">
+                <div class="connect-content">
+                    <div class="order-box">
+                        <div class="centered">
+                            <div class="order-no">
+                                <h3>SİPARİŞ NO</h3>
+                                <p>10000024</p>
+                            </div>
+                            <div class="ufe-card-detail">
+                                <div class="btn-set">
+                                    <button type="button" class="btn-1">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="210.625" height="211" viewBox="0 0 210.625 211"><g><path d="M3,96.565H96.565V3H3ZM26.391,26.391H73.174V73.174H26.391Z" transform="translate(-3 -3)" fill="#1ac5cc" /><path d="M3,106.565H96.565V13H3ZM26.391,36.391H73.174V83.174H26.391Z" transform="translate(-3 103.956)" fill="#1ac5cc" /><path d="M13,3V96.565h93.565V3ZM83.174,73.174H36.391V26.391H83.174Z" transform="translate(103.956 -3)" fill="#1ac5cc" /><rect width="23" height="24" transform="translate(187.625 187)" fill="#1ac5cc" /><rect width="23" height="24" transform="translate(117.625 117)" fill="#1ac5cc" /><rect width="22" height="22" transform="translate(140.625 141)" fill="#1ac5cc" /><rect width="23" height="24" transform="translate(117.625 163)" fill="#1ac5cc" /><rect width="22" height="24" transform="translate(140.625 187)" fill="#1ac5cc" /><rect width="25" height="24" transform="translate(162.625 163)" fill="#1ac5cc" /><rect width="25" height="24" transform="translate(162.625 117)" fill="#1ac5cc" /><rect width="23" height="22" transform="translate(187.625 141)" fill="#1ac5cc" /></g></svg>
+                                    </button>
+                                    <button type="button" class="btn-2">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="133" height="133" viewBox="0 0 133 133">
+                                            <path d="M50.167,101.5a11.173,11.173,0,1,0,11.542,11.167A11.392,11.392,0,0,0,50.167,101.5ZM15.542,1A11.392,11.392,0,0,0,4,12.167,11.392,11.392,0,0,0,15.542,23.333,11.392,11.392,0,0,0,27.083,12.167,11.392,11.392,0,0,0,15.542,1Zm0,33.5a11.173,11.173,0,1,0,0,22.333,11.173,11.173,0,1,0,0-22.333Zm0,33.5a11.173,11.173,0,1,0,0,22.333,11.173,11.173,0,1,0,0-22.333Zm69.25-44.667A11.392,11.392,0,0,0,96.333,12.167a11.548,11.548,0,0,0-23.083,0A11.392,11.392,0,0,0,84.792,23.333ZM50.167,68A11.173,11.173,0,1,0,61.708,79.167,11.392,11.392,0,0,0,50.167,68Zm34.625,0A11.173,11.173,0,1,0,96.333,79.167,11.392,11.392,0,0,0,84.792,68Zm0-33.5A11.173,11.173,0,1,0,96.333,45.667,11.392,11.392,0,0,0,84.792,34.5Zm-34.625,0A11.173,11.173,0,1,0,61.708,45.667,11.392,11.392,0,0,0,50.167,34.5Zm0-33.5A11.392,11.392,0,0,0,38.625,12.167a11.548,11.548,0,0,0,23.083,0A11.392,11.392,0,0,0,50.167,1Z" transform="translate(16.333 4.083)" fill="#fff" />
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="code-area">
+                                    <input type="text">
+                                </div>
+                                <div class="informations">
+                                    <div class="name">
+                                        <p>ADI SOYADI</p>
+                                        <p><b>İBRAHİM GÜ***DU</b></p>
+                                    </div>
+                                    <div class="card-no">
+                                        <p>KART NO</p>
+                                        <p><b>3467 0001 0000 0001</b></p>
+                                    </div>
+                                    <div class="list">
+                                        <table cellpadding="0" cellspacing="0" class="table-1">
+                                            <tr>
+                                                <td>SİPARİŞ TUTARI</td>
+                                                <td>25,00 ₺</td>
+                                            </tr>
+                                            <tr>
+                                                <td>YÜKLÜ KREDİ</td>
+                                                <td><b>50,00 ₺</b></td>
+                                            </tr>
+                                        </table>
+                                        <table cellpadding="0" cellspacing="0" class="table-2">
+                                            <tr>
+                                                <td>KULLANILACAK KREDİ</td>
+                                                <td><input type="text" class="input-c"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>KALAN BAKİYE</td>
+                                                <td><input type="text" class="input-c" value="00,00" readonly></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                    <div class="credit-btn">
+                                        <button type="button" class="credit-upload">
+                                            KREDİ YÜKLE
+                                        </button>
+                                        <button type="button" class="credit-use">
+                                            KREDİ KULLAN
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div><!-- content -->
+        </div>
+    </div><!-- main -->
+    <script src="/assets/js/jquery-3.5.1.min.js"></script>
+    <script src="/assets/js/modal.js"></script>
+    <script src="/assets/js/global.js"></script>
+    <script>
+        $(function () {
+            const open = 'open';
+            const $menu = $('.header .menu');
+            const $listBtn = $('.bot-list-btn');
+
+            $menu.on('click', function () {
+                let $this = $(this);
+                if (($this).hasClass(open)) {
+                    $this.removeClass(open);
+                    $('.side-menu,.side-menu-overlay').removeClass(open);
+                } else {
+                    $this.addClass(open);
+                    $('.side-menu,.side-menu-overlay').addClass(open);
+                }
+            });
+            $('.side-menu-overlay').on('click', function () {
+                $menu.removeClass(open);
+                $('.side-menu,.side-menu-overlay').removeClass(open);
+            });
+
+
+
+        });
+    </script>
+
+</body>
+</html>
