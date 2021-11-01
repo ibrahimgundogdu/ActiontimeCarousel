@@ -35,5 +35,7 @@ namespace ActionForce.Entity
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public string PostAddress { get; set; }
+        public Nullable<int> ParentCustomerID { get; set; }
+        public Nullable<int> ChildTypeID { get; set; }
     }
 }

@@ -327,7 +327,6 @@ namespace ActionForce.Entity
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<CustomerActions> CustomerActions { get; set; }
         public virtual DbSet<AddressType> AddressType { get; set; }
-        public virtual DbSet<CustomerCard> CustomerCard { get; set; }
         public virtual DbSet<CustomerScorePointActions> CustomerScorePointActions { get; set; }
         public virtual DbSet<CustomerScorePointRules> CustomerScorePointRules { get; set; }
         public virtual DbSet<ScoreItem> ScoreItem { get; set; }
@@ -343,6 +342,8 @@ namespace ActionForce.Entity
         public virtual DbSet<CardNumber> CardNumber { get; set; }
         public virtual DbSet<CardStatus> CardStatus { get; set; }
         public virtual DbSet<CardType> CardType { get; set; }
+        public virtual DbSet<VCustomerCard> VCustomerCard { get; set; }
+        public virtual DbSet<CustomerCard> CustomerCard { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -2270,6 +2271,19 @@ namespace ActionForce.Entity
                 new ObjectParameter("EmployeeID", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetBankTransferStatus", iDParameter, statusIDParameter, employeeIDParameter);
+        }
+    
+        public virtual ObjectResult<GetCardBalance_Result> GetCardBalance(Nullable<long> cardID, string currency)
+        {
+            var cardIDParameter = cardID.HasValue ?
+                new ObjectParameter("CardID", cardID) :
+                new ObjectParameter("CardID", typeof(long));
+    
+            var currencyParameter = currency != null ?
+                new ObjectParameter("Currency", currency) :
+                new ObjectParameter("Currency", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCardBalance_Result>("GetCardBalance", cardIDParameter, currencyParameter);
         }
     }
 }

@@ -404,6 +404,9 @@
     <Compile Include="GetAppLocations_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetCardBalance_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="GetEmployeeAll_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -898,6 +901,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VCity.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VCustomerCard.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VDayResult.cs">

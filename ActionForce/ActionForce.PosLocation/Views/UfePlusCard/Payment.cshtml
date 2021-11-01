@@ -51,59 +51,93 @@
                                 <p>10000024</p>
                             </div>
                             <div class="ufe-card-detail">
-                                <div class="btn-set">
-                                    <button type="button" class="btn-1">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="210.625" height="211" viewBox="0 0 210.625 211"><g><path d="M3,96.565H96.565V3H3ZM26.391,26.391H73.174V73.174H26.391Z" transform="translate(-3 -3)" fill="#1ac5cc" /><path d="M3,106.565H96.565V13H3ZM26.391,36.391H73.174V83.174H26.391Z" transform="translate(-3 103.956)" fill="#1ac5cc" /><path d="M13,3V96.565h93.565V3ZM83.174,73.174H36.391V26.391H83.174Z" transform="translate(103.956 -3)" fill="#1ac5cc" /><rect width="23" height="24" transform="translate(187.625 187)" fill="#1ac5cc" /><rect width="23" height="24" transform="translate(117.625 117)" fill="#1ac5cc" /><rect width="22" height="22" transform="translate(140.625 141)" fill="#1ac5cc" /><rect width="23" height="24" transform="translate(117.625 163)" fill="#1ac5cc" /><rect width="22" height="24" transform="translate(140.625 187)" fill="#1ac5cc" /><rect width="25" height="24" transform="translate(162.625 163)" fill="#1ac5cc" /><rect width="25" height="24" transform="translate(162.625 117)" fill="#1ac5cc" /><rect width="23" height="22" transform="translate(187.625 141)" fill="#1ac5cc" /></g></svg>
-                                    </button>
-                                    <button type="button" class="btn-2">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="133" height="133" viewBox="0 0 133 133">
-                                            <path d="M50.167,101.5a11.173,11.173,0,1,0,11.542,11.167A11.392,11.392,0,0,0,50.167,101.5ZM15.542,1A11.392,11.392,0,0,0,4,12.167,11.392,11.392,0,0,0,15.542,23.333,11.392,11.392,0,0,0,27.083,12.167,11.392,11.392,0,0,0,15.542,1Zm0,33.5a11.173,11.173,0,1,0,0,22.333,11.173,11.173,0,1,0,0-22.333Zm0,33.5a11.173,11.173,0,1,0,0,22.333,11.173,11.173,0,1,0,0-22.333Zm69.25-44.667A11.392,11.392,0,0,0,96.333,12.167a11.548,11.548,0,0,0-23.083,0A11.392,11.392,0,0,0,84.792,23.333ZM50.167,68A11.173,11.173,0,1,0,61.708,79.167,11.392,11.392,0,0,0,50.167,68Zm34.625,0A11.173,11.173,0,1,0,96.333,79.167,11.392,11.392,0,0,0,84.792,68Zm0-33.5A11.173,11.173,0,1,0,96.333,45.667,11.392,11.392,0,0,0,84.792,34.5Zm-34.625,0A11.173,11.173,0,1,0,61.708,45.667,11.392,11.392,0,0,0,50.167,34.5Zm0-33.5A11.392,11.392,0,0,0,38.625,12.167a11.548,11.548,0,0,0,23.083,0A11.392,11.392,0,0,0,50.167,1Z" transform="translate(16.333 4.083)" fill="#fff" />
-                                        </svg>
-                                    </button>
-                                </div>
-                                <div class="code-area">
-                                    <input type="text">
-                                </div>
-                                <div class="informations">
-                                    <div class="name">
-                                        <p>ADI SOYADI</p>
-                                        <p><b>İBRAHİM GÜ***DU</b></p>
-                                    </div>
-                                    <div class="card-no">
-                                        <p>KART NO</p>
-                                        <p><b>3467 0001 0000 0001</b></p>
-                                    </div>
-                                    <div class="list">
-                                        <table cellpadding="0" cellspacing="0" class="table-1">
-                                            <tr>
-                                                <td>SİPARİŞ TUTARI</td>
-                                                <td>25,00 ₺</td>
-                                            </tr>
-                                            <tr>
-                                                <td>YÜKLÜ KREDİ</td>
-                                                <td><b>50,00 ₺</b></td>
-                                            </tr>
-                                        </table>
-                                        <table cellpadding="0" cellspacing="0" class="table-2">
-                                            <tr>
-                                                <td>KULLANILACAK KREDİ</td>
-                                                <td><input type="text" class="input-c"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>KALAN BAKİYE</td>
-                                                <td><input type="text" class="input-c" value="00,00" readonly></td>
-                                            </tr>
-                                        </table>
-                                    </div>
-                                    <div class="credit-btn">
-                                        <button type="button" class="credit-upload">
-                                            KREDİ YÜKLE
+
+
+                                @using (Html.BeginForm("FindCustomer", "UfePlusCard", FormMethod.Post, new { role = "form", @class = "form", enctype = "multipart/form-data" }))
+                                {
+                                    <div class="btn-set">
+                                        <button type="button" class="btn-1" onclick="ShowQr()">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="210.625" height="211" viewBox="0 0 210.625 211"><g><path d="M3,96.565H96.565V3H3ZM26.391,26.391H73.174V73.174H26.391Z" transform="translate(-3 -3)" fill="#1ac5cc" /><path d="M3,106.565H96.565V13H3ZM26.391,36.391H73.174V83.174H26.391Z" transform="translate(-3 103.956)" fill="#1ac5cc" /><path d="M13,3V96.565h93.565V3ZM83.174,73.174H36.391V26.391H83.174Z" transform="translate(103.956 -3)" fill="#1ac5cc" /><rect width="23" height="24" transform="translate(187.625 187)" fill="#1ac5cc" /><rect width="23" height="24" transform="translate(117.625 117)" fill="#1ac5cc" /><rect width="22" height="22" transform="translate(140.625 141)" fill="#1ac5cc" /><rect width="23" height="24" transform="translate(117.625 163)" fill="#1ac5cc" /><rect width="22" height="24" transform="translate(140.625 187)" fill="#1ac5cc" /><rect width="25" height="24" transform="translate(162.625 163)" fill="#1ac5cc" /><rect width="25" height="24" transform="translate(162.625 117)" fill="#1ac5cc" /><rect width="23" height="22" transform="translate(187.625 141)" fill="#1ac5cc" /></g></svg>
                                         </button>
-                                        <button type="button" class="credit-use">
-                                            KREDİ KULLAN
+                                        <button type="button" class="btn-2" onclick="ShowNumber()">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="133" height="133" viewBox="0 0 133 133">
+                                                <path d="M50.167,101.5a11.173,11.173,0,1,0,11.542,11.167A11.392,11.392,0,0,0,50.167,101.5ZM15.542,1A11.392,11.392,0,0,0,4,12.167,11.392,11.392,0,0,0,15.542,23.333,11.392,11.392,0,0,0,27.083,12.167,11.392,11.392,0,0,0,15.542,1Zm0,33.5a11.173,11.173,0,1,0,0,22.333,11.173,11.173,0,1,0,0-22.333Zm0,33.5a11.173,11.173,0,1,0,0,22.333,11.173,11.173,0,1,0,0-22.333Zm69.25-44.667A11.392,11.392,0,0,0,96.333,12.167a11.548,11.548,0,0,0-23.083,0A11.392,11.392,0,0,0,84.792,23.333ZM50.167,68A11.173,11.173,0,1,0,61.708,79.167,11.392,11.392,0,0,0,50.167,68Zm34.625,0A11.173,11.173,0,1,0,96.333,79.167,11.392,11.392,0,0,0,84.792,68Zm0-33.5A11.173,11.173,0,1,0,96.333,45.667,11.392,11.392,0,0,0,84.792,34.5Zm-34.625,0A11.173,11.173,0,1,0,61.708,45.667,11.392,11.392,0,0,0,50.167,34.5Zm0-33.5A11.392,11.392,0,0,0,38.625,12.167a11.548,11.548,0,0,0,23.083,0A11.392,11.392,0,0,0,50.167,1Z" transform="translate(16.333 4.083)" fill="#fff" />
+                                            </svg>
                                         </button>
                                     </div>
-                                </div>
+
+                                    <div class="code-area">
+                                        <input type="text" name="QRCode" id="QRCode" placeholder="QR Kodu Okutunuz" value="@(Model.CardFilter != null && !string.IsNullOrEmpty(Model.CardFilter.QRCode) ? Model.CardFilter.QRCode : "")">
+                                    </div>
+
+                                    <div class="code-area">
+                                        <input type="text" name="CardNumber" id="CardNumber" class="cardno" style="display:none;" placeholder="0000 0000 0000 0000" value="@(Model.CardFilter != null && !string.IsNullOrEmpty(Model.CardFilter.CardNumber) ? Model.CardFilter.CardNumber : "")">
+                                    </div>
+
+                                    <div class="code-area">
+                                        <input type="text" name="PhoneNumber" id="PhoneNumber" class="phone" style="display:none;" placeholder="(555) 555 55 55" value="@(Model.CardFilter != null && !string.IsNullOrEmpty(Model.CardFilter.PhoneNumber) ? Model.CardFilter.PhoneNumber : "")">
+                                    </div>
+
+                                    <div class="code-area">
+                                        <input id="OrderID" name="OrderID" type="hidden" value="@(Model.SaleSummary.ID)" />
+                                        <input id="ButtonFind" type="submit" value="Find" style="display:none;" />
+                                    </div>
+                                }
+
+                                @if (Model.CustomerCards != null && Model.CustomerCards.Count > 0)
+                                {
+                                    <div class="informations">
+
+                                        @foreach (var item in Model.CustomerCards)
+                                        {
+                                            <div class="name">
+                                                <p>ADI SOYADI</p>
+                                                <p><b>@(item.FullName)</b></p>
+                                            </div>
+                                            <div class="card-no">
+                                                <p>KART NO</p>
+                                                <p><b>@(item.CardNumber)</b></p>
+                                            </div>
+                                            <div class="card-no" style="border-bottom:solid 1px #808080;">
+                                                <p>KREDİ</p>
+                                                <p><b>@(item.Credit?.ToString("N2"))</b></p>
+                                            </div>
+                                            
+                                        }
+
+
+                                        <div class="list">
+                                            <table cellpadding="0" cellspacing="0" class="table-1">
+                                                <tr>
+                                                    <td>SİPARİŞ TUTARI</td>
+                                                    <td>25,00 ₺</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>YÜKLÜ KREDİ</td>
+                                                    <td><b>50,00 ₺</b></td>
+                                                </tr>
+                                            </table>
+                                            <table cellpadding="0" cellspacing="0" class="table-2">
+                                                <tr>
+                                                    <td>KULLANILACAK KREDİ</td>
+                                                    <td><input type="text" class="input-c"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>KALAN BAKİYE</td>
+                                                    <td><input type="text" class="input-c" value="00,00" readonly></td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="credit-btn">
+                                            <button type="button" class="credit-upload">
+                                                KREDİ YÜKLE
+                                            </button>
+                                            <button type="button" class="credit-use">
+                                                KREDİ KULLAN
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -138,7 +172,46 @@
 
 
         });
-    </script>
 
+        function ShowQr() {
+            $('#QRCode').show();
+            $('#CardNumber').hide();
+            $('#PhoneNumber').hide();
+        }
+
+        function ShowNumber() {
+
+            $('#QRCode').hide();
+            $('#CardNumber').show();
+            $('#PhoneNumber').show();
+        }
+
+    </script>
+    <script src="/assets/js/jquery.mask.js"></script>
+    <script>
+        $(function () {
+            $('.shiftbegintime').mask('00:00');
+            $('.hour').mask('00:00');
+            $('.hourfull').mask('00:00:00');
+            $('.shiftdate').mask('0000-00-00');
+            $('.postcode').mask('00000-000');
+            $('.money').mask("#.##0,00", { reverse: true });
+            $('.money4').mask("#.##0,0000", { reverse: true });
+            $(".phone").mask("(999) 999 99 99?9");
+            $(".cardno").mask("9999 9999 9999 9999");
+        });
+        function SumExchangeRate() {
+            var amount = $("#Amount").val().replace('.', '').replace(',', '.');
+            var toamount = $("#ToAmount").val().replace('.', '').replace(',', '.');
+            var rate = parseFloat(toamount) / parseFloat(amount) || 0.0000;
+            $("#SaleExchangeRate").val(rate.toFixed(4).replace(',', '').replace('.', ',').toString());
+        };
+        function SumExchangeToAmount() {
+            var amount = $("#Amount").val().replace('.', '').replace(',', '.');
+            var rate = $("#SaleExchangeRate").val().replace('.', '').replace(',', '.');
+            var toamount = parseFloat(amount) * parseFloat(rate) || 0.00;
+            $("#ToAmount").val(toamount.toFixed(2).replace(',', '').replace('.', ',').toString());
+        };
+    </script>
 </body>
 </html>

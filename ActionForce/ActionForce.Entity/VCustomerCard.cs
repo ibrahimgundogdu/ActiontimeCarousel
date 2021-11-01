@@ -12,12 +12,11 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class CustomerCard
+    public partial class VCustomerCard
     {
-        public long ID { get; set; }
+        public int ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
         public Nullable<int> CustomerID { get; set; }
-        public Nullable<long> CardID { get; set; }
         public Nullable<short> CardTypeID { get; set; }
         public Nullable<int> CardStatuLevel { get; set; }
         public Nullable<short> CardStatusID { get; set; }
@@ -30,5 +29,14 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<bool> IsMaster { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public string FullName { get; set; }
+        public string EMail { get; set; }
+        public string CountryCode { get; set; }
+        public string PhoneCode { get; set; }
+        public string PhoneNumber { get; set; }
+        public string SMSNumber { get; set; }
+        public string CardStatusName { get; set; }
+        public string CardTypeName { get; set; }
+        public Nullable<long> CardID { get; set; }
     }
 }

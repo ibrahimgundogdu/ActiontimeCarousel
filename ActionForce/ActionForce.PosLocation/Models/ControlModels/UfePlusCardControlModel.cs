@@ -9,7 +9,8 @@ namespace ActionForce.PosLocation
     public class UfePlusCardControlModel : LayoutControlModel
     {
         public VTicketSaleSummary SaleSummary { get; set; }
-        public List<CustomerCard> CustomerCards { get; set; }
+        public List<VCustomerCard> CustomerCards { get; set; }
         public Customer Customer { get; set; }
+        public FormCardFilter CardFilter { get; set; }
     }
 }
