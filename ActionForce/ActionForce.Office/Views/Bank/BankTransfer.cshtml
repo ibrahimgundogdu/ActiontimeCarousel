@@ -128,7 +128,7 @@
                                 </thead>
                                 <tbody>
 
-                                    @foreach (var item in Model.DocumentBankTransfers)
+                                    @foreach (var item in Model.DocumentBankTransfers.Where(x => x.StatusID != 5).OrderByDescending(x => x.RecordDate))
                                     {
                                         <tr style='@(item.IsActive == false ? "color: red" : "")'>
 
@@ -174,7 +174,7 @@
                                     }
 
                                 </tbody>
-                                <tfoot class="">
+                                <tbody class="">
                                     @foreach (var item in Model.StatusCounts)
                                     {
                                         <tr>
@@ -209,6 +209,56 @@
                                         <th></th>
                                         <th></th>
                                     </tr>
+                                </tbody>
+                                <tfoot>
+                              
+
+                                    @foreach (var item in Model.DocumentBankTransfers.Where(x => x.StatusID == 5).OrderByDescending(x => x.RecordDate))
+                                    {
+                                        <tr style='@(item.IsActive == false ? "color: red" : "")'>
+
+                                            <td class="tx-sm-13"><a href="@($"/Bank/BankTransfer?Date={item.Date?.ToString("yyyy-MM-dd")}")">@(item.Date?.ToString("dd.MM.yyyy"))</a></td>
+                                            <td class="tx-sm-13"><a href="@("/Cash/TransferDetail/" + @item.UID)" target="_blank" class="font-weight-bold">@item.DocumentNumber</a></td>
+                                            <td class="tx-sm-13">@item.StatusName</td>
+                                            <td class="tx-sm-13"><a href="@($"/Bank/BankTransfer?Date={item.Date?.ToString("yyyy-MM-dd")}&&LocationID={item.LocationID}")">@(item.LocationFullName)</a></td>
+                                            <td class="tx-sm-13">@item.BankAccountName </td>
+                                            <td class="tx-sm-13 text-right text-indigo font-weight-bold">@item.ReferenceCode</td>
+                                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Amount?.ToString("N2"))</td>
+                                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Commission?.ToString("N2"))</td>
+                                            <td class="tx-sm-13">@(item.Currency)</td>
+                                            <td class="tx-sm-13">@(item.RecorderFullName)<br />@item.RecordDate</td>
+                                            <td class="tx-sm-13">@(item.SlipNumber) <br />@($"{item.SlipDate?.ToShortDateString()} {item.SlipDate?.ToString("HH:mm:ss")}")</td>
+                                            <td>
+                                                @if (item.SlipDocument != null)
+                                                {
+                                                    <a href="@(string.Format("../Document/Bank/{0}",item.SlipDocument))" target="_blank">
+                                                        <img src="@(string.Format("../Document/Bank/{0}",item.SlipDocument))" class="img-fluid img-thumbnail" width="64">
+                                                    </a>
+                                                }
+                                            </td>
+
+
+                                            <td class="tx-sm-13 text-right">
+                                                @if (Model.Authentication.ActionEmployee.RoleGroup.RoleLevel >= 3)
+                                                {
+                                                    <div class="dropup mg-b-15 mg-sm-b-0 mg-sm-r-auto">
+                                                        <button type="button" class="btn btn-block bd bd-gray-300" data-toggle="dropdown" aria-expanded="false">Durum Değiştir <i class="icon ion-ios-arrow-up mg-l-5"></i></button>
+
+                                                        <div class="dropdown-menu tx-13" style="">
+                                                            @foreach (var status in Model.BankTransferStatus.OrderBy(x => x.LevelNumber))
+                                                            {
+                                                                <a href="javascript:;" onclick="ChangeStatus('@(item.UID)',@(status.ID))" class="dropdown-item @(status.ID < item.StatusID ? "text-secondary": status.ID == item.StatusID ? "font-weight-bold" : "text-primary font-weight-bold")">@(status.StatusName)</a>
+                                                            }
+                                                        </div>
+
+                                                    </div>
+                                                }
+
+                                            </td>
+                                        </tr>
+                                    }
+
+                               
                                 </tfoot>
                             </table>
 

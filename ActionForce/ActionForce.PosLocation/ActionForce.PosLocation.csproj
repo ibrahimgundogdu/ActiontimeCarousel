@@ -360,6 +360,7 @@
     <Content Include="Views\Sales\RowDetail.cshtml" />
     <Content Include="Views\Actions\Index.cshtml" />
     <Content Include="Views\UfePlusCard\Payment.cshtml" />
+    <Content Include="Views\UfePlusCard\_PartialCreditPayment.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

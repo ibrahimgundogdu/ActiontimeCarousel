@@ -1126,7 +1126,7 @@ namespace ActionForce.Office.Controllers
             }
 
             TempData["result"] = result;
-            return RedirectToAction("BankTransfer", new { LocationId = bankTransfer.LocationID, Date = bankTransfer.Date?.ToString("yyyy-MM-dd") });
+            return RedirectToAction("BankTransfer", new { Date = bankTransfer.Date?.ToString("yyyy-MM-dd") });
 
         }
 
