@@ -88,6 +88,7 @@ namespace ActionForce.Office.Controllers
                 model.CurrentTicketSaleSummary = Db.VTicketSaleAllSummary.FirstOrDefault(x => x.ID == model.TicketSale.ID);
                 model.TicketSaleRows = Db.VTicketSaleRowSummary.Where(x => x.SaleID == model.TicketSale.ID).ToList();
                 model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => x.SaleID == model.TicketSale.ID).ToList();
+                model.DocumentExpenseSlips = Db.VDocumentExpenseSlip.Where(x => x.ReferenceID == model.TicketSale.ID).ToList();
             }
 
 

@@ -14,7 +14,6 @@ namespace ActionForce.Entity
     
     public partial class VTicketSaleAllSummary
     {
-        public long ID { get; set; }
         public string OrderNumber { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<int> LocationID { get; set; }
@@ -29,6 +28,7 @@ namespace ActionForce.Entity
         public string FullName { get; set; }
         public double PaymentAmount { get; set; }
         public double BalanceAmount { get; set; }
+        public double RefondAmount { get; set; }
         public string PosStatusName { get; set; }
         public Nullable<bool> IsSendPosTerminal { get; set; }
         public string PayMethodList { get; set; }
@@ -37,5 +37,6 @@ namespace ActionForce.Entity
         public string SortBy { get; set; }
         public string LocationFullName { get; set; }
         public string Name { get; set; }
+        public long ID { get; set; }
     }
 }

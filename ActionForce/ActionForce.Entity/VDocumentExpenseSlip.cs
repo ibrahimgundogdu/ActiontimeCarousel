@@ -12,7 +12,7 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class DocumentExpenseSlip
+    public partial class VDocumentExpenseSlip
     {
         public long ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
@@ -21,6 +21,7 @@ namespace ActionForce.Entity
         public string DocumentNumber { get; set; }
         public Nullable<int> CustomerID { get; set; }
         public string CustomerAddress { get; set; }
+        public Nullable<int> PayMethodID { get; set; }
         public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
         public Nullable<double> ExchangeRate { get; set; }
@@ -41,6 +42,7 @@ namespace ActionForce.Entity
         public string UpdateIP { get; set; }
         public Nullable<bool> IsConfirmed { get; set; }
         public Nullable<bool> IsActive { get; set; }
-        public Nullable<int> PayMethodID { get; set; }
+        public string PayMethodName { get; set; }
+        public string Sign { get; set; }
     }
 }

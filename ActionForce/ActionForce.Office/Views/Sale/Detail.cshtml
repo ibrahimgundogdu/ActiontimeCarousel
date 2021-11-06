@@ -226,6 +226,41 @@
 
                     </div>
                 </div>
+
+                <div class="card mg-b-20 mg-lg-b-25 mt-4">
+                    <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                        <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">İade Listesi</h6>
+                    </div>
+                    <div class="card-body pd-20 pd-lg-5">
+
+                        <div class="table-responsive">
+                            <table class="table table-dashboard table-striped table-hover">
+                                <tr>
+                                    <th>EVRAK NO</th>
+                                    <th>TARİH</th>
+                                    <th class="text-right">TUTAR</th>
+                                    <th>TÜR</th>
+                                    <th>AÇIKLAMA</th>
+                                </tr>
+                                @foreach (var item in Model.DocumentExpenseSlips)
+                                {
+                                    <tr>
+                                        <td class="font-weight-bold">@(item.DocumentNumber)</td>
+                                        <td>@(item.DocumentDate?.ToShortDateString())</td>
+                                        <td class="font-weight-bold text-right">@(item.Amount?.ToString("N2")) @(item.Sign)</td>
+                                        <td>@(item.PayMethodName)</td>
+                                        <td>@(item.Description)</td>
+                                    </tr>
+                                }
+
+
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+
             </div>
         </div>
     </div>

@@ -29,6 +29,20 @@
             <h4><a href="" class="link-01">@(Model.CurrentTicketSaleSummary.PaymentAmount.ToString("N2")) @(Model.CurrentTicketSaleSummary.Sign)</a></h4>
             <label class="pd-l-15">Tahsilat</label>
         </div>
+
+
+    </div>
+    <div class="d-flex mg-b-20">
+        <div class="profile-skillset flex-fill">
+            <h4><a href="" class="link-01">&nbsp;</a></h4>
+            <label></label>
+        </div>
+        <div class="profile-skillset flex-fill tx-right">
+            <h4><a href="" class="link-01" style="color:darkred;">@(Model.CurrentTicketSaleSummary.RefondAmount.ToString("N2")) @(Model.CurrentTicketSaleSummary.Sign)</a></h4>
+            <label class="pd-l-15">İade</label>
+        </div>
+
+
     </div>
     <hr />
     <a href="@($"/Sale/Index?LocationID={Model.TicketSale.LocationID}&Date={Model.TicketSale.Date?.ToString("yyyy-MM-dd")}")" class="btn btn-block btn-primary">Satış Listesi</a>

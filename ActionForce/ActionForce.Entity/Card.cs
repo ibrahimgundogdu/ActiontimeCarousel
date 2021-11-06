@@ -25,5 +25,11 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<System.DateTime> ActivateDate { get; set; }
         public Nullable<System.Guid> UID { get; set; }
+        public string CardNumberText { get; set; }
+        public string ExpireDateText { get; set; }
+        public Nullable<System.DateTime> CreateTemplateDate { get; set; }
+        public Nullable<System.DateTime> PrintDate { get; set; }
+        public string RFID { get; set; }
+        public Nullable<int> CustomerID { get; set; }
     }
 }

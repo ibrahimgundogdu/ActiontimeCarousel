@@ -12,5 +12,6 @@ namespace ActionForce.PosLocation
         public List<VCustomerCard> CustomerCards { get; set; }
         public Customer Customer { get; set; }
         public FormCardFilter CardFilter { get; set; }
+        public float CardCreditAmount { get; set; }
     }
 }

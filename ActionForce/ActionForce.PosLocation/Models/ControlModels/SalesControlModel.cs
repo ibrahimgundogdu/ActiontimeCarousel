@@ -42,5 +42,6 @@ namespace ActionForce.PosLocation
         public List<VTicketSalePaymentSummary> TicketSalePaymentSummary { get; set; }
         public List<CashActions> CashActions { get; set; }
         public List<BankActions> BankActions { get; set; }
+        public List<PayMethod> PayMethods { get; set; }
     }
 }

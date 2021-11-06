@@ -936,6 +936,9 @@
     <Compile Include="VDocumentEmployeePermit.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VDocumentExpenseSlip.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VDocumentPosCancel.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

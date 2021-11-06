@@ -160,6 +160,8 @@ namespace ActionForce.PosLocation.Controllers
             model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => x.SaleID == id).ToList();
             model.PaymentAmount = Db.GetTicketSalePaymentAmount(id).FirstOrDefault() ?? 0;
             model.ExpenseSlip = Db.DocumentExpenseSlip.FirstOrDefault(x => x.ReferenceID == id);
+            model.PayMethods = Db.PayMethod.Where(x => x.IsActive == true).ToList();
+
             if (model.ExpenseSlip != null && model.ExpenseSlip.CustomerID > 0)
             {
                 model.Customer = Db.Customer.FirstOrDefault(x => x.ID == model.ExpenseSlip.CustomerID);

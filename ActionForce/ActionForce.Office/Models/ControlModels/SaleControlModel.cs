@@ -38,6 +38,7 @@ namespace ActionForce.Office
         public List<VDocumentsAllSummaryUnion> DocumentsAllSummary { get; set; }
         public List<VSaleActionsSummaryUnion> SaleActionsAllSummary { get; set; }
 
+        public List<VDocumentExpenseSlip> DocumentExpenseSlips { get; set; }
 
     }
 }
