@@ -2286,5 +2286,14 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetCardBalance_Result>("GetCardBalance", cardIDParameter, currencyParameter);
         }
+    
+        public virtual ObjectResult<Nullable<long>> ExpenseSlipCheck(Nullable<long> slipID)
+        {
+            var slipIDParameter = slipID.HasValue ?
+                new ObjectParameter("SlipID", slipID) :
+                new ObjectParameter("SlipID", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("ExpenseSlipCheck", slipIDParameter);
+        }
     }
 }

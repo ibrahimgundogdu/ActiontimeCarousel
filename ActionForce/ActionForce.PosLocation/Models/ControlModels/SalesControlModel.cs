@@ -14,7 +14,8 @@ namespace ActionForce.PosLocation
         public TicketSaleRows TicketSaleRow { get; set; }
         public Price Price { get; set; }
         public TicketProduct TicketProduct { get; set; }
-        public DocumentExpenseSlip ExpenseSlip { get; set; }
+        public VDocumentExpenseSlip ExpenseSlip { get; set; }
+        public List<VDocumentExpenseSlip> ExpenseSlips { get; set; }
         public Customer Customer { get; set; }
         public TicketSalePosReceipt TicketSalePosReceipt { get; set; }
         public List<VTicketSaleRowSummary> TicketSaleRows { get; set; }
@@ -32,6 +33,7 @@ namespace ActionForce.PosLocation
         public string DocumentNumbers { get; set; }
         public double PaymentAmount { get; set; }
         public double BalanceAmount { get; set; }
+        public double RefundedAmount { get; set; }
         public bool IsManuel { get; set; } = false;
         public string PosStatusName { get; set; }
 

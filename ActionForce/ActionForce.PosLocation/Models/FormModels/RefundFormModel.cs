@@ -14,6 +14,7 @@ namespace ActionForce.PosLocation
         public string DocumentNumber { get; set; } //
         public DateTime DocumentDate { get; set; } //
 
+        public int PayMethod { get; set; }
         public string CountryCode { get; set; }  //phone-number-country   phone-number   phone-number-full   phone-number-code
         public string CustomerPhone { get; set; }
         public string PhoneNumberFull { get; set; }

@@ -46,34 +46,35 @@
             <div class="content">
                 <div class="refund-form">
                     <div class="steps">
-                        <h1>İADE FORMU (Gider Pusulası)</h1>
+                        <h1>GİDER PUSULASI DETAY</h1>
                         <div class="step step-1 active">
-                            @using (Html.BeginForm("AddRefund", "Sales", FormMethod.Post, new { role = "form" }))
+                            @using (Html.BeginForm("EditRefund", "Sales", FormMethod.Post, new { role = "form" }))
                             {
                                 <div class="form">
+                                    <input id="ExpenseSlipID" name="ExpenseSlipID" type="hidden" value="@(Model.ExpenseSlip.ID)" />
                                     <input id="OrderID" name="OrderID" type="hidden" value="@(Model.TicketSaleSummary.ID)" />
 
                                     <div class="form-group">
                                         <input type="text" name="OrderNumber" class="form-control" value="@(Model.TicketSaleSummary.OrderNumber)" readonly>
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" name="PaymentAmount" class="form-control money" style="text-align:right; font-weight:bold;" value="@(Model.PaymentAmount.ToString("N2"))" required>
+                                        <input type="text" name="PaymentAmount" class="form-control money" style="text-align:right; font-weight:bold;" value="@(Model.ExpenseSlip.Amount?.ToString("N2"))" required>
                                     </div>
                                     <div class="form-group">
                                         <select name="PayMethod" class="form-control" required>
                                             <option value="">İade Yöntemi</option>
                                             @foreach (var item in Model.PayMethods)
                                             {
-                                                <option value="@(item.ID)"> @(item.MethodName)</option>
+                                                <option value="@(item.ID)" @(item.ID == Model.ExpenseSlip.PayMethodID ? "selected":"")> @(item.MethodName)</option>
                                             }
                                         </select>
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="text" name="DocumentNumber" class="form-control" placeholder="Gider Pusulası Evrak No" value="@(Model.ExpenseSlip != null ? Model.ExpenseSlip.DocumentNumber : "")" required>
+                                        <input type="text" name="DocumentNumber" class="form-control" placeholder="Gider Pusulası Evrak No" value="@(Model.ExpenseSlip.DocumentNumber)" required>
                                     </div>
                                     <div class="form-group">
-                                        <input type="date" name="DocumentDate" class="form-control" placeholder="Evrak Tarihi" value="@(Model.ExpenseSlip != null ? Model.ExpenseSlip.DocumentDate?.ToString("yyyy-MM-dd") :  DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                                        <input type="date" name="DocumentDate" class="form-control" placeholder="Evrak Tarihi" value="@(Model.ExpenseSlip.DocumentDate?.ToString("yyyy-MM-dd"))" required>
                                     </div>
 
                                     <div class="row">
@@ -112,14 +113,13 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-light">@(Model.ExpenseSlip != null ? "GÜNCELLE" : "KAYDET")</button>
+                                        <button type="submit" class="btn btn-light">GÜNCELLE</button>
                                     </div>
 
 
                                 </div>
                             }
                         </div>
-                       
                         @if (Model.Result != null && !string.IsNullOrEmpty(Model.Result.Message))
                         {
                             <div>
@@ -386,5 +386,5 @@
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
     </script>
-</body >
-</html >
+</body>
+</html>

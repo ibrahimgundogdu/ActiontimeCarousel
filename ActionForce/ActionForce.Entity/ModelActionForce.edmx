@@ -7304,6 +7304,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="Year" Type="int" Mode="In" />
           <Parameter Name="LocationID" Type="int" Mode="In" />
         </Function>
+        <Function Name="ExpenseSlipCheck" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SlipID" Type="bigint" Mode="In" />
+        </Function>
         <Function Name="ExpenseSlipMessageConfirmed" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ConfirmID" Type="bigint" Mode="In" />
           <Parameter Name="DocumentID" Type="bigint" Mode="In" />
@@ -11254,6 +11257,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="CustomerCard" EntityType="db293_ActionTimeDbModel.CustomerCard" />
           <EntitySet Name="VTicketSaleAllSummary" EntityType="db293_ActionTimeDbModel.VTicketSaleAllSummary" />
           <EntitySet Name="VDocumentExpenseSlip" EntityType="db293_ActionTimeDbModel.VDocumentExpenseSlip" />
+          <FunctionImport Name="ExpenseSlipCheck" ReturnType="Collection(Int64)">
+            <Parameter Name="SlipID" Mode="In" Type="Int64" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -25959,6 +25965,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ExpenseSlipCheck" FunctionName="db293_ActionTimeDbModel.Store.ExpenseSlipCheck" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

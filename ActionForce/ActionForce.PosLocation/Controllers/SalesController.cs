@@ -2,6 +2,7 @@
 using ActionForce.Service;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -81,7 +82,10 @@ namespace ActionForce.PosLocation.Controllers
             model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => x.SaleID == id).ToList();
             model.DocumentActions = Db.VTicketSaleDocumentAction.Where(x => x.SaleID == id).ToList();
             model.DocumentNumbers = string.Join(",", model.DocumentActions.Select(x => x.DocumentNumber).ToArray());
+            model.ExpenseSlips = Db.VDocumentExpenseSlip.Where(x => x.ReferenceID == id).ToList();
 
+            model.PaymentAmount = model.TicketSalePosPaymentSummary.Sum(x => x.PaymentAmount) ?? 0;
+            model.RefundedAmount = model.ExpenseSlips.Sum(x => x.Amount) ?? 0;
 
             return View(model);
         }
@@ -96,14 +100,14 @@ namespace ActionForce.PosLocation.Controllers
 
             try
             {
-                
+
 
                 if (!string.IsNullOrEmpty(id))
                 {
                     DateTime.TryParse(id, out DocumentDate);
                 }
 
-                var SaleIds = Db.TicketSale.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == DocumentDate).Select(x=> x.ID).Distinct().ToList();
+                var SaleIds = Db.TicketSale.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == DocumentDate).Select(x => x.ID).Distinct().ToList();
 
                 foreach (var item in SaleIds)
                 {
@@ -159,13 +163,45 @@ namespace ActionForce.PosLocation.Controllers
             model.TicketSaleSummary = Db.VTicketSaleSummary.FirstOrDefault(x => x.ID == id);
             model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => x.SaleID == id).ToList();
             model.PaymentAmount = Db.GetTicketSalePaymentAmount(id).FirstOrDefault() ?? 0;
-            model.ExpenseSlip = Db.DocumentExpenseSlip.FirstOrDefault(x => x.ReferenceID == id);
+            model.ExpenseSlips = Db.VDocumentExpenseSlip.Where(x => x.ReferenceID == id).ToList();
             model.PayMethods = Db.PayMethod.Where(x => x.IsActive == true).ToList();
 
-            if (model.ExpenseSlip != null && model.ExpenseSlip.CustomerID > 0)
+
+            return View(model);
+        }
+
+        public ActionResult RefundDetail(long? id)
+        {
+            if (id <= 0 || id == null)
             {
+                return RedirectToAction("Index");
+            }
+
+            SalesControlModel model = new SalesControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            model.ExpenseSlip = Db.VDocumentExpenseSlip.FirstOrDefault(x => x.ID == id);
+
+            if (model.ExpenseSlip != null)
+            {
+                model.TicketSaleSummary = Db.VTicketSaleSummary.FirstOrDefault(x => x.ID == model.ExpenseSlip.ReferenceID);
+                model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => x.SaleID == model.ExpenseSlip.ReferenceID).ToList();
+                model.PaymentAmount = Db.GetTicketSalePaymentAmount(model.ExpenseSlip.ReferenceID).FirstOrDefault() ?? 0;
+                model.PayMethods = Db.PayMethod.Where(x => x.IsActive == true).ToList();
                 model.Customer = Db.Customer.FirstOrDefault(x => x.ID == model.ExpenseSlip.CustomerID);
             }
+            else
+            {
+                return RedirectToAction("Index");
+            }
+
+
+
 
             return View(model);
         }
@@ -204,6 +240,75 @@ namespace ActionForce.PosLocation.Controllers
 
         [HttpPost]
         public ActionResult AddRefund(RefundFormModel form)
+        {
+            SalesControlModel model = new SalesControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            if (form == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+
+            string phonenumber = form.CustomerPhone.Replace("(", "").Replace(")", "").Replace(" ", "");
+
+
+            int CustomerID = Db.CheckCustomer(form.CustomerIdentityNumber.Trim(), form.CustomerName.Trim(), form.CustomerMail, form.PhoneNumberCountry.Trim(), form.CountryCode.Trim(), phonenumber, form.PostAddress.Trim(), 2).FirstOrDefault() ?? 2;
+
+            model.TicketSaleSummary = Db.VTicketSaleSummary.FirstOrDefault(x => x.ID == form.OrderID);
+            var ResultID = Db.GetDayResultID(model.Authentication.CurrentLocation.ID, form.DocumentDate, 1, 3, model.Authentication.CurrentEmployee.EmployeeID, string.Empty, PosManager.GetIPAddress()).FirstOrDefault();
+            var PaymentAmount = Convert.ToDouble(form.PaymentAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture); 
+
+            DocumentExpenseSlip slip = new DocumentExpenseSlip();
+
+            try
+            {
+                slip.ActionTypeID = 41;
+                slip.ActionTypeName = "Gider Pusulası";
+                slip.Amount = PaymentAmount;
+                slip.PayMethodID = form.PayMethod;
+                slip.Currency = model.TicketSaleSummary.Currency;
+                slip.Description = form.Description;
+                slip.DocumentDate = form.DocumentDate;
+                slip.DocumentNumber = form.DocumentNumber;
+                slip.EnvironmentID = 7;
+                slip.ExchangeRate = 1;
+                slip.IsActive = true;
+                slip.IsConfirmed = true;
+                slip.LocationID = model.Authentication.CurrentLocation.ID;
+                slip.OurCompanyID = model.Authentication.CurrentLocation.OurCompanyID;
+                slip.RecordDate = DateTime.UtcNow.AddHours(3);
+                slip.RecordEmployeeID = model.Authentication.CurrentEmployee.EmployeeID;
+                slip.RecordIP = PosManager.GetIPAddress();
+                slip.ReferenceID = form.OrderID;
+                slip.ResultID = ResultID;
+                slip.SystemAmount = PaymentAmount;
+                slip.SystemCurrency = model.TicketSaleSummary.Currency;
+                slip.UID = Guid.NewGuid();
+                slip.CustomerID = CustomerID;
+                slip.CustomerAddress = form.PostAddress;
+
+                Db.DocumentExpenseSlip.Add(slip);
+                Db.SaveChanges();
+
+                Db.ExpenseSlipCheck(slip.ID);
+
+                model.Result.IsSuccess = true;
+                model.Result.Message = "Gider Pusulası Kaydedildi.";
+            }
+            catch (Exception ex)
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Gider Pusulası Kaydedilemedi : " + ex.Message;
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", new { id = form.OrderID });
+        }
+
+        [HttpPost]
+        public ActionResult EditRefund(RefundFormModel form)
         {
             SalesControlModel model = new SalesControlModel();
             model.Authentication = this.AuthenticationData;
@@ -320,7 +425,7 @@ namespace ActionForce.PosLocation.Controllers
                 return RedirectToAction("Index");
             }
 
-            model.ExpenseSlip = Db.DocumentExpenseSlip.FirstOrDefault(x => x.ID == id);
+            model.ExpenseSlip = Db.VDocumentExpenseSlip.FirstOrDefault(x => x.ID == id);
             if (model.ExpenseSlip != null)
             {
                 model.TicketSaleSummary = Db.VTicketSaleSummary.FirstOrDefault(x => x.ID == model.ExpenseSlip.ReferenceID);
