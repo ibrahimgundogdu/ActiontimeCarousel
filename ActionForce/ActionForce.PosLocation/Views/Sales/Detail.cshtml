@@ -52,7 +52,7 @@
                         <li><span>ID</span><span> @(Model.TicketSale.ID)</span></li>
                         <li><span>SİPARİŞ NO</span><span> @(Model.TicketSale.OrderNumber)</span></li>
                         <li><span>SİPARİŞ TARİHİ</span><span> @(Model.TicketSale.Date?.ToShortDateString())</span></li>
-                        <li><span>DURUM</span><span>@(Model.TicketSalePosStatus.FirstOrDefault(x=> x.ID == Model.TicketSale.PosStatusID)?.PosStatusName)</span></li>
+                        <li><span>DURUM</span><span>@(Model.TicketSale.PosStatusID == 5 ? $"%{Model.RefundRate.ToString("N0")}":"") @(Model.TicketSalePosStatus.FirstOrDefault(x=> x.ID == Model.TicketSale.PosStatusID)?.PosStatusName)</span></li>
                         <li><span>TUTAR</span><span>@(Model.TicketSaleSummary.Total.ToString("N2")) @(Model.TicketSaleSummary.Sign)</span></li>
                         <li><span>TAHSİLAT</span><span>@((Model.TicketSaleSummary.PaymentAmount).ToString("N2")) @(Model.TicketSaleSummary.Sign)</span></li>
                         <li><span>BİLET ADEDİ</span><span>@(Model.TicketSaleSummary.Quantity)</span></li>
@@ -172,7 +172,7 @@
                                 <th style="text-align:left;">TÜR</th>
                                 <th>AÇIKLAMA</th>
                                 <th>KAYIT</th>
-
+                                <th></th>
                             </tr>
                             @foreach (var item in Model.ExpenseSlips)
                             {
@@ -183,6 +183,8 @@
                                     <td style="text-align:left;">@(item.PayMethodName)</td>
                                     <td>@(item.Description)</td>
                                     <td style="text-align:right;"><a href="/Sales/RefundDetail/@(item.ID)" class="btn btn-light" style="font-weight:500; color:darkblue !important;">@(item.RecordDate)</a></td>
+                                    <td style="text-align:right;"><a href="/Sales/RemoveRefund/@(item.ID)" class="btn btn-light" style="font-weight:500; color:darkred !important;">SİL</a></td>
+
                                 </tr>
                             }
                         </table>
@@ -242,8 +244,8 @@
                             {
                                 <!--<a href="/Sales/Refund/@(Model.TicketSale.ID)">
                                     <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><path fill="currentColor" d="M16,5l-1.42,1.42l-1.59-1.59V16h-1.98V4.83L9.42,6.42L8,5l4-4L16,5z M20,10v11c0,1.1-0.9,2-2,2H6c-1.11,0-2-0.9-2-2V10 c0-1.11,0.89-2,2-2h3v2H6v11h12V10h-3V8h3C19.1,8,20,8.89,20,10z" /></svg>-->
-                                    <!-- payment -->
-                                    <!--<span>İADE ET</span>
+                                <!-- payment -->
+                                <!--<span>İADE ET</span>
                                 </a>-->
                             }
 

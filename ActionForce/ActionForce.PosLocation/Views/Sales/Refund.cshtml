@@ -57,7 +57,7 @@
                                         <input type="text" name="OrderNumber" class="form-control" value="@(Model.TicketSaleSummary.OrderNumber)" readonly>
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" name="PaymentAmount" class="form-control money" style="text-align:right; font-weight:bold;" value="@(Model.PaymentAmount.ToString("N2"))" required>
+                                        <input type="text" name="PaymentAmount" class="form-control money" style="text-align:right; font-weight:bold;" value="@((Model.PaymentAmount - Model.RefundedAmount).ToString("N2"))" required>
                                     </div>
                                     <div class="form-group">
                                         <select name="PayMethod" class="form-control" required>

@@ -82,10 +82,11 @@ namespace ActionForce.PosLocation.Controllers
             model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => x.SaleID == id).ToList();
             model.DocumentActions = Db.VTicketSaleDocumentAction.Where(x => x.SaleID == id).ToList();
             model.DocumentNumbers = string.Join(",", model.DocumentActions.Select(x => x.DocumentNumber).ToArray());
-            model.ExpenseSlips = Db.VDocumentExpenseSlip.Where(x => x.ReferenceID == id).ToList();
+            model.ExpenseSlips = Db.VDocumentExpenseSlip.Where(x => x.ReferenceID == id && x.IsActive == true).ToList();
 
             model.PaymentAmount = model.TicketSalePosPaymentSummary.Sum(x => x.PaymentAmount) ?? 0;
             model.RefundedAmount = model.ExpenseSlips.Sum(x => x.Amount) ?? 0;
+            model.RefundRate = (100 * model.RefundedAmount) / model.PaymentAmount;
 
             return View(model);
         }
@@ -163,8 +164,10 @@ namespace ActionForce.PosLocation.Controllers
             model.TicketSaleSummary = Db.VTicketSaleSummary.FirstOrDefault(x => x.ID == id);
             model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => x.SaleID == id).ToList();
             model.PaymentAmount = Db.GetTicketSalePaymentAmount(id).FirstOrDefault() ?? 0;
-            model.ExpenseSlips = Db.VDocumentExpenseSlip.Where(x => x.ReferenceID == id).ToList();
+            model.ExpenseSlips = Db.VDocumentExpenseSlip.Where(x => x.ReferenceID == id && x.IsActive == true).ToList();
             model.PayMethods = Db.PayMethod.Where(x => x.IsActive == true).ToList();
+
+            model.RefundedAmount = model.ExpenseSlips.Sum(x => x.Amount) ?? 0;
 
 
             return View(model);
@@ -257,51 +260,72 @@ namespace ActionForce.PosLocation.Controllers
 
             model.TicketSaleSummary = Db.VTicketSaleSummary.FirstOrDefault(x => x.ID == form.OrderID);
             var ResultID = Db.GetDayResultID(model.Authentication.CurrentLocation.ID, form.DocumentDate, 1, 3, model.Authentication.CurrentEmployee.EmployeeID, string.Empty, PosManager.GetIPAddress()).FirstOrDefault();
-            var PaymentAmount = Convert.ToDouble(form.PaymentAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture); 
+            var PaymentAmount = Convert.ToDouble(form.PaymentAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
 
-            DocumentExpenseSlip slip = new DocumentExpenseSlip();
-
-            try
+            if (PaymentAmount > 0)
             {
-                slip.ActionTypeID = 41;
-                slip.ActionTypeName = "Gider Pusulası";
-                slip.Amount = PaymentAmount;
-                slip.PayMethodID = form.PayMethod;
-                slip.Currency = model.TicketSaleSummary.Currency;
-                slip.Description = form.Description;
-                slip.DocumentDate = form.DocumentDate;
-                slip.DocumentNumber = form.DocumentNumber;
-                slip.EnvironmentID = 7;
-                slip.ExchangeRate = 1;
-                slip.IsActive = true;
-                slip.IsConfirmed = true;
-                slip.LocationID = model.Authentication.CurrentLocation.ID;
-                slip.OurCompanyID = model.Authentication.CurrentLocation.OurCompanyID;
-                slip.RecordDate = DateTime.UtcNow.AddHours(3);
-                slip.RecordEmployeeID = model.Authentication.CurrentEmployee.EmployeeID;
-                slip.RecordIP = PosManager.GetIPAddress();
-                slip.ReferenceID = form.OrderID;
-                slip.ResultID = ResultID;
-                slip.SystemAmount = PaymentAmount;
-                slip.SystemCurrency = model.TicketSaleSummary.Currency;
-                slip.UID = Guid.NewGuid();
-                slip.CustomerID = CustomerID;
-                slip.CustomerAddress = form.PostAddress;
+                model.PaymentAmount = Db.GetTicketSalePaymentAmount(form.OrderID).FirstOrDefault() ?? 0;
+                model.RefundedAmount = Db.GetTicketSaleRefundAmount(form.OrderID).FirstOrDefault() ?? 0;
 
-                Db.DocumentExpenseSlip.Add(slip);
-                Db.SaveChanges();
+                if ((model.RefundedAmount + PaymentAmount) > model.PaymentAmount)
+                {
+                    PaymentAmount = (model.PaymentAmount - model.RefundedAmount);
+                }
 
-                Db.ExpenseSlipCheck(slip.ID);
+                DocumentExpenseSlip slip = new DocumentExpenseSlip();
+                long SlipID = 0;
 
-                model.Result.IsSuccess = true;
-                model.Result.Message = "Gider Pusulası Kaydedildi.";
+                try
+                {
+
+                    SlipID = Db.AddEditExpenseSlip(
+                        null,
+                        model.Authentication.CurrentLocation.OurCompanyID,
+                        model.Authentication.CurrentLocation.ID,
+                        form.DocumentDate,
+                        form.DocumentNumber,
+                        CustomerID,
+                        form.PostAddress,
+                        form.PayMethod,
+                        PaymentAmount,
+                        model.TicketSaleSummary.Currency,
+                        1,
+                        PaymentAmount,
+                        model.TicketSaleSummary.Currency,
+                        form.OrderID,
+                        "Gider Pusulası",
+                        41,
+                        form.Description,
+                        ResultID,
+                        7,
+                        Guid.NewGuid(),
+                        DateTime.UtcNow.AddHours(3),
+                        model.Authentication.CurrentEmployee.EmployeeID,
+                        PosManager.GetIPAddress(),
+                        null,
+                        null,
+                        null,
+                        true,
+                        true
+                        ).FirstOrDefault().Value;
+
+
+                    Db.ExpenseSlipCheck(SlipID);
+
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = "Gider Pusulası Kaydedildi.";
+                }
+                catch (Exception ex)
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = "Gider Pusulası Kaydedilemedi : " + ex.Message;
+                }
             }
-            catch (Exception ex)
+            else
             {
                 model.Result.IsSuccess = false;
-                model.Result.Message = "Gider Pusulası Kaydedilemedi : " + ex.Message;
+                model.Result.Message = "Tutar 0 dan büyük olmalı.";
             }
-
             TempData["Result"] = model.Result;
 
             return RedirectToAction("Detail", new { id = form.OrderID });
@@ -318,7 +342,6 @@ namespace ActionForce.PosLocation.Controllers
                 return RedirectToAction("Index");
             }
 
-
             string phonenumber = form.CustomerPhone.Replace("(", "").Replace(")", "").Replace(" ", "");
 
 
@@ -326,95 +349,162 @@ namespace ActionForce.PosLocation.Controllers
 
             model.TicketSaleSummary = Db.VTicketSaleSummary.FirstOrDefault(x => x.ID == form.OrderID);
             var ResultID = Db.GetDayResultID(model.Authentication.CurrentLocation.ID, form.DocumentDate, 1, 3, model.Authentication.CurrentEmployee.EmployeeID, string.Empty, PosManager.GetIPAddress()).FirstOrDefault();
-            var PaymentAmount = Db.GetTicketSalePaymentAmount(form.OrderID).FirstOrDefault() ?? 0;
+            var refundAmount = Convert.ToDouble(form.PaymentAmount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+            long SlipID = form.ExpenseSlipID ?? 0;
 
-            DocumentExpenseSlip slip = new DocumentExpenseSlip();
+            DocumentExpenseSlip slip = Db.DocumentExpenseSlip.FirstOrDefault(x => x.ID == form.ExpenseSlipID);
+            SlipID = slip.ID;
 
-            if (form.ExpenseSlipID > 0)
+            model.PaymentAmount = Db.GetTicketSalePaymentAmount(form.OrderID).FirstOrDefault() ?? 0;
+            model.RefundedAmount = Db.GetTicketSaleRefundAmount(form.OrderID).FirstOrDefault() ?? 0;
+
+            model.RefundedAmount = model.RefundedAmount - slip.Amount ?? 0;
+
+            if ((model.RefundedAmount + refundAmount) > model.PaymentAmount)
             {
-                slip = Db.DocumentExpenseSlip.FirstOrDefault(x => x.ID == form.ExpenseSlipID);
-                slip.CustomerAddress = form.PostAddress;
-                slip.Description = form.Description;
-
-                Db.SaveChanges();
-
-                model.Result.IsSuccess = true;
-                model.Result.Message = "Gider Pusulası Bulundu. Doğrulayınız!";
+                refundAmount = (model.PaymentAmount - model.RefundedAmount);
             }
-            else
+
+            if (refundAmount > 0)
             {
                 try
                 {
-                    slip.ActionTypeID = 41;
-                    slip.ActionTypeName = "Gider Pusulası";
-                    slip.Amount = PaymentAmount;
-                    slip.Currency = model.TicketSaleSummary.Currency;
-                    slip.Description = form.Description;
-                    slip.DocumentDate = form.DocumentDate;
-                    slip.DocumentNumber = form.DocumentNumber;
-                    slip.EnvironmentID = 7;
-                    slip.ExchangeRate = 1;
-                    slip.IsActive = true;
-                    slip.IsConfirmed = false;
-                    slip.LocationID = model.Authentication.CurrentLocation.ID;
-                    slip.OurCompanyID = model.Authentication.CurrentLocation.OurCompanyID;
-                    slip.RecordDate = DateTime.UtcNow.AddHours(3);
-                    slip.RecordEmployeeID = model.Authentication.CurrentEmployee.EmployeeID;
-                    slip.RecordIP = PosManager.GetIPAddress();
-                    slip.ReferenceID = form.OrderID;
-                    slip.ResultID = ResultID;
-                    slip.SystemAmount = PaymentAmount;
-                    slip.SystemCurrency = model.TicketSaleSummary.Currency;
-                    slip.UID = Guid.NewGuid();
-                    slip.CustomerID = CustomerID;
-                    slip.CustomerAddress = form.PostAddress;
+                    DocumentExpenseSlip self = new DocumentExpenseSlip()
+                    {
+                        DocumentNumber = slip.DocumentNumber,
+                        DocumentDate = slip.DocumentDate,
+                        Description = slip.Description,
+                        ActionTypeID = slip.ActionTypeID,
+                        ActionTypeName = slip.ActionTypeName,
+                        Amount = slip.Amount,
+                        Currency = slip.Currency,
+                        CustomerAddress = slip.CustomerAddress,
+                        CustomerID = slip.CustomerID,
+                        EnvironmentID = slip.EnvironmentID,
+                        ExchangeRate = slip.ExchangeRate,
+                        ID = slip.ID,
+                        IsActive = slip.IsActive,
+                        IsConfirmed = slip.IsConfirmed,
+                        LocationID = slip.LocationID,
+                        OurCompanyID = slip.OurCompanyID,
+                        PayMethodID = slip.PayMethodID,
+                        RecordDate = slip.RecordDate,
+                        RecordEmployeeID = slip.RecordEmployeeID,
+                        RecordIP = slip.RecordIP,
+                        ReferenceID = slip.ReferenceID,
+                        ResultID = slip.ResultID,
+                        SystemAmount = slip.SystemAmount,
+                        SystemCurrency = slip.SystemCurrency,
+                        UID = slip.UID,
+                        UpdateDate = slip.UpdateDate,
+                        UpdateEmployee = slip.UpdateEmployee,
+                        UpdateIP = slip.UpdateIP
+                    };
 
-                    Db.DocumentExpenseSlip.Add(slip);
-                    Db.SaveChanges();
+                    SlipID = Db.AddEditExpenseSlip(
+                        slip.ID,
+                        slip.OurCompanyID,
+                        slip.LocationID,
+                        form.DocumentDate,
+                        form.DocumentNumber,
+                        CustomerID,
+                        form.PostAddress,
+                        form.PayMethod,
+                        refundAmount,
+                        model.TicketSaleSummary.Currency,
+                        slip.ExchangeRate,
+                        refundAmount,
+                        model.TicketSaleSummary.Currency,
+                        slip.ReferenceID,
+                        slip.ActionTypeName,
+                        slip.ActionTypeID,
+                        form.Description,
+                        ResultID,
+                        slip.EnvironmentID,
+                        slip.UID,
+                        slip.RecordDate,
+                        slip.RecordEmployeeID,
+                        slip.RecordIP,
+                        DateTime.UtcNow.AddHours(3),
+                        model.Authentication.CurrentEmployee.EmployeeID,
+                        PosManager.GetIPAddress(),
+                        slip.IsConfirmed,
+                        slip.IsActive
+                        ).FirstOrDefault().Value;
+
 
                     model.Result.IsSuccess = true;
-                    model.Result.Message = "Gider Pusulası Kaydedildi. Doğrulayınız!";
+                    model.Result.Message = "Gider Pusulası Güncellendi";
+
+                    var isequal = PosManager.PublicInstancePropertiesEqual<DocumentExpenseSlip>(self, slip, PosManager.getIgnorelist());
+                    PosManager.AddApplicationLog("PosLocation", "ExpenseSlip", "Update", slip.ID.ToString(), "DocumentExpenseSlip", "EditRefund", isequal, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.CurrentEmployee.FullName, PosManager.GetIPAddress(), string.Empty, null);
+
+                    Db.ExpenseSlipCheck(SlipID);
                 }
                 catch (Exception ex)
                 {
                     model.Result.IsSuccess = false;
-                    model.Result.Message = "Gider Pusulası Kaydedilemedi : " + ex.Message;
+                    model.Result.Message = "Gider Pusulası Güncellenemedi : " + ex.Message;
                 }
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Tutar 0'dan büyük olmalıdır.";
             }
 
 
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", new { id = form.OrderID });
+        }
+
+        public ActionResult RemoveRefund(long? id)
+        {
+            if (id <= 0 || id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            SalesControlModel model = new SalesControlModel();
+            model.Authentication = this.AuthenticationData;
+            long OrderID = 0;
+
+            DocumentExpenseSlip slip = Db.DocumentExpenseSlip.FirstOrDefault(x => x.ID == id);
+
             if (slip != null)
             {
-                var Customer = Db.Customer.FirstOrDefault(x => x.ID == slip.CustomerID);
+                OrderID = slip.ReferenceID.Value;
 
-                if (Customer.PhoneNumber != phonenumber)
+                try
                 {
-                    Customer.PhoneNumber = phonenumber;
-                    Db.ChangeCustomerPhone(Customer.ID, phonenumber);
+                    Db.RemoveExpenseSlip(id);
+
+                    Db.ExpenseSlipCheck(id);
+
+                    var RefundedAmount = Db.GetTicketSaleRefundAmount(OrderID).FirstOrDefault() ?? 0;
+
+                    if (RefundedAmount == 0)
+                    {
+                        Db.SetTicketSalePosStatusR(OrderID, 3);
+                    }
+
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = "Gider Pusulası Kaldırıldı";
                 }
-
-                Random _random = new Random();
-                var code = _random.Next(100000, 999999);
-
-                string smsphonenumber = Customer.PhoneCode == "90" ? Customer.PhoneNumber : Customer.SMSNumber;
-                bool isinternational = Customer.PhoneCode == "90" ? false : true;
-                var sendtime = DateTime.UtcNow.AddHours(3);
-
-                Db.AddConfirmMessage(12, slip.UID, smsphonenumber, code, sendtime);
-
-                string Message = $"Degerli ziyaretcimiz. {code} kodunuzu UFE GRUP dan aldiginiz hizmetin iptali icin kullanabilirsiniz.";
-                // SMS gönderme
-                SMSManager smsmanager = new SMSManager();
-                smsmanager.SendSMS(Message, smsphonenumber, isinternational);
-
-                return RedirectToAction("ConfirmRefund", new { id = slip.ID });
-
+                catch (Exception ex)
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = "Gider Pusulası Kaldırılamadı : " + ex.Message;
+                }
             }
 
             TempData["Result"] = model.Result;
 
-            return RedirectToAction("Refund", new { id = form.OrderID });
+            return RedirectToAction("Detail", new { id = OrderID });
         }
+
+
 
         public ActionResult ConfirmRefund(long? id)
         {

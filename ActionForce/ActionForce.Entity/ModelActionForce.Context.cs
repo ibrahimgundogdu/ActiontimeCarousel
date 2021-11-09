@@ -2295,5 +2295,153 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("ExpenseSlipCheck", slipIDParameter);
         }
+    
+        public virtual ObjectResult<Nullable<long>> AddEditExpenseSlip(Nullable<long> slipID, Nullable<int> ourCompanyID, Nullable<int> locationID, Nullable<System.DateTime> documentDate, string documentNumber, Nullable<int> customerID, string customerAddress, Nullable<int> payMethodID, Nullable<double> amount, string currency, Nullable<double> exchangeRate, Nullable<double> systemAmount, string systemCurrency, Nullable<long> referenceID, string actionTypeName, Nullable<int> actionTypeID, string description, Nullable<long> resultID, Nullable<int> environmentID, Nullable<System.Guid> uID, Nullable<System.DateTime> recordDate, Nullable<int> recordEmployeeID, string recordIP, Nullable<System.DateTime> updateDate, Nullable<int> updateEmployee, string updateIP, Nullable<bool> isConfirmed, Nullable<bool> isActive)
+        {
+            var slipIDParameter = slipID.HasValue ?
+                new ObjectParameter("SlipID", slipID) :
+                new ObjectParameter("SlipID", typeof(long));
+    
+            var ourCompanyIDParameter = ourCompanyID.HasValue ?
+                new ObjectParameter("OurCompanyID", ourCompanyID) :
+                new ObjectParameter("OurCompanyID", typeof(int));
+    
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var documentDateParameter = documentDate.HasValue ?
+                new ObjectParameter("DocumentDate", documentDate) :
+                new ObjectParameter("DocumentDate", typeof(System.DateTime));
+    
+            var documentNumberParameter = documentNumber != null ?
+                new ObjectParameter("DocumentNumber", documentNumber) :
+                new ObjectParameter("DocumentNumber", typeof(string));
+    
+            var customerIDParameter = customerID.HasValue ?
+                new ObjectParameter("CustomerID", customerID) :
+                new ObjectParameter("CustomerID", typeof(int));
+    
+            var customerAddressParameter = customerAddress != null ?
+                new ObjectParameter("CustomerAddress", customerAddress) :
+                new ObjectParameter("CustomerAddress", typeof(string));
+    
+            var payMethodIDParameter = payMethodID.HasValue ?
+                new ObjectParameter("PayMethodID", payMethodID) :
+                new ObjectParameter("PayMethodID", typeof(int));
+    
+            var amountParameter = amount.HasValue ?
+                new ObjectParameter("Amount", amount) :
+                new ObjectParameter("Amount", typeof(double));
+    
+            var currencyParameter = currency != null ?
+                new ObjectParameter("Currency", currency) :
+                new ObjectParameter("Currency", typeof(string));
+    
+            var exchangeRateParameter = exchangeRate.HasValue ?
+                new ObjectParameter("ExchangeRate", exchangeRate) :
+                new ObjectParameter("ExchangeRate", typeof(double));
+    
+            var systemAmountParameter = systemAmount.HasValue ?
+                new ObjectParameter("SystemAmount", systemAmount) :
+                new ObjectParameter("SystemAmount", typeof(double));
+    
+            var systemCurrencyParameter = systemCurrency != null ?
+                new ObjectParameter("SystemCurrency", systemCurrency) :
+                new ObjectParameter("SystemCurrency", typeof(string));
+    
+            var referenceIDParameter = referenceID.HasValue ?
+                new ObjectParameter("ReferenceID", referenceID) :
+                new ObjectParameter("ReferenceID", typeof(long));
+    
+            var actionTypeNameParameter = actionTypeName != null ?
+                new ObjectParameter("ActionTypeName", actionTypeName) :
+                new ObjectParameter("ActionTypeName", typeof(string));
+    
+            var actionTypeIDParameter = actionTypeID.HasValue ?
+                new ObjectParameter("ActionTypeID", actionTypeID) :
+                new ObjectParameter("ActionTypeID", typeof(int));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var resultIDParameter = resultID.HasValue ?
+                new ObjectParameter("ResultID", resultID) :
+                new ObjectParameter("ResultID", typeof(long));
+    
+            var environmentIDParameter = environmentID.HasValue ?
+                new ObjectParameter("EnvironmentID", environmentID) :
+                new ObjectParameter("EnvironmentID", typeof(int));
+    
+            var uIDParameter = uID.HasValue ?
+                new ObjectParameter("UID", uID) :
+                new ObjectParameter("UID", typeof(System.Guid));
+    
+            var recordDateParameter = recordDate.HasValue ?
+                new ObjectParameter("RecordDate", recordDate) :
+                new ObjectParameter("RecordDate", typeof(System.DateTime));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            var updateDateParameter = updateDate.HasValue ?
+                new ObjectParameter("UpdateDate", updateDate) :
+                new ObjectParameter("UpdateDate", typeof(System.DateTime));
+    
+            var updateEmployeeParameter = updateEmployee.HasValue ?
+                new ObjectParameter("UpdateEmployee", updateEmployee) :
+                new ObjectParameter("UpdateEmployee", typeof(int));
+    
+            var updateIPParameter = updateIP != null ?
+                new ObjectParameter("UpdateIP", updateIP) :
+                new ObjectParameter("UpdateIP", typeof(string));
+    
+            var isConfirmedParameter = isConfirmed.HasValue ?
+                new ObjectParameter("IsConfirmed", isConfirmed) :
+                new ObjectParameter("IsConfirmed", typeof(bool));
+    
+            var isActiveParameter = isActive.HasValue ?
+                new ObjectParameter("IsActive", isActive) :
+                new ObjectParameter("IsActive", typeof(bool));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddEditExpenseSlip", slipIDParameter, ourCompanyIDParameter, locationIDParameter, documentDateParameter, documentNumberParameter, customerIDParameter, customerAddressParameter, payMethodIDParameter, amountParameter, currencyParameter, exchangeRateParameter, systemAmountParameter, systemCurrencyParameter, referenceIDParameter, actionTypeNameParameter, actionTypeIDParameter, descriptionParameter, resultIDParameter, environmentIDParameter, uIDParameter, recordDateParameter, recordEmployeeIDParameter, recordIPParameter, updateDateParameter, updateEmployeeParameter, updateIPParameter, isConfirmedParameter, isActiveParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<double>> GetTicketSaleRefundAmount(Nullable<long> saleID)
+        {
+            var saleIDParameter = saleID.HasValue ?
+                new ObjectParameter("SaleID", saleID) :
+                new ObjectParameter("SaleID", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetTicketSaleRefundAmount", saleIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> RemoveExpenseSlip(Nullable<long> slipId)
+        {
+            var slipIdParameter = slipId.HasValue ?
+                new ObjectParameter("SlipId", slipId) :
+                new ObjectParameter("SlipId", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("RemoveExpenseSlip", slipIdParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> SetTicketSalePosStatusR(Nullable<long> orderID, Nullable<int> statusID)
+        {
+            var orderIDParameter = orderID.HasValue ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(long));
+    
+            var statusIDParameter = statusID.HasValue ?
+                new ObjectParameter("StatusID", statusID) :
+                new ObjectParameter("StatusID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("SetTicketSalePosStatusR", orderIDParameter, statusIDParameter);
+        }
     }
 }

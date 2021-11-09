@@ -7144,6 +7144,36 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="Description" Type="nvarchar" Mode="In" />
           <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="AddEditExpenseSlip" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SlipID" Type="bigint" Mode="In" />
+          <Parameter Name="OurCompanyID" Type="int" Mode="In" />
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="DocumentDate" Type="date" Mode="In" />
+          <Parameter Name="DocumentNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="CustomerID" Type="int" Mode="In" />
+          <Parameter Name="CustomerAddress" Type="nvarchar" Mode="In" />
+          <Parameter Name="PayMethodID" Type="int" Mode="In" />
+          <Parameter Name="Amount" Type="float" Mode="In" />
+          <Parameter Name="Currency" Type="nvarchar" Mode="In" />
+          <Parameter Name="ExchangeRate" Type="float" Mode="In" />
+          <Parameter Name="SystemAmount" Type="float" Mode="In" />
+          <Parameter Name="SystemCurrency" Type="nvarchar" Mode="In" />
+          <Parameter Name="ReferenceID" Type="bigint" Mode="In" />
+          <Parameter Name="ActionTypeName" Type="nvarchar" Mode="In" />
+          <Parameter Name="ActionTypeID" Type="int" Mode="In" />
+          <Parameter Name="Description" Type="nvarchar" Mode="In" />
+          <Parameter Name="ResultID" Type="bigint" Mode="In" />
+          <Parameter Name="EnvironmentID" Type="int" Mode="In" />
+          <Parameter Name="UID" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="RecordDate" Type="datetime" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+          <Parameter Name="UpdateDate" Type="datetime" Mode="In" />
+          <Parameter Name="UpdateEmployee" Type="int" Mode="In" />
+          <Parameter Name="UpdateIP" Type="nvarchar" Mode="In" />
+          <Parameter Name="IsConfirmed" Type="bit" Mode="In" />
+          <Parameter Name="IsActive" Type="bit" Mode="In" />
+        </Function>
         <Function Name="AddEmployeeAction" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -7438,6 +7468,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <Function Name="GetTicketSalePaymentAmount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SaleID" Type="bigint" Mode="In" />
         </Function>
+        <Function Name="GetTicketSaleRefundAmount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SaleID" Type="bigint" Mode="In" />
+        </Function>
         <Function Name="GetToList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OurCompanyID" Type="int" Mode="In" />
         </Function>
@@ -7469,6 +7502,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         </Function>
         <Function Name="RemoveEmployeePhone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="AddressID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="RemoveExpenseSlip" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SlipId" Type="bigint" Mode="In" />
         </Function>
         <Function Name="RemovePosTerminal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="TerminalID" Type="int" Mode="In" />
@@ -7516,6 +7552,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="IsSend" Type="bit" Mode="In" />
         </Function>
         <Function Name="SetTicketSalePosStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="OrderID" Type="bigint" Mode="In" />
+          <Parameter Name="StatusID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="SetTicketSalePosStatusR" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="OrderID" Type="bigint" Mode="In" />
           <Parameter Name="StatusID" Type="int" Mode="In" />
         </Function>
@@ -11258,7 +11298,47 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="VTicketSaleAllSummary" EntityType="db293_ActionTimeDbModel.VTicketSaleAllSummary" />
           <EntitySet Name="VDocumentExpenseSlip" EntityType="db293_ActionTimeDbModel.VDocumentExpenseSlip" />
           <FunctionImport Name="ExpenseSlipCheck" ReturnType="Collection(Int64)">
+          <Parameter Name="SlipID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="AddEditExpenseSlip" ReturnType="Collection(Int64)">
             <Parameter Name="SlipID" Mode="In" Type="Int64" />
+            <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="DocumentDate" Mode="In" Type="DateTime" />
+            <Parameter Name="DocumentNumber" Mode="In" Type="String" />
+            <Parameter Name="CustomerID" Mode="In" Type="Int32" />
+            <Parameter Name="CustomerAddress" Mode="In" Type="String" />
+            <Parameter Name="PayMethodID" Mode="In" Type="Int32" />
+            <Parameter Name="Amount" Mode="In" Type="Double" />
+            <Parameter Name="Currency" Mode="In" Type="String" />
+            <Parameter Name="ExchangeRate" Mode="In" Type="Double" />
+            <Parameter Name="SystemAmount" Mode="In" Type="Double" />
+            <Parameter Name="SystemCurrency" Mode="In" Type="String" />
+            <Parameter Name="ReferenceID" Mode="In" Type="Int64" />
+            <Parameter Name="ActionTypeName" Mode="In" Type="String" />
+            <Parameter Name="ActionTypeID" Mode="In" Type="Int32" />
+            <Parameter Name="Description" Mode="In" Type="String" />
+            <Parameter Name="ResultID" Mode="In" Type="Int64" />
+            <Parameter Name="EnvironmentID" Mode="In" Type="Int32" />
+            <Parameter Name="UID" Mode="In" Type="Guid" />
+            <Parameter Name="RecordDate" Mode="In" Type="DateTime" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+            <Parameter Name="UpdateDate" Mode="In" Type="DateTime" />
+            <Parameter Name="UpdateEmployee" Mode="In" Type="Int32" />
+            <Parameter Name="UpdateIP" Mode="In" Type="String" />
+            <Parameter Name="IsConfirmed" Mode="In" Type="Boolean" />
+            <Parameter Name="IsActive" Mode="In" Type="Boolean" />
+          </FunctionImport>
+          <FunctionImport Name="GetTicketSaleRefundAmount" ReturnType="Collection(Double)">
+          <Parameter Name="SaleID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="RemoveExpenseSlip" ReturnType="Collection(Int64)">
+          <Parameter Name="SlipId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="SetTicketSalePosStatusR" ReturnType="Collection(Int64)">
+            <Parameter Name="OrderID" Mode="In" Type="Int64" />
+            <Parameter Name="StatusID" Mode="In" Type="Int32" />
           </FunctionImport>
         
           </EntityContainer>
@@ -25966,6 +26046,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="ExpenseSlipCheck" FunctionName="db293_ActionTimeDbModel.Store.ExpenseSlipCheck" />
+          <FunctionImportMapping FunctionImportName="AddEditExpenseSlip" FunctionName="db293_ActionTimeDbModel.Store.AddEditExpenseSlip" />
+          <FunctionImportMapping FunctionImportName="GetTicketSaleRefundAmount" FunctionName="db293_ActionTimeDbModel.Store.GetTicketSaleRefundAmount" />
+          <FunctionImportMapping FunctionImportName="RemoveExpenseSlip" FunctionName="db293_ActionTimeDbModel.Store.RemoveExpenseSlip" />
+          <FunctionImportMapping FunctionImportName="SetTicketSalePosStatusR" FunctionName="db293_ActionTimeDbModel.Store.SetTicketSalePosStatusR" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
