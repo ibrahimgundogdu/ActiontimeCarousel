@@ -43,10 +43,34 @@ namespace ActionForce.PosLocation.Controllers
                 Type = "Cash",
                 Total = 0
             });
+            headerTotals.Add(new TotalModel()
+            {
+                Currency = "USD",
+                Type = "Cash",
+                Total = 0
+            });
+            headerTotals.Add(new TotalModel()
+            {
+                Currency = "EUR",
+                Type = "Cash",
+                Total = 0
+            });
 
             headerTotals.Add(new TotalModel()
             {
                 Currency = "TRL",
+                Type = "Bank",
+                Total = 0
+            });
+            headerTotals.Add(new TotalModel()
+            {
+                Currency = "USD",
+                Type = "Bank",
+                Total = 0
+            });
+            headerTotals.Add(new TotalModel()
+            {
+                Currency = "EUR",
                 Type = "Bank",
                 Total = 0
             });
@@ -61,10 +85,35 @@ namespace ActionForce.PosLocation.Controllers
                 Type = "Cash",
                 Total = model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total
             });
+            footerTotals.Add(new TotalModel()
+            {
+                Currency = "USD",
+                Type = "Cash",
+                Total = model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total
+            });
+            footerTotals.Add(new TotalModel()
+            {
+                Currency = "EUR",
+                Type = "Cash",
+                Total = model.HeaderTotals.FirstOrDefault(x => x.Type == "Cash" && x.Currency == "TRL").Total
+            });
 
             footerTotals.Add(new TotalModel()
             {
                 Currency = "TRL",
+                Type = "Bank",
+                Total = model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total
+            });
+
+            footerTotals.Add(new TotalModel()
+            {
+                Currency = "USD",
+                Type = "Bank",
+                Total = model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total
+            });
+            footerTotals.Add(new TotalModel()
+            {
+                Currency = "EUR",
                 Type = "Bank",
                 Total = model.HeaderTotals.FirstOrDefault(x => x.Type == "Bank" && x.Currency == "TRL").Total
             });

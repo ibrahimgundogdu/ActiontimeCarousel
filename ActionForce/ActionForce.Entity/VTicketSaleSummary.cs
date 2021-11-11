@@ -32,5 +32,6 @@ namespace ActionForce.Entity
         public Nullable<bool> IsSendPosTerminal { get; set; }
         public double BalanceAmount { get; set; }
         public string PayMethodList { get; set; }
+        public double RefundAmount { get; set; }
     }
 }

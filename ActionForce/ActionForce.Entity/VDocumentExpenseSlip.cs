@@ -21,7 +21,7 @@ namespace ActionForce.Entity
         public string DocumentNumber { get; set; }
         public Nullable<int> CustomerID { get; set; }
         public string CustomerAddress { get; set; }
-        public Nullable<int> PayMethodID { get; set; }
+        public int PayMethodID { get; set; }
         public Nullable<double> Amount { get; set; }
         public string Currency { get; set; }
         public Nullable<double> ExchangeRate { get; set; }

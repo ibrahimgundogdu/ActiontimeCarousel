@@ -42,13 +42,13 @@ namespace ActionForce.PosLocation.Controllers
             model.VPrices.AddRange(Db.VPrice.Where(x => priceIds.Contains(x.ID)).ToList());
             model.VPrices = model.VPrices.Distinct().ToList();
 
-            int[] cashtypes = new int[] { 10, 21, 24, 28 }.ToArray();
-            int[] cardtypes = new int[] { 1, 3, 5 }.ToArray();
+            int[] cashtypes = new int[] { 10, 21, 24, 28, 41 }.ToArray();
+            int[] cardtypes = new int[] { 1, 3, 5, 9 }.ToArray();
 
             model.TicketSalePaymentSummary = Db.VTicketSalePaymentSummary.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == DocumentDate).ToList();
             model.CashActions = Db.CashActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ProcessDate == DocumentDate && cashtypes.Contains(x.CashActionTypeID.Value)).ToList();
             model.BankActions = Db.BankActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ProcessDate == DocumentDate && cardtypes.Contains(x.BankActionTypeID.Value)).ToList();
-
+            model.ExpenseSlips = Db.VDocumentExpenseSlip.Where(x=> x.LocationID == model.Authentication.CurrentLocation.ID && x.DocumentDate == DocumentDate && x.IsActive == true).ToList();
 
             return View(model);
         }
@@ -126,6 +126,7 @@ namespace ActionForce.PosLocation.Controllers
 
             return RedirectToAction("Index", new { id = DocumentDate.ToString("yyyy-MM-dd") });
         }
+
         public ActionResult CheckDocument(long? id)
         {
             if (id <= 0 || id == null)
@@ -503,8 +504,6 @@ namespace ActionForce.PosLocation.Controllers
 
             return RedirectToAction("Detail", new { id = OrderID });
         }
-
-
 
         public ActionResult ConfirmRefund(long? id)
         {
