@@ -167,18 +167,18 @@
                                     </div>
                                     <div class="piece-name">
                                         <div class="piece">@(item.Quantity) Adet.</div>
-                                        <div class="name">@(item.PosStatusName?.ToUpper())</div>
+                                        <div class="name">@(item.RefundAmount >0 && item.RefundAmount < item.PaymentAmount ? "KISMİ ":"" ) @(item.PosStatusName?.ToUpper())</div>
                                         <div class="text">@(item.IsSendPosTerminal == true ? "Ingenico":"Manuel")</div>
                                     </div>
                                     <div class="credit">
                                         <div class="price">@(item.Total.ToString("N2")) <span>@(item.Sign)</span></div>
                                         <div class="text">@((item.PaymentAmount).ToString("N2")) <span>@(item.Sign)</span></div>
-
                                         <div class="text">
-                                            <span style="color:darkred;"> @(item.RefundAmount.ToString("N2")) <span>@(item.Sign)</span></span><br />@(item.PayMethodList)</div>
+                                            <span style="color:darkred;"> @(item.RefundAmount.ToString("N2")) <span>@(item.Sign)</span></span></div>
 
                                         <div class="detail">
-                                            <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><g><g><rect fill="currentColor" height="2" width="9" x="13" y="7" /><rect fill="currentColor" height="2" width="9" x="13" y="15" /><rect fill="currentColor" height="2" width="6" x="16" y="11" /><polygon fill="currentColor" points="13,12 8,7 8,11 2,11 2,13 8,13 8,17" /></g></g></svg>
+                                            @(item.PayMethodList)
+                                            @*<svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" viewBox="0 0 24 24"><g><g><rect fill="currentColor" height="2" width="9" x="13" y="7" /><rect fill="currentColor" height="2" width="9" x="13" y="15" /><rect fill="currentColor" height="2" width="6" x="16" y="11" /><polygon fill="currentColor" points="13,12 8,7 8,11 2,11 2,13 8,13 8,17" /></g></g></svg>*@
                                         </div>
                                     </div>
                                 </a>
