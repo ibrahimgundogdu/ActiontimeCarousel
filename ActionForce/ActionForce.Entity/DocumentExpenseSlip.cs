@@ -42,5 +42,7 @@ namespace ActionForce.Entity
         public Nullable<bool> IsConfirmed { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<int> PayMethodID { get; set; }
+        public Nullable<long> SaleID { get; set; }
+        public Nullable<long> SaleRowID { get; set; }
     }
 }

@@ -2296,7 +2296,38 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("ExpenseSlipCheck", slipIDParameter);
         }
     
-        public virtual ObjectResult<Nullable<long>> AddEditExpenseSlip(Nullable<long> slipID, Nullable<int> ourCompanyID, Nullable<int> locationID, Nullable<System.DateTime> documentDate, string documentNumber, Nullable<int> customerID, string customerAddress, Nullable<int> payMethodID, Nullable<double> amount, string currency, Nullable<double> exchangeRate, Nullable<double> systemAmount, string systemCurrency, Nullable<long> referenceID, string actionTypeName, Nullable<int> actionTypeID, string description, Nullable<long> resultID, Nullable<int> environmentID, Nullable<System.Guid> uID, Nullable<System.DateTime> recordDate, Nullable<int> recordEmployeeID, string recordIP, Nullable<System.DateTime> updateDate, Nullable<int> updateEmployee, string updateIP, Nullable<bool> isConfirmed, Nullable<bool> isActive)
+        public virtual ObjectResult<Nullable<double>> GetTicketSaleRefundAmount(Nullable<long> saleID)
+        {
+            var saleIDParameter = saleID.HasValue ?
+                new ObjectParameter("SaleID", saleID) :
+                new ObjectParameter("SaleID", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetTicketSaleRefundAmount", saleIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> RemoveExpenseSlip(Nullable<long> slipId)
+        {
+            var slipIdParameter = slipId.HasValue ?
+                new ObjectParameter("SlipId", slipId) :
+                new ObjectParameter("SlipId", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("RemoveExpenseSlip", slipIdParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> SetTicketSalePosStatusR(Nullable<long> orderID, Nullable<int> statusID)
+        {
+            var orderIDParameter = orderID.HasValue ?
+                new ObjectParameter("OrderID", orderID) :
+                new ObjectParameter("OrderID", typeof(long));
+    
+            var statusIDParameter = statusID.HasValue ?
+                new ObjectParameter("StatusID", statusID) :
+                new ObjectParameter("StatusID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("SetTicketSalePosStatusR", orderIDParameter, statusIDParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> AddEditExpenseSlip(Nullable<long> slipID, Nullable<int> ourCompanyID, Nullable<int> locationID, Nullable<System.DateTime> documentDate, string documentNumber, Nullable<int> customerID, string customerAddress, Nullable<int> payMethodID, Nullable<double> amount, string currency, Nullable<double> exchangeRate, Nullable<double> systemAmount, string systemCurrency, Nullable<long> referenceID, Nullable<long> orderRowID, string actionTypeName, Nullable<int> actionTypeID, string description, Nullable<long> resultID, Nullable<int> environmentID, Nullable<System.Guid> uID, Nullable<System.DateTime> recordDate, Nullable<int> recordEmployeeID, string recordIP, Nullable<System.DateTime> updateDate, Nullable<int> updateEmployee, string updateIP, Nullable<bool> isConfirmed, Nullable<bool> isActive)
         {
             var slipIDParameter = slipID.HasValue ?
                 new ObjectParameter("SlipID", slipID) :
@@ -2354,6 +2385,10 @@ namespace ActionForce.Entity
                 new ObjectParameter("ReferenceID", referenceID) :
                 new ObjectParameter("ReferenceID", typeof(long));
     
+            var orderRowIDParameter = orderRowID.HasValue ?
+                new ObjectParameter("OrderRowID", orderRowID) :
+                new ObjectParameter("OrderRowID", typeof(long));
+    
             var actionTypeNameParameter = actionTypeName != null ?
                 new ObjectParameter("ActionTypeName", actionTypeName) :
                 new ObjectParameter("ActionTypeName", typeof(string));
@@ -2410,38 +2445,7 @@ namespace ActionForce.Entity
                 new ObjectParameter("IsActive", isActive) :
                 new ObjectParameter("IsActive", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddEditExpenseSlip", slipIDParameter, ourCompanyIDParameter, locationIDParameter, documentDateParameter, documentNumberParameter, customerIDParameter, customerAddressParameter, payMethodIDParameter, amountParameter, currencyParameter, exchangeRateParameter, systemAmountParameter, systemCurrencyParameter, referenceIDParameter, actionTypeNameParameter, actionTypeIDParameter, descriptionParameter, resultIDParameter, environmentIDParameter, uIDParameter, recordDateParameter, recordEmployeeIDParameter, recordIPParameter, updateDateParameter, updateEmployeeParameter, updateIPParameter, isConfirmedParameter, isActiveParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<double>> GetTicketSaleRefundAmount(Nullable<long> saleID)
-        {
-            var saleIDParameter = saleID.HasValue ?
-                new ObjectParameter("SaleID", saleID) :
-                new ObjectParameter("SaleID", typeof(long));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<double>>("GetTicketSaleRefundAmount", saleIDParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<long>> RemoveExpenseSlip(Nullable<long> slipId)
-        {
-            var slipIdParameter = slipId.HasValue ?
-                new ObjectParameter("SlipId", slipId) :
-                new ObjectParameter("SlipId", typeof(long));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("RemoveExpenseSlip", slipIdParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<long>> SetTicketSalePosStatusR(Nullable<long> orderID, Nullable<int> statusID)
-        {
-            var orderIDParameter = orderID.HasValue ?
-                new ObjectParameter("OrderID", orderID) :
-                new ObjectParameter("OrderID", typeof(long));
-    
-            var statusIDParameter = statusID.HasValue ?
-                new ObjectParameter("StatusID", statusID) :
-                new ObjectParameter("StatusID", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("SetTicketSalePosStatusR", orderIDParameter, statusIDParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddEditExpenseSlip", slipIDParameter, ourCompanyIDParameter, locationIDParameter, documentDateParameter, documentNumberParameter, customerIDParameter, customerAddressParameter, payMethodIDParameter, amountParameter, currencyParameter, exchangeRateParameter, systemAmountParameter, systemCurrencyParameter, referenceIDParameter, orderRowIDParameter, actionTypeNameParameter, actionTypeIDParameter, descriptionParameter, resultIDParameter, environmentIDParameter, uIDParameter, recordDateParameter, recordEmployeeIDParameter, recordIPParameter, updateDateParameter, updateEmployeeParameter, updateIPParameter, isConfirmedParameter, isActiveParameter);
         }
     }
 }

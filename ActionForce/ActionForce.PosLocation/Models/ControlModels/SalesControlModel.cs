@@ -34,6 +34,7 @@ namespace ActionForce.PosLocation
         public double PaymentAmount { get; set; }
         public double BalanceAmount { get; set; }
         public double RefundedAmount { get; set; }
+        public double RefundAmount { get; set; }
         public double RefundRate { get; set; }
         public bool IsManuel { get; set; } = false;
         public string PosStatusName { get; set; }

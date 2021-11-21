@@ -55,6 +55,7 @@
                         <li><span>DURUM</span><span>@(Model.TicketSale.PosStatusID == 5 ? $"%{Model.RefundRate.ToString("N0")}":"") @(Model.TicketSalePosStatus.FirstOrDefault(x=> x.ID == Model.TicketSale.PosStatusID)?.PosStatusName)</span></li>
                         <li><span>TUTAR</span><span>@(Model.TicketSaleSummary.Total.ToString("N2")) @(Model.TicketSaleSummary.Sign)</span></li>
                         <li><span>TAHSİLAT</span><span>@((Model.TicketSaleSummary.PaymentAmount).ToString("N2")) @(Model.TicketSaleSummary.Sign)</span></li>
+                        <li><span>İADE</span><span>@((Model.TicketSaleSummary.RefundAmount).ToString("N2")) @(Model.TicketSaleSummary.Sign)</span></li>
                         <li><span>BİLET ADEDİ</span><span>@(Model.TicketSaleSummary.Quantity)</span></li>
                         <li><span>ORTAM BİLGİSİ</span><span>@(Model.Environments.FirstOrDefault(x=> x.ID == Model.TicketSaleSummary.EnvironmentID)?.Environment1)</span></li>
                         <li><span>KAYIT TARİHİ</span><span> @(Model.TicketSaleSummary.RecordDate.ToString())</span></li>
@@ -121,6 +122,7 @@
                         <table>
                             <tr>
                                 <th>ÜRÜN</th>
+                                <th>DURUM</th>
                                 <th>KDV %</th>
                                 <th>DK</th>
                                 <th>FİYAT</th>
@@ -129,6 +131,7 @@
                             {
                                 <tr>
                                     <td><a href="/Sales/RowDetail/@(item.ID)?OrderID=@(Model.TicketSale.ID)" class="btn btn-light" style="font-weight:500; color:darkblue;">@(item.ProductName)</a></td>
+                                    <td>@(item.StatusName)</td>
                                     <td>@(item.TaxRate) %</td>
                                     <td>@(item.SaleRowUnit) dk @(item.ExtraUnit > 0 ? $" + {item.ExtraUnit} dk, {item.ExtraPrice?.ToString("N2")} {item.Sign}":"")</td>
                                     <td><a href="/Sales/RowDetail/@(item.ID)?OrderID=@(Model.TicketSale.ID)" class="btn btn-light" style="font-weight:500; color:darkblue;">@(item.RowTotal?.ToString("N2")) @(item.Sign)</a></td>

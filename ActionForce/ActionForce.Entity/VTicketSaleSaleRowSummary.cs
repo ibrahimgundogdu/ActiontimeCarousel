@@ -24,5 +24,6 @@ namespace ActionForce.Entity
         public string Currency { get; set; }
         public Nullable<int> PosStatusID { get; set; }
         public Nullable<int> PriceCategoryID { get; set; }
+        public Nullable<int> StatusID { get; set; }
     }
 }

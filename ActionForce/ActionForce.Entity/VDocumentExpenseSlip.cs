@@ -44,5 +44,7 @@ namespace ActionForce.Entity
         public Nullable<bool> IsActive { get; set; }
         public string PayMethodName { get; set; }
         public string Sign { get; set; }
+        public Nullable<long> SaleID { get; set; }
+        public Nullable<long> SaleRowID { get; set; }
     }
 }

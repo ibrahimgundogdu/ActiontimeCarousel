@@ -147,7 +147,7 @@ namespace ActionForce.PosLocation.Controllers
             return RedirectToAction("Detail", new { id });
         }
 
-        public ActionResult Refund(long? id)
+        public ActionResult Refund(long? id, long? RowID = 0)
         {
             if (id <= 0 || id == null)
             {
@@ -167,8 +167,17 @@ namespace ActionForce.PosLocation.Controllers
             model.PaymentAmount = Db.GetTicketSalePaymentAmount(id).FirstOrDefault() ?? 0;
             model.ExpenseSlips = Db.VDocumentExpenseSlip.Where(x => x.ReferenceID == id && x.IsActive == true).ToList();
             model.PayMethods = Db.PayMethod.Where(x => x.IsActive == true).ToList();
-
+            model.TicketSaleRow = Db.TicketSaleRows.FirstOrDefault(x => x.ID == RowID);
             model.RefundedAmount = model.ExpenseSlips.Sum(x => x.Amount) ?? 0;
+            model.RefundAmount = model.PaymentAmount - model.RefundedAmount;
+
+            if (model.TicketSaleRow != null)
+            {
+                model.RefundAmount = model.RefundAmount > model.TicketSaleRow.Total ? model.TicketSaleRow.Total.Value : model.RefundAmount;
+            }
+           
+
+
 
 
             return View(model);
@@ -294,6 +303,7 @@ namespace ActionForce.PosLocation.Controllers
                         PaymentAmount,
                         model.TicketSaleSummary.Currency,
                         form.OrderID,
+                        form.OrderRowID,
                         "Gider Pusulası",
                         41,
                         form.Description,
@@ -399,7 +409,9 @@ namespace ActionForce.PosLocation.Controllers
                         UID = slip.UID,
                         UpdateDate = slip.UpdateDate,
                         UpdateEmployee = slip.UpdateEmployee,
-                        UpdateIP = slip.UpdateIP
+                        UpdateIP = slip.UpdateIP,
+                        SaleID = slip.SaleID,
+                        SaleRowID = slip.SaleRowID
                     };
 
                     SlipID = Db.AddEditExpenseSlip(
@@ -417,6 +429,7 @@ namespace ActionForce.PosLocation.Controllers
                         refundAmount,
                         model.TicketSaleSummary.Currency,
                         slip.ReferenceID,
+                        slip.SaleRowID,
                         slip.ActionTypeName,
                         slip.ActionTypeID,
                         form.Description,

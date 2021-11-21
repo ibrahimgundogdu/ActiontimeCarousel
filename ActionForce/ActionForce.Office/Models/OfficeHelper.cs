@@ -1492,11 +1492,15 @@ namespace ActionForce.Office
                                     finishtime = employeeshift.ShiftDateEnd;
                                 }
 
-                                if (finishtime != null && starttime != null)
+                                if (finishtime != null && starttime != null && finishtime > starttime)
                                 {
                                     duration = (finishtime - starttime).Value;
                                     double? durationminute = (finishtime - starttime).Value.TotalMinutes;
                                     durationhour = (durationminute / 60);
+                                }
+                                else
+                                {
+                                    duration = new TimeSpan(0,0,0);
                                 }
 
                                 // varmı yokmu

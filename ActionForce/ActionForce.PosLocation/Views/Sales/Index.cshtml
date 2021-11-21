@@ -81,9 +81,9 @@
                                 @foreach (var item in Model.VPrices.OrderBy(x => x.Unit).ToList())
                                 {
                                     var saletotal = Model.TicketSaleRowSummary.Where(x => x.PriceID == item.ID && (new List<int> { 3, 4, 5 }).Contains(x.PosStatusID.Value)).ToList();
-                                    var sale = Model.TicketSaleRowSummary.Where(x => x.PriceID == item.ID && x.PosStatusID == 3).ToList();
+                                    var sale = Model.TicketSaleRowSummary.Where(x => x.PriceID == item.ID && x.PosStatusID == 3 && x.StatusID == 2).ToList();
                                     var cancel = Model.TicketSaleRowSummary.Where(x => x.PriceID == item.ID && x.PosStatusID == 4).ToList();
-                                    var refund = Model.TicketSaleRowSummary.Where(x => x.PriceID == item.ID && x.PosStatusID == 5).ToList();
+                                    var refund = Model.TicketSaleRowSummary.Where(x => x.PriceID == item.ID && (x.PosStatusID == 5 || x.StatusID == 5)).ToList();
 
                                     <tr>
                                         <td>@(item.ProductName) <br />@(item.Unit) Dk.</td>
@@ -97,7 +97,7 @@
                                 }
                                 <tr>
                                     <td class="color-cash font-bold" colspan="5"></td>
-                                    <td class="font-bold" colspan="2">@((Model.TicketSaleRowSummary.Where(x=> x.PosStatusID == 3).Sum(x => x.Total))?.ToString("N2")) ₺</td>
+                                    <td class="font-bold" colspan="2">@((Model.TicketSaleRowSummary.Where(x=> x.PosStatusID == 3 && x.StatusID == 2).Sum(x => x.Total))?.ToString("N2")) ₺</td>
                                 </tr>
                             </table>
 
@@ -167,14 +167,15 @@
                                     </div>
                                     <div class="piece-name">
                                         <div class="piece">@(item.Quantity) Adet.</div>
-                                        <div class="name">@(item.RefundAmount >0 && item.RefundAmount < item.PaymentAmount ? "KISMİ ":"" ) @(item.PosStatusName?.ToUpper())</div>
+                                        <div class="name">@(item.PosStatusName?.ToUpper())</div>
                                         <div class="text">@(item.IsSendPosTerminal == true ? "Ingenico":"Manuel")</div>
                                     </div>
                                     <div class="credit">
                                         <div class="price">@(item.Total.ToString("N2")) <span>@(item.Sign)</span></div>
                                         <div class="text">@((item.PaymentAmount).ToString("N2")) <span>@(item.Sign)</span></div>
                                         <div class="text">
-                                            <span style="color:darkred;"> @(item.RefundAmount.ToString("N2")) <span>@(item.Sign)</span></span></div>
+                                            <span style="color:darkred;"> @(item.RefundAmount.ToString("N2")) <span>@(item.Sign)</span></span>
+                                        </div>
 
                                         <div class="detail">
                                             @(item.PayMethodList)

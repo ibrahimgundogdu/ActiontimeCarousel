@@ -50,73 +50,74 @@
                         <div class="step step-1 active">
                             @using (Html.BeginForm("AddRefund", "Sales", FormMethod.Post, new { role = "form" }))
                             {
-                                <div class="form">
-                                    <input id="OrderID" name="OrderID" type="hidden" value="@(Model.TicketSaleSummary.ID)" />
+                            <div class="form">
+                                <input id="OrderID" name="OrderID" type="hidden" value="@(Model.TicketSaleSummary.ID)" />
+                                <input id="OrderRowID" name="OrderRowID" type="hidden" value="@(Model.TicketSaleRow != null ? Model.TicketSaleRow.ID : 0)" />
 
-                                    <div class="form-group">
-                                        <input type="text" name="OrderNumber" class="form-control" value="@(Model.TicketSaleSummary.OrderNumber)" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" name="PaymentAmount" class="form-control money" style="text-align:right; font-weight:bold;" value="@((Model.PaymentAmount - Model.RefundedAmount).ToString("N2"))" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <select name="PayMethod" class="form-control" required>
-                                            <option value="">İade Yöntemi</option>
-                                            @foreach (var item in Model.PayMethods)
-                                            {
-                                                <option value="@(item.ID)"> @(item.MethodName)</option>
-                                            }
-                                        </select>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input type="text" name="DocumentNumber" class="form-control" placeholder="Gider Pusulası Evrak No" value="@(Model.ExpenseSlip != null ? Model.ExpenseSlip.DocumentNumber : "")" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="date" name="DocumentDate" class="form-control" placeholder="Evrak Tarihi" value="@(Model.ExpenseSlip != null ? Model.ExpenseSlip.DocumentDate?.ToString("yyyy-MM-dd") :  DateTime.Now.ToString("yyyy-MM-dd"))" required>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-5">
-                                            <div class="form-group">
-                                                <select class="form-control" id="phone-number-country" name="PhoneNumberCountry" autocomplete="off">
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-7">
-                                            <div class="form-group">
-                                                <div class="phone-number">
-                                                    <div class="form-control phone-number-prefix"></div>
-                                                    <input class="form-control" id="phone-number" name="CustomerPhone" type="tel" autocomplete="off" style="font-weight:bold;" value="@(Model.Customer != null ? Model.Customer.PhoneNumber : "")">
-                                                    <input type="hidden" id="phone-number-full" name="PhoneNumberFull" />
-                                                    <input type="hidden" id="phone-number-code" name="CountryCode" value="@(Model.Customer != null ? Model.Customer.PhoneCode : "90")" />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <input type="text" id="CustomerName" name="CustomerName" class="form-control" placeholder="Müşteri Adı Soyadı" value="@(Model.Customer != null ? Model.Customer.FullName : "")" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" id="CustomerIdentityNumber" name="CustomerIdentityNumber" class="form-control" placeholder="TCKN" value="@(Model.Customer != null ? Model.Customer.IdentityNumber : "")" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="email" id="CustomerMail" name="CustomerMail" class="form-control" placeholder="E-Mail" value="@(Model.Customer != null ? Model.Customer.EMail : "")">
-                                    </div>
-                                    <div class="form-group">
-                                        <textarea class="form-control" id="PostAddress" name="PostAddress" placeholder="Posta Adresi" required rows="1">@(Model.ExpenseSlip != null ? Model.ExpenseSlip.CustomerAddress : "")</textarea>
-                                    </div>
-                                    <div class="form-group">
-                                        <textarea class="form-control" name="Description" placeholder="Açıklama" required>@(Model.ExpenseSlip != null ? Model.ExpenseSlip.Description : "")</textarea>
-                                    </div>
-
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-light">@(Model.ExpenseSlip != null ? "GÜNCELLE" : "KAYDET")</button>
-                                    </div>
-
-
+                                <div class="form-group">
+                                    <input type="text" name="OrderNumber" class="form-control" value="@(Model.TicketSaleSummary.OrderNumber)" readonly>
                                 </div>
+                                <div class="form-group">
+                                    <input type="text" name="PaymentAmount" class="form-control money" style="text-align:right; font-weight:bold;" value="@(Model.RefundAmount.ToString("N2"))" required readonly>
+                                </div>
+                                <div class="form-group">
+                                    <select name="PayMethod" class="form-control" required>
+                                        <option value="">İade Yöntemi</option>
+                                        @foreach (var item in Model.PayMethods)
+                                        {
+                                            <option value="@(item.ID)"> @(item.MethodName)</option>
+                                        }
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="text" name="DocumentNumber" class="form-control" placeholder="Gider Pusulası Evrak No" value="@(Model.ExpenseSlip != null ? Model.ExpenseSlip.DocumentNumber : "")" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="date" name="DocumentDate" class="form-control" placeholder="Evrak Tarihi" value="@(Model.ExpenseSlip != null ? Model.ExpenseSlip.DocumentDate?.ToString("yyyy-MM-dd") :  DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-5">
+                                        <div class="form-group">
+                                            <select class="form-control" id="phone-number-country" name="PhoneNumberCountry" autocomplete="off">
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-7">
+                                        <div class="form-group">
+                                            <div class="phone-number">
+                                                <div class="form-control phone-number-prefix"></div>
+                                                <input class="form-control" id="phone-number" name="CustomerPhone" type="tel" autocomplete="off" style="font-weight:bold;" value="@(Model.Customer != null ? Model.Customer.PhoneNumber : "")" required>
+                                                <input type="hidden" id="phone-number-full" name="PhoneNumberFull" />
+                                                <input type="hidden" id="phone-number-code" name="CountryCode" value="@(Model.Customer != null ? Model.Customer.PhoneCode : "90")" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="text" id="CustomerName" name="CustomerName" class="form-control" placeholder="Müşteri Adı Soyadı" value="@(Model.Customer != null ? Model.Customer.FullName : "")" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" id="CustomerIdentityNumber" name="CustomerIdentityNumber" class="form-control" placeholder="TCKN" value="@(Model.Customer != null ? Model.Customer.IdentityNumber : "")" required>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" id="CustomerMail" name="CustomerMail" class="form-control" placeholder="E-Mail" value="@(Model.Customer != null ? Model.Customer.EMail : "")">
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-control" id="PostAddress" name="PostAddress" placeholder="Posta Adresi" required rows="1">@(Model.ExpenseSlip != null ? Model.ExpenseSlip.CustomerAddress : "")</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <textarea class="form-control" name="Description" placeholder="Açıklama" required>@(Model.ExpenseSlip != null ? Model.ExpenseSlip.Description : "")</textarea>
+                                </div>
+
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-light">@(Model.ExpenseSlip != null ? "GÜNCELLE" : "KAYDET")</button>
+                                </div>
+
+
+                            </div>
                             }
                         </div>
                        

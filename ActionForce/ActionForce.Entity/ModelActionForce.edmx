@@ -1418,6 +1418,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.City' does not have a prima
           <Property Name="SystemAmount" Type="float" />
           <Property Name="SystemCurrency" Type="nvarchar" MaxLength="4" />
           <Property Name="ReferenceID" Type="bigint" />
+          <Property Name="SaleID" Type="bigint" />
+          <Property Name="SaleRowID" Type="bigint" />
           <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
           <Property Name="ActionTypeID" Type="int" />
           <Property Name="Description" Type="nvarchar" MaxLength="250" />
@@ -4839,6 +4841,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentExpenseSlip' does 
           <Property Name="IsActive" Type="bit" />
           <Property Name="PayMethodName" Type="nvarchar" MaxLength="50" />
           <Property Name="Sign" Type="nvarchar" MaxLength="1" />
+          <Property Name="SaleID" Type="bigint" />
+          <Property Name="SaleRowID" Type="bigint" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentPosCancel' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6751,6 +6755,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleSaleRowSummary' 
           <Property Name="Total" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" Nullable="false" />
           <Property Name="PosStatusID" Type="int" />
+          <Property Name="StatusID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketSaleSummary' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -7162,6 +7167,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="SystemAmount" Type="float" Mode="In" />
           <Parameter Name="SystemCurrency" Type="nvarchar" Mode="In" />
           <Parameter Name="ReferenceID" Type="bigint" Mode="In" />
+          <Parameter Name="OrderRowID" Type="bigint" Mode="In" />
           <Parameter Name="ActionTypeName" Type="nvarchar" Mode="In" />
           <Parameter Name="ActionTypeID" Type="int" Mode="In" />
           <Parameter Name="Description" Type="nvarchar" Mode="In" />
@@ -8578,7 +8584,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentExpenseSlip].[IsConfirmed] AS [IsConfirmed], 
     [VDocumentExpenseSlip].[IsActive] AS [IsActive], 
     [VDocumentExpenseSlip].[PayMethodName] AS [PayMethodName], 
-    [VDocumentExpenseSlip].[Sign] AS [Sign]
+    [VDocumentExpenseSlip].[Sign] AS [Sign], 
+    [VDocumentExpenseSlip].[SaleID] AS [SaleID], 
+    [VDocumentExpenseSlip].[SaleRowID] AS [SaleRowID]
     FROM [dbo].[VDocumentExpenseSlip] AS [VDocumentExpenseSlip]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentPosCancel" EntityType="Self.VDocumentPosCancel" store:Type="Views" store:Schema="dbo">
@@ -10253,7 +10261,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketSaleSaleRowSummary].[Quantity] AS [Quantity], 
     [VTicketSaleSaleRowSummary].[Total] AS [Total], 
     [VTicketSaleSaleRowSummary].[Currency] AS [Currency], 
-    [VTicketSaleSaleRowSummary].[PosStatusID] AS [PosStatusID]
+    [VTicketSaleSaleRowSummary].[PosStatusID] AS [PosStatusID], 
+    [VTicketSaleSaleRowSummary].[StatusID] AS [StatusID]
     FROM [dbo].[VTicketSaleSaleRowSummary] AS [VTicketSaleSaleRowSummary]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VTicketSaleSummary" EntityType="Self.VTicketSaleSummary" store:Type="Views" store:Schema="dbo">
@@ -11304,6 +11313,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImport Name="ExpenseSlipCheck" ReturnType="Collection(Int64)">
           <Parameter Name="SlipID" Mode="In" Type="Int64" />
           </FunctionImport>
+          <FunctionImport Name="GetTicketSaleRefundAmount" ReturnType="Collection(Double)">
+          <Parameter Name="SaleID" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="RemoveExpenseSlip" ReturnType="Collection(Int64)">
+          <Parameter Name="SlipId" Mode="In" Type="Int64" />
+          </FunctionImport>
+          <FunctionImport Name="SetTicketSalePosStatusR" ReturnType="Collection(Int64)">
+            <Parameter Name="OrderID" Mode="In" Type="Int64" />
+            <Parameter Name="StatusID" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="AddEditExpenseSlip" ReturnType="Collection(Int64)">
             <Parameter Name="SlipID" Mode="In" Type="Int64" />
             <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
@@ -11319,6 +11338,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="SystemAmount" Mode="In" Type="Double" />
             <Parameter Name="SystemCurrency" Mode="In" Type="String" />
             <Parameter Name="ReferenceID" Mode="In" Type="Int64" />
+            <Parameter Name="OrderRowID" Mode="In" Type="Int64" />
             <Parameter Name="ActionTypeName" Mode="In" Type="String" />
             <Parameter Name="ActionTypeID" Mode="In" Type="Int32" />
             <Parameter Name="Description" Mode="In" Type="String" />
@@ -11333,16 +11353,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="UpdateIP" Mode="In" Type="String" />
             <Parameter Name="IsConfirmed" Mode="In" Type="Boolean" />
             <Parameter Name="IsActive" Mode="In" Type="Boolean" />
-          </FunctionImport>
-          <FunctionImport Name="GetTicketSaleRefundAmount" ReturnType="Collection(Double)">
-          <Parameter Name="SaleID" Mode="In" Type="Int64" />
-          </FunctionImport>
-          <FunctionImport Name="RemoveExpenseSlip" ReturnType="Collection(Int64)">
-          <Parameter Name="SlipId" Mode="In" Type="Int64" />
-          </FunctionImport>
-          <FunctionImport Name="SetTicketSalePosStatusR" ReturnType="Collection(Int64)">
-            <Parameter Name="OrderID" Mode="In" Type="Int64" />
-            <Parameter Name="StatusID" Mode="In" Type="Int32" />
           </FunctionImport>
         
           </EntityContainer>
@@ -18249,6 +18259,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsConfirmed" Type="Boolean" />
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="PayMethodID" Type="Int32" />
+          <Property Name="SaleID" Type="Int64" />
+          <Property Name="SaleRowID" Type="Int64" />
         </EntityType>
         <EntityType Name="PosTerminal">
           <Key>
@@ -18540,6 +18552,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Currency" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="PosStatusID" Type="Int32" />
           <Property Name="PriceCategoryID" Type="Int32" />
+          <Property Name="StatusID" Type="Int32" />
         </EntityType>
         <EntityType Name="VTicketSalePaymentSummary">
           <Key>
@@ -18804,6 +18817,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="PayMethodName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="SaleID" Type="Int64" />
+          <Property Name="SaleRowID" Type="Int64" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -25437,6 +25452,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="DocumentExpenseSlip">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.DocumentExpenseSlip">
               <MappingFragment StoreEntitySet="DocumentExpenseSlip">
+                <ScalarProperty Name="SaleRowID" ColumnName="SaleRowID" />
+                <ScalarProperty Name="SaleID" ColumnName="SaleID" />
                 <ScalarProperty Name="PayMethodID" ColumnName="PayMethodID" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="IsConfirmed" ColumnName="IsConfirmed" />
@@ -25762,6 +25779,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VTicketSaleSaleRowSummary">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketSaleSaleRowSummary">
               <MappingFragment StoreEntitySet="VTicketSaleSaleRowSummary">
+                <ScalarProperty Name="StatusID" ColumnName="StatusID" />
                 <ScalarProperty Name="PriceCategoryID" ColumnName="PriceCategoryID" />
                 <ScalarProperty Name="PosStatusID" ColumnName="PosStatusID" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />
@@ -26019,6 +26037,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentExpenseSlip">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentExpenseSlip">
               <MappingFragment StoreEntitySet="VDocumentExpenseSlip">
+                <ScalarProperty Name="SaleRowID" ColumnName="SaleRowID" />
+                <ScalarProperty Name="SaleID" ColumnName="SaleID" />
                 <ScalarProperty Name="Sign" ColumnName="Sign" />
                 <ScalarProperty Name="PayMethodName" ColumnName="PayMethodName" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -26053,10 +26073,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="ExpenseSlipCheck" FunctionName="db293_ActionTimeDbModel.Store.ExpenseSlipCheck" />
-          <FunctionImportMapping FunctionImportName="AddEditExpenseSlip" FunctionName="db293_ActionTimeDbModel.Store.AddEditExpenseSlip" />
           <FunctionImportMapping FunctionImportName="GetTicketSaleRefundAmount" FunctionName="db293_ActionTimeDbModel.Store.GetTicketSaleRefundAmount" />
           <FunctionImportMapping FunctionImportName="RemoveExpenseSlip" FunctionName="db293_ActionTimeDbModel.Store.RemoveExpenseSlip" />
           <FunctionImportMapping FunctionImportName="SetTicketSalePosStatusR" FunctionName="db293_ActionTimeDbModel.Store.SetTicketSalePosStatusR" />
+          <FunctionImportMapping FunctionImportName="AddEditExpenseSlip" FunctionName="db293_ActionTimeDbModel.Store.AddEditExpenseSlip" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

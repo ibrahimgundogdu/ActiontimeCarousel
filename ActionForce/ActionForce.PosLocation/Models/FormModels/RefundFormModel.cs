@@ -9,6 +9,7 @@ namespace ActionForce.PosLocation
     {
         public long? ExpenseSlipID { get; set; } //
         public long OrderID { get; set; } //
+        public long OrderRowID { get; set; } //
         public string OrderNumber { get; set; }
         public string PaymentAmount { get; set; }
         public string DocumentNumber { get; set; } //
