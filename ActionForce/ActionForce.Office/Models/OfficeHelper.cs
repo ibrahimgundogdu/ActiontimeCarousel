@@ -1481,7 +1481,7 @@ namespace ActionForce.Office
                             if (employeeschedule != null && employeeshift != null)
                             {
                                 DateTime? starttime = employeeschedule.ShiftDateStart;
-                                if (employeeshift.ShiftDateStart > starttime)
+                                if (employeeshift.ShiftDateStart?.AddMinutes(-15) > starttime)
                                 {
                                     starttime = employeeshift.ShiftDateStart;
                                 }
@@ -1815,7 +1815,7 @@ namespace ActionForce.Office
                         if (employeeschedule != null && employeeshift != null)
                         {
                             DateTime? starttime = employeeschedule.ShiftDateStart;
-                            if (employeeshift.ShiftDateStart > starttime)
+                            if (employeeshift.ShiftDateStart?.AddMinutes(-15) > starttime)
                             {
                                 starttime = employeeshift.ShiftDateStart;
                             }

@@ -147,6 +147,7 @@
     <Content Include="assets\img\yazar-kasa-icon.svg" />
     <Content Include="assets\js\aos-2.3.1.min.js" />
     <Content Include="assets\js\bootstrap.js" />
+    <Content Include="assets\js\confirm.js" />
     <Content Include="assets\js\formatter.js" />
     <Content Include="assets\js\global.js" />
     <Content Include="assets\js\intlTelInput.js" />
@@ -193,6 +194,7 @@
     <Content Include="assets\plugins\typewriter\typewriter.js" />
     <Content Include="assets\plugins\typewriter\typewriterApp.js" />
     <Content Include="assets\scss\aos-2.3.1.min.css" />
+    <Content Include="assets\scss\confirm.css" />
     <Content Include="assets\scss\documentation.css" />
     <Content Include="assets\scss\global.css" />
     <Content Include="assets\scss\slick.css" />

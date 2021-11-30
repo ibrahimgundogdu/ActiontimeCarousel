@@ -74,7 +74,7 @@
                                     <input type="text" name="DocumentNumber" class="form-control" placeholder="Gider Pusulası Evrak No" value="@(Model.ExpenseSlip != null ? Model.ExpenseSlip.DocumentNumber : "")" required>
                                 </div>
                                 <div class="form-group">
-                                    <input type="date" name="DocumentDate" class="form-control" placeholder="Evrak Tarihi" value="@(Model.ExpenseSlip != null ? Model.ExpenseSlip.DocumentDate?.ToString("yyyy-MM-dd") :  DateTime.Now.ToString("yyyy-MM-dd"))" required>
+                                    <input type="date" name="DocumentDate" class="form-control" placeholder="Evrak Tarihi" value="@(Model.ExpenseSlip != null ? Model.ExpenseSlip.DocumentDate?.ToString("yyyy-MM-dd") :  Model.TicketSaleSummary.Date?.ToString("yyyy-MM-dd"))" required>
                                 </div>
 
                                 <div class="row">

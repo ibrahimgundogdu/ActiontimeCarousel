@@ -123,6 +123,7 @@ namespace ActionForce.Office.Controllers
 
             if (model.Filters?.LocationID != null)
             {
+
                 model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
                 model.Filters.Date = model.Filters.Date != null ? model.Filters.Date : model.CurrentLocation.LocalDate;
                 model.TicketSaleSummary = Db.VTicketSaleAllSummary.Where(x => x.LocationID == model.Filters.LocationID && x.Date == model.Filters.Date).ToList();
@@ -131,6 +132,7 @@ namespace ActionForce.Office.Controllers
                 model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => saleIds.Contains(x.SaleID.Value)).ToList();
                 model.DocumentsAllSummary = Db.VDocumentsAllSummaryUnion.Where(x => x.LocationID == model.Filters.LocationID && x.Date == model.Filters.Date).ToList();
                 model.SaleActionsAllSummary = Db.VSaleActionsSummaryUnion.Where(x => x.LocationID == model.Filters.LocationID && x.ProcessDate == model.Filters.Date).ToList();
+                model.DocumentExpenseSlips = Db.VDocumentExpenseSlip.Where(x=> x.LocationID == model.Filters.LocationID && x.DocumentDate == model.Filters.Date && x.IsActive == true).ToList();
 
             }
             else

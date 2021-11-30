@@ -88,8 +88,6 @@ namespace ActionForce.PosLocation.Controllers
                 Duration = x.ShiftDuration
             }).FirstOrDefault();
 
-
-
             model.TicketSaleRowSummary = Db.VTicketSaleSaleRowSummary.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == ResultDate).ToList();
 
             List<int> priceCategorieIds = model.TicketSaleRowSummary.Select(x => x.PriceCategoryID.Value).Distinct().ToList();
@@ -99,14 +97,16 @@ namespace ActionForce.PosLocation.Controllers
             model.Prices.AddRange(Db.VPrice.Where(x => priceIds.Contains(x.ID)).ToList());
             model.Prices = model.Prices.Distinct().ToList();
 
-            int[] cashtypes = new int[] { 10, 21, 24, 28 }.ToArray();
-            int[] cardtypes = new int[] { 1, 3, 5 }.ToArray();
+            int[] cashtypes = new int[] { 10, 21, 24, 28, 41 }.ToArray();
+            int[] cardtypes = new int[] { 1, 3, 5, 9 }.ToArray();
 
             model.TicketSalePaymentSummary = Db.VTicketSalePaymentSummary.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == ResultDate).ToList();
             model.CashActions = Db.CashActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ProcessDate == ResultDate && cashtypes.Contains(x.CashActionTypeID.Value)).ToList();
             model.BankActions = Db.BankActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.ProcessDate == ResultDate && cardtypes.Contains(x.BankActionTypeID.Value)).ToList();
+            model.ExpenseSlips = Db.VDocumentExpenseSlip.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.DocumentDate == ResultDate && x.IsActive == true).ToList();
 
             return View(model);
+
         }
 
 

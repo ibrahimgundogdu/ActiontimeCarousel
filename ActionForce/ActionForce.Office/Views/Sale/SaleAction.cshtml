@@ -91,6 +91,7 @@
                             var documents = Model.DocumentsAllSummary.Where(x => x.ReferenceID == item.ID).ToList();
                             var uids = documents.Select(x => x.UID).ToList();
                             var actions = Model.SaleActionsAllSummary.Where(x => uids.Contains(x.ProcessUID)).ToList();
+                            var refunds = Model.DocumentExpenseSlips.Where(x => x.SaleID == item.ID).ToList();
 
 
                             <tr>
@@ -98,8 +99,8 @@
                                     <a href="@("/Sale/Detail/" + @item.UID)">@item.OrderNumber</a>
                                 </td>
                                 <td class="tx-sm-13 @(item.PosStatusID == 3 ? "font-weight-bold":"")">@item.PosStatusName</td>
-                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Quantity)</td>
-                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Total.ToString("N2")) @(item.Sign)</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Quantity) @(refunds != null && refunds.Count > 0 ? Html.Raw( "<br>"+ refunds.Count().ToString()) : Html.Raw(""))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(item.Total.ToString("N2")) @(item.Sign)  @(refunds != null && refunds.Count > 0 ? Html.Raw("<br> -" + refunds.Sum(x=> x.Amount)?.ToString("N2") +" "+item.Sign) : Html.Raw(""))</td>
 
                                 <td class="tx-sm-13">@(item.IsSendPosTerminal == true ? "Ingenico":"Manuel")</td>
                                 <td class="tx-sm-13 text-right">@(item.RecordDate?.ToString(@"T"))</td>

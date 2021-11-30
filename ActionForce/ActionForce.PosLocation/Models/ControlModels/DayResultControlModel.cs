@@ -37,5 +37,7 @@ namespace ActionForce.PosLocation
         public List<EmployeeSalary> EmployeeSalaries { get; set; }
 
         public bool IsSuccess { get; set; } = true;
+
+        public List<VDocumentExpenseSlip> ExpenseSlips { get; set; }
     }
 }

@@ -15,6 +15,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/assets/scss/global.css">
+    <link rel="stylesheet" href="/assets/scss/confirm.css" />
 </head>
 <body>
     <div class="main">
@@ -181,10 +182,13 @@
                                         <div class="form-group">
                                             <button type="Submit" class="btn btn-primary">GÜNCELLE</button>
                                         </div>
+                                        @if (Model.TicketSale.PosStatusID == 3 && Model.TicketSaleRow.StatusID == 2)
+                                        {
+                                            <div class="form-group">
+                                                <a href="javascript:;" onclick="RowRefund()" class="btn btn-danger btn-block">İADE ET</a>
+                                            </div>
+                                        }
 
-                                        <div class="form-group">
-                                            <a href="/Sales/Refund/@(Model.TicketSale.ID)?RowID=@(Model.TicketSaleRow.ID)" class="btn btn-danger">İADE ET</a>
-                                        </div>
                                     </div>
                                 }
 
@@ -225,6 +229,38 @@
     </div><!-- main -->
     <script src="/assets/js/jquery-3.5.1.min.js"></script>
     <script src="/assets/js/global.js"></script>
+    <script src="/assets/js/confirm.js"></script>
+
+    <script type="text/javascript">
+
+        function RowRefund() {
+
+            $.confirm({
+                animation: 'zoom',
+                closeAnimation: 'scale',
+                title: 'Onaylama',
+                content: 'Bu Biletin tahsilatını iade etmek istediğinize emin misiniz?',
+                buttons: {
+                    succes: {
+                        text: 'EVET',
+                        btnClass: 'btn-yes',
+                        action: function () {
+                            window.location.href = "/Sales/Refund/@(Model.TicketSale.ID)?RowID=@(Model.TicketSaleRow.ID)";
+                        }
+                    },
+                    danger: {
+                        text: 'HAYIR',
+                        btnClass: 'btn-no',
+                        action: function () {
+
+                        }
+                    },
+                }
+            });
+        };
+
+    </script>
+
     <script>
         $(function () {
             const open = 'open';
