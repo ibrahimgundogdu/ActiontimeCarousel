@@ -92,6 +92,7 @@
                             var uids = documents.Select(x => x.UID).ToList();
                             var actions = Model.SaleActionsAllSummary.Where(x => uids.Contains(x.ProcessUID)).ToList();
                             var refunds = Model.DocumentExpenseSlips.Where(x => x.SaleID == item.ID).ToList();
+                            var rows = Model.TicketSaleSaleRows.Where(x => x.SaleID == item.ID).ToList();
 
 
                             <tr>
@@ -112,8 +113,8 @@
                                             @foreach (var payment in payments)
                                             {
                                                 <tr>
-                                                    <td class="tx-sm-13" style="width:30%;">@(payment.PaymentTypeName)</td>
-                                                    <td class="tx-sm-13 text-right font-weight-bold" style="width:30%;">@(payment.PaymentAmount?.ToString("N2")) @(payment.Sign) </td>
+                                                    <td class="tx-sm-13" style="width:30%;">@(payment.PaymentTypeName.ToUpper())  @(refunds != null && refunds.Count == 1 ? Html.Raw("<br>" + refunds.FirstOrDefault()?.PayMethodName) : Html.Raw(""))</td>
+                                                    <td class="tx-sm-13 text-right font-weight-bold" style="width:30%;">@(payment.PaymentAmount?.ToString("N2")) @(payment.Sign)  @(refunds != null && refunds.Count > 0 ? Html.Raw("<br> -" + refunds.Sum(x=> x.Amount)?.ToString("N2") +" "+item.Sign) : Html.Raw(""))</td>
                                                     <td class="tx-sm-13" style="width:20%;">@(payment.FromPosTerminal == true ? "Ingenico":"Manuel")</td>
                                                     <td class="tx-sm-13 text-right">@(payment.PaymentTime?.ToString("T"))</td>
                                                 </tr>
@@ -147,7 +148,7 @@
                                     @if (actions != null)
                                     {
                                         <table class="table table-borderless m-0 p-0">
-                                            @foreach (var action in actions)
+                                            @foreach (var action in actions.OrderBy(x=> x.ActionTypeID).ToList())
                                             {
                                                 <tr>
                                                     <td class="tx-sm-13" style="width:30%;">@(action.DocumentNumber)</td>
@@ -170,7 +171,7 @@
                             <td class="bd-l"></td>
                             <td></td>
                             <td class="bd-l">Nakit</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.TicketSalePosPaymentSummary.Where(x=> x.PaymentType == 1 && x.PosStatusID == 3).Sum(x=> x.PaymentAmount)?.ToString("N2")) @(sign)</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(((Model.TicketSalePosPaymentSummary.Where(x=> x.PaymentType == 1 && x.PosStatusID == 3).Sum(x=> x.PaymentAmount) ?? 0) - (Model.DocumentExpenseSlips.Where(x=> x.PayMethodID == 1 && x.PosStatusID == 3).Sum(x=> x.Amount) ?? 0)).ToString("N2") ) @(sign)</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -178,7 +179,7 @@
                             <td></td>
                             <td></td>
                             <td class="bd-l">Nakit</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SaleActionsAllSummary.Where(x=> x.ActionTypeID == 24 || x.ActionTypeID == 28).Sum(x=> x.Amount)?.ToString("N2")) @(sign)</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SaleActionsAllSummary.Where(x=> x.ActionTypeID == 24 || x.ActionTypeID == 28 || x.ActionTypeID == 41).Sum(x=> x.Amount)?.ToString("N2")) @(sign)</td>
                         </tr>
                         <tr>
                             <td></td>
@@ -188,7 +189,7 @@
                             <td class="bd-l"></td>
                             <td></td>
                             <td class="bd-l">Banka Kartı</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.TicketSalePosPaymentSummary.Where(x=> x.PaymentType == 4 && x.PosStatusID == 3).Sum(x=> x.PaymentAmount)?.ToString("N2")) @(sign)</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(((Model.TicketSalePosPaymentSummary.Where(x=> x.PaymentType == 4 && x.PosStatusID == 3).Sum(x=> x.PaymentAmount) ?? 0) - (Model.DocumentExpenseSlips.Where(x=> x.PayMethodID == 2 && x.PosStatusID == 3).Sum(x=> x.Amount) ?? 0)).ToString("N2") ) @(sign)</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -196,17 +197,17 @@
                             <td></td>
                             <td></td>
                             <td class="bd-l">Banka Kartı</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SaleActionsAllSummary.Where(x=> x.ActionTypeID == 1 || x.ActionTypeID == 5).Sum(x=> x.Amount)?.ToString("N2")) @(sign)</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SaleActionsAllSummary.Where(x=> x.ActionTypeID == 1 || x.ActionTypeID == 5 || x.ActionTypeID == 9).Sum(x=> x.Amount)?.ToString("N2")) @(sign)</td>
                         </tr>
                         <tr>
                             <td></td>
                             <td></td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold bd-l">@(Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.Quantity))</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.Total).ToString("N2")) @(sign)</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold bd-l">@(Model.TicketSaleSaleRows.Where(x=> (x.StatusID == 3 || x.StatusID == 2) && x.PosStatusID == 3).Sum(x=> x.Quantity))</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.Total) - Model.TicketSaleSaleRows.Where(x => x.StatusID == 5 && x.PosStatusID == 3).Sum(x => x.Total) ?? 0).ToString("N2")) @(sign)</td>
                             <td class="bd-l"></td>
                             <td></td>
                             <td class="bd-l">Toplam</td>
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.TicketSalePosPaymentSummary.Where(x=> x.PosStatusID == 3).Sum(x=> x.PaymentAmount)?.ToString("N2")) @(sign)</td>
+                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@((   (Model.TicketSalePosPaymentSummary.Where(x=> x.PosStatusID == 3).Sum(x=> x.PaymentAmount) ?? 0 ) - (Model.TicketSaleSaleRows.Where(x => x.StatusID == 5 && x.PosStatusID == 3).Sum(x => x.Total) ?? 0)).ToString("N2")) @(sign)</td>
                             <td></td>
                             <td></td>
                             <td></td>

@@ -498,6 +498,9 @@ namespace ActionForce.Office
         public string Address { get; set; }
         public string PostCode { get; set; }
 
+        public string IBAN { get; set; }
+        public int BankID { get; set; }
+
     }
     public class NewEmployeeLocation
     {

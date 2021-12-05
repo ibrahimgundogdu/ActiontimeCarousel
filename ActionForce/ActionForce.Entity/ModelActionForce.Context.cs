@@ -334,8 +334,6 @@ namespace ActionForce.Entity
         public virtual DbSet<VTicketSalePaymentSummary> VTicketSalePaymentSummary { get; set; }
         public virtual DbSet<VDocumentsAllSummaryUnion> VDocumentsAllSummaryUnion { get; set; }
         public virtual DbSet<VSaleActionsSummaryUnion> VSaleActionsSummaryUnion { get; set; }
-        public virtual DbSet<Card> Card { get; set; }
-        public virtual DbSet<CardActions> CardActions { get; set; }
         public virtual DbSet<CardActionType> CardActionType { get; set; }
         public virtual DbSet<CardCreditOption> CardCreditOption { get; set; }
         public virtual DbSet<CardNumber> CardNumber { get; set; }
@@ -345,6 +343,8 @@ namespace ActionForce.Entity
         public virtual DbSet<CustomerCard> CustomerCard { get; set; }
         public virtual DbSet<VTicketSaleAllSummary> VTicketSaleAllSummary { get; set; }
         public virtual DbSet<VDocumentExpenseSlip> VDocumentExpenseSlip { get; set; }
+        public virtual DbSet<Card> Card { get; set; }
+        public virtual DbSet<CardActions> CardActions { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

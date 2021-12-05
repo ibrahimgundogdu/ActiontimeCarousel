@@ -176,19 +176,21 @@
                                 <th>AÇIKLAMA</th>
                                 <th>KAYIT</th>
                                 <th></th>
+                                <th></th>
                             </tr>
                             @foreach (var item in Model.ExpenseSlips)
                             {
-                                <tr>
-                                    <td style="font-weight:500;"><a href="/Sales/RefundDetail/@(item.ID)" class="btn btn-light" style="font-weight: 500; color: darkblue !important;">@(item.DocumentNumber)</a></td>
-                                    <td>@(item.DocumentDate?.ToShortDateString())</td>
-                                    <td style="font-weight:500; text-align:right;">@(item.Amount?.ToString("N2")) @(item.Sign)</td>
-                                    <td style="text-align:left;">@(item.PayMethodName)</td>
-                                    <td>@(item.Description)</td>
-                                    <td style="text-align:right;"><a href="/Sales/RefundDetail/@(item.ID)" class="btn btn-light" style="font-weight:500; color:darkblue !important;">@(item.RecordDate)</a></td>
-                                    <td style="text-align:right;"><a href="/Sales/RemoveRefund/@(item.ID)" class="btn btn-light" style="font-weight:500; color:darkred !important;">SİL</a></td>
-
-                                </tr>
+                        <tr>
+                            <td style="font-weight:500;"><a href="/Sales/RefundDetail/@(item.ID)" class="btn btn-light" style="font-weight: 500; color: darkblue !important;">@(item.DocumentNumber)</a></td>
+                            <td>@(item.DocumentDate?.ToShortDateString())</td>
+                            <td style="font-weight:500; text-align:right;">@(item.Amount?.ToString("N2")) @(item.Sign)</td>
+                            <td style="text-align:left;">@(item.PayMethodName)</td>
+                            <td>@(item.Description)</td>
+                            <td style="text-align:right;"><a href="/Sales/RefundDetail/@(item.ID)" class="btn btn-light" style="font-weight:500; color:darkblue !important;">@(item.RecordDate)</a></td>
+                            <td style="text-align:right;"><a href="/Sales/RemoveRefund/@(item.ID)" class="btn btn-light" style="font-weight:500; color:darkred !important;">SİL</a></td>
+                            <td style="text-align:right;"><a href="/Sales/CheckRefund/@(item.ID)?oid=@(Model.TicketSaleSummary.ID)" class="btn btn-light" style="font-weight:500; color:darkred !important;">KONTROL</a></td>
+                            
+                        </tr>
                             }
                         </table>
 

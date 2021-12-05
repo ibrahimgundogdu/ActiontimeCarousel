@@ -63,7 +63,7 @@
                     <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
                         <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">@($"{Model.CurrentLocation.SortBy} {Model.CurrentDayResult.LocationFullName}" )</h6>
                         <nav class="nav">
-                            <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CurrentDate?.DateKey.ToShortDateString())</span></a>
+                            <a href="" class="link-03 mg-l-10"><span class="d-none d-sm-inline">@(Model.CurrentDate?.DateKey.ToLongDateString())</span></a>
                         </nav>
                     </div><!-- card-header -->
                     <div class="card-body pd-r-10 pd-l-10 pd-t-0">
@@ -807,7 +807,8 @@
                                                 <a class="link-03 tx-12" id="Loading" style="display:none;">
                                                     Yükleniyor... &nbsp;&nbsp;
                                                 </a>
-                                                <a href="/Result/RecalculateSalary?LocationID=@(Model.CurrentLocation.LocationID)&Date=@(Model.CurrentDate.DateKey.ToString("yyyy-MM-dd"))&UID=@(Model.CurrentDayResult.UID.Value.ToString())" class="link-03 lh-0"><i class="icon ion-md-refresh"></i></a>
+                                                <a href="/Result/RecalculateSalary?LocationID=@(Model.CurrentLocation.LocationID)&Date=@(Model.CurrentDate.DateKey.ToString("yyyy-MM-dd"))&UID=@(Model.CurrentDayResult.UID.Value.ToString())" class="text-primary lh-0 "><i data-feather="refresh-ccw"></i></a>
+                                               
                                                 @*<a href="" class="link-03 lh-0 mg-l-10"><i class="icon ion-md-more"></i></a>*@
                                             </div>
                                         </div>
@@ -816,7 +817,7 @@
                                                 <thead class="bg-gray-100">
                                                     <tr>
                                                         <th></th>
-                                                        <th colspan="5" class=" bd-l text-center font-weight-bold">(8) Lokasyon Maaş Hakediş Hesabı</th>
+                                                        <th colspan="4" class=" bd-l text-center font-weight-bold">(8) Lokasyon Maaş Hakediş Hesabı</th>
                                                         <th colspan="3" class=" bd-l text-center font-weight-bold">(9) Maaş Avansı Ödeme</th>
                                                     </tr>
                                                     <tr>
@@ -826,7 +827,7 @@
                                                         <th class="text-right"><span>@(Model.CurrentLocation.Currency)/Saat</span></th>
                                                         <th class="text-right"><span>Hakediş (@(Model.CurrentLocation.Currency))</span></th>
                                                         <th class="text-center">Açıklama</th>
-                                                        <th></th>
+                                                       
 
                                                         <th class="text-right bd-l"><span>Ödeme (@(Model.CurrentLocation.Currency))</span></th>
                                                         <th class="text-center">Açıklama</th>
@@ -861,11 +862,7 @@
                                                             <td class="table-light" style="padding:1px !important;">
                                                                 <input type="text" id="S8SDE@(emp)" class="form-control" autocomplete="off" placeholder="" value="@(salary.Description)" />
                                                             </td>
-                                                            <td class="text-center" style="width:50px; padding:1px !important;">
-                                                                <a href="#" class="text-primary" onclick="return confirm('Eklemek istediğinize emin misiniz ?') ? AddSalaryEarn(@Model.CurrentDayResult.ID, @emp):false;">
-                                                                    <i data-feather="refresh-ccw"></i>
-                                                                </a>
-                                                            </td>
+                                           
                                                             <td class="bd-l" style="width:120px; padding:1px !important;">
                                                                 <input type="text" id="S9PAMOUNT@(emp)" class="form-control money text-right font-weight-bold text-danger" autocomplete="off" placeholder="0,00" />
                                                             </td>

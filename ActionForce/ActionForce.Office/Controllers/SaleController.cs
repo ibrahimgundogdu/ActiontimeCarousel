@@ -41,6 +41,9 @@ namespace ActionForce.Office.Controllers
                 model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
                 model.Filters.Date = model.Filters.Date != null ? model.Filters.Date : model.CurrentLocation.LocalDate;
                 model.TicketSaleSummary = Db.VTicketSaleAllSummary.Where(x => x.LocationID == model.Filters.LocationID && x.Date == model.Filters.Date).ToList();
+                List<long> saleIds = model.TicketSaleSummary.Select(x => x.ID).ToList();
+                model.TicketSaleSaleRows = Db.VTicketSaleSaleRowSummary.Where(x => saleIds.Contains(x.SaleID)).ToList();
+                model.DocumentExpenseSlips = Db.VDocumentExpenseSlip.Where(x => x.LocationID == model.Filters.LocationID && x.DocumentDate == model.Filters.Date && x.IsActive == true).ToList();
             }
             else
             {
@@ -130,6 +133,7 @@ namespace ActionForce.Office.Controllers
                 List<long> saleIds = model.TicketSaleSummary.Select(x => x.ID).ToList();
 
                 model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => saleIds.Contains(x.SaleID.Value)).ToList();
+                model.TicketSaleSaleRows = Db.VTicketSaleSaleRowSummary.Where(x => saleIds.Contains(x.SaleID)).ToList();
                 model.DocumentsAllSummary = Db.VDocumentsAllSummaryUnion.Where(x => x.LocationID == model.Filters.LocationID && x.Date == model.Filters.Date).ToList();
                 model.SaleActionsAllSummary = Db.VSaleActionsSummaryUnion.Where(x => x.LocationID == model.Filters.LocationID && x.ProcessDate == model.Filters.Date).ToList();
                 model.DocumentExpenseSlips = Db.VDocumentExpenseSlip.Where(x=> x.LocationID == model.Filters.LocationID && x.DocumentDate == model.Filters.Date && x.IsActive == true).ToList();
@@ -240,8 +244,39 @@ namespace ActionForce.Office.Controllers
 
             return RedirectToAction("Detail", new { id = id.ToString() });
         }
-        
 
+        [AllowAnonymous]
+        public ActionResult CheckRefund(Guid? id, Guid? uid)
+        {
+            if (id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            SaleControlModel model = new SaleControlModel();
+            model.Result = new Result();
+
+            var refund = Db.DocumentExpenseSlip.FirstOrDefault(x => x.UID == id);
+
+            if (refund != null)
+            {
+
+                Db.ExpenseSlipCheck(refund.ID);
+
+                model.Result.IsSuccess = true;
+                model.Result.Message = $"{refund.ID} ID'li iade kontrol edildi.";
+
+                TempData["Result"] = model.Result;
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = $"İade Bulunamadı.";
+                TempData["Result"] = model.Result;
+            }
+
+            return RedirectToAction("Detail", new { id = uid.ToString() });
+        }
 
         #region Price
 

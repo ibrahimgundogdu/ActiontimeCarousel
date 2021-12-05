@@ -19,9 +19,8 @@ namespace ActionForce.Entity
         public Nullable<long> CardID { get; set; }
         public Nullable<int> LocationID { get; set; }
         public Nullable<int> CustomerID { get; set; }
-        public Nullable<long> OrderID { get; set; }
-        public Nullable<long> OrderRowID { get; set; }
-        public Nullable<System.Guid> OrderRowUID { get; set; }
+        public Nullable<long> ProcessID { get; set; }
+        public Nullable<System.Guid> ProcessUID { get; set; }
         public Nullable<short> ActionTypeID { get; set; }
         public string ActionTypeName { get; set; }
         public Nullable<System.DateTime> ActionDate { get; set; }

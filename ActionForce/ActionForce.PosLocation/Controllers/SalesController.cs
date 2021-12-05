@@ -536,6 +536,26 @@ namespace ActionForce.PosLocation.Controllers
             return View(model);
         }
 
+        public ActionResult CheckRefund(long? id, long? oid)
+        {
+            if (id <= 0 || id == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            SalesControlModel model = new SalesControlModel();
+            model.Authentication = this.AuthenticationData;
+            try
+            {
+                Db.ExpenseSlipCheck(id);
+            }
+            catch (Exception)
+            {
+            }
+
+            return RedirectToAction("Detail", new { id = oid });
+        }
+
         [HttpPost]
         public ActionResult CheckConfirm(ConfirmFormModel form)
         {

@@ -30,7 +30,7 @@ namespace ActionForce.Entity
         public Nullable<int> Stage { get; set; }
         public string RoleName { get; set; }
         public Nullable<int> RoleLevel { get; set; }
-        public Nullable<int> OurCompanyID { get; set; }
+        public int OurCompanyID { get; set; }
         public string Description { get; set; }
         public Nullable<bool> IsTemp { get; set; }
         public Nullable<bool> IsActive { get; set; }
@@ -46,5 +46,7 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> DateEnd { get; set; }
         public Nullable<int> StatusID { get; set; }
         public Nullable<System.Guid> EmployeeUID { get; set; }
+        public string IBAN { get; set; }
+        public Nullable<int> BankID { get; set; }
     }
 }

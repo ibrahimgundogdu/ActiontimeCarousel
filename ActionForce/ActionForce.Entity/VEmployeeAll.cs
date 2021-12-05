@@ -72,5 +72,7 @@ namespace ActionForce.Entity
         public Nullable<int> State { get; set; }
         public Nullable<int> City { get; set; }
         public string PostCode { get; set; }
+        public string IBAN { get; set; }
+        public Nullable<int> BankID { get; set; }
     }
 }

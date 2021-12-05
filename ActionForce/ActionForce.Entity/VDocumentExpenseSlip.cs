@@ -46,5 +46,7 @@ namespace ActionForce.Entity
         public string Sign { get; set; }
         public Nullable<long> SaleID { get; set; }
         public Nullable<long> SaleRowID { get; set; }
+        public Nullable<int> PosStatusID { get; set; }
+        public string FullName { get; set; }
     }
 }

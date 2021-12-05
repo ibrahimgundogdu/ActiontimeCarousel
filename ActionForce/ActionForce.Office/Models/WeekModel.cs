@@ -10,5 +10,6 @@ namespace ActionForce.Office
         public int WeekYear { get; set; }
         public int WeekNumber { get; set; }
         public string WeekKey { get; set; }
+        public string Between { get; set; }
     }
 }

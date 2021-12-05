@@ -41,6 +41,8 @@ namespace ActionForce.Office
         public IEnumerable<EmployeeShiftType> ShiftTypeList { get; set; }
         public IEnumerable<EmployeeSalaryCategory> SalaryCategoryList { get; set; }
         public IEnumerable<EmployeeSequence> SequenceList { get; set; }
+        public IEnumerable<Bank> BankList { get; set; }
+        public Bank Bank { get; set; }
 
 
         public IEnumerable<VEmployeeCashActions> CashAction { get; set; }

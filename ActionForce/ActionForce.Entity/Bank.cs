@@ -27,6 +27,8 @@ namespace ActionForce.Entity
         public Nullable<int> OurCompanyID { get; set; }
         public string SortBy { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public string ShortName { get; set; }
+        public Nullable<bool> Individual { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<BankAccount> BankAccount { get; set; }

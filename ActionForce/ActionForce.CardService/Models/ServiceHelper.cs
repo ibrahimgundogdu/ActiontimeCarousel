@@ -149,8 +149,8 @@ namespace ActionForce.CardService
 
                     // kart hereketi eklenir
 
-                    var caParameters = new { OurCompanyID = 2, CardID = card.ID, LocationID = cardReader.LocationID, ActionTypeID = 2, ActionDate = model.ProcessDate, Credit = model.RidePrice };
-                    var caSql = "SELECT TOP (1) * FROM [dbo].[CardActions] Where [OurCompanyID] = @OurCompanyID and [CardID] = @CardID and [LocationID] = @LocationID and [ActionTypeID] = @ActionTypeID and [ActionDate] = @ActionDate and [Credit] = @Credit";
+                    var caParameters = new { OurCompanyID = 2, CardID = card.ID, LocationID = cardReader.LocationID, ActionTypeID = 2, ActionDate = model.ProcessDate, CreditSpend = model.RidePrice };
+                    var caSql = "SELECT TOP (1) * FROM [dbo].[CardActions] Where [OurCompanyID] = @OurCompanyID and [CardID] = @CardID and [LocationID] = @LocationID and [ActionTypeID] = @ActionTypeID and [ActionDate] = @ActionDate and [CreditSpend] = @CreditSpend";
                     var cardAction = connection.QueryFirstOrDefault<CardAction>(caSql, caParameters);
 
                     if (cardAction == null)
@@ -238,6 +238,7 @@ namespace ActionForce.CardService
                         connection.Execute(isql, iparameters);
 
                         cardReader = GetCardReader(guid);
+
                     }
 
 
@@ -260,11 +261,10 @@ namespace ActionForce.CardService
                             Currency = "TRL",
                             CardStatusID = 1,
                             RecordDate = now,
-                            UID = cguid,
-                            EmployeeID = model.EmployeeID
+                            UID = cguid
                         };
 
-                        var csql = "INSERT INTO [dbo].[Card] ([OurCompanyID],[CardTypeID],[CardNumber],[ExpireDate],[Credit],[Currency],[CardStatusID],[RecordDate],[ActivateDate],[UID],[EmployeeID]) VALUES( @OurCompanyID, @CardTypeID, @CardNumber, @ExpireDate, @Credit, @Currency, @CardStatusID, @RecordDate, null, @UID, @EmployeeID)";
+                        var csql = "INSERT INTO [dbo].[Card] ([OurCompanyID],[CardTypeID],[CardNumber],[ExpireDate],[Credit],[Currency],[CardStatusID],[RecordDate],[ActivateDate],[UID]) VALUES( @OurCompanyID, @CardTypeID, @CardNumber, @ExpireDate, @Credit, @Currency, @CardStatusID, @RecordDate, null, @UID)";
 
                         connection.Execute(csql, cparameters);
 
@@ -274,35 +274,188 @@ namespace ActionForce.CardService
 
                     if (cardReader.CardReaderTypeID == 2) // part set et
                     {
+                        var emplyeeparameters = new {CardNumber = model.CardNumber};
+                        var emplyeesql = "SELECT TOP (1) * FROM [dbo].[EmployeeCard] Where [CardNumber] = @CardNumber Order By [RecordDate] desc";
+                        var cardEmployee = connection.QueryFirstOrDefault<EmployeeCard>(emplyeesql, emplyeeparameters);
 
-                        var ncparameters = new
+                        if (cardEmployee != null && cardEmployee.EmployeeID != null)
                         {
-                            OurCompanyID = 2,
-                            LocationID = cardReader.LocationID,
-                            LocationTypeID = cardReader.LocationTypeID,
-                            LocationPartID = cardReader.LocationPartID,
-                            EmployeeID = card.EmployeeID,
-                            ReadDate = DateTime.UtcNow.AddHours(3)
-                        };
-                        var csql = "INSERT INTO [dbo].[LocationPartEmployee] ([OurCompanyID], [LocationID], [LocationTypeID], [LocationPartID], [EmployeeID], [ReadDate]) VALUES(@OurCompanyID, @LocationID, @LocationTypeID, @LocationPartID, @EmployeeID, @ReadDate)";
-                        connection.Execute(csql, ncparameters);
+                            var ncparameters = new
+                            {
+                                OurCompanyID = 2,
+                                LocationID = cardReader.LocationID,
+                                LocationTypeID = cardReader.LocationTypeID,
+                                LocationPartID = cardReader.LocationPartID,
+                                EmployeeID = cardEmployee.EmployeeID,
+                                ReadDate = DateTime.UtcNow.AddHours(3)
+                            };
+                            var csql = "INSERT INTO [dbo].[LocationPartEmployee] ([OurCompanyID], [LocationID], [LocationTypeID], [LocationPartID], [EmployeeID], [ReadDate]) VALUES(@OurCompanyID, @LocationID, @LocationTypeID, @LocationPartID, @EmployeeID, @ReadDate)";
+                            connection.Execute(csql, ncparameters);
 
-                       
+                            result.IsSuccess = true;
+                            result.Message = "OK";
+
+                        }
+                        else if (cardEmployee != null && (cardEmployee.EmployeeID == null || cardEmployee.EmployeeID  <= 0))
+                        {
+                            result.IsSuccess = false;
+                            result.Message = "NO CRDEM";
+                        }
+                        else if (cardEmployee == null)
+                        {
+                            var ncparameters = new
+                            {
+                                OurCompanyID = 2,
+                                EmployeeID = cardEmployee?.EmployeeID,
+                                CardID = card.ID,
+                                CardTypeID = card.CardTypeID,
+                                CardStatusID = card.CardStatusID,
+                                CardNumber = model.CardNumber,
+                                RecordDate = DateTime.UtcNow.AddHours(3)
+                            };
+                            var csql = "INSERT INTO [dbo].[EmployeeCard] ([OurCompanyID],[EmployeeID],[CardID],[CardTypeID],[CardStatusID],[CardNumber],[RecordDate]) VALUES(@OurCompanyID, @EmployeeID, @CardID, @CardTypeID, @CardStatusID, @CardNumber,@RecordDate)";
+                            connection.Execute(csql, ncparameters);
+
+                            result.IsSuccess = false;
+                            result.Message = "EDIT CRD";
+                        }
+                        else
+                        {
+                            result.IsSuccess = false;
+                            result.Message = "NOTFOUND";
+                        }
 
                     }
                     else if (cardReader.CardReaderTypeID == 3) // mesai set et
                     {
-
+                        result.IsSuccess = true;
+                        result.Message = "OK";
                     }
 
-
                 }
-
-                result.IsSuccess = true;
-                result.Message = "OK";
             }
             catch (Exception ex)
             {
+                result.IsSuccess = false;
+                result.Message = "ERROR";
+            }
+
+            return result;
+        }
+
+
+        public ParameterResult AddCardReaderParameter(CardReaderParameterModel model)
+        {
+            ParameterResult result = new ParameterResult();
+            DateTime now = DateTime.UtcNow.AddHours(3);
+
+            result.IsSuccess = true;
+            result.Message = string.Empty;
+
+            try
+            {
+
+                using (var connection = new SqlConnection(GetConnectionString()))
+                {
+
+
+                    var crParameters = new { Serial = model.SerialNumber, MAC = model.MACAddress };
+                    var crSql = "SELECT TOP (1) * FROM [dbo].[CardReader] Where [SerialNumber] = @Serial and [MACAddress] = @MAC";
+                    var cardReader = connection.QueryFirstOrDefault<CardReader>(crSql, crParameters);
+
+                    if (cardReader == null)
+                    {
+                        var guid = Guid.NewGuid();
+                        var parameters = new
+                        {
+                            OurCompanyID = 2,
+                            LocationID = 0,
+                            LocationTypeID = 0,
+                            LocationPartID = 0,
+                            PartName = "Tanımsız",
+                            PartGroupName = "Tanımsız",
+                            SerialNumber = model.SerialNumber,
+                            MACAddress = model.MACAddress,
+                            CardReaderTypeID = 2,
+                            UID = guid,
+                            StartDate = now.Date,
+                            IsActive = true
+                        };
+                        var isql = "INSERT INTO [dbo].[CardReader] ([OurCompanyID],[LocationID],[LocationTypeID],[LocationPartID],[PartName],[PartGroupName],[SerialNumber],[MACAddress],[CardReaderTypeID],[UID],[StartDate],[IsActive]) VALUES(@OurCompanyID, @LocationID, @LocationTypeID, @LocationPartID,@PartName,@PartGroupName, @SerialNumber, @MACAddress, @CardReaderTypeID, @UID, @StartDate, @IsActive)";
+                        connection.Execute(isql, parameters);
+                        cardReader = GetCardReader(guid);
+                    }
+
+
+                    //Mevcut parametreye bakılır değişen var mı kontrol edilir
+
+                    if (cardReader != null)
+                    {
+                        var rpParameters = new { Serial = model.SerialNumber, MAC = model.MACAddress };
+                        var rpSql = "SELECT TOP (1) * FROM [dbo].[CardReaderParameter] Where [SerialNumber] = @Serial and [MACAddress] = @MAC";
+                        var cardReaderParameter = connection.QueryFirstOrDefault<CardReaderParameter>(rpSql, rpParameters);
+
+
+
+                        if (cardReaderParameter == null)
+                        {
+                            var pparameters = new
+                            {
+                                CardReaderID = cardReader.ID,
+                                SerialNumber = model.SerialNumber,
+                                MACAddress = model.MACAddress,
+                                StartDate = now.Date,
+                                Version = model.Version,
+                                UnitPrice = (decimal)(model.UnitPrice / 100),
+                                MiliSecond = model.MiliSecond,
+                                ReadCount = model.ReadCount,
+                                UnitDuration = model.UnitDuration,
+                                RecordDate = now
+                            };
+
+                            var psql = "INSERT INTO [dbo].[CardReaderParameter] ([CardReaderID],[SerialNumber],[MACAddress],[StartDate],[Version],[UnitPrice],[MiliSecond],[ReadCount],[UnitDuration],[RecordDate]) VALUES(@CardReaderID, @SerialNumber, @MACAddress, @StartDate,@Version,@UnitPrice, @MiliSecond, @ReadCount, @UnitDuration, @RecordDate)";
+                            connection.Execute(psql, pparameters);
+
+                            result.IsAnyChange = false;
+                            result.IsSuccess = true;
+                            result.Message = "OK";
+                        }
+                        else
+                        {
+                            if (cardReaderParameter.Version != model.Version || cardReaderParameter.UnitPrice != model.UnitPrice || cardReaderParameter.MiliSecond != model.MiliSecond || cardReaderParameter.ReadCount != model.ReadCount || cardReaderParameter.UnitDuration != model.UnitDuration)
+                            {
+                                // Mevcudu Gönder Reader i Update et
+
+                                result.IsAnyChange = true;
+                                result.IsSuccess = true;
+                                result.Message = "OK";
+                                result.Version = cardReaderParameter.Version;
+                                result.UnitPrice = cardReaderParameter.UnitPrice*100;
+                                result.MiliSecond = cardReaderParameter.MiliSecond;
+                                result.ReadCount = cardReaderParameter.ReadCount;
+                                result.UnitDuration = cardReaderParameter.UnitDuration;
+                            }
+                            else
+                            {
+                                result.IsAnyChange = false;
+                                result.IsSuccess = true;
+                                result.Message = "OK";
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        result.IsAnyChange = false;
+                        result.IsSuccess = false;
+                        result.Message = "NO CRD";
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
                 result.Message = "ERROR";
             }
 

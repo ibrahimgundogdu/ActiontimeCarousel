@@ -132,7 +132,7 @@
                                 <tr>
                                     <td>Kontrol</td>
                                     <td>
-                                        <a href="@($"/Sale/CheckSale/{Model.TicketSale.UID}")" class="btn btn-xs btn-primary" onclick="return confirm('Kontrol işlemi yapılacak emin misiniz?') ? true : false">Kontrol Et</a>
+                                        <a href="@($"/Sale/CheckSale/{Model.TicketSale.UID}")" class="btn btn-xs btn-primary" onclick="return confirm('Kontrol işlemi yapılacak emin misiniz?') ? true : false">Sipariş Kontrol Et</a>
                                     </td>
                                 </tr>
 
@@ -241,6 +241,7 @@
                                     <th class="text-right">TUTAR</th>
                                     <th>TÜR</th>
                                     <th>AÇIKLAMA</th>
+                                    <th></th>
                                 </tr>
                                 @foreach (var item in Model.DocumentExpenseSlips)
                                 {
@@ -250,6 +251,9 @@
                                         <td class="font-weight-bold text-right">@(item.Amount?.ToString("N2")) @(item.Sign)</td>
                                         <td>@(item.PayMethodName)</td>
                                         <td>@(item.Description)</td>
+                                        <td>
+                                            <a href="@($"/Sale/CheckRefund/{item.UID}?uid={Model.CurrentTicketSaleSummary.UID}")" class="btn btn-xs btn-primary" onclick="return confirm('İade için kontrol işlemi yapılacak emin misiniz?') ? true : false">İade Kontrol Et</a>
+                                        </td>
                                     </tr>
                                 }
 

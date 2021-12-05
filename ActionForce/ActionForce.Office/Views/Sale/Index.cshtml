@@ -80,8 +80,10 @@
                     </thead>
                     <tbody>
 
-                        @foreach (var item in Model.TicketSaleSummary.OrderBy(x=> x.RecordDate))
+                        @foreach (var item in Model.TicketSaleSummary.OrderBy(x => x.RecordDate))
                         {
+                            var refunds = Model.DocumentExpenseSlips.Where(x => x.SaleID == item.ID).ToList();
+
                             <tr style='@(item.IsActive == false ? "color: red" : "")'>
                                 <td class="tx-sm-13 bold">@item.ID</td>
                                 <td class="tx-sm-13 font-weight-bold"><a href="@("/Sale/Detail/" + @item.UID)">@item.OrderNumber</a></td>
@@ -89,7 +91,7 @@
                                 <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)">@(item.Date?.ToShortDateString())</a></td>
                                 <td class="tx-sm-13 @(item.PosStatusID == 3 ? "font-weight-bold":"")">@item.PosStatusName</td>
                                 <td class="tx-sm-13">@(item.Environment)</td>
-                                <td class="tx-sm-13">@(item.Quantity)</td>
+                                <td class="tx-sm-13 text-right">@(item.Quantity)</td>
 
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold  bd-l">@(item.Total.ToString("N2")) @(item.Sign)</td>
                                 <td class="tx-sm-13 text-right bg-primary-light @(item.PaymentAmount != 0 ? "font-weight-bold":"")">@(item.PaymentAmount.ToString("N2")) @(item.Sign)</td>
@@ -102,6 +104,36 @@
                                 <td class="tx-sm-13">@(item.IsActive)</td>
 
                             </tr>
+
+                            if (refunds != null && refunds.Count > 0)
+                            {
+                                foreach (var rf in refunds)
+                                {
+                                    <tr style='@(rf.IsActive == false ? "color: red" : "")'>
+                                        <td class="tx-sm-13 bold">@rf.ID</td>
+                                        <td class="tx-sm-13 font-weight-bold"><a href="@("/Sale/Detail/" + @item.UID)">@(item.OrderNumber)</a></td>
+                                        <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")">@rf.DocumentNumber</a></td>
+                                        <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)">@(rf.DocumentDate?.ToShortDateString())</a></td>
+                                        <td class="tx-sm-13"></td>
+                                        <td class="tx-sm-13"></td>
+                                        <td class="tx-sm-13 text-right">-1</td>
+
+                                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold  bd-l">-@(rf.Amount?.ToString("N2")) @(rf.Sign)</td>
+                                        <td class="tx-sm-13 text-right bg-primary-light @(rf.Amount != 0 ? "font-weight-bold":"")">-@(rf.Amount?.ToString("N2")) @(rf.Sign)</td>
+                                        <td class="tx-sm-13 text-right bg-primary-light">@((0).ToString("N2")) @(rf.Sign)</td>
+
+                                        <td class="tx-sm-13 bd-l">@rf.PayMethodName</td>
+                                        <td class="tx-sm-13"></td>
+                                        <td class="tx-sm-13">@(rf.FullName)</td>
+                                        <td class="tx-sm-13">@(rf.RecordDate)</td>
+                                        <td class="tx-sm-13">@(rf.IsActive)</td>
+
+                                    </tr>
+
+                                }
+
+                            }
+
                         }
                     </tbody>
                     <tfoot>
@@ -112,9 +144,9 @@
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th>@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.Quantity)))</th>
-                            <th class="text-right bg-light bd-l">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID <= 3 && x.IsActive == true).Sum(x=> x.Total)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
-                            <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.PaymentAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
+                            <th class="text-right">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.Quantity) ?? 0) - (Model.TicketSaleSaleRows.Where(x=> x.PosStatusID == 3 && x.StatusID == 5).Sum(x=> x.Quantity))        )</th>
+                            <th class="text-right bg-light bd-l">@(  ((Model.TicketSaleSummary.Where(x=> x.PosStatusID <= 3 && x.IsActive == true).Sum(x=> x.Total)) - (Model.TicketSaleSaleRows.Where(x => x.PosStatusID == 3 && x.StatusID == 5).Sum(x => x.Total) ?? 0)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
+                            <th class="text-right bg-light">@(((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.PaymentAmount)) -(Model.TicketSaleSaleRows.Where(x => x.PosStatusID == 3 && x.StatusID == 5).Sum(x => x.Total) ?? 0)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
                             <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID <= 3 && x.IsActive == true).Sum(x=> x.BalanceAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
                             <th class="bd-l"></th>
                             <th></th>

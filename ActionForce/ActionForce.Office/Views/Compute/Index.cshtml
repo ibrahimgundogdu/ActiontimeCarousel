@@ -52,10 +52,9 @@
 
                                                 <td class="" style="padding:2px !important;">
                                                     <select class="form-control" id="WeekCode">
-                                                        <option value="">Hafta Seçiminiz</option>
-                                                        @foreach (var item in Model.WeekLists)
+                                                        @foreach (var item in Model.WeekLists.OrderByDescending(x=> x.WeekYear).ThenByDescending(x=> x.WeekNumber))
                                                         {
-                                                            <option value="@item.WeekKey">@($"{item.WeekKey}")</option>
+                                                            <option value="@item.WeekKey" @(item.WeekKey == Model.WeekKey ? "selected":"")>@($"{item.WeekKey}. Hafta | {item.Between}")</option>
                                                         }
                                                     </select>
                                                 </td>
@@ -138,6 +137,8 @@
 
         function ComputeSalaryEarns() {
 
+            $("#ComputeSalaryEarnResult").empty();
+
             var locationid = $('#LocationID').val();
             var date = $('#Date').val();
             var weekcode = $('#WeekCode').val();
@@ -158,7 +159,7 @@
                 url: "/Compute/ComputeSalaryEarns",
                 data: data
             }).done(function (d) {
-                //$("#ComputeSalaryEarnResult").html(d);
+                
             });
         }
 

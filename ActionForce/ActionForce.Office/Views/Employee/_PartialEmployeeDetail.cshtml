@@ -61,6 +61,14 @@
             <td>@(Model.Employee.SequenceName)</td>
         </tr>
         <tr>
+            <td>IBAN</td>
+            <td>@(Model.Employee.IBAN)</td>
+        </tr>
+        <tr>
+            <td>IBAN Banka</td>
+            <td>@(Model.Bank?.ShortName)</td>
+        </tr>
+        <tr>
             <td>Açıklama</td>
             <td>@(Model.Employee.Description)</td>
         </tr>

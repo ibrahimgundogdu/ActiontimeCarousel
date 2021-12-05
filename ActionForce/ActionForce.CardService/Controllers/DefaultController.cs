@@ -49,7 +49,7 @@ namespace ActionForce.CardService.Controllers
                 using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
                 {
                     var parameters = new { Message = info, IP = ServiceHelper.GetIPAddress(), Date = DateTime.UtcNow.AddHours(3) };
-                    var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [Module] ) VALUES(@Message,@IP, @Date, 'Default', 'GetPersonelCardInfo', 'String')";
+                    var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [Module] ) VALUES(@Message,@IP, @Date, 'Default', 'GetCardAction', 'String')";
                     connection.Execute(sql, parameters);
                 }
 

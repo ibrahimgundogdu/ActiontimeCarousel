@@ -186,6 +186,7 @@ namespace ActionForce.Office.Controllers
             model.EmployeeShift = model.EmployeeShifts.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.ShiftDate == _date);
             model.EmployeeBreak = model.EmployeeBreaks.FirstOrDefault(x => x.EmployeeID == model.Employee.EmployeeID && x.BreakDurationMinute == null);
 
+            model.Bank = Db.Bank.FirstOrDefault(x => x.ID == model.Employee.BankID);
 
             model.CurrentDateCode = _date.ToString("yyyy-MM-dd");
 
@@ -347,6 +348,8 @@ namespace ActionForce.Office.Controllers
             model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
             model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
             model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.BankList = Db.Bank.Where(x => x.Individual == true && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
 
             model.Employee = Db.VEmployeeAll.FirstOrDefault(x => x.EmployeeUID == id);
             model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Employee" && x.ProcessID == model.Employee.EmployeeID.ToString()).ToList();
@@ -442,8 +445,10 @@ namespace ActionForce.Office.Controllers
                         Country = isEmployee.Country,
                         PostCode = isEmployee.PostCode,
                         State = isEmployee.State,
-                        RoleID = isEmployee.RoleID
-
+                        RoleID = isEmployee.RoleID,
+                        BankID = isEmployee.BankID,
+                        IBAN = isEmployee.IBAN
+                        
                     };
 
                     isEmployee.AreaCategoryID = employee.AreaCategoryID;
@@ -471,6 +476,8 @@ namespace ActionForce.Office.Controllers
                     isEmployee.EMail = employee.EMail;
                     isEmployee.OurCompanyID = employee.OurCompanyID;
                     isEmployee.RoleID = isEmployee.RoleID ?? 1;
+                    isEmployee.IBAN = employee.IBAN;
+                    isEmployee.BankID = employee.BankID;
 
                     isEmployee.Country = employee.Country;
                     isEmployee.State = employee.State;
@@ -1498,6 +1505,7 @@ namespace ActionForce.Office.Controllers
                 model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
                 model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
                 model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
+                model.BankList = Db.Bank.Where(x => x.Individual == true && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
 
                 model.CountryList = Db.Country.Where(x => x.IsActive == true).ToList();
                 int countryid = model.CountryList.FirstOrDefault(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ID;
@@ -1569,6 +1577,8 @@ namespace ActionForce.Office.Controllers
                 empdoc.Address = employee.Address;
                 empdoc.PostCode = employee.PostCode;
                 empdoc.RoleID = 1;
+                empdoc.IBAN = employee.IBAN;
+                empdoc.BankID = employee.BankID;
 
                 empdoc.RecordDate = daterecord;
                 empdoc.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;

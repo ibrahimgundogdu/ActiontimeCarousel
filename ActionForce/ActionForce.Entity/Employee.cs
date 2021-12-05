@@ -64,6 +64,8 @@ namespace ActionForce.Entity
         public Nullable<int> State { get; set; }
         public Nullable<int> City { get; set; }
         public string PostCode { get; set; }
+        public string IBAN { get; set; }
+        public Nullable<int> BankID { get; set; }
     
         public virtual Role Role { get; set; }
         public virtual RoleGroup RoleGroup { get; set; }

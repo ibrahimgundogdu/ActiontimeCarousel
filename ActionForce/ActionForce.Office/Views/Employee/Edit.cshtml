@@ -83,6 +83,7 @@
                                         </div>
                                     </div>
 
+
                                     <div class="form-group row bg-gray-100">
                                         <label for="FullName" class="col-sm-3 col-form-label">Ad Soyad</label>
                                         <div class="col-sm-6">
@@ -91,6 +92,32 @@
                                         <div class="col-sm-3">
                                         </div>
                                     </div>
+
+                                    <div class="form-group row mg-b-5">
+                                        <label for="IBAN" class="col-sm-3 col-form-label">IBAN</label>
+                                        <div class="col-sm-6">
+                                            <input id="IBAN" name="IBAN" type="text" class="form-control" autocomplete="off" placeholder="IBAN" value="@(Model.Employee.IBAN)">
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row mg-b-5">
+                                        <label for="BankID" class="col-sm-3 col-form-label">IBAN Bankası</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" id="BankID" name="BankID">
+                                                <option value="">Seçiminiz</option>
+                                                @foreach (var item in Model.BankList.OrderBy(x => x.ShortName).ToList())
+                                                {
+                                                    <option value="@item.ID" @(item.ID == Model.Employee.BankID ? "selected" : "")>@($"{item.ShortName}")</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+
 
 
                                     <div class="form-group row mg-b-5">
