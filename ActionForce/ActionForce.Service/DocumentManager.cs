@@ -2111,18 +2111,20 @@ namespace ActionForce.Service
                             if (employeeschedule != null && employeeshift != null)
                             {
                                 DateTime? starttime = employeeschedule.ShiftDateStart;
-                                if (employeeshift.ShiftDateStart > starttime)
+
+                                if (employeeshift.ShiftDateStart?.AddMinutes(-15) > starttime)
                                 {
                                     starttime = employeeshift.ShiftDateStart;
                                 }
 
                                 DateTime? finishtime = employeeschedule.ShiftdateEnd;
-                                if (employeeshift.ShiftDateEnd < finishtime)
+
+                                if (employeeshift.ShiftDateEnd?.AddMinutes(10) < finishtime)
                                 {
                                     finishtime = employeeshift.ShiftDateEnd;
                                 }
 
-                                if (finishtime != null && starttime != null)
+                                if (finishtime != null && starttime != null && (finishtime > starttime))
                                 {
                                     duration = (finishtime - starttime).Value;
                                     double? durationminute = (finishtime - starttime).Value.TotalMinutes;

@@ -1487,7 +1487,8 @@ namespace ActionForce.Office
                                 }
 
                                 DateTime? finishtime = employeeschedule.ShiftdateEnd;
-                                if (employeeshift.ShiftDateEnd < finishtime)
+
+                                if (employeeshift.ShiftDateEnd?.AddMinutes(10) < finishtime)
                                 {
                                     finishtime = employeeshift.ShiftDateEnd;
                                 }
@@ -1821,12 +1822,12 @@ namespace ActionForce.Office
                             }
 
                             DateTime? finishtime = employeeschedule.ShiftdateEnd;
-                            if (employeeshift.ShiftDateEnd < finishtime)
+                            if (employeeshift.ShiftDateEnd?.AddMinutes(10) < finishtime)
                             {
                                 finishtime = employeeshift.ShiftDateEnd;
                             }
 
-                            if (finishtime != null && starttime != null)
+                            if (finishtime != null && starttime != null && finishtime > starttime)
                             {
                                 duration = (finishtime - starttime).Value;
                                 double? durationminute = (finishtime - starttime).Value.TotalMinutes;
