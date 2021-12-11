@@ -1,6 +1,6 @@
 ﻿@model ResultControlModel
 @{
-    var typeids = Model.BankActionTypes.Where(x => new[] { "CRDT", "CRDTR", "CRDTC" }.Contains(x.Code)).Select(x => x.ID).ToList();
+    var typeids = Model.BankActionTypes.Where(x => new[] { "CRDT", "CRDTR", "CRDTC","A" }.Contains(x.Code)).Select(x => x.ID).ToList();
 
     double? total = 0;
 }

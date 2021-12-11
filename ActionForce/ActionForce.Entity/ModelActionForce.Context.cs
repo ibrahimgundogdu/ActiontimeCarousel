@@ -96,7 +96,6 @@ namespace ActionForce.Entity
         public virtual DbSet<PrePaidCampaign> PrePaidCampaign { get; set; }
         public virtual DbSet<PrePaidCampaignPrices> PrePaidCampaignPrices { get; set; }
         public virtual DbSet<ProductCategory> ProductCategory { get; set; }
-        public virtual DbSet<ProductType> ProductType { get; set; }
         public virtual DbSet<PromotionBlackOut> PromotionBlackOut { get; set; }
         public virtual DbSet<PromotionLocations> PromotionLocations { get; set; }
         public virtual DbSet<PromotionRule> PromotionRule { get; set; }
@@ -324,7 +323,6 @@ namespace ActionForce.Entity
         public virtual DbSet<VLocationMallMoto> VLocationMallMoto { get; set; }
         public virtual DbSet<CustomerCardStatu> CustomerCardStatu { get; set; }
         public virtual DbSet<LocationWareHouse> LocationWareHouse { get; set; }
-        public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<CustomerActions> CustomerActions { get; set; }
         public virtual DbSet<AddressType> AddressType { get; set; }
         public virtual DbSet<CustomerScorePointActions> CustomerScorePointActions { get; set; }
@@ -334,7 +332,6 @@ namespace ActionForce.Entity
         public virtual DbSet<VTicketSalePaymentSummary> VTicketSalePaymentSummary { get; set; }
         public virtual DbSet<VDocumentsAllSummaryUnion> VDocumentsAllSummaryUnion { get; set; }
         public virtual DbSet<VSaleActionsSummaryUnion> VSaleActionsSummaryUnion { get; set; }
-        public virtual DbSet<CardActionType> CardActionType { get; set; }
         public virtual DbSet<CardCreditOption> CardCreditOption { get; set; }
         public virtual DbSet<CardNumber> CardNumber { get; set; }
         public virtual DbSet<CardStatus> CardStatus { get; set; }
@@ -343,8 +340,22 @@ namespace ActionForce.Entity
         public virtual DbSet<CustomerCard> CustomerCard { get; set; }
         public virtual DbSet<VTicketSaleAllSummary> VTicketSaleAllSummary { get; set; }
         public virtual DbSet<VDocumentExpenseSlip> VDocumentExpenseSlip { get; set; }
+        public virtual DbSet<CardReader> CardReader { get; set; }
+        public virtual DbSet<CardReaderAction> CardReaderAction { get; set; }
+        public virtual DbSet<CardReaderParameter> CardReaderParameter { get; set; }
+        public virtual DbSet<CardReaderType> CardReaderType { get; set; }
+        public virtual DbSet<EmployeeCard> EmployeeCard { get; set; }
+        public virtual DbSet<LocationPartEmployee> LocationPartEmployee { get; set; }
+        public virtual DbSet<LocationProductPriceCategory> LocationProductPriceCategory { get; set; }
+        public virtual DbSet<ProductImges> ProductImges { get; set; }
+        public virtual DbSet<ProductUnit> ProductUnit { get; set; }
         public virtual DbSet<Card> Card { get; set; }
         public virtual DbSet<CardActions> CardActions { get; set; }
+        public virtual DbSet<CardActionType> CardActionType { get; set; }
+        public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<ProductPrice> ProductPrice { get; set; }
+        public virtual DbSet<ProductPriceCategory> ProductPriceCategory { get; set; }
+        public virtual DbSet<VProductPriceLastList> VProductPriceLastList { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -2446,6 +2457,49 @@ namespace ActionForce.Entity
                 new ObjectParameter("IsActive", typeof(bool));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddEditExpenseSlip", slipIDParameter, ourCompanyIDParameter, locationIDParameter, documentDateParameter, documentNumberParameter, customerIDParameter, customerAddressParameter, payMethodIDParameter, amountParameter, currencyParameter, exchangeRateParameter, systemAmountParameter, systemCurrencyParameter, referenceIDParameter, orderRowIDParameter, actionTypeNameParameter, actionTypeIDParameter, descriptionParameter, resultIDParameter, environmentIDParameter, uIDParameter, recordDateParameter, recordEmployeeIDParameter, recordIPParameter, updateDateParameter, updateEmployeeParameter, updateIPParameter, isConfirmedParameter, isActiveParameter);
+        }
+    
+        public virtual ObjectResult<VProductPriceLastList> GetLocationCurrentProductPrices(Nullable<int> locationID)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VProductPriceLastList>("GetLocationCurrentProductPrices", locationIDParameter);
+        }
+    
+        public virtual ObjectResult<VProductPriceLastList> GetLocationCurrentProductPrices(Nullable<int> locationID, MergeOption mergeOption)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VProductPriceLastList>("GetLocationCurrentProductPrices", mergeOption, locationIDParameter);
+        }
+    
+        public virtual int AddCardBasket(Nullable<int> locationID, Nullable<int> employeeID, Nullable<int> priceID, Nullable<int> cardPriceID, Nullable<int> environment)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            var priceIDParameter = priceID.HasValue ?
+                new ObjectParameter("PriceID", priceID) :
+                new ObjectParameter("PriceID", typeof(int));
+    
+            var cardPriceIDParameter = cardPriceID.HasValue ?
+                new ObjectParameter("CardPriceID", cardPriceID) :
+                new ObjectParameter("CardPriceID", typeof(int));
+    
+            var environmentParameter = environment.HasValue ?
+                new ObjectParameter("Environment", environment) :
+                new ObjectParameter("Environment", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddCardBasket", locationIDParameter, employeeIDParameter, priceIDParameter, cardPriceIDParameter, environmentParameter);
         }
     }
 }

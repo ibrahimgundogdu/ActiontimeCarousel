@@ -1,6 +1,6 @@
 ﻿@model ResultControlModel
 @{
-    var typeids = Model.CashActionTypes.Where(x => new[] { "SALE", "SALERETURN" }.Contains(x.Code)).Select(x => x.ID).ToList();
+    var typeids = Model.CashActionTypes.Where(x => new[] { "SALE", "SALERETURN", "OKCEXPENSESLIP" }.Contains(x.Code)).Select(x => x.ID).ToList();
 
     double? totaltrl = 0;
     double? totalusd = 0;

@@ -14,5 +14,6 @@ namespace ActionForce.PosLocation
         public Guid? UID { get; set; }
         public int TimeZone { get; set; }
         public string Currency { get; set; }
+        public bool UseCardSysteme { get; set; } = false;
     }
 }

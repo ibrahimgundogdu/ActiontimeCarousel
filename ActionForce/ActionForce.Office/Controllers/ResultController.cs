@@ -196,8 +196,8 @@ namespace ActionForce.Office.Controllers
                 //model.PriceList = Db.GetLocationPrice(model.DayResult.LocationID, model.DayResult.Date).ToList();
                 model.CheckPriceList = Db.DayResultCheckPrice.Where(x => x.ResultID == model.DayResult.ID).ToList();
                 // cirosu nedir
-                List<int> cashsales = new int[] { 10, 21, 24, 28 }.ToList();
-                List<int> cardsales = new int[] { 1, 3, 5 }.ToList();
+                List<int> cashsales = new int[] { 10, 21, 24, 28, 41 }.ToList();
+                List<int> cardsales = new int[] { 1, 3, 5, 9 }.ToList();
                 model.CashCiro = model.CashActions.Where(x => cashsales.Contains(x.CashActionTypeID.Value) && x.Currency == model.CurrentLocation.Currency).Sum(x => x.Amount);
                 model.CardCiro = model.BankActions.Where(x => cardsales.Contains(x.BankActionTypeID.Value) && x.Currency == model.CurrentLocation.Currency).Sum(x => x.Amount);
 
@@ -1161,8 +1161,8 @@ namespace ActionForce.Office.Controllers
 
             model.CheckPriceList = Db.DayResultCheckPrice.Where(x => x.ResultID == dayresult.ID).ToList();
 
-            List<int> cashsales = new int[] { 10, 21, 24, 28 }.ToList();
-            List<int> cardsales = new int[] { 1, 3, 5 }.ToList();
+            List<int> cashsales = new int[] { 10, 21, 24, 28,41 }.ToList();
+            List<int> cardsales = new int[] { 1, 3, 5, 9 }.ToList();
             model.DayResult = dayresult;
 
             model.CashCiro = Db.VCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date && cashsales.Contains(x.CashActionTypeID.Value) && x.Currency == location.Currency).Sum(x => x.Amount);
@@ -1219,8 +1219,8 @@ namespace ActionForce.Office.Controllers
 
                 model.CheckPriceList = Db.DayResultCheckPrice.Where(x => x.ResultID == checkprice.ResultID).ToList();
 
-                List<int> cashsales = new int[] { 10, 21, 24, 28 }.ToList();
-                List<int> cardsales = new int[] { 1, 3, 5 }.ToList();
+                List<int> cashsales = new int[] { 10, 21, 24, 28,41 }.ToList();
+                List<int> cardsales = new int[] { 1, 3, 5,9 }.ToList();
                 model.DayResult = dayresult;
 
                 model.CashCiro = Db.VCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date && cashsales.Contains(x.CashActionTypeID.Value) && x.Currency == location.Currency).Sum(x => x.Amount);
@@ -1249,8 +1249,8 @@ namespace ActionForce.Office.Controllers
 
                 model.CheckPriceList = Db.DayResultCheckPrice.Where(x => x.ResultID == id).ToList();
 
-                List<int> cashsales = new int[] { 10, 21, 24, 28 }.ToList();
-                List<int> cardsales = new int[] { 1, 3, 5 }.ToList();
+                List<int> cashsales = new int[] { 10, 21, 24, 28,41 }.ToList();
+                List<int> cardsales = new int[] { 1, 3, 5,9 }.ToList();
 
                 model.DayResult = dayresult;
                 model.CashCiro = Db.VCashActions.Where(x => x.LocationID == model.DayResult.LocationID && x.ActionDate == model.DayResult.Date && cashsales.Contains(x.CashActionTypeID.Value) && x.Currency == location.Currency).Sum(x => x.Amount);

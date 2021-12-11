@@ -21,8 +21,6 @@ namespace ActionForce.Entity
         public string ItemCode { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
         public Nullable<int> CategoryID { get; set; }
-        public Nullable<int> ModelID { get; set; }
-        public Nullable<int> ProductTypeID { get; set; }
         public string Barcode { get; set; }
         public string ProductName { get; set; }
         public string Property { get; set; }
@@ -30,7 +28,9 @@ namespace ActionForce.Entity
         public Nullable<int> CardTypeID { get; set; }
         public Nullable<int> UnitID { get; set; }
         public string UnitCode { get; set; }
+        public Nullable<double> TaxRate { get; set; }
         public string MainImage { get; set; }
+        public Nullable<System.Guid> UID { get; set; }
         public Nullable<bool> IsZeroStock { get; set; }
         public Nullable<bool> IsSale { get; set; }
         public Nullable<bool> IsEnvanter { get; set; }

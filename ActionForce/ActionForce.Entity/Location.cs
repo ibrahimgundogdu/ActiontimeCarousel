@@ -52,5 +52,7 @@ namespace ActionForce.Entity
         public Nullable<int> UpdateEmployeeID { get; set; }
         public string UpdateIP { get; set; }
         public Nullable<double> TaxRate { get; set; }
+        public Nullable<bool> UseCardSysteme { get; set; }
+        public Nullable<int> ProductPriceCatID { get; set; }
     }
 }

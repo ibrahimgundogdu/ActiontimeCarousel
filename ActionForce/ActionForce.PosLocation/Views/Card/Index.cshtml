@@ -1,0 +1,234 @@
+﻿@model CardControlModel
+@{
+    Layout = null;
+    var cardPriceID = Model.PriceList.FirstOrDefault(x => x.ProductID == 1)?.ID ?? 2;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFE POS</title>
+    <meta name="description" content="UFE POS">
+    <meta name="keywords" content="UFE POS">
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <link rel="stylesheet" href="/assets/scss/global.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+    <div class="main">
+        <div class="container">
+            <div class="header">
+                <div class="menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="49.778" viewBox="0 0 64 49.778">
+                        <path d="M59.889,40.556v7.111H10.111V40.556H59.889M67,5H3v7.111H67Zm0,14.222H3v7.111H67Zm0,14.222H3V54.778H67Z" transform="translate(-3 -5)" fill="currentColor" />
+                    </svg>
+                    <!-- menu -->
+                </div>
+                <div class="logo">
+                    <a href="javascript:;">UFE POS</a>
+                    <div class="date">@(DateTime.Now.ToLongDateString())</div>
+                </div>
+                <div class="homepage">
+                    <a href="/">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50">
+                            <path d="M4,16.5H16.5V4H4ZM22.75,54h12.5V41.5H22.75ZM4,54H16.5V41.5H4ZM4,35.25H16.5V22.75H4Zm18.75,0h12.5V22.75H22.75ZM41.5,4V16.5H54V4ZM22.75,16.5h12.5V4H22.75ZM41.5,35.25H54V22.75H41.5ZM41.5,54H54V41.5H41.5Z" transform="translate(-4 -4)" fill="currentColor" />
+                        </svg>
+                        <!-- homepage -->
+                    </a>
+                </div>
+            </div><!-- header -->
+            <div class="side-menu-overlay"></div>
+            <div class="side-menu">
+                @{ Html.RenderPartial("_PartialMenu");}
+            </div><!-- side-menu -->
+            <div class="content">
+                <div class="card-box">
+                    <div class="card-box-process">
+                        <a class="item item-1" href="javascript:;">
+                            <div class="big-name"><span class="circle"></span>YENİ KART</div>
+                        </a>
+                        <div class="item-content item-content-1">
+                            <ul>
+                                @foreach (var item in Model.PriceList.Where(x => x.ProductID == 3).OrderByDescending(x => x.TotalCredit).ToList())
+                                {
+                                    <li><a href="javascript:;" onclick="AddBasket(@(item.ID),@(cardPriceID))">@(item.TotalCredit) Kontör <span>@(item.Price.ToString("N2")) ₺</span></a></li>
+                                }
+                            </ul>
+                        </div>
+                        <a class="item item-2" href="javascript:;">
+                            <div class="big-name"><span class="square"></span>KONTÖR YÜKLE</div>
+                        </a>
+                        <div class="item-content item-content-2">
+                            <ul>
+                                @foreach (var item in Model.PriceList.Where(x => x.ProductID == 3).OrderByDescending(x => x.TotalCredit).ToList())
+                                {
+                                    <li><a href="javascript:;" onclick="AddBasket(@(item.ID),0)">@(item.TotalCredit) Kontör <span>@(item.Price.ToString("N2")) ₺</span></a></li>
+                                }
+                            </ul>
+                        </div>
+                        <a class="item item-3" href="javascript:;">
+                            <div class="big-name"><span class="triangle"></span>KONTÖR İADE</div>
+                        </a>
+                        <a class="item item-4" href="javascript:;">
+                            <div class="big-name"><span class="times"></span>SATIŞ İADE</div>
+                        </a>
+                    </div>
+                </div>
+            </div><!-- content -->
+
+            <div class="fixed-footer-overlay"></div>
+            <div class="fixed-footer">
+                <div class="container" id="BasketContainer">
+                    <div class="bot-list-btn">
+                        <button type="button">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="67.355" height="67.355" viewBox="0 0 67.355 67.355">
+                                <path d="M35.678,2A33.678,33.678,0,1,0,69.355,35.678,33.69,33.69,0,0,0,35.678,2Zm0,60.62A26.942,26.942,0,1,1,62.62,35.678,26.935,26.935,0,0,1,35.678,62.62Z" transform="translate(-2 -2)" fill="currentColor" />
+                                <circle cx="5.052" cy="5.052" r="5.052" transform="translate(11.787 28.626)" fill="currentColor" />
+                                <circle cx="5.052" cy="5.052" r="5.052" transform="translate(28.626 28.626)" fill="currentColor" />
+                                <circle cx="5.052" cy="5.052" r="5.052" transform="translate(45.465 28.626)" fill="currentColor" />
+                            </svg>
+                            <!-- dots -->
+                        </button>
+                    </div>
+                    <div id="BasketBody">
+                        @{ Html.RenderPartial("_PartialBasketList", Model);}
+                    </div>
+                </div>
+            </div><!-- fixed-footer -->
+        </div>
+    </div><!-- main -->
+
+
+
+
+    <script type="text/javascript">
+
+
+
+        function AddBasket(priceid, cardpriceid) {
+            $.ajax({
+                method: "GET",
+                url: "/Card/AddBasket",
+                data: { id: priceid, cardid: cardpriceid }
+            }).done(function (d) {
+                $("#BasketBody").html(d);
+            });
+        };
+
+
+
+        function RemoveBasketItem(id) {
+            $.ajax({
+                method: "GET",
+                url: "/Card/RemoveBasketItem",
+                data: { id: id }
+            }).done(function (d) {
+                $("#BasketBody").html(d);
+                $('.footer-basket').attr('style', 'display:block');
+            });
+        };
+
+        function BasketItemDetail(itemid) {
+            $.ajax({
+                method: "GET",
+                url: "/Card/BasketItemDetail",
+                data: { id: itemid }
+            }).done(function (d) {
+                $("#BasketItemDetailContent").html(d);
+            });
+        };
+
+        function ClearBasket() {
+            $.ajax({
+                method: "GET",
+                url: "/Card/ClearBasket"
+            }).done(function (d) {
+                $("#BasketBody").html(d);
+
+                $('.fixed-footer-overlay, .bot-list-btn').removeClass('open');
+            });
+        };
+
+
+    </script>
+
+    <script src="/assets/js/modal.js"></script>
+    <script src="/assets/js/global.js"></script>
+
+    <script>
+        $(function () {
+            const open = 'open';
+            const $menu = $('.header .menu');
+            const $listBtn = $('.bot-list-btn');
+
+            $menu.on('click', function () {
+                let $this = $(this);
+                if (($this).hasClass(open)) {
+                    $this.removeClass(open);
+                    $('.side-menu,.side-menu-overlay').removeClass(open);
+                } else {
+                    $this.addClass(open);
+                    $('.side-menu,.side-menu-overlay').addClass(open);
+                }
+            });
+            $('.side-menu-overlay').on('click', function () {
+                $menu.removeClass(open);
+                $('.side-menu,.side-menu-overlay').removeClass(open);
+            });
+
+            $listBtn.on('click', function () {
+                let $this = $(this);
+                if ($this.hasClass(open)) {
+                    $this.removeClass(open);
+                    $('.fixed-footer-overlay').removeClass(open);
+                    $('.footer-basket').stop().slideUp();
+                } else {
+                    $this.addClass(open);
+                    $('.fixed-footer-overlay').addClass(open);
+                    $('.footer-basket').stop().slideDown();
+                }
+            });
+
+            $('.fixed-footer-overlay').on('click', function () {
+                $listBtn.removeClass(open);
+                $('.fixed-footer-overlay').removeClass(open);
+                $('.footer-basket').stop().slideUp();
+            });
+            $(document).ready(function () {
+                $('.piece-options .minus').click(function () {
+                    var $input = $(this).parent().find('input');
+                    var count = parseInt($input.val()) - 1;
+                    count = count < 1 ? 1 : count;
+                    $input.val(count);
+                    $input.change();
+                    return false;
+                });
+                $('.piece-options .plus').click(function () {
+                    var $input = $(this).parent().find('input');
+                    $input.val(parseInt($input.val()) + 1);
+                    $input.change();
+                    return false;
+                });
+            });
+
+            let $item = $('.content .card-box .card-box-process .item');
+            $item.on('click', function () {
+                let $this = $(this);
+                $this.addClass('active').siblings().removeClass('active');
+            });
+
+
+
+
+
+        });
+
+
+
+    </script>
+</body>
+</html>

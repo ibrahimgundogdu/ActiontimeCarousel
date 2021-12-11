@@ -4074,9 +4074,9 @@ namespace ActionForce.Office
                     var actionrow = Db.ActionRow.FirstOrDefault(x => x.LocationID == isResult.LocationID && x.Date == isResult.Date);
                     var actionrowresult = Db.ActionRowResult.FirstOrDefault(x => x.LocationID == isResult.LocationID && x.ResultDate == isResult.Date);
 
-                    List<int> cashsales = new int[] { 10, 21, 24, 28 }.ToList();
+                    List<int> cashsales = new int[] { 10, 21, 24, 28, 41 }.ToList();
                     List<int> cashprocess = new int[] { 23, 27 }.ToList();
-                    List<int> cardsales = new int[] { 1, 3, 5 }.ToList();
+                    List<int> cardsales = new int[] { 1, 3, 5,9 }.ToList();
                     List<int> maas = new int[] { 3, 31 }.ToList();
                     List<int> hakedisid = new int[] { 32, 36, 39 }.ToList();
                     List<int> cashexpense = new int[] { 4, 29, 42 }.ToList();

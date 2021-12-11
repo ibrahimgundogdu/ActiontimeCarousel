@@ -449,6 +449,7 @@ namespace ActionForce.Office.Controllers
                         BankID = isEmployee.BankID,
                         IBAN = isEmployee.IBAN
                         
+                        
                     };
 
                     isEmployee.AreaCategoryID = employee.AreaCategoryID;

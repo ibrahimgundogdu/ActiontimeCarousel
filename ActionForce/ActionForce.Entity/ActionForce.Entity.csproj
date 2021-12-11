@@ -155,6 +155,18 @@
     <Compile Include="CardNumber.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="CardReader.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CardReaderAction.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CardReaderParameter.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CardReaderType.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="CardStatus.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -338,6 +350,9 @@
     <Compile Include="EmployeeAreaCategory.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="EmployeeCard.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="EmployeeCashActions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -429,6 +444,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="GetLocationCurrentBasketTotal_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetLocationCurrentProductPrices_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="GetLocationCurrentPromotions_Result.cs">
@@ -527,6 +545,9 @@
     <Compile Include="LocationParamCalculate.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="LocationPartEmployee.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="LocationPeriods.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -534,6 +555,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="LocationPriceCategory.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LocationProductPriceCategory.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="LocationSchedule.cs">
@@ -668,7 +692,16 @@
     <Compile Include="ProductCategory.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
-    <Compile Include="ProductType.cs">
+    <Compile Include="ProductImges.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductPrice.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductPriceCategory.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ProductUnit.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="PromotionBlackOut.cs">
@@ -1045,6 +1078,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VPriceLastList.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VProductPriceLastList.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VRevenue.cs">

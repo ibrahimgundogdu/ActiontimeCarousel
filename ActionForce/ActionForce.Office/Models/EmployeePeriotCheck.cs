@@ -7,6 +7,7 @@ namespace ActionForce.Office
 {
     public class EmployeePeriotCheck
     {
+        public int ID { get; set; }
         public int EmployeeID { get; set; }
         public int? AreaCategoryID { get; set; }
         public int? DepartmentID { get; set; }

@@ -12,10 +12,11 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class ProductType
+    public partial class ProductUnit
     {
         public int ID { get; set; }
-        public string TypeName { get; set; }
+        public string UnitCode { get; set; }
+        public string UnitName { get; set; }
         public string SortBy { get; set; }
         public Nullable<bool> IsActive { get; set; }
     }
