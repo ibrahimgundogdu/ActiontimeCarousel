@@ -236,7 +236,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\ActionsController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
+    <Compile Include="Controllers\CardActionController.cs" />
     <Compile Include="Controllers\CardController.cs" />
+    <Compile Include="Controllers\CardTransactionController.cs" />
     <Compile Include="Controllers\CashController.cs" />
     <Compile Include="Controllers\DayResultController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
@@ -253,6 +255,7 @@
     </Compile>
     <Compile Include="Models\AuthenticationModel.cs" />
     <Compile Include="Models\ControlModels\ActionsControlModel.cs" />
+    <Compile Include="Models\ControlModels\CardActionControlModel.cs" />
     <Compile Include="Models\ControlModels\CardControlModel.cs" />
     <Compile Include="Models\ControlModels\CashControlModel.cs" />
     <Compile Include="Models\ControlModels\DayResultControlModel.cs" />
@@ -368,6 +371,8 @@
     <Content Include="Views\Sales\RefundDetail.cshtml" />
     <Content Include="Views\Card\Index.cshtml" />
     <Content Include="Views\Card\_PartialBasketList.cshtml" />
+    <Content Include="Views\CardTransaction\Index.cshtml" />
+    <Content Include="Views\CardAction\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

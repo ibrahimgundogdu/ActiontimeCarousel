@@ -30,5 +30,6 @@ namespace ActionForce.Entity
         public Nullable<int> ExtraUnit { get; set; }
         public Nullable<double> ExtraPrice { get; set; }
         public string CategoryName { get; set; }
+        public int SaleTypeID { get; set; }
     }
 }

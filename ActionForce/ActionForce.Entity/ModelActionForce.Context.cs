@@ -356,6 +356,7 @@ namespace ActionForce.Entity
         public virtual DbSet<ProductPrice> ProductPrice { get; set; }
         public virtual DbSet<ProductPriceCategory> ProductPriceCategory { get; set; }
         public virtual DbSet<VProductPriceLastList> VProductPriceLastList { get; set; }
+        public virtual DbSet<TicketSaleCreditLoad> TicketSaleCreditLoad { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -2500,6 +2501,113 @@ namespace ActionForce.Entity
                 new ObjectParameter("Environment", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddCardBasket", locationIDParameter, employeeIDParameter, priceIDParameter, cardPriceIDParameter, environmentParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> AddCardPosOrder(Nullable<int> locationID, Nullable<int> employeeID, string orderNumber, string customerName, string customerData, string customerPhone, string identityCard, string description, string recordIP)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            var orderNumberParameter = orderNumber != null ?
+                new ObjectParameter("OrderNumber", orderNumber) :
+                new ObjectParameter("OrderNumber", typeof(string));
+    
+            var customerNameParameter = customerName != null ?
+                new ObjectParameter("CustomerName", customerName) :
+                new ObjectParameter("CustomerName", typeof(string));
+    
+            var customerDataParameter = customerData != null ?
+                new ObjectParameter("CustomerData", customerData) :
+                new ObjectParameter("CustomerData", typeof(string));
+    
+            var customerPhoneParameter = customerPhone != null ?
+                new ObjectParameter("CustomerPhone", customerPhone) :
+                new ObjectParameter("CustomerPhone", typeof(string));
+    
+            var identityCardParameter = identityCard != null ?
+                new ObjectParameter("IdentityCard", identityCard) :
+                new ObjectParameter("IdentityCard", typeof(string));
+    
+            var descriptionParameter = description != null ?
+                new ObjectParameter("Description", description) :
+                new ObjectParameter("Description", typeof(string));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddCardPosOrder", locationIDParameter, employeeIDParameter, orderNumberParameter, customerNameParameter, customerDataParameter, customerPhoneParameter, identityCardParameter, descriptionParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<TicketSaleCreditLoad> AddTicketSaleCreditLoad(Nullable<long> saleID, string cardNumber, Nullable<double> existsCredit, string serialNumber, string mACAddress, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var saleIDParameter = saleID.HasValue ?
+                new ObjectParameter("SaleID", saleID) :
+                new ObjectParameter("SaleID", typeof(long));
+    
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            var existsCreditParameter = existsCredit.HasValue ?
+                new ObjectParameter("ExistsCredit", existsCredit) :
+                new ObjectParameter("ExistsCredit", typeof(double));
+    
+            var serialNumberParameter = serialNumber != null ?
+                new ObjectParameter("SerialNumber", serialNumber) :
+                new ObjectParameter("SerialNumber", typeof(string));
+    
+            var mACAddressParameter = mACAddress != null ?
+                new ObjectParameter("MACAddress", mACAddress) :
+                new ObjectParameter("MACAddress", typeof(string));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TicketSaleCreditLoad>("AddTicketSaleCreditLoad", saleIDParameter, cardNumberParameter, existsCreditParameter, serialNumberParameter, mACAddressParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<TicketSaleCreditLoad> AddTicketSaleCreditLoad(Nullable<long> saleID, string cardNumber, Nullable<double> existsCredit, string serialNumber, string mACAddress, Nullable<int> recordEmployeeID, string recordIP, MergeOption mergeOption)
+        {
+            var saleIDParameter = saleID.HasValue ?
+                new ObjectParameter("SaleID", saleID) :
+                new ObjectParameter("SaleID", typeof(long));
+    
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            var existsCreditParameter = existsCredit.HasValue ?
+                new ObjectParameter("ExistsCredit", existsCredit) :
+                new ObjectParameter("ExistsCredit", typeof(double));
+    
+            var serialNumberParameter = serialNumber != null ?
+                new ObjectParameter("SerialNumber", serialNumber) :
+                new ObjectParameter("SerialNumber", typeof(string));
+    
+            var mACAddressParameter = mACAddress != null ?
+                new ObjectParameter("MACAddress", mACAddress) :
+                new ObjectParameter("MACAddress", typeof(string));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TicketSaleCreditLoad>("AddTicketSaleCreditLoad", mergeOption, saleIDParameter, cardNumberParameter, existsCreditParameter, serialNumberParameter, mACAddressParameter, recordEmployeeIDParameter, recordIPParameter);
         }
     }
 }

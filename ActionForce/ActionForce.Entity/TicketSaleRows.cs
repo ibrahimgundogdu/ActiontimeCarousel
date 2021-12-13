@@ -57,5 +57,8 @@ namespace ActionForce.Entity
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<int> ProductID { get; set; }
         public Nullable<int> TicketProductID { get; set; }
+        public Nullable<int> MasterCredit { get; set; }
+        public Nullable<int> PromoCredit { get; set; }
+        public Nullable<int> TotalCredit { get; set; }
     }
 }

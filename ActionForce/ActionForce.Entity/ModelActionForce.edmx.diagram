@@ -358,6 +358,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ProductPrice" Width="1.5" PointX="4.1372802165044842" PointY="27.994303939861386" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.ProductPriceCategory" Width="1.5" PointX="3.7434976397750424" PointY="24.607791107430955" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VProductPriceLastList" Width="1.5" PointX="45.375" PointY="6.25" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleCreditLoad" Width="1.5" PointX="1.6818123039239143" PointY="31.495691850546603" />
         
         
         

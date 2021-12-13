@@ -32,5 +32,16 @@ namespace ActionForce.PosService
             return false;
         }
 
+        public bool SendCardInfo(int locationid, int orderid, string info)
+        {
+            var request = new RestRequest("Messenger/SendCardInfo/?locationid=" + locationid + "&orderid=" + orderid + "&info=" + info, Method.GET);
+            var response = Client.Execute(request);
+            if (response.ResponseStatus == ResponseStatus.Completed && response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return true;
+            }
+            return false;
+        }
+
     }
 }
