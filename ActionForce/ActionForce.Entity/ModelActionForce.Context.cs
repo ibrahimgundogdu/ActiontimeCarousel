@@ -2609,5 +2609,38 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TicketSaleCreditLoad>("AddTicketSaleCreditLoad", mergeOption, saleIDParameter, cardNumberParameter, existsCreditParameter, serialNumberParameter, mACAddressParameter, recordEmployeeIDParameter, recordIPParameter);
         }
+    
+        public virtual ObjectResult<Nullable<bool>> CheckCardReaderParameter(string serialNumber, string mACAddress, string version, Nullable<double> unitPrice, Nullable<int> miliSecond, Nullable<int> readCount, Nullable<int> unitDuration)
+        {
+            var serialNumberParameter = serialNumber != null ?
+                new ObjectParameter("SerialNumber", serialNumber) :
+                new ObjectParameter("SerialNumber", typeof(string));
+    
+            var mACAddressParameter = mACAddress != null ?
+                new ObjectParameter("MACAddress", mACAddress) :
+                new ObjectParameter("MACAddress", typeof(string));
+    
+            var versionParameter = version != null ?
+                new ObjectParameter("Version", version) :
+                new ObjectParameter("Version", typeof(string));
+    
+            var unitPriceParameter = unitPrice.HasValue ?
+                new ObjectParameter("UnitPrice", unitPrice) :
+                new ObjectParameter("UnitPrice", typeof(double));
+    
+            var miliSecondParameter = miliSecond.HasValue ?
+                new ObjectParameter("MiliSecond", miliSecond) :
+                new ObjectParameter("MiliSecond", typeof(int));
+    
+            var readCountParameter = readCount.HasValue ?
+                new ObjectParameter("ReadCount", readCount) :
+                new ObjectParameter("ReadCount", typeof(int));
+    
+            var unitDurationParameter = unitDuration.HasValue ?
+                new ObjectParameter("UnitDuration", unitDuration) :
+                new ObjectParameter("UnitDuration", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<bool>>("CheckCardReaderParameter", serialNumberParameter, mACAddressParameter, versionParameter, unitPriceParameter, miliSecondParameter, readCountParameter, unitDurationParameter);
+        }
     }
 }

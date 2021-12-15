@@ -28,5 +28,6 @@ namespace ActionForce.Entity
         public Nullable<double> CreditSpend { get; set; }
         public double Credit { get; set; }
         public string Currency { get; set; }
+        public Nullable<bool> IsPromotion { get; set; }
     }
 }

@@ -35,5 +35,6 @@ namespace ActionForce.Entity
         public string RecordIP { get; set; }
         public Nullable<System.Guid> UID { get; set; }
         public bool IsSuccess { get; set; }
+        public Nullable<System.DateTime> CompleteDate { get; set; }
     }
 }

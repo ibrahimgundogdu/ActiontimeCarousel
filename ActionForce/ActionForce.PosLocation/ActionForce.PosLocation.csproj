@@ -373,6 +373,7 @@
     <Content Include="Views\Card\_PartialBasketList.cshtml" />
     <Content Include="Views\CardTransaction\Index.cshtml" />
     <Content Include="Views\CardAction\Index.cshtml" />
+    <Content Include="Views\CardAction\LoadResult.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

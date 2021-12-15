@@ -47,7 +47,7 @@
             <div class="content" style="padding-top:80px;">
                 <div class="refund-form">
                     <div class="steps">
-                        <h1>KARTA KREDİ YÜKLEME</h1>
+                        <h1>KARTA KREDİ YÜKLEME SONUCU</h1>
                         <div class="step step-1 active">
                             @if (Model.TicketSaleRow != null)
                             {
@@ -177,7 +177,7 @@
 
                             }
 
-                            
+
 
                         </div>
                     </div>
@@ -329,13 +329,6 @@
             }
         })
 
-        connection.on('ReceiveCardLoadResult', (locationid, uid) => {
-            if (locationid == @(Model.Authentication.CurrentLocation.ID)) {
-                GetCardLoadInfo(uid);
-            }
-        })
-
-
         connection.on('finished', (update) => {
             connection.stop();
         });
@@ -346,13 +339,6 @@
             console.log("Order ID : " + orderid);
             console.log("info : " + info);
             window.location = '/CardAction/Index/' + orderid +"?cardinfo="+info;
-        }
-
-        function GetCardLoadInfo(uid) {
-            var orderid = $('#OrderID').val();
-            console.log("Order ID : " + orderid);
-            console.log("uid : " + uid);
-            window.location = '/CardAction/LoadResult/' + uid;
         }
 
     </script>

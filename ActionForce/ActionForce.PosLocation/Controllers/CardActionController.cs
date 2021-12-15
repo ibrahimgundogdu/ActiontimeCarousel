@@ -59,5 +59,45 @@ namespace ActionForce.PosLocation.Controllers
 
             return View(model);
         }
+
+        public ActionResult LoadResult(Guid? id)
+        {
+            CardActionControlModel model = new CardActionControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("Index", "Card");
+            }
+
+            model.CreditLoad = Db.TicketSaleCreditLoad.FirstOrDefault(x => x.UID == id);
+
+            if (model.CreditLoad != null)
+            {
+
+                model.Card = Db.Card.FirstOrDefault(x => x.CardNumber == model.CreditLoad.CardNumber);
+                model.CardReader = Db.CardReader.FirstOrDefault(x => x.SerialNumber == model.CreditLoad.SerialNumber && x.MACAddress == model.CreditLoad.MACAddress && x.LocationID == model.Authentication.CurrentLocation.ID && x.CardReaderTypeID == 1 && x.IsActive == true);
+
+                model.TicketSale = Db.TicketSale.FirstOrDefault(x => x.ID == model.CreditLoad.SaleID);
+                model.TicketSaleRow = Db.TicketSaleRows.Where(x => x.SaleID == model.CreditLoad.SaleID).ToList();
+                model.TicketSalePosPayments = Db.TicketSalePosPayment.Where(x => x.SaleID == model.CreditLoad.SaleID).ToList();
+
+                model.CreditPaymentAmount = model.TicketSalePosPayments.Sum(x => x.PaymentAmount) ?? 0;
+                model.MasterCredit = model.TicketSaleRow.Sum(x => x.MasterCredit) ?? 0;
+                model.PromoCredit = model.TicketSaleRow.Sum(x => x.PromoCredit) ?? 0;
+                model.TotalCredit = model.MasterCredit + model.PromoCredit;
+
+            }
+
+            return View(model);
+        }
+
+
+
     }
 }

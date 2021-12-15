@@ -178,7 +178,7 @@ namespace ActionForce.CardService
 
                     // kartın bakiyesi güncellenir.
 
-                    var cuparameters = new {ID = card.ID, Balance = model.CardBlance};
+                    var cuparameters = new { ID = card.ID, Balance = model.CardBlance };
                     var cusql = "Update [dbo].[Card] Set [Credit] = @Balance Where [ID] = @ID";
                     connection.Execute(cusql, cuparameters);
 
@@ -274,7 +274,7 @@ namespace ActionForce.CardService
 
                     if (cardReader.CardReaderTypeID == 2) // part set et
                     {
-                        var emplyeeparameters = new {CardNumber = model.CardNumber};
+                        var emplyeeparameters = new { CardNumber = model.CardNumber };
                         var emplyeesql = "SELECT TOP (1) * FROM [dbo].[EmployeeCard] Where [CardNumber] = @CardNumber Order By [RecordDate] desc";
                         var cardEmployee = connection.QueryFirstOrDefault<EmployeeCard>(emplyeesql, emplyeeparameters);
 
@@ -296,7 +296,7 @@ namespace ActionForce.CardService
                             result.Message = "OK";
 
                         }
-                        else if (cardEmployee != null && (cardEmployee.EmployeeID == null || cardEmployee.EmployeeID  <= 0))
+                        else if (cardEmployee != null && (cardEmployee.EmployeeID == null || cardEmployee.EmployeeID <= 0))
                         {
                             result.IsSuccess = false;
                             result.Message = "NO CRDEM";
@@ -430,7 +430,7 @@ namespace ActionForce.CardService
                                 result.IsSuccess = true;
                                 result.Message = "OK";
                                 result.Version = cardReaderParameter.Version;
-                                result.UnitPrice = cardReaderParameter.UnitPrice*100;
+                                result.UnitPrice = cardReaderParameter.UnitPrice * 100;
                                 result.MiliSecond = cardReaderParameter.MiliSecond;
                                 result.ReadCount = cardReaderParameter.ReadCount;
                                 result.UnitDuration = cardReaderParameter.UnitDuration;
@@ -472,6 +472,16 @@ namespace ActionForce.CardService
             }
         }
 
+        public CardReader GetCardReader(string serial, string macaddress)
+        {
+            using (var connection = new SqlConnection(GetConnectionString()))
+            {
+                var Parameters = new { SERIAL = serial, MAC = macaddress };
+                var sql = "SELECT TOP (1) * FROM [dbo].[CardReader] Where [SerialNumber] = @SERIAL and [MACAddress] = @MAC and [IsActive] = 1";
+                return connection.QueryFirstOrDefault<CardReader>(sql, Parameters);
+            }
+        }
+
         public CardReaderAction GetCardReaderAction(Guid uid)
         {
             using (var connection = new SqlConnection(GetConnectionString()))
@@ -492,5 +502,113 @@ namespace ActionForce.CardService
             }
         }
 
+        public CardCreditLoad GetCardLoad(Guid uid)
+        {
+            using (var connection = new SqlConnection(GetConnectionString()))
+            {
+                var Parameters = new { UID = uid };
+                var sql = "SELECT TOP (1) * FROM [dbo].[TicketSaleCreditLoad] Where [UID] = @UID";
+                return connection.QueryFirstOrDefault<CardCreditLoad>(sql, Parameters);
+            }
+        }
+
+        public Result LoadCard(CardCreditLoad load)
+        {
+            Result result = new Result();
+            DateTime now = DateTime.UtcNow.AddHours(3);
+
+            result.IsSuccess = false;
+            result.Message = string.Empty;
+
+            try
+            {
+                var card = GetCard(load.CardNumber, 0);
+                var cardReader = GetCardReader(load.SerialNumber, load.MACAddress);
+
+                using (var connection = new SqlConnection(GetConnectionString()))
+                {
+                    // MasterCredit kart hereketi eklenir
+                    if (load.MasterCredit != null && load.MasterCredit > 0)
+                    {
+
+                        var caParameters = new { OurCompanyID = 2, CardID = card.ID, LocationID = cardReader.LocationID, ActionTypeID = 3, UID = load.UID, IsPromotion = false };
+                        var caSql = "Delete FROM [dbo].[CardActions] Where [OurCompanyID] = @OurCompanyID and [CardID] = @CardID and [LocationID] = @LocationID and [ActionTypeID] = @ActionTypeID and [ProcessUID] = @UID and [IsPromotion] = @IsPromotion";
+                        connection.Execute(caSql, caParameters);
+
+                        var caparameters = new
+                        {
+                            OurCompanyID = card.OurCompanyID,
+                            CardID = card.ID,
+                            LocationID = cardReader.LocationID,
+                            CustomerID = 2,
+                            ProcessID = load.ID,
+                            ProcessUID = load.UID,
+                            ActionTypeID = 3,
+                            ActionTypeName = "Kredi Yükleme",
+                            ActionDate = now,
+                            CreditCharge = load.MasterCredit,
+                            CreditSpend = 0,
+                            Currency = "TRL",
+                            IsPromotion = false
+                        };
+
+                        var casql = "  INSERT INTO [dbo].[CardActions] ([OurCompanyID],[CardID],[LocationID],[CustomerID],[ProcessID],[ProcessUID],[ActionTypeID],[ActionTypeName],[ActionDate],[CreditCharge],[CreditSpend],[Currency],[IsPromotion]) VALUES(@OurCompanyID,@CardID,@LocationID,@CustomerID,@ProcessID,@ProcessUID,@ActionTypeID, @ActionTypeName, @ActionDate, @CreditCharge, @CreditSpend , @Currency, @IsPromotion)";
+                        connection.Execute(casql, caparameters);
+
+                    }
+
+                    // PromoCredit kart hereketi eklenir
+                    if (load.PromoCredit != null && load.PromoCredit > 0)
+                    {
+
+                        var caParameters = new { OurCompanyID = 2, CardID = card.ID, LocationID = cardReader.LocationID, ActionTypeID = 3, UID = load.UID, IsPromotion = true };
+                        var caSql = "Delete FROM [dbo].[CardActions] Where [OurCompanyID] = @OurCompanyID and [CardID] = @CardID and [LocationID] = @LocationID and [ActionTypeID] = @ActionTypeID and [ProcessUID] = @UID and [IsPromotion] = @IsPromotion";
+                        connection.Execute(caSql, caParameters);
+
+                        var caparameters = new
+                        {
+                            OurCompanyID = card.OurCompanyID,
+                            CardID = card.ID,
+                            LocationID = cardReader.LocationID,
+                            CustomerID = 2,
+                            ProcessID = load.ID,
+                            ProcessUID = load.UID,
+                            ActionTypeID = 3,
+                            ActionTypeName = "Kredi Yükleme",
+                            ActionDate = now,
+                            CreditCharge = load.PromoCredit,
+                            CreditSpend = 0,
+                            Currency = "TRL",
+                            IsPromotion = true
+                        };
+
+                        var casql = "  INSERT INTO [dbo].[CardActions] ([OurCompanyID],[CardID],[LocationID],[CustomerID],[ProcessID],[ProcessUID],[ActionTypeID],[ActionTypeName],[ActionDate],[CreditCharge],[CreditSpend],[Currency],[IsPromotion]) VALUES(@OurCompanyID,@CardID,@LocationID,@CustomerID,@ProcessID,@ProcessUID,@ActionTypeID, @ActionTypeName, @ActionDate, @CreditCharge, @CreditSpend , @Currency, @IsPromotion)";
+                        connection.Execute(casql, caparameters);
+
+                    }
+
+                    // kartın bakiyesi güncellenir.
+
+                    var cuparameters = new { ID = card.ID, Balance = load.FinalCredit };
+                    var cusql = "Update [dbo].[Card] Set [Credit] = @Balance Where [ID] = @ID";
+                    connection.Execute(cusql, cuparameters);
+
+                    // yüklenme bölümü onaylanır.
+
+                    var lcparameters = new { ID = load.ID, UID = load.UID, IsSuccess = true, CompleteDate = now };
+                    var lcsql = "Update [dbo].[TicketSaleCreditLoad] Set [IsSuccess] = @IsSuccess, [CompleteDate] = @CompleteDate  Where [ID] = @ID and [UID] = @UID";
+                    connection.Execute(lcsql, lcparameters);
+                }
+
+                result.IsSuccess = true;
+                result.Message = "OK";
+            }
+            catch (Exception ex)
+            {
+                result.Message = "ERR";
+            }
+
+            return result;
+        }
     }
 }
