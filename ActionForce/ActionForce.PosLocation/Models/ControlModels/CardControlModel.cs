@@ -14,5 +14,11 @@ namespace ActionForce.PosLocation
         public VTicketBasket BasketItem { get; set; }
         public BasketTotal BasketTotal { get; set; }
         public int? EmployeeBasketCount { get; set; }
+
+        public Card Card { get; set; }
+        public CardReader CardReader { get; set; }
+        public List<TicketSaleCreditLoad> CreditLoads { get; set; }
+        public double CardBalance { get; set; } = 0;
+        public double CardBalanceAction { get; set; } = 0;
     }
 }

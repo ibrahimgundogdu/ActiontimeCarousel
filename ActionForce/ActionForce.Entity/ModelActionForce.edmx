@@ -609,6 +609,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LocationID" Type="int" />
           <Property Name="CardReaderID" Type="int" />
           <Property Name="SerialNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="MACAddress" Type="nvarchar" MaxLength="20" />
@@ -3765,10 +3766,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="LocationID" Type="int" />
           <Property Name="SaleID" Type="bigint" />
           <Property Name="FromCardReader" Type="bit" />
+          <Property Name="WithCard" Type="bit" />
           <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
-          <Property Name="ExistsCredit" Type="float" />
-          <Property Name="MasterCredit" Type="float" />
-          <Property Name="PromoCredit" Type="float" />
+          <Property Name="ExistsCredit" Type="float" Nullable="false" />
+          <Property Name="MasterCredit" Type="float" Nullable="false" />
+          <Property Name="PromoCredit" Type="float" Nullable="false" />
+          <Property Name="RefundCredit" Type="float" Nullable="false" />
           <Property Name="TotalCredit" Type="float" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="FinalCredit" Type="float" />
           <Property Name="PaymentAmount" Type="float" />
@@ -11712,7 +11715,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="Description" Mode="In" Type="String" />
             <Parameter Name="RecordIP" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="TicketSaleCreditLoad" EntityType="db293_ActionTimeDbModel.TicketSaleCreditLoad" />
           <FunctionImport Name="AddTicketSaleCreditLoad" EntitySet="TicketSaleCreditLoad" ReturnType="Collection(db293_ActionTimeDbModel.TicketSaleCreditLoad)">
             <Parameter Name="SaleID" Mode="In" Type="Int64" />
             <Parameter Name="CardNumber" Mode="In" Type="String" />
@@ -11731,6 +11733,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="ReadCount" Mode="In" Type="Int32" />
             <Parameter Name="UnitDuration" Mode="In" Type="Int32" />
           </FunctionImport>
+          <EntitySet Name="TicketSaleCreditLoad" EntityType="db293_ActionTimeDbModel.TicketSaleCreditLoad" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -19190,6 +19193,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ReadCount" Type="Int32" />
           <Property Name="UnitDuration" Type="Int32" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="LocationID" Type="Int32" />
         </EntityType>
         <EntityType Name="CardReaderType">
           <Key>
@@ -19429,33 +19433,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UseToSale" Type="Boolean" />
           <Property Name="TotalCredit" Type="Double" Nullable="false" />
         </EntityType>
-        <EntityType Name="TicketSaleCreditLoad">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="LocationID" Type="Int32" />
-          <Property Name="SaleID" Type="Int64" />
-          <Property Name="FromCardReader" Type="Boolean" />
-          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="ExistsCredit" Type="Double" />
-          <Property Name="MasterCredit" Type="Double" />
-          <Property Name="PromoCredit" Type="Double" />
-          <Property Name="TotalCredit" Type="Double" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
-          <Property Name="FinalCredit" Type="Double" />
-          <Property Name="PaymentAmount" Type="Double" />
-          <Property Name="Currency" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
-          <Property Name="SerialNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="MACAddress" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="RecordEmployeeID" Type="Int32" />
-          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="UID" Type="Guid" />
-          <Property Name="IsSuccess" Type="Boolean" Nullable="false" />
-          <Property Name="CompleteDate" Type="DateTime" Precision="3" />
-        </EntityType>
         <ComplexType Name="AddTicketSaleCreditLoad_Result">
           <Property Type="Int64" Name="ID" Nullable="false" />
           <Property Type="Int32" Name="OurCompanyID" Nullable="true" />
@@ -19479,6 +19456,35 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Type="Guid" Name="UID" Nullable="true" />
           <Property Type="Boolean" Name="IsSuccess" Nullable="false" />
         </ComplexType>
+        <EntityType Name="TicketSaleCreditLoad">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="SaleID" Type="Int64" />
+          <Property Name="FromCardReader" Type="Boolean" />
+          <Property Name="WithCard" Type="Boolean" />
+          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ExistsCredit" Type="Double" Nullable="false" />
+          <Property Name="MasterCredit" Type="Double" Nullable="false" />
+          <Property Name="PromoCredit" Type="Double" Nullable="false" />
+          <Property Name="RefundCredit" Type="Double" Nullable="false" />
+          <Property Name="TotalCredit" Type="Double" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="FinalCredit" Type="Double" />
+          <Property Name="PaymentAmount" Type="Double" />
+          <Property Name="Currency" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="PaymentDate" Type="DateTime" Precision="3" />
+          <Property Name="SerialNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MACAddress" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="CompleteDate" Type="DateTime" Precision="3" />
+          <Property Name="IsSuccess" Type="Boolean" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -26711,6 +26717,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="CardReaderParameter">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardReaderParameter">
               <MappingFragment StoreEntitySet="CardReaderParameter">
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
                 <ScalarProperty Name="UnitDuration" ColumnName="UnitDuration" />
                 <ScalarProperty Name="ReadCount" ColumnName="ReadCount" />
@@ -26949,11 +26956,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddCardBasket" FunctionName="db293_ActionTimeDbModel.Store.AddCardBasket" />
           <FunctionImportMapping FunctionImportName="AddCardPosOrder" FunctionName="db293_ActionTimeDbModel.Store.AddCardPosOrder" />
+          <FunctionImportMapping FunctionImportName="AddTicketSaleCreditLoad" FunctionName="db293_ActionTimeDbModel.Store.AddTicketSaleCreditLoad">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CheckCardReaderParameter" FunctionName="db293_ActionTimeDbModel.Store.CheckCardReaderParameter" />
           <EntitySetMapping Name="TicketSaleCreditLoad">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketSaleCreditLoad">
               <MappingFragment StoreEntitySet="TicketSaleCreditLoad">
-                <ScalarProperty Name="CompleteDate" ColumnName="CompleteDate" />
                 <ScalarProperty Name="IsSuccess" ColumnName="IsSuccess" />
+                <ScalarProperty Name="CompleteDate" ColumnName="CompleteDate" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
                 <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
@@ -26965,10 +26975,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="PaymentAmount" ColumnName="PaymentAmount" />
                 <ScalarProperty Name="FinalCredit" ColumnName="FinalCredit" />
                 <ScalarProperty Name="TotalCredit" ColumnName="TotalCredit" />
+                <ScalarProperty Name="RefundCredit" ColumnName="RefundCredit" />
                 <ScalarProperty Name="PromoCredit" ColumnName="PromoCredit" />
                 <ScalarProperty Name="MasterCredit" ColumnName="MasterCredit" />
                 <ScalarProperty Name="ExistsCredit" ColumnName="ExistsCredit" />
                 <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="WithCard" ColumnName="WithCard" />
                 <ScalarProperty Name="FromCardReader" ColumnName="FromCardReader" />
                 <ScalarProperty Name="SaleID" ColumnName="SaleID" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
@@ -26977,9 +26989,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="AddTicketSaleCreditLoad" FunctionName="db293_ActionTimeDbModel.Store.AddTicketSaleCreditLoad">
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="CheckCardReaderParameter" FunctionName="db293_ActionTimeDbModel.Store.CheckCardReaderParameter" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

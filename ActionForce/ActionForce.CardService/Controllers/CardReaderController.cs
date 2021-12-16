@@ -20,8 +20,6 @@ namespace ActionForce.CardService.Controllers
             result.IsSuccess = false;
             result.Message = string.Empty;
 
-            
-
             //00175D8B;CC:50:E3:17:5D:8B;2.22;100;100;1;2
             //Serino, macadresi, versiyon, ucret, milisaniye, tetik sayısı, bekleme süresi
 
@@ -48,14 +46,51 @@ namespace ActionForce.CardService.Controllers
                     model.ReadCount = Convert.ToInt32(infolist[5]);
                     model.UnitDuration = Convert.ToInt32(infolist[6]);
 
-                    var addResult = helper.AddCardReaderParameter(model);
+                    var paramResult = helper.AddCardReaderParameter(model);
 
-                    result = addResult;
+                    if (paramResult != null && paramResult.IsSameParameter == false && paramResult.LocationID > 0)
+                    {
+                        //ucret, milisaniye, tetik sayısı, bekleme süresi
+                        //100;100;1;2
+
+                        string newParameter = $"{paramResult.UnitPrice * 100};{paramResult.MiliSecond};{paramResult.ReadCount};{paramResult.UnitDuration}";
+                        result.IsSuccess = true;
+                        result.Message = $"OK";
+                        result.IsChanged = 1;
+
+                        result.UnitPrice = Convert.ToInt32(paramResult.UnitPrice * 100);
+                        result.MiliSecond = paramResult.MiliSecond;
+                        result.ReadCount = paramResult.ReadCount;
+                        result.UnitDuration = paramResult.UnitDuration;
+                    }
+                    else if (paramResult != null && paramResult.IsSameParameter == false && paramResult.LocationID == 0)
+                    {
+
+                        result.IsSuccess = true;
+                        result.Message = $"NOREAD";
+                        result.IsChanged = 0;
+
+                    }
+                    else if (paramResult != null && paramResult.IsSameParameter == true && paramResult.LocationID >= 0)
+                    {
+
+                        result.IsSuccess = true;
+                        result.Message = $"SAME";
+                        result.IsChanged = 0;
+                    }
+                    else
+                    {
+                        result.IsSuccess = true;
+                        result.Message = $"EMPTY";
+                        result.IsChanged = 0;
+                    }
+
                 }
                 catch (Exception ex)
                 {
                     result.IsSuccess = false;
                     result.Message = $"ERR";
+                    result.IsChanged = 0;
                 }
             }
 

@@ -18,14 +18,12 @@ namespace ActionForce.CardService
         public bool IsSuccess { get; set; }
         public string Message { get; set; }
         public DateTime ProcessDate { get; set; }
-        public bool IsAnyChange { get; set; }
+        public int IsChanged { get; set; } // 0 değişme yok, 1 değişme var
 
-
-        public string Version { get; set; }
-        public double? UnitPrice { get; set; }
-        public int MiliSecond { get; set; }
-        public int ReadCount { get; set; }
-        public int UnitDuration { get; set; }
+        public int? UnitPrice { get; set; }
+        public int? MiliSecond { get; set; }
+        public int? ReadCount { get; set; }
+        public int? UnitDuration { get; set; }
     }
 
 }

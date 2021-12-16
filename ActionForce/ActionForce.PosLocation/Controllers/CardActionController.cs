@@ -51,8 +51,23 @@ namespace ActionForce.PosLocation.Controllers
                     var creditLoad = Db.AddTicketSaleCreditLoad(id, cardno, existscredit, serino, macano, model.Authentication.CurrentEmployee.EmployeeID, PosManager.GetIPAddress()).FirstOrDefault();
                     model.CreditLoad = creditLoad;
 
+                    if (creditLoad.IsSuccess == true)
+                    {
+                        return RedirectToAction("LoadResult", new { id = creditLoad.UID });
+                    }
+
+
                     model.Card = Db.Card.FirstOrDefault(x => x.CardNumber == cardno);
                     model.CardReader = Db.CardReader.FirstOrDefault(x => x.SerialNumber == serino && x.MACAddress == macano && x.LocationID == model.Authentication.CurrentLocation.ID && x.CardReaderTypeID == 1 && x.IsActive == true);
+
+                    model.CardBalanceAction = 0;
+
+                    if (Db.CardActions.Any(x => x.CardID == model.Card.ID))
+                    {
+                        model.CardBalanceAction = Db.CardActions.Where(x => x.CardID == model.Card.ID)?.Sum(x => x.Credit) ?? 0.0;
+                    }
+
+                    model.CardBalance = existscredit ?? 0;
                 }
 
             }
@@ -79,7 +94,6 @@ namespace ActionForce.PosLocation.Controllers
 
             if (model.CreditLoad != null)
             {
-
                 model.Card = Db.Card.FirstOrDefault(x => x.CardNumber == model.CreditLoad.CardNumber);
                 model.CardReader = Db.CardReader.FirstOrDefault(x => x.SerialNumber == model.CreditLoad.SerialNumber && x.MACAddress == model.CreditLoad.MACAddress && x.LocationID == model.Authentication.CurrentLocation.ID && x.CardReaderTypeID == 1 && x.IsActive == true);
 
@@ -92,12 +106,18 @@ namespace ActionForce.PosLocation.Controllers
                 model.PromoCredit = model.TicketSaleRow.Sum(x => x.PromoCredit) ?? 0;
                 model.TotalCredit = model.MasterCredit + model.PromoCredit;
 
+                model.CardBalanceAction = 0;
+
+                if (Db.CardActions.Any(x => x.CardID == model.Card.ID))
+                {
+                    model.CardBalanceAction = Db.CardActions.Where(x => x.CardID == model.Card.ID)?.Sum(x => x.Credit) ?? 0.0;
+                }
             }
 
             return View(model);
         }
 
-
+     
 
     }
 }

@@ -130,6 +130,7 @@ namespace ActionForce.CardService.Controllers
         {
             Result result = new Result();
             ServiceHelper helper = new ServiceHelper();
+            PushClient pushService = new PushClient();
 
             result.IsSuccess = false;
             result.Message = string.Empty;
@@ -144,25 +145,19 @@ namespace ActionForce.CardService.Controllers
                     connection.Execute(sql, parameters);
                 }
 
+                CardCreditLoad cardReader = helper.GetCardLoad(id.Value);
+
                 try
                 {
-                    CardCreditLoad cardReader = helper.GetCardLoad(id.Value);
 
                     if (success == 1) // Yükleme başarılı şekilde gerçekleşti ise
                     {
                         var loadResult = helper.LoadCard(cardReader);
 
-                    }
-                    
-
-                    if (cardReader != null)
-                    {
-                        PushClient pushService = new PushClient();
-                        pushService.SendCardInfo(cardReader.LocationID, info);
+                        result.IsSuccess = loadResult.IsSuccess;
+                        result.Message = loadResult.Message;
                     }
 
-                    result.IsSuccess = true;
-                    result.Message = "OK";
                 }
                 catch (Exception ex)
                 {
@@ -170,9 +165,10 @@ namespace ActionForce.CardService.Controllers
                     result.Message = $"ERR";
                 }
 
+                pushService.SendCardLoadResult(cardReader.LocationID, id.ToString());
             }
 
-
+            
 
             result.ProcessDate = DateTime.UtcNow.AddHours(3);
             return Request.CreateResponse(HttpStatusCode.OK, result);

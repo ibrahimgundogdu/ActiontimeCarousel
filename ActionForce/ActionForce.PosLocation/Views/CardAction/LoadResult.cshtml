@@ -113,7 +113,7 @@
                                         <div class="row">
                                             <div class="col-6">
                                                 <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Yüklenecek Kredi :" readonly>
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Yüklenen Kredi :" readonly>
                                                 </div>
                                             </div>
                                             <div class="col-6">
@@ -131,7 +131,7 @@
                                             </div>
                                             <div class="col-6">
                                                 <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CreditLoad?.ExistsCredit)" readonly>
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CreditLoad?.FinalCredit)" readonly>
                                                 </div>
                                             </div>
                                         </div>
@@ -144,33 +144,23 @@
                                             </div>
                                             <div class="col-6">
                                                 <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CreditLoad?.ExistsCredit)" readonly>
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CardBalanceAction)" readonly>
                                                 </div>
                                             </div>
                                         </div>
-
-                                        @if (!string.IsNullOrEmpty(Model.CardNumber) && Model.CardReader != null && Model.CreditLoad != null)
+                                        @if (Model.CreditLoad.IsSuccess == true)
                                         {
-                                            if (Model.CreditLoad.IsSuccess == true)
-                                            {
-                                                <div class="form-group">
-                                                    <a href="javascript:;" class="btn btn-warning btn-block">KART YÜKLEMESİ TAMAMLANMIŞ</a>
-                                                </div>
-                                            }
-                                            else
-                                            {
-                                                <div class="form-group">
-                                                    <a href="javascript:;" onclick="LoadCredit('@(Model.CreditLoad?.UID)')" class="btn btn-primary btn-block">KART YÜKLE</a>
-                                                </div>
-                                            }
-
+                                            <div class="form-group">
+                                                <a href="javascript:;" class="btn btn-success btn-block">KART YÜKLEMESİ TAMAMLADI</a>
+                                            </div>
                                         }
                                         else
                                         {
                                             <div class="form-group">
-                                                <a href="javascript:;" class="btn btn-danger btn-block">@(!string.IsNullOrEmpty(Model.CardNumber) && Model.CardReader == null ? "KART OKUYUCU TANIMSIZ" : !string.IsNullOrEmpty(Model.CardNumber) && Model.CreditLoad == null ? "OKUMA BAŞARISIZ" : !string.IsNullOrEmpty(Model.CardNumber) && Model.CreditLoad != null && Model.CreditLoad.IsSuccess == true ? "KART YÜKLEMESİ TAMAMLANMIŞ" : "KART OKUTUNUZ") </a>
+                                                <a href="/CardAction/Index/@(Model.CreditLoad?.SaleID)" class="btn btn-primary btn-block">TEKRAR DENE</a>
                                             </div>
                                         }
+
 
                                     </div>
                                 }
@@ -187,7 +177,7 @@
                 <div class="container">
                     <div class="footer-up">
                         <div class="clean clean-2">
-                            <a href="/sales/Detail/@(Model.TicketSale.ID)">
+                            <a href="/CardAction/Index/@(Model.TicketSale.ID)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="87.52" height="65.64" viewBox="0 0 87.52 65.64">
                                     <path d="M80.227,3h-54.7a6.864,6.864,0,0,0-5.8,3.209L0,35.82,19.728,65.394a6.9,6.9,0,0,0,5.8,3.246h54.7a7.315,7.315,0,0,0,7.293-7.293V10.293A7.315,7.315,0,0,0,80.227,3Zm0,58.347H25.782L8.752,35.82,25.745,10.293H80.227ZM37.962,54.053,51.053,40.962,64.145,54.053l5.142-5.142L56.2,35.82,69.287,22.728l-5.142-5.142L51.053,30.678,37.962,17.587,32.82,22.728,45.912,35.82,32.82,48.912Z" transform="translate(0 -3)" fill="currentColor" />
                                 </svg>
@@ -289,58 +279,6 @@
             $('.money').mask("#.##0,00", { reverse: true });
             $('.money4').mask("#.##0,0000", { reverse: true });
         });
-        function SumExchangeRate() {
-            var amount = $("#Amount").val().replace('.', '').replace(',', '.');
-            var toamount = $("#ToAmount").val().replace('.', '').replace(',', '.');
-            var rate = parseFloat(toamount) / parseFloat(amount) || 0.0000;
-            $("#SaleExchangeRate").val(rate.toFixed(4).toString());
-        };
-        function SumExchangeToAmount() {
-            var amount = $("#Amount").val().replace('.', '').replace(',', '.');
-            var rate = $("#SaleExchangeRate").val().replace('.', '').replace(',', '.');
-            var toamount = parseFloat(amount) * parseFloat(rate) || 0.00;
-            $("#ToAmount").val(toamount.toFixed(2).toString());
-        };
-    </script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/3.1.7/signalr.min.js"></script>
-    <script type="text/javascript">
-
-
-
-        "use strict";
-
-        var connection;
-
-        connection = new signalR.HubConnectionBuilder()
-            .withUrl('http://push.ufegrup.com/MyHub')
-            .build();
-
-
-
-        connection.start().catch(function (err) {
-            $("#MessageArea").html("<p>" + err.toString() + "</p>");
-            //return console.error(err.toString())
-        });
-
-        connection.on('ReceiveCardInfo', (locationid, info) => {
-            if (locationid == @(Model.Authentication.CurrentLocation.ID)) {
-                GetCardInfo(info);
-            }
-        })
-
-        connection.on('finished', (update) => {
-            connection.stop();
-        });
-
-
-        function GetCardInfo(info) {
-            var orderid = $('#OrderID').val();
-            console.log("Order ID : " + orderid);
-            console.log("info : " + info);
-            window.location = '/CardAction/Index/' + orderid +"?cardinfo="+info;
-        }
-
     </script>
 
 

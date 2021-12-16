@@ -25,5 +25,6 @@ namespace ActionForce.Entity
         public Nullable<int> ReadCount { get; set; }
         public Nullable<int> UnitDuration { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
+        public Nullable<int> LocationID { get; set; }
     }
 }

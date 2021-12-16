@@ -15,6 +15,7 @@ namespace ActionForce.PosLocation
         public CardReader CardReader { get; set; }
         public TicketSaleCreditLoad CreditLoad { get; set; }
         public double CardBalance { get; set; } = 0;
+        public double CardBalanceAction { get; set; } = 0;
         public double CreditPaymentAmount { get; set; } = 0;
         public int MasterCredit { get; set; } = 0;
         public int PromoCredit { get; set; } = 0;

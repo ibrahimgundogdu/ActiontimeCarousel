@@ -344,21 +344,26 @@ namespace ActionForce.CardService
         }
 
 
-        public ParameterResult AddCardReaderParameter(CardReaderParameterModel model)
+        public ParamResult AddCardReaderParameter(CardReaderParameterModel model)
         {
-            ParameterResult result = new ParameterResult();
             DateTime now = DateTime.UtcNow.AddHours(3);
+            ParamResult paramresult = new ParamResult()
+            {
+                LocationID = 0,
+                IsSameParameter = true,
+                MiliSecond = 0,
+                ReadCount = 0,
+                UnitDuration = 0,
+                UnitPrice = 0,
+            };
 
-            result.IsSuccess = true;
-            result.Message = string.Empty;
+
 
             try
             {
 
                 using (var connection = new SqlConnection(GetConnectionString()))
                 {
-
-
                     var crParameters = new { Serial = model.SerialNumber, MAC = model.MACAddress };
                     var crSql = "SELECT TOP (1) * FROM [dbo].[CardReader] Where [SerialNumber] = @Serial and [MACAddress] = @MAC";
                     var cardReader = connection.QueryFirstOrDefault<CardReader>(crSql, crParameters);
@@ -387,79 +392,18 @@ namespace ActionForce.CardService
                     }
 
 
-                    //Mevcut parametreye bakılır değişen var mı kontrol edilir
+                    var values = new { SerialNumber = model.SerialNumber, MACAddress = model.MACAddress, Version = model.Version, UnitPrice = (decimal)(model.UnitPrice / 100), MiliSecond = model.MiliSecond, ReadCount = model.ReadCount, UnitDuration = model.UnitDuration };
+                    var sql = "exec [dbo].[CheckCardReaderParameter] @SerialNumber, @MACAddress, @Version, @UnitPrice, @MiliSecond, @ReadCount, @UnitDuration";
 
-                    if (cardReader != null)
-                    {
-                        var rpParameters = new { Serial = model.SerialNumber, MAC = model.MACAddress };
-                        var rpSql = "SELECT TOP (1) * FROM [dbo].[CardReaderParameter] Where [SerialNumber] = @Serial and [MACAddress] = @MAC";
-                        var cardReaderParameter = connection.QueryFirstOrDefault<CardReaderParameter>(rpSql, rpParameters);
-
-
-
-                        if (cardReaderParameter == null)
-                        {
-                            var pparameters = new
-                            {
-                                CardReaderID = cardReader.ID,
-                                SerialNumber = model.SerialNumber,
-                                MACAddress = model.MACAddress,
-                                StartDate = now.Date,
-                                Version = model.Version,
-                                UnitPrice = (decimal)(model.UnitPrice / 100),
-                                MiliSecond = model.MiliSecond,
-                                ReadCount = model.ReadCount,
-                                UnitDuration = model.UnitDuration,
-                                RecordDate = now
-                            };
-
-                            var psql = "INSERT INTO [dbo].[CardReaderParameter] ([CardReaderID],[SerialNumber],[MACAddress],[StartDate],[Version],[UnitPrice],[MiliSecond],[ReadCount],[UnitDuration],[RecordDate]) VALUES(@CardReaderID, @SerialNumber, @MACAddress, @StartDate,@Version,@UnitPrice, @MiliSecond, @ReadCount, @UnitDuration, @RecordDate)";
-                            connection.Execute(psql, pparameters);
-
-                            result.IsAnyChange = false;
-                            result.IsSuccess = true;
-                            result.Message = "OK";
-                        }
-                        else
-                        {
-                            if (cardReaderParameter.Version != model.Version || cardReaderParameter.UnitPrice != model.UnitPrice || cardReaderParameter.MiliSecond != model.MiliSecond || cardReaderParameter.ReadCount != model.ReadCount || cardReaderParameter.UnitDuration != model.UnitDuration)
-                            {
-                                // Mevcudu Gönder Reader i Update et
-
-                                result.IsAnyChange = true;
-                                result.IsSuccess = true;
-                                result.Message = "OK";
-                                result.Version = cardReaderParameter.Version;
-                                result.UnitPrice = cardReaderParameter.UnitPrice * 100;
-                                result.MiliSecond = cardReaderParameter.MiliSecond;
-                                result.ReadCount = cardReaderParameter.ReadCount;
-                                result.UnitDuration = cardReaderParameter.UnitDuration;
-                            }
-                            else
-                            {
-                                result.IsAnyChange = false;
-                                result.IsSuccess = true;
-                                result.Message = "OK";
-                            }
-                        }
-
-                    }
-                    else
-                    {
-                        result.IsAnyChange = false;
-                        result.IsSuccess = false;
-                        result.Message = "NO CRD";
-                    }
+                    paramresult = connection.Query<ParamResult>(sql, values).FirstOrDefault();
 
                 }
             }
             catch (Exception ex)
             {
-                result.IsSuccess = false;
-                result.Message = "ERROR";
             }
 
-            return result;
+            return paramresult;
         }
 
         public CardReader GetCardReader(Guid uid)

@@ -19,10 +19,12 @@ namespace ActionForce.Entity
         public Nullable<int> LocationID { get; set; }
         public Nullable<long> SaleID { get; set; }
         public Nullable<bool> FromCardReader { get; set; }
+        public Nullable<bool> WithCard { get; set; }
         public string CardNumber { get; set; }
-        public Nullable<double> ExistsCredit { get; set; }
-        public Nullable<double> MasterCredit { get; set; }
-        public Nullable<double> PromoCredit { get; set; }
+        public double ExistsCredit { get; set; }
+        public double MasterCredit { get; set; }
+        public double PromoCredit { get; set; }
+        public double RefundCredit { get; set; }
         public double TotalCredit { get; set; }
         public Nullable<double> FinalCredit { get; set; }
         public Nullable<double> PaymentAmount { get; set; }
@@ -34,7 +36,7 @@ namespace ActionForce.Entity
         public Nullable<int> RecordEmployeeID { get; set; }
         public string RecordIP { get; set; }
         public Nullable<System.Guid> UID { get; set; }
-        public bool IsSuccess { get; set; }
         public Nullable<System.DateTime> CompleteDate { get; set; }
+        public bool IsSuccess { get; set; }
     }
 }

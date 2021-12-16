@@ -151,6 +151,7 @@
     <Compile Include="Models\CardReadModel.cs" />
     <Compile Include="Models\DateInfo.cs" />
     <Compile Include="Models\EmployeeCard.cs" />
+    <Compile Include="Models\ParamResult.cs" />
     <Compile Include="Models\Result.cs" />
     <Compile Include="Models\ServiceDataHelper.cs" />
     <Compile Include="Models\ServiceHelper.cs" />
