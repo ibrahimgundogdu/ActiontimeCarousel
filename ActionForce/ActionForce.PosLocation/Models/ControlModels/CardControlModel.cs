@@ -20,5 +20,8 @@ namespace ActionForce.PosLocation
         public List<TicketSaleCreditLoad> CreditLoads { get; set; }
         public double CardBalance { get; set; } = 0;
         public double CardBalanceAction { get; set; } = 0;
+        public TicketSaleCreditLoad CreditLoad { get; set; }
+        public string CardNumber { get; set; }
+        public string CardStatus { get; set; }
     }
 }

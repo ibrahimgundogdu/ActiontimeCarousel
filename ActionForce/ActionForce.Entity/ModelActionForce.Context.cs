@@ -349,7 +349,6 @@ namespace ActionForce.Entity
         public virtual DbSet<LocationProductPriceCategory> LocationProductPriceCategory { get; set; }
         public virtual DbSet<ProductImges> ProductImges { get; set; }
         public virtual DbSet<ProductUnit> ProductUnit { get; set; }
-        public virtual DbSet<Card> Card { get; set; }
         public virtual DbSet<CardActions> CardActions { get; set; }
         public virtual DbSet<CardActionType> CardActionType { get; set; }
         public virtual DbSet<Product> Product { get; set; }
@@ -357,6 +356,7 @@ namespace ActionForce.Entity
         public virtual DbSet<ProductPriceCategory> ProductPriceCategory { get; set; }
         public virtual DbSet<VProductPriceLastList> VProductPriceLastList { get; set; }
         public virtual DbSet<TicketSaleCreditLoad> TicketSaleCreditLoad { get; set; }
+        public virtual DbSet<Card> Card { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -2478,7 +2478,7 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VProductPriceLastList>("GetLocationCurrentProductPrices", mergeOption, locationIDParameter);
         }
     
-        public virtual int AddCardBasket(Nullable<int> locationID, Nullable<int> employeeID, Nullable<int> priceID, Nullable<int> cardPriceID, Nullable<int> environment)
+        public virtual int AddCardBasket(Nullable<int> locationID, Nullable<int> employeeID, Nullable<int> priceID, Nullable<int> cardPriceID, string cardNumber, Nullable<int> environment)
         {
             var locationIDParameter = locationID.HasValue ?
                 new ObjectParameter("LocationID", locationID) :
@@ -2496,14 +2496,18 @@ namespace ActionForce.Entity
                 new ObjectParameter("CardPriceID", cardPriceID) :
                 new ObjectParameter("CardPriceID", typeof(int));
     
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
             var environmentParameter = environment.HasValue ?
                 new ObjectParameter("Environment", environment) :
                 new ObjectParameter("Environment", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddCardBasket", locationIDParameter, employeeIDParameter, priceIDParameter, cardPriceIDParameter, environmentParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddCardBasket", locationIDParameter, employeeIDParameter, priceIDParameter, cardPriceIDParameter, cardNumberParameter, environmentParameter);
         }
     
-        public virtual ObjectResult<Nullable<long>> AddCardPosOrder(Nullable<int> locationID, Nullable<int> employeeID, string orderNumber, string customerName, string customerData, string customerPhone, string identityCard, string description, string recordIP)
+        public virtual ObjectResult<Nullable<long>> AddCardPosOrder(Nullable<int> locationID, Nullable<int> employeeID, string orderNumber, string cardNumber, string customerName, string customerData, string customerPhone, string identityCard, string description, string recordIP)
         {
             var locationIDParameter = locationID.HasValue ?
                 new ObjectParameter("LocationID", locationID) :
@@ -2516,6 +2520,10 @@ namespace ActionForce.Entity
             var orderNumberParameter = orderNumber != null ?
                 new ObjectParameter("OrderNumber", orderNumber) :
                 new ObjectParameter("OrderNumber", typeof(string));
+    
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
     
             var customerNameParameter = customerName != null ?
                 new ObjectParameter("CustomerName", customerName) :
@@ -2541,7 +2549,7 @@ namespace ActionForce.Entity
                 new ObjectParameter("RecordIP", recordIP) :
                 new ObjectParameter("RecordIP", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddCardPosOrder", locationIDParameter, employeeIDParameter, orderNumberParameter, customerNameParameter, customerDataParameter, customerPhoneParameter, identityCardParameter, descriptionParameter, recordIPParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddCardPosOrder", locationIDParameter, employeeIDParameter, orderNumberParameter, cardNumberParameter, customerNameParameter, customerDataParameter, customerPhoneParameter, identityCardParameter, descriptionParameter, recordIPParameter);
         }
     
         public virtual ObjectResult<TicketSaleCreditLoad> AddTicketSaleCreditLoad(Nullable<long> saleID, string cardNumber, Nullable<double> existsCredit, string serialNumber, string mACAddress, Nullable<int> recordEmployeeID, string recordIP)
@@ -2641,6 +2649,80 @@ namespace ActionForce.Entity
                 new ObjectParameter("UnitDuration", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<bool>>("CheckCardReaderParameter", serialNumberParameter, mACAddressParameter, versionParameter, unitPriceParameter, miliSecondParameter, readCountParameter, unitDurationParameter);
+        }
+    
+        public virtual ObjectResult<VTicketBasket> GetLocationCardBasket(Nullable<int> locationID, string cardNumber)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VTicketBasket>("GetLocationCardBasket", locationIDParameter, cardNumberParameter);
+        }
+    
+        public virtual ObjectResult<VTicketBasket> GetLocationCardBasket(Nullable<int> locationID, string cardNumber, MergeOption mergeOption)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VTicketBasket>("GetLocationCardBasket", mergeOption, locationIDParameter, cardNumberParameter);
+        }
+    
+        public virtual ObjectResult<GetLocationCardBasketTotal_Result> GetLocationCardBasketTotal(Nullable<int> locationID, string cardNumber)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationCardBasketTotal_Result>("GetLocationCardBasketTotal", locationIDParameter, cardNumberParameter);
+        }
+    
+        public virtual int CleanCardBasket(Nullable<int> locationID, string cardNumber)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CleanCardBasket", locationIDParameter, cardNumberParameter);
+        }
+    
+        public virtual ObjectResult<AddCard_Result> AddCard(string cardNumber)
+        {
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<AddCard_Result>("AddCard", cardNumberParameter);
+        }
+    
+        public virtual ObjectResult<string> GetCardReadInfo(Nullable<int> locationID, string cardNumber)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetCardReadInfo", locationIDParameter, cardNumberParameter);
         }
     }
 }

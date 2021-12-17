@@ -123,13 +123,16 @@
     <Content Include="assets\fancybox\js\slideshow.js" />
     <Content Include="assets\fancybox\js\thumbs.js" />
     <Content Include="assets\fancybox\js\wheel.js" />
+    <Content Include="assets\img\arrow-u-left-top-bold.svg" />
     <Content Include="assets\img\clean.svg" />
     <Content Include="assets\img\dialpad.svg" />
     <Content Include="assets\img\dots.svg" />
     <Content Include="assets\img\exit.svg" />
+    <Content Include="assets\img\harcama.svg" />
     <Content Include="assets\img\hezarfen.jpg" />
     <Content Include="assets\img\hezarfen1.jpg" />
     <Content Include="assets\img\homepage.svg" />
+    <Content Include="assets\img\iade.svg" />
     <Content Include="assets\img\kredi-yukle.svg" />
     <Content Include="assets\img\location-icon.svg" />
     <Content Include="assets\img\lock.svg" />
@@ -145,6 +148,7 @@
     <Content Include="assets\img\ufe-white.svg" />
     <Content Include="assets\img\user-icon.svg" />
     <Content Include="assets\img\yazar-kasa-icon.svg" />
+    <Content Include="assets\img\yukleme.svg" />
     <Content Include="assets\js\aos-2.3.1.min.js" />
     <Content Include="assets\js\bootstrap.js" />
     <Content Include="assets\js\confirm.js" />
@@ -219,6 +223,7 @@
     <Content Include="assetsdoc\scss\_function.scss" />
     <Content Include="assetsdoc\scss\_reset.scss" />
     <Content Include="assetsdoc\scss\_responsive.scss" />
+    <Content Include="assets\.DS_Store" />
     <None Include="Scripts\jquery-1.6.4-vsdoc.js" />
     <Content Include="Rotativa\help-wkhtmltoimage.txt" />
     <Content Include="Rotativa\help-wkhtmltopdf.txt" />

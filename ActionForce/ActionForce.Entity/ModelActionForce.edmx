@@ -501,12 +501,12 @@
         </EntityType>
         <EntityType Name="Card">
           <Key>
-            <PropertyRef Name="ID" />
+            <PropertyRef Name="CardNumber" />
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OurCompanyID" Type="int" />
           <Property Name="CardTypeID" Type="smallint" />
-          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="ExpireDate" Type="date" />
           <Property Name="Credit" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
@@ -3561,6 +3561,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="MasterCredit" Type="int" />
           <Property Name="PromoCredit" Type="int" />
           <Property Name="TotalCredit" Type="int" StoreGeneratedPattern="Computed" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="TicketBasketCounter">
           <Key>
@@ -3728,6 +3729,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="PaymethodID" Type="int" />
           <Property Name="Amount" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="ReasonID" Type="int" />
           <Property Name="PosStatusID" Type="int" />
           <Property Name="EnvironmentID" Type="int" />
@@ -3946,6 +3948,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="ProductID" Type="int" />
           <Property Name="TicketProductID" Type="int" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="MasterCredit" Type="int" />
           <Property Name="PromoCredit" Type="int" />
           <Property Name="TotalCredit" Type="int" StoreGeneratedPattern="Computed" />
@@ -6651,6 +6654,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketBasket' does not hav
           <Property Name="PromoCredit" Type="int" Nullable="false" />
           <Property Name="TotalCredit" Type="int" />
           <Property Name="EnvironmentID" Type="int" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketBasketTotal' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6674,6 +6678,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketBasketTotal' does no
           <Property Name="GeneralTotal" Type="float" Nullable="false" />
           <Property Name="Money" Type="nvarchar" MaxLength="10" Nullable="false" />
           <Property Name="Sign" Type="nvarchar" MaxLength="1" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VTicketProduct' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -7335,17 +7340,22 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
           <Parameter Name="TicketNumber" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="AddCard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="AddCardBasket" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
           <Parameter Name="PriceID" Type="int" Mode="In" />
           <Parameter Name="CardPriceID" Type="int" Mode="In" />
+          <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
           <Parameter Name="Environment" Type="int" Mode="In" />
         </Function>
         <Function Name="AddCardPosOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
           <Parameter Name="OrderNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
           <Parameter Name="CustomerName" Type="nvarchar" Mode="In" />
           <Parameter Name="CustomerData" Type="nvarchar" Mode="In" />
           <Parameter Name="CustomerPhone" Type="nvarchar" Mode="In" />
@@ -7612,6 +7622,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
         </Function>
+        <Function Name="CleanCardBasket" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="ComputeEmployeeSalary" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ProcessDate" Type="date" Mode="In" />
         </Function>
@@ -7642,6 +7656,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <Function Name="GetCardBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CardID" Type="bigint" Mode="In" />
           <Parameter Name="Currency" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetCardReadInfo" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="GetCashBalance" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -7676,6 +7694,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         </Function>
         <Function Name="GetLocationAnimalCostums" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
+        </Function>
+        <Function Name="GetLocationCardBasket" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="GetLocationCardBasketTotal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="GetLocationCurrentBasket" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -10313,7 +10339,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketBasket].[MasterCredit] AS [MasterCredit], 
     [VTicketBasket].[PromoCredit] AS [PromoCredit], 
     [VTicketBasket].[TotalCredit] AS [TotalCredit], 
-    [VTicketBasket].[EnvironmentID] AS [EnvironmentID]
+    [VTicketBasket].[EnvironmentID] AS [EnvironmentID], 
+    [VTicketBasket].[CardNumber] AS [CardNumber]
     FROM [dbo].[VTicketBasket] AS [VTicketBasket]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VTicketBasketTotal" EntityType="Self.VTicketBasketTotal" store:Type="Views" store:Schema="dbo">
@@ -10327,7 +10354,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VTicketBasketTotal].[TaxTotal] AS [TaxTotal], 
     [VTicketBasketTotal].[GeneralTotal] AS [GeneralTotal], 
     [VTicketBasketTotal].[Money] AS [Money], 
-    [VTicketBasketTotal].[Sign] AS [Sign]
+    [VTicketBasketTotal].[Sign] AS [Sign], 
+    [VTicketBasketTotal].[CardNumber] AS [CardNumber]
     FROM [dbo].[VTicketBasketTotal] AS [VTicketBasketTotal]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VTicketProduct" EntityType="Self.VTicketProduct" store:Type="Views" store:Schema="dbo">
@@ -11687,7 +11715,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="LocationProductPriceCategory" EntityType="db293_ActionTimeDbModel.LocationProductPriceCategory" />
           <EntitySet Name="ProductImges" EntityType="db293_ActionTimeDbModel.ProductImges" />
           <EntitySet Name="ProductUnit" EntityType="db293_ActionTimeDbModel.ProductUnit" />
-          <EntitySet Name="Card" EntityType="db293_ActionTimeDbModel.Card" />
           <EntitySet Name="CardActions" EntityType="db293_ActionTimeDbModel.CardActions" />
           <EntitySet Name="CardActionType" EntityType="db293_ActionTimeDbModel.CardActionType" />
           <EntitySet Name="Product" EntityType="db293_ActionTimeDbModel.Product" />
@@ -11702,12 +11729,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="PriceID" Mode="In" Type="Int32" />
             <Parameter Name="CardPriceID" Mode="In" Type="Int32" />
+            <Parameter Name="CardNumber" Mode="In" Type="String" />
             <Parameter Name="Environment" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AddCardPosOrder" ReturnType="Collection(Int64)">
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
             <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="OrderNumber" Mode="In" Type="String" />
+            <Parameter Name="CardNumber" Mode="In" Type="String" />
             <Parameter Name="CustomerName" Mode="In" Type="String" />
             <Parameter Name="CustomerData" Mode="In" Type="String" />
             <Parameter Name="CustomerPhone" Mode="In" Type="String" />
@@ -11734,6 +11763,26 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="UnitDuration" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="TicketSaleCreditLoad" EntityType="db293_ActionTimeDbModel.TicketSaleCreditLoad" />
+          <EntitySet Name="Card" EntityType="db293_ActionTimeDbModel.Card" />
+          <FunctionImport Name="GetLocationCardBasket" EntitySet="VTicketBasket" ReturnType="Collection(db293_ActionTimeDbModel.VTicketBasket)">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="CardNumber" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetLocationCardBasketTotal" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationCardBasketTotal_Result)">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="CardNumber" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CleanCardBasket">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="CardNumber" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddCard" ReturnType="Collection(db293_ActionTimeDbModel.AddCard_Result)">
+          <Parameter Name="CardNumber" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetCardReadInfo" ReturnType="Collection(String)">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="CardNumber" Mode="In" Type="String" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -17429,6 +17478,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="MasterCredit" Type="Int32" />
           <Property Name="PromoCredit" Type="Int32" />
           <Property Name="TotalCredit" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VTicketBasket">
           <Key>
@@ -17484,6 +17534,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="PromoCredit" Type="Int32" Nullable="false" />
           <Property Name="TotalCredit" Type="Int32" />
           <Property Name="EnvironmentID" Type="Int32" />
+          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VTicketPromotion">
           <Key>
@@ -17584,6 +17635,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="GeneralTotal" Type="Double" Nullable="false" />
           <Property Name="Money" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
           <Property Name="Sign" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <ComplexType Name="GetLocationCurrentBasketTotal_Result">
           <Property Type="Int32" Name="LocationID" Nullable="true" />
@@ -18161,6 +18213,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="IsActive" Type="Boolean" />
           <Property Name="IsSendPosTerminal" Type="Boolean" />
           <Property Name="PosRegistryNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="TicketSaleRows">
           <Key>
@@ -18212,6 +18265,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="MasterCredit" Type="Int32" />
           <Property Name="PromoCredit" Type="Int32" />
           <Property Name="TotalCredit" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="VTicketSaleRowsAll">
           <Key>
@@ -19271,22 +19325,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SortBy" Type="String" MaxLength="3" FixedLength="true" Unicode="false" />
           <Property Name="IsActive" Type="Boolean" />
         </EntityType>
-        <EntityType Name="Card">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="CardTypeID" Type="Int16" />
-          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="ExpireDate" Type="DateTime" Precision="0" />
-          <Property Name="Credit" Type="Double" />
-          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
-          <Property Name="CardStatusID" Type="Int32" />
-          <Property Name="RecordDate" Type="DateTime" Precision="3" />
-          <Property Name="ActivateDate" Type="DateTime" Precision="3" />
-          <Property Name="UID" Type="Guid" />
-        </EntityType>
         <EntityType Name="CardActions">
           <Key>
             <PropertyRef Name="ID" />
@@ -19485,6 +19523,92 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CompleteDate" Type="DateTime" Precision="3" />
           <Property Name="IsSuccess" Type="Boolean" Nullable="false" />
         </EntityType>
+        <EntityType Name="Card">
+          <Key>
+            <PropertyRef Name="CardNumber" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="CardTypeID" Type="Int16" />
+          <Property Name="CardNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ExpireDate" Type="DateTime" Precision="0" />
+          <Property Name="Credit" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="CardStatusID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="ActivateDate" Type="DateTime" Precision="3" />
+          <Property Name="UID" Type="Guid" />
+        </EntityType>
+        <ComplexType Name="GetLocationCardBasket_Result">
+          <Property Type="Int64" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="LocationID" Nullable="true" />
+          <Property Type="Int32" Name="EmployeeID" Nullable="true" />
+          <Property Type="Int32" Name="PriceCategoryID" Nullable="true" />
+          <Property Type="Int32" Name="PriceID" Nullable="false" />
+          <Property Type="Int32" Name="TicketProductID" Nullable="true" />
+          <Property Type="Int32" Name="TicketTypeID" Nullable="true" />
+          <Property Type="Boolean" Name="UseImmediately" Nullable="true" />
+          <Property Type="String" Name="Name" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TicketNumber" Nullable="true" MaxLength="50" />
+          <Property Type="DateTime" Name="Date" Nullable="false" />
+          <Property Type="Boolean" Name="IsSale" Nullable="false" />
+          <Property Type="Int32" Name="Quantity" Nullable="false" />
+          <Property Type="Int32" Name="Unit" Nullable="true" />
+          <Property Type="Double" Name="Price" Nullable="false" />
+          <Property Type="Double" Name="Total" Nullable="false" />
+          <Property Type="String" Name="Money" Nullable="false" MaxLength="10" />
+          <Property Type="Int32" Name="PromotionID" Nullable="true" />
+          <Property Type="Boolean" Name="IsPromotion" Nullable="true" />
+          <Property Type="Boolean" Name="IsApprove" Nullable="true" />
+          <Property Type="Int32" Name="RecordEmployeeID" Nullable="true" />
+          <Property Type="DateTime" Name="RecordDate" Nullable="true" Precision="23" />
+          <Property Type="Int32" Name="SaleTypeID" Nullable="true" />
+          <Property Type="Double" Name="PrePaid" Nullable="true" />
+          <Property Type="Int32" Name="PrePaidCampaignID" Nullable="true" />
+          <Property Type="String" Name="CategoryCode" Nullable="true" MaxLength="8" />
+          <Property Type="String" Name="CategoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="TicketTypeName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ProductName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="ProductCategoryName" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Style" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="BackStyle" Nullable="true" MaxLength="50" />
+          <Property Type="String" Name="Sign" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="Description" Nullable="true" MaxLength="500" />
+          <Property Type="Double" Name="TaxRate" Nullable="true" />
+          <Property Type="Double" Name="Tax" Nullable="true" />
+          <Property Type="Double" Name="Discount" Nullable="true" />
+          <Property Type="Int32" Name="MasterCredit" Nullable="false" />
+          <Property Type="Int32" Name="PromoCredit" Nullable="false" />
+          <Property Type="Int32" Name="TotalCredit" Nullable="true" />
+          <Property Type="Int32" Name="EnvironmentID" Nullable="true" />
+          <Property Type="String" Name="CardNumber" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="GetLocationCardBasketTotal_Result">
+          <Property Type="Int32" Name="LocationID" Nullable="true" />
+          <Property Type="Int32" Name="EmployeeID" Nullable="true" />
+          <Property Type="DateTime" Name="Date" Nullable="false" />
+          <Property Type="Double" Name="Total" Nullable="false" />
+          <Property Type="Double" Name="Discount" Nullable="false" />
+          <Property Type="Double" Name="SubTotal" Nullable="false" />
+          <Property Type="Double" Name="TaxTotal" Nullable="false" />
+          <Property Type="Double" Name="GeneralTotal" Nullable="false" />
+          <Property Type="String" Name="Money" Nullable="false" MaxLength="10" />
+          <Property Type="String" Name="Sign" Nullable="true" MaxLength="1" />
+          <Property Type="String" Name="CardNumber" Nullable="true" MaxLength="20" />
+        </ComplexType>
+        <ComplexType Name="AddCard_Result">
+          <Property Type="Int64" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="OurCompanyID" Nullable="true" />
+          <Property Type="Int16" Name="CardTypeID" Nullable="true" />
+          <Property Type="String" Name="CardNumber" Nullable="false" MaxLength="20" />
+          <Property Type="DateTime" Name="ExpireDate" Nullable="true" />
+          <Property Type="Double" Name="Credit" Nullable="true" />
+          <Property Type="String" Name="Currency" Nullable="true" MaxLength="4" />
+          <Property Type="Int32" Name="CardStatusID" Nullable="true" />
+          <Property Type="DateTime" Name="RecordDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="ActivateDate" Nullable="true" Precision="23" />
+          <Property Type="Guid" Name="UID" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -24967,6 +25091,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketBasket">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketBasket">
               <MappingFragment StoreEntitySet="TicketBasket">
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
                 <ScalarProperty Name="TotalCredit" ColumnName="TotalCredit" />
                 <ScalarProperty Name="PromoCredit" ColumnName="PromoCredit" />
                 <ScalarProperty Name="MasterCredit" ColumnName="MasterCredit" />
@@ -25007,6 +25132,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VTicketBasket">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketBasket">
               <MappingFragment StoreEntitySet="VTicketBasket">
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
                 <ScalarProperty Name="EnvironmentID" ColumnName="EnvironmentID" />
                 <ScalarProperty Name="TotalCredit" ColumnName="TotalCredit" />
                 <ScalarProperty Name="PromoCredit" ColumnName="PromoCredit" />
@@ -25098,6 +25224,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VTicketBasketTotal">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VTicketBasketTotal">
               <MappingFragment StoreEntitySet="VTicketBasketTotal">
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
                 <ScalarProperty Name="Sign" ColumnName="Sign" />
                 <ScalarProperty Name="Money" ColumnName="Money" />
                 <ScalarProperty Name="GeneralTotal" ColumnName="GeneralTotal" />
@@ -25623,6 +25750,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketSale">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketSale">
               <MappingFragment StoreEntitySet="TicketSale">
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
                 <ScalarProperty Name="PosRegistryNumber" ColumnName="PosRegistryNumber" />
                 <ScalarProperty Name="IsSendPosTerminal" ColumnName="IsSendPosTerminal" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
@@ -25663,6 +25791,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketSaleRows">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketSaleRows">
               <MappingFragment StoreEntitySet="TicketSaleRows">
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
                 <ScalarProperty Name="TotalCredit" ColumnName="TotalCredit" />
                 <ScalarProperty Name="PromoCredit" ColumnName="PromoCredit" />
                 <ScalarProperty Name="MasterCredit" ColumnName="MasterCredit" />
@@ -26814,23 +26943,6 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Card">
-            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Card">
-              <MappingFragment StoreEntitySet="Card">
-                <ScalarProperty Name="UID" ColumnName="UID" />
-                <ScalarProperty Name="ActivateDate" ColumnName="ActivateDate" />
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="CardStatusID" ColumnName="CardStatusID" />
-                <ScalarProperty Name="Currency" ColumnName="Currency" />
-                <ScalarProperty Name="Credit" ColumnName="Credit" />
-                <ScalarProperty Name="ExpireDate" ColumnName="ExpireDate" />
-                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
-                <ScalarProperty Name="CardTypeID" ColumnName="CardTypeID" />
-                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="CardActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardActions">
               <MappingFragment StoreEntitySet="CardActions">
@@ -26989,6 +27101,61 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Card">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Card">
+              <MappingFragment StoreEntitySet="Card">
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="ActivateDate" ColumnName="ActivateDate" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="CardStatusID" ColumnName="CardStatusID" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="ExpireDate" ColumnName="ExpireDate" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="CardTypeID" ColumnName="CardTypeID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetLocationCardBasket" FunctionName="db293_ActionTimeDbModel.Store.GetLocationCardBasket">
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetLocationCardBasketTotal" FunctionName="db293_ActionTimeDbModel.Store.GetLocationCardBasketTotal">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetLocationCardBasketTotal_Result">
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="SubTotal" ColumnName="SubTotal" />
+                <ScalarProperty Name="TaxTotal" ColumnName="TaxTotal" />
+                <ScalarProperty Name="GeneralTotal" ColumnName="GeneralTotal" />
+                <ScalarProperty Name="Money" ColumnName="Money" />
+                <ScalarProperty Name="Sign" ColumnName="Sign" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="CleanCardBasket" FunctionName="db293_ActionTimeDbModel.Store.CleanCardBasket" />
+          <FunctionImportMapping FunctionImportName="AddCard" FunctionName="db293_ActionTimeDbModel.Store.AddCard">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.AddCard_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="CardTypeID" ColumnName="CardTypeID" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="ExpireDate" ColumnName="ExpireDate" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="CardStatusID" ColumnName="CardStatusID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="ActivateDate" ColumnName="ActivateDate" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="GetCardReadInfo" FunctionName="db293_ActionTimeDbModel.Store.GetCardReadInfo" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

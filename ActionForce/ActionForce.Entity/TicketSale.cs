@@ -48,5 +48,6 @@ namespace ActionForce.Entity
         public Nullable<bool> IsActive { get; set; }
         public Nullable<bool> IsSendPosTerminal { get; set; }
         public string PosRegistryNumber { get; set; }
+        public string CardNumber { get; set; }
     }
 }

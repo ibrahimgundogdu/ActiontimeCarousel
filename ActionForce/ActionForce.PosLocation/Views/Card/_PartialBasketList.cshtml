@@ -2,7 +2,7 @@
 
 <div class="footer-up">
     <div class="clean">
-        <button onclick="ClearBasket()">
+        <button onclick="ClearBasket('@(Model.CardNumber)')">
             <svg xmlns="http://www.w3.org/2000/svg" width="87.52" height="65.64" viewBox="0 0 87.52 65.64">
                 <path d="M80.227,3h-54.7a6.864,6.864,0,0,0-5.8,3.209L0,35.82,19.728,65.394a6.9,6.9,0,0,0,5.8,3.246h54.7a7.315,7.315,0,0,0,7.293-7.293V10.293A7.315,7.315,0,0,0,80.227,3Zm0,58.347H25.782L8.752,35.82,25.745,10.293H80.227ZM37.962,54.053,51.053,40.962,64.145,54.053l5.142-5.142L56.2,35.82,69.287,22.728l-5.142-5.142L51.053,30.678,37.962,17.587,32.82,22.728,45.912,35.82,32.82,48.912Z" transform="translate(0 -3)" fill="currentColor" />
             </svg>
@@ -15,7 +15,7 @@
         <span class="piece">@(Model.EmployeeBasketCount) ADET SATIR</span>
     </div>
     <div class="payment">
-        <a href="/CardTransaction/SaveOrder">
+        <a href="/CardTransaction/SaveOrder/@(Model.CardNumber)">
             <button type="button">
                 <svg xmlns="http://www.w3.org/2000/svg" width="80.314" height="65.638" viewBox="0 0 80.314 65.638">
                     <path d="M74.012,3.01H8.3a7.323,7.323,0,0,0-7.3,7.3V24.877H8.3V10.238H74.012V61.456H8.3V46.781H1V61.42a7.26,7.26,0,0,0,7.3,7.228H74.012a7.26,7.26,0,0,0,7.3-7.228V10.311a7.3,7.3,0,0,0-7.3-7.3ZM37.506,50.432l14.6-14.6-14.6-14.6V32.178H1v7.3H37.506ZM74.012,3.01H8.3a7.323,7.323,0,0,0-7.3,7.3V24.877H8.3V10.238H74.012V61.456H8.3V46.781H1V61.42a7.26,7.26,0,0,0,7.3,7.228H74.012a7.26,7.26,0,0,0,7.3-7.228V10.311a7.3,7.3,0,0,0-7.3-7.3ZM37.506,50.432l14.6-14.6-14.6-14.6V32.178H1v7.3H37.506Z" transform="translate(-1 -3.01)" fill="currentColor" />
@@ -28,7 +28,7 @@
 </div>
 <div class="footer-basket">
     <ul>
-        @foreach (var item in Model.BasketList.OrderBy(x => x.RecordDate))
+        @foreach (var item in Model.BasketList?.OrderBy(x => x.RecordDate))
         {
             <li>
                 <div class="name">
@@ -47,7 +47,7 @@
                 </div>
                 <div class="list-delete">
 
-                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" onclick="return confirm('Kaldırmak istediğinize emin misiniz?') ? RemoveBasketItem(@(item.ID)):''">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" onclick="return confirm('Kaldırmak istediğinize emin misiniz?') ? RemoveBasketItem(@(item.ID),'@(item.CardNumber)'):''">
                         <path d="M59.889,3H10.111A7.132,7.132,0,0,0,3,10.111V59.889A7.132,7.132,0,0,0,10.111,67H59.889A7.132,7.132,0,0,0,67,59.889V10.111A7.132,7.132,0,0,0,59.889,3Zm0,56.889H10.111V10.111H59.889ZM17.222,31.444H52.778v7.111H17.222Z" transform="translate(-3 -3)" fill="currentColor" />
                     </svg>
                 </div>

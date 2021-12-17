@@ -95,6 +95,9 @@
     <Compile Include="ActionTypeExpense.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="AddCard_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="AddConfirmMessage_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -444,6 +447,12 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="GetLocationAnimalCostums_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetLocationCardBasketTotal_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetLocationCardBasket_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="GetLocationCurrentBasketTotal_Result.cs">

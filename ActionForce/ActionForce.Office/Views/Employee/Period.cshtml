@@ -58,10 +58,9 @@
                                     </tbody>
                                 </table>
                             }
-
-                            <div id="EmployeePeriodsDetail@(Model.Employee.EmployeeID)">
-                                @{ Html.RenderPartial("_PartialEmployeePeriodsDetail", Model);}
-                            </div>
+                        </div>
+                        <div id="EmployeePeriodsDetail@(Model.Employee.EmployeeID)">
+                            @{ Html.RenderPartial("_PartialEmployeePeriodsDetail", Model);}
                         </div>
                     </div>
 

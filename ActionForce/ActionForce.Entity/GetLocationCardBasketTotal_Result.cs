@@ -10,9 +10,8 @@
 namespace ActionForce.Entity
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class VTicketBasketTotal
+    public partial class GetLocationCardBasketTotal_Result
     {
         public Nullable<int> LocationID { get; set; }
         public Nullable<int> EmployeeID { get; set; }

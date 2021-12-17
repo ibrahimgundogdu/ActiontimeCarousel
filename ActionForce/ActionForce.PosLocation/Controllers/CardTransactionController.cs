@@ -45,7 +45,7 @@ namespace ActionForce.PosLocation.Controllers
         }
 
         //SaveOrder
-        public ActionResult SaveOrder()
+        public ActionResult SaveOrder(string id)
         {
             TransactionControlModel model = new TransactionControlModel();
             model.Authentication = this.AuthenticationData;
@@ -53,18 +53,20 @@ namespace ActionForce.PosLocation.Controllers
 
             DateTime date = DateTime.UtcNow.AddHours(this.AuthenticationData.CurrentLocation.TimeZone).Date;
 
+            var cardinfo = Db.GetCardReadInfo(model.Authentication.CurrentLocation.ID, id).FirstOrDefault();
+
             if (Db.TicketBasket.Any(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == date))
             {
                 try
                 {
                     var OrderNumber = "S" + Db.GetPosOrderNumber().FirstOrDefault().ToString();
 
-                    orderID = Db.AddCardPosOrder(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID, OrderNumber, null, null, null, null, null, PosManager.GetIPAddress()).FirstOrDefault();
+                    orderID = Db.AddCardPosOrder(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID, OrderNumber, id, null, null, null, null, null, PosManager.GetIPAddress()).FirstOrDefault();
 
                     model.Result.IsSuccess = true;
                     model.Result.Message = $"{orderID} ID'li Sipariş Eklendi";
 
-                    var clean = Db.CleanBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID);
+                    var clean = Db.CleanCardBasket(model.Authentication.CurrentLocation.ID, id);
 
                     PosManager.AddApplicationLog("Location", "TicketSale", "Insert", orderID.ToString(), "Default", "CreateOrder", null, true, model.Result.Message, string.Empty, DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone), $"{model.Authentication.CurrentEmployee.EmployeeID} {model.Authentication.CurrentEmployee.FullName}", PosManager.GetIPAddress(), string.Empty, null);
 
@@ -77,7 +79,7 @@ namespace ActionForce.PosLocation.Controllers
                     model.Result.IsSuccess = false;
                     model.Result.Message = $"Sipariş Eklenemedi. Hata :" + ex.Message;
                     TempData["Result"] = model.Result;
-                    return RedirectToAction("Index", "Default");
+                    return RedirectToAction("Index", "Card", new { card = cardinfo });
                 }
             }
             else
@@ -85,7 +87,7 @@ namespace ActionForce.PosLocation.Controllers
                 model.Result.IsSuccess = false;
                 model.Result.Message = $"Sepetiniz boş olamaz";
                 TempData["Result"] = model.Result;
-                return RedirectToAction("Index", "Default");
+                return RedirectToAction("Index", "Card", new { card = cardinfo });
             }
 
         }
