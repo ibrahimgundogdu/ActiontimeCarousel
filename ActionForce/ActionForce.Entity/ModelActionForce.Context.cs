@@ -357,6 +357,8 @@ namespace ActionForce.Entity
         public virtual DbSet<VProductPriceLastList> VProductPriceLastList { get; set; }
         public virtual DbSet<TicketSaleCreditLoad> TicketSaleCreditLoad { get; set; }
         public virtual DbSet<Card> Card { get; set; }
+        public virtual DbSet<VCard> VCard { get; set; }
+        public virtual DbSet<VCardActions> VCardActions { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -2478,7 +2480,7 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VProductPriceLastList>("GetLocationCurrentProductPrices", mergeOption, locationIDParameter);
         }
     
-        public virtual int AddCardBasket(Nullable<int> locationID, Nullable<int> employeeID, Nullable<int> priceID, Nullable<int> cardPriceID, string cardNumber, Nullable<int> environment)
+        public virtual int AddCardBasket(Nullable<int> locationID, Nullable<int> employeeID, Nullable<int> priceID, Nullable<int> cardPriceID, string cardNumber, Nullable<int> cardReaderID, Nullable<int> environment)
         {
             var locationIDParameter = locationID.HasValue ?
                 new ObjectParameter("LocationID", locationID) :
@@ -2500,11 +2502,15 @@ namespace ActionForce.Entity
                 new ObjectParameter("CardNumber", cardNumber) :
                 new ObjectParameter("CardNumber", typeof(string));
     
+            var cardReaderIDParameter = cardReaderID.HasValue ?
+                new ObjectParameter("CardReaderID", cardReaderID) :
+                new ObjectParameter("CardReaderID", typeof(int));
+    
             var environmentParameter = environment.HasValue ?
                 new ObjectParameter("Environment", environment) :
                 new ObjectParameter("Environment", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddCardBasket", locationIDParameter, employeeIDParameter, priceIDParameter, cardPriceIDParameter, cardNumberParameter, environmentParameter);
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddCardBasket", locationIDParameter, employeeIDParameter, priceIDParameter, cardPriceIDParameter, cardNumberParameter, cardReaderIDParameter, environmentParameter);
         }
     
         public virtual ObjectResult<Nullable<long>> AddCardPosOrder(Nullable<int> locationID, Nullable<int> employeeID, string orderNumber, string cardNumber, string customerName, string customerData, string customerPhone, string identityCard, string description, string recordIP)

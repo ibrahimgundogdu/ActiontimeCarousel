@@ -12,13 +12,15 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class CardActions
+    public partial class VCardActions
     {
         public long ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
         public Nullable<long> CardID { get; set; }
         public Nullable<int> LocationID { get; set; }
         public Nullable<int> CustomerID { get; set; }
+        public Nullable<long> SaleID { get; set; }
+        public Nullable<long> SaleRowID { get; set; }
         public Nullable<long> ProcessID { get; set; }
         public Nullable<System.Guid> ProcessUID { get; set; }
         public Nullable<short> ActionTypeID { get; set; }
@@ -29,9 +31,17 @@ namespace ActionForce.Entity
         public double Credit { get; set; }
         public string Currency { get; set; }
         public Nullable<bool> IsPromotion { get; set; }
-        public Nullable<long> SaleID { get; set; }
-        public Nullable<long> SaleRowID { get; set; }
-        public string CardNumber { get; set; }
+        public string NameTR { get; set; }
         public Nullable<int> CardReaderID { get; set; }
+        public string CardNumber { get; set; }
+        public Nullable<short> CardTypeID { get; set; }
+        public Nullable<int> CardReaderTypeID { get; set; }
+        public Nullable<int> LocationPartID { get; set; }
+        public string PartName { get; set; }
+        public string SerialNumber { get; set; }
+        public string MACAddress { get; set; }
+        public string ReaderTypeName { get; set; }
+        public string LocationFullName { get; set; }
+        public Nullable<System.DateTime> DateOnly { get; set; }
     }
 }

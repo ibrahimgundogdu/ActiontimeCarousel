@@ -9,7 +9,7 @@ namespace ActionForce.PosLocation.Controllers
 {
     public class CardActionController : BaseController
     {
-        public ActionResult Index(long? id, string cardinfo)
+        public ActionResult Index(long? id)
         {
             CardActionControlModel model = new CardActionControlModel();
             model.Authentication = this.AuthenticationData;
@@ -25,6 +25,14 @@ namespace ActionForce.PosLocation.Controllers
             }
 
             model.TicketSale = Db.TicketSale.FirstOrDefault(x => x.ID == id);
+
+            if (model.TicketSale == null || string.IsNullOrEmpty(model.TicketSale?.CardNumber))
+            {
+                return RedirectToAction("Index", "Card");
+            }
+
+            model.CardReader = Db.CardReader.FirstOrDefault(x => x.ID == model.TicketSale.CardReaderID);
+
             model.TicketSaleRow = Db.TicketSaleRows.Where(x => x.SaleID == id).ToList();
             model.TicketSalePosPayments = Db.TicketSalePosPayment.Where(x => x.SaleID == id).ToList();
 
@@ -32,45 +40,28 @@ namespace ActionForce.PosLocation.Controllers
             model.MasterCredit = model.TicketSaleRow.Sum(x => x.MasterCredit) ?? 0;
             model.PromoCredit = model.TicketSaleRow.Sum(x => x.PromoCredit) ?? 0;
             model.TotalCredit = model.MasterCredit + model.PromoCredit;
+            model.Card = Db.Card.FirstOrDefault(x => x.CardNumber == model.TicketSale.CardNumber);
 
-            if (!string.IsNullOrEmpty(cardinfo))
+            model.CardNumber = model.Card.CardNumber;
+
+            var creditLoad = Db.AddTicketSaleCreditLoad(id, model.Card.CardNumber, model.Card.Credit, model.CardReader.SerialNumber, model.CardReader.MACAddress, model.Authentication.CurrentEmployee.EmployeeID, PosManager.GetIPAddress()).FirstOrDefault();
+            model.CreditLoad = creditLoad;
+
+            if (creditLoad.IsSuccess == true)
             {
-                //00119D9B;CC:50:E3:11:9D:9B;4528C2F3;100
-
-                string[] cardinfolist = cardinfo.Split(';').ToArray();
-
-                if (cardinfolist.Count() == 4)
-                {
-                    string serino = cardinfolist[0];
-                    string macano = cardinfolist[1];
-                    string cardno = cardinfolist[2];
-                    string credit = cardinfolist[3];
-                    double? existscredit = (Convert.ToDouble(credit) / 100);
-                    model.CardNumber = cardno;
-
-                    var creditLoad = Db.AddTicketSaleCreditLoad(id, cardno, existscredit, serino, macano, model.Authentication.CurrentEmployee.EmployeeID, PosManager.GetIPAddress()).FirstOrDefault();
-                    model.CreditLoad = creditLoad;
-
-                    if (creditLoad.IsSuccess == true)
-                    {
-                        return RedirectToAction("LoadResult", new { id = creditLoad.UID });
-                    }
-
-
-                    model.Card = Db.Card.FirstOrDefault(x => x.CardNumber == cardno);
-                    model.CardReader = Db.CardReader.FirstOrDefault(x => x.SerialNumber == serino && x.MACAddress == macano && x.LocationID == model.Authentication.CurrentLocation.ID && x.CardReaderTypeID == 1 && x.IsActive == true);
-
-                    model.CardBalanceAction = 0;
-
-                    if (Db.CardActions.Any(x => x.CardID == model.Card.ID))
-                    {
-                        model.CardBalanceAction = Db.CardActions.Where(x => x.CardID == model.Card.ID)?.Sum(x => x.Credit) ?? 0.0;
-                    }
-
-                    model.CardBalance = existscredit ?? 0;
-                }
-
+                return RedirectToAction("LoadResult", new { id = creditLoad.UID });
             }
+
+
+
+            model.CardBalanceAction = 0;
+
+            if (Db.CardActions.Any(x => x.CardID == model.Card.ID))
+            {
+                model.CardBalanceAction = Db.CardActions.Where(x => x.CardID == model.Card.ID)?.Sum(x => x.Credit) ?? 0.0;
+            }
+
+            model.CardBalance = model.Card?.Credit ?? 0;
 
             return View(model);
         }
@@ -117,7 +108,7 @@ namespace ActionForce.PosLocation.Controllers
             return View(model);
         }
 
-     
+
 
     }
 }

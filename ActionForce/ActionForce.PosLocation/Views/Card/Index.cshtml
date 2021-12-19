@@ -53,6 +53,7 @@
                                 <div class="col col-12 col-lg-5">
                                     <div class="left-card">
                                         <div class="centered">
+                                            <input id="CardReaderID" name="CardReaderID" type="hidden" value="@(Model.CardReader?.ID)" />
                                             <div class="seri-no">@(Model.CardReader?.SerialNumber)</div>
                                             <div class="mac-no">@(Model.CardReader?.MACAddress)</div>
                                         </div>
@@ -61,9 +62,11 @@
                                 <div class="col col-12 col-lg-7">
                                     <div class="center-card">
                                         <div class="centered">
+                                            <div class="card-type">@(Model.Card?.CardTypeName)</div>
                                             <div class="status @(Model.Card?.CardStatusID == 0 ? "open": Model.Card?.CardStatusID == 1 ? "active" : Model.Card?.CardStatusID == 2 ? "passive":"")">@(Model.CardStatus)</div>  <!-- passive active open -->
                                             <div class="card-no">@(Model.Card != null ? Model.Card.CardNumber : "Kartı Okutunuz")</div>
                                             <div class="balances">
+                                                <input id="CardNumber" name="CardNumber" type="hidden" value="@(Model.Card?.CardNumber)" />
                                                 <div class="physical-balance">@(Model.CardBalance)</div>
                                                 <div class="system-balance">@(Model.CardBalanceAction)</div>
                                             </div>
@@ -83,7 +86,7 @@
                                                     <ul>
                                                         @foreach (var item in Model.PriceList.Where(x => x.ProductID == 3).OrderByDescending(x => x.TotalCredit).ToList())
                                                         {
-                                                            <li><a href="javascript:;" onclick="AddBasket(@(item.ID),@(cardPriceID),'@(Model.Card?.CardNumber)')">@(item.TotalCredit) Kontör <span>@(item.Price.ToString("N2")) ₺</span></a></li>
+                                                            <li><a href="javascript:;" onclick="AddBasket(@(item.ID),@(cardPriceID))">@(item.TotalCredit) Kontör <span>@(item.Price.ToString("N2")) ₺</span></a></li>
                                                         }
                                                     </ul>
                                                 </div>
@@ -98,7 +101,7 @@
                                                     <ul>
                                                         @foreach (var item in Model.PriceList.Where(x => x.ProductID == 3).OrderByDescending(x => x.TotalCredit).ToList())
                                                         {
-                                                            <li><a href="javascript:;" onclick="AddBasket(@(item.ID),0,'@(Model.Card?.CardNumber)')">@(item.TotalCredit) Kontör <span>@(item.Price.ToString("N2")) ₺</span></a></li>
+                                                            <li><a href="javascript:;" onclick="AddBasket(@(item.ID),0)">@(item.TotalCredit) Kontör <span>@(item.Price.ToString("N2")) ₺</span></a></li>
                                                         }
                                                     </ul>
                                                 </div>
@@ -120,168 +123,54 @@
                             <div class="right-card">
                                 <div class="centered">
                                     <div class="last-load">
-                                        <table cellpadding="0" cellspacing="0">
-                                            <tr>
-                                                <th colspan="5"><span class="date">20 Aralık 2021 Pazartesi</span></th>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process loading"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11.92,19.92L4,12L11.92,4.08L13.33,5.5L7.83,11H22V13H7.83L13.34,18.5L11.92,19.92M4,12V2H2V22H4V12Z" /></svg></span></td>
-                                                <td><span class="price">120</span></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process return"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20 13.5C20 17.09 17.09 20 13.5 20H6V18H13.5C16 18 18 16 18 13.5S16 9 13.5 9H7.83L10.91 12.09L9.5 13.5L4 8L9.5 2.5L10.92 3.91L7.83 7H13.5C17.09 7 20 9.91 20 13.5Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <th colspan="5"><span class="date">21 Aralık 2021 Salı</span></th>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process loading"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11.92,19.92L4,12L11.92,4.08L13.33,5.5L7.83,11H22V13H7.83L13.34,18.5L11.92,19.92M4,12V2H2V22H4V12Z" /></svg></span></td>
-                                                <td><span class="price">120</span></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process return"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20 13.5C20 17.09 17.09 20 13.5 20H6V18H13.5C16 18 18 16 18 13.5S16 9 13.5 9H7.83L10.91 12.09L9.5 13.5L4 8L9.5 2.5L10.92 3.91L7.83 7H13.5C17.09 7 20 9.91 20 13.5Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process loading"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11.92,19.92L4,12L11.92,4.08L13.33,5.5L7.83,11H22V13H7.83L13.34,18.5L11.92,19.92M4,12V2H2V22H4V12Z" /></svg></span></td>
-                                                <td><span class="price">120</span></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td><a href="javascript:;" class="return-link"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13.5 21H6V17H13.5C15.43 17 17 15.43 17 13.5S15.43 10 13.5 10H11V14L4 8L11 2V6H13.5C17.64 6 21 9.36 21 13.5S17.64 21 13.5 21Z" /></svg></a></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="date">14:12:25</span></td>
-                                                <td><span class="loc">Akbatı Trambolin asdfİstanbul</span></td>
-                                                <td><span class="process return"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20 13.5C20 17.09 17.09 20 13.5 20H6V18H13.5C16 18 18 16 18 13.5S16 9 13.5 9H7.83L10.91 12.09L9.5 13.5L4 8L9.5 2.5L10.92 3.91L7.83 7H13.5C17.09 7 20 9.91 20 13.5Z" /></svg></span></td>
-                                                <td><span class="price">15</span></td>
-                                                <td></td>
-                                            </tr>
-                                        </table>
+                                        @if (Model.Card != null && Model.Card.CardTypeID <= 1)
+                                        {
+
+
+                                            <table cellpadding="0" cellspacing="0">
+                                                @foreach (var date in Model.ActionDates)
+                                                {
+                                                    var actionlist = Model.CardActions.Where(x => x.DateOnly == date).OrderBy(x => x.ActionDate).ToList();
+
+                                                    <tr>
+                                                        <th colspan="5"><span class="date">@(date.ToLongDateString())</span></th>
+                                                    </tr>
+
+                                                    foreach (var item in actionlist)
+                                                    {
+
+                                                        <tr>
+                                                            <td><span class="date">@(item.ActionDate?.ToString("T"))</span></td>
+                                                            <td><span class="loc">@(item.LocationFullName)</span></td>
+
+                                                            @if (item.ActionTypeID == 1) // Aktif etme
+                                                            {
+                                                                <td><a href="javascript:;" class="card-active"><svg viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg"><path d="M224 32.01c-123.5 0-224 100.5-224 224s100.5 224 224 224s224-100.5 224-224S347.5 32.01 224 32.01zM224 416c-88.22 0-160-71.78-160-160s71.78-159.1 160-159.1s160 71.78 160 159.1S312.2 416 224 416z" fill="currentColor" /></svg></a></td>
+                                                            }
+                                                            else if (item.ActionTypeID == 2) // kullanım
+                                                            {
+                                                                <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
+                                                            }
+                                                            else if (item.ActionTypeID == 3) // yükleme
+                                                            {
+                                                                <td><span class="process loading"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11.92,19.92L4,12L11.92,4.08L13.33,5.5L7.83,11H22V13H7.83L13.34,18.5L11.92,19.92M4,12V2H2V22H4V12Z" /></svg></span></td>
+                                                            }
+                                                            else if (item.ActionTypeID == 4) // iade
+                                                            {
+                                                                <td><span class="process return"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20 13.5C20 17.09 17.09 20 13.5 20H6V18H13.5C16 18 18 16 18 13.5S16 9 13.5 9H7.83L10.91 12.09L9.5 13.5L4 8L9.5 2.5L10.92 3.91L7.83 7H13.5C17.09 7 20 9.91 20 13.5Z" /></svg></span></td>
+                                                            }
+                                                            else if (item.ActionTypeID == 5) // iade
+                                                            {
+                                                                <td><a href="javascript:;" class="card-cancel"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13.41,12l4.3-4.29a1,1,0,1,0-1.42-1.42L12,10.59,7.71,6.29A1,1,0,0,0,6.29,7.71L10.59,12l-4.3,4.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l4.29,4.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z" fill="currentColor" /></svg></a></td>
+                                                            }
+                                                            <td><span class="price">@(item.Credit)</span></td>
+                                                            <td></td>
+                                                        </tr>
+                                                    }
+                                                }
+
+                                            </table>
+                                        }
                                     </div>
                                 </div>
                             </div>
@@ -319,11 +208,15 @@
 
 
 
-        function AddBasket(priceid, cardpriceid, cardnumber) {
+        function AddBasket(priceid, cardpriceid) {
+
+            var cardReaderID = $('#CardReaderID').val();
+            var cardNumber = $('#CardNumber').val();
+
             $.ajax({
                 method: "GET",
                 url: "/Card/AddBasket",
-                data: { id: priceid, cardpriceid, cardnumber }
+                data: { id: priceid, cardpriceid, cardnumber: cardNumber, cardreaderid: cardReaderID }
             }).done(function (d) {
                 $("#BasketBody").html(d);
             });
@@ -331,32 +224,30 @@
 
 
 
-        function RemoveBasketItem(id, cardnumber) {
+        function RemoveBasketItem(id) {
+
+            var cardReaderID = $('#CardReaderID').val();
+            var cardNumber = $('#CardNumber').val();
+
             $.ajax({
                 method: "GET",
                 url: "/Card/RemoveBasketItem",
-                data: { id:id, cardnumber }
+                data: { id: id, cardnumber: cardNumber, cardreaderid: cardReaderID }
             }).done(function (d) {
                 $("#BasketBody").html(d);
                 $('.footer-basket').attr('style', 'display:block');
             });
         };
 
-        //function BasketItemDetail(itemid) {
-        //    $.ajax({
-        //        method: "GET",
-        //        url: "/Card/BasketItemDetail",
-        //        data: { id: itemid }
-        //    }).done(function (d) {
-        //        $("#BasketItemDetailContent").html(d);
-        //    });
-        //};
+        function ClearBasket() {
 
-        function ClearBasket(cardnumber) {
+            var cardReaderID = $('#CardReaderID').val();
+            var cardNumber = $('#CardNumber').val();
+
             $.ajax({
                 method: "GET",
                 url: "/Card/ClearBasket",
-                data: { cardnumber }
+                data: { cardnumber: cardNumber, cardreaderid: cardReaderID }
             }).done(function (d) {
                 $("#BasketBody").html(d);
 
@@ -465,7 +356,7 @@
 
 
         function GetCardInfo(info) {
-            window.location = '/Card/Index?card='+info;
+            window.location = '/Card/Index?cardinfo='+info;
         }
 
     </script>

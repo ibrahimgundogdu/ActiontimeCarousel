@@ -55,8 +55,9 @@ namespace ActionForce.PosLocation.Controllers
 
             var cardinfo = Db.GetCardReadInfo(model.Authentication.CurrentLocation.ID, id).FirstOrDefault();
 
-            if (Db.TicketBasket.Any(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.Date == date))
+            if (Db.TicketBasket.Any(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.CardNumber == id && x.Date == date))
             {
+
                 try
                 {
                     var OrderNumber = "S" + Db.GetPosOrderNumber().FirstOrDefault().ToString();
@@ -101,7 +102,7 @@ namespace ActionForce.PosLocation.Controllers
             }
             catch (Exception ex)
             {
-                return RedirectToAction("Index", "Sales");
+                return RedirectToAction("Index", "Card");
             }
         }
     }

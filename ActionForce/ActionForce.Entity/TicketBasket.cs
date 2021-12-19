@@ -49,5 +49,6 @@ namespace ActionForce.Entity
         public Nullable<int> PromoCredit { get; set; }
         public Nullable<int> TotalCredit { get; set; }
         public string CardNumber { get; set; }
+        public Nullable<int> CardReaderID { get; set; }
     }
 }

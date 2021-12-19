@@ -151,7 +151,7 @@
                                         @if (Model.CreditLoad.IsSuccess == true)
                                         {
                                             <div class="form-group">
-                                                <a href="javascript:;" class="btn btn-success btn-block">KART YÜKLEMESİ TAMAMLADI</a>
+                                                <a href="@($"/Card/Index?cardinfo={Model.CreditLoad?.SerialNumber};{Model.CreditLoad?.MACAddress};{Model.CreditLoad?.CardNumber};{(Model.CreditLoad?.FinalCredit) * 100}")" class="btn btn-success btn-block">KART YÜKLEMESİ TAMAMLADI</a>
                                             </div>
                                         }
                                         else
@@ -160,7 +160,6 @@
                                                 <a href="/CardAction/Index/@(Model.CreditLoad?.SaleID)" class="btn btn-primary btn-block">TEKRAR DENE</a>
                                             </div>
                                         }
-
 
                                     </div>
                                 }

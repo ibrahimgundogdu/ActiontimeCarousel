@@ -15,13 +15,17 @@ namespace ActionForce.PosLocation
         public BasketTotal BasketTotal { get; set; }
         public int? EmployeeBasketCount { get; set; }
 
-        public Card Card { get; set; }
+        public VCard Card { get; set; }
         public CardReader CardReader { get; set; }
         public List<TicketSaleCreditLoad> CreditLoads { get; set; }
+        public List<VCardActions> CardActions { get; set; }
+        public List<CardType> CardTypes { get; set; }
+        public List<DateTime> ActionDates { get; set; }
         public double CardBalance { get; set; } = 0;
         public double CardBalanceAction { get; set; } = 0;
         public TicketSaleCreditLoad CreditLoad { get; set; }
         public string CardNumber { get; set; }
         public string CardStatus { get; set; }
+        public string CardTypeName { get; set; }
     }
 }

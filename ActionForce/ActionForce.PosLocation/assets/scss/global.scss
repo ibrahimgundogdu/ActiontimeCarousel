@@ -127,7 +127,8 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
     }
     .center-card{ display: flex; align-items: center; justify-content: center; position: relative; height: 200px; padding: 20px; background: #fefefe; border-radius: 15px; border: 1px solid rgb(238, 238, 238);
       .centered{ height: 100%; flex: 0 0 100%; max-width: 100%; display: flex; align-items: flex-end; }
-      .status{ font-weight: 700; position: absolute; right: 10px; top: 10px; padding: 10px 15px; font-size: 16px; border-radius: 5px; color: #fff;  
+      .card-type{ font-weight: 700; position: absolute; left: 10px; top: 10px; padding: 10px 15px; font-size: 16px; border-radius: 5px; color: #2c3e50; } 
+      .status{ font-weight: 700; position: absolute; right: 10px; top: 10px; padding: 10px 15px; font-size: 16px; border-radius: 5px; color: #2c3e50;  
         &.open{ color: #bdc3c7; }
         &.active{ color: #2ecc71; }
         &.passive{ color: #c0392b; }
@@ -142,13 +143,19 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
       .centered{ flex: 0 0 100%; max-width: 100%; }
       .last-load,.last-used{ display: flex; align-items: center; justify-content: space-evenly; margin: 10px 0; 
         span{ display: block; padding: 10px; font-size: 20px; border-radius: 5px; margin: 0 5px;  }
+        .card-active{ display: block; color: #27ae60; padding: 10px; 
+          svg{ width: 24px; height: 24px; }
+        }
+        .card-cancel{ display: block; color: #c0392b; padding: 4px; 
+          svg{ width: 30px; height: 30px; }
+        }
         .date{ font-size: 16px; }
         .loc{ color: #3498db; }
         .price{ color: #31c971; font-size: 20px; font-weight: 700; }
         .process{
           &.spending{ color: #e67e22; }
           &.loading{ color: #2c3e50; }
-          &.return{ color: #c0392b; }
+          &.return{ color: #e74c3c; }
         }
         .return-link{ color: #95a5a6; display: block; padding: 5px; transition: .4s; 
           &:hover{ color: #6f7b7c; }

@@ -930,6 +930,12 @@
     <Compile Include="VBankActions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VCard.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VCardActions.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VCash.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
