@@ -10,5 +10,6 @@ namespace ActionForce.PosLocation
         public virtual CurrentEmployee CurrentEmployee { get; set; }
         public virtual LockedEmployee LockedEmployee { get; set; }
         public virtual CurrentLocation CurrentLocation { get; set; }
+        public bool IsCardSystem { get; set; } = false;
     }
 }

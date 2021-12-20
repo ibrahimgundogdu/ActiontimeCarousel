@@ -24,18 +24,25 @@ namespace ActionForce.PosLocation.Controllers
             DefaultControlModel model = new DefaultControlModel();
             model.Authentication = this.AuthenticationData;
 
+            if (model.Authentication.IsCardSystem == true)
+            {
+                return RedirectToAction("Index", "Card");
+            }
+
             _EmployeeID = this.AuthenticationData.CurrentEmployee.EmployeeID;
             _LocationID = this.AuthenticationData.CurrentLocation.ID;
             _Currency = this.AuthenticationData.CurrentLocation.Currency;
             //string sql = "SELECT * FROM VPriceLastList Where ";
             //using (var connection = new SqlConnection(PosManager.GetConnectionString()))
             //{
-            //    var invoices = connection.Query<CurrentPriceList>(sql);
+            //    var invoices = connection.Query<CurrentPriceList>(sql);   @(Model.Authentication.IsCardSystem == true ? "Card":"/")
             //}
             if (TempData["Result"] != null)
             {
                 model.Result = TempData["Result"] as Result;
             }
+
+
 
 
             model.PriceList = Db.GetLocationCurrentPrices(_LocationID).ToList();

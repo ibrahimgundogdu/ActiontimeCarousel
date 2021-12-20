@@ -70,6 +70,7 @@ namespace ActionForce.PosLocation.Controllers
                             UID = location.LocationUID,
                             LocationTypeID = location.LocationTypeID ?? 0
                         };
+                        AuthenticationData.IsCardSystem = location.UseCardSysteme ?? false;
 
                         return;
                     }
