@@ -80,6 +80,26 @@ namespace ActionForce.PosLocation.Controllers
                         model.CardActions = Db.VCardActions.Where(x => x.CardNumber == cardno).ToList();
                         model.ActionDates = model.CardActions.Select(x => x.DateOnly.Value.Date).Distinct().OrderByDescending(x => x).ToList();
                     }
+                    if (model.Card.CardTypeID == 2)
+                    {
+                        var isemployeecard = Db.EmployeeCard.FirstOrDefault(x => x.CardNumber == model.Card.CardNumber);
+
+                        if (isemployeecard != null)
+                        {
+                            if (isemployeecard.CardStatusID == 1)
+                            {
+                                PosManager manager = new PosManager();
+
+                                var location = Db.Location.FirstOrDefault(x => x.LocationID == model.Authentication.CurrentLocation.ID);
+                                var employees = manager.GetLocationEmployeeModelsToday(location);
+
+                                model.EmployeeModel = employees.FirstOrDefault(x => x.ID == isemployeecard.EmployeeID);
+                            }
+                        }
+
+                       
+
+                    }
 
                     model.CardStatus = model.Card.CardStatusName ?? "Bilinmiyor";
                     model.CardReader = Db.CardReader.FirstOrDefault(x => x.SerialNumber == serino && x.MACAddress == macano && x.LocationID == model.Authentication.CurrentLocation.ID && x.CardReaderTypeID == 1 && x.IsActive == true);
