@@ -2558,7 +2558,7 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("AddCardPosOrder", locationIDParameter, employeeIDParameter, orderNumberParameter, cardNumberParameter, customerNameParameter, customerDataParameter, customerPhoneParameter, identityCardParameter, descriptionParameter, recordIPParameter);
         }
     
-        public virtual ObjectResult<TicketSaleCreditLoad> AddTicketSaleCreditLoad(Nullable<long> saleID, string cardNumber, Nullable<double> existsCredit, string serialNumber, string mACAddress, Nullable<int> recordEmployeeID, string recordIP)
+        public virtual ObjectResult<TicketSaleCreditLoad> AddTicketSaleCreditLoad(Nullable<long> saleID, string cardNumber, Nullable<double> existsCredit, string serialNumber, string mACAddress, Nullable<int> recordEmployeeID, string recordIP, Nullable<int> cardActionTypeID, Nullable<long> cardReaderActionID, Nullable<long> cardActionID)
         {
             var saleIDParameter = saleID.HasValue ?
                 new ObjectParameter("SaleID", saleID) :
@@ -2588,10 +2588,22 @@ namespace ActionForce.Entity
                 new ObjectParameter("RecordIP", recordIP) :
                 new ObjectParameter("RecordIP", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TicketSaleCreditLoad>("AddTicketSaleCreditLoad", saleIDParameter, cardNumberParameter, existsCreditParameter, serialNumberParameter, mACAddressParameter, recordEmployeeIDParameter, recordIPParameter);
+            var cardActionTypeIDParameter = cardActionTypeID.HasValue ?
+                new ObjectParameter("CardActionTypeID", cardActionTypeID) :
+                new ObjectParameter("CardActionTypeID", typeof(int));
+    
+            var cardReaderActionIDParameter = cardReaderActionID.HasValue ?
+                new ObjectParameter("CardReaderActionID", cardReaderActionID) :
+                new ObjectParameter("CardReaderActionID", typeof(long));
+    
+            var cardActionIDParameter = cardActionID.HasValue ?
+                new ObjectParameter("CardActionID", cardActionID) :
+                new ObjectParameter("CardActionID", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TicketSaleCreditLoad>("AddTicketSaleCreditLoad", saleIDParameter, cardNumberParameter, existsCreditParameter, serialNumberParameter, mACAddressParameter, recordEmployeeIDParameter, recordIPParameter, cardActionTypeIDParameter, cardReaderActionIDParameter, cardActionIDParameter);
         }
     
-        public virtual ObjectResult<TicketSaleCreditLoad> AddTicketSaleCreditLoad(Nullable<long> saleID, string cardNumber, Nullable<double> existsCredit, string serialNumber, string mACAddress, Nullable<int> recordEmployeeID, string recordIP, MergeOption mergeOption)
+        public virtual ObjectResult<TicketSaleCreditLoad> AddTicketSaleCreditLoad(Nullable<long> saleID, string cardNumber, Nullable<double> existsCredit, string serialNumber, string mACAddress, Nullable<int> recordEmployeeID, string recordIP, Nullable<int> cardActionTypeID, Nullable<long> cardReaderActionID, Nullable<long> cardActionID, MergeOption mergeOption)
         {
             var saleIDParameter = saleID.HasValue ?
                 new ObjectParameter("SaleID", saleID) :
@@ -2621,7 +2633,19 @@ namespace ActionForce.Entity
                 new ObjectParameter("RecordIP", recordIP) :
                 new ObjectParameter("RecordIP", typeof(string));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TicketSaleCreditLoad>("AddTicketSaleCreditLoad", mergeOption, saleIDParameter, cardNumberParameter, existsCreditParameter, serialNumberParameter, mACAddressParameter, recordEmployeeIDParameter, recordIPParameter);
+            var cardActionTypeIDParameter = cardActionTypeID.HasValue ?
+                new ObjectParameter("CardActionTypeID", cardActionTypeID) :
+                new ObjectParameter("CardActionTypeID", typeof(int));
+    
+            var cardReaderActionIDParameter = cardReaderActionID.HasValue ?
+                new ObjectParameter("CardReaderActionID", cardReaderActionID) :
+                new ObjectParameter("CardReaderActionID", typeof(long));
+    
+            var cardActionIDParameter = cardActionID.HasValue ?
+                new ObjectParameter("CardActionID", cardActionID) :
+                new ObjectParameter("CardActionID", typeof(long));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<TicketSaleCreditLoad>("AddTicketSaleCreditLoad", mergeOption, saleIDParameter, cardNumberParameter, existsCreditParameter, serialNumberParameter, mACAddressParameter, recordEmployeeIDParameter, recordIPParameter, cardActionTypeIDParameter, cardReaderActionIDParameter, cardActionIDParameter);
         }
     
         public virtual ObjectResult<Nullable<bool>> CheckCardReaderParameter(string serialNumber, string mACAddress, string version, Nullable<double> unitPrice, Nullable<int> miliSecond, Nullable<int> readCount, Nullable<int> unitDuration)

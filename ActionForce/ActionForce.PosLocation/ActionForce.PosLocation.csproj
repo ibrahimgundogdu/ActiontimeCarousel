@@ -379,6 +379,8 @@
     <Content Include="Views\CardTransaction\Index.cshtml" />
     <Content Include="Views\CardAction\Index.cshtml" />
     <Content Include="Views\CardAction\LoadResult.cshtml" />
+    <Content Include="Views\CardAction\CreditRefund.cshtml" />
+    <Content Include="Views\CardAction\RefundResult.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -44,7 +44,7 @@ namespace ActionForce.PosLocation.Controllers
 
             model.CardNumber = model.Card.CardNumber;
 
-            var creditLoad = Db.AddTicketSaleCreditLoad(id, model.Card.CardNumber, model.Card.Credit, model.CardReader.SerialNumber, model.CardReader.MACAddress, model.Authentication.CurrentEmployee.EmployeeID, PosManager.GetIPAddress()).FirstOrDefault();
+            var creditLoad = Db.AddTicketSaleCreditLoad(id, model.Card.CardNumber, model.Card.Credit, model.CardReader.SerialNumber, model.CardReader.MACAddress, model.Authentication.CurrentEmployee.EmployeeID, PosManager.GetIPAddress(),3,null,null).FirstOrDefault();
             model.CreditLoad = creditLoad;
 
             if (creditLoad.IsSuccess == true)
@@ -55,6 +55,54 @@ namespace ActionForce.PosLocation.Controllers
 
 
             model.CardBalanceAction = 0;
+
+            if (Db.CardActions.Any(x => x.CardID == model.Card.ID))
+            {
+                model.CardBalanceAction = Db.CardActions.Where(x => x.CardID == model.Card.ID)?.Sum(x => x.Credit) ?? 0.0;
+            }
+
+            model.CardBalance = model.Card?.Credit ?? 0;
+
+            return View(model);
+        }
+
+        public ActionResult CreditRefund(long? id)
+        {
+            CardActionControlModel model = new CardActionControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("Index", "Card");
+            }
+
+            model.CardAction = Db.VCardActions.FirstOrDefault(x => x.ID == id);
+
+            if (model.CardAction == null || string.IsNullOrEmpty(model.CardAction?.CardNumber))
+            {
+                return RedirectToAction("Index", "Card");
+            }
+
+            model.CardReader = Db.CardReader.FirstOrDefault(x => x.ID == model.CardAction.CardReaderID);
+            model.Card = Db.Card.FirstOrDefault(x => x.CardNumber == model.CardAction.CardNumber);
+
+            model.CardNumber = model.Card.CardNumber;
+
+            var creditLoad = Db.AddTicketSaleCreditLoad(null, model.Card.CardNumber, model.Card.Credit, model.CardReader.SerialNumber, model.CardReader.MACAddress, model.Authentication.CurrentEmployee.EmployeeID, PosManager.GetIPAddress(),4, model.CardAction.ProcessID, model.CardAction.ID).FirstOrDefault();
+            model.CreditLoad = creditLoad;
+
+            if (creditLoad.IsSuccess == true)
+            {
+                return RedirectToAction("RefundResult", new { id = creditLoad.UID });
+            }
+
+            model.CardBalanceAction = 0;
+            model.RefundCredit = Convert.ToInt32(model.CreditLoad.RefundCredit);
 
             if (Db.CardActions.Any(x => x.CardID == model.Card.ID))
             {
@@ -85,8 +133,13 @@ namespace ActionForce.PosLocation.Controllers
 
             if (model.CreditLoad != null)
             {
+
+
+
                 model.Card = Db.Card.FirstOrDefault(x => x.CardNumber == model.CreditLoad.CardNumber);
                 model.CardReader = Db.CardReader.FirstOrDefault(x => x.SerialNumber == model.CreditLoad.SerialNumber && x.MACAddress == model.CreditLoad.MACAddress && x.LocationID == model.Authentication.CurrentLocation.ID && x.CardReaderTypeID == 1 && x.IsActive == true);
+
+
 
                 model.TicketSale = Db.TicketSale.FirstOrDefault(x => x.ID == model.CreditLoad.SaleID);
                 model.TicketSaleRow = Db.TicketSaleRows.Where(x => x.SaleID == model.CreditLoad.SaleID).ToList();
@@ -103,12 +156,53 @@ namespace ActionForce.PosLocation.Controllers
                 {
                     model.CardBalanceAction = Db.CardActions.Where(x => x.CardID == model.Card.ID)?.Sum(x => x.Credit) ?? 0.0;
                 }
+
+
+
+
             }
 
             return View(model);
         }
 
+        public ActionResult RefundResult(Guid? id)
+        {
+            CardActionControlModel model = new CardActionControlModel();
+            model.Authentication = this.AuthenticationData;
 
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("Index", "Card");
+            }
+
+            model.CreditLoad = Db.TicketSaleCreditLoad.FirstOrDefault(x => x.UID == id);
+
+            if (model.CreditLoad != null)
+            {
+
+                model.Card = Db.Card.FirstOrDefault(x => x.CardNumber == model.CreditLoad.CardNumber);
+                model.CardReader = Db.CardReader.FirstOrDefault(x => x.SerialNumber == model.CreditLoad.SerialNumber && x.MACAddress == model.CreditLoad.MACAddress && x.LocationID == model.Authentication.CurrentLocation.ID && x.CardReaderTypeID == 1 && x.IsActive == true);
+
+                model.CardAction = Db.VCardActions.FirstOrDefault(x => x.ID == model.CreditLoad.CardActionID);
+
+                model.RefundCredit = Convert.ToInt32(model.CreditLoad.RefundCredit);
+                model.CardBalanceAction = 0;
+
+                if (Db.CardActions.Any(x => x.CardID == model.Card.ID))
+                {
+                    model.CardBalanceAction = Db.CardActions.Where(x => x.CardID == model.Card.ID)?.Sum(x => x.Credit) ?? 0.0;
+                }
+
+                model.CardBalance = model.Card?.Credit ?? 0;
+            }
+
+            return View(model);
+        }
 
     }
 }

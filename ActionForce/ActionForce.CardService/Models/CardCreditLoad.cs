@@ -10,12 +10,17 @@ namespace ActionForce.CardService
         public long ID { get; set; }
         public int OurCompanyID { get; set; }
         public int LocationID { get; set; }
+        public int CardActionTypeID { get; set; }
         public long SaleID { get; set; }
         public bool FromCardReader { get; set; }
+        public long CardReaderActionID { get; set; }
+        public long CardActionID { get; set; }
+        public bool WithCard { get; set; }
         public string CardNumber { get; set; }
         public double? ExistsCredit { get; set; }
         public double? MasterCredit { get; set; }
         public double? PromoCredit { get; set; }
+        public double? RefundCredit { get; set; }
         public double? TotalCredit { get; set; }
         public double? FinalCredit { get; set; }
         public double? PaymentAmount { get; set; }
@@ -28,7 +33,7 @@ namespace ActionForce.CardService
         public string RecordIP { get; set; }
         public Guid UID { get; set; }
         public bool IsSuccess { get; set; }
-
+        public string Message { get; set; }
     }
 }
 

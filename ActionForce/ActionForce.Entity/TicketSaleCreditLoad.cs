@@ -38,5 +38,9 @@ namespace ActionForce.Entity
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<System.DateTime> CompleteDate { get; set; }
         public bool IsSuccess { get; set; }
+        public Nullable<int> CardActionTypeID { get; set; }
+        public Nullable<long> CardReaderActionID { get; set; }
+        public string Message { get; set; }
+        public Nullable<long> CardActionID { get; set; }
     }
 }

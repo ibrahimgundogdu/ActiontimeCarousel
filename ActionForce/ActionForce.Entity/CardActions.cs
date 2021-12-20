@@ -33,5 +33,6 @@ namespace ActionForce.Entity
         public Nullable<long> SaleRowID { get; set; }
         public string CardNumber { get; set; }
         public Nullable<int> CardReaderID { get; set; }
+        public Nullable<System.DateTime> ActionDateUpdate { get; set; }
     }
 }

@@ -43,5 +43,6 @@ namespace ActionForce.Entity
         public string ReaderTypeName { get; set; }
         public string LocationFullName { get; set; }
         public Nullable<System.DateTime> DateOnly { get; set; }
+        public Nullable<System.DateTime> ActionDateUpdate { get; set; }
     }
 }

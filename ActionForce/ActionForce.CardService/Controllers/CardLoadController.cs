@@ -126,7 +126,7 @@ namespace ActionForce.CardService.Controllers
         }
 
         [HttpGet]
-        public HttpResponseMessage CardLoadResult(Guid? id, int? success)
+        public HttpResponseMessage CardLoadResult(Guid? id, int? success, string Message)
         {
             Result result = new Result();
             ServiceHelper helper = new ServiceHelper();
@@ -137,19 +137,23 @@ namespace ActionForce.CardService.Controllers
 
             if (id != null && success != null)
             {
-                string info = $"id:{id} success:{success}";
+                string info = $"id:{id} success:{success} message:{Message}";
                 using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
                 {
                     var parameters = new { Message = info, IP = ServiceHelper.GetIPAddress(), Date = DateTime.UtcNow.AddHours(3) };
                     var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [Module] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'CardLoadResult', 'Guid,int')";
                     connection.Execute(sql, parameters);
+
+                    var mparameter = new { UID = id, Message };
+                    var msql = "Update [dbo].[TicketSaleCreditLoad] Set [Message] = @Message Where [UID] = @UID";
+                    connection.Execute(msql, mparameter);
                 }
 
                 CardCreditLoad cardReader = helper.GetCardLoad(id.Value);
 
                 try
                 {
-
+                   
                     if (success == 1) // Yükleme başarılı şekilde gerçekleşti ise
                     {
                         var loadResult = helper.LoadCard(cardReader);
@@ -157,7 +161,7 @@ namespace ActionForce.CardService.Controllers
                         result.IsSuccess = loadResult.IsSuccess;
                         result.Message = loadResult.Message;
                     }
-
+                    
                 }
                 catch (Exception ex)
                 {

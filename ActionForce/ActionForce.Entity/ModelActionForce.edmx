@@ -538,6 +538,7 @@
           <Property Name="Credit" Type="float" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="IsPromotion" Type="bit" />
+          <Property Name="ActionDateUpdate" Type="datetime" />
         </EntityType>
         <EntityType Name="CardActionType">
           <Key>
@@ -3772,8 +3773,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="OurCompanyID" Type="int" />
           <Property Name="LocationID" Type="int" />
+          <Property Name="CardActionTypeID" Type="int" />
           <Property Name="SaleID" Type="bigint" />
           <Property Name="FromCardReader" Type="bit" />
+          <Property Name="CardReaderActionID" Type="bigint" />
+          <Property Name="CardActionID" Type="bigint" />
           <Property Name="WithCard" Type="bit" />
           <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="ExistsCredit" Type="float" Nullable="false" />
@@ -3793,6 +3797,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="CompleteDate" Type="datetime" />
           <Property Name="IsSuccess" Type="bit" Nullable="false" />
+          <Property Name="Message" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="TicketSalePosDiscount">
           <Key>
@@ -4441,6 +4446,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCardActions' does not have
           <Property Name="MACAddress" Type="nvarchar" MaxLength="20" />
           <Property Name="ReaderTypeName" Type="nvarchar" MaxLength="40" />
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+          <Property Name="ActionDateUpdate" Type="datetime" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCash' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -7606,6 +7612,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="MACAddress" Type="nvarchar" Mode="In" />
           <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
           <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+          <Parameter Name="CardActionTypeID" Type="int" Mode="In" />
+          <Parameter Name="CardReaderActionID" Type="bigint" Mode="In" />
+          <Parameter Name="CardActionID" Type="bigint" Mode="In" />
         </Function>
         <Function Name="AddTicketSalePosDiscount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SaleID" Type="bigint" Mode="In" />
@@ -8432,7 +8441,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VCardActions].[SerialNumber] AS [SerialNumber], 
     [VCardActions].[MACAddress] AS [MACAddress], 
     [VCardActions].[ReaderTypeName] AS [ReaderTypeName], 
-    [VCardActions].[LocationFullName] AS [LocationFullName]
+    [VCardActions].[LocationFullName] AS [LocationFullName], 
+    [VCardActions].[ActionDateUpdate] AS [ActionDateUpdate]
     FROM [dbo].[VCardActions] AS [VCardActions]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VCash" EntityType="Self.VCash" store:Type="Views" store:Schema="dbo">
@@ -11869,6 +11879,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="MACAddress" Mode="In" Type="String" />
             <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="RecordIP" Mode="In" Type="String" />
+            <Parameter Name="CardActionTypeID" Mode="In" Type="Int32" />
+            <Parameter Name="CardReaderActionID" Mode="In" Type="Int64" />
+            <Parameter Name="CardActionID" Mode="In" Type="Int64" />
           </FunctionImport>
           <FunctionImport Name="CheckCardReaderParameter" ReturnType="Collection(Boolean)">
             <Parameter Name="SerialNumber" Mode="In" Type="String" />
@@ -19470,6 +19483,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SaleRowID" Type="Int64" />
           <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="CardReaderID" Type="Int32" />
+          <Property Name="ActionDateUpdate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="CardActionType">
           <Key>
@@ -19648,6 +19662,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UID" Type="Guid" />
           <Property Name="CompleteDate" Type="DateTime" Precision="3" />
           <Property Name="IsSuccess" Type="Boolean" Nullable="false" />
+          <Property Name="CardActionTypeID" Type="Int32" />
+          <Property Name="CardReaderActionID" Type="Int64" />
+          <Property Name="Message" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="CardActionID" Type="Int64" />
         </EntityType>
         <EntityType Name="Card">
           <Key>
@@ -19788,6 +19806,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ReaderTypeName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
           <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
           <Property Name="DateOnly" Type="DateTime" Precision="3" />
+          <Property Name="ActionDateUpdate" Type="DateTime" Precision="3" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -27129,6 +27148,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="CardActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardActions">
               <MappingFragment StoreEntitySet="CardActions">
+                <ScalarProperty Name="ActionDateUpdate" ColumnName="ActionDateUpdate" />
                 <ScalarProperty Name="CardReaderID" ColumnName="CardReaderID" />
                 <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
                 <ScalarProperty Name="SaleRowID" ColumnName="SaleRowID" />
@@ -27261,6 +27281,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketSaleCreditLoad">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketSaleCreditLoad">
               <MappingFragment StoreEntitySet="TicketSaleCreditLoad">
+                <ScalarProperty Name="CardActionID" ColumnName="CardActionID" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="CardReaderActionID" ColumnName="CardReaderActionID" />
+                <ScalarProperty Name="CardActionTypeID" ColumnName="CardActionTypeID" />
                 <ScalarProperty Name="IsSuccess" ColumnName="IsSuccess" />
                 <ScalarProperty Name="CompleteDate" ColumnName="CompleteDate" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
@@ -27365,6 +27389,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VCardActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VCardActions">
               <MappingFragment StoreEntitySet="VCardActions">
+                <ScalarProperty Name="ActionDateUpdate" ColumnName="ActionDateUpdate" />
                 <ScalarProperty Name="DateOnly" ColumnName="DateOnly" />
                 <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
                 <ScalarProperty Name="ReaderTypeName" ColumnName="ReaderTypeName" />

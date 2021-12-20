@@ -12,6 +12,7 @@ namespace ActionForce.PosLocation
         public List<TicketSaleRows> TicketSaleRow { get; set; }
         public List<TicketSalePosPayment> TicketSalePosPayments { get; set; }
         public Card Card { get; set; }
+        public VCardActions CardAction { get; set; }
         public CardReader CardReader { get; set; }
         public TicketSaleCreditLoad CreditLoad { get; set; }
         public double CardBalance { get; set; } = 0;
@@ -20,6 +21,7 @@ namespace ActionForce.PosLocation
         public int MasterCredit { get; set; } = 0;
         public int PromoCredit { get; set; } = 0;
         public int TotalCredit { get; set; } = 0;
+        public int RefundCredit { get; set; } = 0;
         public string CardNumber { get; set; }
 
     }
