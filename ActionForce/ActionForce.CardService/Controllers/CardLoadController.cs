@@ -50,7 +50,7 @@ namespace ActionForce.CardService.Controllers
                             result.IsSuccess = false;
                             result.Message = "READERNOTFOUND";
                         }
-                    }  
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -63,7 +63,7 @@ namespace ActionForce.CardService.Controllers
             using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
             {
                 var parameters = new { Message = comment, IP = ServiceHelper.GetIPAddress(), Date = DateTime.UtcNow.AddHours(3), ResultMessage = result.Message };
-                var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [ResultMessage] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'ReceiveComment', @ResultMessage)";
+                var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [ResponseMessage] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'ReceiveComment', @ResultMessage)";
                 connection.Execute(sql, parameters);
             }
 
@@ -123,7 +123,7 @@ namespace ActionForce.CardService.Controllers
             using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
             {
                 var parameters = new { Message = info, IP = ServiceHelper.GetIPAddress(), Date = DateTime.UtcNow.AddHours(3), ResultMessage = result.Message };
-                var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [ResultMessage] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'CardInfo', @ResultMessage)";
+                var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [ResponseMessage] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'CardInfo', @ResultMessage)";
                 connection.Execute(sql, parameters);
             }
 
@@ -186,7 +186,7 @@ namespace ActionForce.CardService.Controllers
             {
                 using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
                 {
-                  
+
                     var mparameter = new { UID = id, Message };
                     var msql = "Update [dbo].[TicketSaleCreditLoad] Set [Message] = @Message Where [UID] = @UID";
                     connection.Execute(msql, mparameter);
@@ -203,7 +203,7 @@ namespace ActionForce.CardService.Controllers
                         result.IsSuccess = loadResult.IsSuccess;
                         result.Message = loadResult.Message;
                     }
-                    
+
                 }
                 catch (Exception ex)
                 {
@@ -217,7 +217,7 @@ namespace ActionForce.CardService.Controllers
             using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
             {
                 var parameters = new { Message = info, IP = ServiceHelper.GetIPAddress(), Date = DateTime.UtcNow.AddHours(3), ResultMessage = result.Message };
-                var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [Module], [ResultMessage] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'CardLoadResult', 'Guid,int')";
+                var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [Module], [ResponseMessage] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'CardLoadResult', 'Guid,int')";
                 connection.Execute(sql, parameters);
             }
 
@@ -225,7 +225,33 @@ namespace ActionForce.CardService.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 
+        [HttpGet]
+        public HttpResponseMessage CardServiceLog(Guid? id)
+        {
 
+            if (id != null && id.ToString().ToUpper() == "DC27522E-7828-4253-AADC-3557CD082DAE")
+            {
+                using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
+                {
+
+                    var parameters = new { Message = "LOG", IP = ServiceHelper.GetIPAddress(), Date = DateTime.UtcNow.AddHours(3), ResultMessage = "OK" };
+                    var sqll = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [ResponseMessage] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'ReceiveComment', @ResultMessage)";
+                    connection.Execute(sqll, parameters);
+
+                    var sql = "SELECT TOP (200) * FROM [dbo].[NFCCardLog] WHERE [Message] <> 'LOG' ORDER BY ID DESC";
+                    var logs = connection.Query<CardLog>(sql).ToList();
+
+                    return Request.CreateResponse(HttpStatusCode.OK, logs);
+
+                }
+            }
+            else
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+
+        }
 
     }
 }

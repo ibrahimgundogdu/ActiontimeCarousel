@@ -146,6 +146,7 @@
     <Compile Include="Models\CardCreditLoad.cs" />
     <Compile Include="Models\CardDeposite.cs" />
     <Compile Include="Models\CardLoadInfoModel.cs" />
+    <Compile Include="Models\CardLog.cs" />
     <Compile Include="Models\CardReader.cs" />
     <Compile Include="Models\CardReaderAction.cs" />
     <Compile Include="Models\CardReaderParameter.cs" />
