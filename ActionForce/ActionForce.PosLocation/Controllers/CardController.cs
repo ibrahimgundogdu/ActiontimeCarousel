@@ -9,31 +9,23 @@ namespace ActionForce.PosLocation.Controllers
 {
     public class CardController : BaseController
     {
-        private int _EmployeeID { get; set; }
-        private int _LocationID { get; set; }
-        private string _Currency { get; set; }
 
         public CardController() : base()
         {
 
         }
-        // GET: Default
+
         public ActionResult Index(string cardinfo)
         {
             CardControlModel model = new CardControlModel();
             model.Authentication = this.AuthenticationData;
-
-            _EmployeeID = this.AuthenticationData.CurrentEmployee.EmployeeID;
-            _LocationID = this.AuthenticationData.CurrentLocation.ID;
-            _Currency = this.AuthenticationData.CurrentLocation.Currency;
-
 
             if (TempData["Result"] != null)
             {
                 model.Result = TempData["Result"] as Result;
             }
 
-            model.PriceList = Db.GetLocationCurrentProductPrices(_LocationID).ToList();
+            model.PriceList = Db.GetLocationCurrentProductPrices(model.Authentication.CurrentLocation.ID).ToList();
             model.CardTypes = Db.CardType.Where(x => x.IsActive == true).ToList();
 
             model.BasketTotal = new BasketTotal()
@@ -48,22 +40,23 @@ namespace ActionForce.PosLocation.Controllers
             };
 
             model.BasketList = new List<VTicketBasket>();
+            model.Card = null;
+            model.CardReader = null;
 
 
             if (!string.IsNullOrEmpty(cardinfo))
             {
-
-                //00119D9B;CC:50:E3:11:9D:9B;4528C2F3;100
-
-
                 string[] cardinfolist = cardinfo.Split(';').ToArray();
 
-                if (cardinfolist.Count() == 4)
+                string serino = cardinfolist[0];
+                string macano = cardinfolist[1];
+                int process = Convert.ToInt32(cardinfolist[2]);
+
+                if (process == 1) // Müşteri Kartı Okunma bölümü //00119D9B;CC:50:E3:11:9D:9B;1;4528C2F3;1;100
                 {
-                    string serino = cardinfolist[0];
-                    string macano = cardinfolist[1];
-                    string cardno = cardinfolist[2];
-                    string credit = cardinfolist[3];
+                    string cardno = cardinfolist[3];
+                    int processtype = Convert.ToInt32(cardinfolist[4]);
+                    string credit = cardinfolist[5];
                     double? existscredit = (Convert.ToDouble(credit) / 100);
 
                     model.CardNumber = cardno;
@@ -97,8 +90,6 @@ namespace ActionForce.PosLocation.Controllers
                             }
                         }
 
-                       
-
                     }
 
                     model.CardStatus = model.Card.CardStatusName ?? "Bilinmiyor";
@@ -112,22 +103,30 @@ namespace ActionForce.PosLocation.Controllers
                     }
 
                     model.CardBalance = existscredit ?? 0;
+
+
+                    model.BasketList = Db.GetLocationCardBasket(model.Authentication.CurrentLocation.ID, model.Card?.CardNumber).ToList();
+                    model.EmployeeBasketCount = model.BasketList.Sum(x => x.Quantity);
+                    var currentBasketTotal = Db.GetLocationCardBasketTotal(model.Authentication.CurrentLocation.ID, model.Card?.CardNumber).FirstOrDefault(x => x.Money == model.Authentication.CurrentLocation.Currency);
+
+                    model.BasketTotal = new BasketTotal()
+                    {
+                        Total = currentBasketTotal?.Total ?? 0,
+                        Discount = currentBasketTotal?.Discount ?? 0,
+                        SubTotal = currentBasketTotal?.SubTotal ?? 0,
+                        TaxTotal = currentBasketTotal?.TaxTotal ?? 0,
+                        GeneralTotal = currentBasketTotal?.GeneralTotal ?? 0,
+                        Currency = currentBasketTotal?.Money,
+                        Sign = currentBasketTotal?.Sign
+                    };
+                }
+                else
+                {
+
                 }
 
-                model.BasketList = Db.GetLocationCardBasket(_LocationID, model.Card?.CardNumber).ToList();
-                model.EmployeeBasketCount = model.BasketList.Sum(x => x.Quantity);
-                var currentBasketTotal = Db.GetLocationCardBasketTotal(_LocationID, model.Card?.CardNumber).FirstOrDefault(x => x.Money == _Currency);
 
-                model.BasketTotal = new BasketTotal()
-                {
-                    Total = currentBasketTotal?.Total ?? 0,
-                    Discount = currentBasketTotal?.Discount ?? 0,
-                    SubTotal = currentBasketTotal?.SubTotal ?? 0,
-                    TaxTotal = currentBasketTotal?.TaxTotal ?? 0,
-                    GeneralTotal = currentBasketTotal?.GeneralTotal ?? 0,
-                    Currency = currentBasketTotal?.Money,
-                    Sign = currentBasketTotal?.Sign
-                };
+
 
             }
 
@@ -137,21 +136,20 @@ namespace ActionForce.PosLocation.Controllers
         public PartialViewResult AddBasket(int id, int cardpriceid, string cardnumber, int cardreaderid)
         {
             CardControlModel model = new CardControlModel();
-            _EmployeeID = this.AuthenticationData.CurrentEmployee.EmployeeID;
-            _LocationID = this.AuthenticationData.CurrentLocation.ID;
-            _Currency = this.AuthenticationData.CurrentLocation.Currency;
+            model.Authentication = this.AuthenticationData;
+
             model.CardNumber = cardnumber;
 
             model.Price = Db.VProductPriceLastList.FirstOrDefault(x => x.ID == id);
 
             if (model.Price != null)
             {
-                var added = Db.AddCardBasket(_LocationID, _EmployeeID, id, cardpriceid, cardnumber, cardreaderid, 7);
+                var added = Db.AddCardBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID, id, cardpriceid, cardnumber, cardreaderid, 7);
             }
 
-            model.BasketList = Db.GetLocationCardBasket(_LocationID, cardnumber).ToList();
+            model.BasketList = Db.GetLocationCardBasket(model.Authentication.CurrentLocation.ID, cardnumber).ToList();
             model.EmployeeBasketCount = model.BasketList.Sum(x => x.Quantity);
-            var currentBasketTotal = Db.GetLocationCardBasketTotal(_LocationID, cardnumber).FirstOrDefault(x => x.Money == _Currency);
+            var currentBasketTotal = Db.GetLocationCardBasketTotal(model.Authentication.CurrentLocation.ID, cardnumber).FirstOrDefault(x => x.Money == model.Authentication.CurrentLocation.Currency);
             model.BasketTotal = new BasketTotal()
             {
                 Total = currentBasketTotal?.Total ?? 0,
@@ -174,16 +172,15 @@ namespace ActionForce.PosLocation.Controllers
         public PartialViewResult RemoveBasketItem(int id, string cardnumber, int cardreaderid)
         {
             CardControlModel model = new CardControlModel();
-            _EmployeeID = this.AuthenticationData.CurrentEmployee.EmployeeID;
-            _LocationID = this.AuthenticationData.CurrentLocation.ID;
-            _Currency = this.AuthenticationData.CurrentLocation.Currency;
+            model.Authentication = this.AuthenticationData;
+
             model.CardNumber = cardnumber;
 
             var removed = Db.RemoveBasketItem(id);
 
-            model.BasketList = Db.GetLocationCardBasket(_LocationID, cardnumber).ToList();
+            model.BasketList = Db.GetLocationCardBasket(model.Authentication.CurrentLocation.ID, cardnumber).ToList();
             model.EmployeeBasketCount = model.BasketList.Sum(x => x.Quantity);
-            var currentBasketTotal = Db.GetLocationCardBasketTotal(_LocationID, cardnumber).FirstOrDefault(x => x.Money == _Currency);
+            var currentBasketTotal = Db.GetLocationCardBasketTotal(model.Authentication.CurrentLocation.ID, cardnumber).FirstOrDefault(x => x.Money == model.Authentication.CurrentLocation.Currency);
             model.BasketTotal = new BasketTotal()
             {
                 Total = currentBasketTotal?.Total ?? 0,
@@ -207,16 +204,15 @@ namespace ActionForce.PosLocation.Controllers
         public PartialViewResult ClearBasket(string cardnumber, int cardreaderid)
         {
             CardControlModel model = new CardControlModel();
-            _EmployeeID = this.AuthenticationData.CurrentEmployee.EmployeeID;
-            _LocationID = this.AuthenticationData.CurrentLocation.ID;
-            _Currency = this.AuthenticationData.CurrentLocation.Currency;
+            model.Authentication = this.AuthenticationData;
+
             model.CardNumber = cardnumber;
 
-            var clean = Db.CleanBasket(_LocationID, _EmployeeID);
+            var clean = Db.CleanBasket(model.Authentication.CurrentLocation.ID, model.Authentication.CurrentEmployee.EmployeeID);
 
-            model.BasketList = Db.GetLocationCardBasket(_LocationID, cardnumber).ToList();
+            model.BasketList = Db.GetLocationCardBasket(model.Authentication.CurrentLocation.ID, cardnumber).ToList();
             model.EmployeeBasketCount = model.BasketList.Sum(x => x.Quantity);
-            var currentBasketTotal = Db.GetLocationCardBasketTotal(_LocationID, cardnumber).FirstOrDefault(x => x.Money == _Currency);
+            var currentBasketTotal = Db.GetLocationCardBasketTotal(model.Authentication.CurrentLocation.ID, cardnumber).FirstOrDefault(x => x.Money == model.Authentication.CurrentLocation.Currency);
             model.BasketTotal = new BasketTotal()
             {
                 Total = currentBasketTotal?.Total ?? 0,

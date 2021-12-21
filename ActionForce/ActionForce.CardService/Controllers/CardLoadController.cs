@@ -14,65 +14,43 @@ namespace ActionForce.CardService.Controllers
     public class CardLoadController : ApiController
     {
         [HttpGet]
-        public HttpResponseMessage CardInfo(string info)
+        public HttpResponseMessage ReceiveComment(string comment)
         {
             Result result = new Result();
-            //ServiceHelper helper = new ServiceHelper();
 
             result.IsSuccess = false;
             result.Message = string.Empty;
 
-            //00119D9B;CC:50:E3:11:9D:9B;4528C2F3;100
-            //Serino, macadresi, card no, bakiye
-
-            if (!string.IsNullOrEmpty(info))
+            if (!string.IsNullOrEmpty(comment))
             {
-                var infolist = info.Split(';').ToArray();
-
-                using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
-                {
-                    var parameters = new { Message = info, IP = ServiceHelper.GetIPAddress(), Date = DateTime.UtcNow.AddHours(3) };
-                    var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [Module] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'CardInfo', 'String')";
-                    connection.Execute(sql, parameters);
-                }
-
                 try
                 {
-                    CardLoadInfoModel model = new CardLoadInfoModel();
+                    var infolist = comment.Split(';').ToArray();
 
-                    model.SerialNumber = infolist[0];
-                    model.MACAddress = infolist[1];
-                    model.CardNumber = infolist[2];
-                    model.CardBlance = (Convert.ToDouble(infolist[3]) / 100);
+                    var SerialNumber = infolist[0];
+                    var MACAddress = infolist[1];
+                    var Process = infolist[2];
 
                     using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
                     {
-                        var rparameters = new { SerialNumber = model.SerialNumber, MACAddress = model.MACAddress };
-                        var rsql = @"SELECT TOP(1) [ID]
-                                ,[OurCompanyID]
-                                ,[LocationID]
-                                ,[LocationTypeID]
-                                ,[CardReaderTypeID]
-                                ,[LocationPartID]
-                                ,[PartName]
-                                ,[PartGroupName]
-                                ,[SerialNumber]
-                                ,[MACAddress]
-                                ,[UID]
-                                ,[StartDate]
-                                ,[IsActive]
-                                FROM [dbo].[CardReader] Where [SerialNumber] = @SerialNumber and [MACAddress] = @MACAddress";
+                        var rparameters = new { SerialNumber, MACAddress };
+                        var rsql = @"SELECT TOP(1) * FROM [dbo].[CardReader] Where [SerialNumber] = @SerialNumber and [MACAddress] = @MACAddress";
                         CardReader cardReader = connection.QueryFirstOrDefault<CardReader>(rsql, rparameters);
 
                         if (cardReader != null && cardReader.LocationID != null)
                         {
                             PushClient pushService = new PushClient();
-                            pushService.SendCardInfo(cardReader.LocationID ?? 0, info);
-                        }
-                    }
+                            pushService.SendComment(cardReader.LocationID ?? 0, comment);
 
-                    result.IsSuccess = true;
-                    result.Message = "OK";
+                            result.IsSuccess = true;
+                            result.Message = "OK";
+                        }
+                        else
+                        {
+                            result.IsSuccess = false;
+                            result.Message = "READERNOTFOUND";
+                        }
+                    }  
                 }
                 catch (Exception ex)
                 {
@@ -80,6 +58,73 @@ namespace ActionForce.CardService.Controllers
                     result.Message = $"ERR";
                 }
 
+            }
+
+            using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
+            {
+                var parameters = new { Message = comment, IP = ServiceHelper.GetIPAddress(), Date = DateTime.UtcNow.AddHours(3), ResultMessage = result.Message };
+                var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [ResultMessage] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'ReceiveComment', @ResultMessage)";
+                connection.Execute(sql, parameters);
+            }
+
+            result.ProcessDate = DateTime.UtcNow.AddHours(3);
+            return Request.CreateResponse(HttpStatusCode.OK, result);
+        }
+
+        [HttpGet]
+        public HttpResponseMessage CardInfo(string info)
+        {
+            Result result = new Result();
+
+            result.IsSuccess = false;
+            result.Message = string.Empty;
+
+            if (!string.IsNullOrEmpty(info))
+            {
+                var infolist = info.Split(';').ToArray();
+
+                try
+                {
+                    CardLoadInfoModel model = new CardLoadInfoModel();
+
+                    model.SerialNumber = infolist[0];
+                    model.MACAddress = infolist[1];
+                    model.Process = Convert.ToInt32(infolist[2]);
+
+                    using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
+                    {
+                        var rparameters = new { SerialNumber = model.SerialNumber, MACAddress = model.MACAddress };
+                        var rsql = @"SELECT TOP(1) * FROM [dbo].[CardReader] Where [SerialNumber] = @SerialNumber and [MACAddress] = @MACAddress";
+                        CardReader cardReader = connection.QueryFirstOrDefault<CardReader>(rsql, rparameters);
+
+                        if (cardReader != null && cardReader.LocationID != null)
+                        {
+                            PushClient pushService = new PushClient();
+                            pushService.SendCardInfo(cardReader.LocationID ?? 0, info);
+
+                            result.IsSuccess = true;
+                            result.Message = "OK";
+                        }
+                        else
+                        {
+                            result.IsSuccess = false;
+                            result.Message = "READERNOTFOUND";
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    result.IsSuccess = false;
+                    result.Message = $"ERR";
+                }
+
+            }
+
+            using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
+            {
+                var parameters = new { Message = info, IP = ServiceHelper.GetIPAddress(), Date = DateTime.UtcNow.AddHours(3), ResultMessage = result.Message };
+                var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [ResultMessage] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'CardInfo', @ResultMessage)";
+                connection.Execute(sql, parameters);
             }
 
             result.ProcessDate = DateTime.UtcNow.AddHours(3);
@@ -123,6 +168,7 @@ namespace ActionForce.CardService.Controllers
                 return Request.CreateResponse(HttpStatusCode.NotFound);
             }
 
+
         }
 
         [HttpGet]
@@ -134,16 +180,13 @@ namespace ActionForce.CardService.Controllers
 
             result.IsSuccess = false;
             result.Message = string.Empty;
+            string info = $"id:{id} success:{success} message:{Message}";
 
             if (id != null && success != null)
             {
-                string info = $"id:{id} success:{success} message:{Message}";
                 using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
                 {
-                    var parameters = new { Message = info, IP = ServiceHelper.GetIPAddress(), Date = DateTime.UtcNow.AddHours(3) };
-                    var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [Module] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'CardLoadResult', 'Guid,int')";
-                    connection.Execute(sql, parameters);
-
+                  
                     var mparameter = new { UID = id, Message };
                     var msql = "Update [dbo].[TicketSaleCreditLoad] Set [Message] = @Message Where [UID] = @UID";
                     connection.Execute(msql, mparameter);
@@ -153,7 +196,6 @@ namespace ActionForce.CardService.Controllers
 
                 try
                 {
-                   
                     if (success == 1) // Yükleme başarılı şekilde gerçekleşti ise
                     {
                         var loadResult = helper.LoadCard(cardReader);
@@ -172,7 +214,12 @@ namespace ActionForce.CardService.Controllers
                 pushService.SendCardLoadResult(cardReader.LocationID, id.ToString());
             }
 
-            
+            using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
+            {
+                var parameters = new { Message = info, IP = ServiceHelper.GetIPAddress(), Date = DateTime.UtcNow.AddHours(3), ResultMessage = result.Message };
+                var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [Module], [ResultMessage] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'CardLoadResult', 'Guid,int')";
+                connection.Execute(sql, parameters);
+            }
 
             result.ProcessDate = DateTime.UtcNow.AddHours(3);
             return Request.CreateResponse(HttpStatusCode.OK, result);

@@ -139,7 +139,7 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
         .system-balance{ font-size: 34px; color: #0FC600; font-weight: bold; }
       }
     }
-    .right-card{ display: flex; align-items: flex-start; justify-content: center; padding: 10px; height: 100%; overflow-y: auto; background: #fefefe; border-radius: 15px; border: 1px solid rgb(238, 238, 238);
+    .right-card{ display: flex; align-items: flex-start; justify-content: center; padding: 10px; height: calc(50% - 10px); margin-bottom: 20px; overflow-y: auto; background: #fefefe; border-radius: 15px; border: 1px solid rgb(238, 238, 238);
       .centered{ flex: 0 0 100%; max-width: 100%; }
       .last-load,.last-used{ display: flex; align-items: center; justify-content: space-evenly; margin: 10px 0; 
         span{ display: block; padding: 10px; font-size: 20px; border-radius: 5px; margin: 0 5px;  }
@@ -170,6 +170,18 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
             &:nth-child(odd){
               td{ background: #f1f1f1; }
             }
+          }
+        }
+      }
+      .log-detail{ text-align: left;
+        ul{
+          li{ font-size: 18px; color: #2c3e50; padding: 10px;
+            .yellow{ color: #f1c40f; }
+            .blue{ color: #3498db; }
+            .green{ color: #2ecc71; }
+            .red{ color: #e74c3c; }
+            .orange{ color: #f39c12; }
+            &:nth-child(even){ background:#f1f1f1; }
           }
         }
       }
@@ -1054,5 +1066,72 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
     }/* modal-body */
   }
 }/* modal */
+
+/*= Confirm Box */
+
+#confirm-wrapper {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000000;
+    background: rgba( 204, 204, 204, 0.6 );
+    display: none;
+    transition: opacity 1s ease-in;
+}
+
+#confirm-box {
+    width: 500px;
+    max-width:  100%;
+    background: #fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    padding:  10px 20px;
+    transform: translate(-50%, -50%);
+}
+
+#confirm-buttons {
+    width: 100%;
+    text-align: center;
+    bottom: 0;
+    left: 0;
+    padding-bottom: 1em;
+}
+
+#confirm-buttons button {
+    display: inline-block;
+    background: transparent;
+    color: #000;
+    font-size: 1em;
+    font-family: 'Lato', Arial, sans-serif;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    margin: 0 10px;
+    border-radius: 10px;
+    padding: 20px 30px;
+    width: 140px;
+}
+
+#confirm-header {
+    text-align: center;
+    font-size: 1em;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 20px 0 40px;
+}
+
+#confirm-header:after {
+    content: ' ';
+    display: block;
+    width: 1em;
+    border-top: 1px solid;
+    margin: 0.4em auto;
+}
+
+#confirm-buttons #confirm-ok{ background: #16a085; border:  none; color:  #fff; }
+#confirm-buttons #confirm-cancel{ background: #34495e; border:  none; color:  #fff; }
+
 @import "modal";
 @import "responsive";

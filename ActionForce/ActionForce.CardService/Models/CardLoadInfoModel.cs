@@ -11,5 +11,6 @@ namespace ActionForce.CardService
         public string MACAddress { get; set; }
         public string CardNumber { get; set; }
         public double? CardBlance { get; set; }
+        public int Process { get; set; }
     }
 }

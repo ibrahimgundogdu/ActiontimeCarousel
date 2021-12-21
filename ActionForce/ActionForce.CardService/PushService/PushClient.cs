@@ -54,5 +54,16 @@ namespace ActionForce.CardService.PushService
             return false;
         }
 
+        public bool SendComment(int locationid, string comment)
+        {
+            var request = new RestRequest("Messenger/SendComment/?locationid=" + locationid + "&comment=" + comment, Method.GET);
+            var response = Client.Execute(request);
+            if (response.ResponseStatus == ResponseStatus.Completed && response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return true;
+            }
+            return false;
+        }
+
     }
 }
