@@ -46,6 +46,7 @@ namespace ActionForce.PosLocation.Controllers
 
             var creditLoad = Db.AddTicketSaleCreditLoad(id, model.Card.CardNumber, model.Card.Credit, model.CardReader.SerialNumber, model.CardReader.MACAddress, model.Authentication.CurrentEmployee.EmployeeID, PosManager.GetIPAddress(),3,null,null).FirstOrDefault();
             model.CreditLoad = creditLoad;
+            model.Comment = $"{model.CreditLoad.SerialNumber};{model.CreditLoad.MACAddress};1;{model.CreditLoad.CardNumber};{(int)model.CreditLoad.FinalCredit*100}";
 
             if (creditLoad.IsSuccess == true)
             {

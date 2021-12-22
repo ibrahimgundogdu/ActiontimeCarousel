@@ -5391,6 +5391,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentsAllSummaryUnion' 
           <Property Name="ActionTypeName" Type="nvarchar" MaxLength="80" />
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="IsActive" Type="bit" />
+          <Property Name="ActionTypeID" Type="int" />
+          <Property Name="PayMethodID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VDocumentTicketSaleReturn' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -9291,7 +9293,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VDocumentsAllSummaryUnion].[ReferenceID] AS [ReferenceID], 
     [VDocumentsAllSummaryUnion].[ActionTypeName] AS [ActionTypeName], 
     [VDocumentsAllSummaryUnion].[UID] AS [UID], 
-    [VDocumentsAllSummaryUnion].[IsActive] AS [IsActive]
+    [VDocumentsAllSummaryUnion].[IsActive] AS [IsActive], 
+    [VDocumentsAllSummaryUnion].[ActionTypeID] AS [ActionTypeID], 
+    [VDocumentsAllSummaryUnion].[PayMethodID] AS [PayMethodID]
     FROM [dbo].[VDocumentsAllSummaryUnion] AS [VDocumentsAllSummaryUnion]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VDocumentTicketSaleReturn" EntityType="Self.VDocumentTicketSaleReturn" store:Type="Views" store:Schema="dbo">
@@ -19144,6 +19148,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ActionTypeName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
           <Property Name="UID" Type="Guid" />
           <Property Name="IsActive" Type="Boolean" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="PayMethodID" Type="Int32" />
         </EntityType>
         <EntityType Name="VSaleActionsSummaryUnion">
           <Key>
@@ -26793,6 +26799,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VDocumentsAllSummaryUnion">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VDocumentsAllSummaryUnion">
               <MappingFragment StoreEntitySet="VDocumentsAllSummaryUnion">
+                <ScalarProperty Name="PayMethodID" ColumnName="PayMethodID" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />

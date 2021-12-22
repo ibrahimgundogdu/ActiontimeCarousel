@@ -47,5 +47,8 @@ namespace ActionForce.PosLocation
         public List<CashActions> CashActions { get; set; }
         public List<BankActions> BankActions { get; set; }
         public List<PayMethod> PayMethods { get; set; }
+        public TicketSaleCreditLoad CreditLoad { get; set; }
+        public List<TicketSaleCreditLoad> CreditLoads { get; set; }
+        public List<CardActionType> CardActionTypes { get; set; }
     }
 }

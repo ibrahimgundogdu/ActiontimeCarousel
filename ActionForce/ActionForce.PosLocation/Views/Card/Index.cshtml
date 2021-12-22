@@ -61,20 +61,50 @@
 
                                     </div>
                                 </div>
-                                <div class="col col-12 col-lg-7">
-                                    <div class="center-card">
-                                        <div class="centered">
-                                            <div class="card-type">@(Model.Card?.CardTypeName)</div>
-                                            <div class="status @(Model.Card?.CardStatusID == 0 ? "open": Model.Card?.CardStatusID == 1 ? "active" : Model.Card?.CardStatusID == 2 ? "passive":"")">@(Model.CardStatus)</div>  <!-- passive active open -->
-                                            <div class="card-no">@(Model.Card != null ? Model.Card.CardNumber : "Kartı Okutunuz")</div>
-                                            <div class="balances">
-                                                <input id="CardNumber" name="CardNumber" type="hidden" value="@(Model.Card?.CardNumber)" />
-                                                <div class="physical-balance">@(Model.CardBalance)</div>
-                                                <div class="system-balance">@(Model.CardBalanceAction)</div>
+                                @if (Model.Card != null)
+                                {
+                                    <div class="col col-12 col-lg-7">
+                                        <div class="center-card">
+                                            <div class="centered">
+                                                <div class="card-type">@(Model.Card?.CardTypeName)</div>
+                                                <div class="status @(Model.Card?.CardStatusID == 0 ? "open": Model.Card?.CardStatusID == 1 ? "active" : Model.Card?.CardStatusID == 2 ? "passive":"")">@(Model.CardStatus)</div>  <!-- passive active open -->
+                                                <div class="card-no">@(Model.Card != null ? Model.Card.CardNumber : "Kartı Okutunuz")</div>
+                                                <div class="balances">
+                                                    <input id="CardNumber" name="CardNumber" type="hidden" value="@(Model.Card?.CardNumber)" />
+                                                    <div class="physical-balance">@(Model.CardBalance)</div>
+                                                    <div class="system-balance">@(Model.CardBalanceAction)</div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
+                                else
+                                {
+                                    <div class="col col-12 col-lg-7">
+                                        <div class="center-card">
+                                            <div class="centered">
+                                                <div class="card-type"></div>
+                                                <div class="status"></div>  <!-- passive active open -->
+                                                <div class="card-no">
+                                                    @if (Model.CardReader != null)
+                                                    {
+                                                        <a href="javascript:;" onclick="AndroidCardRead('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};85;")');">Kartı Oku</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a href="javascript:;">Reader Tanımı Yok </a>
+                                                    }
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            <p>
+                                <a href="javascript:;" onclick="AndroidCardRead('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};86;")');">Sen O Musun</a>
+                            </p>
+
                                 <div class="col col-12 col-lg-12">
                                     <div class="card-box">
                                         <div class="card-box-process">
@@ -186,8 +216,8 @@
                             <div class="right-card">
                                 <div class="centered">
                                     <div class="log-detail">
-                                        <ul>
-                                            <li>
+                                        <ul id="CardSystemInfo">
+                                            @*<li>
                                                 <span class="yellow">Kart</span> bilgisi yanlış
                                             </li>
                                             <li>
@@ -216,7 +246,7 @@
                                             </li>
                                             <li>
                                                 <span class="orange">Kart</span> düzelendi.
-                                            </li>
+                                            </li>*@
                                  
                                         </ul>
                                     </div>
@@ -339,6 +369,10 @@
             });
         };
 
+        function AndroidCardRead(comment) {
+            Android.sendComment(comment);
+        }
+
     </script>
 
 
@@ -430,6 +464,11 @@
             }
         })
 
+        connection.on('ReceiveComment', (locationid, comment) => {
+            if (locationid == @(Model.Authentication.CurrentLocation.ID)) {
+                ReceiveComment(comment);
+            }
+        })
 
         connection.on('finished', (update) => {
             connection.stop();
@@ -438,6 +477,13 @@
 
         function GetCardInfo(info) {
             window.location = '/Card/Index?cardinfo='+info;
+        }
+
+        function ReceiveComment(comment) {
+
+            //$('#CardSystemInfo').append('<li>' + htmlEncode(comment) + '</li>');
+            console.log('Comment : '+comment)
+            window.location = '/Card/Index?cardinfo='+comment;
         }
 
     </script>

@@ -87,6 +87,8 @@ namespace ActionForce.PosLocation.Controllers
             model.PaymentAmount = model.TicketSalePosPaymentSummary.Sum(x => x.PaymentAmount) ?? 0;
             model.RefundedAmount = model.ExpenseSlips.Sum(x => x.Amount) ?? 0;
             model.RefundRate = (100 * model.RefundedAmount) / model.PaymentAmount;
+            model.CardActionTypes = Db.CardActionType.ToList();
+            model.CreditLoads = Db.TicketSaleCreditLoad.Where(x => x.SaleID == id).ToList();
 
             return View(model);
         }

@@ -220,8 +220,10 @@
                         text: 'EVET',
                         btnClass: 'btn-yes',
                         action: function () {
-
+                            console.log('@(Model.Comment)');
+                            Android.sendComment('@(Model.Comment)');
                             // kontör yükleme methodu çağrılır
+
                         }
                     },
                     danger: {
@@ -336,6 +338,7 @@
                 GetCardLoadInfo(uid);
             }
         })
+
 
 
         connection.on('finished', (update) => {

@@ -24,5 +24,7 @@ namespace ActionForce.Entity
         public string ActionTypeName { get; set; }
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public Nullable<int> ActionTypeID { get; set; }
+        public Nullable<int> PayMethodID { get; set; }
     }
 }

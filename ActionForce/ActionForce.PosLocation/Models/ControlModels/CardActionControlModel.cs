@@ -23,6 +23,7 @@ namespace ActionForce.PosLocation
         public int TotalCredit { get; set; } = 0;
         public int RefundCredit { get; set; } = 0;
         public string CardNumber { get; set; }
+        public string Comment { get; set; }
 
     }
 }

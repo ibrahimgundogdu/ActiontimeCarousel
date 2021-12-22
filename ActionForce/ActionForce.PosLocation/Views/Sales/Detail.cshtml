@@ -180,21 +180,61 @@
                             </tr>
                             @foreach (var item in Model.ExpenseSlips)
                             {
-                        <tr>
-                            <td style="font-weight:500;"><a href="/Sales/RefundDetail/@(item.ID)" class="btn btn-light" style="font-weight: 500; color: darkblue !important;">@(item.DocumentNumber)</a></td>
-                            <td>@(item.DocumentDate?.ToShortDateString())</td>
-                            <td style="font-weight:500; text-align:right;">@(item.Amount?.ToString("N2")) @(item.Sign)</td>
-                            <td style="text-align:left;">@(item.PayMethodName)</td>
-                            <td>@(item.Description)</td>
-                            <td style="text-align:right;"><a href="/Sales/RefundDetail/@(item.ID)" class="btn btn-light" style="font-weight:500; color:darkblue !important;">@(item.RecordDate)</a></td>
-                            <td style="text-align:right;"><a href="/Sales/RemoveRefund/@(item.ID)" class="btn btn-light" style="font-weight:500; color:darkred !important;">SİL</a></td>
-                            <td style="text-align:right;"><a href="/Sales/CheckRefund/@(item.ID)?oid=@(Model.TicketSaleSummary.ID)" class="btn btn-light" style="font-weight:500; color:darkred !important;">KONTROL</a></td>
-                            
-                        </tr>
+                                <tr>
+                                    <td style="font-weight:500;"><a href="/Sales/RefundDetail/@(item.ID)" class="btn btn-light" style="font-weight: 500; color: darkblue !important;">@(item.DocumentNumber)</a></td>
+                                    <td>@(item.DocumentDate?.ToShortDateString())</td>
+                                    <td style="font-weight:500; text-align:right;">@(item.Amount?.ToString("N2")) @(item.Sign)</td>
+                                    <td style="text-align:left;">@(item.PayMethodName)</td>
+                                    <td>@(item.Description)</td>
+                                    <td style="text-align:right;"><a href="/Sales/RefundDetail/@(item.ID)" class="btn btn-light" style="font-weight:500; color:darkblue !important;">@(item.RecordDate)</a></td>
+                                    <td style="text-align:right;"><a href="/Sales/RemoveRefund/@(item.ID)" class="btn btn-light" style="font-weight:500; color:darkred !important;">SİL</a></td>
+                                    <td style="text-align:right;"><a href="/Sales/CheckRefund/@(item.ID)?oid=@(Model.TicketSaleSummary.ID)" class="btn btn-light" style="font-weight:500; color:darkred !important;">KONTROL</a></td>
+
+                                </tr>
                             }
                         </table>
 
                     </div>
+                    @if (Model.CreditLoads != null && Model.CreditLoads.Count > 0)
+                    {
+                        <h1>KONTÖR YÜKLEME DETAYI</h1>
+                        <div class="table-responsive">
+                            <table class="table table-dashboard table-striped table-hover">
+                                <tr>
+                                    <th>İŞLEM</th>
+                                    <th>SERI</th>
+                                    <th>MAC</th>
+                                    <th>CARD</th>
+                                    <th style="text-align:right;">FKREDİ</th>
+                                    <th style="text-align:right;">SKREDİ</th>
+                                    <th style="text-align:right;">KREDİ</th>
+                                    <th>AÇIKLAMA</th>
+                                    <th>ZAMAN</th>
+                                    <th>DURUM</th>
+                                </tr>
+                                @foreach (var item in Model.CreditLoads)
+                                {
+                                    var cardActionType = Model.CardActionTypes.FirstOrDefault(x => x.ID == item.CardActionTypeID);
+                                    <tr>
+                                        <td style="font-weight:500;"><a href="@(item.CardActionTypeID == 3 ? $"/CardAction/Index/{item.SaleID}":$"/CardAction/CreditRefund/{item.SaleID}")" class="btn btn-light" style="font-weight: 500; color: darkblue !important;">@(cardActionType.NameTR)</a></td>
+                                        <td>@(item.SerialNumber)</td>
+                                        <td>@(item.MACAddress)</td>
+                                        <td>@(item.CardNumber)</td>
+                                        <td style="font-weight:500; text-align:right;">@(item.ExistsCredit)</td>
+                                        <td style="font-weight:500; text-align:right;">@(item.TotalCredit)</td>
+                                        <td style="font-weight:500; text-align:right;">@(item.FinalCredit)</td>
+                                        <td style="text-align:left;">@(item.Message)</td>
+                                        <td>@(item.RecordDate)</td>
+                                        <td style="font-weight:500;"><a href="@(item.CardActionTypeID == 3 ? $"/CardAction/Index/{item.SaleID}":$"/CardAction/CreditRefund/{item.SaleID}")" class="btn btn-light" style="font-weight: 500; color: darkblue !important;">@(item.IsSuccess == true ? "Tamamlandı" : "Bekliyor")</a></td>
+                                    </tr>
+                                }
+                            </table>
+
+                        </div>
+                    }
+
+
+
                 </div>
             </div><!-- content -->
             <div class="fixed-footer">

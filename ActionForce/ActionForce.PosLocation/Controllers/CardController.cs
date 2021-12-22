@@ -41,7 +41,7 @@ namespace ActionForce.PosLocation.Controllers
 
             model.BasketList = new List<VTicketBasket>();
             model.Card = null;
-            model.CardReader = null;
+            model.CardReader = model.CardReader = Db.CardReader.FirstOrDefault(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.CardReaderTypeID == 1 && x.IsActive == true);
 
 
             if (!string.IsNullOrEmpty(cardinfo))
@@ -93,6 +93,7 @@ namespace ActionForce.PosLocation.Controllers
                     }
 
                     model.CardStatus = model.Card.CardStatusName ?? "Bilinmiyor";
+
                     model.CardReader = Db.CardReader.FirstOrDefault(x => x.SerialNumber == serino && x.MACAddress == macano && x.LocationID == model.Authentication.CurrentLocation.ID && x.CardReaderTypeID == 1 && x.IsActive == true);
 
                     model.CardBalanceAction = 0;
@@ -120,7 +121,7 @@ namespace ActionForce.PosLocation.Controllers
                         Sign = currentBasketTotal?.Sign
                     };
                 }
-                else
+                else if(process == 86)
                 {
 
                 }
