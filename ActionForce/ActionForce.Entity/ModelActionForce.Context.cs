@@ -359,6 +359,7 @@ namespace ActionForce.Entity
         public virtual DbSet<Card> Card { get; set; }
         public virtual DbSet<VCard> VCard { get; set; }
         public virtual DbSet<VCardActions> VCardActions { get; set; }
+        public virtual DbSet<CardComment> CardComment { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -2753,6 +2754,48 @@ namespace ActionForce.Entity
                 new ObjectParameter("CardNumber", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<string>("GetCardReadInfo", locationIDParameter, cardNumberParameter);
+        }
+    
+        public virtual ObjectResult<CardComment> AddCardComment(Nullable<int> locationID, Nullable<int> process, string comment, Nullable<System.DateTime> record)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var processParameter = process.HasValue ?
+                new ObjectParameter("Process", process) :
+                new ObjectParameter("Process", typeof(int));
+    
+            var commentParameter = comment != null ?
+                new ObjectParameter("Comment", comment) :
+                new ObjectParameter("Comment", typeof(string));
+    
+            var recordParameter = record.HasValue ?
+                new ObjectParameter("Record", record) :
+                new ObjectParameter("Record", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CardComment>("AddCardComment", locationIDParameter, processParameter, commentParameter, recordParameter);
+        }
+    
+        public virtual ObjectResult<CardComment> AddCardComment(Nullable<int> locationID, Nullable<int> process, string comment, Nullable<System.DateTime> record, MergeOption mergeOption)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var processParameter = process.HasValue ?
+                new ObjectParameter("Process", process) :
+                new ObjectParameter("Process", typeof(int));
+    
+            var commentParameter = comment != null ?
+                new ObjectParameter("Comment", comment) :
+                new ObjectParameter("Comment", typeof(string));
+    
+            var recordParameter = record.HasValue ?
+                new ObjectParameter("Record", record) :
+                new ObjectParameter("Record", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CardComment>("AddCardComment", mergeOption, locationIDParameter, processParameter, commentParameter, recordParameter);
         }
     }
 }

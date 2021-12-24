@@ -48,6 +48,7 @@
             <div class="content">
                 <div class="card-program">
                     <div class="row">
+
                         <div class="col col-12 col-lg-7">
                             <div class="row">
                                 <div class="col col-12 col-lg-5">
@@ -59,6 +60,9 @@
                                             <div class="mac-no">@(Model.CardReader?.MACAddress)</div>
                                         </div>
 
+                                    </div>
+                                    <div class="">
+                                        <a href="javascript:;" class="btn btn-block btn-outline-warning" onclick="AndroidSendCommend('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};86;")');">Sen O Musun</a>
                                     </div>
                                 </div>
                                 @if (Model.Card != null)
@@ -76,7 +80,12 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div>
+                                            @(Model.Comment)
+                                        </div>
                                     </div>
+
                                 }
                                 else
                                 {
@@ -88,7 +97,7 @@
                                                 <div class="card-no">
                                                     @if (Model.CardReader != null)
                                                     {
-                                                        <a href="javascript:;" onclick="AndroidCardRead('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};85;")');">Kartı Oku</a>
+                                                        <a href="javascript:;" onclick="AndroidSendCommend('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};85;")');">Kartı Oku</a>
                                                     }
                                                     else
                                                     {
@@ -101,9 +110,18 @@
                                         </div>
                                     </div>
                                 }
-                            <p>
-                                <a href="javascript:;" onclick="AndroidCardRead('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};86;")');">Sen O Musun</a>
-                            </p>
+
+                                @if (Model.CardReader != null && Model.Card != null && Model.Card.CardStatusID == 0)
+                                {
+                                    <div>
+                                        <div class="">
+                                            <a href="javascript:;" class="btn btn-warning" onclick="AndroidSendCommend('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};85;")');">Kasa Kartı Yap</a>
+                                        </div>
+                                        <div class="">
+                                            <a href="javascript:;" class="btn btn-primary" onclick="AndroidSendCommend('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};85;")');">Personel Kartı Yap</a>
+                                        </div>
+                                    </div>
+                                }
 
                                 <div class="col col-12 col-lg-12">
                                     <div class="card-box">
@@ -217,37 +235,16 @@
                                 <div class="centered">
                                     <div class="log-detail">
                                         <ul id="CardSystemInfo">
-                                            @*<li>
-                                                <span class="yellow">Kart</span> bilgisi yanlış
-                                            </li>
-                                            <li>
-                                                <span class="blue">Kart</span> okutuldu.
-                                            </li>
-                                            <li>
-                                                Müşteri <span class="green">Kartı</span> oluşturuldu.
-                                            </li>
-                                            <li>
-                                                <span class="red">Kart</span> silindi.
-                                            </li>
-                                            <li>
-                                                <span class="orange">Kart</span> düzelendi.
-                                            </li>
-                                            <li>
-                                                <span class="yellow">Kart</span> bilgisi yanlış
-                                            </li>
-                                            <li>
-                                                <span class="blue">Kart</span> okutuldu.
-                                            </li>
-                                            <li>
-                                                Müşteri <span class="green">Kartı</span> oluşturuldu.
-                                            </li>
-                                            <li>
-                                                <span class="red">Kart</span> silindi.
-                                            </li>
-                                            <li>
-                                                <span class="orange">Kart</span> düzelendi.
-                                            </li>*@
-                                 
+                                            @if (Model.CardComments != null)
+                                            {
+                                                foreach (var item in Model.CardComments.OrderByDescending(x => x.Record))
+                                                {
+                                                    <li>
+                                                        <span>@(item.RecordTime)</span>&nbsp;&nbsp;<span class="blue">@(item.Process)</span> @(item.Comment)
+                                                    </li>
+                                                }
+                                            }
+
                                         </ul>
                                     </div>
                                 </div>
@@ -373,6 +370,10 @@
             Android.sendComment(comment);
         }
 
+        function AndroidSendCommend(comment) {
+            Android.sendComment(comment);
+        }
+
     </script>
 
 
@@ -481,8 +482,7 @@
 
         function ReceiveComment(comment) {
 
-            //$('#CardSystemInfo').append('<li>' + htmlEncode(comment) + '</li>');
-            console.log('Comment : '+comment)
+            /*$('#CardSystemInfo').append('<li>' + htmlEncode(comment) + '</li>');*/
             window.location = '/Card/Index?cardinfo='+comment;
         }
 

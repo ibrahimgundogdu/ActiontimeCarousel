@@ -46,11 +46,17 @@ namespace ActionForce.PosLocation.Controllers
 
             if (!string.IsNullOrEmpty(cardinfo))
             {
+                model.Comment = cardinfo;
+                
+
                 string[] cardinfolist = cardinfo.Split(';').ToArray();
 
                 string serino = cardinfolist[0];
                 string macano = cardinfolist[1];
                 int process = Convert.ToInt32(cardinfolist[2]);
+
+                model.CardComments = Db.AddCardComment(model.Authentication.CurrentLocation.ID, process, cardinfo, DateTime.UtcNow.AddHours(3)).ToList();
+
 
                 if (process == 1) // Müşteri Kartı Okunma bölümü //00119D9B;CC:50:E3:11:9D:9B;1;4528C2F3;1;100
                 {

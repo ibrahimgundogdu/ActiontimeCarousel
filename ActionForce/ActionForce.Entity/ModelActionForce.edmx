@@ -550,6 +550,18 @@
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="CardComment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="Process" Type="int" />
+          <Property Name="Comment" Type="nvarchar" MaxLength="250" />
+          <Property Name="Record" Type="datetime" />
+          <Property Name="RecordDate" Type="date" StoreGeneratedPattern="Computed" />
+          <Property Name="RecordTime" Type="time" Precision="0" StoreGeneratedPattern="Computed" />
+        </EntityType>
         <EntityType Name="CardCreditOption">
           <Key>
             <PropertyRef Name="ID" />
@@ -7425,6 +7437,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="CardReaderID" Type="int" Mode="In" />
           <Parameter Name="Environment" Type="int" Mode="In" />
         </Function>
+        <Function Name="AddCardComment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="Process" Type="int" Mode="In" />
+          <Parameter Name="Comment" Type="nvarchar" Mode="In" />
+          <Parameter Name="Record" Type="datetime" Mode="In" />
+        </Function>
         <Function Name="AddCardPosOrder" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
@@ -8031,6 +8049,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="Card" EntityType="Self.Card" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardActions" EntityType="Self.CardActions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardActionType" EntityType="Self.CardActionType" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardComment" EntityType="Self.CardComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardCreditOption" EntityType="Self.CardCreditOption" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardNumber" EntityType="Self.CardNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardReader" EntityType="Self.CardReader" Schema="dbo" store:Type="Tables" />
@@ -11919,6 +11938,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="VCard" EntityType="db293_ActionTimeDbModel.VCard" />
           <EntitySet Name="VCardActions" EntityType="db293_ActionTimeDbModel.VCardActions" />
+          <FunctionImport Name="AddCardComment" EntitySet="CardComment" ReturnType="Collection(db293_ActionTimeDbModel.CardComment)">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="Process" Mode="In" Type="Int32" />
+            <Parameter Name="Comment" Mode="In" Type="String" />
+            <Parameter Name="Record" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <EntitySet Name="CardComment" EntityType="db293_ActionTimeDbModel.CardComment" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -19814,6 +19840,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="DateOnly" Type="DateTime" Precision="3" />
           <Property Name="ActionDateUpdate" Type="DateTime" Precision="3" />
         </EntityType>
+        <ComplexType Name="AddCardComment_Result">
+          <Property Type="Int64" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="LocationID" Nullable="true" />
+          <Property Type="Int32" Name="Process" Nullable="true" />
+          <Property Type="String" Name="Comment" Nullable="true" MaxLength="250" />
+          <Property Type="DateTime" Name="Record" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="RecordDate" Nullable="true" />
+          <Property Type="Time" Name="RecordTime" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="CardComment">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="Process" Type="Int32" />
+          <Property Name="Comment" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="Record" Type="DateTime" Precision="3" />
+          <Property Name="RecordDate" Type="DateTime" annotation:StoreGeneratedPattern="Computed" Precision="0" />
+          <Property Name="RecordTime" Type="Time" annotation:StoreGeneratedPattern="Computed" Precision="0" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -27426,6 +27473,21 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="CardID" ColumnName="CardID" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddCardComment" FunctionName="db293_ActionTimeDbModel.Store.AddCardComment">
+          </FunctionImportMapping>
+          <EntitySetMapping Name="CardComment">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardComment">
+              <MappingFragment StoreEntitySet="CardComment">
+                <ScalarProperty Name="RecordTime" ColumnName="RecordTime" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="Record" ColumnName="Record" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="Process" ColumnName="Process" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
