@@ -25,7 +25,6 @@ namespace ActionForce.PosLocation.Controllers
                 model.Result = TempData["Result"] as Result;
             }
 
-            model.PriceList = Db.GetLocationCurrentProductPrices(model.Authentication.CurrentLocation.ID).ToList();
             model.CardTypes = Db.CardType.Where(x => x.IsActive == true).ToList();
 
             model.BasketTotal = new BasketTotal()
@@ -48,7 +47,6 @@ namespace ActionForce.PosLocation.Controllers
             {
                 model.Comment = cardinfo;
                 
-
                 string[] cardinfolist = cardinfo.Split(';').ToArray();
 
                 string serino = cardinfolist[0];
@@ -56,7 +54,6 @@ namespace ActionForce.PosLocation.Controllers
                 int process = Convert.ToInt32(cardinfolist[2]);
 
                 model.CardComments = Db.AddCardComment(model.Authentication.CurrentLocation.ID, process, cardinfo, DateTime.UtcNow.AddHours(3)).ToList();
-
 
                 if (process == 1) // Müşteri Kartı Okunma bölümü //00119D9B;CC:50:E3:11:9D:9B;1;4528C2F3;1;100
                 {
@@ -73,29 +70,13 @@ namespace ActionForce.PosLocation.Controllers
                     }
 
                     model.Card = Db.VCard.FirstOrDefault(x => x.CardNumber == cardno);
+                    model.CardActions = Db.VCardActions.Where(x => x.CardNumber == cardno).ToList();
+                    model.ActionDates = model.CardActions.Select(x => x.DateOnly.Value.Date).Distinct().OrderByDescending(x => x).ToList();
+                    model.PriceList = Db.GetLocationCurrentProductPrices(model.Authentication.CurrentLocation.ID).ToList();
 
-                    if (model.Card.CardTypeID <= 1)
+                    if (model.Card.CardTypeID == 1)
                     {
-                        model.CardActions = Db.VCardActions.Where(x => x.CardNumber == cardno).ToList();
-                        model.ActionDates = model.CardActions.Select(x => x.DateOnly.Value.Date).Distinct().OrderByDescending(x => x).ToList();
-                    }
-                    if (model.Card.CardTypeID == 2)
-                    {
-                        var isemployeecard = Db.EmployeeCard.FirstOrDefault(x => x.CardNumber == model.Card.CardNumber);
-
-                        if (isemployeecard != null)
-                        {
-                            if (isemployeecard.CardStatusID == 1)
-                            {
-                                PosManager manager = new PosManager();
-
-                                var location = Db.Location.FirstOrDefault(x => x.LocationID == model.Authentication.CurrentLocation.ID);
-                                var employees = manager.GetLocationEmployeeModelsToday(location);
-
-                                model.EmployeeModel = employees.FirstOrDefault(x => x.ID == isemployeecard.EmployeeID);
-                            }
-                        }
-
+                        model.PriceList = model.PriceList.Where(x => x.IsBase == true).ToList();
                     }
 
                     model.CardStatus = model.Card.CardStatusName ?? "Bilinmiyor";
@@ -127,14 +108,44 @@ namespace ActionForce.PosLocation.Controllers
                         Sign = currentBasketTotal?.Sign
                     };
                 }
-                else if(process == 86)
+
+                if (process == 2) // Personel Kartı Okunma bölümü //00E268A5;E8:DB:84:E2:68:A5;2;A59ED793;1;254;0
                 {
+                    string cardno = cardinfolist[3];
+                    int processtype = Convert.ToInt32(cardinfolist[4]);
+                    string setupconfig = cardinfolist[5];  // 254 personel kartı
+
+                    model.CardNumber = cardno;
+
+                    if (!Db.Card.Any(x => x.CardNumber == cardno))
+                    {
+                        Db.AddCard(cardno);
+                    }
+
+                    model.Card = Db.VCard.FirstOrDefault(x => x.CardNumber == cardno);
+
+                    if (setupconfig == "254")
+                    {
+                        var isemployeecard = Db.EmployeeCard.Where(x => x.CardNumber == model.Card.CardNumber).OrderByDescending(x=> x.RecordDate).FirstOrDefault();
+
+                        if (isemployeecard != null)
+                        {
+                            PosManager manager = new PosManager();
+
+                            var location = Db.Location.FirstOrDefault(x => x.LocationID == model.Authentication.CurrentLocation.ID);
+                            model.Employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == isemployeecard.EmployeeID);
+                            var employees = manager.GetLocationEmployeeModelsToday(location);
+
+                            model.EmployeeModel = employees.FirstOrDefault(x => x.ID == isemployeecard.EmployeeID);
+                        }
+                        else
+                        {
+                            model.EmployeeModel = null;
+                        }
+
+                    }
 
                 }
-
-
-
-
             }
 
             return View(model);
@@ -239,56 +250,34 @@ namespace ActionForce.PosLocation.Controllers
             return PartialView("_PartialBasketList", model);
         }
 
-        //public ActionResult Detail(string cardinfo)
-        //{
-        //    CardControlModel model = new CardControlModel();
-        //    model.Authentication = this.AuthenticationData;
+        public string MakeCashCard(string cardnumber)
+        {
+            CardControlModel model = new CardControlModel();
+            model.Authentication = this.AuthenticationData;
 
-        //    _EmployeeID = this.AuthenticationData.CurrentEmployee.EmployeeID;
-        //    _LocationID = this.AuthenticationData.CurrentLocation.ID;
-        //    _Currency = this.AuthenticationData.CurrentLocation.Currency;
+            string message = string.Empty;
 
+            if (!string.IsNullOrEmpty(cardnumber))
+            {
+                try
+                {
+                    var card = Db.Card.FirstOrDefault(x => x.CardNumber == cardnumber);
 
-        //    if (TempData["Result"] != null)
-        //    {
-        //        model.Result = TempData["Result"] as Result;
-        //    }
+                    card.CardTypeID = 1;
+                    card.CardStatusID = 1;
 
+                    Db.SaveChanges();
 
-        //    if (!string.IsNullOrEmpty(cardinfo))
-        //    {
-        //        //00119D9B;CC:50:E3:11:9D:9B;4528C2F3;100
+                    message = "Kasa Kartı Tanımlandı";
+                }
+                catch (Exception ex)
+                {
+                    message = "Kasa Kartı Tanımlanamadı!";
+                }
+                
+            }
 
-        //        string[] cardinfolist = cardinfo.Split(';').ToArray();
-
-        //        if (cardinfolist.Count() == 4)
-        //        {
-        //            string serino = cardinfolist[0];
-        //            string macano = cardinfolist[1];
-        //            string cardno = cardinfolist[2];
-        //            string credit = cardinfolist[3];
-        //            double? existscredit = (Convert.ToDouble(credit) / 100);
-        //            model.CardNumber = cardno;
-
-
-
-        //            model.Card = Db.Card.FirstOrDefault(x => x.CardNumber == cardno);
-        //            model.CardReader = Db.CardReader.FirstOrDefault(x => x.SerialNumber == serino && x.MACAddress == macano && x.LocationID == model.Authentication.CurrentLocation.ID && x.CardReaderTypeID == 1 && x.IsActive == true);
-
-        //            model.CardBalanceAction = 0;
-
-        //            if (Db.CardActions.Any(x => x.CardID == model.Card.ID))
-        //            {
-        //                model.CardBalanceAction = Db.CardActions.Where(x => x.CardID == model.Card.ID)?.Sum(x => x.Credit) ?? 0.0;
-        //            }
-
-        //            model.CardBalance = existscredit ?? 0;
-        //        }
-
-        //    }
-
-
-        //    return View(model);
-        //}
+            return message;
+        }
     }
 }

@@ -49,9 +49,10 @@ namespace ActionForce.Location.Controllers
             model.DateKey = Db.DateList.FirstOrDefault(x => x.DateKey == selectedDate);
             model.OurCompanies = Db.OurCompany.ToList();
             model.SelectedDate = selectedDate;
-            model.LocationSaleTotals = documentManager.GetDailyLocationSales(selectedDate);
+            //model.LocationSaleTotals = documentManager.GetDailyLocationSales(selectedDate);
             model.SalaryList = documentManager.GetDailyEmployeeSalary(selectedDate);
             model.ExpenseList = documentManager.GetDailyCashExpense(selectedDate);
+            model.Revenue = Db.VDocumentsAllSummaryRevenue.Where(x => x.Date == selectedDate && x.IsActive == true).ToList();
 
             if (OurCompnayID != null && OurCompnayID > 0)
             {
@@ -100,7 +101,9 @@ namespace ActionForce.Location.Controllers
             model.DateKey = Db.DateList.FirstOrDefault(x => x.DateKey == selectedDate);
             model.OurCompanies = Db.OurCompany.ToList();
             model.SelectedDate = selectedDate;
-            model.LocationSaleTotals = documentManager.GetDailyLocationSales(selectedDate);
+            //model.LocationSaleTotals = documentManager.GetDailyLocationSales(selectedDate);
+            model.Revenue = Db.VDocumentsAllSummaryRevenue.Where(x => x.Date == selectedDate && x.IsActive == true).ToList();
+
             model.SalaryList = documentManager.GetDailyEmployeeSalary(selectedDate);
             model.ExpenseList = documentManager.GetDailyCashExpense(selectedDate);
 
@@ -166,10 +169,11 @@ namespace ActionForce.Location.Controllers
                 model.PriceList = Db.GetLocationCurrentPrices(model.Authentication.CurrentLocation.ID).ToList();
 
                 model.CurrentOurCompany = model.OurCompanies.FirstOrDefault(x => x.CompanyID == model.CurrentLocation.OurCompanyID);
-                model.LocationSaleTotals = documentManager.GetDailyLocationSales(selectedDate).Where(x=> x.LocationID == LocationID).ToList();
+                //model.LocationSaleTotals = documentManager.GetDailyLocationSales(selectedDate).Where(x=> x.LocationID == LocationID).ToList();
+                model.Revenue = Db.VDocumentsAllSummaryRevenue.Where(x => x.Date == selectedDate && x.IsActive == true && x.LocationID == LocationID).ToList();
 
                 model.TicketList = manager.GetLocationTicketsToday(selectedDate);
-                model.LocationBalance = manager.GetLocationSaleBalanceToday(selectedDate);
+                //model.LocationBalance = manager.GetLocationSaleBalanceToday(selectedDate);
             }
 
 

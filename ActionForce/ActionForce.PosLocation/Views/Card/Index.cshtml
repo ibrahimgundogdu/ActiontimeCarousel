@@ -1,7 +1,7 @@
 ﻿@model CardControlModel
 @{
     Layout = null;
-    var cardPriceID = Model.PriceList.FirstOrDefault(x => x.ProductID == 1)?.ID ?? 2;
+    var cardPriceID = Model.PriceList?.FirstOrDefault(x => x.ProductID == 1)?.ID ?? 2;
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -29,8 +29,10 @@
                     <!-- menu -->
                 </div>
                 <div class="logo">
-                    <a href="javascript:;">UFE POS</a>
-                    <div class="date">@(DateTime.Now.ToLongDateString())</div>
+                    <a href="javascript:;">@(Model.CardReader?.SerialNumber)</a>
+                    <div class="date" style="font-weight:800;" id="MessageArea">@(DateTime.Now.ToLongDateString())</div>
+                    <input id="CardReaderID" type="hidden" value="@(Model.CardReader?.ID)" />
+                    <input id="CardNumber" type="hidden" value="@(Model.Card?.CardNumber)" />
                 </div>
                 <div class="homepage">
                     <a href="@(Model.Authentication.IsCardSystem == true ? "/Card":"/")">
@@ -51,23 +53,14 @@
 
                         <div class="col col-12 col-lg-7">
                             <div class="row">
-                                <div class="col col-12 col-lg-5">
-                                    <div class="left-card">
 
-                                        <div class="centered">
-                                            <input id="CardReaderID" name="CardReaderID" type="hidden" value="@(Model.CardReader?.ID)" />
-                                            <div class="seri-no">@(Model.CardReader?.SerialNumber)</div>
-                                            <div class="mac-no">@(Model.CardReader?.MACAddress)</div>
-                                        </div>
-
-                                    </div>
-                                    <div class="">
-                                        <a href="javascript:;" class="btn btn-block btn-outline-warning" onclick="AndroidSendCommend('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};86;")');">Sen O Musun</a>
-                                    </div>
+                                <div class="col col-12 col-lg-12">
+                                    <a href="javascript:;" class="btn btn-block btn-warning" style="margin-bottom:10px; border-radius:10px;" onclick="AndroidSendCommend('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};86;")');">Reader Kontrol</a>
                                 </div>
+
                                 @if (Model.Card != null)
                                 {
-                                    <div class="col col-12 col-lg-7">
+                                    <div class="col col-12 col-lg-12">
                                         <div class="center-card">
                                             <div class="centered">
                                                 <div class="card-type">@(Model.Card?.CardTypeName)</div>
@@ -80,16 +73,12 @@
                                                 </div>
                                             </div>
                                         </div>
-
-                                        <div>
-                                            @(Model.Comment)
-                                        </div>
                                     </div>
 
                                 }
                                 else
                                 {
-                                    <div class="col col-12 col-lg-7">
+                                    <div class="col col-12 col-lg-12">
                                         <div class="center-card">
                                             <div class="centered">
                                                 <div class="card-type"></div>
@@ -113,12 +102,13 @@
 
                                 @if (Model.CardReader != null && Model.Card != null && Model.Card.CardStatusID == 0)
                                 {
-                                    <div>
-                                        <div class="">
-                                            <a href="javascript:;" class="btn btn-warning" onclick="AndroidSendCommend('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};85;")');">Kasa Kartı Yap</a>
+                                    <div class="col col-12 col-lg-12 row">
+                                        <div  class="col col-6 col-lg-6">
+                                            <a href="javascript:;" class="btn btn-block btn-primary" style="border-radius: 10px;" onclick="MakeCashCard('@(Model.Card?.CardNumber)');">Kasa Kartı Yap</a>
                                         </div>
-                                        <div class="">
-                                            <a href="javascript:;" class="btn btn-primary" onclick="AndroidSendCommend('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};85;")');">Personel Kartı Yap</a>
+                                        <div class="col col-6 col-lg-6" style="padding-right:0px !important;">
+                                            <a href="javascript:;" class="btn btn-block btn-secondary" style="border-radius: 10px;" onclick="AndroidSendCommend('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};2;{Model.Card.CardNumber};254;0;")');">Personel Kartı Yap</a>
+                                            @*00EF6963;A4:CF:12:EF:69:63;2;A59E37EC;254;0;*@
                                         </div>
                                     </div>
                                 }
@@ -127,11 +117,8 @@
                                     <div class="card-box">
                                         <div class="card-box-process">
 
-                                            @if (Model.Card?.CardStatusID == 0)
+                                            @if (Model.Card?.CardTypeID == 0 && Model.Card?.CardStatusID == 0)
                                             {
-                                                <a class="item item-1" href="javascript:;">
-                                                    <div class="big-name"><span class="circle"></span>YENİ KART</div>
-                                                </a>
                                                 <div class="item-content item-content-1">
                                                     <ul>
                                                         @foreach (var item in Model.PriceList.Where(x => x.ProductID == 3).OrderByDescending(x => x.TotalCredit).ToList())
@@ -142,10 +129,22 @@
                                                 </div>
                                             }
 
-                                            @if (Model.Card?.CardStatusID == 1)
+                                            @if (Model.Card?.CardTypeID == 0 && Model.Card?.CardStatusID == 1)
+                                            {
+                                                <div class="item-content item-content-2">
+                                                    <ul>
+                                                        @foreach (var item in Model.PriceList.Where(x => x.ProductID == 3).OrderByDescending(x => x.TotalCredit).ToList())
+                                                        {
+                                                            <li><a href="javascript:;" onclick="AddBasket(@(item.ID),0)">@(item.TotalCredit) Kontör <span>@(item.Price.ToString("N2")) ₺</span></a></li>
+                                                        }
+                                                    </ul>
+                                                </div>
+                                            }
+
+                                            @if (Model.Card?.CardTypeID == 1 && Model.Card?.CardStatusID == 1)
                                             {
                                                 <a class="item item-2" href="javascript:;">
-                                                    <div class="big-name"><span class="square"></span>KONTÜR YÜKLE</div>
+                                                    <div class="big-name">KASA KARTI</div>
                                                 </a>
                                                 <div class="item-content item-content-2">
                                                     <ul>
@@ -156,6 +155,23 @@
                                                     </ul>
                                                 </div>
                                             }
+
+                                            @if (Model.Card?.CardTypeID == 2 && Model.Card?.CardStatusID == 1)
+                                            {
+                                                <a class="item item-2" href="javascript:;">
+                                                    <div class="big-name">@(Model.Employee?.FullName)</div>
+                                                </a>
+                                                <div class="item-content item-content-2">
+                                                    <ul>
+                                                        <li><a href="javascript:;" onclick="Shift(0)"><span>Mesai Başlat</span></a></li>
+                                                        <li><a href="javascript:;" onclick="Shift(0)"><span>Mesai Bitir</span></a></li>
+                                                        <li><a href="javascript:;" onclick="Shift(0)"><span>Mola Başlat</span></a></li>
+                                                        <li><a href="javascript:;" onclick="Shift(0)"><span>Mola Bitir</span></a></li>
+
+                                                    </ul>
+                                                </div>
+                                            }
+
 
                                             @if (Model.Card?.CardStatusID == 2)
                                             {
@@ -288,6 +304,8 @@
             var cardReaderID = $('#CardReaderID').val();
             var cardNumber = $('#CardNumber').val();
 
+
+
             $.ajax({
                 method: "GET",
                 url: "/Card/AddBasket",
@@ -329,6 +347,20 @@
                 $('.fixed-footer-overlay, .bot-list-btn').removeClass('open');
             });
         };
+
+        
+        function MakeCashCard(cardnumber) {
+            $.ajax({
+                method: "GET",
+                url: "/Card/MakeCashCard",
+                data: { cardnumber }
+            }).done(function (d) {
+                $("#MessageArea").html(d);
+            });
+        };
+
+
+
 
 
     </script>
@@ -438,6 +470,10 @@
                 let $this = $(this);
                 $this.addClass('active').siblings().removeClass('active');
             });
+
+
+
+
         });
     </script>
 
@@ -480,10 +516,152 @@
             window.location = '/Card/Index?cardinfo='+info;
         }
 
+         $(document).ready(function () {
+             var comment = '@(Model.Comment)';
+             if (comment != null) {
+                 ProcessComment(comment);
+             };
+          });
+
+        //00E268A5;E8:DB:84:E2:68:A5;1;A59F2F44;1;249900
+        function ProcessComment(comment) {
+
+            const commentArray = comment.split(";");
+
+            if (commentArray[2] == '1') {
+
+                if (commentArray[4] == '1') {
+
+                    $("#MessageArea").html("Kart Okuma Başarılı");
+                }
+
+                if (commentArray[4] == '2') {
+
+                    $("#MessageArea").html("Kart Bozuk");
+                }
+
+                if (commentArray[4] == '3') {
+
+                    $("#MessageArea").html("Kart Okunamadı!");
+                }
+
+                if (commentArray[4] == '4') {
+
+                    $("#MessageArea").html("Karta Yazılamadı!");
+                }
+
+                if (commentArray[4] == '5') {
+
+                    $("#MessageArea").html("Kart Değişmiş!");
+                }
+
+                if (commentArray[4] == '6') {
+
+                    $("#MessageArea").html("Tekrar Deneyin!");
+                }
+
+                if (commentArray[4] == '7') {
+
+                    $("#MessageArea").html("Kart Yükleme Tamamlandı");
+                }
+            }
+
+            if (commentArray[2] == '2') {
+
+                if (commentArray[4] == '1') {
+
+                    $("#MessageArea").html("Kart Okuma Başarılı");
+                }
+
+                if (commentArray[4] == '2') {
+
+                    $("#MessageArea").html("Kart Bozuk");
+                }
+
+                if (commentArray[4] == '3') {
+
+                    $("#MessageArea").html("Kart Okunamadı!");
+                }
+
+                if (commentArray[4] == '4') {
+
+                    $("#MessageArea").html("Karta Yazılamadı!");
+                }
+
+                if (commentArray[4] == '5') {
+
+                    $("#MessageArea").html("Kart Değişmiş!");
+                }
+
+                if (commentArray[4] == '6') {
+
+                    $("#MessageArea").html("Tekrar Deneyin!");
+                }
+
+                if (commentArray[4] == '7') {
+
+                    $("#MessageArea").html("Kart Oluşturma Tamamlandı");
+                }
+            }
+
+        }
+
         function ReceiveComment(comment) {
 
             /*$('#CardSystemInfo').append('<li>' + htmlEncode(comment) + '</li>');*/
-            window.location = '/Card/Index?cardinfo='+comment;
+
+            //$.ajax({
+            //    method: "GET",
+            //    url: "/Card/ReceiveComment",
+            //    data: { comment }
+            //}).done(function (d) {
+            //    $("#MessageArea").html(d);
+            //});
+
+            var currentseri = '@(Model.CardReader?.SerialNumber)';
+            var currentmac = '@(Model.CardReader?.MACAddress)';
+
+            const commentArray = comment.split(";");
+
+            if (commentArray[2] == '80') {
+                $("#MessageArea").html("Versiyon : " + commentArray[3]);
+            }
+
+            if (commentArray[2] == '85') {
+                $("#MessageArea").html("Kart Yok");
+            }
+
+            if (commentArray[2] == '86') {
+
+                if (commentArray[3] == '0') {
+
+                    $("#MessageArea").html("Reader Tanımı Yok!");
+                }
+
+                if (commentArray[3] == '1') {
+
+                    $("#MessageArea").html("Reader Tanımı Yapılmış");
+                }
+
+            }
+
+            if (commentArray[2] == '0') {
+                $("#MessageArea").html("Yabancı Kart : " + commentArray[3]);
+            }
+
+            if (commentArray[2] == '3') {
+                $("#MessageArea").html("Formatsız Kart : " + commentArray[3]);
+            }
+
+            if (commentArray[2] == '1') {
+                window.location = '/Card/Index?cardinfo=' + comment;
+            }
+
+            if (commentArray[2] == '2') {
+                window.location = '/Card/Index?cardinfo=' + comment;
+            }
+
+
         }
 
     </script>

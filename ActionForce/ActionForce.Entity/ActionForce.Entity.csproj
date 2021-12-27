@@ -1017,6 +1017,9 @@
     <Compile Include="VDocumentSaleExchange.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VDocumentsAllSummaryRevenue.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VDocumentsAllSummaryUnion.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

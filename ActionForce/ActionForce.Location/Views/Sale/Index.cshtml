@@ -47,7 +47,7 @@
                                     <table class="table mb-0">
                                         <thead>
                                             <tr>
-                                                <th class="text-success p-1" colspan="6">
+                                                <th class="text-success p-1" colspan="4">
 
                                                     <select class="custom-select" id="OurCompanyID">
                                                         <option value="0">Tümü</option>
@@ -63,109 +63,57 @@
 
                                             @foreach (var our in Model.CurrentOurCompany != null ? Model.OurCompanies.Where(x => x.CompanyID == Model.CurrentOurCompany?.CompanyID) : Model.OurCompanies)
                                             {
-                                                var cash = Model.LocationSaleTotals.Where(x => x.OurCompanyID == our.CompanyID && x.PayMethodID == 1 && x.StatusID <= 3).ToList();
-                                                var cashref = Model.LocationSaleTotals.Where(x => x.OurCompanyID == our.CompanyID && x.PayMethodID == 1 && x.StatusID == 5).ToList();
-                                                var credit = Model.LocationSaleTotals.Where(x => x.OurCompanyID == our.CompanyID && x.PayMethodID == 2 && x.StatusID <= 3).ToList();
-                                                var creditref = Model.LocationSaleTotals.Where(x => x.OurCompanyID == our.CompanyID && x.PayMethodID == 2 && x.StatusID == 5).ToList();
-                                                var total = Model.LocationSaleTotals.Where(x => x.OurCompanyID == our.CompanyID && x.StatusID <= 3).ToList();
-                                                var totalref = Model.LocationSaleTotals.Where(x => x.OurCompanyID == our.CompanyID && x.StatusID == 5).ToList();
+                                                var cash = Model.Revenue.Where(x => x.OurCompanyID == our.CompanyID && x.PayMethodID == 1 && x.ActionTypeID == 24).ToList();
+                                                var credit = Model.Revenue.Where(x => x.OurCompanyID == our.CompanyID && x.PayMethodID == 2 && x.ActionTypeID == 1).ToList();
+                                                var total = Model.Revenue.Where(x => x.OurCompanyID == our.CompanyID).ToList();
 
 
-                                                <tr class="v-middle shadow-sm">
-                                                    <td colspan="6" class="bg-body p-1 pl-2 pt-3">@(our.Code) Nakit, Kredi Kartı Satışları ve İadeleri</td>
-                                                </tr>
                                                 <tr>
-                                                    <td class="text-info p-2">@(cash.Where(x => x.Currency == "USD").Sum(x=> x.Quantity))</td>
+                                                    <th>Nakit</th>
                                                     <th class="text-info p-2 text-right" style="border-right:solid 1px #e6e6e6;">@(cash.Where(x => x.Currency == "USD").Sum(x=> x.Amount).ToString("N2")) $</th>
-                                                    <td class="text-info p-2">@(cash.Where(x => x.Currency == "EUR").Sum(x=> x.Quantity))</td>
                                                     <th class="text-info p-2 text-right" style="border-right: solid 1px #e6e6e6;">@(cash.Where(x => x.Currency == "EUR").Sum(x=> x.Amount).ToString("N2")) €</th>
-                                                    <td class="text-info p-2">@(cash.Where(x => x.Currency == "TRL").Sum(x=> x.Quantity))</td>
                                                     <th class="text-info p-2 text-right">@(cash.Where(x => x.Currency == "TRL").Sum(x=> x.Amount).ToString("N2")) ₺</th>
                                                 </tr>
+
+                                               
                                                 <tr>
-                                                    <td class="text-danger p-2">@(cashref.Where(x => x.Currency == "USD").Sum(x=> x.Quantity))</td>
-                                                    <td class="text-danger p-2 text-right" style="border-right:solid 1px #e6e6e6;">- @(cashref.Where(x => x.Currency == "USD").Sum(x=> x.Amount).ToString("N2")) $</td>
-                                                    <td class="text-danger p-2">@(cashref.Where(x => x.Currency == "EUR").Sum(x=> x.Quantity))</td>
-                                                    <td class="text-danger p-2 text-right" style="border-right: solid 1px #e6e6e6;">- @(cashref.Where(x => x.Currency == "EUR").Sum(x=> x.Amount).ToString("N2")) €</td>
-                                                    <td class="text-danger p-2">@(cashref.Where(x => x.Currency == "TRL").Sum(x=> x.Quantity))</td>
-                                                    <td class="text-danger p-2 text-right">- @(cashref.Where(x => x.Currency == "TRL").Sum(x=> x.Amount).ToString("N2")) ₺</td>
-                                                </tr>
-
-                                                <tr class="v-middle shadow-sm">
-                                                    <td class="bg-body p-2 text-black-50">@(cash.Where(x => x.Currency == "USD").Sum(x => x.Quantity) - cashref.Where(x => x.Currency == "USD").Sum(x => x.Quantity))</td>
-                                                    <th class="bg-body p-2 text-right text-black-50" style="border-right: solid 1px #e6e6e6;">@((cash.Where(x => x.Currency == "USD").Sum(x => x.Amount) - cashref.Where(x => x.Currency == "USD").Sum(x => x.Amount)).ToString("N2")) $</th>
-                                                    <td class="bg-body p-2 text-black-50">@(cash.Where(x => x.Currency == "EUR").Sum(x => x.Quantity) - cashref.Where(x => x.Currency == "EUR").Sum(x => x.Quantity))</td>
-                                                    <th class="bg-body p-2 text-right text-black-50" style="border-right: solid 1px #e6e6e6;">@((cash.Where(x => x.Currency == "EUR").Sum(x => x.Amount) - cashref.Where(x => x.Currency == "EUR").Sum(x => x.Amount)).ToString("N2")) €</th>
-                                                    <td class="bg-body p-2 text-black-50">@(cash.Where(x => x.Currency == "TRL").Sum(x => x.Quantity) - cashref.Where(x => x.Currency == "TRL").Sum(x => x.Quantity))</td>
-                                                    <th class="bg-body p-2 text-right text-black-50">@((cash.Where(x => x.Currency == "TRL").Sum(x => x.Amount) - cashref.Where(x => x.Currency == "TRL").Sum(x => x.Amount)).ToString("N2")) ₺</th>
-                                                </tr>
-
-
-
-                                                <tr class="v-middle shadow-sm">
-                                                    <td colspan="6" class="bg-body p-0"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="text-warning p-2">@(credit.Where(x => x.Currency == "USD").Sum(x=> x.Quantity))</td>
+                                                    <th>Banka</th>
                                                     <th class="text-warning p-2 text-right" style="border-right:solid 1px #e6e6e6;">@(credit.Where(x => x.Currency == "USD").Sum(x=> x.Amount).ToString("N2")) $</th>
-                                                    <td class="text-warning p-2">@(credit.Where(x => x.Currency == "EUR").Sum(x=> x.Quantity))</td>
                                                     <th class="text-warning p-2 text-right" style="border-right: solid 1px #e6e6e6;">@(credit.Where(x => x.Currency == "EUR").Sum(x=> x.Amount).ToString("N2")) €</th>
-                                                    <td class="text-warning p-2">@(credit.Where(x => x.Currency == "TRL").Sum(x=> x.Quantity))</td>
                                                     <th class="text-warning p-2 text-right">@(credit.Where(x => x.Currency == "TRL").Sum(x=> x.Amount).ToString("N2")) ₺</th>
                                                 </tr>
+                                               
+                                               
                                                 <tr>
-                                                    <td class="text-danger p-2">@(creditref.Where(x => x.Currency == "USD").Sum(x=> x.Quantity))</td>
-                                                    <td class="text-danger p-2 text-right" style="border-right:solid 1px #e6e6e6;">- @(creditref.Where(x => x.Currency == "USD").Sum(x=> x.Amount).ToString("N2")) $</td>
-                                                    <td class="text-danger p-2">@(creditref.Where(x => x.Currency == "EUR").Sum(x=> x.Quantity))</td>
-                                                    <td class="text-danger p-2 text-right" style="border-right: solid 1px #e6e6e6;">- @(creditref.Where(x => x.Currency == "EUR").Sum(x=> x.Amount).ToString("N2")) €</td>
-                                                    <td class="text-danger p-2">@(creditref.Where(x => x.Currency == "TRL").Sum(x=> x.Quantity))</td>
-                                                    <td class="text-danger p-2 text-right">- @(creditref.Where(x => x.Currency == "TRL").Sum(x=> x.Amount).ToString("N2")) ₺</td>
+                                                    <th class="bg-body p-2 text-left" style="border-right: solid 1px #e6e6e6; border-top: solid 4px #e6e6e6;">Toplam</th>
+                                                    <th class="bg-body p-2 text-right" style="border-right: solid 1px #e6e6e6; border-top: solid 4px #e6e6e6;">@((total.Where(x => x.Currency == "USD").Sum(x => x.Amount)).ToString("N2")) $</th>
+                                                    <th class="bg-body p-2 text-right" style="border-right: solid 1px #e6e6e6; border-top: solid 4px #e6e6e6;">@((total.Where(x => x.Currency == "EUR").Sum(x => x.Amount)).ToString("N2")) €</th>
+                                                    <th class="bg-body p-2 text-right" style="border-top: solid 4px #e6e6e6;">@((total.Where(x => x.Currency == "TRL").Sum(x => x.Amount)).ToString("N2")) ₺</th>
                                                 </tr>
 
                                                 <tr class="v-middle shadow-sm">
-                                                    <td class="bg-body p-2 text-black-50">@(credit.Where(x => x.Currency == "USD").Sum(x => x.Quantity) - creditref.Where(x => x.Currency == "USD").Sum(x => x.Quantity))</td>
-                                                    <th class="bg-body p-2 text-right text-black-50" style="border-right: solid 1px #e6e6e6;">@((credit.Where(x => x.Currency == "USD").Sum(x => x.Amount) - creditref.Where(x => x.Currency == "USD").Sum(x => x.Amount)).ToString("N2")) $</th>
-                                                    <td class="bg-body p-2 text-black-50">@(credit.Where(x => x.Currency == "EUR").Sum(x => x.Quantity) - creditref.Where(x => x.Currency == "EUR").Sum(x => x.Quantity))</td>
-                                                    <th class="bg-body p-2 text-right text-black-50" style="border-right: solid 1px #e6e6e6;">@((credit.Where(x => x.Currency == "EUR").Sum(x => x.Amount) - creditref.Where(x => x.Currency == "EUR").Sum(x => x.Amount)).ToString("N2")) €</th>
-                                                    <td class="bg-body p-2 text-black-50">@(credit.Where(x => x.Currency == "TRL").Sum(x => x.Quantity) - creditref.Where(x => x.Currency == "TRL").Sum(x => x.Quantity))</td>
-                                                    <th class="bg-body p-2 text-right text-black-50">@((credit.Where(x => x.Currency == "TRL").Sum(x => x.Amount) - creditref.Where(x => x.Currency == "TRL").Sum(x => x.Amount)).ToString("N2")) ₺</th>
-                                                </tr>
-                                                <tr class="v-middle shadow-sm">
-                                                    <td colspan="6" class="bg-body p-0"></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="bg-body p-2" style="border-top: solid 4px #e6e6e6;">@(total.Where(x => x.Currency == "USD").Sum(x => x.Quantity) - totalref.Where(x => x.Currency == "USD").Sum(x => x.Quantity))</td>
-                                                    <th class="bg-body p-2 text-right" style="border-right: solid 1px #e6e6e6; border-top: solid 4px #e6e6e6;">@((total.Where(x => x.Currency == "USD").Sum(x => x.Amount) - totalref.Where(x => x.Currency == "USD").Sum(x => x.Amount)).ToString("N2")) $</th>
-                                                    <td class="bg-body p-2" style="border-top: solid 4px #e6e6e6;">@(total.Where(x => x.Currency == "EUR").Sum(x => x.Quantity) - totalref.Where(x => x.Currency == "EUR").Sum(x => x.Quantity))</td>
-                                                    <th class="bg-body p-2 text-right" style="border-right: solid 1px #e6e6e6; border-top: solid 4px #e6e6e6;">@((total.Where(x => x.Currency == "EUR").Sum(x => x.Amount) - totalref.Where(x => x.Currency == "EUR").Sum(x => x.Amount)).ToString("N2")) €</th>
-                                                    <td class="bg-body p-2" style="border-top: solid 4px #e6e6e6;">@(total.Where(x => x.Currency == "TRL").Sum(x => x.Quantity) - totalref.Where(x => x.Currency == "TRL").Sum(x => x.Quantity))</td>
-                                                    <th class="bg-body p-2 text-right" style="border-top: solid 4px #e6e6e6;">@((total.Where(x => x.Currency == "TRL").Sum(x => x.Amount) - totalref.Where(x => x.Currency == "TRL").Sum(x => x.Amount)).ToString("N2")) ₺</th>
-                                                </tr>
-
-                                                <tr class="v-middle shadow-sm">
-                                                    <td colspan="6" class="bg-body p-1 pl-2 pt-3">İşçilik Maliyeti</td>
+                                                    <td colspan="4" class="bg-body p-1 pl-2 pt-3">İşçilik Maliyeti</td>
                                                 </tr>
 
                                                 foreach (var currency in Model.SalaryList?.Where(x => x.OurCompanyID == our.CompanyID).Select(x => x.Currency).Distinct().ToList())
                                                 {
                                                     <tr>
-                                                        <td class="p-2" style="border-right: solid 1px #e6e6e6;" colspan="2">@(our.Code)</td>
+                                                        <td class="p-2" style="border-right: solid 1px #e6e6e6;">@(our.Code)</td>
                                                         <td class="text-success p-2" style="border-right: solid 1px #e6e6e6;">@(Model.SalaryList?.Where(x => x.OurCompanyID == our.CompanyID)?.Select(x => x.LocationID)?.Distinct()?.Count())</td>
                                                         <td class="text-success p-2" style="border-right: solid 1px #e6e6e6;"><i data-feather="user"></i> &nbsp; @(Model.SalaryList?.Where(x => x.OurCompanyID == our.CompanyID && x.Currency == currency)?.Count())</td>
-                                                        <th class="text-success p-2 text-right" colspan="2">@(Model.SalaryList?.Where(x => x.OurCompanyID == our.CompanyID && x.Currency == currency)?.Sum(x => x.Amount)?.ToString("N2")) @(currency == "USD" ? "$" : currency == "EUR" ? "€" : "₺")</th>
+                                                        <th class="text-success p-2 text-right">@(Model.SalaryList?.Where(x => x.OurCompanyID == our.CompanyID && x.Currency == currency)?.Sum(x => x.Amount)?.ToString("N2")) @(currency == "USD" ? "$" : currency == "EUR" ? "€" : "₺")</th>
                                                     </tr>
                                                 }
 
-                                                <tr class="v-middle shadow-sm">
-                                                    <td colspan="6" class="bg-body p-1 pl-2 pt-3">Masraflar</td>
-                                                </tr>
+                                               
 
                                                 foreach (var currency in Model.ExpenseList?.Where(x => x.OurCompanyID == our.CompanyID).Select(x => x.Currency).Distinct().ToList())
                                                 {
                                                     <tr>
-                                                        <td class="p-2" style="border-right: solid 1px #e6e6e6;" colspan="2">@(our.Code)</td>
-                                                        <td class="text-primary p-2" style="border-right: solid 1px #e6e6e6;" colspan="2">@(Model.ExpenseList?.Where(x => x.OurCompanyID == our.CompanyID)?.Select(x => x.LocationID)?.Distinct()?.Count())</td>
-                                                        <th class="text-primary p-2 text-right" colspan="2">@(Model.ExpenseList?.Where(x => x.OurCompanyID == our.CompanyID && x.Currency == currency)?.Sum(x => x.Amount)?.ToString("N2")) @(currency == "USD" ? "$" : currency == "EUR" ? "€" : "₺")</th>
+                                                        <td class="text-primary p-2" style="border-right: solid 1px #e6e6e6;">Masraflar</td>
+                                                        <td class="p-2" style="border-right: solid 1px #e6e6e6;">@(our.Code)</td>
+                                                        <td class="text-primary p-2" style="border-right: solid 1px #e6e6e6;">@(Model.ExpenseList?.Where(x => x.OurCompanyID == our.CompanyID)?.Select(x => x.LocationID)?.Distinct()?.Count())</td>
+                                                        <th class="text-primary p-2 text-right">@(Model.ExpenseList?.Where(x => x.OurCompanyID == our.CompanyID && x.Currency == currency)?.Sum(x => x.Amount)?.ToString("N2")) @(currency == "USD" ? "$" : currency == "EUR" ? "€" : "₺")</th>
                                                     </tr>
                                                 }
 
@@ -175,7 +123,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <th colspan="6">
+                                                <th colspan="4">
                                                     <a href="/Sale/Detail/@(Model.SelectedDate.ToString("yyyy-MM-dd"))@(Model.CurrentOurCompany != null ? "?OurCompnayID="+Model.CurrentOurCompany.CompanyID:"")" class="btn btn-md btn-block btn-white" title="Satış Detay">
                                                         <i class="text-info font-weight-bold" data-feather="layers"></i> &nbsp; Satış Detayları
                                                     </a>

@@ -344,7 +344,6 @@ namespace ActionForce.Entity
         public virtual DbSet<CardReaderAction> CardReaderAction { get; set; }
         public virtual DbSet<CardReaderParameter> CardReaderParameter { get; set; }
         public virtual DbSet<CardReaderType> CardReaderType { get; set; }
-        public virtual DbSet<EmployeeCard> EmployeeCard { get; set; }
         public virtual DbSet<LocationPartEmployee> LocationPartEmployee { get; set; }
         public virtual DbSet<LocationProductPriceCategory> LocationProductPriceCategory { get; set; }
         public virtual DbSet<ProductImges> ProductImges { get; set; }
@@ -360,6 +359,8 @@ namespace ActionForce.Entity
         public virtual DbSet<VCard> VCard { get; set; }
         public virtual DbSet<VCardActions> VCardActions { get; set; }
         public virtual DbSet<CardComment> CardComment { get; set; }
+        public virtual DbSet<VDocumentsAllSummaryRevenue> VDocumentsAllSummaryRevenue { get; set; }
+        public virtual DbSet<EmployeeCard> EmployeeCard { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

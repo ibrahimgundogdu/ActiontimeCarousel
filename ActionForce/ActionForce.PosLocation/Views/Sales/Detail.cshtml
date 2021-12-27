@@ -232,6 +232,42 @@
 
                         </div>
                     }
+                    else if (Model.Authentication.IsCardSystem == true && Model.TicketSale.PosStatusID == 3)
+                    {
+
+                        <h1>KONTÖR YÜKLEME TAMAMLAMA</h1>
+                        <div class="table-responsive">
+                            <table class="table table-dashboard table-striped table-hover">
+                                <tr>
+                                    <th>İŞLEM</th>
+                                    <th>SERI</th>
+                                    <th>MAC</th>
+                                    <th>CARD</th>
+                                    <th style="text-align:right;">FKREDİ</th>
+                                    <th style="text-align:right;">SKREDİ</th>
+                                    <th style="text-align:right;">KREDİ</th>
+                                    <th>AÇIKLAMA</th>
+                                    <th>ZAMAN</th>
+                                    <th>DURUM</th>
+                                </tr>
+
+                                <tr>
+                                    <td style="font-weight:500;"><a href="@($"/CardAction/Index/{Model.TicketSale.ID}")" class="btn btn-light" style="font-weight: 500; color: darkblue !important;">Kart Yükleme </a></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td style="font-weight:500; text-align:right;"></td>
+                                    <td style="font-weight:500; text-align:right;"></td>
+                                    <td style="font-weight:500; text-align:right;"></td>
+                                    <td style="text-align:left;"></td>
+                                    <td></td>
+                                    <td style="font-weight:500;"><a href="@($"/CardAction/Index/{Model.TicketSale.ID}")" class="btn btn-light" style="font-weight: 500; color: darkblue !important;">Bekliyor</a></td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+                    }
 
 
 
@@ -284,6 +320,7 @@
                                     <!-- payment -->
                                     <span>İADE ET</span>
                                 </a>
+
                             }
                             else
                             {
@@ -295,73 +332,73 @@
                             }
 
 
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div><!-- fixed-footer -->
+                </div><!-- fixed-footer -->
 
-        </div>
-    </div><!-- main -->
-    <script src="/assets/js/jquery-3.5.1.min.js"></script>
-    <script src="/assets/js/global.js"></script>
-    <script>
-        $(function () {
-            const open = 'open';
-            const $menu = $('.header .menu');
-            const $listBtn = $('.bot-list-btn');
+            </div>
+        </div><!-- main -->
+        <script src="/assets/js/jquery-3.5.1.min.js"></script>
+        <script src="/assets/js/global.js"></script>
+        <script>
+            $(function () {
+                const open = 'open';
+                const $menu = $('.header .menu');
+                const $listBtn = $('.bot-list-btn');
 
-            $menu.on('click', function () {
-                let $this = $(this);
-                if (($this).hasClass(open)) {
-                    $this.removeClass(open);
+                $menu.on('click', function () {
+                    let $this = $(this);
+                    if (($this).hasClass(open)) {
+                        $this.removeClass(open);
+                        $('.side-menu,.side-menu-overlay').removeClass(open);
+                    } else {
+                        $this.addClass(open);
+                        $('.side-menu,.side-menu-overlay').addClass(open);
+                    }
+                });
+                $('.side-menu-overlay').on('click', function () {
+                    $menu.removeClass(open);
                     $('.side-menu,.side-menu-overlay').removeClass(open);
-                } else {
-                    $this.addClass(open);
-                    $('.side-menu,.side-menu-overlay').addClass(open);
-                }
-            });
-            $('.side-menu-overlay').on('click', function () {
-                $menu.removeClass(open);
-                $('.side-menu,.side-menu-overlay').removeClass(open);
-            });
+                });
 
-            $listBtn.on('click', function () {
-                let $this = $(this);
-                if ($this.hasClass(open)) {
-                    $this.removeClass(open);
+                $listBtn.on('click', function () {
+                    let $this = $(this);
+                    if ($this.hasClass(open)) {
+                        $this.removeClass(open);
+                        $('.fixed-footer-overlay').removeClass(open);
+                        $('.footer-basket').stop().slideUp();
+                    } else {
+                        $this.addClass(open);
+                        $('.fixed-footer-overlay').addClass(open);
+                        $('.footer-basket').stop().slideDown();
+                    }
+                });
+                $('.fixed-footer-overlay').on('click', function () {
+                    $listBtn.removeClass(open);
                     $('.fixed-footer-overlay').removeClass(open);
                     $('.footer-basket').stop().slideUp();
-                } else {
-                    $this.addClass(open);
-                    $('.fixed-footer-overlay').addClass(open);
-                    $('.footer-basket').stop().slideDown();
-                }
-            });
-            $('.fixed-footer-overlay').on('click', function () {
-                $listBtn.removeClass(open);
-                $('.fixed-footer-overlay').removeClass(open);
-                $('.footer-basket').stop().slideUp();
-            });
-            $(document).ready(function () {
-                $('.piece-options .minus').click(function () {
-                    var $input = $(this).parent().find('input');
-                    var count = parseInt($input.val()) - 1;
-                    count = count < 1 ? 1 : count;
-                    $input.val(count);
-                    $input.change();
-                    return false;
                 });
-                $('.piece-options .plus').click(function () {
-                    var $input = $(this).parent().find('input');
-                    $input.val(parseInt($input.val()) + 1);
-                    $input.change();
-                    return false;
+                $(document).ready(function () {
+                    $('.piece-options .minus').click(function () {
+                        var $input = $(this).parent().find('input');
+                        var count = parseInt($input.val()) - 1;
+                        count = count < 1 ? 1 : count;
+                        $input.val(count);
+                        $input.change();
+                        return false;
+                    });
+                    $('.piece-options .plus').click(function () {
+                        var $input = $(this).parent().find('input');
+                        $input.val(parseInt($input.val()) + 1);
+                        $input.change();
+                        return false;
+                    });
                 });
-            });
-        });</script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+            });</script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
-    <script type="text/javascript">
+        <script type="text/javascript">
         // Default Configuration
         $(document).ready(function () {
             toastr.options = {
@@ -387,6 +424,6 @@
             }
         });
 
-    </script>
-</body>
+        </script>
+    </body>
 </html>

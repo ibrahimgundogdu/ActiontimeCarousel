@@ -29,5 +29,6 @@ namespace ActionForce.PosLocation
         public string CardTypeName { get; set; }
         public string Comment { get; set; }
         public List<CardComment> CardComments { get; set; }
+        public Employee Employee { get; set; }
     }
 }

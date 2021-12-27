@@ -217,7 +217,7 @@ namespace ActionForce.CardService.Controllers
             using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
             {
                 var parameters = new { Message = info, IP = ServiceHelper.GetIPAddress(), Date = DateTime.UtcNow.AddHours(3), ResultMessage = result.Message };
-                var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [Module], [ResponseMessage] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'CardLoadResult', 'Guid,int')";
+                var sql = "INSERT INTO [dbo].[NFCCardLog] ([Message], [RecordIP], [RecordDate], [Controller], [Action], [Module], [ResponseMessage] ) VALUES(@Message,@IP, @Date, 'CardLoad', 'CardLoadResult', '', @ResultMessage)";
                 connection.Execute(sql, parameters);
             }
 

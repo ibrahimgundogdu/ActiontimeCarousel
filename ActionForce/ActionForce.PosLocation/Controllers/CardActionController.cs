@@ -44,9 +44,9 @@ namespace ActionForce.PosLocation.Controllers
 
             model.CardNumber = model.Card.CardNumber;
 
-            var creditLoad = Db.AddTicketSaleCreditLoad(id, model.Card.CardNumber, model.Card.Credit, model.CardReader.SerialNumber, model.CardReader.MACAddress, model.Authentication.CurrentEmployee.EmployeeID, PosManager.GetIPAddress(),3,null,null).FirstOrDefault();
+            var creditLoad = Db.AddTicketSaleCreditLoad(id, model.Card.CardNumber, model.Card.Credit, model.CardReader.SerialNumber, model.CardReader.MACAddress, model.Authentication.CurrentEmployee.EmployeeID, PosManager.GetIPAddress(), 3, null, null).FirstOrDefault();
             model.CreditLoad = creditLoad;
-            model.Comment = $"{model.CreditLoad.SerialNumber};{model.CreditLoad.MACAddress};1;{model.CreditLoad.CardNumber};{(int)model.CreditLoad.FinalCredit*100};";
+            model.Comment = $"{model.CreditLoad.SerialNumber};{model.CreditLoad.MACAddress};1;{model.CreditLoad.CardNumber};{(int)model.CreditLoad.FinalCredit * 100};";
 
             if (creditLoad.IsSuccess == true)
             {
@@ -94,7 +94,7 @@ namespace ActionForce.PosLocation.Controllers
 
             model.CardNumber = model.Card.CardNumber;
 
-            var creditLoad = Db.AddTicketSaleCreditLoad(null, model.Card.CardNumber, model.Card.Credit, model.CardReader.SerialNumber, model.CardReader.MACAddress, model.Authentication.CurrentEmployee.EmployeeID, PosManager.GetIPAddress(),4, model.CardAction.ProcessID, model.CardAction.ID).FirstOrDefault();
+            var creditLoad = Db.AddTicketSaleCreditLoad(null, model.Card.CardNumber, model.Card.Credit, model.CardReader.SerialNumber, model.CardReader.MACAddress, model.Authentication.CurrentEmployee.EmployeeID, PosManager.GetIPAddress(), 4, model.CardAction.ProcessID, model.CardAction.ID).FirstOrDefault();
             model.CreditLoad = creditLoad;
 
             if (creditLoad.IsSuccess == true)
@@ -205,5 +205,30 @@ namespace ActionForce.PosLocation.Controllers
             return View(model);
         }
 
+        //CompleteCardLoad
+        public string CompleteCardLoad(Guid? uid)
+        {
+            CardControlModel model = new CardControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            string message = string.Empty;
+
+            if (uid != null)
+            {
+                try
+                {
+                    CardServiceClient csclient = new CardServiceClient();
+
+                    message = csclient.CardLoad(uid.Value, 1, "Tamamlandı");
+                }
+                catch (Exception ex)
+                {
+                    message = "Kart Yüklenemedi!";
+                }
+
+            }
+
+            return message;
+        }
     }
 }

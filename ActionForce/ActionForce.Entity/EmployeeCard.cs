@@ -17,9 +17,6 @@ namespace ActionForce.Entity
         public long ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
         public Nullable<int> EmployeeID { get; set; }
-        public Nullable<long> CardID { get; set; }
-        public Nullable<short> CardTypeID { get; set; }
-        public Nullable<short> CardStatusID { get; set; }
         public string CardNumber { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
     }

@@ -27,6 +27,8 @@ namespace ActionForce.Location
         public IEnumerable<LocationTicketSaleInfo> TicketList { get; set; }
         public LocationBalance LocationBalance { get; set; }
 
+        public List<VDocumentsAllSummaryRevenue> Revenue { get; set; }
+
 
 
     }

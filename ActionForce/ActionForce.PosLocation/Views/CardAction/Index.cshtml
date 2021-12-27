@@ -28,8 +28,8 @@
                     <!-- menu -->
                 </div>
                 <div class="logo">
-                    <a href="javascript:;">UFE POS</a>
-                    <div class="date">@(DateTime.Now.ToLongDateString())</div>
+                    <a href="javascript:;">@(Model.CreditLoad?.SerialNumber)</a>
+                    <div class="date" style="font-weight:800;" id="MessageArea">@(DateTime.Now.ToLongDateString())</div>
                 </div>
                 <div class="homepage">
                     <a href="/Card">
@@ -54,132 +54,132 @@
 
                                 using (Html.BeginForm("LoadCard", "CardAction", FormMethod.Post, new { role = "form" }))
                                 {
-                            <div class="form">
-                                <input id="OrderID" name="OrderID" type="hidden" value="@(Model.TicketSale.ID)" />
+                                    <div class="form">
+                                        <input id="OrderID" name="OrderID" type="hidden" value="@(Model.TicketSale.ID)" />
 
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="form-group" style="margin-bottom:10px;">
-                                            <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Sipariş No :" readonly>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Sipariş No :" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.TicketSale.OrderNumber)" readonly>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-group" style="margin-bottom:10px;">
-                                            <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.TicketSale.OrderNumber)" readonly>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="form-group" style="margin-bottom:10px;">
-                                            <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Kart Okuyucu :" readonly>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Kart Okuyucu :" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CreditLoad?.SerialNumber)" readonly>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-group" style="margin-bottom:10px;">
-                                            <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CreditLoad?.SerialNumber)" readonly>
-                                        </div>
-                                    </div>
-                                </div>
 
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="form-group" style="margin-bottom:10px;">
-                                            <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Kart No :" readonly>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Kart No :" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CreditLoad?.CardNumber)" readonly>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-group" style="margin-bottom:10px;">
-                                            <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CreditLoad?.CardNumber)" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-
-
-
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="form-group" style="margin-bottom:10px;">
-                                            <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Karttaki Kredi (CARD) :" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-group" style="margin-bottom:10px;">
-                                            <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CardBalance)" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="form-group" style="margin-bottom:10px;">
-                                            <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Karttaki Kredi (CARİ):" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-group" style="margin-bottom:10px;">
-                                            <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CardBalanceAction)" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="form-group" style="margin-bottom:10px;">
-                                            <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Tahsil Edilen :" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-group" style="margin-bottom:10px;">
-                                            <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@($"{Model.TicketSalePosPayments.Sum(x=> x.PaymentAmount ?? 0).ToString("N2")} ₺")" readonly>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-6">
-                                        <div class="form-group" style="margin-bottom:10px;">
-                                            <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Yüklenecek Kredi :" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <div class="form-group" style="margin-bottom:10px;">
-                                            <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@($"{Model.TotalCredit.ToString("N0")}")" readonly>
-                                        </div>
-                                    </div>
-                                </div>
 
 
-                                @if (!string.IsNullOrEmpty(Model.CardNumber) && Model.CardReader != null && Model.CreditLoad != null)
-                                {
-                                    if (Model.CreditLoad.IsSuccess == true)
-                                    {
-                                        <div class="form-group">
-                                            <a href="javascript:;" class="btn btn-warning btn-block">KART YÜKLEMESİ TAMAMLANMIŞ</a>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div class="form-group">
-                                            <a href="javascript:;" onclick="LoadCredit('@(Model.CreditLoad?.UID)')" class="btn btn-primary btn-block">KART YÜKLE</a>
-                                        </div>
-                                    }
 
-                                }
-                                else
-                                {
-                                    <div class="form-group">
-                                        <a href="javascript:;" class="btn btn-danger btn-block">@(!string.IsNullOrEmpty(Model.CardNumber) && Model.CardReader == null ? "KART OKUYUCU TANIMSIZ" : !string.IsNullOrEmpty(Model.CardNumber) && Model.CreditLoad == null ? "OKUMA BAŞARISIZ" : !string.IsNullOrEmpty(Model.CardNumber) && Model.CreditLoad != null && Model.CreditLoad.IsSuccess == true ? "KART YÜKLEMESİ TAMAMLANMIŞ" : "KART OKUTUNUZ") </a>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Karttaki Kredi (CARD) :" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CardBalance)" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Karttaki Kredi (CARİ):" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CardBalanceAction)" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Tahsil Edilen :" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@($"{Model.TicketSalePosPayments.Sum(x=> x.PaymentAmount ?? 0).ToString("N2")} ₺")" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-6">
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Yüklenecek Kredi :" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-6">
+                                                <div class="form-group" style="margin-bottom:10px;">
+                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@($"{Model.TotalCredit.ToString("N0")}")" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        @if (!string.IsNullOrEmpty(Model.CardNumber) && Model.CardReader != null && Model.CreditLoad != null)
+                                        {
+                                            if (Model.CreditLoad.IsSuccess == true)
+                                            {
+                                                <div class="form-group">
+                                                    <a href="javascript:;" class="btn btn-warning btn-block">KART YÜKLEMESİ TAMAMLANMIŞ</a>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-group">
+                                                    <a href="javascript:;" onclick="LoadCredit('@(Model.CreditLoad?.UID)')" class="btn btn-primary btn-block">KART YÜKLE</a>
+                                                </div>
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            <div class="form-group">
+                                                <a href="javascript:;" class="btn btn-danger btn-block">@(!string.IsNullOrEmpty(Model.CardNumber) && Model.CardReader == null ? "KART OKUYUCU TANIMSIZ" : !string.IsNullOrEmpty(Model.CardNumber) && Model.CreditLoad == null ? "OKUMA BAŞARISIZ" : !string.IsNullOrEmpty(Model.CardNumber) && Model.CreditLoad != null && Model.CreditLoad.IsSuccess == true ? "KART YÜKLEMESİ TAMAMLANMIŞ" : "KART OKUTUNUZ") </a>
+                                            </div>
+                                        }
+
                                     </div>
-                                }
-
-                            </div>
                                 }
 
                             }
 
-                            
+
 
                         </div>
                     </div>
@@ -214,7 +214,7 @@
                 animation: 'zoom',
                 closeAnimation: 'scale',
                 title: 'Onaylama',
-                content: 'Bu karta @(Model.CreditLoad?.TotalCredit ?? 0) kredi kontörü yüklemek istediğinize emin misiniz?',
+                content: '@(Model.CreditLoad?.CardNumber) nolu karta @(Model.CreditLoad?.TotalCredit ?? 0) kredi kontörü yüklemek istediğinize emin misiniz?',
                 buttons: {
                     succes: {
                         text: 'EVET',
@@ -339,6 +339,11 @@
             }
         })
 
+        connection.on('ReceiveComment', (locationid, comment) => {
+            if (locationid == @(Model.Authentication.CurrentLocation.ID)) {
+                ReceiveComment(comment);
+            }
+        });
 
 
         connection.on('finished', (update) => {
@@ -358,6 +363,88 @@
             console.log("Order ID : " + orderid);
             console.log("uid : " + uid);
             window.location = '/CardAction/LoadResult/' + uid;
+        }
+
+         function ReceiveComment(comment) {
+
+            var currentseri = '@(Model.CreditLoad?.SerialNumber)';
+            var currentmac = '@(Model.CreditLoad?.MACAddress)';
+
+            const commentArray = comment.split(";");
+
+            if (commentArray[2] == '80') {
+                $("#MessageArea").html("Versiyon : " + commentArray[3]);
+            }
+
+            if (commentArray[2] == '85') {
+                $("#MessageArea").html("Kart Yok");
+            }
+
+            if (commentArray[2] == '86') {
+
+                if (commentArray[3] == '0') {
+
+                    $("#MessageArea").html("Reader Tanımı Yok!");
+                }
+
+                if (commentArray[3] == '1') {
+
+                    $("#MessageArea").html("Reader Tanımı Yapılmış");
+                }
+
+            }
+
+            if (commentArray[2] == '0') {
+                $("#MessageArea").html("Yabancı Kart : " + commentArray[3]);
+            }
+
+            if (commentArray[2] == '3') {
+                $("#MessageArea").html("Formatsız Kart : " + commentArray[3]);
+            }
+
+            if (commentArray[2] == '1') {
+
+                if (commentArray[4] == '7') {
+
+                    var uid = '@(Model.CreditLoad?.UID)';
+                    $.ajax({
+                        method: "GET",
+                        url: "/CardAction/CompleteCardLoad",
+                        data: { uid }
+                    }).done(function (d) {
+                        $("#MessageArea").html(d);
+                    });
+
+                    //window.location = '/Card/Index?cardinfo=' + comment;  CardServiceClient
+                };
+
+                if (commentArray[4] == '6') {
+                    $("#MessageArea").html("Tekrar Deneyiniz");
+                };
+                if (commentArray[4] == '5') {
+                    $("#MessageArea").html("Kart Değişmiş");
+                };
+                if (commentArray[4] == '4') {
+                    $("#MessageArea").html("Karta Yazılamıyor");
+                };
+                if (commentArray[4] == '3') {
+                    $("#MessageArea").html("Kart Okunamıyor");
+                };
+                if (commentArray[4] == '2') {
+                    $("#MessageArea").html("Bozuk Kart");
+                };
+                if (commentArray[4] == '1') {
+                    $("#MessageArea").html("Kart Okundu");
+                };
+
+
+             };
+
+            if (commentArray[2] == '2') {
+                $("#MessageArea").html("Personel Kartı Yükleme Olamaz");
+             };
+
+
         }
 
     </script>

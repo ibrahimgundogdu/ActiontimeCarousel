@@ -53,9 +53,9 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <th class="text-center p-1">@($"{Model.LocationBalance?.CashTotal.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
-                                                <th class="text-center p-1">@($"{Model.LocationBalance?.CreditTotal.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
-                                                <th class="text-center p-1">@($"{Model.LocationBalance?.Balance.ToString("N2")} {Model.LocationBalance?.CurrencySign}")</th>
+                                                <th class="text-center p-1">@($"{Model.Revenue?.Where(x=> x.PayMethodID == 1).Sum(x => x.Amount).ToString("N2")} {Model.CurrentLocation?.Currency}")</th>
+                                                <th class="text-center p-1">@($"{Model.Revenue?.Where(x=> x.PayMethodID == 2).Sum(x => x.Amount).ToString("N2")} {Model.CurrentLocation?.Currency}")</th>
+                                                <th class="text-center p-1">@($"{Model.Revenue?.Sum(x => x.Amount).ToString("N2")} {Model.CurrentLocation?.Currency}")</th>
                                             </tr>
                                         </tbody>
                                     </table>
