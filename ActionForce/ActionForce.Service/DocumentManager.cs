@@ -2955,7 +2955,7 @@ namespace ActionForce.Service
         {
             Result result = new Result();
 
-            UfeServiceClient service = new UfeServiceClient(Token);
+            UfeServiceClient service = new UfeServiceClient(Token.ToUpper());
             string date = processDate.ToString("yyyy-MM-dd");
 
             var serviceresult = service.EmployeeShiftStart(LocationID, EmployeeID, 3, 0, 0, date);

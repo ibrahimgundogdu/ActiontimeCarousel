@@ -385,6 +385,7 @@
     <Content Include="Views\CardAction\LoadResult.cshtml" />
     <Content Include="Views\CardAction\CreditRefund.cshtml" />
     <Content Include="Views\CardAction\RefundResult.cshtml" />
+    <Content Include="Views\Card\MakePersonelCard.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

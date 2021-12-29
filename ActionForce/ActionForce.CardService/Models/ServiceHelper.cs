@@ -122,7 +122,7 @@ namespace ActionForce.CardService
 
 
                     var cParameters = new { Number = model.CardNumber, TypeId = model.CardType };
-                    var cSql = "SELECT TOP (1) * FROM [dbo].[Card] Where [CardNumber] = @Number and [CardTypeID] = @TypeId";
+                    var cSql = "SELECT TOP (1) * FROM [dbo].[Card] Where [CardNumber] = @Number";
                     var card = connection.QueryFirstOrDefault<Card>(cSql, cParameters);
 
                     if (card == null)

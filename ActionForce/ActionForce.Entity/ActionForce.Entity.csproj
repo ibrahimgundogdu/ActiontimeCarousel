@@ -104,6 +104,9 @@
     <Compile Include="AddConfirmMessage_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="AddEditCard_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="AddressType.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -159,6 +162,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="CardComment.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CardCredit.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="CardCreditOption.cs">

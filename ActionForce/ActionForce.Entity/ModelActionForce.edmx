@@ -562,6 +562,13 @@
           <Property Name="RecordDate" Type="date" StoreGeneratedPattern="Computed" />
           <Property Name="RecordTime" Type="time" Precision="0" StoreGeneratedPattern="Computed" />
         </EntityType>
+        <EntityType Name="CardCredit">
+          <Key>
+            <PropertyRef Name="CardNumber" />
+          </Key>
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Credit" Type="float" />
+        </EntityType>
         <EntityType Name="CardCreditOption">
           <Key>
             <PropertyRef Name="ID" />
@@ -7455,6 +7462,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
           <Parameter Name="CardReaderID" Type="int" Mode="In" />
           <Parameter Name="Environment" Type="int" Mode="In" />
+          <Parameter Name="Process" Type="int" Mode="In" />
         </Function>
         <Function Name="AddCardComment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -7531,6 +7539,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
           <Parameter Name="Description" Type="nvarchar" Mode="In" />
           <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AddEditCard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="Credit" Type="float" Mode="In" />
+        </Function>
+        <Function Name="AddEditEmployeeCard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="EmployeeID" Type="int" Mode="In" />
+          <Parameter Name="OurCompanyID" Type="int" Mode="In" />
+          <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="AddEditExpenseSlip" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SlipID" Type="bigint" Mode="In" />
@@ -7961,6 +7978,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="ID" Type="int" Mode="In" />
           <Parameter Name="Checked" Type="bit" Mode="In" />
         </Function>
+        <Function Name="SetCardCredit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="Credit" Type="float" Mode="In" />
+        </Function>
         <Function Name="SetEmployeeScheduleMultiplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="Date" Type="date" Mode="In" />
@@ -8069,6 +8090,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="CardActions" EntityType="Self.CardActions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardActionType" EntityType="Self.CardActionType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardComment" EntityType="Self.CardComment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardCredit" EntityType="Self.CardCredit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardCreditOption" EntityType="Self.CardCreditOption" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardNumber" EntityType="Self.CardNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardReader" EntityType="Self.CardReader" Schema="dbo" store:Type="Tables" />
@@ -11916,6 +11938,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="CardNumber" Mode="In" Type="String" />
             <Parameter Name="CardReaderID" Mode="In" Type="Int32" />
             <Parameter Name="Environment" Mode="In" Type="Int32" />
+            <Parameter Name="Process" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="AddCardPosOrder" ReturnType="Collection(Int64)">
             <Parameter Name="LocationID" Mode="In" Type="Int32" />
@@ -11982,6 +12005,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="CardComment" EntityType="db293_ActionTimeDbModel.CardComment" />
           <EntitySet Name="VDocumentsAllSummaryRevenue" EntityType="db293_ActionTimeDbModel.VDocumentsAllSummaryRevenue" />
           <EntitySet Name="EmployeeCard" EntityType="db293_ActionTimeDbModel.EmployeeCard" />
+          <FunctionImport Name="SetCardCredit">
+            <Parameter Name="CardNumber" Mode="In" Type="String" />
+            <Parameter Name="Credit" Mode="In" Type="Double" />
+          </FunctionImport>
+          <FunctionImport Name="AddEditEmployeeCard">
+            <Parameter Name="EmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="OurCompanyID" Mode="In" Type="Int32" />
+            <Parameter Name="CardNumber" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="AddEditCard" EntitySet="VCard" ReturnType="Collection(db293_ActionTimeDbModel.VCard)">
+            <Parameter Name="CardNumber" Mode="In" Type="String" />
+            <Parameter Name="Credit" Mode="In" Type="Double" />
+          </FunctionImport>
+          <EntitySet Name="CardCredit" EntityType="db293_ActionTimeDbModel.CardCredit" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -19915,6 +19952,28 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
         </EntityType>
+        <ComplexType Name="AddEditCard_Result">
+          <Property Type="Int64" Name="ID" Nullable="false" />
+          <Property Type="Int32" Name="OurCompanyID" Nullable="true" />
+          <Property Type="Int16" Name="CardTypeID" Nullable="true" />
+          <Property Type="String" Name="CardNumber" Nullable="false" MaxLength="20" />
+          <Property Type="DateTime" Name="ExpireDate" Nullable="true" />
+          <Property Type="Double" Name="Credit" Nullable="true" />
+          <Property Type="String" Name="Currency" Nullable="true" MaxLength="4" />
+          <Property Type="Int32" Name="CardStatusID" Nullable="true" />
+          <Property Type="DateTime" Name="RecordDate" Nullable="true" Precision="23" />
+          <Property Type="DateTime" Name="ActivateDate" Nullable="true" Precision="23" />
+          <Property Type="Guid" Name="UID" Nullable="true" />
+          <Property Type="String" Name="CardTypeName" Nullable="true" MaxLength="40" />
+          <Property Type="String" Name="CardStatusName" Nullable="true" MaxLength="40" />
+        </ComplexType>
+        <EntityType Name="CardCredit">
+          <Key>
+            <PropertyRef Name="CardNumber" />
+          </Key>
+          <Property Name="CardNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Credit" Type="Double" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -27559,6 +27618,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SetCardCredit" FunctionName="db293_ActionTimeDbModel.Store.SetCardCredit" />
+          <FunctionImportMapping FunctionImportName="AddEditEmployeeCard" FunctionName="db293_ActionTimeDbModel.Store.AddEditEmployeeCard" />
+          <FunctionImportMapping FunctionImportName="AddEditCard" FunctionName="db293_ActionTimeDbModel.Store.AddEditCard">
+          </FunctionImportMapping>
+          <EntitySetMapping Name="CardCredit">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardCredit">
+              <MappingFragment StoreEntitySet="CardCredit">
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

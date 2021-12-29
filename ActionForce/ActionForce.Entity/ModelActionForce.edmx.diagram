@@ -362,7 +362,8 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCardActions" Width="1.5" PointX="16.75" PointY="29.25" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CardComment" Width="1.5" PointX="26.5" PointY="31.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentsAllSummaryRevenue" Width="1.5" PointX="32.875" PointY="29.125" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeCard" Width="1.5" PointX="7.4160593279712188" PointY="18.294087060864126" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeCard" Width="1.5" PointX="38.5" PointY="12" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.CardCredit" Width="1.5" PointX="5.3326963620878276" PointY="13.33397681141923" />
         
         
         

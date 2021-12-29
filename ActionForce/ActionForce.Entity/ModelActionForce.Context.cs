@@ -361,6 +361,7 @@ namespace ActionForce.Entity
         public virtual DbSet<CardComment> CardComment { get; set; }
         public virtual DbSet<VDocumentsAllSummaryRevenue> VDocumentsAllSummaryRevenue { get; set; }
         public virtual DbSet<EmployeeCard> EmployeeCard { get; set; }
+        public virtual DbSet<CardCredit> CardCredit { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -2482,7 +2483,7 @@ namespace ActionForce.Entity
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VProductPriceLastList>("GetLocationCurrentProductPrices", mergeOption, locationIDParameter);
         }
     
-        public virtual int AddCardBasket(Nullable<int> locationID, Nullable<int> employeeID, Nullable<int> priceID, Nullable<int> cardPriceID, string cardNumber, Nullable<int> cardReaderID, Nullable<int> environment)
+        public virtual int AddCardBasket(Nullable<int> locationID, Nullable<int> employeeID, Nullable<int> priceID, Nullable<int> cardPriceID, string cardNumber, Nullable<int> cardReaderID, Nullable<int> environment, Nullable<int> process)
         {
             var locationIDParameter = locationID.HasValue ?
                 new ObjectParameter("LocationID", locationID) :
@@ -2512,7 +2513,11 @@ namespace ActionForce.Entity
                 new ObjectParameter("Environment", environment) :
                 new ObjectParameter("Environment", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddCardBasket", locationIDParameter, employeeIDParameter, priceIDParameter, cardPriceIDParameter, cardNumberParameter, cardReaderIDParameter, environmentParameter);
+            var processParameter = process.HasValue ?
+                new ObjectParameter("Process", process) :
+                new ObjectParameter("Process", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddCardBasket", locationIDParameter, employeeIDParameter, priceIDParameter, cardPriceIDParameter, cardNumberParameter, cardReaderIDParameter, environmentParameter, processParameter);
         }
     
         public virtual ObjectResult<Nullable<long>> AddCardPosOrder(Nullable<int> locationID, Nullable<int> employeeID, string orderNumber, string cardNumber, string customerName, string customerData, string customerPhone, string identityCard, string description, string recordIP)
@@ -2797,6 +2802,62 @@ namespace ActionForce.Entity
                 new ObjectParameter("Record", typeof(System.DateTime));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<CardComment>("AddCardComment", mergeOption, locationIDParameter, processParameter, commentParameter, recordParameter);
+        }
+    
+        public virtual int SetCardCredit(string cardNumber, Nullable<double> credit)
+        {
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            var creditParameter = credit.HasValue ?
+                new ObjectParameter("Credit", credit) :
+                new ObjectParameter("Credit", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetCardCredit", cardNumberParameter, creditParameter);
+        }
+    
+        public virtual int AddEditEmployeeCard(Nullable<int> employeeID, Nullable<int> ourCompanyID, string cardNumber)
+        {
+            var employeeIDParameter = employeeID.HasValue ?
+                new ObjectParameter("EmployeeID", employeeID) :
+                new ObjectParameter("EmployeeID", typeof(int));
+    
+            var ourCompanyIDParameter = ourCompanyID.HasValue ?
+                new ObjectParameter("OurCompanyID", ourCompanyID) :
+                new ObjectParameter("OurCompanyID", typeof(int));
+    
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("AddEditEmployeeCard", employeeIDParameter, ourCompanyIDParameter, cardNumberParameter);
+        }
+    
+        public virtual ObjectResult<VCard> AddEditCard(string cardNumber, Nullable<double> credit)
+        {
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            var creditParameter = credit.HasValue ?
+                new ObjectParameter("Credit", credit) :
+                new ObjectParameter("Credit", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VCard>("AddEditCard", cardNumberParameter, creditParameter);
+        }
+    
+        public virtual ObjectResult<VCard> AddEditCard(string cardNumber, Nullable<double> credit, MergeOption mergeOption)
+        {
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            var creditParameter = credit.HasValue ?
+                new ObjectParameter("Credit", credit) :
+                new ObjectParameter("Credit", typeof(double));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VCard>("AddEditCard", mergeOption, cardNumberParameter, creditParameter);
         }
     }
 }

@@ -36,5 +36,20 @@ namespace ActionForce.PosLocation
             return "Yükleme Sorunu";
         }
 
+        public string CreditRefund(Guid guid, int success, string Message)
+        {
+            var request = new RestRequest("CardLoad/CardLoadResult", Method.GET);
+            request.AddParameter("id", guid);
+            request.AddParameter("success", success);
+            request.AddParameter("Message", Message);
+            //request.AddJsonBody(new { LocationID = locationID, EnvironmentID = environmentID, Latitude = latitude, Longitude = longitude, Date = _Date });
+            var response = Client.Execute(request);
+            if (response.ResponseStatus == ResponseStatus.Completed && response.StatusCode == System.Net.HttpStatusCode.OK)
+            {
+                return "Yükleme Tamamlandı";
+            }
+            return "Yükleme Sorunu";
+        }
+
     }
 }

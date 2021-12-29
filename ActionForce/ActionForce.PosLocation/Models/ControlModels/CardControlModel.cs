@@ -30,5 +30,8 @@ namespace ActionForce.PosLocation
         public string Comment { get; set; }
         public List<CardComment> CardComments { get; set; }
         public Employee Employee { get; set; }
+        public List<DataEmployee> Employees { get; set; }
+        public EmployeeCard EmployeeCard { get; set; }
+        public int Process { get; set; }
     }
 }

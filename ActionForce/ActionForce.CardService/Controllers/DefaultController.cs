@@ -55,7 +55,7 @@ namespace ActionForce.CardService.Controllers
 
                 var addResult = helper.AddCardAction(model);
 
-                result.IsSuccess = addResult.IsSuccess;
+                result.IsSuccess = true;
                 result.Message = addResult.Message;
             }
             return Request.CreateResponse(HttpStatusCode.OK, result);
