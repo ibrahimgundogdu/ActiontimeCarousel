@@ -523,6 +523,33 @@
           <Property Name="OurCompanyID" Type="int" />
           <Property Name="CardID" Type="bigint" />
           <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="CardTypeID" Type="smallint" />
+          <Property Name="CardReaderID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="SaleID" Type="bigint" />
+          <Property Name="SaleRowID" Type="bigint" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="ProcessID" Type="bigint" />
+          <Property Name="ProcessUID" Type="uniqueidentifier" />
+          <Property Name="ActionTypeID" Type="smallint" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ActionDate" Type="datetime" />
+          <Property Name="CreditCharge" Type="float" />
+          <Property Name="CreditSpend" Type="float" />
+          <Property Name="Credit" Type="float" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="IsPromotion" Type="bit" />
+          <Property Name="ActionDateUpdate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CardActionsHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="CardID" Type="bigint" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="CardReaderID" Type="int" />
           <Property Name="LocationID" Type="int" />
           <Property Name="CustomerID" Type="int" />
@@ -614,6 +641,28 @@
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="CardReaderID" Type="int" />
+          <Property Name="CardReaderUID" Type="uniqueidentifier" />
+          <Property Name="SerialNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="MACAddress" Type="nvarchar" MaxLength="20" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="ProcessType" Type="smallint" />
+          <Property Name="ProcessNumber" Type="smallint" />
+          <Property Name="CardType" Type="smallint" />
+          <Property Name="CardTypeID" Type="smallint" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="ProcessDate" Type="datetime" />
+          <Property Name="RideAmount" Type="float" />
+          <Property Name="CardBalanceAmount" Type="float" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="RecordDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CardReaderActionHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="CardReaderID" Type="int" Nullable="false" />
           <Property Name="CardReaderUID" Type="uniqueidentifier" />
           <Property Name="SerialNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="MACAddress" Type="nvarchar" MaxLength="20" />
@@ -2884,6 +2933,19 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="Message" Type="nvarchar" MaxLength="500" />
           <Property Name="MessageError" Type="nvarchar" MaxLength="500" />
         </EntityType>
+        <EntityType Name="NFCCardLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Message" Type="nvarchar" MaxLength="500" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="Controller" Type="nvarchar" MaxLength="40" />
+          <Property Name="Action" Type="nvarchar" MaxLength="40" />
+          <Property Name="Module" Type="nvarchar" MaxLength="40" />
+          <Property Name="ResponseMessage" Type="nvarchar" MaxLength="250" />
+          <Property Name="RecordDate" Type="datetime" />
+        </EntityType>
         <EntityType Name="OurCompany">
           <Key>
             <PropertyRef Name="CompanyID" />
@@ -3795,6 +3857,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="CardReaderActionID" Type="bigint" />
           <Property Name="CardActionID" Type="bigint" />
           <Property Name="WithCard" Type="bit" />
+          <Property Name="CardTypeID" Type="smallint" />
           <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="ExistsCredit" Type="float" Nullable="false" />
           <Property Name="MasterCredit" Type="float" Nullable="false" />
@@ -4411,13 +4474,13 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCard' does not have a prim
           <Key>
             <PropertyRef Name="ID" />
             <PropertyRef Name="CardNumber" />
+            
           </Key>
           <Property Name="ID" Type="bigint" Nullable="false" />
           <Property Name="OurCompanyID" Type="int" />
           <Property Name="CardTypeID" Type="smallint" />
           <Property Name="CardNumber" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="ExpireDate" Type="date" />
-          <Property Name="Credit" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="CardStatusID" Type="int" />
           <Property Name="RecordDate" Type="datetime" />
@@ -4425,6 +4488,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCard' does not have a prim
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="CardTypeName" Type="nvarchar" MaxLength="40" />
           <Property Name="CardStatusName" Type="nvarchar" MaxLength="40" />
+          <Property Name="Credit" Type="float" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VCardActions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -7868,6 +7932,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <Function Name="GetLocationMallMotoColors" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
         </Function>
+        <Function Name="GetLocationPartList" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+        </Function>
         <Function Name="GetLocationPrice" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
           <Parameter Name="Date" Type="datetime" Mode="In" />
@@ -7965,6 +8032,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="UpdateDate" Type="datetime" Mode="In" />
           <Parameter Name="UpdateIP" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="ResetCard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="SetBankTransferStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ID" Type="bigint" Mode="In" />
           <Parameter Name="StatusID" Type="int" Mode="In" />
@@ -7981,6 +8051,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <Function Name="SetCardCredit" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
           <Parameter Name="Credit" Type="float" Mode="In" />
+        </Function>
+        <Function Name="SetCardType" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="CardTypeID" Type="smallint" Mode="In" />
         </Function>
         <Function Name="SetEmployeeScheduleMultiplier" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="LocationID" Type="int" Mode="In" />
@@ -8088,6 +8162,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="BreakTypes" EntityType="Self.BreakTypes" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Card" EntityType="Self.Card" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardActions" EntityType="Self.CardActions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardActionsHistory" EntityType="Self.CardActionsHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardActionType" EntityType="Self.CardActionType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardComment" EntityType="Self.CardComment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardCredit" EntityType="Self.CardCredit" Schema="dbo" store:Type="Tables" />
@@ -8095,6 +8170,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="CardNumber" EntityType="Self.CardNumber" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardReader" EntityType="Self.CardReader" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardReaderAction" EntityType="Self.CardReaderAction" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CardReaderActionHistory" EntityType="Self.CardReaderActionHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardReaderParameter" EntityType="Self.CardReaderParameter" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardReaderType" EntityType="Self.CardReaderType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CardStatus" EntityType="Self.CardStatus" Schema="dbo" store:Type="Tables" />
@@ -8214,6 +8290,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="MallSegment" EntityType="Self.MallSegment" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MobileLog" EntityType="Self.MobileLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="MobileLoginLog" EntityType="Self.MobileLoginLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="NFCCardLog" EntityType="Self.NFCCardLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OurCompany" EntityType="Self.OurCompany" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="OurCompanyPartner" EntityType="Self.OurCompanyPartner" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PayMethod" EntityType="Self.PayMethod" Schema="dbo" store:Type="Tables" />
@@ -8463,14 +8540,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VCard].[CardTypeID] AS [CardTypeID], 
     [VCard].[CardNumber] AS [CardNumber], 
     [VCard].[ExpireDate] AS [ExpireDate], 
-    [VCard].[Credit] AS [Credit], 
     [VCard].[Currency] AS [Currency], 
     [VCard].[CardStatusID] AS [CardStatusID], 
     [VCard].[RecordDate] AS [RecordDate], 
     [VCard].[ActivateDate] AS [ActivateDate], 
     [VCard].[UID] AS [UID], 
     [VCard].[CardTypeName] AS [CardTypeName], 
-    [VCard].[CardStatusName] AS [CardStatusName]
+    [VCard].[CardStatusName] AS [CardStatusName], 
+    [VCard].[Credit] AS [Credit]
     FROM [dbo].[VCard] AS [VCard]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VCardActions" EntityType="Self.VCardActions" store:Type="Views" store:Schema="dbo">
@@ -12019,6 +12096,19 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="Credit" Mode="In" Type="Double" />
           </FunctionImport>
           <EntitySet Name="CardCredit" EntityType="db293_ActionTimeDbModel.CardCredit" />
+          <FunctionImport Name="SetCardType">
+            <Parameter Name="CardNumber" Mode="In" Type="String" />
+            <Parameter Name="CardTypeID" Mode="In" Type="Int16" />
+          </FunctionImport>
+          <FunctionImport Name="ResetCard">
+          <Parameter Name="CardNumber" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="CardActionsHistory" EntityType="db293_ActionTimeDbModel.CardActionsHistory" />
+          <EntitySet Name="CardReaderActionHistory" EntityType="db293_ActionTimeDbModel.CardReaderActionHistory" />
+          <FunctionImport Name="GetLocationPartList" ReturnType="Collection(db293_ActionTimeDbModel.GetLocationPartList_Result)">
+          <Parameter Name="LocationID" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="NFCCardLog" EntityType="db293_ActionTimeDbModel.NFCCardLog" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -19472,6 +19562,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="LocationID" Type="Int32" />
           <Property Name="UID" Type="Guid" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="CardTypeID" Type="Int16" />
         </EntityType>
         <EntityType Name="CardReaderParameter">
           <Key>
@@ -19577,6 +19669,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="CardReaderID" Type="Int32" />
           <Property Name="ActionDateUpdate" Type="DateTime" Precision="3" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="CardTypeID" Type="Int16" />
         </EntityType>
         <EntityType Name="CardActionType">
           <Key>
@@ -19759,6 +19853,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CardReaderActionID" Type="Int64" />
           <Property Name="Message" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="CardActionID" Type="Int64" />
+          <Property Name="CardTypeID" Type="Int16" />
         </EntityType>
         <EntityType Name="Card">
           <Key>
@@ -19856,7 +19951,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="CardTypeID" Type="Int16" />
           <Property Name="CardNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="ExpireDate" Type="DateTime" Precision="0" />
-          <Property Name="Credit" Type="Double" />
+          <Property Name="Credit" Type="Double" Nullable="false" />
           <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="CardStatusID" Type="Int32" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
@@ -19973,6 +20068,72 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </Key>
           <Property Name="CardNumber" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="Credit" Type="Double" />
+        </EntityType>
+        <EntityType Name="CardActionsHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="CardID" Type="Int64" />
+          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CardReaderID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="SaleID" Type="Int64" />
+          <Property Name="SaleRowID" Type="Int64" />
+          <Property Name="ProcessID" Type="Int64" />
+          <Property Name="ProcessUID" Type="Guid" />
+          <Property Name="ActionTypeID" Type="Int16" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ActionDate" Type="DateTime" Precision="3" />
+          <Property Name="CreditCharge" Type="Double" />
+          <Property Name="CreditSpend" Type="Double" />
+          <Property Name="Credit" Type="Double" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="IsPromotion" Type="Boolean" />
+          <Property Name="ActionDateUpdate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CardReaderActionHistory">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="CardReaderID" Type="Int32" Nullable="false" />
+          <Property Name="CardReaderUID" Type="Guid" />
+          <Property Name="SerialNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MACAddress" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessType" Type="Int16" />
+          <Property Name="ProcessNumber" Type="Int16" />
+          <Property Name="CardType" Type="Int16" />
+          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessDate" Type="DateTime" Precision="3" />
+          <Property Name="RideAmount" Type="Double" />
+          <Property Name="CardBalanceAmount" Type="Double" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <ComplexType Name="GetLocationPartList_Result">
+          <Property Type="Int32" Name="LocationID" Nullable="true" />
+          <Property Type="DateTime" Name="StartDate" Nullable="true" />
+          <Property Type="DateTime" Name="FinishDate" Nullable="true" />
+          <Property Type="Int32" Name="LocationTypeID" Nullable="true" />
+          <Property Type="Int32" Name="PartID" Nullable="false" />
+          <Property Type="String" Name="PartName" Nullable="true" MaxLength="50" />
+        </ComplexType>
+        <EntityType Name="NFCCardLog">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Message" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Controller" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="Action" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="Module" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="ResponseMessage" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -27195,6 +27356,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="CardReaderAction">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardReaderAction">
               <MappingFragment StoreEntitySet="CardReaderAction">
+                <ScalarProperty Name="CardTypeID" ColumnName="CardTypeID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
@@ -27302,6 +27465,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="CardActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardActions">
               <MappingFragment StoreEntitySet="CardActions">
+                <ScalarProperty Name="CardTypeID" ColumnName="CardTypeID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="ActionDateUpdate" ColumnName="ActionDateUpdate" />
                 <ScalarProperty Name="CardReaderID" ColumnName="CardReaderID" />
                 <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
@@ -27435,6 +27600,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="TicketSaleCreditLoad">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.TicketSaleCreditLoad">
               <MappingFragment StoreEntitySet="TicketSaleCreditLoad">
+                <ScalarProperty Name="CardTypeID" ColumnName="CardTypeID" />
                 <ScalarProperty Name="CardActionID" ColumnName="CardActionID" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
                 <ScalarProperty Name="CardReaderActionID" ColumnName="CardReaderActionID" />
@@ -27630,6 +27796,81 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               <MappingFragment StoreEntitySet="CardCredit">
                 <ScalarProperty Name="Credit" ColumnName="Credit" />
                 <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SetCardType" FunctionName="db293_ActionTimeDbModel.Store.SetCardType" />
+          <FunctionImportMapping FunctionImportName="ResetCard" FunctionName="db293_ActionTimeDbModel.Store.ResetCard" />
+          <EntitySetMapping Name="CardActionsHistory">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardActionsHistory">
+              <MappingFragment StoreEntitySet="CardActionsHistory">
+                <ScalarProperty Name="ActionDateUpdate" ColumnName="ActionDateUpdate" />
+                <ScalarProperty Name="IsPromotion" ColumnName="IsPromotion" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="CreditSpend" ColumnName="CreditSpend" />
+                <ScalarProperty Name="CreditCharge" ColumnName="CreditCharge" />
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="SaleRowID" ColumnName="SaleRowID" />
+                <ScalarProperty Name="SaleID" ColumnName="SaleID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="CardReaderID" ColumnName="CardReaderID" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="CardID" ColumnName="CardID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CardReaderActionHistory">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardReaderActionHistory">
+              <MappingFragment StoreEntitySet="CardReaderActionHistory">
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="CardBalanceAmount" ColumnName="CardBalanceAmount" />
+                <ScalarProperty Name="RideAmount" ColumnName="RideAmount" />
+                <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="CardType" ColumnName="CardType" />
+                <ScalarProperty Name="ProcessNumber" ColumnName="ProcessNumber" />
+                <ScalarProperty Name="ProcessType" ColumnName="ProcessType" />
+                <ScalarProperty Name="MACAddress" ColumnName="MACAddress" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="CardReaderUID" ColumnName="CardReaderUID" />
+                <ScalarProperty Name="CardReaderID" ColumnName="CardReaderID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="GetLocationPartList" FunctionName="db293_ActionTimeDbModel.Store.GetLocationPartList">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetLocationPartList_Result">
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="FinishDate" ColumnName="FinishDate" />
+                <ScalarProperty Name="LocationTypeID" ColumnName="LocationTypeID" />
+                <ScalarProperty Name="PartID" ColumnName="PartID" />
+                <ScalarProperty Name="PartName" ColumnName="PartName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="NFCCardLog">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.NFCCardLog">
+              <MappingFragment StoreEntitySet="NFCCardLog">
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="ResponseMessage" ColumnName="ResponseMessage" />
+                <ScalarProperty Name="Module" ColumnName="Module" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="Controller" ColumnName="Controller" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

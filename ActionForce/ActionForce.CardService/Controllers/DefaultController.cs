@@ -45,6 +45,7 @@ namespace ActionForce.CardService.Controllers
                 model.RidePrice = Convert.ToDouble(infolist[6]) / 100;
                 model.CardBlance = Convert.ToDouble(infolist[7]) / 100;
                 model.ProcessDate = epocdate;
+                model.CurrentDate = DateTime.UtcNow.AddHours(3);
 
                 using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
                 {

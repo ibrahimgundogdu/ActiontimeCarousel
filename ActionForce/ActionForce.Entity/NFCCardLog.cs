@@ -12,20 +12,15 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class VCard
+    public partial class NFCCardLog
     {
         public long ID { get; set; }
-        public Nullable<int> OurCompanyID { get; set; }
-        public Nullable<short> CardTypeID { get; set; }
-        public string CardNumber { get; set; }
-        public Nullable<System.DateTime> ExpireDate { get; set; }
-        public double Credit { get; set; }
-        public string Currency { get; set; }
-        public Nullable<int> CardStatusID { get; set; }
+        public string Message { get; set; }
+        public string RecordIP { get; set; }
+        public string Controller { get; set; }
+        public string Action { get; set; }
+        public string Module { get; set; }
+        public string ResponseMessage { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
-        public Nullable<System.DateTime> ActivateDate { get; set; }
-        public Nullable<System.Guid> UID { get; set; }
-        public string CardTypeName { get; set; }
-        public string CardStatusName { get; set; }
     }
 }

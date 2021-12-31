@@ -139,7 +139,7 @@ button,button:focus{ outline: none; outline-width: 0; outline-color: transparent
         .system-balance{ font-size: 34px; color: #0FC600; font-weight: bold; }
       }
     }
-    .right-card{ display: flex; align-items: flex-start; justify-content: center; padding: 10px; height: calc(50% - 10px); margin-bottom: 20px; overflow-y: auto; background: #fefefe; border-radius: 15px; border: 1px solid rgb(238, 238, 238);
+    .right-card{ display: flex; align-items: flex-start; justify-content: center; padding: 10px; height: 100%; margin-bottom: 20px; overflow-y: auto; background: #fefefe; border-radius: 15px; border: 1px solid rgb(238, 238, 238);
       .centered{ flex: 0 0 100%; max-width: 100%; }
       .last-load,.last-used{ display: flex; align-items: center; justify-content: space-evenly; margin: 10px 0; 
         span{ display: block; padding: 10px; font-size: 20px; border-radius: 5px; margin: 0 5px;  }

@@ -42,5 +42,6 @@ namespace ActionForce.Entity
         public Nullable<long> CardReaderActionID { get; set; }
         public string Message { get; set; }
         public Nullable<long> CardActionID { get; set; }
+        public Nullable<short> CardTypeID { get; set; }
     }
 }

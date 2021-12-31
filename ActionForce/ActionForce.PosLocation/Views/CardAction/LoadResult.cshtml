@@ -54,114 +54,116 @@
 
                                 using (Html.BeginForm("LoadCard", "CardAction", FormMethod.Post, new { role = "form" }))
                                 {
-                                    <div class="form">
-                                        <input id="OrderID" name="OrderID" type="hidden" value="@(Model.TicketSale.ID)" />
+                            <div class="form">
+                                <input id="OrderID" name="OrderID" type="hidden" value="@(Model.TicketSale.ID)" />
 
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Sipariş No :" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.TicketSale.OrderNumber)" readonly>
-                                                </div>
-                                            </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group" style="margin-bottom:10px;">
+                                            <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Sipariş No :" readonly>
                                         </div>
-
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Kart Okuyucu :" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CreditLoad?.SerialNumber)" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Kart No :" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CreditLoad?.CardNumber)" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Tahsil Edilen :" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@($"{Model.TicketSalePosPayments.Sum(x=> x.PaymentAmount ?? 0).ToString("N2")} ₺")" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Yüklenen Kredi :" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@($"{Model.TotalCredit.ToString("N0")}")" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Karttaki Kredi (CARD) :" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CreditLoad?.FinalCredit)" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Karttaki Kredi (CARİ):" readonly>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="form-group" style="margin-bottom:10px;">
-                                                    <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CardBalanceAction)" readonly>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        @if (Model.CreditLoad.IsSuccess == true)
-                                        {
-                                            <div class="form-group">
-                                                <a href="@($"/Card/Index?cardinfo={Model.CreditLoad?.SerialNumber};{Model.CreditLoad?.MACAddress};1;{Model.CreditLoad?.CardNumber};1;{(Model.CreditLoad?.FinalCredit) * 100};")" class="btn btn-success btn-block">KART YÜKLEMESİ TAMAMLADI</a>
-                                            </div>
-                                        }
-                                        else
-                                        {
-                                            <div class="form-group">
-                                                <a href="/CardAction/Index/@(Model.CreditLoad?.SaleID)" class="btn btn-primary btn-block">TEKRAR DENE</a>
-                                            </div>
-                                        }
-
                                     </div>
+                                    <div class="col-6">
+                                        <div class="form-group" style="margin-bottom:10px;">
+                                            <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.TicketSale.OrderNumber)" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group" style="margin-bottom:10px;">
+                                            <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Kart Okuyucu :" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group" style="margin-bottom:10px;">
+                                            <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CreditLoad?.SerialNumber)" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group" style="margin-bottom:10px;">
+                                            <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Kart Türü : " readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group" style="margin-bottom:10px;">
+                                            <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CreditLoad.CardTypeID == 0 ? "Müşteri": Model.CreditLoad.CardTypeID == 1 ? "Kasa": "Diğer")" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group" style="margin-bottom:10px;">
+                                            <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Kart No :" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group" style="margin-bottom:10px;">
+                                            <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CreditLoad?.CardNumber)" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group" style="margin-bottom:10px;">
+                                            <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Tahsil Edilen :" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group" style="margin-bottom:10px;">
+                                            <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@($"{Model.TicketSalePosPayments.Sum(x=> x.PaymentAmount ?? 0).ToString("N2")} ₺")" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group" style="margin-bottom:10px;">
+                                            <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Yüklenen Kredi :" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group" style="margin-bottom:10px;">
+                                            <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@($"{Model.TotalCredit.ToString("N0")}")" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-group" style="margin-bottom:10px;">
+                                            <input type="text" class="form-control form-control-plaintext" style="text-align: left; font-weight: bold; background-color: aliceblue; " value="Karttaki Kredi :" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group" style="margin-bottom:10px;">
+                                            <input type="text" class="form-control form-control-plaintext" style="text-align: right; font-weight: bold; background-color: aliceblue; " value="@(Model.CreditLoad?.FinalCredit)" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                @if (Model.CreditLoad.IsSuccess == true)
+                                {
+                                    <div class="form-group">
+                                        <a href="@($"/Card/Index?cardinfo={Model.CreditLoad?.SerialNumber};{Model.CreditLoad?.MACAddress};1;{Model.CreditLoad?.CardNumber};1;{(Model.CreditLoad?.FinalCredit) * 100};")" class="btn btn-success btn-block">KART YÜKLEMESİ TAMAMLADI</a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="form-group">
+                                        <a href="/CardAction/Index/@(Model.CreditLoad?.SaleID)" class="btn btn-primary btn-block">TEKRAR DENE</a>
+                                    </div>
+                                }
+
+                            </div>
                                 }
 
                             }

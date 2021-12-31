@@ -319,6 +319,7 @@
     <Compile Include="Models\FormModels\SaleRowFormModel.cs" />
     <Compile Include="Models\FormModels\SerialFormModel.cs" />
     <Compile Include="Models\FormModels\UserLoginFormModel.cs" />
+    <Compile Include="Models\LocationPart.cs" />
     <Compile Include="Models\LockedEmployee.cs" />
     <Compile Include="Models\PosManager.cs" />
     <Compile Include="Models\Result.cs" />
@@ -386,6 +387,9 @@
     <Content Include="Views\CardAction\CreditRefund.cshtml" />
     <Content Include="Views\CardAction\RefundResult.cshtml" />
     <Content Include="Views\Card\MakePersonelCard.cshtml" />
+    <Content Include="Views\CardAction\CardReset.cshtml" />
+    <Content Include="Views\CardAction\ResetResult.cshtml" />
+    <Content Include="Views\Card\CardReader.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

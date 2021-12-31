@@ -14,6 +14,7 @@ namespace ActionForce.CardService
         public short CardType { get; set; }
         public string CardNumber { get; set; }
         public DateTime? ProcessDate { get; set; }
+        public DateTime? CurrentDate { get; set; }
         public double? RidePrice { get; set; }
         public double? CardBlance { get; set; }
     }

@@ -12,10 +12,10 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class CardReaderAction
+    public partial class CardReaderActionHistory
     {
         public long ID { get; set; }
-        public Nullable<int> CardReaderID { get; set; }
+        public int CardReaderID { get; set; }
         public Nullable<System.Guid> CardReaderUID { get; set; }
         public string SerialNumber { get; set; }
         public string MACAddress { get; set; }
@@ -29,7 +29,5 @@ namespace ActionForce.Entity
         public Nullable<int> LocationID { get; set; }
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
-        public Nullable<int> EmployeeID { get; set; }
-        public Nullable<short> CardTypeID { get; set; }
     }
 }

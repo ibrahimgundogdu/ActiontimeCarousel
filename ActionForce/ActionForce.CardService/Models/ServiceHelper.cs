@@ -74,50 +74,6 @@ namespace ActionForce.CardService
                         cardReader = GetCardReader(guid);
                     }
 
-                    // kart okuma hereketi eklenir
-
-                    var criParameters = new
-                    {
-                        Serial = model.SerialNumber,
-                        MAC = model.MACAddress,
-                        ProcessType = model.ProcessType,
-                        ProcessNumber = model.ProcessNumber,
-                        CardType = model.CardType,
-                        CardNumber = model.CardNumber,
-                        ProcessDate = model.ProcessDate,
-                        RideAmount = model.RidePrice,
-                        CardBalanceAmount = model.CardBlance
-                    };
-                    var criSql = "SELECT TOP (1) * FROM [dbo].[CardReaderAction] Where [SerialNumber] = @Serial and [MACAddress] = @MAC and [ProcessType] = @ProcessType and [ProcessNumber] = @ProcessNumber and [CardType] = @CardType and  [CardNumber] = @CardNumber and [ProcessDate] = @ProcessDate and [RideAmount] = @RideAmount and [CardBalanceAmount] = @CardBalanceAmount";
-                    var cardReaderAction = connection.QueryFirstOrDefault<CardReaderAction>(criSql, criParameters);
-
-                    if (cardReaderAction == null)
-                    {
-                        var craguid = Guid.NewGuid();
-                        var craparameters = new
-                        {
-                            CardReaderID = cardReader.ID,
-                            CardReaderUID = cardReader.UID,
-                            SerialNumber = model.SerialNumber,
-                            MACAddress = model.MACAddress,
-                            ProcessType = model.ProcessType,
-                            ProcessNumber = model.ProcessNumber,
-                            CardType = model.CardType,
-                            CardNumber = model.CardNumber,
-                            ProcessDate = model.ProcessDate,
-                            RideAmount = model.RidePrice,
-                            CardBalanceAmount = model.CardBlance,
-                            LocationID = cardReader.LocationID,
-                            UID = craguid,
-                            RecordDate = now
-                        };
-                        var crasql = "  INSERT INTO [dbo].[CardReaderAction] ([CardReaderID] ,[CardReaderUID],[SerialNumber],[MACAddress],[ProcessType],[ProcessNumber],[CardType],[CardNumber],[ProcessDate],[RideAmount],[CardBalanceAmount],[LocationID],[UID],[RecordDate]) VALUES(@CardReaderID,@CardReaderUID,@SerialNumber,@MACAddress,@ProcessType,@ProcessNumber,@CardType, @CardNumber, @ProcessDate, @RideAmount, @CardBalanceAmount , @LocationID, @UID, @RecordDate )";
-                        var isinsert = connection.Execute(crasql, craparameters);
-
-                        cardReaderAction = GetCardReaderAction(craguid);
-                    }
-
-
                     // kart tanımlı mı bakılır değilse eklenir
 
 
@@ -143,8 +99,67 @@ namespace ActionForce.CardService
                         var csql = "INSERT INTO [dbo].[Card] ([OurCompanyID],[CardTypeID],[CardNumber],[ExpireDate],[Credit],[Currency],[CardStatusID],[RecordDate],[ActivateDate],[UID]) VALUES( @OurCompanyID, @CardTypeID, @CardNumber, @ExpireDate, @Credit, @Currency, @CardStatusID, @RecordDate, null, @UID)";
                         connection.Execute(csql, cparameters);
 
-                        card = GetCard(model.CardNumber, model.CardType);
+                        card = GetCard(model.CardNumber);
                     }
+
+
+                    // minderde personel tanımlı mı ona bakılır
+
+
+                    var eParameters = new { LocationID = cardReader.LocationID, LocationPartID = cardReader.LocationPartID };
+                    var eSql = "SELECT TOP (1) [EmployeeID] FROM [dbo].[LocationPartEmployee] WHERE [LocationID] = @LocationID and [LocationPartID] = @LocationPartID Order By [ReadDate] desc";
+                    int EmployeeID = connection.QueryFirstOrDefault<int>(eSql, eParameters);
+
+
+                    // kart okuma hereketi eklenir
+
+                    var criParameters = new
+                    {
+                        Serial = model.SerialNumber,
+                        MAC = model.MACAddress,
+                        ProcessType = model.ProcessType,
+                        ProcessNumber = model.ProcessNumber,
+                        CardType = model.CardType,
+                        CardNumber = model.CardNumber,
+                        ProcessDate = model.CurrentDate,
+                        RideAmount = model.RidePrice,
+                        CardBalanceAmount = model.CardBlance,
+                        EmployeeID = EmployeeID,
+                        CardTypeID = card.CardTypeID
+                    };
+                    var criSql = "SELECT TOP (1) * FROM [dbo].[CardReaderAction] Where [SerialNumber] = @Serial and [MACAddress] = @MAC and [ProcessType] = @ProcessType and [ProcessNumber] = @ProcessNumber and [CardType] = @CardType and  [CardNumber] = @CardNumber and [ProcessDate] = @ProcessDate and [RideAmount] = @RideAmount and [CardBalanceAmount] = @CardBalanceAmount";
+                    var cardReaderAction = connection.QueryFirstOrDefault<CardReaderAction>(criSql, criParameters);
+
+                    if (cardReaderAction == null)
+                    {
+                        var craguid = Guid.NewGuid();
+                        var craparameters = new
+                        {
+                            CardReaderID = cardReader.ID,
+                            CardReaderUID = cardReader.UID,
+                            SerialNumber = model.SerialNumber,
+                            MACAddress = model.MACAddress,
+                            ProcessType = model.ProcessType,
+                            ProcessNumber = model.ProcessNumber,
+                            CardType = model.CardType,
+                            CardNumber = model.CardNumber,
+                            ProcessDate = model.CurrentDate,
+                            RideAmount = model.RidePrice,
+                            CardBalanceAmount = model.CardBlance,
+                            LocationID = cardReader.LocationID,
+                            UID = craguid,
+                            RecordDate = now,
+                            EmployeeID = EmployeeID,
+                            CardTypeID = card.CardTypeID
+
+                        };
+                        var crasql = "  INSERT INTO [dbo].[CardReaderAction] ([CardReaderID] ,[CardReaderUID],[SerialNumber],[MACAddress],[ProcessType],[ProcessNumber],[CardType],[CardNumber],[ProcessDate],[RideAmount],[CardBalanceAmount],[LocationID],[UID],[RecordDate],[EmployeeID],[CardTypeID]) VALUES(@CardReaderID,@CardReaderUID,@SerialNumber,@MACAddress,@ProcessType,@ProcessNumber,@CardType, @CardNumber, @ProcessDate, @RideAmount, @CardBalanceAmount , @LocationID, @UID, @RecordDate, @EmployeeID, @CardTypeID )";
+                        var isinsert = connection.Execute(crasql, craparameters);
+
+                        cardReaderAction = GetCardReaderAction(craguid);
+                    }
+
+
 
 
                     // kart hereketi eklenir
@@ -166,23 +181,26 @@ namespace ActionForce.CardService
                             ProcessUID = cardReaderAction.UID,
                             ActionTypeID = 2,
                             ActionTypeName = "Kredi Kullanım",
-                            ActionDate = model.ProcessDate,
+                            ActionDate = model.CurrentDate,
                             CreditCharge = 0,
                             CreditSpend = model.RidePrice,
                             Currency = "TRL",
                             CardNumber = model.CardNumber,
-                            CardReaderID = cardReader.ID
+                            CardReaderID = cardReader.ID,
+                            EmployeeID = EmployeeID,
+                            CardTypeID = card.CardTypeID
                         };
 
-                        var casql = "  INSERT INTO [dbo].[CardActions] ([OurCompanyID],[CardID],[LocationID],[CustomerID],[ProcessID],[ProcessUID],[ActionTypeID],[ActionTypeName],[ActionDate],[CreditCharge],[CreditSpend],[Currency],[CardNumber],[CardReaderID]) VALUES(@OurCompanyID,@CardID,@LocationID,@CustomerID,@ProcessID,@ProcessUID,@ActionTypeID, @ActionTypeName, @ActionDate, @CreditCharge, @CreditSpend , @Currency, @CardNumber,@CardReaderID)";
+                        var casql = "  INSERT INTO [dbo].[CardActions] ([OurCompanyID],[CardID],[LocationID],[CustomerID],[ProcessID],[ProcessUID],[ActionTypeID],[ActionTypeName],[ActionDate],[CreditCharge],[CreditSpend],[Currency],[CardNumber],[CardReaderID],[EmployeeID],[CardTypeID]) VALUES(@OurCompanyID,@CardID,@LocationID,@CustomerID,@ProcessID,@ProcessUID,@ActionTypeID, @ActionTypeName, @ActionDate, @CreditCharge, @CreditSpend , @Currency, @CardNumber,@CardReaderID, @EmployeeID, @CardTypeID )";
                         connection.Execute(casql, caparameters);
                     }
 
                     // kartın bakiyesi güncellenir.
+                    SetCardBalance(model.CardNumber, model.CardBlance);
 
-                    var cuparameters = new { CardNumber = model.CardNumber, Balance = model.CardBlance };
-                    var cusql = "Update [dbo].[Card] Set [Credit] = @Balance Where [CardNumber] = @CardNumber";
-                    connection.Execute(cusql, cuparameters);
+                    //var cuparameters = new { CardNumber = model.CardNumber, Balance = model.CardBlance };
+                    //var cusql = "Update [dbo].[Card] Set [Credit] = @Balance Where [CardNumber] = @CardNumber";
+                    //connection.Execute(cusql, cuparameters);
 
                 }
 
@@ -246,8 +264,8 @@ namespace ActionForce.CardService
 
                     // kart tanımlı mı bakılır değilse eklenir
 
-                    var cParameters = new { Number = model.CardNumber, TypeId = 1 };
-                    var cSql = "SELECT TOP (1) * FROM [dbo].[Card] Where [CardNumber] = @Number and [CardTypeID] = @TypeId";
+                    var cParameters = new { Number = model.CardNumber };
+                    var cSql = "SELECT TOP (1) * FROM [dbo].[Card] Where [CardNumber] = @Number";
                     var card = connection.QueryFirstOrDefault<Card>(cSql, cParameters);
 
                     if (card == null)
@@ -256,7 +274,7 @@ namespace ActionForce.CardService
                         var cparameters = new
                         {
                             OurCompanyID = 2,
-                            CardTypeID = 1,
+                            CardTypeID = 2,
                             CardNumber = model.CardNumber,
                             ExpireDate = DateTime.Now.AddYears(99),
                             Credit = 0,
@@ -270,7 +288,7 @@ namespace ActionForce.CardService
 
                         connection.Execute(csql, cparameters);
 
-                        card = GetCard(model.CardNumber, 1);
+                        card = GetCard(model.CardNumber);
                     }
 
 
@@ -303,27 +321,27 @@ namespace ActionForce.CardService
                             result.IsSuccess = false;
                             result.Message = "NO CRDEM";
                         }
-                        else if (cardEmployee == null)
-                        {
-                            var ncparameters = new
-                            {
-                                OurCompanyID = 2,
-                                EmployeeID = cardEmployee?.EmployeeID,
-                                CardID = card.ID,
-                                CardTypeID = card.CardTypeID,
-                                CardStatusID = card.CardStatusID,
-                                CardNumber = model.CardNumber,
-                                RecordDate = DateTime.UtcNow.AddHours(3)
-                            };
-                            var csql = "INSERT INTO [dbo].[EmployeeCard] ([OurCompanyID],[EmployeeID],[CardID],[CardTypeID],[CardStatusID],[CardNumber],[RecordDate]) VALUES(@OurCompanyID, @EmployeeID, @CardID, @CardTypeID, @CardStatusID, @CardNumber,@RecordDate)";
-                            connection.Execute(csql, ncparameters);
+                        //else if (cardEmployee == null)
+                        //{
+                        //    var ncparameters = new
+                        //    {
+                        //        OurCompanyID = 2,
+                        //        EmployeeID = cardEmployee?.EmployeeID,
+                        //        CardID = card.ID,
+                        //        CardTypeID = card.CardTypeID,
+                        //        CardStatusID = card.CardStatusID,
+                        //        CardNumber = model.CardNumber,
+                        //        RecordDate = DateTime.UtcNow.AddHours(3)
+                        //    };
+                        //    var csql = "INSERT INTO [dbo].[EmployeeCard] ([OurCompanyID],[EmployeeID],[CardID],[CardTypeID],[CardStatusID],[CardNumber],[RecordDate]) VALUES(@OurCompanyID, @EmployeeID, @CardID, @CardTypeID, @CardStatusID, @CardNumber,@RecordDate)";
+                        //    connection.Execute(csql, ncparameters);
 
-                            result.IsSuccess = false;
-                            result.Message = "EDIT CRD";
-                        }
+                        //    result.IsSuccess = false;
+                        //    result.Message = "EDIT CRD";
+                        //}
                         else
                         {
-                            result.IsSuccess = false;
+                            result.IsSuccess = true;
                             result.Message = "NOTFOUND";
                         }
 
@@ -448,12 +466,12 @@ namespace ActionForce.CardService
             }
         }
 
-        public Card GetCard(string Number, short TypeId)
+        public Card GetCard(string Number)
         {
             using (var connection = new SqlConnection(GetConnectionString()))
             {
-                var Parameters = new { Number, TypeId };
-                var sql = "SELECT TOP (1) * FROM [dbo].[Card] Where [CardNumber] = @Number and [CardTypeID] = @TypeId";
+                var Parameters = new { Number };
+                var sql = "SELECT TOP (1) * FROM [dbo].[VCard] Where [CardNumber] = @Number";
                 return connection.QueryFirstOrDefault<Card>(sql, Parameters);
             }
         }
@@ -478,17 +496,28 @@ namespace ActionForce.CardService
 
             try
             {
-                var card = GetCard(load.CardNumber, 0);
+                var card = GetCard(load.CardNumber);
                 var cardReader = GetCardReader(load.SerialNumber, load.MACAddress);
 
                 using (var connection = new SqlConnection(GetConnectionString()))
                 {
 
+                    if (load.CardActionTypeID == 5) // kart resetleme işlemi
+                    {
+
+                        var caParameters = new { CardNumber = load.CardNumber };
+                        //var caSql = "UPDATE [dbo].[CardActions] SET [CreditCharge] = @RefundCredit, [ActionDateUpdate] = @Date, [ActionTypeID] = @ActionTypeID  WHERE [ProcessID] = @CardReaderActionID and [ActionTypeID] = 2 and [CardNumber] = @CardNumber and [CardReaderID] = @CardReaderID ";
+                        var caSql = "Exec [dbo].[ResetCard] @CardNumber";
+                        connection.Query(caSql, caParameters);
+
+                    }
+
                     if (load.CardActionTypeID == 4) // kontür iade işlemi
                     {
 
-                        var caParameters = new { Date = now, RefundCredit = load.RefundCredit, CardReaderActionID = load.CardReaderActionID, ActionTypeID = load.CardActionTypeID, CardNumber = load.CardNumber, CardReaderID = cardReader.ID };
-                        var caSql = "UPDATE [dbo].[CardActions] SET [CreditCharge] = @RefundCredit, [ActionDateUpdate] = @Date, [ActionTypeID] = @ActionTypeID  WHERE [ProcessID] = @CardReaderActionID and [ActionTypeID] = 2 and [CardNumber] = @CardNumber and [CardReaderID] = @CardReaderID ";
+                        var caParameters = new { Date = now, RefundCredit = load.RefundCredit, CardReaderActionID = load.CardReaderActionID, ActionTypeID = load.CardActionTypeID, CardNumber = load.CardNumber, CardReaderID = cardReader.ID, CardActionID = load.CardActionID };
+                        //var caSql = "UPDATE [dbo].[CardActions] SET [CreditCharge] = @RefundCredit, [ActionDateUpdate] = @Date, [ActionTypeID] = @ActionTypeID  WHERE [ProcessID] = @CardReaderActionID and [ActionTypeID] = 2 and [CardNumber] = @CardNumber and [CardReaderID] = @CardReaderID ";
+                        var caSql = "UPDATE [dbo].[CardActions] SET [CreditCharge] = @RefundCredit, [ActionDateUpdate] = @Date, [ActionTypeID] = @ActionTypeID, [ActionTypeName] = 'Kredi İade'  WHERE [ID] = @CardActionID ";
                         connection.Execute(caSql, caParameters);
 
                     }
@@ -602,10 +631,11 @@ namespace ActionForce.CardService
                     }
 
                     // kartın bakiyesi güncellenir.
+                    SetCardBalance(card.CardNumber, load.FinalCredit);
 
-                    var cuparameters = new { ID = card.ID, Balance = load.FinalCredit };
-                    var cusql = "Update [dbo].[Card] Set [Credit] = @Balance Where [ID] = @ID";
-                    connection.Execute(cusql, cuparameters);
+                    //var cuparameters = new { CardNumber = card.CardNumber, Credit = load.FinalCredit };
+                    //var cusql = "Exec [dbo].[AddEditCard] @CardNumber,  @Credit";
+                    //connection.Query(cusql, cuparameters);
 
                     // yüklenme bölümü onaylanır.
 
@@ -624,6 +654,16 @@ namespace ActionForce.CardService
             }
 
             return result;
+        }
+
+        public void SetCardBalance(string CardNumber, double? Credit)
+        {
+            using (var connection = new SqlConnection(GetConnectionString()))
+            {
+                var cuparameters = new { CardNumber, Credit };
+                var cusql = "Exec [dbo].[AddEditCard] @CardNumber,  @Credit";
+                connection.Query(cusql, cuparameters);
+            }
         }
     }
 }

@@ -54,7 +54,7 @@ namespace ActionForce.PosLocation.Controllers
                 int process = Convert.ToInt32(cardinfolist[2]);
                 model.Process = process;
 
-                model.CardComments = Db.AddCardComment(model.Authentication.CurrentLocation.ID, process, cardinfo, DateTime.UtcNow.AddHours(3)).ToList();
+                //model.CardComments = Db.AddCardComment(model.Authentication.CurrentLocation.ID, process, cardinfo, DateTime.UtcNow.AddHours(3)).ToList();
 
                 if (process == 1) // Müşteri Kartı Okunma bölümü //00119D9B;CC:50:E3:11:9D:9B;1;4528C2F3;1;100
                 {
@@ -128,11 +128,18 @@ namespace ActionForce.PosLocation.Controllers
 
                     model.Card = Db.AddEditCard(cardno, 0).FirstOrDefault();
 
+                    if (model.Card.CardTypeID != 2)
+                    {
+                        Db.SetCardType(cardno, 2);
+
+                        model.Card = Db.VCard.FirstOrDefault(x => x.CardNumber == cardno);
+                    }
+
                     model.EmployeeModel = null;
 
                     if (model.Card != null && model.Card.CardTypeID == 2 && model.Card.CardStatusID == 1)
                     {
-                        model.Card = Db.VCard.FirstOrDefault(x => x.CardNumber == cardno);
+                       // model.Card = Db.VCard.FirstOrDefault(x => x.CardNumber == cardno);
 
                         if (setupconfig == "254")
                         {
@@ -362,7 +369,6 @@ namespace ActionForce.PosLocation.Controllers
             return View(model);
         }
 
-
         public string EmployeeShiftStart(int locationid, int employeeid)
         {
             CardControlModel model = new CardControlModel();
@@ -479,7 +485,6 @@ namespace ActionForce.PosLocation.Controllers
             return result.Message;
         }
 
-        //MakePersonelCardUpdate
         [HttpPost]
         public ActionResult MakePersonelCardUpdate(string comment, string CardNumber, int? EmployeeID)
         {
@@ -519,5 +524,40 @@ namespace ActionForce.PosLocation.Controllers
             return RedirectToAction("Index", new { cardinfo = comment });
         }
 
+
+        //CardReader
+        public ActionResult CardReader()
+        {
+
+            CardControlModel model = new CardControlModel();
+            model.Authentication = this.AuthenticationData;
+            PosManager manager = new PosManager();
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            model.CardTypes = Db.CardType.Where(x => x.IsActive == true).ToList();
+
+            model.CardReaderTypes = Db.CardReaderType.Where(x => x.IsActive == true).ToList();
+            var locationparts = Db.GetLocationPartList(model.Authentication.CurrentLocation.ID).ToList();
+
+            model.LocationParts = locationparts.Select(x => new LocationPart()
+            {
+                LocationID = x.LocationID.Value,
+                LocationTypeID = x.LocationTypeID,
+                PartID = x.PartID,
+                FinishDate = x.FinishDate,
+                PartName = x.PartName,
+                StartDate = x.StartDate
+            }).ToList();
+
+            model.CardReaders = Db.CardReader.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID).ToList();
+
+            model.NFCCardLogs = Db.NFCCardLog.Where(x => x.Message.Contains(";86;0")).OrderByDescending(x => x.RecordDate).Take(10).ToList();
+
+            return View(model);
+        }
     }
 }

@@ -158,6 +158,9 @@
     <Compile Include="CardActions.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="CardActionsHistory.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="CardActionType.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -177,6 +180,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="CardReaderAction.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CardReaderActionHistory.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="CardReaderParameter.cs">
@@ -488,6 +494,9 @@
     <Compile Include="GetLocationMallMotoColors_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetLocationPartList_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="GetLocationSaleBalanceToday_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -652,6 +661,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ModelActionForce.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="NFCCardLog.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="OurCompany.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>

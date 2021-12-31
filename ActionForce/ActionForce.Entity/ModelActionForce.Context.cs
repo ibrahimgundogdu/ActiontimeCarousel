@@ -362,6 +362,9 @@ namespace ActionForce.Entity
         public virtual DbSet<VDocumentsAllSummaryRevenue> VDocumentsAllSummaryRevenue { get; set; }
         public virtual DbSet<EmployeeCard> EmployeeCard { get; set; }
         public virtual DbSet<CardCredit> CardCredit { get; set; }
+        public virtual DbSet<CardActionsHistory> CardActionsHistory { get; set; }
+        public virtual DbSet<CardReaderActionHistory> CardReaderActionHistory { get; set; }
+        public virtual DbSet<NFCCardLog> NFCCardLog { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -2858,6 +2861,37 @@ namespace ActionForce.Entity
                 new ObjectParameter("Credit", typeof(double));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<VCard>("AddEditCard", mergeOption, cardNumberParameter, creditParameter);
+        }
+    
+        public virtual int SetCardType(string cardNumber, Nullable<short> cardTypeID)
+        {
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            var cardTypeIDParameter = cardTypeID.HasValue ?
+                new ObjectParameter("CardTypeID", cardTypeID) :
+                new ObjectParameter("CardTypeID", typeof(short));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetCardType", cardNumberParameter, cardTypeIDParameter);
+        }
+    
+        public virtual int ResetCard(string cardNumber)
+        {
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ResetCard", cardNumberParameter);
+        }
+    
+        public virtual ObjectResult<GetLocationPartList_Result> GetLocationPartList(Nullable<int> locationID)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationPartList_Result>("GetLocationPartList", locationIDParameter);
         }
     }
 }

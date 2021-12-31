@@ -33,5 +33,12 @@ namespace ActionForce.PosLocation
         public List<DataEmployee> Employees { get; set; }
         public EmployeeCard EmployeeCard { get; set; }
         public int Process { get; set; }
+
+        public List<CardReaderType> CardReaderTypes { get; set; }
+        public List<LocationPart> LocationParts { get; set; }
+        public List<CardReader> CardReaders { get; set; }
+        public List<NFCCardLog> NFCCardLogs { get; set; }
+
+
     }
 }

@@ -11,7 +11,7 @@ namespace ActionForce.PosLocation
         public TicketSale TicketSale { get; set; }
         public List<TicketSaleRows> TicketSaleRow { get; set; }
         public List<TicketSalePosPayment> TicketSalePosPayments { get; set; }
-        public Card Card { get; set; }
+        public VCard Card { get; set; }
         public VCardActions CardAction { get; set; }
         public CardReader CardReader { get; set; }
         public TicketSaleCreditLoad CreditLoad { get; set; }
