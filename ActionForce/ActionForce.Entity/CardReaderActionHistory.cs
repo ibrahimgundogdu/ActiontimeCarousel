@@ -29,5 +29,7 @@ namespace ActionForce.Entity
         public Nullable<int> LocationID { get; set; }
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
+        public Nullable<int> EmployeeID { get; set; }
+        public Nullable<short> CardTypeID { get; set; }
     }
 }

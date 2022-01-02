@@ -260,7 +260,14 @@ namespace ActionForce.Office
 
                     if (datekey.DayName == "Saturday" || datekey.DayName == "Sunday")
                     {
-                        filterDate = db.DateList.FirstOrDefault(x => x.Year == datekey.Year && x.WeekNumber == datekey.WeekNumber && x.DayName == "Friday").DateKey;
+                        try
+                        {
+                            filterDate = db.DateList.FirstOrDefault(x => x.Year == datekey.Year && x.WeekNumber == datekey.WeekNumber && x.DayName == "Friday").DateKey;
+                        }
+                        catch (Exception)
+                        {
+                            GetExchange(date.AddDays(-1).Date);
+                        }
                     }
 
                     TCMBClient tcmbClient = new TCMBClient();

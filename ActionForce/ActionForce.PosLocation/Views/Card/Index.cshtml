@@ -182,9 +182,9 @@
                                                     <div class="item-content item-content-2">
                                                         <ul>
                                                             <li><a href="javascript:;" onclick="StartShift(@(Model.Employee?.EmployeeID ?? 0),@(Model.Authentication.CurrentLocation.ID))"><span>Mesai Başlat</span></a></li>
+                                                            <li><a href="javascript:;" onclick="StartBreak(@(Model.Employee?.EmployeeID ?? 0),@(Model.Authentication.CurrentLocation.ID))" style="background-color: darkorange !important;"><span>Mola Başlat</span></a></li>
+                                                            <li><a href="javascript:;" onclick="EndBreak(@(Model.Employee?.EmployeeID ?? 0),@(Model.Authentication.CurrentLocation.ID))" style="background-color: darkorange !important;"><span>Mola Bitir</span></a></li>
                                                             <li><a href="javascript:;" onclick="EndShift(@(Model.Employee?.EmployeeID ?? 0),@(Model.Authentication.CurrentLocation.ID))"><span>Mesai Bitir</span></a></li>
-                                                            <li><a href="javascript:;" onclick="StartBreak(@(Model.Employee?.EmployeeID ?? 0),@(Model.Authentication.CurrentLocation.ID))"><span>Mola Başlat</span></a></li>
-                                                            <li><a href="javascript:;" onclick="EndBreak(@(Model.Employee?.EmployeeID ?? 0),@(Model.Authentication.CurrentLocation.ID))"><span>Mola Bitir</span></a></li>
 
                                                         </ul>
                                                     </div>

@@ -95,7 +95,7 @@ namespace ActionForce.Service
 
                     if (datekey.DayName == "Saturday" || datekey.DayName == "Sunday")
                     {
-                        filterDate = db.DateList.FirstOrDefault(x => x.Year == datekey.Year && x.WeekNumber == datekey.WeekNumber && x.DayName == "Friday").DateKey;
+                        filterDate = db.DateList.FirstOrDefault(x => x.WeekKey == datekey.WeekKey && x.DayName == "Friday").DateKey;
                     }
 
                     TCMBClient tcmbClient = new TCMBClient();

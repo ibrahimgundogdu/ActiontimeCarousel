@@ -390,6 +390,8 @@
     <Content Include="Views\CardAction\CardReset.cshtml" />
     <Content Include="Views\CardAction\ResetResult.cshtml" />
     <Content Include="Views\Card\CardReader.cshtml" />
+    <Content Include="Views\Sales\_PartialTicketSale.cshtml" />
+    <Content Include="Views\Sales\_PartialCardSale.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

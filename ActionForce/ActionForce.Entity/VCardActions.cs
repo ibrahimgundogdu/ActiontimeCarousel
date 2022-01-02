@@ -44,5 +44,8 @@ namespace ActionForce.Entity
         public string LocationFullName { get; set; }
         public Nullable<System.DateTime> DateOnly { get; set; }
         public Nullable<System.DateTime> ActionDateUpdate { get; set; }
+        public Nullable<int> EmployeeID { get; set; }
+        public string EmployeeFullName { get; set; }
+        public double SaleRowTotal { get; set; }
     }
 }

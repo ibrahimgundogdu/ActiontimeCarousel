@@ -34,5 +34,7 @@ namespace ActionForce.Entity
         public string Currency { get; set; }
         public Nullable<bool> IsPromotion { get; set; }
         public Nullable<System.DateTime> ActionDateUpdate { get; set; }
+        public Nullable<short> CardTypeID { get; set; }
+        public Nullable<int> EmployeeID { get; set; }
     }
 }

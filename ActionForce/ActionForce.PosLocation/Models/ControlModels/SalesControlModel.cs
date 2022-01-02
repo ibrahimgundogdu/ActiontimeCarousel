@@ -50,5 +50,7 @@ namespace ActionForce.PosLocation
         public TicketSaleCreditLoad CreditLoad { get; set; }
         public List<TicketSaleCreditLoad> CreditLoads { get; set; }
         public List<CardActionType> CardActionTypes { get; set; }
+
+        public List<VCardActions> CardActions { get; set; }
     }
 }

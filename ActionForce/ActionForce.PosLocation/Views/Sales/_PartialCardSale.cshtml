@@ -1,0 +1,123 @@
+﻿@model SalesControlModel
+@{
+    var depozitosale = Model.CardActions.Where(x => x.ActionTypeID == 1).ToList();
+    var depozitorefund = Model.CardActions.Where(x => x.ActionTypeID == 5).ToList();
+
+    var customersale = Model.CardActions.Where(x => x.ActionTypeID == 3 && x.CardTypeID == 0 && x.IsPromotion == false).ToList();
+    var customersalepromo = Model.CardActions.Where(x => x.ActionTypeID == 3 && x.CardTypeID == 0 && x.IsPromotion == true).ToList();
+
+    var cashsale = Model.CardActions.Where(x => x.ActionTypeID == 3 && x.CardTypeID == 1).ToList();
+
+    var Totalsale = Model.CardActions.Where(x => new[] { 1,3}.ToList().Contains( (short)x.ActionTypeID ) && x.CardTypeID == 1).ToList();
+
+    var customeruse = Model.CardActions.Where(x => x.ActionTypeID == 2).ToList();
+
+}
+
+
+
+<table cellpadding="0" cellspacing="0" class="tickets-sales-cash">
+    <thead>
+        <tr>
+            <th colspan="2">Yükleme (Satış)</th>
+            <th>Kart Sayısı</th>
+            <th>İşlem Sayısı</th>
+            <th>Kontör</th>
+            <th>Ortalama</th>
+        </tr>
+    </thead>
+    <tr>
+        <td class="bg-credit">Müşteri</td>
+        <td class="bg-credit">Depozito</td>
+        <td class="bg-cash" style="text-align:right">@(depozitosale.Select(x=> x.CardNumber).Distinct().Count())</td>
+        <td class="bg-cash" style="text-align:right">@(depozitosale.Count)</td>
+        <td class="bg-cash" style="text-align:right">@(depozitosale.Sum(x=> x.SaleRowTotal))</td>
+        <td class="bg-cash" style="text-align:right">@( (depozitosale.Count / depozitosale.Sum(x => x.SaleRowTotal)).ToString("N2"))</td>
+    <tr>
+        <td class="bg-cash">Müşteri</td>
+        <td class="bg-cash">Kontör Satış</td>
+        <td class="bg-cash" style="text-align:right">@(customersale.Select(x => x.CardNumber).Distinct().Count())</td>
+        <td class="bg-cash" style="text-align:right">@(customersale.Count)</td>
+        <td class="bg-cash" style="text-align:right">@(customersale.Sum(x=> x.Credit))</td>
+        <td class="bg-cash" style="text-align:right">@( (customersale.Count / customersale.Sum(x => x.Credit)).ToString("N2"))</td>
+    </tr>
+    <tr>
+        <td class="bg-cash">Müşteri</td>
+        <td class="bg-cash">Promosyon</td>
+        <td class="bg-cash" style="text-align:right">@(customersalepromo.Select(x => x.CardNumber).Distinct().Count())</td>
+        <td class="bg-cash" style="text-align:right">@(customersalepromo.Count)</td>
+        <td class="bg-cash" style="text-align:right">@(customersalepromo.Sum(x=> x.Credit))</td>
+        <td class="bg-cash" style="text-align:right">@( (customersalepromo.Count / customersalepromo.Sum(x => x.Credit)).ToString("N2"))</td>
+    </tr>
+    <tr>
+        <td class="bg-cash">Kasa</td>
+        <td class="bg-cash">Kontör Satış</td>
+        <td class="bg-cash" style="text-align:right">@(cashsale.Select(x => x.CardNumber).Distinct().Count())</td>
+        <td class="bg-cash" style="text-align:right">@(cashsale.Count)</td>
+        <td class="bg-cash" style="text-align:right">@(cashsale.Sum(x=> x.Credit))</td>
+        <td class="bg-cash" style="text-align:right">@( (cashsale.Count / cashsale.Sum(x => x.Credit)).ToString("N2"))</td>
+    </tr>
+    <tr>
+        <td class="bg-cash">Toplam</td>
+        <td class="bg-cash">Satış</td>
+        <td class="bg-cash" style="text-align:right">@(Totalsale.Select(x => x.CardNumber).Distinct().Count())</td>
+        <td class="bg-cash" style="text-align:right">@(Totalsale.Count)</td>
+        <td class="bg-cash" style="text-align:right">@(Totalsale.Sum(x=> x.Credit))</td>
+        <td class="bg-cash" style="text-align:right">@( (Totalsale.Count / Totalsale.Sum(x => x.Credit)).ToString("N2"))</td>
+    </tr>
+
+</table>
+
+
+<table cellpadding="0" cellspacing="0" class="tickets-sales-cash">
+    <thead>
+        <tr>
+            <th colspan="2">Harcama (Kullanım)</th>
+            <th>Kart Sayısı</th>
+            <th>İşlem Sayısı</th>
+            <th>Kontör</th>
+            <th>Ortalama</th>
+        </tr>
+    </thead>
+    <tr>
+        <td class="bg-cash">Müşteri</td>
+        <td class="bg-cash">Depozito</td>
+        <td class="bg-cash" style="text-align:right">@(depozitosale.Select(x=> x.CardNumber).Distinct().Count())</td>
+        <td class="bg-cash" style="text-align:right">@(depozitosale.Count)</td>
+        <td class="bg-cash" style="text-align:right">@(depozitosale.Sum(x=> x.SaleRowTotal))</td>
+        <td class="bg-cash" style="text-align:right">@( (depozitosale.Count / depozitosale.Sum(x => x.SaleRowTotal)).ToString("N2"))</td>
+    </tr>
+    <tr>
+        <td class="bg-cash">Müşteri</td>
+        <td class="bg-cash">Kontör Satış</td>
+        <td class="bg-cash" style="text-align:right">30</td>
+        <td class="bg-cash" style="text-align:right">30</td>
+        <td class="bg-cash" style="text-align:right">150</td>
+        <td class="bg-cash" style="text-align:right">5</td>
+    </tr>
+    <tr>
+        <td class="bg-cash">Müşteri</td>
+        <td class="bg-cash">Promosyon</td>
+        <td class="bg-cash" style="text-align:right">30</td>
+        <td class="bg-cash" style="text-align:right">30</td>
+        <td class="bg-cash" style="text-align:right">150</td>
+        <td class="bg-cash" style="text-align:right">5</td>
+    </tr>
+    <tr>
+        <td class="bg-cash">Kasa</td>
+        <td class="bg-cash">Kontör Satış</td>
+        <td class="bg-cash" style="text-align:right">30</td>
+        <td class="bg-cash" style="text-align:right">30</td>
+        <td class="bg-cash" style="text-align:right">150</td>
+        <td class="bg-cash" style="text-align:right">5</td>
+    </tr>
+    <tr>
+        <td class="bg-cash">Toplam</td>
+        <td class="bg-cash">Satış</td>
+        <td class="bg-cash" style="text-align:right">30</td>
+        <td class="bg-cash" style="text-align:right">30</td>
+        <td class="bg-cash" style="text-align:right">150</td>
+        <td class="bg-cash" style="text-align:right">5</td>
+    </tr>
+
+</table>
