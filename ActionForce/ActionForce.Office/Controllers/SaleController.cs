@@ -44,6 +44,25 @@ namespace ActionForce.Office.Controllers
                 List<long> saleIds = model.TicketSaleSummary.Select(x => x.ID).ToList();
                 model.TicketSaleSaleRows = Db.VTicketSaleSaleRowSummary.Where(x => saleIds.Contains(x.SaleID)).ToList();
                 model.DocumentExpenseSlips = Db.VDocumentExpenseSlip.Where(x => x.LocationID == model.Filters.LocationID && x.DocumentDate == model.Filters.Date && x.IsActive == true).ToList();
+                model.CardActions = Db.VCardActions.Where(x => x.LocationID == model.Filters.LocationID && x.DateOnly == model.Filters.Date).ToList();
+
+                List<int> employeeids = model.CardActions.Select(x => x.EmployeeID.Value).ToList();
+
+                model.Employees = Db.Employee.Where(x => employeeids.Contains(x.EmployeeID)).ToList();
+
+                var locationparts = Db.GetLocationPartList(model.Filters.LocationID).ToList();
+
+                model.LocationParts = locationparts.Select(x => new LocationPart()
+                {
+                    LocationID = x.LocationID.Value,
+                    LocationTypeID = x.LocationTypeID,
+                    PartID = x.PartID,
+                    FinishDate = x.FinishDate,
+                    PartName = x.PartName,
+                    StartDate = x.StartDate
+                }).ToList();
+
+
             }
             else
             {
@@ -243,6 +262,33 @@ namespace ActionForce.Office.Controllers
             }
 
             return RedirectToAction("Detail", new { id = id.ToString() });
+        }
+
+        [AllowAnonymous]
+        public ActionResult CheckLocationTicketSale(int LocationId, DateTime DocumentDate, string Source)
+        {
+            
+
+            SaleControlModel model = new SaleControlModel();
+            model.Result = new Result();
+
+            var sale = Db.TicketSale.Where(x => x.LocationID == LocationId && x.Date == DocumentDate).ToList();
+
+            int counter = 0;
+
+            foreach (var item in sale)
+            {
+                Db.CheckLocationPosTicketSale(item.ID);
+
+                counter++;
+            }
+
+            model.Result.IsSuccess = true;
+            model.Result.Message = $"{counter} adet sipariş kontrol edildi.";
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction(Source, new { LocationID = LocationId, Date = DocumentDate.ToString("yyyy-MM-dd") });
         }
 
         [AllowAnonymous]

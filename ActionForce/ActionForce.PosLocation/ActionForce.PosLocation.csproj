@@ -392,6 +392,7 @@
     <Content Include="Views\Card\CardReader.cshtml" />
     <Content Include="Views\Sales\_PartialTicketSale.cshtml" />
     <Content Include="Views\Sales\_PartialCardSale.cshtml" />
+    <Content Include="Views\Sales\Employee.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -219,6 +219,9 @@
                         </tr>
                     </tfoot>
                 </table>
+                <div>
+                    <a href="/Sale/CheckLocationTicketSale?LocationId=@(Model.Filters.LocationID)&DocumentDate=@(Model.Filters.Date?.ToString("yyyy-MM-dd"))&Source=SaleAction" class="btn btn-warning left">Kontrol Et</a>
+                </div>
             </div>
         }
         else

@@ -113,8 +113,6 @@ namespace ActionForce.PosLocation.Controllers
 
             try
             {
-
-
                 if (!string.IsNullOrEmpty(id))
                 {
                     DateTime.TryParse(id, out DocumentDate);
@@ -974,6 +972,48 @@ namespace ActionForce.PosLocation.Controllers
             TempData["Result"] = model.Result;
 
             return RedirectToAction("Detail", new { id = form.OrderID });
+        }
+
+        public ActionResult Employee(string id)
+        {
+            SalesControlModel model = new SalesControlModel();
+            model.Authentication = this.AuthenticationData;
+
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
+            DateTime DocumentDate = DateTime.UtcNow.AddHours(model.Authentication.CurrentLocation.TimeZone).Date;
+
+            if (!string.IsNullOrEmpty(id))
+            {
+                DateTime.TryParse(id, out DocumentDate);
+            }
+
+            model.DocumentDate = DocumentDate;
+
+            model.CardActions = Db.VCardActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.DateOnly == DocumentDate).ToList();
+
+            List<int> employeeids = model.CardActions.Select(x => x.EmployeeID.Value).ToList();
+
+            model.Employees = Db.Employee.Where(x => employeeids.Contains(x.EmployeeID)).ToList();
+
+            var locationparts = Db.GetLocationPartList(model.Authentication.CurrentLocation.ID).ToList();
+
+            model.LocationParts = locationparts.Select(x => new LocationPart()
+            {
+                LocationID = x.LocationID.Value,
+                LocationTypeID = x.LocationTypeID,
+                PartID = x.PartID,
+                FinishDate = x.FinishDate,
+                PartName = x.PartName,
+                StartDate = x.StartDate
+            }).ToList();
+
+
+
+            return View(model);
         }
     }
 }

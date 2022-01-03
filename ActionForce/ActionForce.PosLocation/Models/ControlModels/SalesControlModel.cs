@@ -52,5 +52,9 @@ namespace ActionForce.PosLocation
         public List<CardActionType> CardActionTypes { get; set; }
 
         public List<VCardActions> CardActions { get; set; }
+        public List<Employee> Employees { get; set; }
+
+        public List<LocationPart> LocationParts { get; set; }
+
     }
 }
