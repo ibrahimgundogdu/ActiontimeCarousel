@@ -42,12 +42,12 @@
                         <div class="col-lg-12">
 
                             <div class="form-group row mg-b-0">
-                                <label for="ActionTypeName" class="col-sm-3 col-form-label">İşlem Kategorisi</label>
+                                <label for="ActionTypeID" class="col-sm-3 col-form-label">İşlem Kategorisi</label>
                                 <div class="col-sm-6">
-                                    <select class="form-control" id="CategoryID" name="CategoryID">
-                                        @foreach (var item in Model.SalaryCategories)
+                                    <select class="form-control" id="ActionTypeID" name="ActionTypeID">
+                                        @foreach (var item in Model.CashActionTypes)
                                         {
-                                            <option value="@item.ID">@($"{item.SortBy} ({item.CategoryName})")</option>
+                                            <option value="@item.ID">@($"{item.SortBy} ({item.Name})")</option>
                                         }
                                     </select>
                                 </div>
@@ -83,7 +83,7 @@
                             <div class="form-group row bg-gray-50 font-weight-bold">
                                 <label for="EmployeeID" class="col-sm-3 col-form-label">Çalışan</label>
                                 <div class="col-sm-6">
-                                    <select class="form-control" id="EmployeeID" name="EmployeeID" required>
+                                    <select class="form-control select2" id="EmployeeID" name="EmployeeID" required>
                                         @foreach (var item in Model.EmployeeList)
                                         {
                                             <option value="@item.EmployeeID">@(Html.Raw($"{item.FullName} ({item.IsActive})"))</option>
@@ -97,12 +97,12 @@
                             
 
                              <div class="form-group row mg-b-5 bg-gray-50 font-weight-bold">
-                                <label for="DocumentNumber" class="col-sm-3 col-form-label">Tutar</label>
+                                <label for="Price" class="col-sm-3 col-form-label">Tutar</label>
                                 <div class="col-sm-6">
                                     <input id="Price" name="Price" type="text" class="form-control money" autocomplete="off" placeholder="Tutar" required>
+                                    <input id="Currency" name="Currency" type="hidden" value="TRL" />
                                 </div>
-                                <div class="col-sm-3">
-                                </div>
+                                <div class="col-sm-3">₺</div>
                             </div>
 
                           
@@ -144,8 +144,14 @@
 
         $(function () {
             'use strict'
-            $('.select2').select2({
+            $('#LocationID').select2({
                 placeholder: 'Lokasyon Seçiminiz',
+                searchInputPlaceholder: 'Search options',
+                allowClear: true
+            });
+
+            $('#EmployeeID').select2({
+                placeholder: 'Çalışan Seçiminiz',
                 searchInputPlaceholder: 'Search options',
                 allowClear: true
             });

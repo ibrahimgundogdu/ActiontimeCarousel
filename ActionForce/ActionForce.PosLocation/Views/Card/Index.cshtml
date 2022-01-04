@@ -126,7 +126,7 @@
                                             {
                                                 <div class="item-content item-content-1">
                                                     <ul>
-                                                        @foreach (var item in Model.PriceList.Where(x => x.ProductID == 3 && x.IsBase != true).OrderByDescending(x => x.TotalCredit).ToList())
+                                                        @foreach (var item in Model.PriceList.Where(x => x.ProductID == 3).OrderByDescending(x => x.TotalCredit).ToList())  //&& x.IsBase != true
                                                         {
                                                             <li><a href="javascript:;" onclick="AddBasket(@(item.ID),@(cardPriceID),0)">@(item.TotalCredit) Kontör <span>@(item.Price.ToString("N2")) ₺</span></a></li>
                                                         }

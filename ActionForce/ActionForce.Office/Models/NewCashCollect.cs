@@ -309,16 +309,18 @@ namespace ActionForce.Office
     public class NewSalaryEarn
     {
         public int ActinTypeID { get; set; }
+        public int ActionTypeID { get; set; }
         public float UnitPrice { get; set; }
         public float QuantityHour { get; set; }
         public string TotalAmount { get; set; }
         public int LocationID { get; set; }
-        public string EmployeeID { get; set; }
+        public int? EmployeeID { get; set; }
         public string Currency { get; set; }
         public string DocumentDate { get; set; }
         public string Description { get; set; }
         public string ExchangeRate { get; set; }
         public string Exchange { get; set; }
+        public string Price { get; set; }
         public long? ReferanceID { get; set; }
         public int? CategoryID { get; set; }
         public Guid UID { get; set; }

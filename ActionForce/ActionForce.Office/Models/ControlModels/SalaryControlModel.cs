@@ -19,6 +19,7 @@ namespace ActionForce.Office
         public IEnumerable<PermitStatus> PermitStatus { get; set; }
 
         public IEnumerable<SalaryCategory> SalaryCategories { get; set; }
+        public IEnumerable<CashActionType> CashActionTypes { get; set; }
         public IEnumerable<SalaryType> SalaryTypes { get; set; }
         public IEnumerable<Cash> CashList { get; set; }
         public IEnumerable<Location> LocationList { get; set; }

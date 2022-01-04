@@ -56,7 +56,10 @@ namespace ActionForce.Office.Controllers
         {
             SalaryControlModel model = new SalaryControlModel();
 
-            model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 1 && x.IsActive == true && x.IsAutoCompute == false).OrderBy(x=> x.SortBy).ToList();
+            var actypes = new[] { 43, 44, 45, 46 };
+
+            model.CashActionTypes = Db.CashActionType.Where(x => actypes.Contains(x.ID) && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderBy(x => x.FullName).ToList();
 
@@ -103,27 +106,26 @@ namespace ActionForce.Office.Controllers
 
             if (cashSalary != null)
             {
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSalary.ActinTypeID);
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == cashSalary.ActionTypeID);
 
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashSalary.LocationID);
                 var ourcompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == location.OurCompanyID);
-                var fromPrefix = cashSalary.EmployeeID.Substring(0, 1);
-                var fromID = Convert.ToInt32(cashSalary.EmployeeID.Substring(1, cashSalary.EmployeeID.Length - 1));
 
-
-                var currency = cashSalary.Currency;
-                var docDate = DateTime.Now.Date;
                 int timezone = location.Timezone != null ? location.Timezone.Value : ourcompany.TimeZone.Value;
+                var currency = cashSalary.Currency;
+                var docDate = DateTime.UtcNow.AddHours(timezone).Date;
 
                 if (DateTime.TryParse(cashSalary.DocumentDate, out docDate))
                 {
                     docDate = Convert.ToDateTime(cashSalary.DocumentDate).Date;
                 }
                 var cash = OfficeHelper.GetCash(cashSalary.LocationID, cashSalary.Currency);
+
                 // tahsilat eklenir.
                 double? quantity = cashSalary.QuantityHour;
-                double? price = cashSalary.UnitPrice;
-                if (quantity > 0 && price > 0)
+                double? price = Convert.ToDouble(cashSalary.Price.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
+                if (price != null && price > 0)
                 {
                     SalaryEarn earn = new SalaryEarn();
 
@@ -132,11 +134,11 @@ namespace ActionForce.Office.Controllers
                     earn.Currency = cashSalary.Currency;
                     earn.Description = cashSalary.Description;
                     earn.DocumentDate = docDate;
-                    earn.EmployeeID = fromID;
+                    earn.EmployeeID = cashSalary.EmployeeID;
                     earn.EnvironmentID = 2;
                     earn.LocationID = location.LocationID;
                     earn.QuantityHour = quantity;
-                    //earn.TotalAmount = (double)((double)cashSalary.QuantityHour * (double?)cashSalary.UnitPrice);
+                    earn.TotalAmount = (double)(price);
                     earn.UID = Guid.NewGuid();
                     //earn.UnitPrice = (double?)cashSalary.UnitPrice;
                     earn.TimeZone = location.Timezone;
@@ -146,11 +148,59 @@ namespace ActionForce.Office.Controllers
                     //earn.SystemTotalAmount = earn.TotalAmount;
                     //earn.SystemUnitPrice = earn.UnitPrice;
 
-                    DocumentManager documentManager = new DocumentManager();
-                    var addresult = documentManager.AddSalaryEarn(earn, model.Authentication);
+                    var dayresult = Db.DayResult.FirstOrDefault(x => x.LocationID == earn.LocationID && x.Date == earn.DocumentDate);
 
-                    result.IsSuccess = addresult.IsSuccess;
-                    result.Message = addresult.Message;
+                    var salaryEarnEx = Db.DocumentSalaryEarn.FirstOrDefault(x => x.LocationID == earn.LocationID && x.EmployeeID == earn.EmployeeID && x.Date == earn.DocumentDate && x.ActionTypeID == earn.ActionTypeID && x.TotalAmount == earn.TotalAmount);
+
+                    if (salaryEarnEx == null)
+                    {
+
+                        DocumentSalaryEarn salaryEarn = new DocumentSalaryEarn();
+
+                        salaryEarn.ActionTypeID = earn.ActionTypeID;
+                        salaryEarn.ActionTypeName = earn.ActionTypeName;
+                        salaryEarn.EmployeeID = earn.EmployeeID;
+                        salaryEarn.QuantityHour = 0;
+                        salaryEarn.UnitPrice = 0;
+                        salaryEarn.TotalAmount = earn.TotalAmount;
+                        salaryEarn.TotalAmountSalary = earn.TotalAmount;
+                        salaryEarn.UnitPriceMultiplierApplied = 1;
+
+                        salaryEarn.Currency = earn.Currency;
+                        salaryEarn.Date = earn.DocumentDate;
+                        salaryEarn.Description = earn.Description;
+                        salaryEarn.DocumentNumber = OfficeHelper.GetDocumentNumber(earn.OurCompanyID, "SE");
+                        salaryEarn.IsActive = true;
+                        salaryEarn.LocationID = earn.LocationID;
+                        salaryEarn.OurCompanyID = earn.OurCompanyID;
+                        salaryEarn.RecordDate = DateTime.UtcNow.AddHours(earn.TimeZone.Value);
+                        salaryEarn.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                        salaryEarn.RecordIP = OfficeHelper.GetIPAddress();
+                        salaryEarn.UID = earn.UID;
+                        salaryEarn.EnvironmentID = earn.EnvironmentID;
+                        //salaryEarn.ReferenceID = salary.ReferanceID;
+                        salaryEarn.ResultID = dayresult?.ID ?? 0;
+                        salaryEarn.SystemQuantityHour = 0;
+                        salaryEarn.SystemTotalAmount = earn.TotalAmount;
+                        salaryEarn.SystemUnitPrice = earn.TotalAmount;
+                        //salaryEarn.CategoryID = salary.CategoryID;
+
+                        salaryEarn.UnitFoodPrice = 0;
+                        salaryEarn.QuantityHourSalary = 1;
+                        salaryEarn.QuantityHourFood = 0;
+
+                        Db.DocumentSalaryEarn.Add(salaryEarn);
+                        Db.SaveChanges();
+
+                        // cari hesap işlemesi
+                        OfficeHelper.AddEmployeeAction(salaryEarn.EmployeeID, salaryEarn.LocationID, salaryEarn.ActionTypeID, salaryEarn.ActionTypeName, salaryEarn.ID, salaryEarn.Date, salaryEarn.Description, 1, salaryEarn.TotalAmountSalary, 0, salaryEarn.Currency, null, null, null, salaryEarn.RecordEmployeeID, salaryEarn.RecordDate, salaryEarn.UID.Value, salaryEarn.DocumentNumber, 3);
+
+                        result.IsSuccess = true;
+                        result.Message = "Ücret Hakediş başarı ile eklendi";
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", salaryEarn.ID.ToString(), "Salary", "Index", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(earn.TimeZone.Value), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, salaryEarn);
+                    }
 
                 }
                 else
