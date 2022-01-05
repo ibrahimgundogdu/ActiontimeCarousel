@@ -2783,6 +2783,7 @@
     <Content Include="Views\Sale\SaleAction.cshtml" />
     <Content Include="Views\Bank\BankTransfer.cshtml" />
     <Content Include="Views\Salary\SalaryResult.cshtml" />
+    <Content Include="Views\Salary\ReportView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

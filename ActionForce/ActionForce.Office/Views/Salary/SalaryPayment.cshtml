@@ -37,26 +37,35 @@
     @using (Html.BeginForm("FilterSalary", "Salary", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
-        <div class="form-row align-items-end">
-            <div class="form-group col-md-3 d-flex align-items-end">
-                <select class="form-control select2" id="locationId" name="locationId">
-                    <option value="" label="Lokasyon Seçiminiz"></option>
-                    @foreach (var item in Model.LocationList)
-                    {
-                        <option value="@item.LocationID" @(Model.Filters.LocationID == item.LocationID ? "selected" : "")>@(Html.Raw($"<strong>{item.SortBy}</strong> {item.LocationName} {item.Description} {item.State}"))</option>
-                    }
-                </select>
-            </div>
-            <div class="form-group col-md-2 d-flex align-items-end">
-                <input type="text" id="dateFrom" name="beginDate" class="form-control" autocomplete="off" placeholder="Başlangıç Tarihi" value="@(Model.Filters.DateBegin.Value.ToString("yyyy-MM-dd"))">
-            </div>
-            <div class="form-group col-md-2 d-flex align-items-end">
-                <input type="text" id="dateTo" name="endDate" class="form-control" autocomplete="off" placeholder="Bitiş Tarihi" value="@(Model.Filters.DateEnd.Value.ToString("yyyy-MM-dd"))">
-            </div>
-            <div class="form-group col-md-1 d-flex align-items-end ">
-                <button class="btn btn-primary" type="submit" id="btnsearch">Ara</button>
-            </div>
-        </div>
+<div class="form-row align-items-end">
+    <div class="form-group col-md-3 d-flex align-items-end">
+        <select class="form-control select2" id="LocationID" name="LocationID">
+            <option value="" label="Lokasyon Seçiminiz"></option>
+            @foreach (var item in Model.LocationList)
+            {
+                <option value="@item.LocationID" @(Model.Filters.LocationID == item.LocationID ? "selected" : "")>@(Html.Raw($"<strong>{item.SortBy}</strong> {item.LocationName} {item.Description} {item.State}"))</option>
+            }
+        </select>
+    </div>
+    <div class="form-group col-md-3 d-flex align-items-end">
+        <select class="form-control select2" id="EmployeeID" name="EmployeeID">
+            <option value="" label="Personel Seçiminiz"></option>
+            @foreach (var item in Model.EmployeeList)
+            {
+                <option value="@item.EmployeeID" @(Model.Filters.EmployeeID == item.EmployeeID ? "selected" : "")>@(Html.Raw($"<strong>{item.EmployeeID}</strong> {item.FullName}"))</option>
+            }
+        </select>
+    </div>
+    <div class="form-group col-md-2 d-flex align-items-end">
+        <input type="text" id="DateBegin" name="DateBegin" class="form-control" autocomplete="off" placeholder="Başlangıç Tarihi" value="@(Model.Filters.DateBegin.Value.ToString("yyyy-MM-dd"))">
+    </div>
+    <div class="form-group col-md-2 d-flex align-items-end">
+        <input type="text" id="DateEnd" name="DateEnd" class="form-control" autocomplete="off" placeholder="Bitiş Tarihi" value="@(Model.Filters.DateEnd.Value.ToString("yyyy-MM-dd"))">
+    </div>
+    <div class="form-group col-md-1 d-flex align-items-end ">
+        <button class="btn btn-primary" type="submit" id="btnsearch">Ara</button>
+    </div>
+</div>
 
     }
 
@@ -127,13 +136,20 @@
     <script>
         $(function () {
 
-            $('.select2').select2({
+            $('#LocationID').select2({
                 placeholder: 'Lokasyon Seçiminiz',
-                searchInputPlaceholder: 'Search options'
+                searchInputPlaceholder: 'Search options',
+                allowClear: true
+            });
+
+            $('#EmployeeID').select2({
+                placeholder: 'Personel Seçiminiz',
+                searchInputPlaceholder: 'Search options',
+                allowClear: true
             });
 
             var dateFormat = 'yy-mm-dd',
-                from = $('#dateFrom')
+                from = $('#DateBegin')
                     .datepicker({
                         defaultDate: '+1w',
                         numberOfMonths: 2,
@@ -145,7 +161,7 @@
                     .on('change', function () {
                         to.datepicker('option', 'minDate', getDate(this));
                     }),
-                to = $('#dateTo').datepicker({
+                to = $('#DateEnd').datepicker({
                     defaultDate: '+1w',
                     numberOfMonths: 2,
                     dateFormat: "yy-mm-dd",

@@ -12,7 +12,7 @@ namespace ActionForce.Office.Controllers
     {
         // GET: Salary
         [AllowAnonymous]
-        public ActionResult Index(int? locationId)
+        public ActionResult Index(int? LocationID, int? EmployeeID, DateTime? DateBegin, DateTime? DateEnd)
         {
             SalaryControlModel model = new SalaryControlModel();
 
@@ -29,23 +29,34 @@ namespace ActionForce.Office.Controllers
             {
                 FilterModel filterModel = new FilterModel();
 
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
+                filterModel.LocationID = LocationID ?? 0;
+                filterModel.EmployeeID = EmployeeID ?? 0;
+                filterModel.DateBegin = DateBegin != null ? DateBegin : DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateEnd != null ? DateEnd : DateTime.Now.Date;
                 model.Filters = filterModel;
             }
+
             model.BankAccountList = Db.VBankAccount.ToList();
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 1 && x.IsActive == true).ToList();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
             model.UnitPrice = Db.EmployeeSalary.ToList();
             model.SalaryEarn = Db.VDocumentSalaryEarn.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            
             if (model.Filters.LocationID > 0)
             {
                 model.SalaryEarn = model.SalaryEarn.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-
             }
+
+            if (model.Filters.EmployeeID > 0)
+            {
+                model.SalaryEarn = model.SalaryEarn.Where(x => x.EmployeeID == model.Filters.EmployeeID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            }
+
             model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
 
             return View(model);
@@ -68,25 +79,27 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult Filter(int? locationId, DateTime? beginDate, DateTime? endDate)
+        public ActionResult Filter(int? LocationID, int? EmployeeID, DateTime? DateBegin, DateTime? DateEnd)
         {
             FilterModel model = new FilterModel();
 
-            model.LocationID = locationId;
-            model.DateBegin = beginDate;
-            model.DateEnd = endDate;
+            model.LocationID = LocationID;
+            model.EmployeeID = EmployeeID;
+            model.DateBegin = DateBegin;
+            model.DateEnd = DateEnd;
 
-            if (beginDate == null)
+            if (DateBegin == null)
             {
                 DateTime begin = DateTime.Now.AddMonths(-1).Date;
                 model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
             }
 
-            if (endDate == null)
+            if (DateEnd == null)
             {
                 model.DateEnd = DateTime.Now.Date;
             }
 
+           
             TempData["filter"] = model;
 
             return RedirectToAction("Index", "Salary");
@@ -324,7 +337,7 @@ namespace ActionForce.Office.Controllers
 
 
         [AllowAnonymous]
-        public ActionResult SalaryPayment(int? locationId)
+        public ActionResult SalaryPayment(int? LocationID, int? EmployeeID, DateTime? DateBegin, DateTime? DateEnd)
         {
             SalaryControlModel model = new SalaryControlModel();
 
@@ -341,8 +354,10 @@ namespace ActionForce.Office.Controllers
             {
                 FilterModel filterModel = new FilterModel();
 
-                filterModel.DateBegin = DateTime.Now.AddMonths(-1).Date;
-                filterModel.DateEnd = DateTime.Now.Date;
+                filterModel.LocationID = LocationID ?? 0;
+                filterModel.EmployeeID = EmployeeID ?? 0;
+                filterModel.DateBegin = DateBegin != null ? DateBegin : DateTime.Now.AddMonths(-1).Date;
+                filterModel.DateEnd = DateEnd != null ? DateEnd : DateTime.Now.Date;
                 model.Filters = filterModel;
             }
 
@@ -350,6 +365,7 @@ namespace ActionForce.Office.Controllers
             model.CurrencyList = OfficeHelper.GetCurrency();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
             model.UnitPrice = Db.EmployeeSalary.ToList();
             model.SalaryCategories = Db.SalaryCategory.Where(x => x.ParentID == 2 && x.IsActive == true).ToList();
@@ -360,6 +376,11 @@ namespace ActionForce.Office.Controllers
                 model.SalaryPayment = model.SalaryPayment.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
             }
 
+            if (model.Filters.EmployeeID > 0)
+            {
+                model.SalaryPayment = model.SalaryPayment.Where(x => x.ToEmployeeID == model.Filters.EmployeeID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
+            }
+
             model.FromList = OfficeHelper.GetFromList(model.Authentication.ActionEmployee.OurCompanyID.Value).Where(x => x.Prefix == "E").ToList();
 
             return View(model);
@@ -367,21 +388,22 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult FilterSalary(int? locationId, DateTime? beginDate, DateTime? endDate)
+        public ActionResult FilterSalary(int? LocationID, int? EmployeeID, DateTime? DateBegin, DateTime? DateEnd)
         {
             FilterModel model = new FilterModel();
 
-            model.LocationID = locationId;
-            model.DateBegin = beginDate;
-            model.DateEnd = endDate;
+            model.LocationID = LocationID;
+            model.EmployeeID = EmployeeID;
+            model.DateBegin = DateBegin;
+            model.DateEnd = DateEnd;
 
-            if (beginDate == null)
+            if (DateBegin == null)
             {
                 DateTime begin = DateTime.Now.AddMonths(-1).Date;
                 model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
             }
 
-            if (endDate == null)
+            if (DateEnd == null)
             {
                 model.DateEnd = DateTime.Now.Date;
             }
@@ -1490,6 +1512,12 @@ namespace ActionForce.Office.Controllers
         {
             SalaryControlModel model = new SalaryControlModel();
 
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID ))
+            {
+                return RedirectToAction("Index");
+            }
 
             if (TempData["filter"] != null)
             {
@@ -1545,7 +1573,8 @@ namespace ActionForce.Office.Controllers
                 FoodCardNumber = x.FoodCardNumber,
                 IBAN = x.IBAN,
                 IdentityNumber = x.IdentityNumber,
-                Currency = x.Currency
+                Currency = x.Currency,
+                MobilePhone = x.MobilePhone
             }).Distinct().ToList();
 
             var actiontypes = model.EmployeeActionList.Select(x => new { ID = x.ActionTypeID, Name = x.Name }).ToList();
@@ -1588,7 +1617,7 @@ namespace ActionForce.Office.Controllers
 
 
 
-
+            TempData["model"] = model;
 
 
             return View(model);
@@ -1619,6 +1648,46 @@ namespace ActionForce.Office.Controllers
             TempData["filter"] = model;
 
             return RedirectToAction("SalaryResult", "Salary");
+        }
+
+        [AllowAnonymous]
+        public void ExportData()
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (TempData["model"] != null)
+            {
+                model = TempData["model"] as SalaryControlModel;
+            }
+
+            Response.ClearContent();
+
+            Response.ContentType = "application/force-download";
+            Response.AddHeader("content-disposition",
+                "attachment; filename=" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
+            Response.Write("<html xmlns:x=\"urn:schemas-microsoft-com:office:excel\">");
+            Response.Write("<head>");
+            Response.Write("<META http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+            Response.Write("<!--[if gte mso 9]><xml>");
+            Response.Write("<x:ExcelWorkbook>");
+            Response.Write("<x:ExcelWorksheets>");
+            Response.Write("<x:ExcelWorksheet>");
+            Response.Write("<x:Name>Report Data</x:Name>");
+            Response.Write("<x:WorksheetOptions>");
+            Response.Write("<x:Print>");
+            Response.Write("<x:ValidPrinterInfo/>");
+            Response.Write("</x:Print>");
+            Response.Write("</x:WorksheetOptions>");
+            Response.Write("</x:ExcelWorksheet>");
+            Response.Write("</x:ExcelWorksheets>");
+            Response.Write("</x:ExcelWorkbook>");
+            Response.Write("</xml>");
+            Response.Write("<![endif]--> ");
+
+
+            View("~/Views/Salary/ReportView.cshtml", model).ExecuteResult(this.ControllerContext);
+            Response.Flush();
+            Response.End();
         }
     }
 }
