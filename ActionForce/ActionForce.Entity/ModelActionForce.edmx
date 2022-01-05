@@ -5787,6 +5787,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeCashActions' does 
             <PropertyRef Name="ID" />
             <PropertyRef Name="SalaryTypeName" />
             <PropertyRef Name="FromName" />
+            <PropertyRef Name="IBAN" />
+            <PropertyRef Name="IdentityNumber" />
+            <PropertyRef Name="BankCode" />
+            <PropertyRef Name="BankBranchCode" />
+            <PropertyRef Name="FoodCardNumber" />
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="LocationID" Type="int" />
@@ -5831,6 +5836,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeCashActions' does 
           <Property Name="UnitFoodPrice" Type="float" />
           <Property Name="TotalAmountFood" Type="float" />
           <Property Name="SystemUnitPrice" Type="float" />
+          <Property Name="IBAN" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="BankName" Type="nvarchar" MaxLength="80" />
+          <Property Name="IdentityNumber" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="BankCode" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="BankBranchCode" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="FoodCardNumber" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="MobilePhone" Type="nvarchar" MaxLength="59" />
+          <Property Name="CategoryID" Type="int" />
+          <Property Name="OurCompanyID" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeEmails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6019,6 +6033,29 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeLocationPosition' 
           <Property Name="EmployeeFullName" Type="nvarchar" MaxLength="150" />
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="PositionName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeModel' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VEmployeeModel">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="IBAN" />
+            <PropertyRef Name="BankCode" />
+            <PropertyRef Name="BankBranchCode" />
+            <PropertyRef Name="FoodCardNumber" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="EmployeeID" Type="int" Nullable="false" />
+          <Property Name="IdentityNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="IBAN" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="BankName" Type="nvarchar" MaxLength="80" />
+          <Property Name="BankCode" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="BankBranchCode" Type="varchar" MaxLength="1" Nullable="false" />
+          <Property Name="FoodCardNumber" Type="nvarchar" MaxLength="30" Nullable="false" />
+          <Property Name="MobilePhone" Type="nvarchar" MaxLength="59" />
+          <Property Name="OurCompanyID" Type="int" Nullable="false" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="20" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeePhones' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -9762,7 +9799,16 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeCashActions].[QuantityHourFood] AS [QuantityHourFood], 
     [VEmployeeCashActions].[UnitFoodPrice] AS [UnitFoodPrice], 
     [VEmployeeCashActions].[TotalAmountFood] AS [TotalAmountFood], 
-    [VEmployeeCashActions].[SystemUnitPrice] AS [SystemUnitPrice]
+    [VEmployeeCashActions].[SystemUnitPrice] AS [SystemUnitPrice], 
+    [VEmployeeCashActions].[IBAN] AS [IBAN], 
+    [VEmployeeCashActions].[BankName] AS [BankName], 
+    [VEmployeeCashActions].[IdentityNumber] AS [IdentityNumber], 
+    [VEmployeeCashActions].[BankCode] AS [BankCode], 
+    [VEmployeeCashActions].[BankBranchCode] AS [BankBranchCode], 
+    [VEmployeeCashActions].[FoodCardNumber] AS [FoodCardNumber], 
+    [VEmployeeCashActions].[MobilePhone] AS [MobilePhone], 
+    [VEmployeeCashActions].[CategoryID] AS [CategoryID], 
+    [VEmployeeCashActions].[OurCompanyID] AS [OurCompanyID]
     FROM [dbo].[VEmployeeCashActions] AS [VEmployeeCashActions]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VEmployeeEmails" EntityType="Self.VEmployeeEmails" store:Type="Views" store:Schema="dbo">
@@ -9929,6 +9975,21 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeLocationPosition].[LocationFullName] AS [LocationFullName], 
     [VEmployeeLocationPosition].[PositionName] AS [PositionName]
     FROM [dbo].[VEmployeeLocationPosition] AS [VEmployeeLocationPosition]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VEmployeeModel" EntityType="Self.VEmployeeModel" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VEmployeeModel].[EmployeeID] AS [EmployeeID], 
+    [VEmployeeModel].[IdentityNumber] AS [IdentityNumber], 
+    [VEmployeeModel].[FullName] AS [FullName], 
+    [VEmployeeModel].[IBAN] AS [IBAN], 
+    [VEmployeeModel].[BankName] AS [BankName], 
+    [VEmployeeModel].[BankCode] AS [BankCode], 
+    [VEmployeeModel].[BankBranchCode] AS [BankBranchCode], 
+    [VEmployeeModel].[FoodCardNumber] AS [FoodCardNumber], 
+    [VEmployeeModel].[MobilePhone] AS [MobilePhone], 
+    [VEmployeeModel].[OurCompanyID] AS [OurCompanyID], 
+    [VEmployeeModel].[Currency] AS [Currency]
+    FROM [dbo].[VEmployeeModel] AS [VEmployeeModel]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VEmployeePhones" EntityType="Self.VEmployeePhones" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -12120,6 +12181,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="LocationID" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="NFCCardLog" EntityType="db293_ActionTimeDbModel.NFCCardLog" />
+          <EntitySet Name="VEmployeeModel" EntityType="db293_ActionTimeDbModel.VEmployeeModel" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -15433,6 +15495,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <PropertyRef Name="ID" />
             <PropertyRef Name="SalaryTypeName" />
             <PropertyRef Name="FromName" />
+            <PropertyRef Name="IBAN" />
+            <PropertyRef Name="IdentityNumber" />
+            <PropertyRef Name="BankCode" />
+            <PropertyRef Name="BankBranchCode" />
+            <PropertyRef Name="FoodCardNumber" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="LocationID" Type="Int32" />
@@ -15477,6 +15544,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UnitFoodPrice" Type="Double" />
           <Property Name="TotalAmountFood" Type="Double" />
           <Property Name="SystemUnitPrice" Type="Double" />
+          <Property Name="IBAN" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="BankName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="IdentityNumber" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="BankCode" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="BankBranchCode" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="FoodCardNumber" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="MobilePhone" Type="String" MaxLength="59" FixedLength="false" Unicode="true" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="OurCompanyID" Type="Int32" />
         </EntityType>
         <EntityType Name="VDayResultDocuments">
           <Key>
@@ -20154,6 +20230,27 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ResponseMessage" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
         </EntityType>
+        <EntityType Name="VEmployeeModel">
+          <Key>
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="IBAN" />
+            <PropertyRef Name="BankCode" />
+            <PropertyRef Name="BankBranchCode" />
+            <PropertyRef Name="FoodCardNumber" />
+            <PropertyRef Name="OurCompanyID" />
+          </Key>
+          <Property Name="EmployeeID" Type="Int32" Nullable="false" />
+          <Property Name="IdentityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IBAN" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="BankName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="BankCode" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="BankBranchCode" Type="String" Nullable="false" MaxLength="1" FixedLength="false" Unicode="false" />
+          <Property Name="FoodCardNumber" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="MobilePhone" Type="String" MaxLength="59" FixedLength="false" Unicode="true" />
+          <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
+          <Property Name="Currency" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -23414,6 +23511,15 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VEmployeeCashActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeCashActions">
               <MappingFragment StoreEntitySet="VEmployeeCashActions">
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="MobilePhone" ColumnName="MobilePhone" />
+                <ScalarProperty Name="FoodCardNumber" ColumnName="FoodCardNumber" />
+                <ScalarProperty Name="BankBranchCode" ColumnName="BankBranchCode" />
+                <ScalarProperty Name="BankCode" ColumnName="BankCode" />
+                <ScalarProperty Name="IdentityNumber" ColumnName="IdentityNumber" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="IBAN" ColumnName="IBAN" />
                 <ScalarProperty Name="SystemUnitPrice" ColumnName="SystemUnitPrice" />
                 <ScalarProperty Name="TotalAmountFood" ColumnName="TotalAmountFood" />
                 <ScalarProperty Name="UnitFoodPrice" ColumnName="UnitFoodPrice" />
@@ -27897,6 +28003,23 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
                 <ScalarProperty Name="Message" ColumnName="Message" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VEmployeeModel">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeModel">
+              <MappingFragment StoreEntitySet="VEmployeeModel">
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="MobilePhone" ColumnName="MobilePhone" />
+                <ScalarProperty Name="FoodCardNumber" ColumnName="FoodCardNumber" />
+                <ScalarProperty Name="BankBranchCode" ColumnName="BankBranchCode" />
+                <ScalarProperty Name="BankCode" ColumnName="BankCode" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="IBAN" ColumnName="IBAN" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="IdentityNumber" ColumnName="IdentityNumber" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

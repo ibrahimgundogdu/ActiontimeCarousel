@@ -1077,6 +1077,9 @@
     <Compile Include="VEmployeeLocationPosition.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VEmployeeModel.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VEmployeePhones.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

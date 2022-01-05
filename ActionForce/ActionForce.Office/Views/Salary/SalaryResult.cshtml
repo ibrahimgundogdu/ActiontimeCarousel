@@ -1,0 +1,274 @@
+﻿@model SalaryControlModel
+@{
+    ViewBag.Title = "Çalışan Cari Hesap";
+}
+
+@section style{
+
+}
+
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">Çalışan Hakediş - Maaş Cetveli</span>
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div>
+<div class="content-body">
+    @using (Html.BeginForm("ResultFilter", "Salary", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-row align-items-end">
+            <div class="form-group col-md-3 d-flex align-items-end">
+                <select class="form-control select2" id="LocationID" name="LocationID" required>
+                    <option value="" label="Lokasyon Seçiminiz"></option>
+                    @foreach (var item in Model.LocationList)
+                    {
+                        <option value="@item.LocationID" @(Model.Filters.LocationID == item.LocationID ? "selected" : "")>@(Html.Raw($"<strong>{item.LocationFullName}</strong> ({item.IsActive}) "))</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-3 d-flex align-items-end">
+                <select class="form-control select2" id="EmployeeID" name="EmployeeID" required>
+                    <option value="" label="Çalışan Seçiminiz"></option>
+                    @foreach (var item in Model.EmployeeList)
+                    {
+                        <option value="@item.EmployeeID" @(Model.Filters.EmployeeID == item.EmployeeID ? "selected" : "")>@(Html.Raw($"<strong>{item.FullName}</strong> ({item.IsActive}) "))</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-2 d-flex align-items-end">
+                <input type="text" id="DateBegin" name="DateBegin" class="form-control" autocomplete="off" placeholder="Başlangıç Tarihi" value="@(Model.Filters.DateBegin.Value.ToString("yyyy-MM-dd"))">
+            </div>
+            <div class="form-group col-md-2 d-flex align-items-end">
+                <input type="text" id="DateEnd" name="DateEnd" class="form-control" autocomplete="off" placeholder="Bitiş Tarihi" value="@(Model.Filters.DateEnd.Value.ToString("yyyy-MM-dd"))">
+            </div>
+            <div class="form-group col-md-1 d-flex align-items-end ">
+                <button class="btn btn-primary" type="submit" id="btnsearch">Ara</button>
+            </div>
+        </div>
+    }
+
+
+    <div>
+        <div class="table">
+            <table class="table table-sm table-hover">
+                <thead>
+
+
+                    <tr>
+                        <th colspan="5">Personel Bilgisi</th>
+                        <th colspan="8">Hakedişler</th>
+                        <th colspan="3">Ödemeler</th>
+                        <th colspan="3">Bakiye</th>
+                    </tr>
+                    <tr>
+                        <th>Adı</th>
+                        <th>TCKN</th>
+                        <th>Phone</th>
+                        <th>FoodCard</th>
+                        <th>Bank</th>
+
+                        <th class="text-right">Maaş</th>
+                        <th class="text-right">Setcard</th>
+                        <th class="text-right">İzin</th>
+                        <th class="text-right">F.Mesai</th>
+                        <th class="text-right">Prim</th>
+                        <th class="text-right">Resmi</th>
+                        <th class="text-right">Diğer</th>
+                        <th class="text-right">Toplam</th>
+
+                        <th class="text-right">Maaş</th>
+                        <th class="text-right">Setcard</th>
+                        <th class="text-right">Toplam</th>
+
+                        <th>Bakiye</th>
+                        <th>Kümüle</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+
+
+                    @foreach (var emp in Model.EmployeeActionList)
+                    {
+                        var hakedisids = new[] { 32, 36, 37, 39, 43, 44, 45, 46 }.ToList();
+                        var odemeids = new[] { 31, 38 }.ToList();
+
+                        var maashakedis = Model.EmployeeActionList.Where(x => x.ActionTypeID == 32 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var setcardhakedis = Model.EmployeeActionList.Where(x => x.ActionTypeID == 39 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var izinhakedis = Model.EmployeeActionList.Where(x => (x.ActionTypeID == 36 || x.ActionTypeID == 37) && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var mesaihakedis = Model.EmployeeActionList.Where(x => x.ActionTypeID == 43 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var primhakedis = Model.EmployeeActionList.Where(x => x.ActionTypeID == 44 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var resmihakedis = Model.EmployeeActionList.Where(x => x.ActionTypeID == 45 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var digerhakedis = Model.EmployeeActionList.Where(x => x.ActionTypeID == 46 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var toplamhakedis = Model.EmployeeActionList.Where(x => hakedisids.Contains(x.ActionTypeID.Value) && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+
+                        var maas = Model.EmployeeActionList.Where(x => x.ActionTypeID == 31 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var setcard = Model.EmployeeActionList.Where(x => x.ActionTypeID == 38 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var total = Model.EmployeeActionList.Where(x => odemeids.Contains(x.ActionTypeID.Value) && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+
+                        var kumule = Model.EmployeeActionList.Where(x => x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+
+
+                        <tr>
+
+
+                            <td class="tx-sm-13 bold">@(emp.FullName)</td>
+                            <td class="tx-sm-13">@(emp.IdentityNumber)</td>
+                            <td class="tx-sm-13">@(emp.MobilePhone)</td>
+                            <td class="tx-sm-13">@(emp.FoodCardNumber)</td>
+                            <td class="tx-sm-13">@(emp.BankName)</td>
+
+                            <td class="tx-sm-13 text-right bg-primary-light">@(maashakedis.ToString("N2"))</td>
+                            <td class="tx-sm-13 text-right bg-primary-light">@(setcardhakedis.ToString("N2"))</td>
+                            <td class="tx-sm-13 text-right bg-primary-light">@(izinhakedis.ToString("N2"))</td>
+                            <td class="tx-sm-13 text-right bg-primary-light">@(mesaihakedis.ToString("N2"))</td>
+                            <td class="tx-sm-13 text-right bg-primary-light">@(primhakedis.ToString("N2"))</td>
+                            <td class="tx-sm-13 text-right bg-primary-light">@(resmihakedis.ToString("N2"))</td>
+                            <td class="tx-sm-13 text-right bg-primary-light">@(digerhakedis.ToString("N2"))</td>
+                            <td class="tx-sm-13 text-right bg-primary-light">@(toplamhakedis.ToString("N2"))</td>
+
+                            <td class="tx-sm-13 text-right bg-primary-light">@(maas.ToString("N2"))</td>
+                            <td class="tx-sm-13 text-right bg-primary-light">@(setcard.ToString("N2"))</td>
+                            <td class="tx-sm-13 text-right bg-primary-light">@(total.ToString("N2"))</td>
+
+                            <td class="tx-sm-13 text-right bg-primary-light">@((toplamhakedis + total).ToString("N2"))</td>
+                            <td class="tx-sm-13 text-right bg-primary-light">@(kumule.ToString("N2"))</td>
+                            <td class="tx-sm-13">@(emp.Currency)</td>
+
+                        </tr>
+                    }
+
+
+                </tbody>
+                <tfoot>
+                    @*Dip Toplam*@
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th colspan="3">Dip Toplam</th>
+
+
+                        <th class="text-right bg-light text-primary">@((Model.ResultFooterTotals.FirstOrDefault(x => x.Currency == "TRL").Total).ToString("N2"))</th>
+
+                        <th>TRL</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th colspan="3">Dip Toplam</th>
+                        <th class="text-right bg-light text-primary">@((Model.ResultFooterTotals.FirstOrDefault(x => x.Currency == "USD").Total).ToString("N2"))</th>
+
+                        <th>USD</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th colspan="3">Dip Toplam</th>
+                        <th class="text-right bg-light text-primary">@((Model.ResultFooterTotals.FirstOrDefault(x => x.Currency == "EUR").Total).ToString("N2"))</th>
+
+                        <th>EUR</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+
+
+                </tfoot>
+            </table>
+        </div>
+
+
+        <footer class="content-footer">
+            <div>
+                <span>&copy; @DateTime.Now.Year UFE Group LLC </span>
+            </div>
+
+        </footer>
+
+    </div>
+</div>
+
+
+
+@section scripts {
+    <script>
+        $(function () {
+
+            $('#LocationID').select2({
+                placeholder: 'Lokasyon Seçiminiz',
+                searchInputPlaceholder: 'Search options',
+                allowClear: true
+            });
+
+            $('#EmployeeID').select2({
+                placeholder: 'Çalışan Seçiminiz',
+                searchInputPlaceholder: 'Search options',
+                allowClear: true
+            });
+
+            var dateFormat = 'yy-mm-dd',
+                from = $('#DateBegin')
+                    .datepicker({
+                        defaultDate: '+1w',
+                        numberOfMonths: 2,
+                        dateFormat: "yy-mm-dd",
+                        dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                        monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                        firstDay: 1
+                    })
+                    .on('change', function () {
+                        to.datepicker('option', 'minDate', getDate(this));
+                    }),
+                to = $('#DateEnd').datepicker({
+                    defaultDate: '+1w',
+                    numberOfMonths: 2,
+                    dateFormat: "yy-mm-dd",
+                    dayNamesMin: ["Pz", "Pt", "Sa", "Ca", "Pe", "Cu", "Ct"],
+                    monthNames: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+                    firstDay: 1
+                })
+                    .on('change', function () {
+                        from.datepicker('option', 'maxDate', getDate(this));
+                    });
+
+            function getDate(element) {
+                var date;
+                try {
+                    date = $.datepicker.parseDate(dateFormat, element.value);
+                } catch (error) {
+                    date = null;
+                }
+
+                return date;
+
+            }
+        });
+
+
+    </script>
+}

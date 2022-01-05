@@ -50,6 +50,8 @@ namespace ActionForce.Office
         public IEnumerable<TotalModel> HeaderTotals { get; set; }
         public IEnumerable<TotalModel> MiddleTotals { get; set; }
         public IEnumerable<TotalModel> FooterTotals { get; set; }
+        public IEnumerable<ResultTotalModel> ResultFooterTotals { get; set; }
 
+        public List<EmployeeModel> EmployeeModels { get; set; }
     }
 }

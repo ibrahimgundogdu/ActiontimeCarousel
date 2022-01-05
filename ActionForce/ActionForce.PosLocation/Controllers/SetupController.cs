@@ -199,6 +199,11 @@ namespace ActionForce.PosLocation.Controllers
                     model.Employees = manager.GetLocationEmployeesToday(model.Location.LocationID);
 
                 }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
+
             }
             else
             {

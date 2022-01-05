@@ -176,7 +176,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeSalaryDist" Width="1.5" PointX="15.375" PointY="47.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CashRecorders" Width="1.5" PointX="47.375" PointY="18.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCashRecorders" Width="1.5" PointX="47.375" PointY="25.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankTransferStatus" Width="1.5" PointX="38.375" PointY="8.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.BankTransferStatus" Width="1.5" PointX="37.375" PointY="8.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentBankTransfer" Width="1.5" PointX="47.375" PointY="34.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentBankTransfer" Width="1.5" PointX="3.375" PointY="48.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeCashActions" Width="1.5" PointX="49.375" PointY="0.75" />
@@ -226,7 +226,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmpShift" Width="1.5" PointX="53.375" PointY="16.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentSalaryEarn" Width="1.5" PointX="17.375" PointY="54.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VDocumentSalaryEarn" Width="1.5" PointX="54.375" PointY="22.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.OurCompany" Width="1.5" PointX="40.375" PointY="8.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.OurCompany" Width="1.5" PointX="39.5" PointY="8.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.SystemCheckEmployeeRows" Width="1.5" PointX="5.375" PointY="54.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSystemCheckEmployeePerformance" Width="1.5" PointX="7.375" PointY="54.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSystemCheckEmployeeRows" Width="1.5" PointX="23.375" PointY="54.75" />
@@ -366,7 +366,8 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CardCredit" Width="1.5" PointX="21.875" PointY="13.125" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CardActionsHistory" Width="1.5" PointX="47.375" PointY="20.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CardReaderActionHistory" Width="1.5" PointX="32.75" PointY="23.375" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.NFCCardLog" Width="1.5" PointX="5.5358537349551238" PointY="0.20226560542465449" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.NFCCardLog" Width="1.5" PointX="41.5" PointY="7.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeModel" Width="1.5" PointX="9.3354812922587058" PointY="22.789784278157068" />
         
         
         

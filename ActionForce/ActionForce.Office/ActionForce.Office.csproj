@@ -2367,6 +2367,7 @@
     <Compile Include="Models\ControlModels\SaleControlModel.cs" />
     <Compile Include="Models\CounterModel.cs" />
     <Compile Include="Models\DataModels\BankDataModel.cs" />
+    <Compile Include="Models\DataModels\EmployeeModel.cs" />
     <Compile Include="Models\DataModels\LocationDataModel.cs" />
     <Compile Include="Models\DataModels\PosTerminalDataModel.cs" />
     <Compile Include="Models\FilterModel\AnimalFilterModel.cs" />
@@ -2781,6 +2782,7 @@
     <Content Include="Views\Sale\_PartialSaleSideBar.cshtml" />
     <Content Include="Views\Sale\SaleAction.cshtml" />
     <Content Include="Views\Bank\BankTransfer.cshtml" />
+    <Content Include="Views\Salary\SalaryResult.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

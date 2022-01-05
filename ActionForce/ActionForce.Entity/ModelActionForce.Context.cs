@@ -365,6 +365,7 @@ namespace ActionForce.Entity
         public virtual DbSet<CardActionsHistory> CardActionsHistory { get; set; }
         public virtual DbSet<CardReaderActionHistory> CardReaderActionHistory { get; set; }
         public virtual DbSet<NFCCardLog> NFCCardLog { get; set; }
+        public virtual DbSet<VEmployeeModel> VEmployeeModel { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

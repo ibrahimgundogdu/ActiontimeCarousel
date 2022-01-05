@@ -57,5 +57,14 @@ namespace ActionForce.Entity
         public Nullable<double> UnitFoodPrice { get; set; }
         public Nullable<double> TotalAmountFood { get; set; }
         public Nullable<double> SystemUnitPrice { get; set; }
+        public string IBAN { get; set; }
+        public string BankName { get; set; }
+        public string IdentityNumber { get; set; }
+        public string BankCode { get; set; }
+        public string BankBranchCode { get; set; }
+        public string FoodCardNumber { get; set; }
+        public string MobilePhone { get; set; }
+        public Nullable<int> CategoryID { get; set; }
+        public Nullable<int> OurCompanyID { get; set; }
     }
 }

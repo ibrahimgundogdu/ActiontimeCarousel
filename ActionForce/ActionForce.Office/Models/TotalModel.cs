@@ -12,4 +12,12 @@ namespace ActionForce.Office
         public double CiroTotal { get; set; }
         public string Currency { get; set; }
     }
+
+    public class ResultTotalModel
+    {
+        public int ActionTypeID { get; set; }
+        public string ActionTypeName { get; set; }
+        public double Total { get; set; }
+        public string Currency { get; set; }
+    }
 }

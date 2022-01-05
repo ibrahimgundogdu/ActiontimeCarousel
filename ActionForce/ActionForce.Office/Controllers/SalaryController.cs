@@ -1484,6 +1484,141 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("AddPermit", "Salary");
         }
 
+        //SalaryResult
+        [AllowAnonymous]
+        public ActionResult SalaryResult(int? EmployeeID, int? LocationID, DateTime? DateBegin, DateTime? DateEnd)
+        {
+            SalaryControlModel model = new SalaryControlModel();
 
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.EmployeeID = EmployeeID != null ? EmployeeID : 0;
+                filterModel.LocationID = LocationID != null ? LocationID : 0;
+                filterModel.DateBegin = DateBegin != null ? DateBegin : DateTime.Now.AddDays(-15).Date;
+                filterModel.DateEnd = DateEnd != null ? DateEnd : DateTime.Now.Date;
+                model.Filters = filterModel;
+            }
+
+            model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
+            model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+
+            if (model.Filters.EmployeeID > 0)
+            {
+                model.CurrentEmployee = Db.Employee.FirstOrDefault(x => x.EmployeeID == model.Filters.EmployeeID);
+            }
+
+            if (model.Filters.LocationID > 0)
+            {
+                model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
+            }
+
+            var employeeCashActions = Db.VEmployeeCashActions.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.ProcessDate >= model.Filters.DateBegin && x.ProcessDate <= model.Filters.DateEnd).OrderBy(x => x.ProcessDate);
+
+            if (model.CurrentEmployee != null)
+            {
+                employeeCashActions = employeeCashActions.Where(x => x.EmployeeID == model.Filters.EmployeeID).OrderBy(x => x.ProcessDate);
+            }
+
+            if (model.CurrentLocation != null)
+            {
+                employeeCashActions = employeeCashActions.Where(x => x.LocationID == model.Filters.LocationID).OrderBy(x => x.ProcessDate);
+            }
+
+            model.EmployeeActionList = employeeCashActions.ToList();
+
+            List<int> employeeids = model.EmployeeActionList.Select(x => x.EmployeeID.Value).Distinct().ToList();
+
+            model.EmployeeModels = Db.VEmployeeModel.Where(x=> employeeids.Contains(x.EmployeeID)).Select(x => new EmployeeModel(){ 
+                EmployeeID = x.EmployeeID,
+                EmployeeName = x.FullName,
+                BankBranchCode = x.BankBranchCode,
+                BankCode = x.BankCode,
+                BankName = x.BankName,
+                FoodCardNumber = x.FoodCardNumber,
+                IBAN = x.IBAN,
+                IdentityNumber = x.IdentityNumber,
+                Currency = x.Currency
+            }).Distinct().ToList();
+
+            var actiontypes = model.EmployeeActionList.Select(x => new { ID = x.ActionTypeID, Name = x.Name }).ToList();
+
+
+            List<ResultTotalModel> footerTotals = new List<ResultTotalModel>();
+
+            foreach (var item in actiontypes)
+            {
+
+                footerTotals.Add(new ResultTotalModel()
+                {
+                    Currency = "TRL",
+                    ActionTypeID = item.ID.Value,
+                    ActionTypeName = item.Name,
+                    Total = model.EmployeeActionList.Where(x => x.ActionTypeID == item.ID && x.Currency == "TRL").Sum(x=> x.Amount) ?? 0
+                });
+
+                footerTotals.Add(new ResultTotalModel()
+                {
+                    Currency = "USD",
+                    ActionTypeID = item.ID.Value,
+                    ActionTypeName = item.Name,
+                    Total = model.EmployeeActionList.Where(x => x.ActionTypeID == item.ID && x.Currency == "USD").Sum(x => x.Amount) ?? 0
+                });
+
+                footerTotals.Add(new ResultTotalModel()
+                {
+                    Currency = "EUR",
+                    ActionTypeID = item.ID.Value,
+                    ActionTypeName = item.Name,
+                    Total = model.EmployeeActionList.Where(x => x.ActionTypeID == item.ID && x.Currency == "EUR").Sum(x => x.Amount) ?? 0
+                });
+
+            }
+
+
+
+            model.ResultFooterTotals = footerTotals;
+
+
+
+
+
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult ResultFilter(int? EmployeeID, int? LocationID, DateTime? DateBegin, DateTime? DateEnd)
+        {
+            FilterModel model = new FilterModel();
+
+            model.EmployeeID = EmployeeID;
+            model.LocationID = LocationID;
+            model.DateBegin = DateBegin;
+            model.DateEnd = DateEnd;
+
+            if (DateBegin == null)
+            {
+                DateTime begin = DateTime.Now.AddMonths(-1).Date;
+                model.DateBegin = new DateTime(begin.Year, begin.Month, 1);
+            }
+
+            if (DateEnd == null)
+            {
+                model.DateEnd = DateTime.Now.Date;
+            }
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("SalaryResult", "Salary");
+        }
     }
 }
