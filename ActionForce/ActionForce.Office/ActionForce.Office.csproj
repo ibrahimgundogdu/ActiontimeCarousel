@@ -2784,6 +2784,8 @@
     <Content Include="Views\Bank\BankTransfer.cshtml" />
     <Content Include="Views\Salary\SalaryResult.cshtml" />
     <Content Include="Views\Salary\ReportView.cshtml" />
+    <Content Include="Views\Salary\ReportBankView.cshtml" />
+    <Content Include="Views\Salary\ReportSetcardView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

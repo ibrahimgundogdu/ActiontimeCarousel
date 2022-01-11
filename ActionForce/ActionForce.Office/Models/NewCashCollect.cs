@@ -328,6 +328,7 @@ namespace ActionForce.Office
         public double? SystemUnitPrice { get; set; }
         public double? SystemQuantityHour { get; set; }
         public double? SystemTotalAmount { get; set; }
+        public string IsActive { get; set; }
     }
     public class NewEmployeeSalary
     {

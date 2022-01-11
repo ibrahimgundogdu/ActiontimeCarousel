@@ -2227,7 +2227,7 @@ namespace ActionForce.Office
 
                         unitprice = unitprice * salaryMultiplier;
 
-                        var SalaryEarn = Db.DocumentSalaryEarn.FirstOrDefault(x => x.LocationID == salary.LocationID && x.EmployeeID == salary.EmployeeID && x.Date == salary.DocumentDate && x.ResultID == salary.ResultID);
+                        var SalaryEarn = Db.DocumentSalaryEarn.FirstOrDefault(x => x.LocationID == salary.LocationID && x.EmployeeID == salary.EmployeeID && x.Date == salary.DocumentDate && x.ResultID == salary.ResultID && x.ActionTypeID == salary.ActionTypeID);
 
                         if (SalaryEarn == null)
                         {
@@ -2472,11 +2472,10 @@ namespace ActionForce.Office
                         try
                         {
 
-                            SalaryEarn.IsActive = false;
-                            SalaryEarn.UpdateDate = DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(SalaryEarn.LocationID ?? 3));
-                            SalaryEarn.UpdateEmployee = authentication.ActionEmployee.EmployeeID;
-                            SalaryEarn.UpdateIP = OfficeHelper.GetIPAddress();
+                            // log atılır
+                            OfficeHelper.AddApplicationLog("Office", "DocumentSalaryEarn", "Delete", SalaryEarn.ID.ToString(), "Salary", "Detail", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(SalaryEarn.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, SalaryEarn);
 
+                            Db.DocumentSalaryEarn.Remove(SalaryEarn);
                             Db.SaveChanges();
 
                             //maaş hesap işlemi
@@ -2486,9 +2485,6 @@ namespace ActionForce.Office
 
                             result.IsSuccess = true;
                             result.Message = "Ücret Hakediş iptal edildi";
-
-                            // log atılır
-                            OfficeHelper.AddApplicationLog("Office", "DocumentSalaryEarn", "Delete", SalaryEarn.ID.ToString(), "Salary", "Detail", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(OfficeHelper.GetTimeZone(SalaryEarn.LocationID ?? 3)), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, SalaryEarn);
 
                         }
                         catch (Exception ex)
@@ -2522,65 +2518,67 @@ namespace ActionForce.Office
                 {
                     try
                     {
-                        var balance = Db.GetCashBalance(payment.LocationID, payment.FromCashID, payment.DocumentDate).FirstOrDefault() ?? 0;
+                        DocumentSalaryPayment salaryPayment = new DocumentSalaryPayment();
 
-                        if (balance >= payment.Amount)
+                        salaryPayment.ActionTypeID = payment.ActinTypeID;
+                        salaryPayment.ActionTypeName = payment.ActionTypeName;
+                        salaryPayment.ToEmployeeID = payment.EmployeeID;
+                        salaryPayment.Amount = payment.Amount;
+                        salaryPayment.FromCashID = payment.FromCashID;
+                        salaryPayment.Currency = payment.Currency;
+                        salaryPayment.Date = payment.DocumentDate;
+                        salaryPayment.Description = payment.Description;
+                        salaryPayment.DocumentNumber = OfficeHelper.GetDocumentNumber(payment.OurCompanyID, "SAP");
+                        salaryPayment.ExchangeRate = payment.ExchangeRate;
+                        salaryPayment.FromBankAccountID = payment.FromBankID;
+                        salaryPayment.IsActive = true;
+                        salaryPayment.LocationID = payment.LocationID;
+                        salaryPayment.OurCompanyID = payment.OurCompanyID;
+                        salaryPayment.RecordDate = DateTime.UtcNow.AddHours(payment.TimeZone.Value);
+                        salaryPayment.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
+                        salaryPayment.RecordIP = OfficeHelper.GetIPAddress();
+                        salaryPayment.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == salaryPayment.Currency ? salaryPayment.Amount : salaryPayment.Amount * salaryPayment.ExchangeRate;
+                        salaryPayment.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
+                        salaryPayment.SalaryTypeID = payment.SalaryTypeID;
+                        salaryPayment.UID = payment.UID;
+                        salaryPayment.EnvironmentID = payment.EnvironmentID;
+                        salaryPayment.ReferenceID = payment.ReferanceID;
+                        salaryPayment.ResultID = payment.ResultID;
+                        salaryPayment.CategoryID = payment.CategoryID;
+                        Db.DocumentSalaryPayment.Add(salaryPayment);
+                        Db.SaveChanges();
+
+                        // cari hesap işlemesi
+
+                        if (salaryPayment.FromBankAccountID > 0)
                         {
-                            DocumentSalaryPayment salaryPayment = new DocumentSalaryPayment();
-
-                            salaryPayment.ActionTypeID = payment.ActinTypeID;
-                            salaryPayment.ActionTypeName = payment.ActionTypeName;
-                            salaryPayment.ToEmployeeID = payment.EmployeeID;
-                            salaryPayment.Amount = payment.Amount;
-                            salaryPayment.FromCashID = payment.FromCashID;
-                            salaryPayment.Currency = payment.Currency;
-                            salaryPayment.Date = payment.DocumentDate;
-                            salaryPayment.Description = payment.Description;
-                            salaryPayment.DocumentNumber = OfficeHelper.GetDocumentNumber(payment.OurCompanyID, "SAP");
-                            salaryPayment.ExchangeRate = payment.ExchangeRate;
-                            salaryPayment.FromBankAccountID = payment.FromBankID;
-                            salaryPayment.IsActive = true;
-                            salaryPayment.LocationID = payment.LocationID;
-                            salaryPayment.OurCompanyID = payment.OurCompanyID;
-                            salaryPayment.RecordDate = DateTime.UtcNow.AddHours(payment.TimeZone.Value);
-                            salaryPayment.RecordEmployeeID = authentication.ActionEmployee.EmployeeID;
-                            salaryPayment.RecordIP = OfficeHelper.GetIPAddress();
-                            salaryPayment.SystemAmount = authentication.ActionEmployee.OurCompany.Currency == salaryPayment.Currency ? salaryPayment.Amount : salaryPayment.Amount * salaryPayment.ExchangeRate;
-                            salaryPayment.SystemCurrency = authentication.ActionEmployee.OurCompany.Currency;
-                            salaryPayment.SalaryTypeID = payment.SalaryTypeID;
-                            salaryPayment.UID = payment.UID;
-                            salaryPayment.EnvironmentID = payment.EnvironmentID;
-                            salaryPayment.ReferenceID = payment.ReferanceID;
-                            salaryPayment.ResultID = payment.ResultID;
-                            salaryPayment.CategoryID = payment.CategoryID;
-                            Db.DocumentSalaryPayment.Add(salaryPayment);
-                            Db.SaveChanges();
-
-                            // cari hesap işlemesi
-
-                            if (salaryPayment.FromBankAccountID > 0)
-                            {
-                                OfficeHelper.AddBankAction(salaryPayment.LocationID, salaryPayment.ToEmployeeID, salaryPayment.FromBankAccountID, null, salaryPayment.ActionTypeID, salaryPayment.Date, salaryPayment.ActionTypeName, salaryPayment.ID, salaryPayment.Date, salaryPayment.DocumentNumber, salaryPayment.Description, -1, 0, salaryPayment.Amount, salaryPayment.Currency, null, null, salaryPayment.RecordEmployeeID, salaryPayment.RecordDate, salaryPayment.UID.Value);
-                            }
-                            else
-                            {
-                                OfficeHelper.AddCashAction(salaryPayment.FromCashID, salaryPayment.LocationID, salaryPayment.ToEmployeeID, salaryPayment.ActionTypeID, salaryPayment.Date, salaryPayment.ActionTypeName, salaryPayment.ID, salaryPayment.Date, salaryPayment.DocumentNumber, salaryPayment.Description, -1, 0, salaryPayment.Amount, salaryPayment.Currency, null, null, salaryPayment.RecordEmployeeID, salaryPayment.RecordDate, salaryPayment.UID.Value);
-                            }
-
-                            //maaş hesap işlemi
-                            OfficeHelper.AddEmployeeAction(salaryPayment.ToEmployeeID, salaryPayment.LocationID, salaryPayment.ActionTypeID, salaryPayment.ActionTypeName, salaryPayment.ID, salaryPayment.Date, salaryPayment.Description, 1, 0, salaryPayment.Amount, salaryPayment.Currency, null, null, salaryPayment.SalaryType, salaryPayment.RecordEmployeeID, salaryPayment.RecordDate, salaryPayment.UID.Value, salaryPayment.DocumentNumber, 8);
-
-                            result.IsSuccess = true;
-                            result.Message = "Maaş Avans ödemesi başarı ile eklendi";
-
-                            // log atılır
-                            OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", salaryPayment.ID.ToString(), "Salary", "SalaryPayment", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(payment.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, salaryPayment);
+                            OfficeHelper.AddBankAction(salaryPayment.LocationID, salaryPayment.ToEmployeeID, salaryPayment.FromBankAccountID, null, salaryPayment.ActionTypeID, salaryPayment.Date, salaryPayment.ActionTypeName, salaryPayment.ID, salaryPayment.Date, salaryPayment.DocumentNumber, salaryPayment.Description, -1, 0, salaryPayment.Amount, salaryPayment.Currency, null, null, salaryPayment.RecordEmployeeID, salaryPayment.RecordDate, salaryPayment.UID.Value);
                         }
                         else
                         {
-                            result.Message = $"Kasa bakiyesi { payment.Amount } { payment.Currency } tutar için yeterli değildir. Kullanılabilir bakiye { balance } { payment.Currency } tutardır.";
-                            OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", "-1", "Salary", "SalaryPayment", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(payment.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                            OfficeHelper.AddCashAction(salaryPayment.FromCashID, salaryPayment.LocationID, salaryPayment.ToEmployeeID, salaryPayment.ActionTypeID, salaryPayment.Date, salaryPayment.ActionTypeName, salaryPayment.ID, salaryPayment.Date, salaryPayment.DocumentNumber, salaryPayment.Description, -1, 0, salaryPayment.Amount, salaryPayment.Currency, null, null, salaryPayment.RecordEmployeeID, salaryPayment.RecordDate, salaryPayment.UID.Value);
                         }
+
+                        //maaş hesap işlemi
+                        OfficeHelper.AddEmployeeAction(salaryPayment.ToEmployeeID, salaryPayment.LocationID, salaryPayment.ActionTypeID, salaryPayment.ActionTypeName, salaryPayment.ID, salaryPayment.Date, salaryPayment.Description, 1, 0, salaryPayment.Amount, salaryPayment.Currency, null, null, salaryPayment.SalaryType, salaryPayment.RecordEmployeeID, salaryPayment.RecordDate, salaryPayment.UID.Value, salaryPayment.DocumentNumber, 8);
+
+                        result.IsSuccess = true;
+                        result.Message = "Maaş Avans ödemesi başarı ile eklendi";
+
+                        // log atılır
+                        OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", salaryPayment.ID.ToString(), "Salary", "SalaryPayment", null, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(payment.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, salaryPayment);
+
+
+                        //var balance = Db.GetCashBalance(payment.LocationID, payment.FromCashID, payment.DocumentDate).FirstOrDefault() ?? 0;
+
+                        //if (balance >= payment.Amount)
+                        //{
+                        //    }
+                        //else
+                        //{
+                        //    result.Message = $"Kasa, Banka bakiyesi { payment.Amount } { payment.Currency } tutar için yeterli değildir. Kullanılabilir bakiye { balance } { payment.Currency } tutardır.";
+                        //    OfficeHelper.AddApplicationLog("Office", "Salary", "Insert", "-1", "Salary", "SalaryPayment", null, false, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(payment.TimeZone.Value), authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+                        //}
                     }
                     catch (Exception ex)
                     {

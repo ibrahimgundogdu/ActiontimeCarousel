@@ -1,8 +1,9 @@
 ﻿@model SalaryControlModel
 @{
     ViewBag.Title = "Çalışan Cari Hesap";
-    var hakedisids = new[] { 32, 36, 37, 39, 43, 44, 45, 46 }.ToList();
-    var odemeids = new[] { 31, 38 }.ToList();
+    var hakedisids = new[] { 32, 36, 37, 43, 44, 45, 46 }.ToList(); // 39 set kart
+    var odemeids = new[] { 31, 47 }.ToList();  // 38 setcard
+
 }
 
 @section style{
@@ -62,7 +63,7 @@
                     <tr>
                         <th colspan="6" style="border-left:1px solid #808080;">Personel Bilgisi</th>
                         <th colspan="8" class="bg-warning-light" style="border-left:1px solid #808080;">Hakedişler</th>
-                        <th colspan="3" class="bg-primary-light" style="border-left:1px solid #808080;">Ödemeler</th>
+                        <th colspan="4" class="bg-primary-light" style="border-left:1px solid #808080;">Ödemeler</th>
                         <th colspan="3" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Bakiye</th>
                     </tr>
                     <tr>
@@ -74,30 +75,28 @@
                         <th>Bank</th>
 
                         <th class="text-right bg-warning-light" style="border-left:1px solid #808080;">Maaş</th>
-                        <th class="text-right bg-warning-light">Setcard</th>
                         <th class="text-right bg-warning-light">İzin</th>
                         <th class="text-right bg-warning-light">F.Mesai</th>
                         <th class="text-right bg-warning-light">Prim</th>
                         <th class="text-right bg-warning-light">Resmi</th>
                         <th class="text-right bg-warning-light">Diğer</th>
                         <th class="text-right bg-warning-light">Toplam</th>
+                        <th class="text-right bg-warning-light" style="color:orangered;">Setcard</th>
 
                         <th class="text-right bg-primary-light" style="border-left:1px solid #808080;">Maaş</th>
-                        <th class="text-right bg-primary-light">Setcard</th>
+                        <th class="text-right bg-primary-light">Kesinti</th>
                         <th class="text-right bg-primary-light">Toplam</th>
+                        <th class="text-right bg-primary-light" style="color:orangered;">Setcard</th>
 
-                        <th style="border-left:1px solid #808080;">Bakiye</th>
-                        <th>Kümüle</th>
-                        <th style="border-right:1px solid #808080;"> </th>
+                        <th style="border-left:1px solid #808080;">Maaş</th>
+                        <th style="color: orangered;">Setcard</th>
+                        <th style="border-right:1px solid #808080;">Kümüle </th>
                     </tr>
                 </thead>
                 <tbody>
 
-
-
                     @foreach (var emp in Model.EmployeeModels)
                     {
-                       
 
                         var maashakedis = Model.EmployeeActionList.Where(x => x.ActionTypeID == 32 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
                         var setcardhakedis = Model.EmployeeActionList.Where(x => x.ActionTypeID == 39 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
@@ -110,7 +109,10 @@
 
                         var maas = Model.EmployeeActionList.Where(x => x.ActionTypeID == 31 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
                         var setcard = Model.EmployeeActionList.Where(x => x.ActionTypeID == 38 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var kesinti = Model.EmployeeActionList.Where(x => x.ActionTypeID == 47 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
                         var total = Model.EmployeeActionList.Where(x => odemeids.Contains(x.ActionTypeID.Value) && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+
+
 
                         var kumule = Model.EmployeeActionList.Where(x => x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
 
@@ -126,21 +128,23 @@
                         <td class="tx-sm-13">@(emp.BankName?.Length > 4 ? $"{emp.BankName.Substring(0, 4)}..":"")</td>
 
                         <td class="tx-sm-13 text-right bg-warning-light @(maashakedis != 0 ? "font-weight-bold":"")" style="border-left:1px solid #808080;">@(maashakedis.ToString("N2"))</td>
-                        <td class="tx-sm-13 text-right bg-warning-light @(setcardhakedis != 0 ? "font-weight-bold":"")">@(setcardhakedis.ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-warning-light @(izinhakedis != 0 ? "font-weight-bold":"")">@(izinhakedis.ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-warning-light @(mesaihakedis != 0 ? "font-weight-bold":"")">@(mesaihakedis.ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-warning-light @(primhakedis != 0 ? "font-weight-bold":"")">@(primhakedis.ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-warning-light @(resmihakedis != 0 ? "font-weight-bold":"")">@(resmihakedis.ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-warning-light @(digerhakedis != 0 ? "font-weight-bold":"")">@(digerhakedis.ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-warning-light @(toplamhakedis != 0 ? "font-weight-bold":"")">@(toplamhakedis.ToString("N2"))</td>
+                        <td class="tx-sm-13 text-right bg-warning-light @(setcardhakedis != 0 ? "font-weight-bold":"")" style="color: orangered;">@(setcardhakedis.ToString("N2"))</td>
 
                         <td class="tx-sm-13 text-right bg-primary-light" style="border-left:1px solid #808080;">@(maas.ToString("N2"))</td>
-                        <td class="tx-sm-13 text-right bg-primary-light">@(setcard.ToString("N2"))</td>
+                        <td class="tx-sm-13 text-right bg-primary-light">@(kesinti.ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-primary-light">@(total.ToString("N2"))</td>
+                        <td class="tx-sm-13 text-right bg-primary-light" style="color: orangered;">@(setcard.ToString("N2"))</td>
+
 
                         <td class="tx-sm-13 text-right" style="border-left:1px solid #808080;">@((toplamhakedis + total).ToString("N2"))</td>
-                        <td class="tx-sm-13 text-right">@(kumule.ToString("N2"))</td>
-                        <td class="tx-sm-13" style="border-right:1px solid #808080;">@(emp.Currency)</td>
+                        <td class="tx-sm-13 text-right" style="color: orangered;">@((setcardhakedis + setcard).ToString("N2"))</td>
+                        <td class="tx-sm-13 text-right" style="border-right:1px solid #808080;">@(kumule.ToString("N2"))</td>
 
                     </tr>
                     }
@@ -157,26 +161,29 @@
                         <td class="tx-sm-13"></td>
 
                         <td class="tx-sm-13 text-right bg-warning-light font-weight-bold" style="border-left:1px solid #808080;">@((Model.EmployeeActionList.Where(x => x.ActionTypeID == 32).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
-                        <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@((Model.EmployeeActionList.Where(x => x.ActionTypeID == 39).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@((Model.EmployeeActionList.Where(x => x.ActionTypeID == 36 || x.ActionTypeID == 37).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@((Model.EmployeeActionList.Where(x => x.ActionTypeID == 43).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@((Model.EmployeeActionList.Where(x => x.ActionTypeID == 44).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@((Model.EmployeeActionList.Where(x => x.ActionTypeID == 45).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@((Model.EmployeeActionList.Where(x => x.ActionTypeID == 46).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@((Model.EmployeeActionList.Where(x=> hakedisids.Contains(x.ActionTypeID.Value)).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
+                        <td class="tx-sm-13 text-right bg-warning-light font-weight-bold" style="color:orangered;">@((Model.EmployeeActionList.Where(x => x.ActionTypeID == 39).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
 
 
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left:1px solid #808080;">@((Model.EmployeeActionList.Where(x => x.ActionTypeID == 31).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
-                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@((Model.EmployeeActionList.Where(x => x.ActionTypeID == 38).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@((Model.EmployeeActionList.Where(x => x.ActionTypeID == 47).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
                         <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@((Model.EmployeeActionList.Where(x => odemeids.Contains(x.ActionTypeID.Value)).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
+                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="color: orangered;">@((Model.EmployeeActionList.Where(x => x.ActionTypeID == 38).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
 
-                        <td class="tx-sm-13 text-right font-weight-bold" style="border-left:1px solid #808080;">@(((Model.EmployeeActionList.Where(x=> hakedisids.Contains(x.ActionTypeID.Value)).Sum(x => x.Amount) ?? 0)+(Model.EmployeeActionList.Where(x => odemeids.Contains(x.ActionTypeID.Value)).Sum(x => x.Amount) ?? 0)).ToString("N2"))</td>
-                        <td class="tx-sm-13 text-right font-weight-bold">@((Model.EmployeeActionList.Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
-                        <td class="tx-sm-13" style="border-right:1px solid #808080;"></td>
+                        <td class="tx-sm-13 text-right font-weight-bold" style="border-left:1px solid #808080;">@(((Model.EmployeeActionList.Where(x=> x.ActionTypeID != 38 && x.ActionTypeID != 39).Sum(x => x.Amount) ?? 0)).ToString("N2"))</td>
+                        <td class="tx-sm-13 text-right font-weight-bold" style="color:orangered;">@((Model.EmployeeActionList.Where(x=> x.ActionTypeID == 38 || x.ActionTypeID == 39).Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
+                        <td class="tx-sm-13 text-right font-weight-bold" style="border-right:1px solid #808080;">@((Model.EmployeeActionList.Sum(x => x.Amount) ?? 0).ToString("N2"))</td>
                     </tr>
                     <tr>
-                        <td colspan="20">
-                            <a href="/Salary/ExportData" class="btn btn-success"><i data-feather="download"></i> Excel Olarak İndir</a>
+                        <td colspan="21">
+                            <a href="/Salary/ExportData" class="btn btn-success"><i data-feather="download"></i> Excel Olarak İndir</a> &nbsp;
+                            <a href="/Salary/ExportBankData" class="btn btn-success"><i data-feather="download"></i> Banka Listesi İndir</a> &nbsp;
+                            <a href="/Salary/ExportSetcardData" class="btn btn-success"><i data-feather="download"></i> Yemek Kartı Listesi İndir</a> 
                         </td>
                     </tr>
                 </tfoot>

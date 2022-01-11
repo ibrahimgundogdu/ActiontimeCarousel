@@ -190,7 +190,7 @@ namespace ActionForce.PosLocation.Controllers
             {
                 var LocationUID = locationCookie.Value;
 
-                model.Location = Db.Location.FirstOrDefault(x => x.LocationUID.ToString() == LocationUID & x.IsActive == true);
+                model.Location = Db.Location.FirstOrDefault(x => x.LocationUID.ToString() == LocationUID && x.IsActive == true);
 
                 if (model.Location != null)
                 {

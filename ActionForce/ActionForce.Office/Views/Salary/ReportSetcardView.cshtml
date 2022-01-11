@@ -1,0 +1,42 @@
+﻿@model SalaryControlModel
+@{
+    Layout = null;
+    var hakedisids = new[] { 32, 36, 37, 39, 43, 44, 45, 46 }.ToList();
+    var odemeids = new[] { 31, 38, 47 }.ToList();
+}
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th>Şirket Tanımı</th>
+            <th>Şube Tanımı(Kod)</th>
+            <th>Ad Soyad</th>
+            <th>Sicil No</th>
+            <th>Kullanıcı Tanımı</th>
+            <th>Setcard Numarası</th>
+            <th>Tutar</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach (var emp in Model.EmployeeModels.OrderBy(x => x.EmployeeName).ToList())
+        {           
+
+            var setcard = Model.EmployeeActionList.Where(x => (x.ActionTypeID == 39 || x.ActionTypeID == 38) && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+
+            <tr>
+
+                <td class="tx-sm-13">UFE GRUP ORGANİZASYON A.Ş.</td>
+                <td class="tx-sm-13">UFE GROUP ORGANİZASYON A.Ş.(49199)</td>
+                <td class="tx-sm-13">@(emp.EmployeeName)</td>
+                <td class="tx-sm-13">@(emp.IdentityNumber)</td>
+                <td class="tx-sm-13"></td>
+                <td class="tx-sm-13">@(emp.FoodCardNumber)</td>
+                <td class="tx-sm-13 text-right">@(setcard.ToString("N2"))</td>
+
+            </tr>
+        }
+
+
+    </tbody>
+
+</table>

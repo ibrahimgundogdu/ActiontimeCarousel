@@ -46,7 +46,7 @@ namespace ActionForce.Office.Controllers
             model.CurrentLocation = Db.VLocation.FirstOrDefault(x => x.LocationID == model.Filters.LocationID);
             model.UnitPrice = Db.EmployeeSalary.ToList();
             model.SalaryEarn = Db.VDocumentSalaryEarn.Where(x => x.Date >= model.Filters.DateBegin && x.Date <= model.Filters.DateEnd && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
-            
+
             if (model.Filters.LocationID > 0)
             {
                 model.SalaryEarn = model.SalaryEarn.Where(x => x.LocationID == model.Filters.LocationID).OrderByDescending(x => x.Date).ThenByDescending(x => x.RecordDate).ToList();
@@ -99,7 +99,7 @@ namespace ActionForce.Office.Controllers
                 model.DateEnd = DateTime.Now.Date;
             }
 
-           
+
             TempData["filter"] = model;
 
             return RedirectToAction("Index", "Salary");
@@ -246,6 +246,7 @@ namespace ActionForce.Office.Controllers
 
                 var salaryearn = Db.DocumentSalaryEarn.FirstOrDefault(x => x.ID == cashEarn.ID && x.UID == cashEarn.UID);
 
+
                 if (salaryearn != null)
                 {
                     salaryearn.Description = cashEarn.Description;
@@ -277,12 +278,11 @@ namespace ActionForce.Office.Controllers
                 DocumentManager documentManager = new DocumentManager();
                 var delresult = documentManager.DeleteSalaryEarn(Guid.Parse(id), model.Authentication);
 
-                result.IsSuccess = delresult.IsSuccess;
                 result.Message = delresult.Message;
             }
 
             TempData["result"] = result;
-            return RedirectToAction("Detail", new { id = id });
+            return RedirectToAction("Index");
 
         }
 
@@ -451,7 +451,20 @@ namespace ActionForce.Office.Controllers
 
             if (cashsalary != null)
             {
-                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 31);
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 31); // maaş avans ödemesi
+
+                if (cashsalary.CategoryID == 18)
+                {
+                    actType = Db.CashActionType.FirstOrDefault(x => x.ID == 38); // set card Ödemesi
+                }
+
+                else if (cashsalary.CategoryID == 11)
+                {
+                    actType = Db.CashActionType.FirstOrDefault(x => x.ID == 47); // Maaş Kesintisi
+                }
+
+
+
                 var location = Db.Location.FirstOrDefault(x => x.LocationID == cashsalary.LocationID);
                 var amount = Convert.ToDouble(cashsalary.Amount.Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 int timezone = location.Timezone.Value;
@@ -1514,7 +1527,7 @@ namespace ActionForce.Office.Controllers
 
             var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396 }.ToList();
 
-            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID ))
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
             {
                 return RedirectToAction("Index");
             }
@@ -1564,7 +1577,8 @@ namespace ActionForce.Office.Controllers
 
             List<int> employeeids = model.EmployeeActionList.Select(x => x.EmployeeID.Value).Distinct().ToList();
 
-            model.EmployeeModels = Db.VEmployeeModel.Where(x=> employeeids.Contains(x.EmployeeID)).Select(x => new EmployeeModel(){ 
+            model.EmployeeModels = Db.VEmployeeModel.Where(x => employeeids.Contains(x.EmployeeID)).Select(x => new EmployeeModel()
+            {
                 EmployeeID = x.EmployeeID,
                 EmployeeName = x.FullName,
                 BankBranchCode = x.BankBranchCode,
@@ -1590,7 +1604,7 @@ namespace ActionForce.Office.Controllers
                     Currency = "TRL",
                     ActionTypeID = item.ID.Value,
                     ActionTypeName = item.Name,
-                    Total = model.EmployeeActionList.Where(x => x.ActionTypeID == item.ID && x.Currency == "TRL").Sum(x=> x.Amount) ?? 0
+                    Total = model.EmployeeActionList.Where(x => x.ActionTypeID == item.ID && x.Currency == "TRL").Sum(x => x.Amount) ?? 0
                 });
 
                 footerTotals.Add(new ResultTotalModel()
@@ -1660,11 +1674,13 @@ namespace ActionForce.Office.Controllers
                 model = TempData["model"] as SalaryControlModel;
             }
 
+            TempData["model"] = model;
+
             Response.ClearContent();
 
             Response.ContentType = "application/force-download";
             Response.AddHeader("content-disposition",
-                "attachment; filename=" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
+                "attachment; filename=Maas_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
             Response.Write("<html xmlns:x=\"urn:schemas-microsoft-com:office:excel\">");
             Response.Write("<head>");
             Response.Write("<META http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
@@ -1689,5 +1705,116 @@ namespace ActionForce.Office.Controllers
             Response.Flush();
             Response.End();
         }
+
+        //ExportSetcardData
+        [AllowAnonymous]
+        public void ExportBankData()
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (TempData["model"] != null)
+            {
+                model = TempData["model"] as SalaryControlModel;
+            }
+
+            TempData["model"] = model;
+
+            Response.ClearContent();
+
+            Response.ContentType = "application/force-download";
+            Response.AddHeader("content-disposition",
+                "attachment; filename=Bank_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
+            Response.Write("<html xmlns:x=\"urn:schemas-microsoft-com:office:excel\">");
+            Response.Write("<head>");
+            Response.Write("<META http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+            Response.Write("<!--[if gte mso 9]><xml>");
+            Response.Write("<x:ExcelWorkbook>");
+            Response.Write("<x:ExcelWorksheets>");
+            Response.Write("<x:ExcelWorksheet>");
+            Response.Write("<x:Name>Report Data</x:Name>");
+            Response.Write("<x:WorksheetOptions>");
+            Response.Write("<x:Print>");
+            Response.Write("<x:ValidPrinterInfo/>");
+            Response.Write("</x:Print>");
+            Response.Write("</x:WorksheetOptions>");
+            Response.Write("</x:ExcelWorksheet>");
+            Response.Write("</x:ExcelWorksheets>");
+            Response.Write("</x:ExcelWorkbook>");
+            Response.Write("</xml>");
+            Response.Write("<![endif]--> ");
+
+
+            View("~/Views/Salary/ReportBankView.cshtml", model).ExecuteResult(this.ControllerContext);
+            Response.Flush();
+            Response.End();
+        }
+
+        [AllowAnonymous]
+        public void ExportSetcardData()
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (TempData["model"] != null)
+            {
+                model = TempData["model"] as SalaryControlModel;
+            }
+
+            TempData["model"] = model;
+
+            var existsids = model.EmployeeModels.Select(x => x.EmployeeID).ToList();
+            var otherempids = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true && x.FoodCardNumber.Length > 0 && !existsids.Contains(x.EmployeeID)).Select(x => x.EmployeeID).Distinct().ToList();
+
+            var _EmployeeModels = Db.VEmployeeModel.Where(x => otherempids.Contains(x.EmployeeID)).Select(x => new EmployeeModel()
+            {
+                EmployeeID = x.EmployeeID,
+                EmployeeName = x.FullName,
+                BankBranchCode = x.BankBranchCode,
+                BankCode = x.BankCode,
+                BankName = x.BankName,
+                FoodCardNumber = x.FoodCardNumber,
+                IBAN = x.IBAN,
+                IdentityNumber = x.IdentityNumber,
+                Currency = x.Currency,
+                MobilePhone = x.MobilePhone
+            }).Distinct().ToList();
+
+            model.EmployeeModels.AddRange(_EmployeeModels);
+
+
+            
+
+            Response.ClearContent();
+
+            Response.ContentType = "application/force-download";
+            Response.AddHeader("content-disposition",
+                "attachment; filename=Setcard_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
+            Response.Write("<html xmlns:x=\"urn:schemas-microsoft-com:office:excel\">");
+            Response.Write("<head>");
+            Response.Write("<META http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+            Response.Write("<!--[if gte mso 9]><xml>");
+            Response.Write("<x:ExcelWorkbook>");
+            Response.Write("<x:ExcelWorksheets>");
+            Response.Write("<x:ExcelWorksheet>");
+            Response.Write("<x:Name>Report Data</x:Name>");
+            Response.Write("<x:WorksheetOptions>");
+            Response.Write("<x:Print>");
+            Response.Write("<x:ValidPrinterInfo/>");
+            Response.Write("</x:Print>");
+            Response.Write("</x:WorksheetOptions>");
+            Response.Write("</x:ExcelWorksheet>");
+            Response.Write("</x:ExcelWorksheets>");
+            Response.Write("</x:ExcelWorkbook>");
+            Response.Write("</xml>");
+            Response.Write("<![endif]--> ");
+
+
+            View("~/Views/Salary/ReportSetcardView.cshtml", model).ExecuteResult(this.ControllerContext);
+            Response.Flush();
+            Response.End();
+        }
+
+
+
+
     }
 }
