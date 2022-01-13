@@ -2894,5 +2894,43 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetLocationPartList_Result>("GetLocationPartList", locationIDParameter);
         }
+    
+        public virtual int CheckCardReader(string serialNumber, string mACAddress, string version, string iPAddress)
+        {
+            var serialNumberParameter = serialNumber != null ?
+                new ObjectParameter("SerialNumber", serialNumber) :
+                new ObjectParameter("SerialNumber", typeof(string));
+    
+            var mACAddressParameter = mACAddress != null ?
+                new ObjectParameter("MACAddress", mACAddress) :
+                new ObjectParameter("MACAddress", typeof(string));
+    
+            var versionParameter = version != null ?
+                new ObjectParameter("Version", version) :
+                new ObjectParameter("Version", typeof(string));
+    
+            var iPAddressParameter = iPAddress != null ?
+                new ObjectParameter("IPAddress", iPAddress) :
+                new ObjectParameter("IPAddress", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CheckCardReader", serialNumberParameter, mACAddressParameter, versionParameter, iPAddressParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<long>> CheckCreditLoad(string serialNumber, string mACAddress, string cardNumber)
+        {
+            var serialNumberParameter = serialNumber != null ?
+                new ObjectParameter("SerialNumber", serialNumber) :
+                new ObjectParameter("SerialNumber", typeof(string));
+    
+            var mACAddressParameter = mACAddress != null ?
+                new ObjectParameter("MACAddress", mACAddress) :
+                new ObjectParameter("MACAddress", typeof(string));
+    
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("CheckCreditLoad", serialNumberParameter, mACAddressParameter, cardNumberParameter);
+        }
     }
 }

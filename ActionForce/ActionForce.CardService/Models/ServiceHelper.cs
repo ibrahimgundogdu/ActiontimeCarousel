@@ -486,16 +486,29 @@ namespace ActionForce.CardService
             }
         }
 
+        public CardCreditLoad GetCardLoad(long id)
+        {
+            using (var connection = new SqlConnection(GetConnectionString()))
+            {
+                var Parameters = new { ID = id };
+                var sql = "SELECT TOP (1) * FROM [dbo].[TicketSaleCreditLoad] Where [ID] = @ID";
+                return connection.QueryFirstOrDefault<CardCreditLoad>(sql, Parameters);
+            }
+        }
+
         public Result LoadCard(CardCreditLoad load)
         {
             Result result = new Result();
-            DateTime now = DateTime.UtcNow.AddHours(3);
 
             result.IsSuccess = false;
             result.Message = string.Empty;
 
             try
             {
+                if (load.IsSuccess != true)
+                {
+
+                
                 var card = GetCard(load.CardNumber);
                 var cardReader = GetCardReader(load.SerialNumber, load.MACAddress);
 
@@ -515,7 +528,7 @@ namespace ActionForce.CardService
                     if (load.CardActionTypeID == 4) // kontür iade işlemi
                     {
 
-                        var caParameters = new { Date = now, RefundCredit = load.RefundCredit, CardReaderActionID = load.CardReaderActionID, ActionTypeID = load.CardActionTypeID, CardNumber = load.CardNumber, CardReaderID = cardReader.ID, CardActionID = load.CardActionID };
+                        var caParameters = new { Date = DateTime.UtcNow.AddHours(3), RefundCredit = load.RefundCredit, CardReaderActionID = load.CardReaderActionID, ActionTypeID = load.CardActionTypeID, CardNumber = load.CardNumber, CardReaderID = cardReader.ID, CardActionID = load.CardActionID };
                         //var caSql = "UPDATE [dbo].[CardActions] SET [CreditCharge] = @RefundCredit, [ActionDateUpdate] = @Date, [ActionTypeID] = @ActionTypeID  WHERE [ProcessID] = @CardReaderActionID and [ActionTypeID] = 2 and [CardNumber] = @CardNumber and [CardReaderID] = @CardReaderID ";
                         var caSql = "UPDATE [dbo].[CardActions] SET [CreditCharge] = @RefundCredit, [ActionDateUpdate] = @Date, [ActionTypeID] = @ActionTypeID, [ActionTypeName] = 'Kredi İade'  WHERE [ID] = @CardActionID ";
                         connection.Execute(caSql, caParameters);
@@ -547,7 +560,7 @@ namespace ActionForce.CardService
                                 ProcessUID = load.UID,
                                 ActionTypeID = 1,
                                 ActionTypeName = "Kart Aktif Etme",
-                                ActionDate = now,
+                                ActionDate = DateTime.UtcNow.AddHours(3),
                                 CreditCharge = 0,
                                 CreditSpend = 0,
                                 Currency = "TRL",
@@ -559,7 +572,7 @@ namespace ActionForce.CardService
                             var casql = "  INSERT INTO [dbo].[CardActions] ([OurCompanyID],[CardID],[LocationID],[CustomerID],[SaleID],[SaleRowID],[ProcessID],[ProcessUID],[ActionTypeID],[ActionTypeName],[ActionDate],[CreditCharge],[CreditSpend],[Currency],[IsPromotion],[CardNumber],[CardReaderID]) VALUES(@OurCompanyID,@CardID,@LocationID,@CustomerID,@SaleID,@SaleRowID,@ProcessID,@ProcessUID,@ActionTypeID, @ActionTypeName, @ActionDate, @CreditCharge, @CreditSpend , @Currency, @IsPromotion,@CardNumber,@CardReaderID)";
                             connection.Execute(casql, caparameters);
 
-                            var cuparameter = new { CardNumber = card.CardNumber, ActivateDate = now };
+                            var cuparameter = new { CardNumber = card.CardNumber, ActivateDate = DateTime.UtcNow.AddHours(3) };
                             var cupdsql = "Update [dbo].[Card] Set [CardStatusID] = 1, [ActivateDate] = @ActivateDate  Where [CardNumber] = @CardNumber";
                             connection.Execute(cupdsql, cuparameter);
                         }
@@ -582,7 +595,7 @@ namespace ActionForce.CardService
                                 ProcessUID = load.UID,
                                 ActionTypeID = 3,
                                 ActionTypeName = "Kredi Yükleme",
-                                ActionDate = now,
+                                ActionDate = DateTime.UtcNow.AddHours(3),
                                 CreditCharge = load.MasterCredit,
                                 CreditSpend = 0,
                                 Currency = "TRL",
@@ -614,7 +627,7 @@ namespace ActionForce.CardService
                                 ProcessUID = load.UID,
                                 ActionTypeID = 3,
                                 ActionTypeName = "Kredi Yükleme",
-                                ActionDate = now,
+                                ActionDate = DateTime.UtcNow.AddHours(3),
                                 CreditCharge = load.PromoCredit,
                                 CreditSpend = 0,
                                 Currency = "TRL",
@@ -639,7 +652,7 @@ namespace ActionForce.CardService
 
                     // yüklenme bölümü onaylanır.
 
-                    var lcparameters = new { ID = load.ID, UID = load.UID, IsSuccess = true, CompleteDate = now };
+                    var lcparameters = new { ID = load.ID, UID = load.UID, IsSuccess = true, CompleteDate = DateTime.UtcNow.AddHours(3) };
                     var lcsql = "Update [dbo].[TicketSaleCreditLoad] Set [IsSuccess] = @IsSuccess, [CompleteDate] = @CompleteDate  Where [ID] = @ID and [UID] = @UID";
                     connection.Execute(lcsql, lcparameters);
 
@@ -647,6 +660,8 @@ namespace ActionForce.CardService
 
                 result.IsSuccess = true;
                 result.Message = "OK";
+                }
+
             }
             catch (Exception ex)
             {

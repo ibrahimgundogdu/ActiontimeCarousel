@@ -118,7 +118,7 @@
                                         else
                                         {
                                             <div class="form-group">
-                                                <a href="javascript:;" onclick="ResetCredit();" class="btn btn-primary btn-block">KARTI RESETLE</a>
+                                                <button type="button" id="ResetCardCredit" onclick="ResetCredit();" class="btn btn-primary btn-block">KARTI RESETLE</button>
                                             </div>
                                         }
 
@@ -171,8 +171,9 @@
                         text: 'EVET',
                         btnClass: 'btn-yes',
                         action: function () {
-                            console.log('@(Model.Comment)');
+                            //console.log('@(Model.Comment)');
                             Android.sendComment('@(Model.Comment)');
+                            $('#ResetCardCredit').prop('disabled', true);
                             // kart resetleme methodu çağrılır
                         }
                     },
@@ -329,7 +330,7 @@
                 if (commentArray[4] == '7') {
 
 
-                    var cardnumber = commentArray[3];
+                    @*var cardnumber = commentArray[3];
 
                     var uid = '@(Model.CreditLoad?.UID)';
                     $.ajax({
@@ -338,9 +339,13 @@
                         data: { uid}
                     }).done(function (d) {
                         $("#MessageArea").html(d);
-                    });
+                    });*@
 
                     //window.location = '/Card/Index?cardinfo=' + comment;  CardServiceClient   00EF6963;A4:CF:12:EF:69:63;1;194F407D;1;0
+
+                    var comment = commentArray[0] + ';' + commentArray[1] + ';1;' + commentArray[3] + ';1;' + commentArray[5] + ';';
+
+                    window.location = '/Card/Index?cardinfo=' + comment;
                 };
 
                 if (commentArray[4] == '6') {

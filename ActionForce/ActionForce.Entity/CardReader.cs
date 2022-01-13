@@ -27,5 +27,7 @@ namespace ActionForce.Entity
         public Nullable<System.Guid> UID { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
         public Nullable<bool> IsActive { get; set; }
+        public string Version { get; set; }
+        public string IPAddress { get; set; }
     }
 }

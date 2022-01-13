@@ -47,6 +47,11 @@ namespace ActionForce.PosLocation.Controllers
             var creditLoad = Db.AddTicketSaleCreditLoad(id, model.Card.CardNumber, model.Card.Credit, model.CardReader.SerialNumber, model.CardReader.MACAddress, model.Authentication.CurrentEmployee.EmployeeID, PosManager.GetIPAddress(), 3, null, null).FirstOrDefault();
             model.CreditLoad = creditLoad;
 
+            if (creditLoad.IsSuccess == true)
+            {
+                return RedirectToAction("LoadResult", new { id = creditLoad.UID });
+            }
+
             var loadmethodid = 1;
 
             if (model.Card.CardTypeID == 1)
@@ -54,14 +59,7 @@ namespace ActionForce.PosLocation.Controllers
                 loadmethodid = 0;
             }
 
-            model.Comment = $"{model.CreditLoad.SerialNumber};{model.CreditLoad.MACAddress};1;{model.CreditLoad.CardNumber};{loadmethodid};{(int)model.CreditLoad.TotalCredit * 100};";
-
-            if (creditLoad.IsSuccess == true)
-            {
-                return RedirectToAction("LoadResult", new { id = creditLoad.UID });
-            }
-
-
+            model.Comment = $"{model.CreditLoad.SerialNumber};{model.CreditLoad.MACAddress};1;{model.CreditLoad.CardNumber};{loadmethodid};{(int)model.CreditLoad.TotalCredit * 100};{creditLoad.ID};";
 
             model.CardBalanceAction = 0;
 
@@ -106,7 +104,7 @@ namespace ActionForce.PosLocation.Controllers
 
             var creditLoad = Db.AddTicketSaleCreditLoad(null, model.Card.CardNumber, model.Card.Credit, model.CardReader.SerialNumber, model.CardReader.MACAddress, model.Authentication.CurrentEmployee.EmployeeID, PosManager.GetIPAddress(), 4, model.CardAction.ProcessID, model.CardAction.ID).FirstOrDefault();
             model.CreditLoad = creditLoad;
-            model.Comment = $"{model.CreditLoad.SerialNumber};{model.CreditLoad.MACAddress};1;{model.CreditLoad.CardNumber};1;{(int)model.CreditLoad.TotalCredit * 100};";
+            model.Comment = $"{model.CreditLoad.SerialNumber};{model.CreditLoad.MACAddress};1;{model.CreditLoad.CardNumber};1;{(int)model.CreditLoad.TotalCredit * 100};{creditLoad.ID};";
 
             if (creditLoad.IsSuccess == true)
             {
@@ -158,7 +156,8 @@ namespace ActionForce.PosLocation.Controllers
             model.CardNumber = model.Card.CardNumber;
 
             model.CreditLoad = Db.AddTicketSaleCreditLoad(null, model.Card.CardNumber, model.Card.Credit, model.CardReader.SerialNumber, model.CardReader.MACAddress, model.Authentication.CurrentEmployee.EmployeeID, PosManager.GetIPAddress(), 5, 0, 0).FirstOrDefault();
-            model.Comment = $"{model.CreditLoad.SerialNumber};{model.CreditLoad.MACAddress};1;{model.CreditLoad.CardNumber};0;0;";
+            
+            model.Comment = $"{model.CreditLoad.SerialNumber};{model.CreditLoad.MACAddress};1;{model.CreditLoad.CardNumber};0;0;{model.CreditLoad.ID};";
 
             if (model.CreditLoad.IsSuccess == true)
             {

@@ -16,6 +16,8 @@ namespace ActionForce.CardService.Models
         public string PartGroupName { get; set; }
         public string SerialNumber { get; set; }
         public string MACAddress { get; set; }
+        public string Version { get; set; }
+        public string IPAddress { get; set; }
         public int? CardReaderTypeID { get; set; }
         public Guid? UID { get; set; }
         public DateTime? StartDate { get; set; }

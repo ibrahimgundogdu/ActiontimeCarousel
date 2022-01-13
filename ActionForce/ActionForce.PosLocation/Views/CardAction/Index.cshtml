@@ -164,7 +164,7 @@
                                     else
                                     {
                                         <div class="form-group">
-                                            <a href="javascript:;" onclick="LoadCredit('@(Model.CreditLoad?.UID)')" class="btn btn-primary btn-block">KART YÜKLE</a>
+                                            <button type="button" id="LoadCardCredit" onclick="LoadCredit('@(Model.CreditLoad?.UID)');" class="btn btn-primary btn-block">KART YÜKLE</button>
                                         </div>
                                     }
 
@@ -224,7 +224,8 @@
                         action: function () {
                             console.log('@(Model.Comment)');
                             Android.sendComment('@(Model.Comment)');
-                            // kontör yükleme methodu çağrılır
+                            $('#LoadCardCredit').prop('disabled', true);
+                            // kontör yükleme methodu çağrılır LoadCredit
 
                         }
                     },
@@ -411,16 +412,18 @@
                     var credit = commentArray[5];
                     var cardnumber = commentArray[3];
 
-                    var uid = '@(Model.CreditLoad?.UID)';
-                    $.ajax({
-                        method: "GET",
-                        url: "/CardAction/CompleteCardLoad",
-                        data: { uid, credit, cardnumber }
-                    }).done(function (d) {
-                        $("#MessageArea").html(d);
-                    });
+                    var comment = commentArray[0] + ';' + commentArray[1] + ';1;' + commentArray[3] + ';1;' + commentArray[5] + ';';
 
-                    //window.location = '/Card/Index?cardinfo=' + comment;  CardServiceClient
+                    //$.ajax({
+                    //    method: "GET",
+                    //    url: "/CardAction/CompleteCardLoad",
+                    //    data: { uid, credit, cardnumber }
+                    //}).done(function (d) {
+                    //    $("#MessageArea").html(d);
+                    //});
+                    //00DD4D48;E8:DB:84:DD:4D:48;1;194FBD8D;1;10000
+
+                    window.location = '/Card/Index?cardinfo=' + comment;
                 };
 
                 if (commentArray[4] == '6') {

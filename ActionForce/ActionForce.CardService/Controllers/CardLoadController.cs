@@ -17,6 +17,8 @@ namespace ActionForce.CardService.Controllers
         public HttpResponseMessage ReceiveComment(string comment)
         {
             Result result = new Result();
+            ServiceHelper helper = new ServiceHelper();
+            PushClient pushService = new PushClient();
 
             result.IsSuccess = false;
             result.Message = string.Empty;
@@ -31,6 +33,7 @@ namespace ActionForce.CardService.Controllers
                     var MACAddress = infolist[1];
                     var Process = infolist[2];
 
+
                     using (var connection = new SqlConnection(ServiceHelper.GetConnectionString()))
                     {
                         var rparameters = new { SerialNumber, MACAddress };
@@ -39,7 +42,44 @@ namespace ActionForce.CardService.Controllers
 
                         if (cardReader != null && cardReader.LocationID != null)
                         {
-                            PushClient pushService = new PushClient();
+                            if (Process == "1")
+                            {
+                                if (infolist.Length >= 5 && infolist[4] == "7") //kontör yükleme başarılı
+                                {
+                                    if (!string.IsNullOrEmpty(cardReader.Version) && cardReader.Version == "1.12")
+                                    {
+                                        //00DD4D48;E8:DB:84:DD:4D:48;1;194FBD8D;7;10000;1779
+
+                                        var CardNumber = infolist[3];
+                                        var crParameters = new { SerialNumber, MACAddress, CardNumber };
+                                        var crSql = "Exec [dbo].[CheckCreditLoad] @SerialNumber , @MACAddress, @CardNumber";
+                                        var creditLoadID = connection.QueryFirst(crSql, crParameters);  // id si alınır
+                                        var creditLoad = helper.GetCardLoad(creditLoadID.ID);
+                                        var loadresult = CardLoadResult(creditLoad.UID, 1, "Kredi Yüklendi");
+
+                                    }
+                                    else
+                                    {
+                                        var creditLoadID = Convert.ToInt32(infolist[6]);
+                                        var creditLoad = helper.GetCardLoad(creditLoadID);
+                                        var loadresult = CardLoadResult(creditLoad.UID,1,"Kredi Yüklendi"); //helper.LoadCard(creditLoad);
+                                    }
+                                    
+                                }
+
+                            }
+                            else if (Process == "80")
+                            {
+                                var Version = infolist[3];
+                                var IPAdress = infolist[4];
+
+                                var crParameters = new { SerialNumber , MACAddress , Version, IPAdress };
+                                var crSql = "Exec [dbo].[CheckCardReader] @SerialNumber , @MACAddress, @Version, @IPAdress";
+
+                                connection.Query(crSql, crParameters);
+
+                            }
+
                             pushService.SendComment(cardReader.LocationID ?? 0, comment);
 
                             result.IsSuccess = true;
@@ -47,8 +87,16 @@ namespace ActionForce.CardService.Controllers
                         }
                         else
                         {
-                            result.IsSuccess = false;
-                            result.Message = "READERNOTFOUND";
+                            var Version = infolist[3];
+                            var IPAdress = infolist[4];
+
+                            var crParameters = new { SerialNumber, MACAddress, Version, IPAdress };
+                            var crSql = "Exec [dbo].[CheckCardReader] @SerialNumber , @MACAddress, @Version, @IPAdress";
+
+                            connection.Query(crSql, crParameters);
+
+                            return ReceiveComment(comment);
+                            
                         }
                     }
                 }

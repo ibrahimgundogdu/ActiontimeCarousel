@@ -633,6 +633,8 @@
           <Property Name="PartGroupName" Type="nvarchar" MaxLength="50" />
           <Property Name="SerialNumber" Type="nvarchar" MaxLength="20" />
           <Property Name="MACAddress" Type="nvarchar" MaxLength="20" />
+          <Property Name="Version" Type="nvarchar" MaxLength="20" />
+          <Property Name="IPAddress" Type="nvarchar" MaxLength="20" />
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="StartDate" Type="datetime" />
           <Property Name="IsActive" Type="bit" />
@@ -7826,6 +7828,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="CustomerID" Type="int" Mode="In" />
           <Parameter Name="PhoneNumber" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="CheckCardReader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SerialNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="MACAddress" Type="nvarchar" Mode="In" />
+          <Parameter Name="Version" Type="nvarchar" Mode="In" />
+          <Parameter Name="IPAddress" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="CheckCardReaderParameter" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SerialNumber" Type="nvarchar" Mode="In" />
           <Parameter Name="MACAddress" Type="nvarchar" Mode="In" />
@@ -7834,6 +7842,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="MiliSecond" Type="int" Mode="In" />
           <Parameter Name="ReadCount" Type="int" Mode="In" />
           <Parameter Name="UnitDuration" Type="int" Mode="In" />
+        </Function>
+        <Function Name="CheckCreditLoad" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SerialNumber" Type="nvarchar" Mode="In" />
+          <Parameter Name="MACAddress" Type="nvarchar" Mode="In" />
+          <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="CheckCustomer" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="IdentityNumber" Type="nvarchar" Mode="In" />
@@ -12182,6 +12195,17 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="NFCCardLog" EntityType="db293_ActionTimeDbModel.NFCCardLog" />
           <EntitySet Name="VEmployeeModel" EntityType="db293_ActionTimeDbModel.VEmployeeModel" />
+          <FunctionImport Name="CheckCardReader">
+            <Parameter Name="SerialNumber" Mode="In" Type="String" />
+            <Parameter Name="MACAddress" Mode="In" Type="String" />
+            <Parameter Name="Version" Mode="In" Type="String" />
+            <Parameter Name="IPAddress" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="CheckCreditLoad" ReturnType="Collection(Int64)">
+            <Parameter Name="SerialNumber" Mode="In" Type="String" />
+            <Parameter Name="MACAddress" Mode="In" Type="String" />
+            <Parameter Name="CardNumber" Mode="In" Type="String" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -19629,6 +19653,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="UID" Type="Guid" />
           <Property Name="StartDate" Type="DateTime" Precision="3" />
           <Property Name="IsActive" Type="Boolean" />
+          <Property Name="Version" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IPAddress" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="CardReaderAction">
           <Key>
@@ -27462,6 +27488,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="CardReader">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.CardReader">
               <MappingFragment StoreEntitySet="CardReader">
+                <ScalarProperty Name="IPAddress" ColumnName="IPAddress" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
                 <ScalarProperty Name="IsActive" ColumnName="IsActive" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
@@ -28023,6 +28051,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="CheckCardReader" FunctionName="db293_ActionTimeDbModel.Store.CheckCardReader" />
+          <FunctionImportMapping FunctionImportName="CheckCreditLoad" FunctionName="db293_ActionTimeDbModel.Store.CheckCreditLoad" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
