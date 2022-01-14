@@ -2582,6 +2582,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="LocationPartID" Type="int" />
           <Property Name="EmployeeID" Type="int" />
           <Property Name="ReadDate" Type="datetime" />
+          <Property Name="ReadDay" Type="date" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="LocationPeriods">
           <Key>
@@ -4366,6 +4367,48 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UpdateDate" Type="datetime" />
           <Property Name="UpdateIP" Type="nvarchar" MaxLength="20" />
           <Property Name="UpdateEmployeeID" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.HCardActions' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="HCardActions">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="Credit" />
+            <PropertyRef Name="SaleRowTotal" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="CardID" Type="bigint" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="CustomerID" Type="int" />
+          <Property Name="SaleID" Type="bigint" />
+          <Property Name="SaleRowID" Type="bigint" />
+          <Property Name="ProcessID" Type="bigint" />
+          <Property Name="ProcessUID" Type="uniqueidentifier" />
+          <Property Name="ActionTypeID" Type="smallint" />
+          <Property Name="ActionTypeName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ActionDate" Type="datetime" />
+          <Property Name="DateOnly" Type="datetime" />
+          <Property Name="CreditCharge" Type="float" />
+          <Property Name="CreditSpend" Type="float" />
+          <Property Name="Credit" Type="float" Nullable="false" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="IsPromotion" Type="bit" />
+          <Property Name="NameTR" Type="nvarchar" MaxLength="50" />
+          <Property Name="CardReaderID" Type="int" />
+          <Property Name="CardNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="CardTypeID" Type="smallint" />
+          <Property Name="CardReaderTypeID" Type="int" />
+          <Property Name="LocationPartID" Type="int" />
+          <Property Name="PartName" Type="nvarchar" MaxLength="50" />
+          <Property Name="SerialNumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="MACAddress" Type="nvarchar" MaxLength="20" />
+          <Property Name="ReaderTypeName" Type="nvarchar" MaxLength="40" />
+          <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
+          <Property Name="ActionDateUpdate" Type="datetime" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="EmployeeFullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="SaleRowTotal" Type="float" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.LocationEmployeeCheck' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -6267,6 +6310,23 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationMallMoto' does not
           <Property Name="OurCompanyID" Type="int" />
           <Property Name="LocationFullName" Type="nvarchar" MaxLength="613" />
           <Property Name="MallMotoColorID" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPartEmployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VLocationPartEmployee">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="LocationTypeID" Type="int" />
+          <Property Name="LocationPartID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="ReadDate" Type="datetime" />
+          <Property Name="ReadDay" Type="date" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="PartName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VLocationPosTerminal' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -8505,6 +8565,43 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [EmployeeX].[IsDismissal] AS [IsDismissal]
     FROM [dbo].[EmployeeX] AS [EmployeeX]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="HCardActions" EntityType="Self.HCardActions" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [HCardActions].[ID] AS [ID], 
+    [HCardActions].[OurCompanyID] AS [OurCompanyID], 
+    [HCardActions].[CardID] AS [CardID], 
+    [HCardActions].[LocationID] AS [LocationID], 
+    [HCardActions].[CustomerID] AS [CustomerID], 
+    [HCardActions].[SaleID] AS [SaleID], 
+    [HCardActions].[SaleRowID] AS [SaleRowID], 
+    [HCardActions].[ProcessID] AS [ProcessID], 
+    [HCardActions].[ProcessUID] AS [ProcessUID], 
+    [HCardActions].[ActionTypeID] AS [ActionTypeID], 
+    [HCardActions].[ActionTypeName] AS [ActionTypeName], 
+    [HCardActions].[ActionDate] AS [ActionDate], 
+    [HCardActions].[DateOnly] AS [DateOnly], 
+    [HCardActions].[CreditCharge] AS [CreditCharge], 
+    [HCardActions].[CreditSpend] AS [CreditSpend], 
+    [HCardActions].[Credit] AS [Credit], 
+    [HCardActions].[Currency] AS [Currency], 
+    [HCardActions].[IsPromotion] AS [IsPromotion], 
+    [HCardActions].[NameTR] AS [NameTR], 
+    [HCardActions].[CardReaderID] AS [CardReaderID], 
+    [HCardActions].[CardNumber] AS [CardNumber], 
+    [HCardActions].[CardTypeID] AS [CardTypeID], 
+    [HCardActions].[CardReaderTypeID] AS [CardReaderTypeID], 
+    [HCardActions].[LocationPartID] AS [LocationPartID], 
+    [HCardActions].[PartName] AS [PartName], 
+    [HCardActions].[SerialNumber] AS [SerialNumber], 
+    [HCardActions].[MACAddress] AS [MACAddress], 
+    [HCardActions].[ReaderTypeName] AS [ReaderTypeName], 
+    [HCardActions].[LocationFullName] AS [LocationFullName], 
+    [HCardActions].[ActionDateUpdate] AS [ActionDateUpdate], 
+    [HCardActions].[EmployeeID] AS [EmployeeID], 
+    [HCardActions].[EmployeeFullName] AS [EmployeeFullName], 
+    [HCardActions].[SaleRowTotal] AS [SaleRowTotal]
+    FROM [dbo].[HCardActions] AS [HCardActions]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="LocationEmployeeCheck" EntityType="Self.LocationEmployeeCheck" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [LocationEmployeeCheck].[LocationID] AS [LocationID], 
@@ -10183,6 +10280,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VLocationMallMoto].[LocationFullName] AS [LocationFullName], 
     [VLocationMallMoto].[MallMotoColorID] AS [MallMotoColorID]
     FROM [dbo].[VLocationMallMoto] AS [VLocationMallMoto]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="VLocationPartEmployee" EntityType="Self.VLocationPartEmployee" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VLocationPartEmployee].[ID] AS [ID], 
+    [VLocationPartEmployee].[OurCompanyID] AS [OurCompanyID], 
+    [VLocationPartEmployee].[LocationID] AS [LocationID], 
+    [VLocationPartEmployee].[LocationTypeID] AS [LocationTypeID], 
+    [VLocationPartEmployee].[LocationPartID] AS [LocationPartID], 
+    [VLocationPartEmployee].[EmployeeID] AS [EmployeeID], 
+    [VLocationPartEmployee].[ReadDate] AS [ReadDate], 
+    [VLocationPartEmployee].[ReadDay] AS [ReadDay], 
+    [VLocationPartEmployee].[FullName] AS [FullName], 
+    [VLocationPartEmployee].[PartName] AS [PartName]
+    FROM [dbo].[VLocationPartEmployee] AS [VLocationPartEmployee]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VLocationPosTerminal" EntityType="Self.VLocationPosTerminal" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
@@ -12206,6 +12317,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="MACAddress" Mode="In" Type="String" />
             <Parameter Name="CardNumber" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="HCardActions" EntityType="db293_ActionTimeDbModel.HCardActions" />
+          <EntitySet Name="VLocationPartEmployee" EntityType="db293_ActionTimeDbModel.VLocationPartEmployee" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -19714,6 +19827,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="LocationPartID" Type="Int32" />
           <Property Name="EmployeeID" Type="Int32" />
           <Property Name="ReadDate" Type="DateTime" Precision="3" />
+          <Property Name="ReadDay" Type="DateTime" annotation:StoreGeneratedPattern="Computed" Precision="0" />
         </EntityType>
         <EntityType Name="LocationProductPriceCategory">
           <Key>
@@ -20276,6 +20390,61 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="MobilePhone" Type="String" MaxLength="59" FixedLength="false" Unicode="true" />
           <Property Name="OurCompanyID" Type="Int32" Nullable="false" />
           <Property Name="Currency" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="HCardActions">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="Credit" />
+            <PropertyRef Name="SaleRowTotal" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="CardID" Type="Int64" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="CustomerID" Type="Int32" />
+          <Property Name="SaleID" Type="Int64" />
+          <Property Name="SaleRowID" Type="Int64" />
+          <Property Name="ProcessID" Type="Int64" />
+          <Property Name="ProcessUID" Type="Guid" />
+          <Property Name="ActionTypeID" Type="Int16" />
+          <Property Name="ActionTypeName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ActionDate" Type="DateTime" Precision="3" />
+          <Property Name="DateOnly" Type="DateTime" Precision="3" />
+          <Property Name="CreditCharge" Type="Double" />
+          <Property Name="CreditSpend" Type="Double" />
+          <Property Name="Credit" Type="Double" Nullable="false" />
+          <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="IsPromotion" Type="Boolean" />
+          <Property Name="NameTR" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CardReaderID" Type="Int32" />
+          <Property Name="CardNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CardTypeID" Type="Int16" />
+          <Property Name="CardReaderTypeID" Type="Int32" />
+          <Property Name="LocationPartID" Type="Int32" />
+          <Property Name="PartName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SerialNumber" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="MACAddress" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ReaderTypeName" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="LocationFullName" Type="String" MaxLength="613" FixedLength="false" Unicode="true" />
+          <Property Name="ActionDateUpdate" Type="DateTime" Precision="3" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="EmployeeFullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="SaleRowTotal" Type="Double" Nullable="false" />
+        </EntityType>
+        <EntityType Name="VLocationPartEmployee">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="LocationTypeID" Type="Int32" />
+          <Property Name="LocationPartID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="ReadDate" Type="DateTime" Precision="3" />
+          <Property Name="ReadDay" Type="DateTime" Precision="0" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="PartName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -27559,6 +27728,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="LocationPartEmployee">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationPartEmployee">
               <MappingFragment StoreEntitySet="LocationPartEmployee">
+                <ScalarProperty Name="ReadDay" ColumnName="ReadDay" />
                 <ScalarProperty Name="ReadDate" ColumnName="ReadDate" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="LocationPartID" ColumnName="LocationPartID" />
@@ -28053,6 +28223,61 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="CheckCardReader" FunctionName="db293_ActionTimeDbModel.Store.CheckCardReader" />
           <FunctionImportMapping FunctionImportName="CheckCreditLoad" FunctionName="db293_ActionTimeDbModel.Store.CheckCreditLoad" />
+          <EntitySetMapping Name="HCardActions">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.HCardActions">
+              <MappingFragment StoreEntitySet="HCardActions">
+                <ScalarProperty Name="SaleRowTotal" ColumnName="SaleRowTotal" />
+                <ScalarProperty Name="EmployeeFullName" ColumnName="EmployeeFullName" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="ActionDateUpdate" ColumnName="ActionDateUpdate" />
+                <ScalarProperty Name="LocationFullName" ColumnName="LocationFullName" />
+                <ScalarProperty Name="ReaderTypeName" ColumnName="ReaderTypeName" />
+                <ScalarProperty Name="MACAddress" ColumnName="MACAddress" />
+                <ScalarProperty Name="SerialNumber" ColumnName="SerialNumber" />
+                <ScalarProperty Name="PartName" ColumnName="PartName" />
+                <ScalarProperty Name="LocationPartID" ColumnName="LocationPartID" />
+                <ScalarProperty Name="CardReaderTypeID" ColumnName="CardReaderTypeID" />
+                <ScalarProperty Name="CardTypeID" ColumnName="CardTypeID" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="CardReaderID" ColumnName="CardReaderID" />
+                <ScalarProperty Name="NameTR" ColumnName="NameTR" />
+                <ScalarProperty Name="IsPromotion" ColumnName="IsPromotion" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Credit" ColumnName="Credit" />
+                <ScalarProperty Name="CreditSpend" ColumnName="CreditSpend" />
+                <ScalarProperty Name="CreditCharge" ColumnName="CreditCharge" />
+                <ScalarProperty Name="DateOnly" ColumnName="DateOnly" />
+                <ScalarProperty Name="ActionDate" ColumnName="ActionDate" />
+                <ScalarProperty Name="ActionTypeName" ColumnName="ActionTypeName" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="SaleRowID" ColumnName="SaleRowID" />
+                <ScalarProperty Name="SaleID" ColumnName="SaleID" />
+                <ScalarProperty Name="CustomerID" ColumnName="CustomerID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="CardID" ColumnName="CardID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VLocationPartEmployee">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VLocationPartEmployee">
+              <MappingFragment StoreEntitySet="VLocationPartEmployee">
+                <ScalarProperty Name="PartName" ColumnName="PartName" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="ReadDay" ColumnName="ReadDay" />
+                <ScalarProperty Name="ReadDate" ColumnName="ReadDate" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="LocationPartID" ColumnName="LocationPartID" />
+                <ScalarProperty Name="LocationTypeID" ColumnName="LocationTypeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -28068,7 +28293,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="false" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>

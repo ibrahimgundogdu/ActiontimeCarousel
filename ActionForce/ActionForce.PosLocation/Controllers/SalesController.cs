@@ -37,7 +37,7 @@ namespace ActionForce.PosLocation.Controllers
 
             if (model.Authentication.IsCardSystem == true)
             {
-                model.CardActions = Db.VCardActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.DateOnly == DocumentDate).ToList();
+                model.UCardActions = Db.HCardActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.DateOnly == DocumentDate).ToList();
             }
             else
             {
@@ -993,11 +993,13 @@ namespace ActionForce.PosLocation.Controllers
 
             model.DocumentDate = DocumentDate;
 
-            model.CardActions = Db.VCardActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.DateOnly == DocumentDate).ToList();
+            model.UCardActions = Db.HCardActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.DateOnly == DocumentDate).ToList();
 
-            List<int> employeeids = model.CardActions.Select(x => x.EmployeeID.Value).ToList();
+            List<int> employeeids = model.UCardActions.Select(x => x.EmployeeID.Value).ToList();
 
             model.Employees = Db.Employee.Where(x => employeeids.Contains(x.EmployeeID)).ToList();
+            model.LocationPartEmployees = Db.VLocationPartEmployee.Where(x => x.ReadDay == DocumentDate && x.LocationID == model.Authentication.CurrentLocation.ID).ToList();
+
 
             var locationparts = Db.GetLocationPartList(model.Authentication.CurrentLocation.ID).ToList();
 

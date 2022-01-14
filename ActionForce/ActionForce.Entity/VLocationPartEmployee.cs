@@ -12,7 +12,7 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class LocationPartEmployee
+    public partial class VLocationPartEmployee
     {
         public long ID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
@@ -22,5 +22,7 @@ namespace ActionForce.Entity
         public Nullable<int> EmployeeID { get; set; }
         public Nullable<System.DateTime> ReadDate { get; set; }
         public Nullable<System.DateTime> ReadDay { get; set; }
+        public string FullName { get; set; }
+        public string PartName { get; set; }
     }
 }

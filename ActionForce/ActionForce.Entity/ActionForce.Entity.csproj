@@ -527,6 +527,9 @@
     <Compile Include="GetToList_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="HCardActions.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="IdentityType.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -1099,6 +1102,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VLocationMallMoto.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VLocationPartEmployee.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VLocationPosTerminal.cs">

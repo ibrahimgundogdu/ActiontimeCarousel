@@ -30,10 +30,10 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Cash" Width="1.5" PointX="21.75" PointY="4.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CashActionType" Width="1.5" PointX="22.125" PointY="15.25" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Chassis" Width="1.5" PointX="12.75" PointY="23.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ChassisType" Width="1.5" PointX="14.75" PointY="23.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.ChassisType" Width="1.5" PointX="14.75" PointY="24.5" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CheckParameters" Width="1.5" PointX="26.5" PointY="20.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Costume" Width="1.5" PointX="22.75" PointY="17.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.CostumeType" Width="1.5" PointX="16.75" PointY="23.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.CostumeType" Width="1.5" PointX="17.375" PointY="37.875" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DateList" Width="1.5" PointX="22.75" PointY="20.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentNumber" Width="1.5" PointX="23.75" PointY="1.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.DocumentType" Width="1.5" PointX="13" PointY="8.75" />
@@ -367,7 +367,9 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CardActionsHistory" Width="1.5" PointX="47.375" PointY="20.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.CardReaderActionHistory" Width="1.5" PointX="32.75" PointY="23.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.NFCCardLog" Width="1.5" PointX="41.5" PointY="7.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeModel" Width="1.5" PointX="9.3354812922587058" PointY="22.789784278157068" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployeeModel" Width="1.5" PointX="26.75" PointY="35.125" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.HCardActions" Width="1.5" PointX="37.125" PointY="33.125" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VLocationPartEmployee" Width="1.5" PointX="10.798830806649677" PointY="27.029130978057687" />
         
         
         

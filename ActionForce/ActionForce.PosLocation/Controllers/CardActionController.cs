@@ -304,9 +304,6 @@ namespace ActionForce.PosLocation.Controllers
 
         //ResetResult
 
-
-
-
         public string CompleteCardLoad(Guid? uid, string credit, string cardnumber)
         {
             CardControlModel model = new CardControlModel();
@@ -362,5 +359,9 @@ namespace ActionForce.PosLocation.Controllers
 
             return message;
         }
+
+
+
+
     }
 }

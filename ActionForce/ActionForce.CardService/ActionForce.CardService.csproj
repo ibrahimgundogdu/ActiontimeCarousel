@@ -135,6 +135,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\CardLoadController.cs" />
     <Compile Include="Controllers\CardReaderController.cs" />
+    <Compile Include="Controllers\CommentController.cs" />
     <Compile Include="Controllers\DefaultController.cs" />
     <Compile Include="Controllers\PersonalController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
@@ -173,6 +174,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Card\" />
+    <Folder Include="Views\Comment\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
