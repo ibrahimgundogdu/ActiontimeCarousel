@@ -368,6 +368,12 @@ namespace ActionForce.Entity
         public virtual DbSet<VEmployeeModel> VEmployeeModel { get; set; }
         public virtual DbSet<HCardActions> HCardActions { get; set; }
         public virtual DbSet<VLocationPartEmployee> VLocationPartEmployee { get; set; }
+        public virtual DbSet<SalaryPeriod> SalaryPeriod { get; set; }
+        public virtual DbSet<SalaryPeriodCompute> SalaryPeriodCompute { get; set; }
+        public virtual DbSet<SalaryPeriodComputeActions> SalaryPeriodComputeActions { get; set; }
+        public virtual DbSet<SalaryPeriodGroup> SalaryPeriodGroup { get; set; }
+        public virtual DbSet<SalaryPeriodStatus> SalaryPeriodStatus { get; set; }
+        public virtual DbSet<VSalaryPeriod> VSalaryPeriod { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

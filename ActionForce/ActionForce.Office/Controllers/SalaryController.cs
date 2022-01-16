@@ -1521,11 +1521,11 @@ namespace ActionForce.Office.Controllers
 
         //SalaryResult
         [AllowAnonymous]
-        public ActionResult SalaryResult(int? EmployeeID, int? LocationID, DateTime? DateBegin, DateTime? DateEnd)
+        public ActionResult SalaryResult(int? EmployeeID, int? LocationID, int? SalaryPeriodID, DateTime? DateBegin, DateTime? DateEnd )
         {
             SalaryControlModel model = new SalaryControlModel();
 
-            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396 }.ToList();
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
 
             if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
             {
@@ -1542,11 +1542,20 @@ namespace ActionForce.Office.Controllers
 
                 filterModel.EmployeeID = EmployeeID != null ? EmployeeID : 0;
                 filterModel.LocationID = LocationID != null ? LocationID : 0;
+                filterModel.SalaryPeriodID = SalaryPeriodID != null ? SalaryPeriodID : 0;
                 filterModel.DateBegin = DateBegin != null ? DateBegin : DateTime.Now.AddDays(-15).Date;
                 filterModel.DateEnd = DateEnd != null ? DateEnd : DateTime.Now.Date;
                 model.Filters = filterModel;
             }
 
+            if ((SalaryPeriodID != null && SalaryPeriodID > 0) || (model.Filters.SalaryPeriodID != null && model.Filters.SalaryPeriodID > 0))
+            {
+                model.SalaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.ID == model.Filters.SalaryPeriodID);
+                model.Filters.DateBegin = model.SalaryPeriod.DateBegin;
+                model.Filters.DateEnd = model.SalaryPeriod.DateEnd;
+            }
+
+            model.SalaryPeriods = Db.VSalaryPeriod.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.CurrentCompany = Db.OurCompany.FirstOrDefault(x => x.CompanyID == model.Authentication.ActionEmployee.OurCompanyID);
             model.EmployeeList = Db.Employee.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.LocationList = Db.Location.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
@@ -1639,12 +1648,13 @@ namespace ActionForce.Office.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult ResultFilter(int? EmployeeID, int? LocationID, DateTime? DateBegin, DateTime? DateEnd)
+        public ActionResult ResultFilter(int? EmployeeID, int? LocationID, int? SalaryPeriodID, DateTime? DateBegin, DateTime? DateEnd)
         {
             FilterModel model = new FilterModel();
 
             model.EmployeeID = EmployeeID;
             model.LocationID = LocationID;
+            model.SalaryPeriodID = SalaryPeriodID;
             model.DateBegin = DateBegin;
             model.DateEnd = DateEnd;
 
@@ -1706,7 +1716,6 @@ namespace ActionForce.Office.Controllers
             Response.End();
         }
 
-        //ExportSetcardData
         [AllowAnonymous]
         public void ExportBankData()
         {
@@ -1813,7 +1822,40 @@ namespace ActionForce.Office.Controllers
             Response.End();
         }
 
+        [AllowAnonymous]
+        public ActionResult NewSalaryPeriod(Guid? id)
+        {
+            SalaryControlModel model = new SalaryControlModel();
 
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            model.SalaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.UID == id);
+
+            if (model.SalaryPeriod == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            model.Filters.DateBegin = model.SalaryPeriod.DateBegin;
+            model.Filters.DateEnd = model.SalaryPeriod.DateEnd;
+
+            model.SalaryPeriodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == model.SalaryPeriod.ID).ToList();
+            
+
+
+
+            return View(model);
+        }
 
 
     }

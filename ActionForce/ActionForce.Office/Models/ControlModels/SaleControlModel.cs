@@ -41,7 +41,7 @@ namespace ActionForce.Office
 
         public List<VDocumentExpenseSlip> DocumentExpenseSlips { get; set; }
 
-        public List<VCardActions> CardActions { get; set; }
+        public List<HCardActions> CardActions { get; set; }
 
         public List<Employee> Employees { get; set; }
 

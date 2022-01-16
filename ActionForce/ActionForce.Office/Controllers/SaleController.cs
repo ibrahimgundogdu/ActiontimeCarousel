@@ -44,7 +44,7 @@ namespace ActionForce.Office.Controllers
                 List<long> saleIds = model.TicketSaleSummary.Select(x => x.ID).ToList();
                 model.TicketSaleSaleRows = Db.VTicketSaleSaleRowSummary.Where(x => saleIds.Contains(x.SaleID)).ToList();
                 model.DocumentExpenseSlips = Db.VDocumentExpenseSlip.Where(x => x.LocationID == model.Filters.LocationID && x.DocumentDate == model.Filters.Date && x.IsActive == true).ToList();
-                model.CardActions = Db.VCardActions.Where(x => x.LocationID == model.Filters.LocationID && x.DateOnly == model.Filters.Date).ToList();
+                model.CardActions = Db.HCardActions.Where(x => x.LocationID == model.Filters.LocationID && x.DateOnly == model.Filters.Date).ToList();
 
                 List<int> employeeids = model.CardActions.Select(x => x.EmployeeID.Value).ToList();
 

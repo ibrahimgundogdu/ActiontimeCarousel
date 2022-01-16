@@ -3449,6 +3449,98 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="SortBy" Type="char" MaxLength="4" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="SalaryPeriod">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="SalaryPeriodGroupID" Type="smallint" />
+          <Property Name="SalaryPeriodStatusID" Type="smallint" />
+          <Property Name="PeriodCode" Type="nvarchar" MaxLength="10" StoreGeneratedPattern="Computed" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="Number" Type="nvarchar" MaxLength="5" />
+          <Property Name="DateBegin" Type="date" />
+          <Property Name="DateEnd" Type="date" />
+          <Property Name="UID" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="SalaryPeriodCompute">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SalaryPeriodID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+          <Property Name="IdentityNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="PhoneNumber" Type="nvarchar" MaxLength="50" />
+          <Property Name="FoodCard" Type="nvarchar" MaxLength="30" />
+          <Property Name="IBAN" Type="nvarchar" MaxLength="30" />
+          <Property Name="BankName" Type="nvarchar" MaxLength="80" />
+          <Property Name="SalaryTotal" Type="float" />
+          <Property Name="PermitTotal" Type="float" />
+          <Property Name="ExtraShiftTotal" Type="float" />
+          <Property Name="PremiumTotal" Type="float" />
+          <Property Name="FormalTotal" Type="float" />
+          <Property Name="TotalProgress" Type="float" />
+          <Property Name="PrePaymentAmount" Type="float" />
+          <Property Name="SalaryCutAmount" Type="float" />
+          <Property Name="BankPaymentAmount" Type="float" />
+          <Property Name="ManuelPaymentAmount" Type="float" />
+          <Property Name="OtherPaymentAmount" Type="float" />
+          <Property Name="TotalPaymentAmount" Type="float" />
+          <Property Name="TotalBalance" Type="float" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
+          <Property Name="UID" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="SalaryPeriodComputeActions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SalaryPeriodID" Type="int" />
+          <Property Name="SalaryPeriodStatusID" Type="smallint" />
+          <Property Name="EmployeeCashActionID" Type="bigint" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="EmployeeID" Type="int" />
+          <Property Name="ActionTypeID" Type="int" />
+          <Property Name="DocumentNumber" Type="nvarchar" MaxLength="16" />
+          <Property Name="ProcessName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProcessID" Type="int" />
+          <Property Name="ProcessDate" Type="date" />
+          <Property Name="ProcessDetail" Type="nvarchar" MaxLength="500" />
+          <Property Name="ProcessUID" Type="uniqueidentifier" />
+          <Property Name="Direction" Type="smallint" />
+          <Property Name="Collection" Type="float" />
+          <Property Name="Payment" Type="float" />
+          <Property Name="Amount" Type="float" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="50" />
+          <Property Name="SalaryTypeID" Type="int" />
+          <Property Name="CategoryID" Type="int" />
+          <Property Name="RecordEmployeeID" Type="int" />
+          <Property Name="RecordDate" Type="datetime" />
+          <Property Name="UpdateEmployeeID" Type="int" />
+          <Property Name="UpdateDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="SalaryPeriodGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GroupType" Type="smallint" />
+          <Property Name="GroupName" Type="nvarchar" MaxLength="20" />
+          <Property Name="DayCount" Type="smallint" />
+          <Property Name="EmployeeAreaCategoryID" Type="int" />
+        </EntityType>
+        <EntityType Name="SalaryPeriodStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="smallint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="20" />
+        </EntityType>
         <EntityType Name="SalaryType">
           <Key>
             <PropertyRef Name="ID" />
@@ -6762,6 +6854,32 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VRevenueLines' does not hav
           <Property Name="VAT" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSalaryPeriod' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="VSalaryPeriod">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="SalaryPeriodGroupID" Type="smallint" />
+          <Property Name="SalaryPeriodStatusID" Type="smallint" />
+          <Property Name="PeriodCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="Year" Type="int" Nullable="false" />
+          <Property Name="Number" Type="nvarchar" MaxLength="5" />
+          <Property Name="DateBegin" Type="date" />
+          <Property Name="DateEnd" Type="date" />
+          <Property Name="UID" Type="uniqueidentifier" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="20" />
+          <Property Name="CompanyName" Type="nvarchar" MaxLength="150" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="20" />
+          <Property Name="GroupType" Type="smallint" />
+          <Property Name="GroupName" Type="nvarchar" MaxLength="20" />
+          <Property Name="EmployeeAreaCategoryID" Type="int" />
+          <Property Name="DayCount" Type="smallint" />
+          <Property Name="AreaName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSaleActionsSummaryUnion' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="VSaleActionsSummaryUnion">
           <Key>
@@ -8448,6 +8566,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="RoleGroupPermissions" EntityType="Self.RoleGroupPermissions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RoleLevel" EntityType="Self.RoleLevel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SalaryCategory" EntityType="Self.SalaryCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalaryPeriod" EntityType="Self.SalaryPeriod" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalaryPeriodCompute" EntityType="Self.SalaryPeriodCompute" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalaryPeriodComputeActions" EntityType="Self.SalaryPeriodComputeActions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalaryPeriodGroup" EntityType="Self.SalaryPeriodGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SalaryPeriodStatus" EntityType="Self.SalaryPeriodStatus" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SalaryType" EntityType="Self.SalaryType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SaleChannel" EntityType="Self.SaleChannel" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ScoreItem" EntityType="Self.ScoreItem" Schema="dbo" store:Type="Tables" />
@@ -10671,6 +10794,28 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VRevenueLines].[VAT] AS [VAT]
     FROM [dbo].[VRevenueLines] AS [VRevenueLines]</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="VSalaryPeriod" EntityType="Self.VSalaryPeriod" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [VSalaryPeriod].[ID] AS [ID], 
+    [VSalaryPeriod].[OurCompanyID] AS [OurCompanyID], 
+    [VSalaryPeriod].[SalaryPeriodGroupID] AS [SalaryPeriodGroupID], 
+    [VSalaryPeriod].[SalaryPeriodStatusID] AS [SalaryPeriodStatusID], 
+    [VSalaryPeriod].[PeriodCode] AS [PeriodCode], 
+    [VSalaryPeriod].[Year] AS [Year], 
+    [VSalaryPeriod].[Number] AS [Number], 
+    [VSalaryPeriod].[DateBegin] AS [DateBegin], 
+    [VSalaryPeriod].[DateEnd] AS [DateEnd], 
+    [VSalaryPeriod].[UID] AS [UID], 
+    [VSalaryPeriod].[Currency] AS [Currency], 
+    [VSalaryPeriod].[CompanyName] AS [CompanyName], 
+    [VSalaryPeriod].[StatusName] AS [StatusName], 
+    [VSalaryPeriod].[GroupType] AS [GroupType], 
+    [VSalaryPeriod].[GroupName] AS [GroupName], 
+    [VSalaryPeriod].[EmployeeAreaCategoryID] AS [EmployeeAreaCategoryID], 
+    [VSalaryPeriod].[DayCount] AS [DayCount], 
+    [VSalaryPeriod].[AreaName] AS [AreaName]
+    FROM [dbo].[VSalaryPeriod] AS [VSalaryPeriod]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="VSaleActionsSummaryUnion" EntityType="Self.VSaleActionsSummaryUnion" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [VSaleActionsSummaryUnion].[ID] AS [ID], 
@@ -12319,6 +12464,12 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="HCardActions" EntityType="db293_ActionTimeDbModel.HCardActions" />
           <EntitySet Name="VLocationPartEmployee" EntityType="db293_ActionTimeDbModel.VLocationPartEmployee" />
+          <EntitySet Name="SalaryPeriod" EntityType="db293_ActionTimeDbModel.SalaryPeriod" />
+          <EntitySet Name="SalaryPeriodCompute" EntityType="db293_ActionTimeDbModel.SalaryPeriodCompute" />
+          <EntitySet Name="SalaryPeriodComputeActions" EntityType="db293_ActionTimeDbModel.SalaryPeriodComputeActions" />
+          <EntitySet Name="SalaryPeriodGroup" EntityType="db293_ActionTimeDbModel.SalaryPeriodGroup" />
+          <EntitySet Name="SalaryPeriodStatus" EntityType="db293_ActionTimeDbModel.SalaryPeriodStatus" />
+          <EntitySet Name="VSalaryPeriod" EntityType="db293_ActionTimeDbModel.VSalaryPeriod" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -20446,6 +20597,122 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <Property Name="PartName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="SalaryPeriod">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="SalaryPeriodGroupID" Type="Int16" />
+          <Property Name="SalaryPeriodStatusID" Type="Int16" />
+          <Property Name="PeriodCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="Number" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="DateBegin" Type="DateTime" Precision="0" />
+          <Property Name="DateEnd" Type="DateTime" Precision="0" />
+          <Property Name="UID" Type="Guid" />
+        </EntityType>
+        <EntityType Name="SalaryPeriodCompute">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SalaryPeriodID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="IdentityNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PhoneNumber" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FoodCard" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="IBAN" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="BankName" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="SalaryTotal" Type="Double" />
+          <Property Name="PermitTotal" Type="Double" />
+          <Property Name="ExtraShiftTotal" Type="Double" />
+          <Property Name="PremiumTotal" Type="Double" />
+          <Property Name="FormalTotal" Type="Double" />
+          <Property Name="TotalProgress" Type="Double" />
+          <Property Name="PrePaymentAmount" Type="Double" />
+          <Property Name="SalaryCutAmount" Type="Double" />
+          <Property Name="BankPaymentAmount" Type="Double" />
+          <Property Name="ManuelPaymentAmount" Type="Double" />
+          <Property Name="OtherPaymentAmount" Type="Double" />
+          <Property Name="TotalPaymentAmount" Type="Double" />
+          <Property Name="TotalBalance" Type="Double" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordIP" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UID" Type="Guid" />
+        </EntityType>
+        <EntityType Name="SalaryPeriodComputeActions">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SalaryPeriodID" Type="Int32" />
+          <Property Name="SalaryPeriodStatusID" Type="Int16" />
+          <Property Name="EmployeeCashActionID" Type="Int64" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="EmployeeID" Type="Int32" />
+          <Property Name="ActionTypeID" Type="Int32" />
+          <Property Name="DocumentNumber" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessID" Type="Int32" />
+          <Property Name="ProcessDate" Type="DateTime" Precision="0" />
+          <Property Name="ProcessDetail" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessUID" Type="Guid" />
+          <Property Name="Direction" Type="Int16" />
+          <Property Name="Collection" Type="Double" />
+          <Property Name="Payment" Type="Double" />
+          <Property Name="Amount" Type="Double" />
+          <Property Name="Currency" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="SalaryTypeID" Type="Int32" />
+          <Property Name="CategoryID" Type="Int32" />
+          <Property Name="RecordEmployeeID" Type="Int32" />
+          <Property Name="RecordDate" Type="DateTime" Precision="3" />
+          <Property Name="UpdateEmployeeID" Type="Int32" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="SalaryPeriodGroup">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GroupType" Type="Int16" />
+          <Property Name="GroupName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DayCount" Type="Int16" />
+          <Property Name="EmployeeAreaCategoryID" Type="Int32" />
+        </EntityType>
+        <EntityType Name="SalaryPeriodStatus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int16" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="VSalaryPeriod">
+          <Key>
+            <PropertyRef Name="ID" />
+            <PropertyRef Name="Year" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="SalaryPeriodGroupID" Type="Int16" />
+          <Property Name="SalaryPeriodStatusID" Type="Int16" />
+          <Property Name="PeriodCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Year" Type="Int32" Nullable="false" />
+          <Property Name="Number" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="DateBegin" Type="DateTime" Precision="0" />
+          <Property Name="DateEnd" Type="DateTime" Precision="0" />
+          <Property Name="UID" Type="Guid" />
+          <Property Name="Currency" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="StatusName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="GroupType" Type="Int16" />
+          <Property Name="GroupName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="EmployeeAreaCategoryID" Type="Int32" />
+          <Property Name="DayCount" Type="Int16" />
+          <Property Name="AreaName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -28273,6 +28540,127 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
                 <ScalarProperty Name="LocationPartID" ColumnName="LocationPartID" />
                 <ScalarProperty Name="LocationTypeID" ColumnName="LocationTypeID" />
                 <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalaryPeriod">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SalaryPeriod">
+              <MappingFragment StoreEntitySet="SalaryPeriod">
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
+                <ScalarProperty Name="SalaryPeriodStatusID" ColumnName="SalaryPeriodStatusID" />
+                <ScalarProperty Name="SalaryPeriodGroupID" ColumnName="SalaryPeriodGroupID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalaryPeriodCompute">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SalaryPeriodCompute">
+              <MappingFragment StoreEntitySet="SalaryPeriodCompute">
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="RecordIP" ColumnName="RecordIP" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="TotalBalance" ColumnName="TotalBalance" />
+                <ScalarProperty Name="TotalPaymentAmount" ColumnName="TotalPaymentAmount" />
+                <ScalarProperty Name="OtherPaymentAmount" ColumnName="OtherPaymentAmount" />
+                <ScalarProperty Name="ManuelPaymentAmount" ColumnName="ManuelPaymentAmount" />
+                <ScalarProperty Name="BankPaymentAmount" ColumnName="BankPaymentAmount" />
+                <ScalarProperty Name="SalaryCutAmount" ColumnName="SalaryCutAmount" />
+                <ScalarProperty Name="PrePaymentAmount" ColumnName="PrePaymentAmount" />
+                <ScalarProperty Name="TotalProgress" ColumnName="TotalProgress" />
+                <ScalarProperty Name="FormalTotal" ColumnName="FormalTotal" />
+                <ScalarProperty Name="PremiumTotal" ColumnName="PremiumTotal" />
+                <ScalarProperty Name="ExtraShiftTotal" ColumnName="ExtraShiftTotal" />
+                <ScalarProperty Name="PermitTotal" ColumnName="PermitTotal" />
+                <ScalarProperty Name="SalaryTotal" ColumnName="SalaryTotal" />
+                <ScalarProperty Name="BankName" ColumnName="BankName" />
+                <ScalarProperty Name="IBAN" ColumnName="IBAN" />
+                <ScalarProperty Name="FoodCard" ColumnName="FoodCard" />
+                <ScalarProperty Name="PhoneNumber" ColumnName="PhoneNumber" />
+                <ScalarProperty Name="IdentityNumber" ColumnName="IdentityNumber" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="SalaryPeriodID" ColumnName="SalaryPeriodID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalaryPeriodComputeActions">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SalaryPeriodComputeActions">
+              <MappingFragment StoreEntitySet="SalaryPeriodComputeActions">
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
+                <ScalarProperty Name="UpdateEmployeeID" ColumnName="UpdateEmployeeID" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="RecordEmployeeID" ColumnName="RecordEmployeeID" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="SalaryTypeID" ColumnName="SalaryTypeID" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Payment" ColumnName="Payment" />
+                <ScalarProperty Name="Collection" ColumnName="Collection" />
+                <ScalarProperty Name="Direction" ColumnName="Direction" />
+                <ScalarProperty Name="ProcessUID" ColumnName="ProcessUID" />
+                <ScalarProperty Name="ProcessDetail" ColumnName="ProcessDetail" />
+                <ScalarProperty Name="ProcessDate" ColumnName="ProcessDate" />
+                <ScalarProperty Name="ProcessID" ColumnName="ProcessID" />
+                <ScalarProperty Name="ProcessName" ColumnName="ProcessName" />
+                <ScalarProperty Name="DocumentNumber" ColumnName="DocumentNumber" />
+                <ScalarProperty Name="ActionTypeID" ColumnName="ActionTypeID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="EmployeeCashActionID" ColumnName="EmployeeCashActionID" />
+                <ScalarProperty Name="SalaryPeriodStatusID" ColumnName="SalaryPeriodStatusID" />
+                <ScalarProperty Name="SalaryPeriodID" ColumnName="SalaryPeriodID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalaryPeriodGroup">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SalaryPeriodGroup">
+              <MappingFragment StoreEntitySet="SalaryPeriodGroup">
+                <ScalarProperty Name="EmployeeAreaCategoryID" ColumnName="EmployeeAreaCategoryID" />
+                <ScalarProperty Name="DayCount" ColumnName="DayCount" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="GroupType" ColumnName="GroupType" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SalaryPeriodStatus">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SalaryPeriodStatus">
+              <MappingFragment StoreEntitySet="SalaryPeriodStatus">
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="VSalaryPeriod">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VSalaryPeriod">
+              <MappingFragment StoreEntitySet="VSalaryPeriod">
+                <ScalarProperty Name="AreaName" ColumnName="AreaName" />
+                <ScalarProperty Name="DayCount" ColumnName="DayCount" />
+                <ScalarProperty Name="EmployeeAreaCategoryID" ColumnName="EmployeeAreaCategoryID" />
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="GroupType" ColumnName="GroupType" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="CompanyName" ColumnName="CompanyName" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="UID" ColumnName="UID" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateBegin" ColumnName="DateBegin" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="PeriodCode" ColumnName="PeriodCode" />
+                <ScalarProperty Name="SalaryPeriodStatusID" ColumnName="SalaryPeriodStatusID" />
+                <ScalarProperty Name="SalaryPeriodGroupID" ColumnName="SalaryPeriodGroupID" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>

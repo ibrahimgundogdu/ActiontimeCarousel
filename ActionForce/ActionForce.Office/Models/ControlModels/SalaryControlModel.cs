@@ -53,5 +53,29 @@ namespace ActionForce.Office
         public IEnumerable<ResultTotalModel> ResultFooterTotals { get; set; }
 
         public List<EmployeeModel> EmployeeModels { get; set; }
+
+        public VSalaryPeriod SalaryPeriod { get; set; }
+        public List<VSalaryPeriod> SalaryPeriods { get; set; }
+        public List<SalaryPeriodCompute> SalaryPeriodComputes { get; set; }
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 }

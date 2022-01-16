@@ -9,6 +9,7 @@ namespace ActionForce.Office
     {
         public int? LocationID { get; set; }
         public int? EmployeeID { get; set; }
+        public int? SalaryPeriodID { get; set; }
         public int? BankAccountID { get; set; }
         public int? TypeID { get; set; }
         public int? DepartmentID { get; set; }
