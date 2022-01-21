@@ -132,7 +132,7 @@
             .withUrl('http://push.ufegrup.com/MyHub')
             .build();
 
-       
+
 
         connection.start().catch(function (err) {
             $("#MessageArea").html("<p>" + err.toString() + "</p>");
@@ -156,6 +156,7 @@
 
         function openCashReader() {
             Android.openCashBox();
+            Android.sendComment('@(Model.CashOpenComment)');
         }
 
 

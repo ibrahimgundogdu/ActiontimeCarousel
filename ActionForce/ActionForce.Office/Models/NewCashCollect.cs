@@ -256,6 +256,19 @@ namespace ActionForce.Office
         public int FromBankID { get; set; }
     }
 
+    public class CashSalaryPaymentF
+    {
+        public int EmployeeID { get; set; }
+        public int LocationID { get; set; }
+        public double Amount { get; set; }
+        public string Currency { get; set; }
+        public DateTime DocumentDate { get; set; }
+        public string Description { get; set; }
+        public int SalaryTypeID { get; set; }
+        public int CategoryID { get; set; }
+        public int FromBankID { get; set; }
+    }
+
 
     public class NewPosCollect
     {

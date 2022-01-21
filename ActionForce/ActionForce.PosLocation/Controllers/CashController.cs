@@ -38,6 +38,13 @@ namespace ActionForce.PosLocation.Controllers
 
             var location = Db.Location.FirstOrDefault(x => x.LocationID == model.Authentication.CurrentLocation.ID);
 
+            var cashReader = Db.CardReader.FirstOrDefault(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.IsActive == true && x.LocationPartID == 0);
+
+            if (cashReader != null)
+            {
+                model.CashOpenComment = $"{cashReader.SerialNumber};{cashReader.MACAddress};96;";
+            }
+
             model.LocationDate = location.LocalDate ?? DateTime.UtcNow.AddHours(3).Date;
             model.SelectedDate = selectedDate;
             model.Summary = manager.GetLocationSummary(model.SelectedDate, model.Authentication.CurrentEmployee, location);

@@ -1834,8 +1834,8 @@ namespace ActionForce.Service
                             if (employee.OurCompanyID == 2 && employee.AreaCategoryID == 2 && (employee.PositionID == 5 || employee.PositionID == 6))
                             {
                                 salaryEarn.UnitFoodPrice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
-                                salaryEarn.QuantityHourSalary = (salaryEarn.QuantityHour * 0.9);
-                                salaryEarn.QuantityHourFood = (salaryEarn.QuantityHour * 0.9);
+                                salaryEarn.QuantityHourSalary = (salaryEarn.QuantityHour * 1); // 0.9
+                                salaryEarn.QuantityHourFood = (salaryEarn.QuantityHour * 1); // 0.9
                             }
 
 
@@ -1978,8 +1978,8 @@ namespace ActionForce.Service
                         if (employee.OurCompanyID == 2 && employee.AreaCategoryID == 2 && (employee.PositionID == 5 || employee.PositionID == 6))
                         {
                             isEarn.UnitFoodPrice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
-                            isEarn.QuantityHourSalary = (isEarn.QuantityHour * 0.9);
-                            isEarn.QuantityHourFood = (isEarn.QuantityHour * 0.9);
+                            isEarn.QuantityHourSalary = (isEarn.QuantityHour * 1); //0.9
+                            isEarn.QuantityHourFood = (isEarn.QuantityHour * 1); // 0.9
                         }
 
                         Db.SaveChanges();

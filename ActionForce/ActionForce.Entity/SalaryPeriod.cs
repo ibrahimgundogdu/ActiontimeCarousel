@@ -24,5 +24,9 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> DateBegin { get; set; }
         public Nullable<System.DateTime> DateEnd { get; set; }
         public Nullable<System.Guid> UID { get; set; }
+        public Nullable<double> TotalAmount { get; set; }
+        public Nullable<double> PaymentAmount { get; set; }
+        public Nullable<double> BalanceAmount { get; set; }
+        public string Currency { get; set; }
     }
 }

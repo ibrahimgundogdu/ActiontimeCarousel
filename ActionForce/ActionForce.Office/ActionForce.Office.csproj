@@ -2786,6 +2786,9 @@
     <Content Include="Views\Salary\ReportView.cshtml" />
     <Content Include="Views\Salary\ReportBankView.cshtml" />
     <Content Include="Views\Salary\ReportSetcardView.cshtml" />
+    <Content Include="Views\Salary\DetailSalaryPeriod.cshtml" />
+    <Content Include="Views\Compute\EmployeeActionReset.cshtml" />
+    <Content Include="Views\Compute\BankTransferReset.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

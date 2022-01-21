@@ -525,39 +525,6 @@ namespace ActionForce.PosLocation.Controllers
         }
 
 
-        //CardReader
-        public ActionResult CardReader()
-        {
-
-            CardControlModel model = new CardControlModel();
-            model.Authentication = this.AuthenticationData;
-            PosManager manager = new PosManager();
-
-            if (TempData["Result"] != null)
-            {
-                model.Result = TempData["Result"] as Result;
-            }
-
-            model.CardTypes = Db.CardType.Where(x => x.IsActive == true).ToList();
-
-            model.CardReaderTypes = Db.CardReaderType.Where(x => x.IsActive == true).ToList();
-            var locationparts = Db.GetLocationPartList(model.Authentication.CurrentLocation.ID).ToList();
-
-            model.LocationParts = locationparts.Select(x => new LocationPart()
-            {
-                LocationID = x.LocationID.Value,
-                LocationTypeID = x.LocationTypeID,
-                PartID = x.PartID,
-                FinishDate = x.FinishDate,
-                PartName = x.PartName,
-                StartDate = x.StartDate
-            }).ToList();
-
-            model.CardReaders = Db.CardReader.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID).ToList();
-
-            model.NFCCardLogs = Db.NFCCardLog.Where(x => x.Message.Contains(";86;0")).OrderByDescending(x => x.RecordDate).Take(10).ToList();
-
-            return View(model);
-        }
+        
     }
 }

@@ -374,6 +374,9 @@ namespace ActionForce.Entity
         public virtual DbSet<SalaryPeriodGroup> SalaryPeriodGroup { get; set; }
         public virtual DbSet<SalaryPeriodStatus> SalaryPeriodStatus { get; set; }
         public virtual DbSet<VSalaryPeriod> VSalaryPeriod { get; set; }
+        public virtual DbSet<VCardReader> VCardReader { get; set; }
+        public virtual DbSet<TempEmployeeActionReset> TempEmployeeActionReset { get; set; }
+        public virtual DbSet<TempDocumentBankTransfer> TempDocumentBankTransfer { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -2939,6 +2942,23 @@ namespace ActionForce.Entity
                 new ObjectParameter("CardNumber", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<long>>("CheckCreditLoad", serialNumberParameter, mACAddressParameter, cardNumberParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> AddSalaryPeriodCompute(Nullable<int> salaryPeriodID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var salaryPeriodIDParameter = salaryPeriodID.HasValue ?
+                new ObjectParameter("SalaryPeriodID", salaryPeriodID) :
+                new ObjectParameter("SalaryPeriodID", typeof(int));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("AddSalaryPeriodCompute", salaryPeriodIDParameter, recordEmployeeIDParameter, recordIPParameter);
         }
     }
 }

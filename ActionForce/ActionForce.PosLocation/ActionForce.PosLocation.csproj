@@ -255,6 +255,7 @@
     <Compile Include="Controllers\LocationController.cs" />
     <Compile Include="Controllers\SalesController.cs" />
     <Compile Include="Controllers\SchedulesController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\SetupController.cs" />
     <Compile Include="Controllers\ShiftsController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
@@ -275,6 +276,7 @@
     <Compile Include="Models\ControlModels\LoginControlModel.cs" />
     <Compile Include="Models\ControlModels\SalesControlModel.cs" />
     <Compile Include="Models\ControlModels\ScheduleControlModel.cs" />
+    <Compile Include="Models\ControlModels\SettingsControlModel.cs" />
     <Compile Include="Models\ControlModels\SetupControlModel.cs" />
     <Compile Include="Models\ControlModels\ShiftControlModel.cs" />
     <Compile Include="Models\ControlModels\SummaryControlModel.cs" />
@@ -306,6 +308,7 @@
     <Compile Include="Models\FormModels\ConfirmFormModel.cs" />
     <Compile Include="Models\FormModels\FormBankTransfer.cs" />
     <Compile Include="Models\FormModels\FormCardFilter.cs" />
+    <Compile Include="Models\FormModels\FormCardReader.cs" />
     <Compile Include="Models\FormModels\FormCashCollect.cs" />
     <Compile Include="Models\FormModels\FormCashExpense.cs" />
     <Compile Include="Models\FormModels\FormCashPayment.cs" />
@@ -389,10 +392,12 @@
     <Content Include="Views\Card\MakePersonelCard.cshtml" />
     <Content Include="Views\CardAction\CardReset.cshtml" />
     <Content Include="Views\CardAction\ResetResult.cshtml" />
-    <Content Include="Views\Card\CardReader.cshtml" />
+    <Content Include="Views\Settings\CardReader.cshtml" />
     <Content Include="Views\Sales\_PartialTicketSale.cshtml" />
     <Content Include="Views\Sales\_PartialCardSale.cshtml" />
     <Content Include="Views\Sales\Employee.cshtml" />
+    <Content Include="Views\Settings\_PartialSettingsMenu.cshtml" />
+    <Content Include="Views\Settings\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

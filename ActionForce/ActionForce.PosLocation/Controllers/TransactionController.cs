@@ -41,6 +41,14 @@ namespace ActionForce.PosLocation.Controllers
                 }
             }
 
+            var cashReader = Db.CardReader.FirstOrDefault(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.IsActive == true && x.LocationPartID == 0);
+
+            if (cashReader != null)
+            {
+                model.CashOpenComment = $"{cashReader.SerialNumber};{cashReader.MACAddress};96;";
+            }
+            
+
             return View(model);
         }
 

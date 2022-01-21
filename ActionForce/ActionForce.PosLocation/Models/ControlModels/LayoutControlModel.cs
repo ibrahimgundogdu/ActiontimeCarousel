@@ -9,6 +9,7 @@ namespace ActionForce.PosLocation
     {
         public AuthenticationModel Authentication { get; set; }
         public Result Result { get; set; }
+        public string CashOpenComment { get; set; }
 
         public LayoutControlModel()
         {

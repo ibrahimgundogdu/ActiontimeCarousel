@@ -1521,7 +1521,7 @@ namespace ActionForce.Office.Controllers
 
         //SalaryResult
         [AllowAnonymous]
-        public ActionResult SalaryResult(int? EmployeeID, int? LocationID, int? SalaryPeriodID, DateTime? DateBegin, DateTime? DateEnd )
+        public ActionResult SalaryResult(int? EmployeeID, int? LocationID, int? SalaryPeriodID, DateTime? DateBegin, DateTime? DateEnd)
         {
             SalaryControlModel model = new SalaryControlModel();
 
@@ -1790,7 +1790,7 @@ namespace ActionForce.Office.Controllers
             model.EmployeeModels.AddRange(_EmployeeModels);
 
 
-            
+
 
             Response.ClearContent();
 
@@ -1846,12 +1846,37 @@ namespace ActionForce.Office.Controllers
                 return RedirectToAction("SalaryResult");
             }
 
-            model.Filters.DateBegin = model.SalaryPeriod.DateBegin;
-            model.Filters.DateEnd = model.SalaryPeriod.DateEnd;
+
+            Db.AddSalaryPeriodCompute(model.SalaryPeriod.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+            return RedirectToAction("DetailSalaryPeriod", new { id });
+        }
+
+        [AllowAnonymous]
+        public ActionResult DetailSalaryPeriod(Guid? id)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            model.SalaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.UID == id);
+
+            if (model.SalaryPeriod == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
 
             model.SalaryPeriodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == model.SalaryPeriod.ID).ToList();
-            
-
 
 
             return View(model);

@@ -210,5 +210,196 @@ namespace ActionForce.Office.Controllers
 
         }
 
+
+        // 31.12.2021 tarihi için çalışan carisini sıfırla
+        [AllowAnonymous]
+        public ActionResult EmployeeActionReset()
+        {
+            ComputeControlModel model = new ComputeControlModel();
+
+            DateTime documentDate = new DateTime(2021,12,31).Date;
+
+            var tempdocument = Db.TempEmployeeActionReset.Where(x=> x.IsSuccess == false).ToList();
+
+            foreach (var item in tempdocument)
+            {
+
+                CashSalaryPaymentF cashsalary = new CashSalaryPaymentF()
+                {
+                    Amount = item.Amount.Value,
+                    CategoryID = item.Category.Value,
+                    Currency = item.Currency,
+                    Description = item.Description,
+                    DocumentDate = item.DocumentDate.Value,
+                    EmployeeID = item.EmployeeID.Value,
+                    FromBankID = item.BankID.Value,
+                    LocationID = item.LocationID.Value,
+                    SalaryTypeID = item.SalaryTypeID.Value
+                };
+
+                var result = AddSalaryPayment(cashsalary);
+
+                if (result.IsSuccess == true)
+                {
+                    item.IsSuccess = true;
+                    item.Message = result.Message;
+                }
+                else
+                {
+                    item.Message = result.Message;
+                }
+
+                Db.SaveChanges();
+            }
+
+           
+            return View(model);
+        }
+
+
+        public Result AddSalaryPayment(CashSalaryPaymentF cashsalary)
+        {
+
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            CashControlModel model = new CashControlModel();
+
+            if (cashsalary != null)
+            {
+                var actType = Db.CashActionType.FirstOrDefault(x => x.ID == 31); // maaş avans ödemesi
+
+                if (cashsalary.CategoryID == 18)
+                {
+                    actType = Db.CashActionType.FirstOrDefault(x => x.ID == 38); // set card Ödemesi
+                }
+
+                else if (cashsalary.CategoryID == 11)
+                {
+                    actType = Db.CashActionType.FirstOrDefault(x => x.ID == 47); // Maaş Kesintisi
+                }
+
+
+
+                var location = Db.Location.FirstOrDefault(x => x.LocationID == cashsalary.LocationID);
+                var amount = cashsalary.Amount;
+                int timezone = location.Timezone.Value;
+                int? frombankID = null;
+                int? fromcashID = null;
+
+                if (cashsalary.FromBankID > 0)
+                {
+                    frombankID = cashsalary.FromBankID;
+                }
+                else
+                {
+                    var cash = OfficeHelper.GetCash(cashsalary.LocationID, cashsalary.Currency);
+                    fromcashID = cash.ID;
+                }
+
+                var docDate = cashsalary.DocumentDate;
+               
+
+
+                var exchange = OfficeHelper.GetExchange(docDate);
+
+
+
+                if (amount > 0)
+                {
+                    SalaryPayment payment = new SalaryPayment();
+
+                    payment.ActinTypeID = actType.ID;
+                    payment.ActionTypeName = actType.Name;
+                    payment.Currency = cashsalary.Currency;
+                    payment.Description = cashsalary.Description;
+                    payment.DocumentDate = docDate;
+                    payment.EmployeeID = cashsalary.EmployeeID;
+                    payment.EnvironmentID = 2;
+                    payment.LocationID = location.LocationID;
+                    payment.Amount = amount;
+                    payment.UID = Guid.NewGuid();
+                    payment.TimeZone = timezone;
+                    payment.OurCompanyID = location.OurCompanyID;
+                    payment.ExchangeRate = payment.Currency == "USD" ? exchange.USDA.Value : payment.Currency == "EUR" ? exchange.EURA.Value : 1;
+                    payment.FromBankID = frombankID;
+                    payment.FromCashID = fromcashID;
+                    payment.SalaryTypeID = cashsalary.SalaryTypeID;
+                    payment.CategoryID = cashsalary.CategoryID;
+
+                    DocumentManager documentManager = new DocumentManager();
+                    var addresult = documentManager.AddSalaryPayment(payment, model.Authentication);
+
+                    result.IsSuccess = addresult.IsSuccess;
+                    result.Message = addresult.Message;
+                }
+                else
+                {
+                    result.IsSuccess = false;
+                    result.Message = $"Tutar 0'dan büyük olmalıdır.";
+                }
+            }
+
+            return result;
+
+        }
+
+
+
+        [AllowAnonymous]
+        public ActionResult BankTransferReset()
+        {
+            ComputeControlModel model = new ComputeControlModel();
+
+            var tempdocument = Db.TempDocumentBankTransfer.Where(x => x.IsSuccess == false).ToList();
+
+            foreach (var item in tempdocument)
+            {
+
+                var result = ChangeTransferStatus(item.UID,item.StatusID);
+
+                if (result.IsSuccess == true)
+                {
+                    item.IsSuccess = true;
+                    item.Message = result.Message;
+                }
+                else
+                {
+                    item.Message = result.Message;
+                }
+
+                Db.SaveChanges();
+            }
+
+
+            return View(model);
+        }
+
+
+        public Result ChangeTransferStatus(Guid? UID, int? StatusID)
+        {
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            BankControlModel model = new BankControlModel();
+
+            var bankTransfer = Db.DocumentBankTransfer.FirstOrDefault(x => x.UID == UID);
+
+            if (bankTransfer != null)
+            {
+                DocumentManager documentManager = new DocumentManager();
+                result = documentManager.EditBankTransferStatus(bankTransfer, model.Authentication, StatusID.Value);
+            }
+
+            return result;
+
+        }
+
     }
 }

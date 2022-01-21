@@ -50,5 +50,7 @@ namespace ActionForce.PosLocation
         public DocumentBankTransfer BankTransfer { get; set; }
         public IEnumerable<VBankAccount> BankAccountList { get; set; }
         public IEnumerable<BankTransferStatus> TransferStatus { get; set; }
+
+
     }
 }

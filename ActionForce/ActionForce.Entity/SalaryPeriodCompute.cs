@@ -40,5 +40,7 @@ namespace ActionForce.Entity
         public Nullable<int> RecordEmployeeID { get; set; }
         public string RecordIP { get; set; }
         public Nullable<System.Guid> UID { get; set; }
+        public Nullable<double> OtherTotal { get; set; }
+        public string Currency { get; set; }
     }
 }

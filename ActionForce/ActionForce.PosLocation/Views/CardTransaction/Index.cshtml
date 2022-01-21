@@ -139,7 +139,9 @@
 
 
         function openCashReader() {
+            //CashOpenComment
             Android.openCashBox();
+            Android.sendComment('@(Model.CashOpenComment)');
         }
 
         function loadCard(orderid) {
