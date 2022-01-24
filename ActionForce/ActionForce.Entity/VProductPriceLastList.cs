@@ -37,5 +37,6 @@ namespace ActionForce.Entity
         public string PriceCategoryName { get; set; }
         public Nullable<bool> UseToSale { get; set; }
         public double TotalCredit { get; set; }
+        public Nullable<bool> UseToDeposite { get; set; }
     }
 }

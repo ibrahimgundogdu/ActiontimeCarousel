@@ -40,6 +40,7 @@ namespace ActionForce.PosLocation.Controllers
                 Message = string.Empty
             };
 
+            SicilNumber = SicilNumber.Trim();
             //Response.Cookies.Remove("PosLocation");
 
             //HttpCookie locationCookie = System.Web.HttpContext.Current.Request.Cookies["PosLocation"];
@@ -60,12 +61,18 @@ namespace ActionForce.PosLocation.Controllers
                 model.Result.Message = "Lokasyon Bulundu!";
                 model.Location = Db.Location.FirstOrDefault(x => x.LocationID == posTerminal.LocationID);
                 model.PosTerminalSerial = posTerminal.SicilNumber;
+                model.Result.IsSuccess = true;
+                model.Result.Message = "Sicil Numarasına Ait Bir Lokasyon Bulundu";
             }
             else
             {
                 model.Result.IsSuccess = false;
-                model.Result.Message = "Sicil Numarasına Ait Bir Lokasyon Bulunamadı!";
+                model.Result.Message = "Sicil Numarası veya Ona Ait Bir Lokasyon Bulunamadı!";
                 model.PosTerminalSerial = SicilNumber;
+                model.Location = new Entity.Location()
+                {
+                    LocationFullName = "Lokasyon bulunamadı"
+                };
             }
 
 
@@ -241,6 +248,12 @@ namespace ActionForce.PosLocation.Controllers
         public ActionResult UserLoginCheck(UserLoginFormModel form)
         {
             SetupControlModel model = new SetupControlModel();
+            model.Result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
             PosManager manager = new PosManager();
 
             var employeecheck = manager.GetLocationEmployeesToday(form.LocationID).Where(x => x.EmployeeID == form.EmployeeID).FirstOrDefault();
@@ -304,7 +317,6 @@ namespace ActionForce.PosLocation.Controllers
             HttpCookie authCookie = System.Web.HttpContext.Current.Request.Cookies["AuthenticationToken"];
             authCookie.Expires = DateTime.Now.AddDays(-1);
             Response.SetCookie(authCookie);
-
 
             return RedirectToAction("Employee");
         }

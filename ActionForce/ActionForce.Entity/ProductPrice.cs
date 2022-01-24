@@ -28,5 +28,6 @@ namespace ActionForce.Entity
         public Nullable<bool> IsBase { get; set; }
         public Nullable<bool> IsActive { get; set; }
         public Nullable<bool> UseToSale { get; set; }
+        public Nullable<bool> UseToDeposite { get; set; }
     }
 }

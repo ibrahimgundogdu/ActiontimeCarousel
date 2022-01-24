@@ -34,6 +34,8 @@ namespace ActionForce.PosLocation.Controllers
             model.CardReaderTypes = Db.CardReaderType.Where(x => x.IsActive == true).ToList();
             var locationparts = Db.GetLocationPartList(model.Authentication.CurrentLocation.ID).ToList();
 
+
+
             model.LocationParts = locationparts.Select(x => new LocationPart()
             {
                 LocationID = x.LocationID.Value,
@@ -43,6 +45,15 @@ namespace ActionForce.PosLocation.Controllers
                 PartName = x.PartName,
                 StartDate = x.StartDate
             }).ToList();
+
+            if (model.LocationParts == null || model.LocationParts.Count == 0)
+            {
+                model.LocationParts.Add(new LocationPart()
+                {
+                    PartID = 0,
+                    PartName = "Kasa"
+                }) ;
+            }
 
             model.CardReaders = Db.VCardReader.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID).ToList();
             model.NewCardReaders = Db.VCardReader.Where(x => x.LocationID == 0 && x.IsActive == true).ToList();
@@ -80,10 +91,14 @@ namespace ActionForce.PosLocation.Controllers
                     wReader.PartName = part.PartName;
                     wReader.PartGroupName = part.PartName;
 
-                    existReader.LocationID = 0;
-                    existReader.LocationPartID = 0;
+                    if (existReader != null)
+                    {
+                        existReader.LocationID = 0;
+                        existReader.LocationPartID = 0;
 
-                    Db.SaveChanges();
+                        Db.SaveChanges();
+                    }
+
 
                     model.Result.IsSuccess = true;
                     model.Result.Message = "Tanımlama Tamamlandı";
@@ -104,7 +119,7 @@ namespace ActionForce.PosLocation.Controllers
 
             TempData["Result"] = model.Result;
 
-            return RedirectToAction("CardReader", new { id = reader.CardReaderID});
+            return RedirectToAction("CardReader", new { id = reader.CardReaderID });
         }
     }
 }

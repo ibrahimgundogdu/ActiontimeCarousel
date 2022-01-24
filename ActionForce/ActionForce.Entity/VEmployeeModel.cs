@@ -25,5 +25,8 @@ namespace ActionForce.Entity
         public string MobilePhone { get; set; }
         public int OurCompanyID { get; set; }
         public string Currency { get; set; }
+        public int AreaCategoryID { get; set; }
+        public Nullable<bool> IsActive { get; set; }
+        public Nullable<int> StatusID { get; set; }
     }
 }

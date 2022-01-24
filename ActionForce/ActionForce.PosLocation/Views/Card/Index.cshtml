@@ -30,7 +30,7 @@
                     <!-- menu -->
                 </div>
                 <div class="logo">
-                    <a href="javascript:;" onclick="AndroidSendCommend('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};86;")');">@(Model.CardReader?.SerialNumber)</a>
+                    <a href="javascript:;" onclick="AndroidSendCommend('@($"{Model.CardReader?.SerialNumber};{Model.CardReader?.MACAddress};86;")');">@(Model.CardReader != null ? Model.CardReader.SerialNumber : "Kart Yükleyici Tanımlayınız!")</a>
                     <div class="date" style="font-weight:800;" id="MessageArea">@(DateTime.Now.ToLongDateString())</div>
                     <input id="CardReaderID" type="hidden" value="@(Model.CardReader?.ID)" />
                     <input id="CardNumber" type="hidden" value="@(Model.Card?.CardNumber)" />
@@ -420,7 +420,7 @@
                         text: 'EVET',
                         btnClass: 'btn-yes',
                         action: function () {
-                            AndroidSendCommend('@($"{Model.CardReader.SerialNumber};{Model.CardReader.MACAddress};85;")')
+                            AndroidSendCommend('@($"{Model.CardReader?.SerialNumber};{Model.CardReader?.MACAddress};85;")')
                         }
                     },
                     danger: {

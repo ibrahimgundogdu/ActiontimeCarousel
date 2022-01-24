@@ -1831,7 +1831,7 @@ namespace ActionForce.Office.Controllers
 
             if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
             {
-                return RedirectToAction("SalaryResult");
+                return RedirectToAction("Index");
             }
 
             if (id == null)
@@ -1846,11 +1846,89 @@ namespace ActionForce.Office.Controllers
                 return RedirectToAction("SalaryResult");
             }
 
+            if (model.SalaryPeriod.GroupType == 1)
+            {
+                Db.AddSalaryPeriodCompute(model.SalaryPeriod.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+            }
 
-            Db.AddSalaryPeriodCompute(model.SalaryPeriod.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+            if (model.SalaryPeriod.GroupType == 2)
+            {
+                Db.AddSalaryPeriodFoodCompute(model.SalaryPeriod.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+            }
+
 
             return RedirectToAction("DetailSalaryPeriod", new { id });
         }
+
+        [AllowAnonymous]
+        public ActionResult SalaryPeriods(int? GroupID, int? StatusID, int? Year)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return RedirectToAction("Index");
+            }
+
+            if (TempData["filter"] != null)
+            {
+                model.Filters = TempData["filter"] as FilterModel;
+            }
+            else
+            {
+                FilterModel filterModel = new FilterModel();
+
+                filterModel.Year = Year;
+                filterModel.GroupID = GroupID;
+                filterModel.StatusID = StatusID;
+
+                model.Filters = filterModel;
+            }
+
+            model.SalaryPeriods = Db.VSalaryPeriod.ToList();
+
+            if (model.Filters.Year > 0)
+            {
+                model.SalaryPeriods = model.SalaryPeriods.Where(x => x.Year == model.Filters.Year).ToList();
+            }
+
+            if (model.Filters.GroupID > 0)
+            {
+                model.SalaryPeriods = model.SalaryPeriods.Where(x => x.SalaryPeriodGroupID == model.Filters.GroupID).ToList();
+            }
+
+            if (model.Filters.StatusID > 0)
+            {
+                model.SalaryPeriods = model.SalaryPeriods.Where(x => x.SalaryPeriodStatusID == model.Filters.StatusID).ToList();
+            }
+
+            model.Years = Db.VSalaryPeriod.Select(x => x.Year).Distinct().ToList();
+            model.SalaryPeriodGroups = Db.SalaryPeriodGroup.ToList();
+            model.SalaryPeriodStatus = Db.SalaryPeriodStatus.ToList();
+
+
+            return View(model);
+        }
+
+
+        //FilterSalaryPeriods
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult FilterSalaryPeriods(int? GroupID, int? StatusID, int? Year)
+        {
+            FilterModel model = new FilterModel();
+
+            model.GroupID = GroupID;
+            model.StatusID = StatusID;
+            model.Year = Year;
+
+            TempData["filter"] = model;
+
+            return RedirectToAction("SalaryPeriods", "Salary");
+        }
+
 
         [AllowAnonymous]
         public ActionResult DetailSalaryPeriod(Guid? id)
@@ -1861,7 +1939,7 @@ namespace ActionForce.Office.Controllers
 
             if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
             {
-                return RedirectToAction("SalaryResult");
+                return RedirectToAction("Index");
             }
 
             if (id == null)
@@ -1877,11 +1955,59 @@ namespace ActionForce.Office.Controllers
             }
 
             model.SalaryPeriodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == model.SalaryPeriod.ID).ToList();
+            model.SalaryPeriodComputeSum = Db.VSalaryPeriodComputeSum.FirstOrDefault(x => x.SalaryPeriodID == model.SalaryPeriod.ID);
+
+            if (Db.SalaryPeriodStatus.Any(x => x.ID == model.SalaryPeriod.SalaryPeriodStatusID + 1))
+            {
+                model.SalaryPeriodNextStatus = Db.SalaryPeriodStatus.FirstOrDefault(x => x.ID == model.SalaryPeriod.SalaryPeriodStatusID + 1);
+            }
+            else
+            {
+                model.SalaryPeriodNextStatus = Db.SalaryPeriodStatus.FirstOrDefault(x => x.ID == model.SalaryPeriod.SalaryPeriodStatusID);
+            }
 
 
             return View(model);
         }
 
+        //StatusSalaryPeriod
 
+        [AllowAnonymous]
+        public ActionResult StatusSalaryPeriod(Guid? id)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return RedirectToAction("Index");
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            var SalaryPeriod = Db.SalaryPeriod.FirstOrDefault(x => x.UID == id);
+
+            if (SalaryPeriod == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            short statusid = SalaryPeriod.SalaryPeriodStatusID ?? 0;
+            short newstatusid = (short)(statusid + 1);
+
+            if (Db.SalaryPeriodStatus.Any(x => x.ID == newstatusid))
+            {
+                SalaryPeriod.SalaryPeriodStatusID = newstatusid;
+                Db.SaveChanges();
+            }
+
+            return RedirectToAction("DetailSalaryPeriod", new { id });
+
+
+        }
     }
 }

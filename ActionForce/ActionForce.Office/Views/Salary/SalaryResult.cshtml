@@ -16,6 +16,7 @@
     </div>
     <nav class="nav">
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+        
     </nav>
 </div>
 <div class="content-body">
@@ -41,7 +42,7 @@
                     }
                 </select>
             </div>
-            <div class="form-group col-md-4 d-flex align-items-end">
+            <div class="form-group col-md-3 d-flex align-items-end">
                 <select class="form-control select2" id="SalaryPeriodID" name="SalaryPeriodID">
                     <option value="" label="Ücret Periyodu Seçiminiz"></option>
                     @foreach (var item in Model.SalaryPeriods)
@@ -56,9 +57,13 @@
             <div class="form-group col-md-1 d-flex align-items-end">
                 <input type="text" id="DateEnd" name="DateEnd" class="form-control" autocomplete="off" placeholder="Bitiş Tarihi" value="@(Model.Filters.DateEnd.Value.ToString("yyyy-MM-dd"))">
             </div>
-            <div class="form-group col-md-2 d-flex align-items-end ">
+            <div class="form-group col-md-1 d-flex align-items-end ">
                 <button class="btn btn-primary btn-block" type="submit" id="btnsearch">Ara</button>
             </div>
+            <div class="form-group col-md-2 d-flex align-items-end ">
+                <a href="/Salary/SalaryPeriods" class="btn btn-info btn-block">Maaş Periyotları</a>
+            </div>
+
         </div>
     }
 
@@ -120,7 +125,7 @@
                 </thead>
                 <tbody>
 
-                    @foreach (var emp in Model.EmployeeModels)
+                    @foreach (var emp in Model.EmployeeModels.OrderBy(x=> x.EmployeeName))
                     {
 
                         var maashakedis = Model.EmployeeActionList.Where(x => x.ActionTypeID == 32 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;

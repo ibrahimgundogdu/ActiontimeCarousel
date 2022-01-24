@@ -76,11 +76,22 @@ namespace ActionForce.PosLocation.Controllers
 
                     model.CardActions = Db.VCardActions.Where(x => x.CardNumber == cardno).ToList();
                     model.ActionDates = model.CardActions.Select(x => x.DateOnly.Value.Date).Distinct().OrderByDescending(x => x).ToList();
+
                     model.PriceList = Db.GetLocationCurrentProductPrices(model.Authentication.CurrentLocation.ID).ToList();
 
-                    if (model.Card.CardTypeID == 1)
+                    if (model.Card.CardTypeID == 0 && model.Card.CardStatusID == 0) // müşteri kartı ise ve ilk kez okunuyor ise sadece bunları getir
                     {
-                        model.PriceList = model.PriceList.Where(x => x.IsBase == true).ToList();
+                        model.PriceList = model.PriceList.Where(x => x.UseToDeposite == true && x.UseToSale == true).ToList();
+                    }
+
+                    if (model.Card.CardTypeID == 0 && model.Card.CardStatusID == 1) // müşteri kartı ise ve daha önce yükleme oldu ise sadece bunları getir
+                    {
+                        model.PriceList = model.PriceList.Where(x => x.UseToSale == true).ToList();
+                    }
+
+                    if (model.Card.CardTypeID == 1) // kasa kartı ise sadece bunları getir
+                    {
+                        model.PriceList = model.PriceList.Where(x => x.IsBase == true && x.UseToSale == true).ToList();
                     }
 
                     model.CardStatus = model.Card.CardStatusName ?? "Bilinmiyor";

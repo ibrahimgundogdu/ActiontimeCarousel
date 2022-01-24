@@ -378,7 +378,8 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSalaryPeriod" Width="1.5" PointX="32.875" PointY="33.5" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VCardReader" Width="1.5" PointX="37.375" PointY="41.125" IsExpanded="true" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TempEmployeeActionReset" Width="1.5" PointX="23.625" PointY="47.375" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TempDocumentBankTransfer" Width="1.5" PointX="4.4124347066564642" PointY="10.569602807317676" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TempDocumentBankTransfer" Width="1.5" PointX="17.125" PointY="24.625" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSalaryPeriodComputeSum" Width="1.5" PointX="21.375" PointY="42.25" />
         
         
         

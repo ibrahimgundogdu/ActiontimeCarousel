@@ -1173,6 +1173,9 @@
     <Compile Include="VSalaryPeriod.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VSalaryPeriodComputeSum.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VSaleActionsSummaryUnion.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

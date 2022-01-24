@@ -2212,6 +2212,17 @@ namespace ActionForce.Office
                     {
                         var setcardparam = Db.SetcardParameter.Where(x => x.Year <= salary.DocumentDate.Value.Year && x.OurCompanyID == authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Year).FirstOrDefault();
                         var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == salary.EmployeeID);
+
+                        int? PositionID = employee.PositionID;
+
+                        var period = Db.EmployeePeriods.Where(x => x.EmployeeID == salary.EmployeeID && x.StartDate <= salary.DocumentDate).OrderByDescending(x => x.StartDate).FirstOrDefault();
+
+                        if (period != null && period.PositionID != null)
+                        {
+                            PositionID = period.PositionID;
+                        }
+    
+
                         var location = Db.Location.FirstOrDefault(x => x.LocationID == salary.LocationID);
                         var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
                         double salaryMultiplier = Db.GetSalaryMultiplier(salary.LocationID, salary.EmployeeID, salary.DocumentDate).FirstOrDefault() ?? 0;
@@ -2266,14 +2277,12 @@ namespace ActionForce.Office
                             salaryEarn.QuantityHourSalary = salaryEarn.QuantityHour;
                             salaryEarn.QuantityHourFood = salaryEarn.QuantityHour;
 
-                            if (employee.OurCompanyID == 2 && employee.AreaCategoryID == 2 && (employee.PositionID == 5 || employee.PositionID == 6))
+                            if (employee.OurCompanyID == 2 && employee.AreaCategoryID == 2 && (PositionID == 5 || PositionID == 6))
                             {
                                 salaryEarn.UnitFoodPrice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
                                 salaryEarn.QuantityHourSalary = (salaryEarn.QuantityHour * 1); // 0.9
                                 salaryEarn.QuantityHourFood = (salaryEarn.QuantityHour * 1); // 0.9
                             }
-
-
 
                             Db.DocumentSalaryEarn.Add(salaryEarn);
                             Db.SaveChanges();
@@ -2337,6 +2346,16 @@ namespace ActionForce.Office
                         var exchange = OfficeHelper.GetExchange(salary.DocumentDate.Value);
                         var setcardparam = Db.SetcardParameter.Where(x => x.Year <= salary.DocumentDate.Value.Year && x.OurCompanyID == authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Year).FirstOrDefault();
                         var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == salary.EmployeeID);
+
+                        int? PositionID = employee.PositionID;
+
+                        var period = Db.EmployeePeriods.Where(x => x.EmployeeID == salary.EmployeeID && x.StartDate <= salary.DocumentDate).OrderByDescending(x => x.StartDate).FirstOrDefault();
+
+                        if (period != null && period.PositionID != null)
+                        {
+                            PositionID = period.PositionID;
+                        }
+
                         double salaryMultiplier = Db.GetSalaryMultiplier(salary.LocationID, salary.EmployeeID, salary.DocumentDate).FirstOrDefault() ?? 0;
 
                         var empunits = Db.EmployeeSalary.Where(x => x.EmployeeID == salary.EmployeeID && x.DateStart <= salary.DocumentDate && x.Hourly > 0).OrderByDescending(x => x.DateStart).FirstOrDefault();
@@ -2411,7 +2430,7 @@ namespace ActionForce.Office
                         isEarn.QuantityHourSalary = isEarn.QuantityHour;
                         isEarn.QuantityHourFood = isEarn.QuantityHour;
 
-                        if (employee.OurCompanyID == 2 && employee.AreaCategoryID == 2 && (employee.PositionID == 5 || employee.PositionID == 6))
+                        if (employee.OurCompanyID == 2 && employee.AreaCategoryID == 2 && (PositionID == 5 || PositionID == 6))
                         {
                             isEarn.UnitFoodPrice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
                             isEarn.QuantityHourSalary = (isEarn.QuantityHour * 1); // 0.9

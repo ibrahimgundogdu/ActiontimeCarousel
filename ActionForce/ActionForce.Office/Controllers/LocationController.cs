@@ -170,6 +170,7 @@ namespace ActionForce.Office.Controllers
                 model.LogList = Db.ApplicationLog.Where(x => x.Modul == "Location" && x.ProcessID == model.LocationModel.LocationID.ToString()).ToList();
                 model.OurCompanyList = Db.OurCompany.ToList();
                 model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.TicketTypeID == model.LocationModel.TicketTypeID).ToList();
+                model.ProductPriceCategory = Db.ProductPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
                 model.MallList = Db.Mall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
                 model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 2).ToList(); // TODO: AccountTypeID == 2 olmasının sebebi POS işlemlerinden dolayı
                 model.CityList = Db.VCity.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
@@ -327,7 +328,9 @@ namespace ActionForce.Office.Controllers
                                     CityID = isLocation.CityID,
                                     CountryID = isLocation.CountryID,
                                     StateID = isLocation.StateID,
-                                    TaxRate = isLocation.TaxRate
+                                    TaxRate = isLocation.TaxRate,
+                                    ProductPriceCatID = isLocation.ProductPriceCatID,
+                                    UseCardSysteme = isLocation.UseCardSysteme
                                 };
                                 #endregion
                                 #region UpdateModel
@@ -335,6 +338,7 @@ namespace ActionForce.Office.Controllers
                                 isLocation.IP = location.IP;
                                 isLocation.IsActive = !String.IsNullOrEmpty(location.IsActive) && location.IsActive == "1" ? true : false; ;
                                 isLocation.IsHaveOperator = !String.IsNullOrEmpty(location.IsHaveOperator) && location.IsHaveOperator == "1" ? true : false; ;
+                                isLocation.UseCardSysteme = !String.IsNullOrEmpty(location.UseCardSysteme) && location.UseCardSysteme == "1" ? true : false; ;
                                 isLocation.Latitude = location.Latitude;
                                 isLocation.LocationCode = location.LocationCode;
                                 isLocation.LocationID = location.LocationID;
@@ -349,6 +353,7 @@ namespace ActionForce.Office.Controllers
                                 isLocation.OurCompanyID = location.OurCompany;
                                 isLocation.POSAccountID = location.POSAccountID;
                                 isLocation.PriceCatID = location.PriceCatID;
+                                isLocation.ProductPriceCatID = location.ProductPriceCatID > 0 ? location.ProductPriceCatID : (int?)null;
                                 isLocation.UpdateDate = DateTime.UtcNow.AddHours(location?.Timezone ?? 0);
                                 isLocation.UpdateEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                                 isLocation.UpdateIP = OfficeHelper.GetIPAddress();
@@ -429,7 +434,7 @@ namespace ActionForce.Office.Controllers
                 return RedirectToAction("Edit", "Location", new { id = location.LocationUID });
             }
 
-            return RedirectToAction("Index", "Location");
+            return RedirectToAction("Detail", "Location", new { id = location.LocationUID });
         }
 
         [AllowAnonymous]
@@ -441,6 +446,8 @@ namespace ActionForce.Office.Controllers
             model.MallList = Db.Mall.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
             model.LocationTypeList = Db.LocationType.Where(x => x.IsActive == true).ToList();
             model.PriceCategoryList = Db.VPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
+            model.ProductPriceCategory = Db.ProductPriceCategory.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.IsActive == true).ToList();
+
             model.BankAccountList = Db.VBankAccount.Where(x => x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID && x.AccountTypeID == 2).ToList(); // TODO: AccountTypeID == 2 olmasının sebebi POS işlemlerinden dolayı
 
             if (TempData["checkLocation"] != null)
@@ -489,6 +496,7 @@ namespace ActionForce.Office.Controllers
                         IP = location.IP,
                         IsActive = location.IsActive == "1" ? true : false,
                         IsHaveOperator = location.IsHaveOperator == "1" ? true : false,
+                        UseCardSysteme = location.UseCardSysteme == "1" ? true : false,
                         Latitude = location.Latitude,
                         Longitude = location.Longitude,
                         LocalDate = DateTime.UtcNow.AddHours(location.Timezone ?? 0).Date,
@@ -505,7 +513,8 @@ namespace ActionForce.Office.Controllers
                         RecordIP = OfficeHelper.GetIPAddress(),
                         SortBy = location.SortBy,
                         Timezone = location.Timezone,
-                        LocationUID = locationUID
+                        LocationUID = locationUID,
+                        ProductPriceCatID = location.ProductPriceCatID > 0 ? location.ProductPriceCatID : (int?)null
                     };
 
                     Db.Location.Add(locationModel);

@@ -21,6 +21,7 @@ namespace ActionForce.Office
         public List<VCity> CityList { get; set; }
         public List<Mall> MallList { get; set; }
         public List<VBankAccount> BankAccountList { get; set; }
+        public List<ProductPriceCategory> ProductPriceCategory { get; set; }
         public List<LocationType> LocationTypeList { get; set; }
         public List<VLocationPosTerminal> LocationPosTerminalList { get; set; }
         public List<VPrice> LocationPriceLastList { get; set; }

@@ -20,6 +20,7 @@ namespace ActionForce.Office
         public Nullable<int> Timezone { get; set; }
         public string MapURL { get; set; }
         public string IsHaveOperator { get; set; }
+        public string UseCardSysteme { get; set; }
         public string IP { get; set; }
         public string SortBy { get; set; }
         public string IsActive { get; set; }
@@ -28,6 +29,7 @@ namespace ActionForce.Office
         public string EnforcedWarning { get; set; }
         public Nullable<System.Guid> LocationUID { get; set; }
         public int PriceCatID { get; set; }
+        public int ProductPriceCatID { get; set; }
         public int MallID { get; set; }
         public int POSAccountID { get; set; }
         public int CityID { get; set; }

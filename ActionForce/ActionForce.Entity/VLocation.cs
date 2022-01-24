@@ -81,5 +81,7 @@ namespace ActionForce.Entity
         public string CityName { get; set; }
         public string CategoryName { get; set; }
         public Nullable<double> TaxRate { get; set; }
+        public Nullable<bool> UseCardSysteme { get; set; }
+        public Nullable<int> ProductPriceCatID { get; set; }
     }
 }

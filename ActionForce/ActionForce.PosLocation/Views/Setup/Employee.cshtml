@@ -35,6 +35,11 @@
                 <form action="#">
                     <div class="form">
                         <h3>@(Model.Location?.LocationFullName.ToUpper())</h3>
+                        @if (Model.Result != null)
+                        {
+                            <h3>@(Model.Result.Message)</h3>
+                        }
+
                     </div>
                 </form>
                 <div class="list">

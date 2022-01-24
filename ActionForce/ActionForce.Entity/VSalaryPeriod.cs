@@ -32,5 +32,9 @@ namespace ActionForce.Entity
         public Nullable<int> EmployeeAreaCategoryID { get; set; }
         public Nullable<short> DayCount { get; set; }
         public string AreaName { get; set; }
+        public Nullable<double> TotalAmount { get; set; }
+        public Nullable<double> PaymentAmount { get; set; }
+        public Nullable<double> BalanceAmount { get; set; }
+        public string Expr1 { get; set; }
     }
 }

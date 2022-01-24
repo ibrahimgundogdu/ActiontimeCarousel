@@ -57,9 +57,13 @@ namespace ActionForce.Office
         public VSalaryPeriod SalaryPeriod { get; set; }
         public List<VSalaryPeriod> SalaryPeriods { get; set; }
         public List<SalaryPeriodCompute> SalaryPeriodComputes { get; set; }
-        
 
+        public VSalaryPeriodComputeSum SalaryPeriodComputeSum { get; set; }
 
+        public List<SalaryPeriodGroup> SalaryPeriodGroups { get; set; }
+        public List<SalaryPeriodStatus> SalaryPeriodStatus { get; set; }
+        public SalaryPeriodStatus SalaryPeriodNextStatus { get; set; }
+        public List<int> Years { get; set; }
 
 
 

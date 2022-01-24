@@ -66,5 +66,6 @@ namespace ActionForce.Entity
         public string MobilePhone { get; set; }
         public Nullable<int> CategoryID { get; set; }
         public Nullable<int> OurCompanyID { get; set; }
+        public Nullable<int> AreaCategoryID { get; set; }
     }
 }

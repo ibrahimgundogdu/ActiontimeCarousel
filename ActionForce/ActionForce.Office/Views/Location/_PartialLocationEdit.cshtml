@@ -148,6 +148,26 @@
                 <div class="col-sm-3">
                 </div>
             </div>
+
+            <div class="form-group row mg-b-5">
+                <label for="ProductPriceCatID" class="col-sm-3 col-form-label">Ürün Fiyat Listesi</label>
+                <div class="col-sm-6">
+                    <select class="form-control" id="ProductPriceCatID" name="ProductPriceCatID">
+                        @if (Model?.ProductPriceCategory?.Count > 0)
+                        {
+                            <option value="0">Seçiniz</option>
+                            foreach (var item in Model.ProductPriceCategory)
+                            {
+                                <option value="@(item.ID)" @(Model.LocationModel.ProductPriceCatID == item.ID ? "selected" : "")>@(item.CategoryName)</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+
+
             <div class="form-group row mg-b-5">
                 <label for="bankAccount" class="col-sm-3 col-form-label">POS Hesabı</label>
                 <div class="col-sm-6">
@@ -222,6 +242,7 @@
                 <div class="col-sm-3">
                 </div>
             </div>
+
             <div class="form-group row mg-b-5">
                 <label for="isHaveOperator" class="col-sm-3 col-form-label">Operatör var mı?</label>
                 <div class="col-sm-6">
@@ -233,6 +254,19 @@
                 <div class="col-sm-3">
                 </div>
             </div>
+
+            <div class="form-group row mg-b-5">
+                <label for="UseCardSysteme" class="col-sm-3 col-form-label">Kartlı Sistem Var Mı?</label>
+                <div class="col-sm-6">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="UseCardSysteme" name="UseCardSysteme" value="1" @(Model.LocationModel.UseCardSysteme.Value == true ? "checked" : "")>
+                        <label class="custom-control-label" for="UseCardSysteme">Kartlı Sistem Var</label>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                </div>
+            </div>
+
             <div class="form-group row mg-b-5">
                 <label for="isActive" class="col-sm-3 col-form-label">Aktif mi?</label>
                 <div class="col-sm-6">

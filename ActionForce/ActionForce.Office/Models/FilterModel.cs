@@ -20,6 +20,8 @@ namespace ActionForce.Office
         public string IsActive { get; set; }
         public string SearchKey { get; set; }
         public int? StatusID { get; set; }
+        public int? GroupID { get; set; }
+        public int? Year { get; set; }
 
     }
 

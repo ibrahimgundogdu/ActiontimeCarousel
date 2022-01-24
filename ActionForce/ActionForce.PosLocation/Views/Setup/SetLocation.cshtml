@@ -54,12 +54,24 @@
                         <ul>
                             @if (Model.Location != null)
                             {
-                                <li class="active">
-                                    <button type="submit" name="Correct" value="1" class="btn-block">Lokasyon - Sicil Numarası Doğru</button>
-                                </li>
-                                <li class="active">
-                                    <button type="submit" name="Fail" value="1" class="btn-block btn-danger">Lokasyon - Sicil Numarası Hatalı</button>
-                                </li>
+                                if (Model.Result.IsSuccess == false)
+                                {
+                                    <li class="active">
+                                        <button type="submit" name="Fail" value="1" class="btn-block btn-danger">Lokasyon - Sicil Numarası Hatalı</button>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="active">
+                                        <button type="submit" name="Correct" value="1" class="btn-block">Lokasyon - Sicil Numarası Doğru</button>
+                                    </li>
+                                    <li class="active">
+                                        <button type="submit" name="Fail" value="1" class="btn-block btn-danger">Lokasyon - Sicil Numarası Hatalı</button>
+                                    </li>
+
+                                }
+
+
                             }
                             else
                             {

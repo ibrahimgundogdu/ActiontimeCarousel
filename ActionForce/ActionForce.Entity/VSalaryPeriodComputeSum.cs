@@ -12,22 +12,15 @@ namespace ActionForce.Entity
     using System;
     using System.Collections.Generic;
     
-    public partial class SalaryPeriodCompute
+    public partial class VSalaryPeriodComputeSum
     {
-        public long ID { get; set; }
-        public Nullable<int> SalaryPeriodID { get; set; }
-        public Nullable<int> EmployeeID { get; set; }
-        public string FullName { get; set; }
-        public string IdentityNumber { get; set; }
-        public string PhoneNumber { get; set; }
-        public string FoodCard { get; set; }
-        public string IBAN { get; set; }
-        public string BankName { get; set; }
+        public int SalaryPeriodID { get; set; }
         public Nullable<double> SalaryTotal { get; set; }
         public Nullable<double> PermitTotal { get; set; }
         public Nullable<double> ExtraShiftTotal { get; set; }
         public Nullable<double> PremiumTotal { get; set; }
         public Nullable<double> FormalTotal { get; set; }
+        public Nullable<double> OtherTotal { get; set; }
         public Nullable<double> TotalProgress { get; set; }
         public Nullable<double> PrePaymentAmount { get; set; }
         public Nullable<double> SalaryCutAmount { get; set; }
@@ -36,11 +29,6 @@ namespace ActionForce.Entity
         public Nullable<double> OtherPaymentAmount { get; set; }
         public Nullable<double> TotalPaymentAmount { get; set; }
         public Nullable<double> TotalBalance { get; set; }
-        public Nullable<System.DateTime> RecordDate { get; set; }
-        public Nullable<int> RecordEmployeeID { get; set; }
-        public string RecordIP { get; set; }
-        public Nullable<System.Guid> UID { get; set; }
-        public Nullable<double> OtherTotal { get; set; }
         public string Currency { get; set; }
         public Nullable<double> FoodCardTotal { get; set; }
         public Nullable<double> FoodCardPaymentAmount { get; set; }
