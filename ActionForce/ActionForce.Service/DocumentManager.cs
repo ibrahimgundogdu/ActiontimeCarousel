@@ -1453,8 +1453,6 @@ namespace ActionForce.Service
             return result;
         }
 
-
-
         public Result<DocumentBankTransfer> AddBankTransfer(BankTransferModel transfer)
         {
             Result<DocumentBankTransfer> result = new Result<DocumentBankTransfer>()

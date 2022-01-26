@@ -2497,6 +2497,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="FinishDate" Type="date" />
           <Property Name="IsActive" Type="bit" />
         </EntityType>
+        <EntityType Name="LocationCardReaderParameter">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="OurCompanyID" Type="int" />
+          <Property Name="LocationID" Type="int" />
+          <Property Name="LocationTypeID" Type="int" />
+          <Property Name="StartDate" Type="date" />
+          <Property Name="UnitPrice" Type="float" Nullable="false" />
+          <Property Name="MiliSecond" Type="int" Nullable="false" />
+          <Property Name="ReadCount" Type="int" Nullable="false" />
+          <Property Name="UnitDuration" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="LocationCR">
           <Key>
             <PropertyRef Name="ID" />
@@ -8606,6 +8620,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="InspectorReportKeyCategory" EntityType="Self.InspectorReportKeyCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Location" EntityType="Self.Location" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationAnimals" EntityType="Self.LocationAnimals" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LocationCardReaderParameter" EntityType="Self.LocationCardReaderParameter" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationCR" EntityType="Self.LocationCR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationGoals" EntityType="Self.LocationGoals" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LocationMallMoto" EntityType="Self.LocationMallMoto" Schema="dbo" store:Type="Tables" />
@@ -12648,6 +12663,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="RecordIP" Mode="In" Type="String" />
           </FunctionImport>
+          <EntitySet Name="LocationCardReaderParameter" EntityType="db293_ActionTimeDbModel.LocationCardReaderParameter" />
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -20985,6 +21001,20 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="FoodCardTotal" Type="Double" />
           <Property Name="FoodCardPaymentAmount" Type="Double" />
         </EntityType>
+        <EntityType Name="LocationCardReaderParameter">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OurCompanyID" Type="Int32" />
+          <Property Name="LocationID" Type="Int32" />
+          <Property Name="LocationTypeID" Type="Int32" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="UnitPrice" Type="Double" Nullable="false" />
+          <Property Name="MiliSecond" Type="Int32" Nullable="false" />
+          <Property Name="ReadCount" Type="Int32" Nullable="false" />
+          <Property Name="UnitDuration" Type="Int32" Nullable="false" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -29037,6 +29067,21 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddSalaryPeriodFoodCompute" FunctionName="db293_ActionTimeDbModel.Store.AddSalaryPeriodFoodCompute" />
+          <EntitySetMapping Name="LocationCardReaderParameter">
+            <EntityTypeMapping TypeName="db293_ActionTimeDbModel.LocationCardReaderParameter">
+              <MappingFragment StoreEntitySet="LocationCardReaderParameter">
+                <ScalarProperty Name="UnitDuration" ColumnName="UnitDuration" />
+                <ScalarProperty Name="ReadCount" ColumnName="ReadCount" />
+                <ScalarProperty Name="MiliSecond" ColumnName="MiliSecond" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="LocationTypeID" ColumnName="LocationTypeID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
