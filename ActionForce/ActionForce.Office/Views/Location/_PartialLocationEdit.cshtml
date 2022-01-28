@@ -259,7 +259,7 @@
                 <label for="UseCardSysteme" class="col-sm-3 col-form-label">Kartlı Sistem Var Mı?</label>
                 <div class="col-sm-6">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="UseCardSysteme" name="UseCardSysteme" value="1" @(Model.LocationModel.UseCardSysteme.Value == true ? "checked" : "")>
+                        <input type="checkbox" class="custom-control-input" id="UseCardSysteme" name="UseCardSysteme" value="1" @(Model.LocationModel?.UseCardSysteme == true ? "checked" : "")>
                         <label class="custom-control-label" for="UseCardSysteme">Kartlı Sistem Var</label>
                     </div>
                 </div>

@@ -52,7 +52,7 @@
         </tr>
         <tr>
             <td class="wd-25p"><span class="tx-medium">Kartlı Sistem Varmı?</span></td>
-            <td><span class="tx-rubik">@Html.Raw(Model.LocationModel.UseCardSysteme.Value == true ? "Evet" : "Hayır")</span></td>
+            <td><span class="tx-rubik">@Html.Raw(Model.LocationModel?.UseCardSysteme == true ? "Evet" : "Hayır")</span></td>
         </tr>
         <tr>
             <td class="wd-25p"><span class="tx-medium">Aktif mi?</span></td>
