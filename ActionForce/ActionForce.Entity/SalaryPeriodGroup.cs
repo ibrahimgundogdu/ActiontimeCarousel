@@ -19,5 +19,6 @@ namespace ActionForce.Entity
         public string GroupName { get; set; }
         public Nullable<short> DayCount { get; set; }
         public Nullable<int> EmployeeAreaCategoryID { get; set; }
+        public Nullable<int> SalaryCategoryID { get; set; }
     }
 }

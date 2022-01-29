@@ -2378,6 +2378,7 @@
     <Compile Include="Models\FormModels\FormMall.cs" />
     <Compile Include="Models\FormModels\FormPrice.cs" />
     <Compile Include="Models\FormModels\FormPriceCategory.cs" />
+    <Compile Include="Models\FormModels\FormSalaryPeriod.cs" />
     <Compile Include="Models\FormModels\FormTicketProduct.cs" />
     <Compile Include="Models\Crypter.cs" />
     <Compile Include="Models\Document\EmployeesLocation.cs" />
@@ -2790,6 +2791,7 @@
     <Content Include="Views\Compute\EmployeeActionReset.cshtml" />
     <Content Include="Views\Compute\BankTransferReset.cshtml" />
     <Content Include="Views\Salary\SalaryPeriods.cshtml" />
+    <Content Include="Views\Salary\_PartialSetEmployeeSalary.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

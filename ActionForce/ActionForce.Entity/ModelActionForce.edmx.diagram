@@ -104,7 +104,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleRowHistory" Width="1.5" PointX="34.75" PointY="11.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleTransfer" Width="1.5" PointX="34.75" PointY="16.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketSaleType" Width="1.5" PointX="18.75" PointY="35.75" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketStatus" Width="1.5" PointX="20.75" PointY="35.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketStatus" Width="1.5" PointX="20.875" PointY="35.25" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketStatusChanges" Width="1.5" PointX="34.75" PointY="22.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketTrip" Width="1.5" PointX="34.75" PointY="29.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TicketTripConfirm" Width="1.5" PointX="35.75" PointY="1.75" />
@@ -112,7 +112,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.Trampoline" Width="1.5" PointX="35.75" PointY="7.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TrampolinePart" Width="1.5" PointX="22.75" PointY="36.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TrampolinePartType" Width="1.5" PointX="30.625" PointY="37" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TrampolineType" Width="1.5" PointX="34.75" PointY="36.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.TrampolineType" Width="1.5" PointX="21" PointY="37.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeShiftX" Width="1.5" PointX="36.75" PointY="11.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.EmployeeX" Width="1.5" PointX="36.75" PointY="18.75" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VEmployee" Width="1.5" PointX="36.75" PointY="24.75" />
@@ -380,7 +380,7 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TempEmployeeActionReset" Width="1.5" PointX="23.625" PointY="47.375" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TempDocumentBankTransfer" Width="1.5" PointX="17.125" PointY="24.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSalaryPeriodComputeSum" Width="1.5" PointX="21.375" PointY="42.25" />
-        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationCardReaderParameter" Width="1.5" PointX="6.2686361494793719" PointY="6.1864418118197664" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationCardReaderParameter" Width="1.5" PointX="34.75" PointY="35.75" />
         
         
         

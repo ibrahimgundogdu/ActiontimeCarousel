@@ -1,0 +1,172 @@
+﻿@model SalaryControlModel
+
+
+@using (Html.BeginForm("EditSalaryPaymentPeriod", "Salary", FormMethod.Post))
+{
+    <div class="modal-header">
+        <h5 class="modal-title">@(Html.Raw($"{Model.SalaryPeriod.PeriodCode}  &nbsp;&nbsp;&nbsp; <b>{Model.SalaryPeriodCompute.FullName}</b>")) </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body pd-y-30">
+        <div class="row row-xs">
+            <div class="col-lg-12">
+
+                <div class="form-group row mg-b-5">
+                    <div class="col-sm-4 form-control-plaintext"></div>
+                    <label for="SalaryTotal" class="col-sm-5 col-form-label tx-16"><b>Hakedişler (+)</b></label>
+                    <div class="col-sm-3 form-control-plaintext"></div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="SalaryTotal" class="col-sm-4 col-form-label tx-14 tx-bold">Maaş Hakediş</label>
+                    <div class="col-sm-5">
+                        <input id="SalaryTotal" name="SalaryTotal" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.SalaryTotal?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+                <div class="form-group row mg-b-5 hover hover-primary">
+                    <label for="PermitTotal" class="col-sm-4 col-form-label tx-14 tx-bold">İzin Hakediş</label>
+                    <div class="col-sm-5">
+                        <input id="PermitTotal" name="PermitTotal" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.PermitTotal?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="ExtraShiftTotal" class="col-sm-4 col-form-label tx-14 tx-bold">Fazla Mesai Hakediş</label>
+                    <div class="col-sm-5">
+                        <input id="ExtraShiftTotal" name="ExtraShiftTotal" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.ExtraShiftTotal?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+                <div class="form-group row mg-b-5 hover hover-primary">
+                    <label for="PremiumTotal" class="col-sm-4 col-form-label tx-14 tx-bold">Prim Hakediş</label>
+                    <div class="col-sm-5">
+                        <input id="PremiumTotal" name="PremiumTotal" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.PremiumTotal?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="FormalTotal" class="col-sm-4 col-form-label tx-14 tx-bold">Yasal Hakediş</label>
+                    <div class="col-sm-5">
+                        <input id="FormalTotal" name="FormalTotal" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.FormalTotal?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+                <div class="form-group row mg-b-5 hover hover-primary">
+                    <label for="OtherTotal" class="col-sm-4 col-form-label tx-14 tx-bold">Diğer Hakediş</label>
+                    <div class="col-sm-5">
+                        <input id="OtherTotal" name="OtherTotal" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.OtherTotal?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="TotalProgress" class="col-sm-4 col-form-label tx-14 tx-bold">Toplam Hakediş</label>
+                    <div class="col-sm-5">
+                        <input id="TotalProgress" name="TotalProgress" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.TotalProgress?.ToString("N2"))" readonly>
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+
+                <div class="form-group row mg-b-5">
+                    <label class="col-sm-12 col-form-label"><b><hr /></b></label>
+                </div>
+
+
+                <div class="form-group row mg-b-5">
+                    <div class="col-sm-4 form-control-plaintext"></div>
+                    <label class="col-sm-5 col-form-label tx-16"><b>Ödemeler (-)</b></label>
+                    <div class="col-sm-3 form-control-plaintext"></div>
+
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="PrePaymentAmount" class="col-sm-4 col-form-label tx-14 tx-bold">Maaş Avans Ödemesi</label>
+                    <div class="col-sm-5">
+                        <input id="PrePaymentAmount" name="PrePaymentAmount" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.PrePaymentAmount?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+                <div class="form-group row mg-b-5 hover hover-primary">
+                    <label for="SalaryCutAmount" class="col-sm-4 col-form-label tx-14 tx-bold">Kesintiler</label>
+                    <div class="col-sm-5">
+                        <input id="SalaryCutAmount" name="SalaryCutAmount" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.SalaryCutAmount?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="BankPaymentAmount" class="col-sm-4 col-form-label tx-14 tx-bold">Bankadan Ödeme</label>
+                    <div class="col-sm-5">
+                        <input id="BankPaymentAmount" name="BankPaymentAmount" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.BankPaymentAmount?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+                <div class="form-group row mg-b-5 hover hover-primary">
+                    <label for="ManuelPaymentAmount" class="col-sm-4 col-form-label tx-14 tx-bold">Manuel Ödeme</label>
+                    <div class="col-sm-5">
+                        <input id="ManuelPaymentAmount" name="ManuelPaymentAmount" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.ManuelPaymentAmount?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+                <div class="form-group row mg-b-5 bg-gray-50 hover hover-primary">
+                    <label for="OtherPaymentAmount" class="col-sm-4 col-form-label tx-14 tx-bold">Diğer Ödemeler</label>
+                    <div class="col-sm-5">
+                        <input id="OtherPaymentAmount" name="OtherPaymentAmount" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.OtherPaymentAmount?.ToString("N2"))">
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+                <div class="form-group row mg-b-5 hover hover-primary">
+                    <label for="TotalPaymentAmount" class="col-sm-4 col-form-label tx-14 tx-bold">Toplam Ödemeler</label>
+                    <div class="col-sm-5">
+                        <input id="TotalPaymentAmount" name="TotalPaymentAmount" type="text" class="form-control money text-right tx-16 tx-bold" autocomplete="off" value="@(Model.SalaryPeriodCompute.TotalPaymentAmount?.ToString("N2"))" readonly>
+                    </div>
+                    <div class="col-sm-3 form-control-plaintext">@(Model.SalaryPeriodCompute.Currency)</div>
+                </div>
+
+
+                <div class="form-group row mg-b-0">
+                    <div class="col-sm-4"></div>
+                    <div class="col-sm-5">
+                        <input id="SalaryPeriodID" name="SalaryPeriodID" type="hidden" value="@(Model.SalaryPeriodCompute.SalaryPeriodID)" />
+                        <input id="EmployeeID" name="EmployeeID" type="hidden" value="@(Model.SalaryPeriodCompute.EmployeeID)" />
+                        <input id="ID" name="ID" type="hidden" value="@(Model.SalaryPeriodCompute.ID)" />
+                        <button type="submit" class="btn btn-primary btn-block">Maaş Bilgisini Güncelle</button>
+                    </div>
+                    <div class="col-sm-3 text-right">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+}
+
+
+<script>
+    $(function () {
+        $('.shiftbegintime').mask('00:00');
+        $('.hour').mask('00:00');
+        $('.hourfull').mask('00:00:00');
+        $('.shiftdate').mask('0000-00-00');
+        $('.quantity').mask("#.##0", { reverse: true });
+        $('.number').mask("##0", { reverse: true });
+        $('.money').mask("#.##0,00", { reverse: true });
+        $('.money4').mask("#.##0,0000", { reverse: true });
+    });
+</script>

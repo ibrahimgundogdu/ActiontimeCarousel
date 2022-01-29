@@ -2979,5 +2979,22 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("AddSalaryPeriodFoodCompute", salaryPeriodIDParameter, recordEmployeeIDParameter, recordIPParameter);
         }
+    
+        public virtual ObjectResult<Nullable<int>> AddSalaryPeriodMonthCompute(Nullable<int> salaryPeriodID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var salaryPeriodIDParameter = salaryPeriodID.HasValue ?
+                new ObjectParameter("SalaryPeriodID", salaryPeriodID) :
+                new ObjectParameter("SalaryPeriodID", typeof(int));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("AddSalaryPeriodMonthCompute", salaryPeriodIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
     }
 }

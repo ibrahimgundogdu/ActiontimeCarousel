@@ -3557,6 +3557,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="GroupName" Type="nvarchar" MaxLength="20" />
           <Property Name="DayCount" Type="smallint" />
           <Property Name="EmployeeAreaCategoryID" Type="int" />
+          <Property Name="SalaryCategoryID" Type="int" />
         </EntityType>
         <EntityType Name="SalaryPeriodStatus">
           <Key>
@@ -6004,6 +6005,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeCashActions' does 
             <PropertyRef Name="BankCode" />
             <PropertyRef Name="BankBranchCode" />
             <PropertyRef Name="FoodCardNumber" />
+            
+            <PropertyRef Name="SalaryCategoryID" />
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="LocationID" Type="int" />
@@ -6057,7 +6060,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeCashActions' does 
           <Property Name="MobilePhone" Type="nvarchar" MaxLength="59" />
           <Property Name="CategoryID" Type="int" />
           <Property Name="OurCompanyID" Type="int" />
-          <Property Name="AreaCategoryID" Type="int" />
+          <Property Name="AreaCategoryID" Type="int" Nullable="false" />
+          <Property Name="SalaryCategoryID" Type="int" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'db293_ActionTimeDb.dbo.VEmployeeEmails' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -8067,6 +8071,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
         </Function>
         <Function Name="AddSalaryPeriodFoodCompute" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SalaryPeriodID" Type="int" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="AddSalaryPeriodMonthCompute" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SalaryPeriodID" Type="int" Mode="In" />
           <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
           <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
@@ -10188,7 +10197,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VEmployeeCashActions].[MobilePhone] AS [MobilePhone], 
     [VEmployeeCashActions].[CategoryID] AS [CategoryID], 
     [VEmployeeCashActions].[OurCompanyID] AS [OurCompanyID], 
-    [VEmployeeCashActions].[AreaCategoryID] AS [AreaCategoryID]
+    [VEmployeeCashActions].[AreaCategoryID] AS [AreaCategoryID], 
+    [VEmployeeCashActions].[SalaryCategoryID] AS [SalaryCategoryID]
     FROM [dbo].[VEmployeeCashActions] AS [VEmployeeCashActions]</DefiningQuery>
           </EntitySet>
           <EntitySet Name="VEmployeeEmails" EntityType="Self.VEmployeeEmails" store:Type="Views" store:Schema="dbo">
@@ -12664,6 +12674,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="RecordIP" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="LocationCardReaderParameter" EntityType="db293_ActionTimeDbModel.LocationCardReaderParameter" />
+          <FunctionImport Name="AddSalaryPeriodMonthCompute" ReturnType="Collection(Int32)">
+            <Parameter Name="SalaryPeriodID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -15982,6 +15997,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <PropertyRef Name="BankCode" />
             <PropertyRef Name="BankBranchCode" />
             <PropertyRef Name="FoodCardNumber" />
+            <PropertyRef Name="SalaryCategoryID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="LocationID" Type="Int32" />
@@ -16035,7 +16051,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="MobilePhone" Type="String" MaxLength="59" FixedLength="false" Unicode="true" />
           <Property Name="CategoryID" Type="Int32" />
           <Property Name="OurCompanyID" Type="Int32" />
-          <Property Name="AreaCategoryID" Type="Int32" />
+          <Property Name="AreaCategoryID" Type="Int32" Nullable="false" />
+          <Property Name="SalaryCategoryID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="VDayResultDocuments">
           <Key>
@@ -20893,6 +20910,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="GroupName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="DayCount" Type="Int16" />
           <Property Name="EmployeeAreaCategoryID" Type="Int32" />
+          <Property Name="SalaryCategoryID" Type="Int32" />
         </EntityType>
         <EntityType Name="SalaryPeriodStatus">
           <Key>
@@ -24275,6 +24293,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VEmployeeCashActions">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VEmployeeCashActions">
               <MappingFragment StoreEntitySet="VEmployeeCashActions">
+                <ScalarProperty Name="SalaryCategoryID" ColumnName="SalaryCategoryID" />
                 <ScalarProperty Name="AreaCategoryID" ColumnName="AreaCategoryID" />
                 <ScalarProperty Name="OurCompanyID" ColumnName="OurCompanyID" />
                 <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
@@ -28945,6 +28964,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="SalaryPeriodGroup">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SalaryPeriodGroup">
               <MappingFragment StoreEntitySet="SalaryPeriodGroup">
+                <ScalarProperty Name="SalaryCategoryID" ColumnName="SalaryCategoryID" />
                 <ScalarProperty Name="EmployeeAreaCategoryID" ColumnName="EmployeeAreaCategoryID" />
                 <ScalarProperty Name="DayCount" ColumnName="DayCount" />
                 <ScalarProperty Name="GroupName" ColumnName="GroupName" />
@@ -29082,6 +29102,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="AddSalaryPeriodMonthCompute" FunctionName="db293_ActionTimeDbModel.Store.AddSalaryPeriodMonthCompute" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

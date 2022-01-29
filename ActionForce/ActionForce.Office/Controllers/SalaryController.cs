@@ -1543,7 +1543,7 @@ namespace ActionForce.Office.Controllers
                 filterModel.EmployeeID = EmployeeID != null ? EmployeeID : 0;
                 filterModel.LocationID = LocationID != null ? LocationID : 0;
                 filterModel.SalaryPeriodID = SalaryPeriodID != null ? SalaryPeriodID : 0;
-                filterModel.DateBegin = DateBegin != null ? DateBegin : DateTime.Now.AddDays(-15).Date;
+                filterModel.DateBegin = DateBegin != null ? DateBegin : DateTime.Now.Date;
                 filterModel.DateEnd = DateEnd != null ? DateEnd : DateTime.Now.Date;
                 model.Filters = filterModel;
             }
@@ -1846,9 +1846,16 @@ namespace ActionForce.Office.Controllers
                 return RedirectToAction("SalaryResult");
             }
 
-            if (model.SalaryPeriod.GroupType == 1)
+            if (model.SalaryPeriod.GroupType == 1 && model.SalaryPeriod.SalaryPeriodGroupID == 1)
             {
                 Db.AddSalaryPeriodCompute(model.SalaryPeriod.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+            }
+
+            if (model.SalaryPeriod.GroupType == 1 && model.SalaryPeriod.SalaryPeriodGroupID == 2)
+            {
+                Db.AddSalaryPeriodMonthCompute(model.SalaryPeriod.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
             }
 
             if (model.SalaryPeriod.GroupType == 2)
@@ -1912,7 +1919,6 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
-
         //FilterSalaryPeriods
         [HttpPost]
         [AllowAnonymous]
@@ -1970,7 +1976,7 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
-        //StatusSalaryPeriod
+        //AddEmployeeSalary
 
         [AllowAnonymous]
         public ActionResult StatusSalaryPeriod(Guid? id)
@@ -2009,5 +2015,147 @@ namespace ActionForce.Office.Controllers
 
 
         }
+
+        [AllowAnonymous]
+        public PartialViewResult SetEmployeeSalary(int? id, int? empid)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            model.SalaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.ID == id);
+            model.SalaryPeriodCompute = Db.SalaryPeriodCompute.FirstOrDefault(x => x.SalaryPeriodID == id && x.EmployeeID == empid);
+
+
+            return PartialView("_PartialSetEmployeeSalary", model);
+        }
+
+
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult EditSalaryPaymentPeriod(FormSalaryPeriod perSalary)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+            Result result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            if (perSalary == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            var salaryperiod = Db.SalaryPeriod.FirstOrDefault(x => x.ID == perSalary.SalaryPeriodID);
+            var salaryComputed = Db.SalaryPeriodCompute.FirstOrDefault(x => x.ID == perSalary.ID && x.SalaryPeriodID == perSalary.SalaryPeriodID && x.EmployeeID == perSalary.EmployeeID);
+
+
+            if (salaryComputed != null)
+            {
+
+                SalaryPeriodCompute self = new SalaryPeriodCompute()
+                {
+                    EmployeeID = salaryComputed.EmployeeID,
+                    FullName = salaryComputed.FullName,
+                    IdentityNumber = salaryComputed.IdentityNumber,
+                    RecordDate = salaryComputed.RecordDate,
+                    RecordEmployeeID = salaryComputed.RecordEmployeeID,
+                    RecordIP = salaryComputed.RecordIP,
+                    PremiumTotal = salaryComputed.PremiumTotal,
+                    PhoneNumber = salaryComputed.PhoneNumber,
+                    PermitTotal = salaryComputed.PermitTotal,
+                    OtherTotal = salaryComputed.OtherTotal,
+                    OtherPaymentAmount = salaryComputed.OtherPaymentAmount,
+                    ManuelPaymentAmount = salaryComputed.ManuelPaymentAmount,
+                    BankName = salaryComputed.BankName,
+                    BankPaymentAmount = salaryComputed.BankPaymentAmount,
+                    Currency = salaryComputed.Currency,
+                    ExtraShiftTotal = salaryComputed.ExtraShiftTotal,
+                    FoodCard = salaryComputed.FoodCard,
+                    FoodCardPaymentAmount = salaryComputed.FoodCardPaymentAmount,
+                    FoodCardTotal = salaryComputed.FoodCardTotal,
+                    FormalTotal = salaryComputed.FormalTotal,
+                    IBAN = salaryComputed.IBAN,
+                    ID = salaryComputed.ID,
+                    PrePaymentAmount = salaryComputed.PrePaymentAmount,
+                    SalaryCutAmount = salaryComputed.SalaryCutAmount,
+                    SalaryPeriodID = salaryComputed.SalaryPeriodID,
+                    SalaryTotal = salaryComputed.SalaryTotal,
+                    TotalBalance = salaryComputed.TotalBalance,
+                    TotalPaymentAmount = salaryComputed.TotalPaymentAmount,
+                    TotalProgress = salaryComputed.TotalProgress,
+                    UID = salaryComputed.UID
+                };
+
+
+
+
+                var SalaryTotal = Convert.ToDouble((perSalary.SalaryTotal ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var PermitTotal = Convert.ToDouble((perSalary.PermitTotal ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var ExtraShiftTotal = Convert.ToDouble((perSalary.ExtraShiftTotal ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var PremiumTotal = Convert.ToDouble((perSalary.PremiumTotal ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var FormalTotal = Convert.ToDouble((perSalary.FormalTotal ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var OtherTotal = Convert.ToDouble((perSalary.OtherTotal ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                //var TotalProgress = SalaryTotal + PermitTotal + ExtraShiftTotal + PremiumTotal + FormalTotal + OtherTotal;
+                var PrePaymentAmount = Convert.ToDouble((perSalary.PrePaymentAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var SalaryCutAmount = Convert.ToDouble((perSalary.SalaryCutAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var BankPaymentAmount = Convert.ToDouble((perSalary.BankPaymentAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var ManuelPaymentAmount = Convert.ToDouble((perSalary.ManuelPaymentAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var OtherPaymentAmount = Convert.ToDouble((perSalary.OtherPaymentAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                //var TotalPaymentAmount = PrePaymentAmount + SalaryCutAmount + BankPaymentAmount + ManuelPaymentAmount + OtherPaymentAmount;
+                //var TotalBalance = TotalProgress + TotalPaymentAmount;
+
+                salaryComputed.SalaryTotal = SalaryTotal;
+                salaryComputed.PermitTotal = PermitTotal;
+                salaryComputed.ExtraShiftTotal = ExtraShiftTotal;
+                salaryComputed.PremiumTotal = PremiumTotal;
+                salaryComputed.FormalTotal = FormalTotal;
+                salaryComputed.OtherTotal = OtherTotal;
+                salaryComputed.TotalProgress = SalaryTotal + PermitTotal + ExtraShiftTotal + PremiumTotal + FormalTotal + OtherTotal;
+                salaryComputed.PrePaymentAmount = PrePaymentAmount * -1;
+                salaryComputed.SalaryCutAmount = SalaryCutAmount * -1;
+                salaryComputed.BankPaymentAmount = BankPaymentAmount * -1;
+                salaryComputed.ManuelPaymentAmount = ManuelPaymentAmount * -1;
+                salaryComputed.OtherPaymentAmount = OtherPaymentAmount * -1;
+                salaryComputed.TotalPaymentAmount = (PrePaymentAmount + SalaryCutAmount + BankPaymentAmount + ManuelPaymentAmount + OtherPaymentAmount) * -1; 
+                salaryComputed.TotalBalance = salaryComputed.TotalProgress + salaryComputed.TotalPaymentAmount;
+                salaryComputed.RecordDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
+                salaryComputed.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                salaryComputed.RecordIP = OfficeHelper.GetIPAddress();
+
+                Db.SaveChanges();
+
+                var totalsum = Db.VSalaryPeriodComputeSum.FirstOrDefault(x => x.SalaryPeriodID == perSalary.SalaryPeriodID);
+
+                salaryperiod.TotalAmount = totalsum?.TotalProgress ?? 0;
+                salaryperiod.PaymentAmount = totalsum?.TotalPaymentAmount ?? 0;
+                salaryperiod.BalanceAmount = totalsum?.TotalBalance ?? 0;
+
+                Db.SaveChanges();
+
+                result.IsSuccess = true;
+                result.Message = $"{salaryComputed.FullName} adlı Çalışanın Maaş bilgisi başarı ile güncellendi";
+
+                var isequal = OfficeHelper.PublicInstancePropertiesEqual<SalaryPeriodCompute>(self, salaryComputed, OfficeHelper.getIgnorelist());
+                OfficeHelper.AddApplicationLog("Office", "Salary", "Update", salaryComputed.EmployeeID.ToString(), "SalaryPeriodCompute", "Detail", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
+
+                
+
+
+            }
+            else
+            {
+                result.IsSuccess = false;
+                result.Message = $"{salaryComputed.FullName} adlı Çalışanın Maaş bilgisi bulunamadı";
+            }
+
+            TempData["result"] = result;
+            return RedirectToAction("DetailSalaryPeriod", new { id = salaryperiod.UID });
+
+
+        }
+
+
     }
 }
