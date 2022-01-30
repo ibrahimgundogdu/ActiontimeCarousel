@@ -67,7 +67,7 @@ namespace ActionForce.Office.Controllers
         {
             SalaryControlModel model = new SalaryControlModel();
 
-            var actypes = new[] { 43, 44, 45, 46 };
+            var actypes = new[] { 43, 44, 45, 46, 38, 39 };
 
             model.CashActionTypes = Db.CashActionType.Where(x => actypes.Contains(x.ID) && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
