@@ -2211,6 +2211,7 @@ namespace ActionForce.Office
                     try
                     {
                         var setcardparam = Db.SetcardParameter.Where(x => x.Year <= salary.DocumentDate.Value.Year && x.OurCompanyID == authentication.ActionEmployee.OurCompanyID).OrderByDescending(x => x.Year).FirstOrDefault();
+                        
                         var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == salary.EmployeeID);
 
                         int? PositionID = employee.PositionID;
@@ -2227,6 +2228,8 @@ namespace ActionForce.Office
                         var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
                         double salaryMultiplier = Db.GetSalaryMultiplier(salary.LocationID, salary.EmployeeID, salary.DocumentDate).FirstOrDefault() ?? 0;
 
+
+
                         var empunits = Db.EmployeeSalary.Where(x => x.EmployeeID == salary.EmployeeID && x.DateStart <= salary.DocumentDate && x.Hourly > 0).OrderByDescending(x => x.DateStart).FirstOrDefault();
                         double? unitprice = empunits?.Hourly ?? 0;
 
@@ -2237,6 +2240,8 @@ namespace ActionForce.Office
                         }
 
                         unitprice = unitprice * salaryMultiplier;
+                        double? unitfoodprice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
+                        unitfoodprice = unitfoodprice * salaryMultiplier;
 
                         var SalaryEarn = Db.DocumentSalaryEarn.FirstOrDefault(x => x.LocationID == salary.LocationID && x.EmployeeID == salary.EmployeeID && x.Date == salary.DocumentDate && x.ResultID == salary.ResultID && x.ActionTypeID == salary.ActionTypeID);
 
@@ -2279,7 +2284,7 @@ namespace ActionForce.Office
 
                             if (employee.OurCompanyID == 2 && employee.AreaCategoryID == 2 && (PositionID == 5 || PositionID == 6))
                             {
-                                salaryEarn.UnitFoodPrice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
+                                salaryEarn.UnitFoodPrice = unitfoodprice;
                                 salaryEarn.QuantityHourSalary = (salaryEarn.QuantityHour * 1); // 0.9
                                 salaryEarn.QuantityHourFood = (salaryEarn.QuantityHour * 1); // 0.9
                             }
@@ -2366,7 +2371,11 @@ namespace ActionForce.Office
                         {
                             unitprice = unitprice + 1;
                         }
+
                         unitprice = unitprice * salaryMultiplier;
+
+                        double? unitfoodprice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
+                        unitfoodprice = unitfoodprice * salaryMultiplier;
 
                         var isEmp = salary.EmployeeID;
 
@@ -2432,7 +2441,7 @@ namespace ActionForce.Office
 
                         if (employee.OurCompanyID == 2 && employee.AreaCategoryID == 2 && (PositionID == 5 || PositionID == 6))
                         {
-                            isEarn.UnitFoodPrice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
+                            isEarn.UnitFoodPrice = unitfoodprice;
                             isEarn.QuantityHourSalary = (isEarn.QuantityHour * 1); // 0.9
                             isEarn.QuantityHourFood = (isEarn.QuantityHour * 1); // 0.9
                         }

@@ -67,7 +67,7 @@ namespace ActionForce.Office.Controllers
         {
             SalaryControlModel model = new SalaryControlModel();
 
-            var actypes = new[] { 43, 44, 45, 46, 38, 39 };
+            var actypes = new[] { 43, 44, 45, 46 };
 
             model.CashActionTypes = Db.CashActionType.Where(x => actypes.Contains(x.ID) && x.IsActive == true).OrderBy(x => x.SortBy).ToList();
 
@@ -76,6 +76,8 @@ namespace ActionForce.Office.Controllers
 
             return View(model);
         }
+
+
 
         [HttpPost]
         [AllowAnonymous]
@@ -1976,7 +1978,7 @@ namespace ActionForce.Office.Controllers
             return View(model);
         }
 
-        //AddEmployeeSalary
+        //RemovePeriodCompute
 
         [AllowAnonymous]
         public ActionResult StatusSalaryPeriod(Guid? id)
@@ -2155,6 +2157,44 @@ namespace ActionForce.Office.Controllers
 
 
         }
+
+
+        [AllowAnonymous]
+        public ActionResult RemovePeriodCompute(Guid? id, int? SalaryPeriodId)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return RedirectToAction("Index");
+            }
+
+            if (id == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+
+            var SalaryPeriod = Db.SalaryPeriod.FirstOrDefault(x => x.ID == SalaryPeriodId);
+
+            if (SalaryPeriod == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            // log alınmalı
+
+            Db.RemoveSalaryPeriodCompute(id, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+            return RedirectToAction("DetailSalaryPeriod", new { id = SalaryPeriod.UID });
+
+
+        }
+
+
+
 
 
     }

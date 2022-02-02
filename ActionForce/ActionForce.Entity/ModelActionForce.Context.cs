@@ -2996,5 +2996,22 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("AddSalaryPeriodMonthCompute", salaryPeriodIDParameter, recordEmployeeIDParameter, recordIPParameter);
         }
+    
+        public virtual ObjectResult<Nullable<int>> RemoveSalaryPeriodCompute(Nullable<System.Guid> salaryPeriodUID, Nullable<int> recordEmployeeID, string recordIP)
+        {
+            var salaryPeriodUIDParameter = salaryPeriodUID.HasValue ?
+                new ObjectParameter("SalaryPeriodUID", salaryPeriodUID) :
+                new ObjectParameter("SalaryPeriodUID", typeof(System.Guid));
+    
+            var recordEmployeeIDParameter = recordEmployeeID.HasValue ?
+                new ObjectParameter("RecordEmployeeID", recordEmployeeID) :
+                new ObjectParameter("RecordEmployeeID", typeof(int));
+    
+            var recordIPParameter = recordIP != null ?
+                new ObjectParameter("RecordIP", recordIP) :
+                new ObjectParameter("RecordIP", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("RemoveSalaryPeriodCompute", salaryPeriodUIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
     }
 }

@@ -1800,6 +1800,9 @@ namespace ActionForce.Service
 
                         unitprice = unitprice * salaryMultiplier;
 
+                        double? unitfoodprice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
+                        unitfoodprice = unitfoodprice * salaryMultiplier;
+
                         var SalaryEarn = Db.DocumentSalaryEarn.FirstOrDefault(x => x.LocationID == salary.LocationID && x.EmployeeID == salary.EmployeeID && x.Date == salary.DocumentDate && x.ResultID == salary.ResultID);
 
                         if (SalaryEarn == null)
@@ -1841,7 +1844,7 @@ namespace ActionForce.Service
 
                             if (employee.OurCompanyID == 2 && employee.AreaCategoryID == 2 && (PositionID == 5 || PositionID == 6))
                             {
-                                salaryEarn.UnitFoodPrice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
+                                salaryEarn.UnitFoodPrice = unitfoodprice;
                                 salaryEarn.QuantityHourSalary = (salaryEarn.QuantityHour * 1); // 0.9
                                 salaryEarn.QuantityHourFood = (salaryEarn.QuantityHour * 1); // 0.9
                             }
@@ -1932,6 +1935,9 @@ namespace ActionForce.Service
                         }
                         unitprice = unitprice * salaryMultiplier;
 
+                        double? unitfoodprice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
+                        unitfoodprice = unitfoodprice * salaryMultiplier;
+
                         var isEmp = salary.EmployeeID;
 
                         DocumentSalaryEarn self = new DocumentSalaryEarn()
@@ -1996,7 +2002,7 @@ namespace ActionForce.Service
 
                         if (employee.OurCompanyID == 2 && employee.AreaCategoryID == 2 && (PositionID == 5 || PositionID == 6))
                         {
-                            isEarn.UnitFoodPrice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
+                            isEarn.UnitFoodPrice = unitfoodprice;
                             isEarn.QuantityHourSalary = (isEarn.QuantityHour * 1); //0.9
                             isEarn.QuantityHourFood = (isEarn.QuantityHour * 1); // 0.9
                         }

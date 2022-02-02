@@ -8393,6 +8393,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="TerminalID" Type="int" Mode="In" />
           <Parameter Name="LocationID" Type="int" Mode="In" />
         </Function>
+        <Function Name="RemoveSalaryPeriodCompute" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SalaryPeriodUID" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="RemoveTicketSale" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SaleID" Type="bigint" Mode="In" />
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
@@ -12676,6 +12681,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySet Name="LocationCardReaderParameter" EntityType="db293_ActionTimeDbModel.LocationCardReaderParameter" />
           <FunctionImport Name="AddSalaryPeriodMonthCompute" ReturnType="Collection(Int32)">
             <Parameter Name="SalaryPeriodID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="RemoveSalaryPeriodCompute" ReturnType="Collection(Int32)">
+            <Parameter Name="SalaryPeriodUID" Mode="In" Type="Guid" />
             <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="RecordIP" Mode="In" Type="String" />
           </FunctionImport>
@@ -29103,6 +29113,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddSalaryPeriodMonthCompute" FunctionName="db293_ActionTimeDbModel.Store.AddSalaryPeriodMonthCompute" />
+          <FunctionImportMapping FunctionImportName="RemoveSalaryPeriodCompute" FunctionName="db293_ActionTimeDbModel.Store.RemoveSalaryPeriodCompute" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
