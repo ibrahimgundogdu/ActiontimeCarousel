@@ -3013,5 +3013,18 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("RemoveSalaryPeriodCompute", salaryPeriodUIDParameter, recordEmployeeIDParameter, recordIPParameter);
         }
+    
+        public virtual ObjectResult<GetSaledUsedStats_Result> GetSaledUsedStats(Nullable<int> locationID, Nullable<System.DateTime> processDate)
+        {
+            var locationIDParameter = locationID.HasValue ?
+                new ObjectParameter("LocationID", locationID) :
+                new ObjectParameter("LocationID", typeof(int));
+    
+            var processDateParameter = processDate.HasValue ?
+                new ObjectParameter("ProcessDate", processDate) :
+                new ObjectParameter("ProcessDate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSaledUsedStats_Result>("GetSaledUsedStats", locationIDParameter, processDateParameter);
+        }
     }
 }

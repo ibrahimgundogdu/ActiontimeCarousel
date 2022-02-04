@@ -2227,7 +2227,7 @@ namespace ActionForce.Office
                         var location = Db.Location.FirstOrDefault(x => x.LocationID == salary.LocationID);
                         var exchange = OfficeHelper.GetExchange(DateTime.UtcNow);
                         double salaryMultiplier = Db.GetSalaryMultiplier(salary.LocationID, salary.EmployeeID, salary.DocumentDate).FirstOrDefault() ?? 0;
-
+                        double foodMultiplier = salaryMultiplier > 0 ? 1 : 0;
 
 
                         var empunits = Db.EmployeeSalary.Where(x => x.EmployeeID == salary.EmployeeID && x.DateStart <= salary.DocumentDate && x.Hourly > 0).OrderByDescending(x => x.DateStart).FirstOrDefault();
@@ -2241,7 +2241,7 @@ namespace ActionForce.Office
 
                         unitprice = unitprice * salaryMultiplier;
                         double? unitfoodprice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
-                        unitfoodprice = unitfoodprice * salaryMultiplier;
+                        unitfoodprice = unitfoodprice * foodMultiplier;
 
                         var SalaryEarn = Db.DocumentSalaryEarn.FirstOrDefault(x => x.LocationID == salary.LocationID && x.EmployeeID == salary.EmployeeID && x.Date == salary.DocumentDate && x.ResultID == salary.ResultID && x.ActionTypeID == salary.ActionTypeID);
 
@@ -2362,6 +2362,7 @@ namespace ActionForce.Office
                         }
 
                         double salaryMultiplier = Db.GetSalaryMultiplier(salary.LocationID, salary.EmployeeID, salary.DocumentDate).FirstOrDefault() ?? 0;
+                        double foodMultiplier = salaryMultiplier > 0 ? 1 : 0;
 
                         var empunits = Db.EmployeeSalary.Where(x => x.EmployeeID == salary.EmployeeID && x.DateStart <= salary.DocumentDate && x.Hourly > 0).OrderByDescending(x => x.DateStart).FirstOrDefault();
                         double? unitprice = empunits?.Hourly ?? 0;
@@ -2375,7 +2376,7 @@ namespace ActionForce.Office
                         unitprice = unitprice * salaryMultiplier;
 
                         double? unitfoodprice = setcardparam != null ? setcardparam.Amount ?? 0 : 0;
-                        unitfoodprice = unitfoodprice * salaryMultiplier;
+                        unitfoodprice = unitfoodprice * foodMultiplier;
 
                         var isEmp = salary.EmployeeID;
 

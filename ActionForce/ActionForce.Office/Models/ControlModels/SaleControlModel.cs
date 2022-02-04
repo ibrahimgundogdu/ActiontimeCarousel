@@ -46,6 +46,8 @@ namespace ActionForce.Office
         public List<Employee> Employees { get; set; }
 
         public List<LocationPart> LocationParts { get; set; }
+        public List<GetSaledUsedStats_Result> GetSaledUsedStats { get; set; }
+        public double DepositeUnitPrice { get; set; }
 
     }
 }

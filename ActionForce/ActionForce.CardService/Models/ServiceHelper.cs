@@ -321,6 +321,7 @@ namespace ActionForce.CardService
                             result.IsSuccess = false;
                             result.Message = "NO CRDEM";
                         }
+
                         //else if (cardEmployee == null)
                         //{
                         //    var ncparameters = new

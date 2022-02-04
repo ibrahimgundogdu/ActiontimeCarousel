@@ -999,7 +999,7 @@ namespace ActionForce.PosLocation.Controllers
 
             model.Employees = Db.Employee.Where(x => employeeids.Contains(x.EmployeeID)).ToList();
             model.LocationPartEmployees = Db.VLocationPartEmployee.Where(x => x.ReadDay == DocumentDate && x.LocationID == model.Authentication.CurrentLocation.ID).ToList();
-
+            model.UCardActions = Db.HCardActions.Where(x => x.LocationID == model.Authentication.CurrentLocation.ID && x.DateOnly == DocumentDate && x.ActionTypeID == 2 && x.Credit < 0).ToList();
 
             var locationparts = Db.GetLocationPartList(model.Authentication.CurrentLocation.ID).ToList();
 

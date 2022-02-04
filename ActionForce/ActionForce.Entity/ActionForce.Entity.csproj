@@ -509,6 +509,9 @@
     <Compile Include="GetPersonList_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="GetSaledUsedStats_Result.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="GetSaleLocationsToday_Result.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

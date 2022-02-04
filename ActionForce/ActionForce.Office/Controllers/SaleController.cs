@@ -62,7 +62,9 @@ namespace ActionForce.Office.Controllers
                     StartDate = x.StartDate
                 }).ToList();
 
+                model.DepositeUnitPrice = Db.ProductPrice.Where(x => x.ProductID == 1 && x.ProductPriceCategoryID == 1).FirstOrDefault()?.Price ?? 0;
 
+                model.GetSaledUsedStats = Db.GetSaledUsedStats(model.Filters.LocationID, model.Filters.Date).ToList();
             }
             else
             {

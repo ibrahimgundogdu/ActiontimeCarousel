@@ -161,13 +161,45 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @{
+                                        var LastTime = DateTime.UtcNow.AddHours(4);
+                                        var firstTime = DateTime.UtcNow.AddHours(4);
+
+                                    }
 
                                     @foreach (var part in Model.LocationPartEmployees.OrderByDescending(x => x.ReadDate).ToList())
                                     {
+                                        firstTime = part.ReadDate.Value;
+                                        var actions = Model.UCardActions.Where(x => x.ActionDate >= firstTime && x.ActionDate <= LastTime).ToList();
+
+
+                                        foreach (var action in actions.OrderByDescending(x => x.ActionDate))
+                                        {
+                                            <tr>
+                                                <td>&nbsp;&nbsp;&nbsp;@(action.EmployeeFullName)</td>
+                                                <td>@(action.ActionDate)</td>
+                                                <td style="text-align:right;">@(action.PartName)</td>
+
+                                                @foreach (var item in Model.LocationParts)
+                                                {
+                                                    if (item.PartID == action.LocationPartID)
+                                                    {
+                                                        <td class="bg-success" style="text-align:center;"><b>@(action.PartName)</b> <br />@(action.ActionDate?.ToString("T"))</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="text-align:center;"></td>
+                                                    }
+
+                                                }
+
+                                            </tr>
+                                        }
+
                                         <tr>
-                                            <td>@(part.FullName)</td>
+                                            <td><b>@(part.FullName)</b></td>
                                             <td>@(part.ReadDate)</td>
-                                            <td>@(part.PartName)</td>
+                                            <td style="text-align:right;">@(part.PartName)</td>
 
                                             @foreach (var item in Model.LocationParts)
                                             {
@@ -183,6 +215,40 @@
                                             }
 
                                         </tr>
+
+                                        LastTime = part.ReadDate.Value;
+
+
+                                    }
+
+                                    @{
+
+                                        var actionslst = Model.UCardActions.Where(x => x.ActionDate <= LastTime).ToList();
+
+
+                                        foreach (var action in actionslst.OrderByDescending(x => x.ActionDate))
+                                        {
+                                            <tr>
+                                                <td>&nbsp;&nbsp;&nbsp;@(action.EmployeeFullName)</td>
+                                                <td>@(action.ActionDate)</td>
+                                                <td style="text-align:right;">@(action.PartName)</td>
+
+                                                @foreach (var item in Model.LocationParts)
+                                                {
+                                                    if (item.PartID == action.LocationPartID)
+                                                    {
+                                                        <td class="bg-success" style="text-align:center;"><b>@(action.PartName)</b> <br />@(action.ActionDate?.ToString("T"))</td>
+                                                    }
+                                                    else
+                                                    {
+                                                        <td style="text-align:center;"></td>
+                                                    }
+
+                                                }
+
+                                            </tr>
+                                        }
+
                                     }
 
                                 </tbody>

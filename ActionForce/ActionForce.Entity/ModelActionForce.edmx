@@ -8328,6 +8328,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
           <Parameter Name="Date" Type="date" Mode="In" />
         </Function>
+        <Function Name="GetSaledUsedStats" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LocationID" Type="int" Mode="In" />
+          <Parameter Name="ProcessDate" Type="date" Mode="In" />
+        </Function>
         <Function Name="GetSaleLocationsToday" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Date" Type="date" Mode="In" />
         </Function>
@@ -12688,6 +12692,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             <Parameter Name="SalaryPeriodUID" Mode="In" Type="Guid" />
             <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
             <Parameter Name="RecordIP" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="GetSaledUsedStats" ReturnType="Collection(db293_ActionTimeDbModel.GetSaledUsedStats_Result)">
+            <Parameter Name="LocationID" Mode="In" Type="Int32" />
+            <Parameter Name="ProcessDate" Mode="In" Type="DateTime" />
           </FunctionImport>
         
           </EntityContainer>
@@ -21043,6 +21051,14 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="ReadCount" Type="Int32" Nullable="false" />
           <Property Name="UnitDuration" Type="Int32" Nullable="false" />
         </EntityType>
+        <ComplexType Name="GetSaledUsedStats_Result">
+          <Property Type="Int32" Name="OrderID" Nullable="false" />
+          <Property Type="Int32" Name="LocationID" Nullable="true" />
+          <Property Type="DateTime" Name="DateOnly" Nullable="true" />
+          <Property Type="String" Name="CardNumber" Nullable="true" MaxLength="20" />
+          <Property Type="Double" Name="Amount" Nullable="true" />
+          <Property Type="Int32" Name="Quantity" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -29114,6 +29130,18 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="AddSalaryPeriodMonthCompute" FunctionName="db293_ActionTimeDbModel.Store.AddSalaryPeriodMonthCompute" />
           <FunctionImportMapping FunctionImportName="RemoveSalaryPeriodCompute" FunctionName="db293_ActionTimeDbModel.Store.RemoveSalaryPeriodCompute" />
+          <FunctionImportMapping FunctionImportName="GetSaledUsedStats" FunctionName="db293_ActionTimeDbModel.Store.GetSaledUsedStats">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="db293_ActionTimeDbModel.GetSaledUsedStats_Result">
+                <ScalarProperty Name="OrderID" ColumnName="OrderID" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+                <ScalarProperty Name="DateOnly" ColumnName="DateOnly" />
+                <ScalarProperty Name="CardNumber" ColumnName="CardNumber" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
