@@ -381,6 +381,8 @@
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.TempDocumentBankTransfer" Width="1.5" PointX="17.125" PointY="24.625" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.VSalaryPeriodComputeSum" Width="1.5" PointX="21.375" PointY="42.25" />
         <EntityTypeShape EntityType="db293_ActionTimeDbModel.LocationCardReaderParameter" Width="1.5" PointX="34.75" PointY="35.75" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleCreditLoad" Width="1.5" PointX="65.25" PointY="8.5" />
+        <EntityTypeShape EntityType="db293_ActionTimeDbModel.VTicketSaleRowSummaryProduct" Width="1.5" PointX="65.375" PointY="16.375" />
         
         
         

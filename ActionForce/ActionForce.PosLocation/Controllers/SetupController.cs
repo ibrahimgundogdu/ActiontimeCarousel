@@ -448,6 +448,97 @@ namespace ActionForce.PosLocation.Controllers
         }
 
 
+        [AllowAnonymous]
+        public ActionResult UserAuthenticationCheck(Guid? id, Guid? locationId)
+        {
+            SetupControlModel model = new SetupControlModel();
+            model.Result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+            Response.Cookies.Remove("PosTerminal");
+            Response.Cookies.Remove("PosLocation");
+            Response.Cookies.Remove("AuthenticationToken");
 
+            if (id != null && locationId != null)
+            {
+                var employee = Db.Employee.FirstOrDefault(x => x.EmployeeUID == id && x.IsActive == true && x.IsDismissal == false && (x.AreaCategoryID == 1 || x.AreaCategoryID == 3));
+                var location = Db.Location.FirstOrDefault(x => x.LocationUID == locationId && x.IsActive == true);
+
+
+                if (employee != null && location != null)
+                {
+                    var posterminal = Db.VLocationPosTerminal.FirstOrDefault(x => x.LocationID == location.LocationID && x.IsActive == true && x.IsMaster == true);
+
+                    if (posterminal != null)
+                    {
+                        //PosTerminal
+
+                        HttpCookie locationPosCookie = System.Web.HttpContext.Current.Request.Cookies["PosTerminal"];
+
+                        if (locationPosCookie == null)
+                            locationPosCookie = new HttpCookie("PosTerminal");
+
+                        locationPosCookie.Value = posterminal.SerialNumber.Trim();
+                        locationPosCookie.Expires = DateTime.Now.AddDays(1);
+
+                        Response.SetCookie(locationPosCookie);
+
+                        //PosLocation
+
+                        HttpCookie locationCookie = System.Web.HttpContext.Current.Request.Cookies["PosLocation"];
+
+                        if (locationCookie == null)
+                            locationCookie = new HttpCookie("PosLocation");
+
+                        locationCookie.Value = location.LocationUID.ToString();
+                        locationCookie.Expires = DateTime.Now.AddDays(1);
+
+                        Response.SetCookie(locationCookie);
+
+                        //AuthenticationToken
+
+
+                        string AuthenticationToken = $"{location.LocationUID}|{employee.EmployeeUID}|{string.Empty}";
+
+                        HttpCookie authCookie = System.Web.HttpContext.Current.Request.Cookies["AuthenticationToken"];
+
+                        if (authCookie == null)
+                            authCookie = new HttpCookie("AuthenticationToken");
+
+                        authCookie.Value = AuthenticationToken;
+                        authCookie.Expires = DateTime.Now.AddDays(1);
+
+                        Response.SetCookie(authCookie);
+
+                        model.Result.IsSuccess = true;
+                        model.Result.Message = "Kullanıcı Girişi Başarılı";
+
+                        return RedirectToAction("Index", "Default");
+
+                    }
+                    else
+                    {
+                        model.Result.IsSuccess = false;
+                        model.Result.Message = "Lokasyon Pos Serisi Tanımı Bulunamadı";
+                    }
+                }
+                else
+                {
+                    model.Result.IsSuccess = false;
+                    model.Result.Message = "Kullanıcı veya Lokasyon Bulunamadı";
+                }
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Gelen hatalı parametre";
+            }
+
+            TempData["Result"] = model.Result;
+            return RedirectToAction("Index");
+
+        }
     }
 }

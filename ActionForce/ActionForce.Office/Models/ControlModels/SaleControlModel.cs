@@ -32,8 +32,11 @@ namespace ActionForce.Office
         public VTicketSaleAllSummary CurrentTicketSaleSummary { get; set; }
 
         public TicketSale TicketSale { get; set; }
+        public VTicketSaleCreditLoad TicketSaleCreditLoad { get; set; }
+        public List<VTicketSaleCreditLoad> TicketSaleCreditLoads { get; set; }
 
         public List<VTicketSaleRowSummary> TicketSaleRows { get; set; }
+        public List<VTicketSaleRowSummaryProduct> TicketSaleRowProducts { get; set; }
         public List<VTicketSaleSaleRowSummary> TicketSaleSaleRows { get; set; }
         public List<VTicketSalePosPaymentSummary> TicketSalePosPaymentSummary { get; set; }
         public List<VDocumentsAllSummaryUnion> DocumentsAllSummary { get; set; }

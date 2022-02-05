@@ -379,6 +379,8 @@ namespace ActionForce.Entity
         public virtual DbSet<TempDocumentBankTransfer> TempDocumentBankTransfer { get; set; }
         public virtual DbSet<VSalaryPeriodComputeSum> VSalaryPeriodComputeSum { get; set; }
         public virtual DbSet<LocationCardReaderParameter> LocationCardReaderParameter { get; set; }
+        public virtual DbSet<VTicketSaleCreditLoad> VTicketSaleCreditLoad { get; set; }
+        public virtual DbSet<VTicketSaleRowSummaryProduct> VTicketSaleRowSummaryProduct { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {

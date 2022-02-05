@@ -1209,6 +1209,9 @@
     <Compile Include="VTicketSaleAllSummary.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="VTicketSaleCreditLoad.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="VTicketSaleDocumentAction.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
@@ -1225,6 +1228,9 @@
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VTicketSaleRowSummary.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
+    <Compile Include="VTicketSaleRowSummaryProduct.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
     <Compile Include="VTicketSaleSaleRowSummary.cs">

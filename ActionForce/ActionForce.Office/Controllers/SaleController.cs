@@ -111,13 +111,29 @@ namespace ActionForce.Office.Controllers
             {
                 model.CurrentTicketSaleSummary = Db.VTicketSaleAllSummary.FirstOrDefault(x => x.ID == model.TicketSale.ID);
                 model.TicketSaleRows = Db.VTicketSaleRowSummary.Where(x => x.SaleID == model.TicketSale.ID).ToList();
+                model.TicketSaleRowProducts = Db.VTicketSaleRowSummaryProduct.Where(x => x.SaleID == model.TicketSale.ID).ToList();
                 model.TicketSalePosPaymentSummary = Db.VTicketSalePosPaymentSummary.Where(x => x.SaleID == model.TicketSale.ID).ToList();
                 model.DocumentExpenseSlips = Db.VDocumentExpenseSlip.Where(x => x.ReferenceID == model.TicketSale.ID).ToList();
+                model.CurrentLocation = Db.Location.FirstOrDefault(x => x.LocationID == model.TicketSale.LocationID);
+                model.TicketSaleCreditLoads = Db.VTicketSaleCreditLoad.Where(x => x.SaleID == model.TicketSale.ID).ToList();
+                model.CardActions = Db.HCardActions.Where(x => x.CardNumber == model.TicketSale.CardNumber).ToList();
             }
 
 
             return View(model);
         }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult GetCardActions(string CardNumber)
+        {
+            SaleControlModel model = new SaleControlModel();
+
+            model.CardActions = Db.HCardActions.Where(x => x.CardNumber == CardNumber).ToList();
+
+            return PartialView("_PartialCardActionDetail", model);
+        }
+
 
         [AllowAnonymous]
         public ActionResult SaleAction(int? LocationID, string Date)
@@ -864,6 +880,13 @@ namespace ActionForce.Office.Controllers
 
             return View(model);
         }
+
+
+
+        
+
+
+
 
         [HttpPost]
         [AllowAnonymous]

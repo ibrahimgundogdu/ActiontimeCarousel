@@ -2792,6 +2792,7 @@
     <Content Include="Views\Compute\BankTransferReset.cshtml" />
     <Content Include="Views\Salary\SalaryPeriods.cshtml" />
     <Content Include="Views\Salary\_PartialSetEmployeeSalary.cshtml" />
+    <Content Include="Views\Sale\_PartialCardActionDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

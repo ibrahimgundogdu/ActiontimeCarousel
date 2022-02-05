@@ -38,5 +38,6 @@ namespace ActionForce.Entity
         public string LocationFullName { get; set; }
         public string Name { get; set; }
         public long ID { get; set; }
+        public string CardNumber { get; set; }
     }
 }

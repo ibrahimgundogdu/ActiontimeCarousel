@@ -1,0 +1,64 @@
+﻿@model SaleControlModel
+<div class="table-responsive">
+    <table class="table table-sm table-hover">
+        <thead>
+            <tr>
+                <th class="tx-center">Kart</th>
+                <th>Lokasyon</th>
+                <th>Bölüm</th>
+                <th>Personel</th>
+                <th>Tarih</th>
+                <th>İşlem</th>
+                <th></th>
+                <th class="tx-right">Yükleme</th>
+                <th class="tx-right">Kullanma</th>
+                <th class="tx-right">Kredi</th>
+                <th class="tx-right">Bakiye</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{ double bakiye = 0;}
+            @foreach (var item in Model.CardActions.OrderBy(x => x.ActionDate).ToList())
+            {
+                bakiye = bakiye + item.Credit;
+                <tr>
+                    <td><span class="font-weight-bold">@(item.CardNumber)</span></td>
+                    <td><span>@(item.LocationFullName)</span></td>
+                    <td><span>@(item.PartName)</span></td>
+                    <td><span>@(item.EmployeeFullName)</span></td>
+                    <td><span class="date">@(item.ActionDate?.ToString("G"))</span></td>
+                    <td><span>@(item.NameTR)</span></td>
+
+
+                    @if (item.ActionTypeID == 1) // Aktif etme
+                    {
+                        <td><a href="javascript:;" class="card-active">&nbsp;</a></td>
+                    }
+                    else if (item.ActionTypeID == 2) // kullanım
+                    {
+                        <td><span class="process spending"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M4,2H2V22H4V13H18.17L12.67,18.5L14.08,19.92L22,12L14.08,4.08L12.67,5.5L18.17,11H4V2Z" /></svg></span></td>
+                    }
+                    else if (item.ActionTypeID == 3) // yükleme
+                    {
+                        <td><span class="process loading"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M11.92,19.92L4,12L11.92,4.08L13.33,5.5L7.83,11H22V13H7.83L13.34,18.5L11.92,19.92M4,12V2H2V22H4V12Z" /></svg></span></td>
+                    }
+                    else if (item.ActionTypeID == 4) // iade
+                    {
+                        <td><span class="process return"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20 13.5C20 17.09 17.09 20 13.5 20H6V18H13.5C16 18 18 16 18 13.5S16 9 13.5 9H7.83L10.91 12.09L9.5 13.5L4 8L9.5 2.5L10.92 3.91L7.83 7H13.5C17.09 7 20 9.91 20 13.5Z" /></svg></span></td>
+                    }
+                    else if (item.ActionTypeID == 5) // sıfırlama
+                    {
+                        <td><a href="javascript:;" class="card-cancel"><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M13.41,12l4.3-4.29a1,1,0,1,0-1.42-1.42L12,10.59,7.71,6.29A1,1,0,0,0,6.29,7.71L10.59,12l-4.3,4.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L12,13.41l4.29,4.3a1,1,0,0,0,1.42,0,1,1,0,0,0,0-1.42Z" fill="currentColor" /></svg></a></td>
+                    }
+
+
+                    <td class="tx-right font-weight-bold">@(item.CreditCharge)</td>
+                    <td class="tx-right font-weight-bold">@(item.CreditSpend)</td>
+                    <td class="tx-right font-weight-bold">@(item.Credit)</td>
+                    <td class="tx-right font-weight-bold">@(bakiye)</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

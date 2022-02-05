@@ -105,6 +105,12 @@
                                     <td>OKC Sicil</td>
                                     <td>@(Model.TicketSale.PosRegistryNumber)</td>
                                 </tr>
+
+                                <tr>
+                                    <td>Müşteri Kartı</td>
+                                    <td><b>@(Model.TicketSale.CardNumber)</b></td>
+                                </tr>
+
                                 <tr>
                                     <td>Kaydeden</td>
                                     <td>@(Model.CurrentTicketSaleSummary.FullName)</td>
@@ -163,22 +169,47 @@
                                     <th>DURUM</th>
                                     <th>KAYIT</th>
                                 </tr>
-                                @foreach (var item in Model.TicketSaleRows)
+                                @if (!string.IsNullOrEmpty(Model.CurrentTicketSaleSummary.CardNumber))
                                 {
-                                    <tr>
-                                        <td class="font-weight-bold">@(item.ProductName)</td>
-                                        <td>@(item.TaxRate) %</td>
-                                        <td>@(item.Quantity)</td>
-                                        <td>@(item.SaleRowUnit) dk</td>
-                                        <td>@(item.ExtraUnit > 0 ? $"{item.ExtraUnit} dk":"")</td>
-                                        <td>@(item.ExtraUnit > 0 ? $"{item.ExtraPrice?.ToString("N2")} {item.Sign}":"")</td>
-                                        <td class="text-right font-weight-bold">@(item.RowTotal?.ToString("N2")) @(item.Sign)</td>
-                                        <td>@(item.CategoryName)</td>
-                                        <td>@(item.StatusName)</td>
-                                        <td>@(item.Date)</td>
 
-                                    </tr>
+                                    foreach (var item in Model.TicketSaleRowProducts)
+                                    {
+                                        <tr>
+                                            <td class="font-weight-bold">@(item.ProductName)</td>
+                                            <td>@(item.TaxRate) %</td>
+                                            <td>@(item.Quantity)</td>
+                                            <td>@(item.SaleRowUnit) dk</td>
+                                            <td>@(item.ExtraUnit > 0 ? $"{item.ExtraUnit} dk":"")</td>
+                                            <td>@(item.ExtraUnit > 0 ? $"{item.ExtraPrice?.ToString("N2")} {item.Sign}":"")</td>
+                                            <td class="text-right font-weight-bold">@(item.RowTotal?.ToString("N2")) @(item.Sign)</td>
+                                            <td>@(item.CategoryName)</td>
+                                            <td>@(item.StatusName)</td>
+                                            <td>@(item.Date)</td>
+
+                                        </tr>
+                                    }
                                 }
+                                else
+                                {
+
+                                    foreach (var item in Model.TicketSaleRows)
+                                    {
+                                        <tr>
+                                            <td class="font-weight-bold">@(item.ProductName)</td>
+                                            <td>@(item.TaxRate) %</td>
+                                            <td>@(item.Quantity)</td>
+                                            <td>@(item.SaleRowUnit) dk</td>
+                                            <td>@(item.ExtraUnit > 0 ? $"{item.ExtraUnit} dk":"")</td>
+                                            <td>@(item.ExtraUnit > 0 ? $"{item.ExtraPrice?.ToString("N2")} {item.Sign}":"")</td>
+                                            <td class="text-right font-weight-bold">@(item.RowTotal?.ToString("N2")) @(item.Sign)</td>
+                                            <td>@(item.CategoryName)</td>
+                                            <td>@(item.StatusName)</td>
+                                            <td>@(item.Date)</td>
+
+                                        </tr>
+                                    }
+                                }
+
                             </table>
                         </div>
 
@@ -264,13 +295,127 @@
                     </div>
                 </div>
 
+                @if (Model.CurrentLocation.UseCardSysteme == true)
+                {
 
+                    <div class="card mg-b-20 mg-lg-b-25 mt-4">
+                        <div class="card-header pd-y-15 pd-x-20 d-flex align-items-center justify-content-between">
+                            <h6 class="tx-13 tx-spacing-1 tx-uppercase tx-semibold mg-b-0">Kontör Dolum Bilgisi</h6>
+                            <nav class="nav nav-with-icon tx-13">
+                                <a href="http://ufepos.ufegrup.com/Setup/UserAuthenticationCheck/@(Model.Authentication.ActionEmployee.Token)?locationId=@(Model.CurrentLocation.LocationUID)" class="btn btn-primary btn-xs" target="_blank">Lokasyon Pos Uyguamasına Git</a>
+                            </nav>
+                        </div>
+                        <div class="card-body pd-20 pd-lg-5">
+
+                            <div class="table-responsive">
+                                <table class="table table-dashboard table-striped table-hover">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>İşlem Türü</th>
+                                        <th>Kart Türü</th>
+                                        <th>Zamanı</th>
+                                        <th>Kart No</th>
+                                        <th>Mevcut</th>
+                                        <th class="text-right">Master</th>
+                                        <th class="text-right">Promo</th>
+                                        <th class="text-right">İade</th>
+                                        <th class="text-right">Toplam</th>
+                                        <th class="text-right">Final</th>
+                                        <th class="text-right">Tahsilat</th>
+                                        <th>Sonuç</th>
+                                        <th>Açıklama</th>
+                                        <th></th>
+                                    </tr>
+                                    @foreach (var item in Model.TicketSaleCreditLoads)
+                                    {
+                                        <tr>
+                                            <td class="font-weight-bold">@(item.ID)</td>
+                                            <td class="font-weight-bold">@(item.CardActionTypeName)</td>
+                                            <td>@(item.CardTypeName)</td>
+                                            <td>@(item.PaymentDate?.ToString("T"))</td>
+                                            <td class="font-weight-bold">@(item.CardNumber)</td>
+                                            <td class="font-weight-bold text-right">@(item.ExistsCredit.ToString("N0"))</td>
+                                            <td class="font-weight-bold text-right">@(item.MasterCredit.ToString("N0"))</td>
+                                            <td class="font-weight-bold text-right">@(item.PromoCredit.ToString("N0"))</td>
+                                            <td class="font-weight-bold text-right">@(item.RefundCredit.ToString("N0"))</td>
+                                            <td class="font-weight-bold text-right">@(item.TotalCredit.ToString("N0"))</td>
+                                            <td class="font-weight-bold text-right">@(item.FinalCredit?.ToString("N0"))</td>
+                                            <td class="font-weight-bold text-right">@(item.PaymentAmount?.ToString("N0")) @(item.Sign)</td>
+                                            <td>@(item.IsSuccess == true ? "OK":"")</td>
+                                            <td>@(item.Message)</td>
+                                            <td>
+                                                @if (item.IsSuccess == true)
+                                                {
+                                                    <a href="javascript:;" class="btn btn-xs btn-warning" onclick="GetCardDetail('@(item.CardNumber)')">Kart İşlemleri Detayı</a>
+                                                }
+                                                else
+                                                {
+                                                    if (item.CardActionTypeID == 3)
+                                                    {
+                                                        <a href="javascript:;" class="btn btn-xs btn-success" onclick="ChangeCard('@(item.CardNumber)',@(item.SaleID))">Yüklenecek Kartı Değiştir</a>
+                                                    }
+
+                                                }
+
+                                            </td>
+                                        </tr>
+                                    }
+
+
+                                </table>
+                            </div>
+
+                        </div>
+
+
+
+
+
+
+
+
+
+                        <div class="card-body pd-20 pd-lg-5" id="CardActionDetail">
+
+
+
+                        </div>
+                    </div>
+                }
             </div>
         </div>
     </div>
 </div>
 
 @section scripts{
+
+    <script>
+
+
+        function GetCardDetail(cardno) {
+
+            var data = new FormData();
+            data.append('CardNumber', cardno);
+
+            $.ajax({
+                url: '@Url.Action("GetCardActions", "Sale")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#CardActionDetail').html(d);
+            });
+        };
+
+
+
+
+
+    </script>
+
 
     @if (Model.Result != null) //
     {
