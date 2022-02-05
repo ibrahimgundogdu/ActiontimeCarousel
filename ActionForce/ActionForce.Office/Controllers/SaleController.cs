@@ -69,11 +69,14 @@ namespace ActionForce.Office.Controllers
             else
             {
                 model.Filters.Date = DateTime.UtcNow.Date;
+                model.CurrentLocation = new Location();
+                model.DocumentExpenseSlips = new List<VDocumentExpenseSlip>();
+                model.TicketSaleSaleRows = new List<VTicketSaleSaleRowSummary>();
             }
 
             if (!string.IsNullOrEmpty(model.Filters.SearchKey))
             {
-                model.TicketSaleSummary = Db.VTicketSaleAllSummary.Where(x => x.OrderNumber.Contains(model.Filters.SearchKey)).ToList();
+                model.TicketSaleSummary = Db.VTicketSaleAllSummary.Where(x => x.OrderNumber.Contains(model.Filters.SearchKey) || x.CardNumber.Contains(model.Filters.SearchKey)).ToList();
             }
 
             return View(model);
@@ -105,6 +108,11 @@ namespace ActionForce.Office.Controllers
                 return RedirectToAction("Index");
             }
 
+            if (TempData["Result"] != null)
+            {
+                model.Result = TempData["Result"] as Result;
+            }
+
             model.TicketSale = Db.TicketSale.FirstOrDefault(x => x.UID.ToString() == id);
 
             if (model.TicketSale != null)
@@ -132,6 +140,55 @@ namespace ActionForce.Office.Controllers
             model.CardActions = Db.HCardActions.Where(x => x.CardNumber == CardNumber).ToList();
 
             return PartialView("_PartialCardActionDetail", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public PartialViewResult GetCardReplace(long LoadId)
+        {
+            SaleControlModel model = new SaleControlModel();
+
+            model.TicketSaleCreditLoad = Db.VTicketSaleCreditLoad.FirstOrDefault(x => x.ID == LoadId);
+            if (model.TicketSaleCreditLoad != null)
+            {
+                model.TicketSale = Db.TicketSale.FirstOrDefault(x => x.ID == model.TicketSaleCreditLoad.SaleID);
+            }
+
+            return PartialView("_PartialCardReplaceDetail", model);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult ReplaceOrderCard(FormCardReplace form)
+        {
+            SaleControlModel model = new SaleControlModel();
+            model.Result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty
+            };
+
+            model.TicketSale = Db.TicketSale.FirstOrDefault(x => x.ID == form.SaleId);
+
+            if (model.TicketSale != null)
+            {
+                var isSuccess = Db.ChangeCardNumber(form.TicketSaleCreditLoadId, form.NewCardNumber).FirstOrDefault();
+
+                if (isSuccess == true)
+                {
+                    model.Result.IsSuccess = true;
+                    model.Result.Message = "Card Numarası Değiştirildi";
+                }
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = "Satış Bilgisi Bulunamadı";
+            }
+
+            TempData["Result"] = model.Result;
+
+            return RedirectToAction("Detail", new { id = model.TicketSale.UID });
         }
 
 

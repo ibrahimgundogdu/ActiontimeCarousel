@@ -2374,6 +2374,7 @@
     <Compile Include="Models\FilterModel\MallMotoFilterModel.cs" />
     <Compile Include="Models\FilterModel\PosFilterModel.cs" />
     <Compile Include="Models\FormModels\CostumeTypeFormModel.cs" />
+    <Compile Include="Models\FormModels\FormCardReplace.cs" />
     <Compile Include="Models\FormModels\FormLocation.cs" />
     <Compile Include="Models\FormModels\FormMall.cs" />
     <Compile Include="Models\FormModels\FormPrice.cs" />
@@ -2793,6 +2794,7 @@
     <Content Include="Views\Salary\SalaryPeriods.cshtml" />
     <Content Include="Views\Salary\_PartialSetEmployeeSalary.cshtml" />
     <Content Include="Views\Sale\_PartialCardActionDetail.cshtml" />
+    <Content Include="Views\Sale\_PartialCardReplaceDetail.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

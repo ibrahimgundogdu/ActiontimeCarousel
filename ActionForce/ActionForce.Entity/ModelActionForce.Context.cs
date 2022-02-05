@@ -3028,5 +3028,18 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSaledUsedStats_Result>("GetSaledUsedStats", locationIDParameter, processDateParameter);
         }
+    
+        public virtual ObjectResult<Nullable<bool>> ChangeCardNumber(Nullable<long> loadID, string cardNumber)
+        {
+            var loadIDParameter = loadID.HasValue ?
+                new ObjectParameter("LoadID", loadID) :
+                new ObjectParameter("LoadID", typeof(long));
+    
+            var cardNumberParameter = cardNumber != null ?
+                new ObjectParameter("CardNumber", cardNumber) :
+                new ObjectParameter("CardNumber", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<bool>>("ChangeCardNumber", loadIDParameter, cardNumberParameter);
+        }
     }
 }

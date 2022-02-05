@@ -49,124 +49,130 @@
     <div>
         @if (Model.TicketSaleSummary != null)
         {
-        <div class="table">
-            <table class="table table-sm table-hover">
-                <thead>
-                    <tr>
-                        <th colspan="14">
-                            @(Model.Filters.Date?.ToLongDateString()) &nbsp;&nbsp; - &nbsp;&nbsp; @(Model.CurrentLocation != null ? Model.CurrentLocation?.LocationFullName : "")
-                        </th>
-                        <th colspan="2" class="text-right">
-                            <a href="http://ufepos.ufegrup.com/Setup/UserAuthenticationCheck/@(Model.Authentication.ActionEmployee.Token)?locationId=@(Model.CurrentLocation.LocationUID)" class="btn btn-primary btn-xs" target="_blank">Lokasyon Pos Uyguamasına Git</a>
+            <div class="table">
+                <table class="table table-sm table-hover">
+                    <thead>
+                        <tr>
+                            <th colspan="14">
+                                @(Model.Filters.Date?.ToLongDateString()) &nbsp;&nbsp; - &nbsp;&nbsp; @(Model?.CurrentLocation == null ? "" : Model?.CurrentLocation?.LocationFullName)
+                            </th>
+                            <th colspan="2" class="text-right">
+                                @if (Model.CurrentLocation?.LocationID > 0)
+                                {
+                                    <a href="http://ufepos.ufegrup.com/Setup/UserAuthenticationCheck/@(Model.Authentication.ActionEmployee.Token)?locationId=@(Model.CurrentLocation.LocationUID)" class="btn btn-primary btn-xs" target="_blank">Lokasyon Pos Uyguamasına Git</a>
+                                }
 
-                            <a href="@($"/Action/Index?locationID={Model.Filters.LocationID}&DateBegin={Model.Filters.Date?.ToString("yyyy-MM-dd")}&&DateEnd={Model.Filters.Date?.ToString("yyyy-MM-dd")}")" class="btn btn-primary btn-xs" target="_blank">Cari Hesap Ekstresi</a>
-                        </th>
-                    </tr>
-                    <tr>
-                        <th></th>
-                        <th>#</th>
-                        <th>Sipariş No</th>
-                        <th>Şube</th>
-                        <th>Tarih</th>
-                        <th>Durum</th>
-                        <th>Kaynak</th>
-                        <th>Adet</th>
-                        <th class="bd-l text-right">Satış</th>
-                        <th class="text-right">Tahsilat</th>
-                        <th class="text-right">Bakiye</th>
-                        <th class=" bd-l">Ödeme</th>
-                        <th>İşlendi</th>
-                        <th>Kaydeden</th>
-                        <th>Kayıt Tarihi</th>
-                        <th>Aktif</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{ int sortnumber = 1;}
-                    @foreach (var item in Model.TicketSaleSummary.OrderBy(x => x.RecordDate))
-                    {
-                        var refunds = Model.DocumentExpenseSlips.Where(x => x.SaleID == item.ID).ToList();
-
-                        <tr style='@(item.IsActive == false ? "color: red" : "")'>
-                            <td class="tx-sm-13 bold">@(sortnumber)</td>
-                            <td class="tx-sm-13 bold">@item.ID</td>
-                            <td class="tx-sm-13 font-weight-bold"><a href="@("/Sale/Detail/" + @item.UID)">@item.OrderNumber</a></td>
-                            <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)">@(item.SortBy)</a></td>
-                            <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)">@(item.Date?.ToShortDateString())</a></td>
-                            <td class="tx-sm-13 @(item.PosStatusID == 3 ? "font-weight-bold":"")">@item.PosStatusName</td>
-                            <td class="tx-sm-13">@(item.Environment)</td>
-                            <td class="tx-sm-13 text-right">@(item.Quantity)</td>
-
-                            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold  bd-l">@(item.Total.ToString("N2")) @(item.Sign)</td>
-                            <td class="tx-sm-13 text-right bg-primary-light @(item.PaymentAmount != 0 ? "font-weight-bold":"")">@(item.PaymentAmount.ToString("N2")) @(item.Sign)</td>
-                            <td class="tx-sm-13 text-right bg-primary-light @(item.BalanceAmount != 0 ? "font-weight-bold":"")">@(item.BalanceAmount.ToString("N2")) @(item.Sign)</td>
-
-                            <td class="tx-sm-13 bd-l">@item.PayMethodList</td>
-                            <td class="tx-sm-13">@(item.IsSendPosTerminal == true ? "Ingenico":"Manuel")</td>
-                            <td class="tx-sm-13">@(item.FullName)</td>
-                            <td class="tx-sm-13">@item.RecordDate</td>
-                            <td class="tx-sm-13">@(item.IsActive)</td>
-
+                                <a href="@($"/Action/Index?locationID={Model.Filters?.LocationID}&DateBegin={Model.Filters.Date?.ToString("yyyy-MM-dd")}&&DateEnd={Model.Filters.Date?.ToString("yyyy-MM-dd")}")" class="btn btn-primary btn-xs" target="_blank">Cari Hesap Ekstresi</a>
+                            </th>
                         </tr>
-
-                        sortnumber++;
-                        if (refunds != null && refunds.Count > 0)
+                        <tr>
+                            <th></th>
+                            <th>#</th>
+                            <th>Sipariş No</th>
+                            <th>Şube</th>
+                            <th>Tarih</th>
+                            <th>Durum</th>
+                            <th>Kaynak</th>
+                            <th>Adet</th>
+                            <th class="bd-l text-right">Satış</th>
+                            <th class="text-right">Tahsilat</th>
+                            <th class="text-right">Bakiye</th>
+                            <th class=" bd-l">Ödeme</th>
+                            <th>İşlendi</th>
+                            <th>Kaydeden</th>
+                            <th>Kayıt Tarihi</th>
+                            <th>Aktif</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{ int sortnumber = 1;}
+                        @foreach (var item in Model.TicketSaleSummary.OrderBy(x => x.RecordDate))
                         {
-                            foreach (var rf in refunds)
+                            var refunds = Model.DocumentExpenseSlips.Where(x => x.SaleID == item.ID).ToList();
+
+                            <tr style='@(item.IsActive == false ? "color: red" : "")'>
+                                <td class="tx-sm-13 bold">@(sortnumber)</td>
+                                <td class="tx-sm-13 bold">@item.ID</td>
+                                <td class="tx-sm-13 font-weight-bold"><a href="@("/Sale/Detail/" + @item.UID)" target="_blank">@item.OrderNumber</a></td>
+                                <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)" target="_blank">@(item.SortBy)</a></td>
+                                <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)" target="_blank">@(item.Date?.ToShortDateString())</a></td>
+                                <td class="tx-sm-13 @(item.PosStatusID == 3 ? "font-weight-bold":"")">@item.PosStatusName</td>
+                                <td class="tx-sm-13">@(item.Environment)</td>
+                                <td class="tx-sm-13 text-right">@(item.Quantity)</td>
+
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold  bd-l">@(item.Total.ToString("N2")) @(item.Sign)</td>
+                                <td class="tx-sm-13 text-right bg-primary-light @(item.PaymentAmount != 0 ? "font-weight-bold":"")">@(item.PaymentAmount.ToString("N2")) @(item.Sign)</td>
+                                <td class="tx-sm-13 text-right bg-primary-light @(item.BalanceAmount != 0 ? "font-weight-bold":"")">@(item.BalanceAmount.ToString("N2")) @(item.Sign)</td>
+
+                                <td class="tx-sm-13 bd-l">@item.PayMethodList</td>
+                                <td class="tx-sm-13">@(item.IsSendPosTerminal == true ? "Ingenico":"Manuel")</td>
+                                <td class="tx-sm-13">@(item.FullName)</td>
+                                <td class="tx-sm-13">@item.RecordDate</td>
+                                <td class="tx-sm-13">@(item.IsActive)</td>
+
+                            </tr>
+
+                            sortnumber++;
+                            if (refunds != null && refunds.Count > 0)
                             {
-                                <tr style='@(rf.IsActive == false ? "color: red" : "")'>
-                                    <td class="tx-sm-13 bold">@(sortnumber)</td>
-                                    <td class="tx-sm-13 bold">@rf.ID</td>
-                                    <td class="tx-sm-13 font-weight-bold"><a href="@("/Sale/Detail/" + @item.UID)">@(item.OrderNumber)</a></td>
-                                    <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")">@rf.DocumentNumber</a></td>
-                                    <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)">@(rf.DocumentDate?.ToShortDateString())</a></td>
-                                    <td class="tx-sm-13"></td>
-                                    <td class="tx-sm-13"></td>
-                                    <td class="tx-sm-13 text-right">-1</td>
+                                foreach (var rf in refunds)
+                                {
+                                    <tr style='@(rf.IsActive == false ? "color: red" : "")'>
+                                        <td class="tx-sm-13 bold">@(sortnumber)</td>
+                                        <td class="tx-sm-13 bold">@rf.ID</td>
+                                        <td class="tx-sm-13 font-weight-bold"><a href="@("/Sale/Detail/" + @item.UID)" target="_blank">@(item.OrderNumber)</a></td>
+                                        <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" target="_blank">@rf.DocumentNumber</a></td>
+                                        <td class="tx-sm-13"><a href="@($"/Sale/Index?LocationID={item.LocationID}&Date={item.Date?.ToString("yyyy-MM-dd")}")" title="@(item.LocationFullName)" target="_blank">@(rf.DocumentDate?.ToShortDateString())</a></td>
+                                        <td class="tx-sm-13"></td>
+                                        <td class="tx-sm-13"></td>
+                                        <td class="tx-sm-13 text-right">-1</td>
 
-                                    <td class="tx-sm-13 text-right bg-primary-light font-weight-bold  bd-l">-@(rf.Amount?.ToString("N2")) @(rf.Sign)</td>
-                                    <td class="tx-sm-13 text-right bg-primary-light @(rf.Amount != 0 ? "font-weight-bold":"")">-@(rf.Amount?.ToString("N2")) @(rf.Sign)</td>
-                                    <td class="tx-sm-13 text-right bg-primary-light">@((0).ToString("N2")) @(rf.Sign)</td>
+                                        <td class="tx-sm-13 text-right bg-primary-light font-weight-bold  bd-l">-@(rf.Amount?.ToString("N2")) @(rf.Sign)</td>
+                                        <td class="tx-sm-13 text-right bg-primary-light @(rf.Amount != 0 ? "font-weight-bold":"")">-@(rf.Amount?.ToString("N2")) @(rf.Sign)</td>
+                                        <td class="tx-sm-13 text-right bg-primary-light">@((0).ToString("N2")) @(rf.Sign)</td>
 
-                                    <td class="tx-sm-13 bd-l">@rf.PayMethodName</td>
-                                    <td class="tx-sm-13"></td>
-                                    <td class="tx-sm-13">@(rf.FullName)</td>
-                                    <td class="tx-sm-13">@(rf.RecordDate)</td>
-                                    <td class="tx-sm-13">@(rf.IsActive)</td>
+                                        <td class="tx-sm-13 bd-l">@rf.PayMethodName</td>
+                                        <td class="tx-sm-13"></td>
+                                        <td class="tx-sm-13">@(rf.FullName)</td>
+                                        <td class="tx-sm-13">@(rf.RecordDate)</td>
+                                        <td class="tx-sm-13">@(rf.IsActive)</td>
 
-                                </tr>
-                                sortnumber++;
+                                    </tr>
+                                    sortnumber++;
+                                }
+
                             }
 
                         }
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th class="text-right">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.Quantity) ?? 0) - (Model.TicketSaleSaleRows.Where(x=> x.PosStatusID == 3 && x.StatusID == 5).Sum(x=> x.Quantity))        )</th>
+                            <th class="text-right bg-light bd-l">@(  ((Model.TicketSaleSummary.Where(x=> x.PosStatusID <= 3 && x.IsActive == true).Sum(x=> x.Total)) - (Model.TicketSaleSaleRows.Where(x => x.PosStatusID == 3 && x.StatusID == 5).Sum(x => x.Total) ?? 0)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
+                            <th class="text-right bg-light">@(((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.PaymentAmount)) -(Model.TicketSaleSaleRows.Where(x => x.PosStatusID == 3 && x.StatusID == 5).Sum(x => x.Total) ?? 0)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
+                            <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID <= 3 && x.IsActive == true).Sum(x=> x.BalanceAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
+                            <th class="bd-l"></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
 
-                    }
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th class="text-right">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.Quantity) ?? 0) - (Model.TicketSaleSaleRows.Where(x=> x.PosStatusID == 3 && x.StatusID == 5).Sum(x=> x.Quantity))        )</th>
-                        <th class="text-right bg-light bd-l">@(  ((Model.TicketSaleSummary.Where(x=> x.PosStatusID <= 3 && x.IsActive == true).Sum(x=> x.Total)) - (Model.TicketSaleSaleRows.Where(x => x.PosStatusID == 3 && x.StatusID == 5).Sum(x => x.Total) ?? 0)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
-                        <th class="text-right bg-light">@(((Model.TicketSaleSummary.Where(x=> x.PosStatusID == 3 && x.IsActive == true).Sum(x=> x.PaymentAmount)) -(Model.TicketSaleSaleRows.Where(x => x.PosStatusID == 3 && x.StatusID == 5).Sum(x => x.Total) ?? 0)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
-                        <th class="text-right bg-light">@((Model.TicketSaleSummary.Where(x=> x.PosStatusID <= 3 && x.IsActive == true).Sum(x=> x.BalanceAmount)).ToString("N2")) @(Model.TicketSaleSummary.FirstOrDefault()?.Sign ?? "₺")</th>
-                        <th class="bd-l"></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                </tfoot>
-            </table>
-
-            <a href="/Sale/CheckLocationTicketSale?LocationId=@(Model.Filters.LocationID)&DocumentDate=@(Model.Filters.Date?.ToString("yyyy-MM-dd"))&Source=Index" class="btn btn-warning">Kontrol Et</a>
-            <a href="http://ufepos.ufegrup.com/Setup/UserAuthenticationCheck/@(Model.Authentication.ActionEmployee.Token)?locationId=@(Model.CurrentLocation.LocationUID)" class="btn btn-primary" target="_blank">Lokasyon Pos Uyguamasına Git</a>
-        </div>
+                <a href="/Sale/CheckLocationTicketSale?LocationId=@(Model.Filters.LocationID)&DocumentDate=@(Model.Filters.Date?.ToString("yyyy-MM-dd"))&Source=Index" class="btn btn-warning">Kontrol Et</a>
+                @if (Model.CurrentLocation?.LocationID > 0)
+                {
+                    <a href="http://ufepos.ufegrup.com/Setup/UserAuthenticationCheck/@(Model.Authentication.ActionEmployee.Token)?locationId=@(Model.CurrentLocation.LocationUID)" class="btn btn-primary" target="_blank">Lokasyon Pos Uyguamasına Git</a>
+                }
+            </div>
         }
         else
         {

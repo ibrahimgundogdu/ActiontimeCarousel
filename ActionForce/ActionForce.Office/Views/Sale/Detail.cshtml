@@ -333,7 +333,7 @@
                                             <td class="font-weight-bold">@(item.CardActionTypeName)</td>
                                             <td>@(item.CardTypeName)</td>
                                             <td>@(item.PaymentDate?.ToString("T"))</td>
-                                            <td class="font-weight-bold">@(item.CardNumber)</td>
+                                            <td class="font-weight-bold"><a href="javascript:;" class="btn btn-xs btn-warning" onclick="GetCardDetail('@(item.CardNumber)')" style="font-size:13px; font-weight:bold;">@(item.CardNumber)</a></td>
                                             <td class="font-weight-bold text-right">@(item.ExistsCredit.ToString("N0"))</td>
                                             <td class="font-weight-bold text-right">@(item.MasterCredit.ToString("N0"))</td>
                                             <td class="font-weight-bold text-right">@(item.PromoCredit.ToString("N0"))</td>
@@ -352,7 +352,7 @@
                                                 {
                                                     if (item.CardActionTypeID == 3)
                                                     {
-                                                        <a href="javascript:;" class="btn btn-xs btn-success" onclick="ChangeCard('@(item.CardNumber)',@(item.SaleID))">Yüklenecek Kartı Değiştir</a>
+                                                        <a href="javascript:;" class="btn btn-xs btn-success" onclick="ChangeCard(@(item.ID))">Yüklenecek Kartı Değiştir</a>
                                                     }
 
                                                 }
@@ -372,14 +372,15 @@
 
 
 
+                        <div class="card-body pd-20 pd-lg-5" id="CardChangeDetail">
 
+                        </div>
 
 
                         <div class="card-body pd-20 pd-lg-5" id="CardActionDetail">
 
-
-
                         </div>
+
                     </div>
                 }
             </div>
@@ -410,6 +411,23 @@
             });
         };
 
+        function ChangeCard(loadid) {
+
+            var data = new FormData();
+            data.append('LoadId', loadid);
+
+            $.ajax({
+                url: '@Url.Action("GetCardReplace", "Sale")',
+                cache: false,
+                contentType: false,
+                processData: false,
+                method: 'POST',
+                type: 'POST',
+                data: data
+            }).done(function (d) {
+                $('#CardChangeDetail').html(d);
+            });
+        };
 
 
 

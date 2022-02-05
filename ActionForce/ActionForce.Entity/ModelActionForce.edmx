@@ -8209,6 +8209,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="TicketType" Type="int" Mode="In" />
           <Parameter Name="PaidAmount" Type="float" Mode="In" />
         </Function>
+        <Function Name="ChangeCardNumber" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="LoadID" Type="bigint" Mode="In" />
+          <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="ChangeCustomerPhone" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CustomerID" Type="int" Mode="In" />
           <Parameter Name="PhoneNumber" Type="nvarchar" Mode="In" />
@@ -12833,6 +12837,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="VTicketSaleCreditLoad" EntityType="db293_ActionTimeDbModel.VTicketSaleCreditLoad" />
           <EntitySet Name="VTicketSaleRowSummaryProduct" EntityType="db293_ActionTimeDbModel.VTicketSaleRowSummaryProduct" />
+          <FunctionImport Name="ChangeCardNumber" ReturnType="Collection(Boolean)">
+            <Parameter Name="LoadID" Mode="In" Type="Int64" />
+            <Parameter Name="CardNumber" Mode="In" Type="String" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -29412,6 +29420,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ChangeCardNumber" FunctionName="db293_ActionTimeDbModel.Store.ChangeCardNumber" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
