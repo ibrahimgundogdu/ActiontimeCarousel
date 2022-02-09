@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Excel = Microsoft.Office.Interop.Excel;
 
 namespace ActionForce.Office.Controllers
 {
@@ -1974,6 +1975,7 @@ namespace ActionForce.Office.Controllers
                 model.SalaryPeriodNextStatus = Db.SalaryPeriodStatus.FirstOrDefault(x => x.ID == model.SalaryPeriod.SalaryPeriodStatusID);
             }
 
+            TempData["model"] = model;
 
             return View(model);
         }
@@ -2120,7 +2122,7 @@ namespace ActionForce.Office.Controllers
                 salaryComputed.BankPaymentAmount = BankPaymentAmount * -1;
                 salaryComputed.ManuelPaymentAmount = ManuelPaymentAmount * -1;
                 salaryComputed.OtherPaymentAmount = OtherPaymentAmount * -1;
-                salaryComputed.TotalPaymentAmount = (PrePaymentAmount + SalaryCutAmount + BankPaymentAmount + ManuelPaymentAmount + OtherPaymentAmount) * -1; 
+                salaryComputed.TotalPaymentAmount = (PrePaymentAmount + SalaryCutAmount + BankPaymentAmount + ManuelPaymentAmount + OtherPaymentAmount) * -1;
                 salaryComputed.TotalBalance = salaryComputed.TotalProgress + salaryComputed.TotalPaymentAmount;
                 salaryComputed.RecordDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
                 salaryComputed.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
@@ -2142,7 +2144,7 @@ namespace ActionForce.Office.Controllers
                 var isequal = OfficeHelper.PublicInstancePropertiesEqual<SalaryPeriodCompute>(self, salaryComputed, OfficeHelper.getIgnorelist());
                 OfficeHelper.AddApplicationLog("Office", "Salary", "Update", salaryComputed.EmployeeID.ToString(), "SalaryPeriodCompute", "Detail", isequal, true, $"{result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, null);
 
-                
+
 
 
             }
@@ -2192,6 +2194,407 @@ namespace ActionForce.Office.Controllers
 
 
         }
+
+        [AllowAnonymous]
+        public void ExportDataPeriod120()
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (TempData["model"] != null)
+            {
+                model = TempData["model"] as SalaryControlModel;
+            }
+
+            TempData["model"] = model;
+
+            Response.ClearContent();
+
+            Response.ContentType = "application/force-download";
+            Response.AddHeader("content-disposition",
+                "attachment; filename=MaasPeriod120_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
+            Response.Write("<html xmlns:x=\"urn:schemas-microsoft-com:office:excel\">");
+            Response.Write("<head>");
+            Response.Write("<META http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+            Response.Write("<!--[if gte mso 9]><xml>");
+            Response.Write("<x:ExcelWorkbook>");
+            Response.Write("<x:ExcelWorksheets>");
+            Response.Write("<x:ExcelWorksheet>");
+            Response.Write("<x:Name>Report Data</x:Name>");
+            Response.Write("<x:WorksheetOptions>");
+            Response.Write("<x:Print>");
+            Response.Write("<x:ValidPrinterInfo/>");
+            Response.Write("</x:Print>");
+            Response.Write("</x:WorksheetOptions>");
+            Response.Write("</x:ExcelWorksheet>");
+            Response.Write("</x:ExcelWorksheets>");
+            Response.Write("</x:ExcelWorkbook>");
+            Response.Write("</xml>");
+            Response.Write("<![endif]--> ");
+
+
+            View("~/Views/Salary/ReportView120.cshtml", model).ExecuteResult(this.ControllerContext);
+            Response.Flush();
+            Response.End();
+        }
+
+        [AllowAnonymous]
+        public void ExportDataPeriod110()
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (TempData["model"] != null)
+            {
+                model = TempData["model"] as SalaryControlModel;
+            }
+
+            TempData["model"] = model;
+
+            Response.ClearContent();
+
+            Response.ContentType = "application/force-download";
+            Response.AddHeader("content-disposition",
+                "attachment; filename=SaatPeriod110_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
+            Response.Write("<html xmlns:x=\"urn:schemas-microsoft-com:office:excel\">");
+            Response.Write("<head>");
+            Response.Write("<META http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+            Response.Write("<!--[if gte mso 9]><xml>");
+            Response.Write("<x:ExcelWorkbook>");
+            Response.Write("<x:ExcelWorksheets>");
+            Response.Write("<x:ExcelWorksheet>");
+            Response.Write("<x:Name>Report Data</x:Name>");
+            Response.Write("<x:WorksheetOptions>");
+            Response.Write("<x:Print>");
+            Response.Write("<x:ValidPrinterInfo/>");
+            Response.Write("</x:Print>");
+            Response.Write("</x:WorksheetOptions>");
+            Response.Write("</x:ExcelWorksheet>");
+            Response.Write("</x:ExcelWorksheets>");
+            Response.Write("</x:ExcelWorkbook>");
+            Response.Write("</xml>");
+            Response.Write("<![endif]--> ");
+
+
+            View("~/Views/Salary/ReportView110.cshtml", model).ExecuteResult(this.ControllerContext);
+            Response.Flush();
+            Response.End();
+        }
+
+        [AllowAnonymous]
+        public void ExportDataPeriod210()
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            if (TempData["model"] != null)
+            {
+                model = TempData["model"] as SalaryControlModel;
+            }
+
+            TempData["model"] = model;
+
+            Response.ClearContent();
+
+            Response.ContentType = "application/force-download";
+            Response.AddHeader("content-disposition",
+                "attachment; filename=FoodCardPeriod210_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
+            Response.Write("<html xmlns:x=\"urn:schemas-microsoft-com:office:excel\">");
+            Response.Write("<head>");
+            Response.Write("<META http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
+            Response.Write("<!--[if gte mso 9]><xml>");
+            Response.Write("<x:ExcelWorkbook>");
+            Response.Write("<x:ExcelWorksheets>");
+            Response.Write("<x:ExcelWorksheet>");
+            Response.Write("<x:Name>Report Data</x:Name>");
+            Response.Write("<x:WorksheetOptions>");
+            Response.Write("<x:Print>");
+            Response.Write("<x:ValidPrinterInfo/>");
+            Response.Write("</x:Print>");
+            Response.Write("</x:WorksheetOptions>");
+            Response.Write("</x:ExcelWorksheet>");
+            Response.Write("</x:ExcelWorksheets>");
+            Response.Write("</x:ExcelWorkbook>");
+            Response.Write("</xml>");
+            Response.Write("<![endif]--> ");
+
+
+            View("~/Views/Salary/ReportView210.cshtml", model).ExecuteResult(this.ControllerContext);
+            Response.Flush();
+            Response.End();
+        }
+
+        [AllowAnonymous]
+        public FileResult GetDataPeriodTemplate(Guid? id)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return null;
+            }
+
+
+            if (TempData["model"] == null)
+            {
+                return null;
+            }
+            else
+            {
+                model = TempData["model"] as SalaryControlModel;
+            }
+
+            TempData["model"] = model;
+
+            var salaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.UID == id);
+
+            if (salaryPeriod != null && model.SalaryPeriod.ID == salaryPeriod.ID)
+            {
+                string targetpath = Server.MapPath("~/Document/Salary/");
+                string FileName = $"SalaryPeriod{model.SalaryPeriod.ID}.xlsx";
+
+                var isCreated = CreateExcelEarn(FileName, model.SalaryPeriodComputes, salaryPeriod.GroupType.Value);
+
+                if (isCreated == true)
+                {
+                    string path = targetpath + FileName;
+                    return File(path, "application/vnd.ms-excel", FileName);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+
+        [AllowAnonymous]
+        public FileResult GetDataPeriodPaymentTemplate(Guid? id)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return null;
+            }
+
+
+            if (TempData["model"] == null)
+            {
+                return null;
+            }
+            else
+            {
+                model = TempData["model"] as SalaryControlModel;
+            }
+
+            TempData["model"] = model;
+
+            var salaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.UID == id);
+
+            if (salaryPeriod != null && model.SalaryPeriod.ID == salaryPeriod.ID)
+            {
+                string targetpath = Server.MapPath("~/Document/Salary/");
+                string FileName = $"SalaryPeriodPayment{model.SalaryPeriod.ID}.xlsx";
+
+                var isCreated = CreateExcelPayment(FileName, model.SalaryPeriodComputes, salaryPeriod.GroupType.Value);
+
+                if (isCreated == true)
+                {
+                    string path = targetpath + FileName;
+                    return File(path, "application/vnd.ms-excel", FileName);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+
+        public bool CreateExcelEarn(string FileName, List<SalaryPeriodCompute> SalaryRows, short SalaryPeriodGroupType)  // SalaryPeriodGroupType; 1 maaş, 2 setcard
+        {
+            bool isSuccess = false;
+
+            try
+            {
+                Excel.Application xlApp = new Excel.Application();
+
+                Excel.Workbook xlWorkBook;
+                Excel.Worksheet xlWorkSheet;
+                object misValue = System.Reflection.Missing.Value;
+
+                xlWorkBook = xlApp.Workbooks.Add(misValue);
+                xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+
+                xlWorkSheet.Cells[1, 1] = "SalaryPeriodID";
+                xlWorkSheet.Cells[1, 2] = "EmployeeID";
+                xlWorkSheet.Cells[1, 3] = "EmployeeName";
+                xlWorkSheet.Cells[1, 4] = "SalaryTotal";
+                xlWorkSheet.Cells[1, 5] = "PermitTotal";
+                xlWorkSheet.Cells[1, 6] = "ExtraShiftTotal";
+                xlWorkSheet.Cells[1, 7] = "PremiumTotal";
+                xlWorkSheet.Cells[1, 8] = "FormalTotal";
+                xlWorkSheet.Cells[1, 9] = "OtherTotal";
+                xlWorkSheet.Cells[1, 10] = "FoodCardTotal";
+                xlWorkSheet.Cells[1, 11] = "PrePaymentAmount";
+                xlWorkSheet.Cells[1, 12] = "SalaryCutAmount";
+                xlWorkSheet.Cells[1, 13] = "Currency";
+
+                int rownum = 2;
+
+
+                foreach (var item in SalaryRows.OrderBy(x => x.FullName))
+                {
+
+                    xlWorkSheet.Cells[rownum, 1] = item.SalaryPeriodID;
+                    xlWorkSheet.Cells[rownum, 2] = item.EmployeeID;
+                    xlWorkSheet.Cells[rownum, 3] = item.FullName;
+
+                    if (SalaryPeriodGroupType == 1)
+                    {
+                        xlWorkSheet.Cells[rownum, 4] = item.SalaryTotal;
+                        xlWorkSheet.Cells[rownum, 5] = item.PermitTotal;
+                        xlWorkSheet.Cells[rownum, 6] = item.ExtraShiftTotal;
+                        xlWorkSheet.Cells[rownum, 7] = item.PremiumTotal;
+                        xlWorkSheet.Cells[rownum, 8] = item.FormalTotal;
+                        xlWorkSheet.Cells[rownum, 9] = item.OtherTotal;
+                        xlWorkSheet.Cells[rownum, 10] = null;
+                        xlWorkSheet.Cells[rownum, 11] = item.PrePaymentAmount;
+                        xlWorkSheet.Cells[rownum, 12] = item.SalaryCutAmount;
+                    }
+
+                    if (SalaryPeriodGroupType == 2)
+                    {
+                        xlWorkSheet.Cells[rownum, 4] = null;
+                        xlWorkSheet.Cells[rownum, 5] = null;
+                        xlWorkSheet.Cells[rownum, 6] = null;
+                        xlWorkSheet.Cells[rownum, 7] = null;
+                        xlWorkSheet.Cells[rownum, 8] = null;
+                        xlWorkSheet.Cells[rownum, 9] = null;
+                        xlWorkSheet.Cells[rownum, 10] = item.FoodCardTotal;
+                        xlWorkSheet.Cells[rownum, 11] = null;
+                        xlWorkSheet.Cells[rownum, 12] = null;
+                    }
+
+                    xlWorkSheet.Cells[rownum, 13] = item.Currency;
+
+                    rownum++;
+                }
+
+                //Here saving the file in xlsx
+                string targetpath = Server.MapPath("~/Document/Salary/");
+                string pathToExcelFile = targetpath + FileName;
+
+
+                xlWorkBook.SaveAs(pathToExcelFile, Excel.XlFileFormat.xlOpenXMLWorkbook, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+
+
+                xlWorkBook.Close(true, misValue, misValue);
+                xlApp.Quit();
+
+                isSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                isSuccess = false;
+            }
+
+            return isSuccess;
+        }
+
+        public bool CreateExcelPayment(string FileName, List<SalaryPeriodCompute> SalaryRows, short SalaryPeriodGroupType)  // SalaryPeriodGroupType; 1 maaş, 2 setcard
+        {
+            bool isSuccess = false;
+
+            try
+            {
+                Excel.Application xlApp = new Excel.Application();
+
+                Excel.Workbook xlWorkBook;
+                Excel.Worksheet xlWorkSheet;
+                object misValue = System.Reflection.Missing.Value;
+
+                xlWorkBook = xlApp.Workbooks.Add(misValue);
+                xlWorkSheet = (Excel.Worksheet)xlWorkBook.Worksheets.get_Item(1);
+
+                xlWorkSheet.Cells[1, 1] = "SalaryPeriodID";
+                xlWorkSheet.Cells[1, 2] = "EmployeeID";
+                xlWorkSheet.Cells[1, 3] = "EmployeeName";
+                xlWorkSheet.Cells[1, 4] = "PrePaymentAmount";
+                xlWorkSheet.Cells[1, 5] = "SalaryCutAmount";
+                xlWorkSheet.Cells[1, 6] = "BankPaymentAmount";
+                xlWorkSheet.Cells[1, 7] = "ManuelPaymentAmount";
+                xlWorkSheet.Cells[1, 8] = "OtherPaymentAmount";
+                xlWorkSheet.Cells[1, 9] = "FoodCardPaymentAmount";
+                xlWorkSheet.Cells[1, 10] = "Currency";
+
+                int rownum = 2;
+
+                foreach (var item in SalaryRows.OrderBy(x => x.FullName))
+                {
+
+                    xlWorkSheet.Cells[rownum, 1] = item.SalaryPeriodID;
+                    xlWorkSheet.Cells[rownum, 2] = item.EmployeeID;
+                    xlWorkSheet.Cells[rownum, 3] = item.FullName;
+
+                    if (SalaryPeriodGroupType == 1)
+                    {
+                        xlWorkSheet.Cells[rownum, 4] = item.PrePaymentAmount;
+                        xlWorkSheet.Cells[rownum, 5] = item.SalaryCutAmount;
+                        xlWorkSheet.Cells[rownum, 6] = item.BankPaymentAmount;
+                        xlWorkSheet.Cells[rownum, 7] = item.ManuelPaymentAmount;
+                        xlWorkSheet.Cells[rownum, 8] = item.OtherPaymentAmount;
+                        xlWorkSheet.Cells[rownum, 9] = null;
+                    }
+
+                    if (SalaryPeriodGroupType == 2)
+                    {
+                        xlWorkSheet.Cells[rownum, 4] = null;
+                        xlWorkSheet.Cells[rownum, 5] = null;
+                        xlWorkSheet.Cells[rownum, 6] = null;
+                        xlWorkSheet.Cells[rownum, 7] = null;
+                        xlWorkSheet.Cells[rownum, 8] = null;
+                        xlWorkSheet.Cells[rownum, 9] = item.FoodCardPaymentAmount;
+                    }
+
+                    xlWorkSheet.Cells[rownum, 10] = item.Currency;
+
+                    rownum++;
+                }
+
+                //Here saving the file in xlsx
+                string targetpath = Server.MapPath("~/Document/Salary/");
+                string pathToExcelFile = targetpath + FileName;
+
+                xlWorkBook.SaveAs(pathToExcelFile, Excel.XlFileFormat.xlOpenXMLWorkbook, misValue, misValue, misValue, misValue, Excel.XlSaveAsAccessMode.xlExclusive, misValue, misValue, misValue, misValue, misValue);
+
+                xlWorkBook.Close(true, misValue, misValue);
+                xlApp.Quit();
+
+                isSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                isSuccess = false;
+            }
+
+            return isSuccess;
+        }
+
+
+
 
 
 

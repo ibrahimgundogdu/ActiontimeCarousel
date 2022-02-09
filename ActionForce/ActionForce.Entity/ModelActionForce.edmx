@@ -513,6 +513,7 @@
           <Property Name="CardStatusID" Type="int" />
           <Property Name="RecordDate" Type="datetime" />
           <Property Name="ActivateDate" Type="datetime" />
+          <Property Name="CancelDate" Type="datetime" />
           <Property Name="UID" Type="uniqueidentifier" />
         </EntityType>
         <EntityType Name="CardActions">
@@ -3518,6 +3519,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="RecordIP" Type="nvarchar" MaxLength="20" />
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
+          <Property Name="UpdateDate" Type="datetime" />
         </EntityType>
         <EntityType Name="SalaryPeriodComputeActions">
           <Key>
@@ -20628,6 +20630,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="RecordDate" Type="DateTime" Precision="3" />
           <Property Name="ActivateDate" Type="DateTime" Precision="3" />
           <Property Name="UID" Type="Guid" />
+          <Property Name="CancelDate" Type="DateTime" Precision="3" />
         </EntityType>
         <ComplexType Name="GetLocationCardBasket_Result">
           <Property Type="Int64" Name="ID" Nullable="false" />
@@ -21034,6 +21037,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="Currency" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
           <Property Name="FoodCardTotal" Type="Double" />
           <Property Name="FoodCardPaymentAmount" Type="Double" />
+          <Property Name="UpdateDate" Type="DateTime" Precision="3" />
         </EntityType>
         <EntityType Name="SalaryPeriodComputeActions">
           <Key>
@@ -28795,6 +28799,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="Card">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.Card">
               <MappingFragment StoreEntitySet="Card">
+                <ScalarProperty Name="CancelDate" ColumnName="CancelDate" />
                 <ScalarProperty Name="UID" ColumnName="UID" />
                 <ScalarProperty Name="ActivateDate" ColumnName="ActivateDate" />
                 <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
@@ -29141,6 +29146,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="SalaryPeriodCompute">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SalaryPeriodCompute">
               <MappingFragment StoreEntitySet="SalaryPeriodCompute">
+                <ScalarProperty Name="UpdateDate" ColumnName="UpdateDate" />
                 <ScalarProperty Name="FoodCardPaymentAmount" ColumnName="FoodCardPaymentAmount" />
                 <ScalarProperty Name="FoodCardTotal" ColumnName="FoodCardTotal" />
                 <ScalarProperty Name="Currency" ColumnName="Currency" />

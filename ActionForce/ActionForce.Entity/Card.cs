@@ -25,5 +25,6 @@ namespace ActionForce.Entity
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<System.DateTime> ActivateDate { get; set; }
         public Nullable<System.Guid> UID { get; set; }
+        public Nullable<System.DateTime> CancelDate { get; set; }
     }
 }

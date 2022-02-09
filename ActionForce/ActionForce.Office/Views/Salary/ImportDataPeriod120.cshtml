@@ -1,7 +1,4 @@
 ﻿@model SalaryControlModel
-@{
-    ViewBag.Title = "Çalışan Cari Hesap";
-}
 
 @section style{
 
@@ -59,11 +56,7 @@
                                 <th colspan="9" style="text-align:right;">
                                     @if (Model.SalaryPeriod.SalaryPeriodStatusID == 1)
                                     {
-                                        <a href="/Salary/GetDataPeriodTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Hakediş Şablonu İndir</a>
-                                    }
-                                    @if (Model.SalaryPeriod.SalaryPeriodStatusID == 3)
-                                    {
-                                        <a href="/Salary/GetDataPeriodPaymentTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Ödeme Şablonu İndir</a>
+                                        <a href="/Salary/ImportDataPeriod120/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Aylık Maaşlı Excel'den Yükle'</a>
                                     }
                                 </th>
                             </tr>
@@ -196,19 +189,9 @@
 
                             </tr>
                             <tr>
-                                <td colspan="13">
+                                <td colspan="22">
                                     <a href="/Salary/ExportDataPeriod120/@(Model.SalaryPeriod.UID)" class="btn btn-success"><img src="~/images/excel.png" class="rounded-10" style="width:24px;"> Aylık Maaşlı Grubu Excel Olarak İndir</a> &nbsp;
                                     @*<a href="/Salary/ExportDataPeriod121/@(Model.SalaryPeriod.UID)" class="btn btn-success"><i data-feather="download"></i>Aylık Maaşlı Grubu Haciz Excel Olarak İndir</a> &nbsp;*@
-                                </td>
-                                <td colspan="9" style="text-align:right;">
-                                    @if (Model.SalaryPeriod.SalaryPeriodStatusID == 1)
-                                    {
-                                        <a href="/Salary/GetDataPeriodTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Hakediş Şablonu İndir</a>
-                                    }
-                                    @if (Model.SalaryPeriod.SalaryPeriodStatusID == 3)
-                                    {
-                                        <a href="/Salary/GetDataPeriodPaymentTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Ödeme Şablonu İndir</a>
-                                    }
                                 </td>
                             </tr>
 
@@ -223,19 +206,9 @@
                         <thead>
 
                             <tr>
-                                <th colspan="13">
+                                <th colspan="20">
                                     <a href="/Salary/ExportDataPeriod110/@(Model.SalaryPeriod.UID)" class="btn btn-success"><img src="~/images/excel.png" class="rounded-10" style="width:24px;"> &nbsp;&nbsp; Saatlik Maaşlı Grubu Excel Olarak İndir</a> &nbsp;
                                     @*<a href="/Salary/ExportDataPeriod111/@(Model.SalaryPeriod.UID)" class="btn btn-success"><i data-feather="download"></i>Aylık Maaşlı Grubu Haciz Excel Olarak İndir</a> &nbsp;*@
-                                </th>
-                                <th colspan="7" style="text-align:right;">
-                                    @if (Model.SalaryPeriod.SalaryPeriodStatusID == 1)
-                                    {
-                                        <a href="/Salary/GetDataPeriodTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Hakediş Şablonu İndir</a>
-                                    }
-                                    @if (Model.SalaryPeriod.SalaryPeriodStatusID == 3)
-                                    {
-                                        <a href="/Salary/GetDataPeriodPaymentTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Ödeme Şablonu İndir</a>
-                                    }
                                 </th>
                             </tr>
                             <tr>
@@ -354,19 +327,9 @@
 
                             </tr>
                             <tr>
-                                <td colspan="13">
+                                <td colspan="20">
                                     <a href="/Salary/ExportDataPeriod110/@(Model.SalaryPeriod.UID)" class="btn btn-success"><img src="~/images/excel.png" class="rounded-10" style="width:24px;"> &nbsp;&nbsp; Saatlik Ücretli Grubu Excel Olarak İndir</a> &nbsp;
                                     @*<a href="/Salary/ExportDataPeriod111/@(Model.SalaryPeriod.UID)" class="btn btn-success"><i data-feather="download"></i>Saatlik Ücretli Grubu Haciz Excel Olarak İndir</a> &nbsp;*@
-                                </td>
-                                <td colspan="7" style="text-align:right;">
-                                    @if (Model.SalaryPeriod.SalaryPeriodStatusID == 1)
-                                    {
-                                        <a href="/Salary/GetDataPeriodTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Hakediş Şablonu İndir</a>
-                                    }
-                                    @if (Model.SalaryPeriod.SalaryPeriodStatusID == 3)
-                                    {
-                                        <a href="/Salary/GetDataPeriodPaymentTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Ödeme Şablonu İndir</a>
-                                    }
                                 </td>
                             </tr>
                         </tfoot>
@@ -381,18 +344,8 @@
                 <table class="table table-sm table-hover">
                     <thead>
                         <tr>
-                            <th colspan="6">
+                            <th colspan="10">
                                 <a href="/Salary/ExportDataPeriod210/@(Model.SalaryPeriod.UID)" class="btn btn-success"><img src="~/images/excel.png" class="rounded-10" style="width:24px;"> &nbsp;&nbsp; Yemek Kartı Grubu Ödeme Excel Olarak İndir</a> &nbsp;
-                            </th>
-                            <th colspan="4" style="text-align:right;">
-                                @if (Model.SalaryPeriod.SalaryPeriodStatusID == 1)
-                                {
-                                    <a href="/Salary/GetDataPeriodTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Hakediş Şablonu İndir</a>
-                                }
-                                @if (Model.SalaryPeriod.SalaryPeriodStatusID == 3)
-                                {
-                                    <a href="/Salary/GetDataPeriodPaymentTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Ödeme Şablonu İndir</a>
-                                }
                             </th>
                         </tr>
 
@@ -467,18 +420,8 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td colspan="6">
+                            <td colspan="10">
                                 <a href="/Salary/ExportDataPeriod210/@(Model.SalaryPeriod.UID)" class="btn btn-success"><img src="~/images/excel.png" class="rounded-10" style="width:24px;"> &nbsp;&nbsp; Yemek Kartı Grubu Ödeme Excel Olarak İndir</a> &nbsp;
-                            </td>
-                            <td colspan="4" style="text-align:right;">
-                                @if (Model.SalaryPeriod.SalaryPeriodStatusID == 1)
-                                {
-                                    <a href="/Salary/GetDataPeriodTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Hakediş Şablonu İndir</a>
-                                }
-                                @if (Model.SalaryPeriod.SalaryPeriodStatusID == 3)
-                                {
-                                    <a href="/Salary/GetDataPeriodPaymentTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Ödeme Şablonu İndir</a>
-                                }
                             </td>
                         </tr>
                     </tfoot>

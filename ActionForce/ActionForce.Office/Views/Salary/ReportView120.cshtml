@@ -1,0 +1,106 @@
+﻿@model SalaryControlModel
+@{
+    Layout = null;
+}
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th colspan="6" style="border-left:1px solid #808080;">Personel Bilgisi</th>
+            <th colspan="7" class="bg-warning-light" style="border-left:1px solid #808080;">Hakedişler</th>
+            <th colspan="6" class="bg-primary-light" style="border-left:1px solid #808080;">Ödemeler</th>
+            <th style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Bakiye</th>
+            <th style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Güncellenme</th>
+        </tr>
+        <tr>
+            <th style="border-left:1px solid #808080;">Adı</th>
+            <th>TCKN</th>
+            <th>Phone</th>
+            <th>FoodCard</th>
+            <th>IBAN</th>
+            <th>Bank</th>
+
+            <th class="text-right bg-warning-light" style="border-left:1px solid #808080;">Maaş</th>
+            <th class="text-right bg-warning-light">İzin</th>
+            <th class="text-right bg-warning-light">F.Mesai</th>
+            <th class="text-right bg-warning-light">Prim</th>
+            <th class="text-right bg-warning-light">Resmi</th>
+            <th class="text-right bg-warning-light">Diğer</th>
+            <th class="text-right bg-warning-light">Toplam</th>
+
+            <th class="text-right bg-primary-light" style="border-left:1px solid #808080;">Avans Maaş</th>
+            <th class="text-right bg-primary-light">Kesinti</th>
+            <th class="text-right bg-primary-light">Banka</th>
+            <th class="text-right bg-primary-light">Manuel</th>
+            <th class="text-right bg-primary-light">Diğer</th>
+            <th class="text-right bg-primary-light">Toplam</th>
+
+            <th class="text-right" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Kalan </th>
+            <th class="text-right" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Tarih </th>
+        </tr>
+       
+    </thead>
+    <tbody>
+
+        @foreach (var emp in Model.SalaryPeriodComputes.OrderBy(x => x.FullName))
+        {
+            <tr>
+
+
+                <td class="tx-sm-13 bold" style="border-left:1px solid #808080;">@(emp.FullName)</td>
+                <td class="tx-sm-13">@(emp.IdentityNumber)</td>
+                <td class="tx-sm-13">@(emp.PhoneNumber)</td>
+                <td class="tx-sm-13">@(emp.FoodCard)</td>
+                <td class="tx-sm-13">@(emp.IBAN)</td>
+                <td class="tx-sm-13">@(emp.BankName)</td>
+
+                <td class="tx-sm-13 text-right bg-warning-light @(emp.SalaryTotal != 0 ? "font-weight-bold":"")" style="border-left:1px solid #808080;">@(emp.SalaryTotal)</td>
+                <td class="tx-sm-13 text-right bg-warning-light @(emp.PermitTotal != 0 ? "font-weight-bold":"")">@(emp.PermitTotal)</td>
+                <td class="tx-sm-13 text-right bg-warning-light @(emp.ExtraShiftTotal != 0 ? "font-weight-bold":"")">@(emp.ExtraShiftTotal)</td>
+                <td class="tx-sm-13 text-right bg-warning-light @(emp.PremiumTotal != 0 ? "font-weight-bold":"")">@(emp.PremiumTotal)</td>
+                <td class="tx-sm-13 text-right bg-warning-light @(emp.FormalTotal != 0 ? "font-weight-bold":"")">@(emp.FormalTotal)</td>
+                <td class="tx-sm-13 text-right bg-warning-light @(emp.OtherTotal != 0 ? "font-weight-bold":"")">@(emp.OtherTotal)</td>
+                <td class="tx-sm-13 text-right bg-warning-light @(emp.TotalProgress != 0 ? "font-weight-bold":"")">@(emp.TotalProgress)</td>
+
+                <td class="tx-sm-13 text-right bg-primary-light" style="border-left:1px solid #808080;">@(emp.PrePaymentAmount)</td>
+                <td class="tx-sm-13 text-right bg-primary-light">@(emp.SalaryCutAmount)</td>
+                <td class="tx-sm-13 text-right bg-primary-light">@(emp.BankPaymentAmount)</td>
+                <td class="tx-sm-13 text-right bg-primary-light">@(emp.ManuelPaymentAmount)</td>
+                <td class="tx-sm-13 text-right bg-primary-light">@(emp.OtherPaymentAmount)</td>
+                <td class="tx-sm-13 text-right bg-primary-light">@(emp.TotalPaymentAmount)</td>
+
+
+                <td class="tx-sm-13 text-right" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(emp.TotalBalance)</td>
+                <td class="tx-sm-13 text-right" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(emp.RecordDate?.ToString("G"))</td>
+            </tr>
+        }
+
+
+    </tbody>
+    <tfoot>
+        <tr class="table-secondary">
+            <td class="tx-sm-13 bold" style="border-left:1px solid #808080;" colspan="6">Toplam</td>
+
+
+            <td class="tx-sm-13 text-right bg-warning-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.SalaryTotal)</td>
+            <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.PermitTotal)</td>
+            <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.ExtraShiftTotal)</td>
+            <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.PremiumTotal)</td>
+            <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.FormalTotal)</td>
+            <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.OtherTotal)</td>
+            <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TotalProgress)</td>
+
+
+            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.PrePaymentAmount)</td>
+            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.SalaryCutAmount)</td>
+            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.BankPaymentAmount)</td>
+            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.ManuelPaymentAmount)</td>
+            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.OtherPaymentAmount)</td>
+            <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TotalPaymentAmount)</td>
+
+            <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.TotalBalance)</td>
+            <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;"></td>
+
+
+        </tr>
+    </tfoot>
+</table>

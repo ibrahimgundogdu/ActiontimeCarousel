@@ -44,5 +44,6 @@ namespace ActionForce.Entity
         public string Currency { get; set; }
         public Nullable<double> FoodCardTotal { get; set; }
         public Nullable<double> FoodCardPaymentAmount { get; set; }
+        public Nullable<System.DateTime> UpdateDate { get; set; }
     }
 }
