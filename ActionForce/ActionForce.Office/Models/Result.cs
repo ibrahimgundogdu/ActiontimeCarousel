@@ -18,6 +18,7 @@ namespace ActionForce.Office
         public bool IsSuccess { get; set; } = false;
         public string Message { get; set; } = string.Empty;
         public ResultType resultType { get; set; }
+        public List<InfoKey> InfoKeyList { get; set; }
     }
 
     public enum ResultType

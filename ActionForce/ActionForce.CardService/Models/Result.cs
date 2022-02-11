@@ -13,6 +13,16 @@ namespace ActionForce.CardService
         public string ProcessNumber { get; set; }
     }
 
+    public class ResultEmployee
+    {
+        public bool IsSuccess { get; set; }
+        public string Message { get; set; }
+        public DateTime ProcessDate { get; set; }
+        public string ProcessNumber { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+    }
+
     public class ParameterResult
     {
         public bool IsSuccess { get; set; }

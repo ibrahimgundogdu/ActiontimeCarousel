@@ -216,9 +216,9 @@ namespace ActionForce.CardService
         }
 
 
-        public Result AddPersonalCardAction(CardReadPersonalModel model)
+        public ResultEmployee AddPersonalCardAction(CardReadPersonalModel model)
         {
-            Result result = new Result();
+            ResultEmployee result = new ResultEmployee();
             DateTime now = DateTime.UtcNow.AddHours(3);
 
             result.IsSuccess = false;
@@ -312,38 +312,31 @@ namespace ActionForce.CardService
                             var csql = "INSERT INTO [dbo].[LocationPartEmployee] ([OurCompanyID], [LocationID], [LocationTypeID], [LocationPartID], [EmployeeID], [ReadDate]) VALUES(@OurCompanyID, @LocationID, @LocationTypeID, @LocationPartID, @EmployeeID, @ReadDate)";
                             connection.Execute(csql, ncparameters);
 
+                            var employeeparameters = new { EmployeeID = cardEmployee.EmployeeID };
+                            var employeesql = "SELECT TOP (1) EmployeeID, FullName, '' as Name, '' as Surname FROM [dbo].[Employee] Where [EmployeeID] = @EmployeeID";
+                            var employee = connection.QueryFirstOrDefault<Employee>(employeesql, employeeparameters);
+
+                            employee = ServiceDataHelper.ProcessEmployee(employee);
+
                             result.IsSuccess = true;
                             result.Message = "OK";
+                            result.Name = employee.Name;
+                            result.Surname = employee.Surname;
 
                         }
                         else if (cardEmployee != null && (cardEmployee.EmployeeID == null || cardEmployee.EmployeeID <= 0))
                         {
                             result.IsSuccess = false;
                             result.Message = "NO CRDEM";
+                            result.Name = "Employee";
+                            result.Surname = "NotFound";
                         }
-
-                        //else if (cardEmployee == null)
-                        //{
-                        //    var ncparameters = new
-                        //    {
-                        //        OurCompanyID = 2,
-                        //        EmployeeID = cardEmployee?.EmployeeID,
-                        //        CardID = card.ID,
-                        //        CardTypeID = card.CardTypeID,
-                        //        CardStatusID = card.CardStatusID,
-                        //        CardNumber = model.CardNumber,
-                        //        RecordDate = DateTime.UtcNow.AddHours(3)
-                        //    };
-                        //    var csql = "INSERT INTO [dbo].[EmployeeCard] ([OurCompanyID],[EmployeeID],[CardID],[CardTypeID],[CardStatusID],[CardNumber],[RecordDate]) VALUES(@OurCompanyID, @EmployeeID, @CardID, @CardTypeID, @CardStatusID, @CardNumber,@RecordDate)";
-                        //    connection.Execute(csql, ncparameters);
-
-                        //    result.IsSuccess = false;
-                        //    result.Message = "EDIT CRD";
-                        //}
                         else
                         {
                             result.IsSuccess = true;
                             result.Message = "NOTFOUND";
+                            result.Name = "Not";
+                            result.Surname = "Found";
                         }
 
                     }
@@ -359,6 +352,8 @@ namespace ActionForce.CardService
             {
                 result.IsSuccess = false;
                 result.Message = "ERROR";
+                result.Name = "Error";
+                result.Surname = "Formed";
             }
 
             return result;

@@ -8493,6 +8493,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
         <Function Name="ResetCard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CardNumber" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="SalaryPeriodComputeSetTotal" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SalaryPeriodID" Type="int" Mode="In" />
+          <Parameter Name="RecordEmployeeID" Type="int" Mode="In" />
+          <Parameter Name="RecordIP" Type="nvarchar" Mode="In" />
+        </Function>
         <Function Name="SetBankTransferStatus" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ID" Type="bigint" Mode="In" />
           <Parameter Name="StatusID" Type="int" Mode="In" />
@@ -12842,6 +12847,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <FunctionImport Name="ChangeCardNumber" ReturnType="Collection(Boolean)">
             <Parameter Name="LoadID" Mode="In" Type="Int64" />
             <Parameter Name="CardNumber" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SalaryPeriodComputeSetTotal" ReturnType="Collection(Int32)">
+            <Parameter Name="SalaryPeriodID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordEmployeeID" Mode="In" Type="Int32" />
+            <Parameter Name="RecordIP" Mode="In" Type="String" />
           </FunctionImport>
         
           </EntityContainer>
@@ -29427,6 +29437,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
             </EntityTypeMapping>
           </EntitySetMapping>
           <FunctionImportMapping FunctionImportName="ChangeCardNumber" FunctionName="db293_ActionTimeDbModel.Store.ChangeCardNumber" />
+          <FunctionImportMapping FunctionImportName="SalaryPeriodComputeSetTotal" FunctionName="db293_ActionTimeDbModel.Store.SalaryPeriodComputeSetTotal" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

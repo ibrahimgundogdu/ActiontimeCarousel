@@ -44,11 +44,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClosedXML, Version=0.95.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClosedXML.0.95.4\lib\net46\ClosedXML.dll</HintPath>
+    </Reference>
+    <Reference Include="DocumentFormat.OpenXml, Version=2.7.2.0, Culture=neutral, PublicKeyToken=8fb06cb64d019a17, processorArchitecture=MSIL">
+      <HintPath>..\packages\DocumentFormat.OpenXml.2.7.2\lib\net46\DocumentFormat.OpenXml.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ExcelNumberFormat, Version=1.0.10.0, Culture=neutral, PublicKeyToken=23c6f5d73be07eca, processorArchitecture=MSIL">
+      <HintPath>..\packages\ExcelNumberFormat.1.0.10\lib\net20\ExcelNumberFormat.dll</HintPath>
     </Reference>
     <Reference Include="LinqToExcel, Version=1.11.0.0, Culture=neutral, PublicKeyToken=9c8ea65a58f03f1f, processorArchitecture=MSIL">
       <HintPath>..\packages\LinqToExcel.1.11.0\lib\LinqToExcel.dll</HintPath>
@@ -92,10 +101,6 @@
     </Reference>
     <Reference Include="Microsoft.Extensions.Primitives, Version=1.1.1.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Extensions.Primitives.1.1.1\lib\netstandard1.0\Microsoft.Extensions.Primitives.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Office.Interop.Excel.15.0.4795.1000\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="Microsoft.Owin, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.2.1.0\lib\net45\Microsoft.Owin.dll</HintPath>
@@ -184,6 +189,9 @@
       <HintPath>..\packages\System.IO.FileSystem.Primitives.4.3.0\lib\net46\System.IO.FileSystem.Primitives.dll</HintPath>
       <Private>True</Private>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="System.IO.Packaging, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IO.Packaging.4.0.0\lib\net46\System.IO.Packaging.dll</HintPath>
     </Reference>
     <Reference Include="System.Linq, Version=4.1.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Linq.4.3.0\lib\net463\System.Linq.dll</HintPath>
@@ -294,6 +302,7 @@
       <Private>True</Private>
       <Private>True</Private>
     </Reference>
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Web.Razor">
@@ -2385,6 +2394,8 @@
     <Compile Include="Models\CounterModel.cs" />
     <Compile Include="Models\DataModels\BankDataModel.cs" />
     <Compile Include="Models\DataModels\EmployeeModel.cs" />
+    <Compile Include="Models\DataModels\ExcelSalaryPeriodEarn.cs" />
+    <Compile Include="Models\DataModels\InfoKey.cs" />
     <Compile Include="Models\DataModels\LocationDataModel.cs" />
     <Compile Include="Models\DataModels\PosTerminalDataModel.cs" />
     <Compile Include="Models\FilterModel\AnimalFilterModel.cs" />
@@ -2397,6 +2408,7 @@
     <Compile Include="Models\FormModels\FormPrice.cs" />
     <Compile Include="Models\FormModels\FormPriceCategory.cs" />
     <Compile Include="Models\FormModels\FormSalaryPeriod.cs" />
+    <Compile Include="Models\FormModels\FormSalaryPeriodEarnImport.cs" />
     <Compile Include="Models\FormModels\FormTicketProduct.cs" />
     <Compile Include="Models\Crypter.cs" />
     <Compile Include="Models\Document\EmployeesLocation.cs" />
@@ -2812,10 +2824,10 @@
     <Content Include="Views\Salary\_PartialSetEmployeeSalary.cshtml" />
     <Content Include="Views\Sale\_PartialCardActionDetail.cshtml" />
     <Content Include="Views\Sale\_PartialCardReplaceDetail.cshtml" />
-    <Content Include="Views\Salary\ReportView120.cshtml" />
     <Content Include="Views\Salary\ReportView110.cshtml" />
     <Content Include="Views\Salary\ReportView210.cshtml" />
-    <Content Include="Views\Salary\ImportDataPeriod120.cshtml" />
+    <Content Include="Views\Salary\ImportSalaryEarn.cshtml" />
+    <Content Include="Views\Salary\ReportView120.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -14,12 +14,14 @@ namespace ActionForce.CardService.Controllers
         [HttpGet]
         public HttpResponseMessage CardRead(string info)
         {
-            Result result = new Result();
+            ResultEmployee result = new ResultEmployee();
             ServiceHelper helper = new ServiceHelper();
 
             result.IsSuccess = true;
             result.Message = $"OK";
             result.ProcessDate = DateTime.UtcNow.AddHours(3);
+            result.Name = "";
+            result.Surname = "";
 
             //00175D8B;CC:50:E3:17:5D:8B;4529AA7
 
@@ -44,8 +46,10 @@ namespace ActionForce.CardService.Controllers
 
                 result.IsSuccess = addResult.IsSuccess;
                 result.Message = addResult.Message;
-
+                result.Name = addResult.Name.Length > 8 ? addResult.Name.Substring(0, 8) : addResult.Name;
+                result.Surname = addResult.Surname.Length > 8 ? addResult.Surname.Substring(0, 8) : addResult.Surname;
             }
+
             return Request.CreateResponse(HttpStatusCode.OK, result);
         }
     }

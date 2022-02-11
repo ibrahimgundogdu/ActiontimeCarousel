@@ -153,6 +153,7 @@
     <Compile Include="Models\CardReaderParameter.cs" />
     <Compile Include="Models\CardReadModel.cs" />
     <Compile Include="Models\DateInfo.cs" />
+    <Compile Include="Models\Employee.cs" />
     <Compile Include="Models\EmployeeCard.cs" />
     <Compile Include="Models\ParamResult.cs" />
     <Compile Include="Models\Result.cs" />

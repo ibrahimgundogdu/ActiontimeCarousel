@@ -200,7 +200,7 @@
                                             <th>Tarih</th>
                                         </tr>
 
-                                        @foreach (var item in Model.CardReaders)
+                                        @foreach (var item in Model.CardReaders.OrderByDescending(x=> x.StartDate).ToList())
                                         {
                                             <tr>
                                                 <td><a href="/Settings/cardreader/@(item.ID)" class="btn btn-block @(item.IsActive == false ? "text-danger":"")" style="color:darkblue;"><b>@(item.SerialNumber)</b></a></td>
@@ -235,7 +235,7 @@
                                             <th>Tarih</th>
                                         </tr>
 
-                                        @foreach (var item in Model.NewCardReaders)
+                                        @foreach (var item in Model.NewCardReaders.OrderByDescending(x => x.StartDate).ToList())
                                         {
                                             <tr>
                                                 <td><a href="/Settings/cardreader/@(item.ID)" class="btn btn-block @(item.IsActive == false ? "text-danger":"")" style="color:darkblue;"><b>@(item.SerialNumber)</b></a></td>
