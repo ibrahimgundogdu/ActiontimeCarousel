@@ -67,6 +67,7 @@ namespace ActionForce.Entity
         public string IBAN { get; set; }
         public Nullable<int> BankID { get; set; }
         public string FoodCardNumber { get; set; }
+        public Nullable<short> SalaryPaymentTypeID { get; set; }
     
         public virtual Role Role { get; set; }
         public virtual RoleGroup RoleGroup { get; set; }

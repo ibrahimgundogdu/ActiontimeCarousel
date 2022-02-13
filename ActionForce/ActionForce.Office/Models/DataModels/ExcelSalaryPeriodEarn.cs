@@ -22,4 +22,39 @@ namespace ActionForce.Office
         public string Currency { get; set; }
 
     }
+
+    public class ExcelSalaryPeriodPayment
+    {
+        public int SalaryPeriodID { get; set; }
+        public int EmployeeID { get; set; }
+        public string EmployeeName { get; set; }
+        public double? PrePaymentAmount { get; set; }
+        public double? SalaryCutAmount { get; set; }
+        public double? BankPaymentAmount { get; set; }
+        public double? ManuelPaymentAmount { get; set; }
+        public double? OtherPaymentAmount { get; set; }
+        public double? FoodCardPaymentAmount { get; set; }
+        public string Currency { get; set; }
+
+    }
+
+    public class ExcelSalaryPeriodFoodEarn
+    {
+        public int SalaryPeriodID { get; set; }
+        public int EmployeeID { get; set; }
+        public string EmployeeName { get; set; }
+        public double? FoodCardTotal { get; set; }
+        public string Currency { get; set; }
+
+    }
+
+    public class ExcelSalaryPeriodFoodPayment
+    {
+        public int SalaryPeriodID { get; set; }
+        public int EmployeeID { get; set; }
+        public string EmployeeName { get; set; }
+        public double? FoodCardPaymentAmount { get; set; }
+        public string Currency { get; set; }
+
+    }
 }

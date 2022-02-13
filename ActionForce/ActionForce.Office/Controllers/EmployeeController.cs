@@ -346,6 +346,8 @@ namespace ActionForce.Office.Controllers
             model.StatusList = Db.EmployeeStatus.Where(x => x.IsActive == true).ToList();
             model.ShiftTypeList = Db.EmployeeShiftType.Where(x => x.IsActive == true).ToList();
             model.SalaryCategoryList = Db.EmployeeSalaryCategory.Where(x => x.IsActive == true).ToList();
+            model.SalaryPaymentTypes = Db.SalaryPaymentType.ToList();
+            
             model.SequenceList = Db.EmployeeSequence.Where(x => x.IsActive == true).ToList();
             model.PhoneCodes = Db.CountryPhoneCode.Where(x => x.IsActive == true).OrderBy(x => x.SortBy).ToList();
             model.BankList = Db.Bank.Where(x => x.Individual == true && x.OurCompanyID == model.Authentication.ActionEmployee.OurCompanyID).ToList();
@@ -447,9 +449,8 @@ namespace ActionForce.Office.Controllers
                         State = isEmployee.State,
                         RoleID = isEmployee.RoleID,
                         BankID = isEmployee.BankID,
-                        IBAN = isEmployee.IBAN
-                        
-                        
+                        IBAN = isEmployee.IBAN,
+                        SalaryPaymentTypeID = isEmployee.SalaryPaymentTypeID
                     };
 
                     isEmployee.AreaCategoryID = employee.AreaCategoryID;
@@ -479,6 +480,7 @@ namespace ActionForce.Office.Controllers
                     isEmployee.RoleID = isEmployee.RoleID ?? 1;
                     isEmployee.IBAN = employee.IBAN;
                     isEmployee.BankID = employee.BankID;
+                    isEmployee.SalaryPaymentTypeID = employee.SalaryPaymentTypeID;
 
                     isEmployee.Country = employee.Country;
                     isEmployee.State = employee.State;
@@ -1580,6 +1582,7 @@ namespace ActionForce.Office.Controllers
                 empdoc.RoleID = 1;
                 empdoc.IBAN = employee.IBAN;
                 empdoc.BankID = employee.BankID;
+                empdoc.SalaryPaymentTypeID = 1;
 
                 empdoc.RecordDate = daterecord;
                 empdoc.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;

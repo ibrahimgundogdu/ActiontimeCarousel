@@ -17,7 +17,7 @@ namespace ActionForce.Office
         public string BankBranchCode { get; set; }
         public string Currency { get; set; }
         public string MobilePhone { get; set; }
-
+        public short SalaryPaymentTypeID { get; set; }
 
     }
 }

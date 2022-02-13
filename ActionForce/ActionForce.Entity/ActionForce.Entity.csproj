@@ -801,6 +801,9 @@
     <Compile Include="SalaryCategory.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>
+    <Compile Include="SalaryPaymentType.cs">
+      <DependentUpon>ModelActionForce.tt</DependentUpon>
+    </Compile>
     <Compile Include="SalaryPeriod.cs">
       <DependentUpon>ModelActionForce.tt</DependentUpon>
     </Compile>

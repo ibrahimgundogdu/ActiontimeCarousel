@@ -1605,7 +1605,8 @@ namespace ActionForce.Office.Controllers
                 IBAN = x.IBAN,
                 IdentityNumber = x.IdentityNumber,
                 Currency = x.Currency,
-                MobilePhone = x.MobilePhone
+                MobilePhone = x.MobilePhone,
+                SalaryPaymentTypeID = x.SalaryPaymentTypeID ?? 1
             }).Distinct().ToList();
 
             var actiontypes = model.EmployeeActionList.Select(x => new { ID = x.ActionTypeID, Name = x.Name }).ToList();
@@ -1683,7 +1684,7 @@ namespace ActionForce.Office.Controllers
         }
 
         [AllowAnonymous]
-        public void ExportData()
+        public FileResult ExportData()
         {
             SalaryControlModel model = new SalaryControlModel();
 
@@ -1694,34 +1695,146 @@ namespace ActionForce.Office.Controllers
 
             TempData["model"] = model;
 
-            Response.ClearContent();
+            var hakedisids = new[] { 32, 37, 43, 44, 45, 46 }.ToList(); // 39 set kart
+            var odemeids = new[] { 31, 47, 36, 48, 49, 50, 51 }.ToList();  // 38 setcard
 
-            Response.ContentType = "application/force-download";
-            Response.AddHeader("content-disposition",
-                "attachment; filename=Maas_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls");
-            Response.Write("<html xmlns:x=\"urn:schemas-microsoft-com:office:excel\">");
-            Response.Write("<head>");
-            Response.Write("<META http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">");
-            Response.Write("<!--[if gte mso 9]><xml>");
-            Response.Write("<x:ExcelWorkbook>");
-            Response.Write("<x:ExcelWorksheets>");
-            Response.Write("<x:ExcelWorksheet>");
-            Response.Write("<x:Name>Report Data</x:Name>");
-            Response.Write("<x:WorksheetOptions>");
-            Response.Write("<x:Print>");
-            Response.Write("<x:ValidPrinterInfo/>");
-            Response.Write("</x:Print>");
-            Response.Write("</x:WorksheetOptions>");
-            Response.Write("</x:ExcelWorksheet>");
-            Response.Write("</x:ExcelWorksheets>");
-            Response.Write("</x:ExcelWorkbook>");
-            Response.Write("</xml>");
-            Response.Write("<![endif]--> ");
+            string FileName = "SalaryResult_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xlsx";
+            string targetpath = Server.MapPath("~/Document/Salary/");
+            string pathToExcelFile = targetpath + FileName;
+
+            try
+            {
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("SalaryResult");
+
+                    worksheet.Cell("A1").Value = "Adı";
+                    worksheet.Cell("B1").Value = "TCKN";
+                    worksheet.Cell("C1").Value = "Phone";
+                    worksheet.Cell("D1").Value = "FoodCard";
+                    worksheet.Cell("E1").Value = "IBAN";
+                    worksheet.Cell("F1").Value = "Bank";
+                    worksheet.Cell("G1").Value = "B";
+                    worksheet.Cell("H1").Value = "Maaş";
+                    worksheet.Cell("I1").Value = "İzin";
+                    worksheet.Cell("J1").Value = "F.Mesai";
+                    worksheet.Cell("K1").Value = "Prim";
+                    worksheet.Cell("L1").Value = "Resmi";
+                    worksheet.Cell("M1").Value = "Diğer";
+                    worksheet.Cell("N1").Value = "Toplam";
+                    worksheet.Cell("O1").Value = "Avans Maaş";
+                    worksheet.Cell("P1").Value = "Kesinti";
+                    worksheet.Cell("Q1").Value = "İzin";
+                    worksheet.Cell("R1").Value = "F.Mesai";
+                    worksheet.Cell("S1").Value = "Prim";
+                    worksheet.Cell("T1").Value = "Resmi";
+                    worksheet.Cell("U1").Value = "Diğer";
+                    worksheet.Cell("V1").Value = "Toplam";
+                    worksheet.Cell("W1").Value = "Bakiye";
+                    worksheet.Cell("X1").Value = "SC Hakediş";
+                    worksheet.Cell("Y1").Value = "SC Ödeme";
+                    worksheet.Cell("Z1").Value = "SC Bakiye";
+                    worksheet.Cell("AA1").Value = "Final";
+
+                    //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
+
+                    int rownum = 2;
+
+                    foreach (var emp in model.EmployeeModels.OrderBy(x => x.EmployeeName))
+                    {
+                        var maashakedis = model.EmployeeActionList.Where(x => x.ActionTypeID == 32 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var izinhakedis = model.EmployeeActionList.Where(x => x.ActionTypeID == 37 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var mesaihakedis = model.EmployeeActionList.Where(x => x.ActionTypeID == 43 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var primhakedis = model.EmployeeActionList.Where(x => x.ActionTypeID == 44 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var resmihakedis = model.EmployeeActionList.Where(x => x.ActionTypeID == 45 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var digerhakedis = model.EmployeeActionList.Where(x => x.ActionTypeID == 46 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var toplamhakedis = model.EmployeeActionList.Where(x => hakedisids.Contains(x.ActionTypeID.Value) && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+
+                        var maas = model.EmployeeActionList.Where(x => x.ActionTypeID == 31 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var kesintip = model.EmployeeActionList.Where(x => x.ActionTypeID == 47 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var izinhakedisp = model.EmployeeActionList.Where(x => x.ActionTypeID == 36 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var mesaihakedisp = model.EmployeeActionList.Where(x => x.ActionTypeID == 48 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var primhakedisp = model.EmployeeActionList.Where(x => x.ActionTypeID == 49 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var resmihakedisp = model.EmployeeActionList.Where(x => x.ActionTypeID == 50 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var digerhakedisp = model.EmployeeActionList.Where(x => x.ActionTypeID == 51 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var toplamodeme = model.EmployeeActionList.Where(x => odemeids.Contains(x.ActionTypeID.Value) && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+
+                        var setcardhakedis = model.EmployeeActionList.Where(x => x.ActionTypeID == 39 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+                        var setcardodeme = model.EmployeeActionList.Where(x => x.ActionTypeID == 38 && x.EmployeeID == emp.EmployeeID).Sum(x => x.Amount) ?? 0;
+
+                        var kumule = (toplamhakedis + toplamodeme + setcardodeme + setcardhakedis);
 
 
-            View("~/Views/Salary/ReportView.cshtml", model).ExecuteResult(this.ControllerContext);
-            Response.Flush();
-            Response.End();
+                        worksheet.Cell("A" + rownum).Value = emp.EmployeeName;
+                        worksheet.Cell("B" + rownum).Value = emp.IdentityNumber;
+                        worksheet.Cell("C" + rownum).Value = emp.MobilePhone;
+                        worksheet.Cell("D" + rownum).Value = emp.FoodCardNumber;
+                        worksheet.Cell("E" + rownum).Value = emp.IBAN;
+                        worksheet.Cell("F" + rownum).Value = emp.BankName;
+                        worksheet.Cell("G" + rownum).Value = emp.SalaryPaymentTypeID == 1 ? "B":"";
+                        worksheet.Cell("H" + rownum).Value = maashakedis;
+                        worksheet.Cell("I" + rownum).Value = izinhakedis;
+                        worksheet.Cell("J" + rownum).Value = mesaihakedis;
+                        worksheet.Cell("K" + rownum).Value = primhakedis;
+                        worksheet.Cell("L" + rownum).Value = resmihakedis;
+                        worksheet.Cell("M" + rownum).Value = digerhakedis;
+                        worksheet.Cell("N" + rownum).Value = toplamhakedis;
+                        worksheet.Cell("O" + rownum).Value = maas;
+                        worksheet.Cell("P" + rownum).Value = kesintip;
+                        worksheet.Cell("Q" + rownum).Value = izinhakedisp;
+                        worksheet.Cell("R" + rownum).Value = mesaihakedisp;
+                        worksheet.Cell("S" + rownum).Value = primhakedisp;
+                        worksheet.Cell("T" + rownum).Value = resmihakedisp;
+                        worksheet.Cell("U" + rownum).Value = digerhakedisp;
+                        worksheet.Cell("V" + rownum).Value = toplamodeme;
+                        worksheet.Cell("W" + rownum).Value = (toplamhakedis + toplamodeme);
+                        worksheet.Cell("X" + rownum).Value = setcardhakedis;
+                        worksheet.Cell("Y" + rownum).Value = setcardodeme;
+                        worksheet.Cell("Z" + rownum).Value = (setcardhakedis + setcardodeme);
+                        worksheet.Cell("AA" + rownum).Value = kumule;
+
+                        rownum++;
+                    }
+
+                    worksheet.Cell("A" + rownum).Value = null;
+                    worksheet.Cell("B" + rownum).Value = "Toplam";
+                    worksheet.Cell("C" + rownum).Value = null;
+                    worksheet.Cell("D" + rownum).Value = null;
+                    worksheet.Cell("E" + rownum).Value = null;
+                    worksheet.Cell("F" + rownum).Value = null;
+                    worksheet.Cell("G" + rownum).Value = null;
+                    worksheet.Cell("H" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 32).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("I" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 37).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("J" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 43).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("K" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 44).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("L" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 45).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("M" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 46).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("N" + rownum).Value = model.EmployeeActionList.Where(x => hakedisids.Contains(x.ActionTypeID.Value)).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("O" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 31).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("P" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 47).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("Q" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 36).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("R" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 48).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("S" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 49).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("T" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 50).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("U" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 51).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("V" + rownum).Value = model.EmployeeActionList.Where(x => odemeids.Contains(x.ActionTypeID.Value)).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("W" + rownum).Value = model.EmployeeActionList.Where(x => odemeids.Contains(x.ActionTypeID.Value) || hakedisids.Contains(x.ActionTypeID.Value)).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("X" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 39).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("Y" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 38).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("Z" + rownum).Value = model.EmployeeActionList.Where(x => x.ActionTypeID == 38 || x.ActionTypeID == 39).Sum(x => x.Amount) ?? 0;
+                    worksheet.Cell("AA" + rownum).Value = model.EmployeeActionList.Sum(x => x.Amount) ?? 0;
+
+                    workbook.SaveAs(pathToExcelFile);
+                }
+
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+
+            return File(pathToExcelFile, "application/vnd.ms-excel", FileName);
+
         }
 
         [AllowAnonymous]
@@ -2797,6 +2910,205 @@ namespace ActionForce.Office.Controllers
 
 
 
+
+        [AllowAnonymous]
+        public FileResult GetDataFoodcardEarnTemplate(Guid? id)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return null;
+            }
+
+            if (TempData["model"] == null)
+            {
+                return null;
+            }
+            else
+            {
+                model = TempData["model"] as SalaryControlModel;
+            }
+
+            TempData["model"] = model;
+
+            var salaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.UID == id);
+
+            if (salaryPeriod != null && model.SalaryPeriod.ID == salaryPeriod.ID)
+            {
+                string targetpath = Server.MapPath("~/Document/Salary/");
+                string FileName = $"FoodcardEarn{model.SalaryPeriod.ID}.xlsx";
+
+                var isCreated = CreateExcelFoodEarn(FileName, model.SalaryPeriodComputes);
+
+                if (isCreated == true)
+                {
+                    string path = targetpath + FileName;
+                    return File(path, "application/vnd.ms-excel", FileName);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+
+        [AllowAnonymous]
+        public FileResult GetDataFoodcardPaymentTemplate(Guid? id)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return null;
+            }
+
+
+            if (TempData["model"] == null)
+            {
+                return null;
+            }
+            else
+            {
+                model = TempData["model"] as SalaryControlModel;
+            }
+
+            TempData["model"] = model;
+
+            var salaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.UID == id);
+
+            if (salaryPeriod != null && model.SalaryPeriod.ID == salaryPeriod.ID)
+            {
+                string targetpath = Server.MapPath("~/Document/Salary/");
+                string FileName = $"FoodcardPayment{model.SalaryPeriod.ID}.xlsx";
+
+                var isCreated = CreateExcelFoodPayment(FileName, model.SalaryPeriodComputes);
+
+                if (isCreated == true)
+                {
+                    string path = targetpath + FileName;
+                    return File(path, "application/vnd.ms-excel", FileName);
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            else
+            {
+                return null;
+            }
+
+
+        }
+
+        public bool CreateExcelFoodEarn(string FileName, List<SalaryPeriodCompute> SalaryRows)  // SalaryPeriodGroupType; 1 maaş, 2 setcard
+        {
+            bool isSuccess = false;
+
+            try
+            {
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("FoodcardEarn");
+
+                    worksheet.Cell("A1").Value = "SalaryPeriodID";
+                    worksheet.Cell("B1").Value = "EmployeeID";
+                    worksheet.Cell("C1").Value = "EmployeeName";
+                    worksheet.Cell("D1").Value = "FoodCardTotal";
+                    worksheet.Cell("E1").Value = "Currency";
+
+                    //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
+
+                    int rownum = 2;
+
+                    foreach (var item in SalaryRows.OrderBy(x => x.FullName))
+                    {
+
+                        worksheet.Cell("A" + rownum).Value = item.SalaryPeriodID;
+                        worksheet.Cell("B" + rownum).Value = item.EmployeeID;
+                        worksheet.Cell("C" + rownum).Value = item.FullName;
+                        worksheet.Cell("D" + rownum).Value = item.FoodCardTotal;
+                        worksheet.Cell("E" + rownum).Value = item.Currency;
+
+                        rownum++;
+                    }
+
+                    string targetpath = Server.MapPath("~/Document/Salary/");
+                    string pathToExcelFile = targetpath + FileName;
+                    workbook.SaveAs(pathToExcelFile);
+
+                    isSuccess = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                isSuccess = false;
+            }
+
+            return isSuccess;
+        }
+
+        public bool CreateExcelFoodPayment(string FileName, List<SalaryPeriodCompute> SalaryRows)  // SalaryPeriodGroupType; 1 maaş, 2 setcard
+        {
+            bool isSuccess = false;
+
+            try
+            {
+                using (var workbook = new XLWorkbook())
+                {
+                    var worksheet = workbook.Worksheets.Add("FoodcardPayment");
+
+                    worksheet.Cell("A1").Value = "SalaryPeriodID";
+                    worksheet.Cell("B1").Value = "EmployeeID";
+                    worksheet.Cell("C1").Value = "EmployeeName";
+                    worksheet.Cell("D1").Value = "FoodCardPaymentAmount";
+                    worksheet.Cell("E1").Value = "Currency";
+
+                    //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
+
+                    int rownum = 2;
+
+                    foreach (var item in SalaryRows.OrderBy(x => x.FullName))
+                    {
+
+                        worksheet.Cell("A" + rownum).Value = item.SalaryPeriodID;
+                        worksheet.Cell("B" + rownum).Value = item.EmployeeID;
+                        worksheet.Cell("C" + rownum).Value = item.FullName;
+                        worksheet.Cell("D" + rownum).Value = item.FoodCardPaymentAmount;
+                        worksheet.Cell("E" + rownum).Value = item.Currency;
+
+                        rownum++;
+                    }
+
+                    string targetpath = Server.MapPath("~/Document/Salary/");
+                    string pathToExcelFile = targetpath + FileName;
+                    workbook.SaveAs(pathToExcelFile);
+
+                    isSuccess = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                isSuccess = false;
+            }
+
+            return isSuccess;
+        }
+
+
+
         [AllowAnonymous]
         public ActionResult ImportSalaryEarn(Guid? id)
         {
@@ -2835,8 +3147,6 @@ namespace ActionForce.Office.Controllers
 
         }
 
-
-        //ImportSalaryEarnFile
         [HttpPost]
         [AllowAnonymous]
         public ActionResult ImportSalaryEarnFile(FormSalaryPeriodEarnImport form)
@@ -2913,13 +3223,11 @@ namespace ActionForce.Office.Controllers
                                     compute.PremiumTotal = item.PremiumTotal != null ? item.PremiumTotal : compute.PremiumTotal;
                                     compute.FormalTotal = item.FormalTotal != null ? item.FormalTotal : compute.FormalTotal;
                                     compute.OtherTotal = item.OtherTotal != null ? item.OtherTotal : compute.OtherTotal;
-                                    compute.TotalProgress = (compute.SalaryTotal + compute.PermitTotal + compute.ExtraShiftTotal + compute.PremiumTotal + compute.FormalTotal + compute.OtherTotal);
 
 
                                     compute.PrePaymentAmount = item.PrePaymentAmount != null ? item.PrePaymentAmount : compute.PrePaymentAmount;
                                     compute.SalaryCutAmount = item.SalaryCutAmount != null ? item.SalaryCutAmount : compute.SalaryCutAmount;
 
-                                    compute.TotalPaymentAmount = (compute.PrePaymentAmount + compute.SalaryCutAmount + compute.BankPaymentAmount + compute.ManuelPaymentAmount + compute.OtherPaymentAmount);
                                     compute.TotalBalance = (compute.TotalProgress + compute.TotalPaymentAmount);
 
                                     model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.EmployeeName}", Message = $"Güncellendi" });
@@ -2959,8 +3267,8 @@ namespace ActionForce.Office.Controllers
                                         newcompute.OtherPaymentAmount = 0;
                                         newcompute.FoodCardPaymentAmount = 0;
 
-                                        newcompute.TotalProgress = (newcompute.SalaryTotal + newcompute.PermitTotal + newcompute.ExtraShiftTotal + newcompute.PremiumTotal + newcompute.FormalTotal + newcompute.OtherTotal);
-                                        newcompute.TotalPaymentAmount = (newcompute.PrePaymentAmount + newcompute.SalaryCutAmount + newcompute.BankPaymentAmount + newcompute.ManuelPaymentAmount + newcompute.OtherPaymentAmount);
+                                        //newcompute.TotalProgress = (newcompute.SalaryTotal + newcompute.PermitTotal + newcompute.ExtraShiftTotal + newcompute.PremiumTotal + newcompute.FormalTotal + newcompute.OtherTotal);
+                                        //newcompute.TotalPaymentAmount = (newcompute.PrePaymentAmount + newcompute.SalaryCutAmount + newcompute.BankPaymentAmount + newcompute.ManuelPaymentAmount + newcompute.OtherPaymentAmount);
                                         newcompute.TotalBalance = (newcompute.TotalProgress + newcompute.TotalPaymentAmount);
 
                                         newcompute.RecordDate = DateTime.UtcNow.AddHours(3);
@@ -2968,9 +3276,6 @@ namespace ActionForce.Office.Controllers
                                         newcompute.RecordIP = OfficeHelper.GetIPAddress();
                                         newcompute.UID = Guid.NewGuid();
                                         newcompute.Currency = item.Currency;
-
-                                        
-
 
                                         computeList.Add(newcompute);
 
@@ -3029,6 +3334,660 @@ namespace ActionForce.Office.Controllers
             return RedirectToAction("ImportSalaryEarn", new { id = salaryPeriod.UID });
 
         }
+
+
+
+        [AllowAnonymous]
+        public ActionResult ImportSalaryPayment(Guid? id)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+            model.Result = new Result();
+
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return RedirectToAction("Index");
+            }
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result;
+            }
+
+
+            if (id == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            model.SalaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.UID == id);
+
+            if (model.SalaryPeriod == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+
+
+            return View(model);
+
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult ImportSalaryPaymentFile(FormSalaryPeriodEarnImport form)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+            model.Result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                InfoKeyList = new List<InfoKey>()
+            };
+
+            if (form == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            var salaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.ID == form.SalaryPeriodID);
+            var datalistforlog = new List<ExcelSalaryPeriodPayment>();
+
+            if (salaryPeriod != null)
+            {
+                var salaryPeriodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == salaryPeriod.ID).ToList();
+                List<SalaryPeriodCompute> computeList = new List<SalaryPeriodCompute>();
+
+
+                if (form.SalaryFile != null && form.SalaryFile.ContentLength > 0)
+                {
+
+                    if (form.SalaryFile.ContentType == "application/vnd.ms-excel" || form.SalaryFile.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    {
+                        string filename = Guid.NewGuid().ToString() + Path.GetExtension(form.SalaryFile.FileName);
+                        string targetpath = Server.MapPath("~/Document/Salary/");
+                        string pathToExcelFile = targetpath + filename;
+
+
+                        form.SalaryFile.SaveAs(Path.Combine(targetpath, filename));
+
+
+
+                        var connectionString = "";
+                        if (filename.EndsWith(".xls"))
+                        {
+                            connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;", pathToExcelFile);
+                        }
+                        else if (filename.EndsWith(".xlsx"))
+                        {
+                            connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";", pathToExcelFile);
+                        }
+
+
+                        //var adapter = new OleDbDataAdapter("SELECT * FROM [SalaryPeriodPayment$]", connectionString);
+                        //var ds = new DataSet();
+                        //adapter.Fill(ds, "ExcelTable");
+                        //DataTable dtable = ds.Tables["ExcelTable"];
+
+
+                        string sheetName = "SalaryPeriodPayment";
+                        var excelFile = new ExcelQueryFactory(pathToExcelFile);
+                        var salaryList = from a in excelFile.Worksheet<ExcelSalaryPeriodPayment>(sheetName) select a;
+                        datalistforlog = salaryList.ToList();
+
+                        foreach (var item in datalistforlog)
+                        {
+                            var compute = salaryPeriodComputes.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+
+                            try
+                            {
+                                if (compute != null)
+                                {
+                                    compute.PrePaymentAmount = item.PrePaymentAmount != null ? item.PrePaymentAmount : compute.PrePaymentAmount;
+                                    compute.SalaryCutAmount = item.SalaryCutAmount != null ? item.SalaryCutAmount : compute.SalaryCutAmount;
+                                    compute.BankPaymentAmount = item.BankPaymentAmount != null ? item.BankPaymentAmount : compute.BankPaymentAmount;
+                                    compute.ManuelPaymentAmount = item.ManuelPaymentAmount != null ? item.ManuelPaymentAmount : compute.ManuelPaymentAmount;
+                                    compute.OtherPaymentAmount = item.OtherPaymentAmount != null ? item.OtherPaymentAmount : compute.OtherPaymentAmount;
+
+                                    compute.Currency = item.Currency;
+
+                                    //compute.TotalPaymentAmount = (compute.PrePaymentAmount + compute.SalaryCutAmount + compute.BankPaymentAmount + compute.ManuelPaymentAmount + compute.OtherPaymentAmount);
+                                    compute.TotalBalance = (compute.TotalProgress + compute.TotalPaymentAmount);
+
+                                    model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.EmployeeName}", Message = $"Güncellendi" });
+                                }
+                                //else
+                                //{
+                                //    var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+                                //    string bankName = "";
+
+                                //    if (employee != null)
+                                //    {
+                                //        bankName = Db.Bank.FirstOrDefault(x => x.ID == employee.BankID)?.ShortName ?? "";
+
+                                //        SalaryPeriodCompute newcompute = new SalaryPeriodCompute();
+
+                                //        newcompute.SalaryPeriodID = salaryPeriod.ID;
+                                //        newcompute.EmployeeID = employee.EmployeeID;
+                                //        newcompute.FullName = employee.FullName;
+                                //        newcompute.IdentityNumber = employee.IdentityNumber;
+                                //        newcompute.PhoneNumber = employee.CountryPhoneCode + employee.SmsNumber;
+                                //        newcompute.FoodCard = employee.FoodCardNumber;
+                                //        newcompute.IBAN = employee.IBAN;
+                                //        newcompute.BankName = bankName;
+
+                                //        newcompute.SalaryTotal = item.SalaryTotal != null ? item.SalaryTotal : 0;
+                                //        newcompute.PermitTotal = item.PermitTotal != null ? item.PermitTotal : 0;
+                                //        newcompute.ExtraShiftTotal = item.ExtraShiftTotal != null ? item.ExtraShiftTotal : 0;
+                                //        newcompute.PremiumTotal = item.PremiumTotal != null ? item.PremiumTotal : 0;
+                                //        newcompute.FormalTotal = item.FormalTotal != null ? item.FormalTotal : 0;
+                                //        newcompute.OtherTotal = item.OtherTotal != null ? item.OtherTotal : 0;
+                                //        newcompute.PrePaymentAmount = item.PrePaymentAmount != null ? item.PrePaymentAmount : 0;
+                                //        newcompute.SalaryCutAmount = item.SalaryCutAmount != null ? item.SalaryCutAmount : 0;
+
+                                //        newcompute.FoodCardTotal = 0;
+                                //        newcompute.BankPaymentAmount = 0;
+                                //        newcompute.ManuelPaymentAmount = 0;
+                                //        newcompute.OtherPaymentAmount = 0;
+                                //        newcompute.FoodCardPaymentAmount = 0;
+
+                                //        newcompute.TotalProgress = (newcompute.SalaryTotal + newcompute.PermitTotal + newcompute.ExtraShiftTotal + newcompute.PremiumTotal + newcompute.FormalTotal + newcompute.OtherTotal);
+                                //        newcompute.TotalPaymentAmount = (newcompute.PrePaymentAmount + newcompute.SalaryCutAmount + newcompute.BankPaymentAmount + newcompute.ManuelPaymentAmount + newcompute.OtherPaymentAmount);
+                                //        newcompute.TotalBalance = (newcompute.TotalProgress + newcompute.TotalPaymentAmount);
+
+                                //        newcompute.RecordDate = DateTime.UtcNow.AddHours(3);
+                                //        newcompute.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                                //        newcompute.RecordIP = OfficeHelper.GetIPAddress();
+                                //        newcompute.UID = Guid.NewGuid();
+                                //        newcompute.Currency = item.Currency;
+
+                                //        computeList.Add(newcompute);
+
+                                //        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.EmployeeName}", Message = $"Eklendi" });
+                                //    }
+                                //}
+                            }
+                            catch (DbEntityValidationException ex)
+                            {
+                                foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                                {
+                                    foreach (var validationError in entityValidationErrors.ValidationErrors)
+                                    {
+                                        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = validationError.PropertyName, Message = validationError.ErrorMessage });
+                                    }
+                                }
+                            }
+                        }
+
+                        Db.SaveChanges();
+
+                        Db.SalaryPeriodCompute.AddRange(computeList);
+                        Db.SaveChanges();
+
+                        Db.SalaryPeriodComputeSetTotal(form.SalaryPeriodID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
+
+                        //deleting excel file from folder
+                        if ((System.IO.File.Exists(pathToExcelFile)))
+                        {
+                            System.IO.File.Delete(pathToExcelFile);
+                        }
+                    }
+                    else
+                    {
+                        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = "Format Hatası", Message = "Sadece Excel Dosyası Geçerlidir." });
+                    }
+                }
+                else
+                {
+                    model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = "Dosya Hatası", Message = "Excel Dosyası Seçin." });
+                }
+
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = $"Maaş Periyodu bilgisi bulunamadı";
+            }
+
+            model.Result.IsSuccess = false;
+            model.Result.Message = $"Maaş Periyodu bilgisi bulunamadı";
+
+            TempData["result"] = model.Result;
+            OfficeHelper.AddApplicationLog("Office", "Salary", "Import", form.SalaryPeriodID.ToString(), "Salary", "ImportSalaryPaymentFile", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, datalistforlog);
+
+            return RedirectToAction("ImportSalaryPayment", new { id = salaryPeriod.UID });
+
+        }
+
+
+
+        [AllowAnonymous]
+        public ActionResult ImportFoodcardEarn(Guid? id)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+            model.Result = new Result();
+
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return RedirectToAction("Index");
+            }
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result;
+            }
+
+
+            if (id == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            model.SalaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.UID == id);
+
+            if (model.SalaryPeriod == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+
+
+            return View(model);
+
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult ImportFoodcardEarnFile(FormSalaryPeriodEarnImport form)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+            model.Result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                InfoKeyList = new List<InfoKey>()
+            };
+
+            if (form == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            var salaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.ID == form.SalaryPeriodID);
+            var datalistforlog = new List<ExcelSalaryPeriodFoodEarn>();
+
+            if (salaryPeriod != null)
+            {
+                var salaryPeriodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == salaryPeriod.ID).ToList();
+                List<SalaryPeriodCompute> computeList = new List<SalaryPeriodCompute>();
+
+
+                if (form.SalaryFile != null && form.SalaryFile.ContentLength > 0)
+                {
+
+                    if (form.SalaryFile.ContentType == "application/vnd.ms-excel" || form.SalaryFile.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    {
+                        string filename = Guid.NewGuid().ToString() + Path.GetExtension(form.SalaryFile.FileName);
+                        string targetpath = Server.MapPath("~/Document/Salary/");
+                        string pathToExcelFile = targetpath + filename;
+
+                        form.SalaryFile.SaveAs(Path.Combine(targetpath, filename));
+
+                        var connectionString = "";
+                        if (filename.EndsWith(".xls"))
+                        {
+                            connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;", pathToExcelFile);
+                        }
+                        else if (filename.EndsWith(".xlsx"))
+                        {
+                            connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";", pathToExcelFile);
+                        }
+
+                        //var adapter = new OleDbDataAdapter("SELECT * FROM [SalaryPeriod$]", connectionString);
+                        //var ds = new DataSet();
+                        //adapter.Fill(ds, "ExcelTable");
+                        //DataTable dtable = ds.Tables["ExcelTable"];
+
+                        string sheetName = "FoodcardEarn";
+                        var excelFile = new ExcelQueryFactory(pathToExcelFile);
+                        var salaryList = from a in excelFile.Worksheet<ExcelSalaryPeriodFoodEarn>(sheetName) select a;
+                        datalistforlog = salaryList.ToList();
+
+                        foreach (var item in datalistforlog)
+                        {
+                            var compute = salaryPeriodComputes.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+
+                            try
+                            {
+                                if (compute != null)
+                                {
+
+                                    compute.FoodCardTotal = item.FoodCardTotal != null ? item.FoodCardTotal : compute.FoodCardTotal;
+                                    //compute.TotalBalance = (compute.FoodCardTotal + compute.FoodCardPaymentAmount);
+
+                                    model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.EmployeeName}", Message = $"Güncellendi" });
+                                }
+                                else
+                                {
+                                    var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+                                    string bankName = "";
+
+                                    if (employee != null)
+                                    {
+                                        bankName = Db.Bank.FirstOrDefault(x => x.ID == employee.BankID)?.ShortName ?? "";
+
+                                        SalaryPeriodCompute newcompute = new SalaryPeriodCompute();
+
+                                        newcompute.SalaryPeriodID = salaryPeriod.ID;
+                                        newcompute.EmployeeID = employee.EmployeeID;
+                                        newcompute.FullName = employee.FullName;
+                                        newcompute.IdentityNumber = employee.IdentityNumber;
+                                        newcompute.PhoneNumber = employee.CountryPhoneCode + employee.SmsNumber;
+                                        newcompute.FoodCard = employee.FoodCardNumber;
+                                        newcompute.IBAN = employee.IBAN;
+                                        newcompute.BankName = bankName;
+
+                                        newcompute.SalaryTotal = 0;
+                                        newcompute.PermitTotal = 0;
+                                        newcompute.ExtraShiftTotal = 0;
+                                        newcompute.PremiumTotal = 0;
+                                        newcompute.FormalTotal = 0;
+                                        newcompute.OtherTotal = 0;
+                                        newcompute.PrePaymentAmount = 0;
+                                        newcompute.SalaryCutAmount = 0;
+
+                                        newcompute.FoodCardTotal = item.FoodCardTotal != null ? item.FoodCardTotal : 0;
+                                        newcompute.BankPaymentAmount = 0;
+                                        newcompute.ManuelPaymentAmount = 0;
+                                        newcompute.OtherPaymentAmount = 0;
+                                        newcompute.FoodCardPaymentAmount = 0;
+
+                                        newcompute.TotalProgress = 0;
+                                        newcompute.TotalPaymentAmount = 0;
+                                        //newcompute.TotalBalance = (newcompute.FoodCardTotal + newcompute.FoodCardPaymentAmount);
+
+                                        newcompute.RecordDate = DateTime.UtcNow.AddHours(3);
+                                        newcompute.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                                        newcompute.RecordIP = OfficeHelper.GetIPAddress();
+                                        newcompute.UID = Guid.NewGuid();
+                                        newcompute.Currency = item.Currency;
+
+                                        computeList.Add(newcompute);
+
+                                        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.EmployeeName}", Message = $"Eklendi" });
+                                    }
+                                }
+                            }
+                            catch (DbEntityValidationException ex)
+                            {
+                                foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                                {
+                                    foreach (var validationError in entityValidationErrors.ValidationErrors)
+                                    {
+                                        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = validationError.PropertyName, Message = validationError.ErrorMessage });
+                                    }
+                                }
+                            }
+                        }
+
+                        Db.SaveChanges();
+
+                        Db.SalaryPeriodCompute.AddRange(computeList);
+                        Db.SaveChanges();
+
+                        Db.SalaryPeriodFoodComputeSetTotal(form.SalaryPeriodID);
+
+                        //deleting excel file from folder
+                        if ((System.IO.File.Exists(pathToExcelFile)))
+                        {
+                            System.IO.File.Delete(pathToExcelFile);
+                        }
+                    }
+                    else
+                    {
+                        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = "Format Hatası", Message = "Sadece Excel Dosyası Geçerlidir." });
+                    }
+                }
+                else
+                {
+                    model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = "Dosya Hatası", Message = "Excel Dosyası Seçin." });
+                }
+
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = $"Yemek Kartı Periyodu bilgisi bulunamadı";
+            }
+
+            model.Result.IsSuccess = false;
+            model.Result.Message = $"Yemek Kartı Periyodu bilgisi bulunamadı";
+
+            TempData["result"] = model.Result;
+            OfficeHelper.AddApplicationLog("Office", "Salary", "Import", form.SalaryPeriodID.ToString(), "Salary", "ImportFoodcardEarnFile", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, datalistforlog);
+
+            return RedirectToAction("ImportFoodcardEarn", new { id = salaryPeriod.UID });
+
+        }
+
+
+        [AllowAnonymous]
+        public ActionResult ImportFoodcardPayment(Guid? id)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+            model.Result = new Result();
+
+            var allowedempids = new int[] { 1, 19, 3921, 129, 4679, 4038, 396, 4147 }.ToList();
+
+            if (!allowedempids.Contains(model.Authentication.ActionEmployee.EmployeeID))
+            {
+                return RedirectToAction("Index");
+            }
+
+            if (TempData["result"] != null)
+            {
+                model.Result = TempData["result"] as Result;
+            }
+
+
+            if (id == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            model.SalaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.UID == id);
+
+            if (model.SalaryPeriod == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+
+
+            return View(model);
+
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public ActionResult ImportFoodcardPaymentFile(FormSalaryPeriodEarnImport form)
+        {
+            SalaryControlModel model = new SalaryControlModel();
+            model.Result = new Result()
+            {
+                IsSuccess = false,
+                Message = string.Empty,
+                InfoKeyList = new List<InfoKey>()
+            };
+
+            if (form == null)
+            {
+                return RedirectToAction("SalaryResult");
+            }
+
+            var salaryPeriod = Db.VSalaryPeriod.FirstOrDefault(x => x.ID == form.SalaryPeriodID);
+            var datalistforlog = new List<ExcelSalaryPeriodFoodPayment>();
+
+            if (salaryPeriod != null)
+            {
+                var salaryPeriodComputes = Db.SalaryPeriodCompute.Where(x => x.SalaryPeriodID == salaryPeriod.ID).ToList();
+                List<SalaryPeriodCompute> computeList = new List<SalaryPeriodCompute>();
+
+
+                if (form.SalaryFile != null && form.SalaryFile.ContentLength > 0)
+                {
+
+                    if (form.SalaryFile.ContentType == "application/vnd.ms-excel" || form.SalaryFile.ContentType == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+                    {
+                        string filename = Guid.NewGuid().ToString() + Path.GetExtension(form.SalaryFile.FileName);
+                        string targetpath = Server.MapPath("~/Document/Salary/");
+                        string pathToExcelFile = targetpath + filename;
+
+                        form.SalaryFile.SaveAs(Path.Combine(targetpath, filename));
+
+                        var connectionString = "";
+                        if (filename.EndsWith(".xls"))
+                        {
+                            connectionString = string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;", pathToExcelFile);
+                        }
+                        else if (filename.EndsWith(".xlsx"))
+                        {
+                            connectionString = string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0 Xml;HDR=YES;IMEX=1\";", pathToExcelFile);
+                        }
+
+                        //var adapter = new OleDbDataAdapter("SELECT * FROM [SalaryPeriod$]", connectionString);
+                        //var ds = new DataSet();
+                        //adapter.Fill(ds, "ExcelTable");
+                        //DataTable dtable = ds.Tables["ExcelTable"];
+
+                        string sheetName = "FoodcardPayment";
+                        var excelFile = new ExcelQueryFactory(pathToExcelFile);
+                        var salaryList = from a in excelFile.Worksheet<ExcelSalaryPeriodFoodPayment>(sheetName) select a;
+                        datalistforlog = salaryList.ToList();
+
+                        foreach (var item in datalistforlog)
+                        {
+                            var compute = salaryPeriodComputes.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+
+                            try
+                            {
+                                if (compute != null)
+                                {
+
+                                    compute.FoodCardPaymentAmount = item.FoodCardPaymentAmount != null ? item.FoodCardPaymentAmount : compute.FoodCardPaymentAmount;
+                                   // compute.TotalBalance = (compute.FoodCardTotal + compute.FoodCardPaymentAmount);
+
+                                    model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.EmployeeName}", Message = $"Güncellendi" });
+                                }
+                                //else
+                                //{
+                                //    var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
+                                //    string bankName = "";
+
+                                //    if (employee != null)
+                                //    {
+                                //        bankName = Db.Bank.FirstOrDefault(x => x.ID == employee.BankID)?.ShortName ?? "";
+
+                                //        SalaryPeriodCompute newcompute = new SalaryPeriodCompute();
+
+                                //        newcompute.SalaryPeriodID = salaryPeriod.ID;
+                                //        newcompute.EmployeeID = employee.EmployeeID;
+                                //        newcompute.FullName = employee.FullName;
+                                //        newcompute.IdentityNumber = employee.IdentityNumber;
+                                //        newcompute.PhoneNumber = employee.CountryPhoneCode + employee.SmsNumber;
+                                //        newcompute.FoodCard = employee.FoodCardNumber;
+                                //        newcompute.IBAN = employee.IBAN;
+                                //        newcompute.BankName = bankName;
+
+                                //        newcompute.SalaryTotal = 0;
+                                //        newcompute.PermitTotal = 0;
+                                //        newcompute.ExtraShiftTotal = 0;
+                                //        newcompute.PremiumTotal = 0;
+                                //        newcompute.FormalTotal = 0;
+                                //        newcompute.OtherTotal = 0;
+                                //        newcompute.PrePaymentAmount = 0;
+                                //        newcompute.SalaryCutAmount = 0;
+
+                                //        newcompute.FoodCardTotal = item.FoodCardTotal != null ? item.FoodCardTotal : 0;
+                                //        newcompute.BankPaymentAmount = 0;
+                                //        newcompute.ManuelPaymentAmount = 0;
+                                //        newcompute.OtherPaymentAmount = 0;
+                                //        newcompute.FoodCardPaymentAmount = 0;
+
+                                //        newcompute.TotalProgress = 0;
+                                //        newcompute.TotalPaymentAmount = 0;
+                                //        newcompute.TotalBalance = (newcompute.FoodCardTotal + newcompute.FoodCardPaymentAmount);
+
+                                //        newcompute.RecordDate = DateTime.UtcNow.AddHours(3);
+                                //        newcompute.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
+                                //        newcompute.RecordIP = OfficeHelper.GetIPAddress();
+                                //        newcompute.UID = Guid.NewGuid();
+                                //        newcompute.Currency = item.Currency;
+
+                                //        computeList.Add(newcompute);
+
+                                //        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.EmployeeName}", Message = $"Eklendi" });
+                                //    }
+                                //}
+                            }
+                            catch (DbEntityValidationException ex)
+                            {
+                                foreach (var entityValidationErrors in ex.EntityValidationErrors)
+                                {
+                                    foreach (var validationError in entityValidationErrors.ValidationErrors)
+                                    {
+                                        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = validationError.PropertyName, Message = validationError.ErrorMessage });
+                                    }
+                                }
+                            }
+                        }
+
+                        Db.SaveChanges();
+
+                        Db.SalaryPeriodCompute.AddRange(computeList);
+                        Db.SaveChanges();
+
+                        Db.SalaryPeriodFoodComputeSetTotal(form.SalaryPeriodID);
+
+                        //deleting excel file from folder
+                        if ((System.IO.File.Exists(pathToExcelFile)))
+                        {
+                            System.IO.File.Delete(pathToExcelFile);
+                        }
+                    }
+                    else
+                    {
+                        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = "Format Hatası", Message = "Sadece Excel Dosyası Geçerlidir." });
+                    }
+                }
+                else
+                {
+                    model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = false, Name = "Dosya Hatası", Message = "Excel Dosyası Seçin." });
+                }
+
+            }
+            else
+            {
+                model.Result.IsSuccess = false;
+                model.Result.Message = $"Yemek Kartı Periyodu bilgisi bulunamadı";
+            }
+
+            model.Result.IsSuccess = false;
+            model.Result.Message = $"Yemek Kartı Periyodu bilgisi bulunamadı";
+
+            TempData["result"] = model.Result;
+            OfficeHelper.AddApplicationLog("Office", "Salary", "Import", form.SalaryPeriodID.ToString(), "Salary", "ImportFoodcardPaymentFile", null, true, $"{model.Result.Message}", string.Empty, DateTime.UtcNow.AddHours(3), model.Authentication.ActionEmployee.FullName, OfficeHelper.GetIPAddress(), string.Empty, datalistforlog);
+
+            return RedirectToAction("ImportFoodcardPayment", new { id = salaryPeriod.UID });
+
+        }
+
 
 
 

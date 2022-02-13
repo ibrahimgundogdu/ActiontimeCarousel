@@ -369,7 +369,6 @@ namespace ActionForce.Entity
         public virtual DbSet<HCardActions> HCardActions { get; set; }
         public virtual DbSet<VLocationPartEmployee> VLocationPartEmployee { get; set; }
         public virtual DbSet<SalaryPeriod> SalaryPeriod { get; set; }
-        public virtual DbSet<SalaryPeriodCompute> SalaryPeriodCompute { get; set; }
         public virtual DbSet<SalaryPeriodComputeActions> SalaryPeriodComputeActions { get; set; }
         public virtual DbSet<SalaryPeriodGroup> SalaryPeriodGroup { get; set; }
         public virtual DbSet<SalaryPeriodStatus> SalaryPeriodStatus { get; set; }
@@ -381,6 +380,8 @@ namespace ActionForce.Entity
         public virtual DbSet<LocationCardReaderParameter> LocationCardReaderParameter { get; set; }
         public virtual DbSet<VTicketSaleCreditLoad> VTicketSaleCreditLoad { get; set; }
         public virtual DbSet<VTicketSaleRowSummaryProduct> VTicketSaleRowSummaryProduct { get; set; }
+        public virtual DbSet<SalaryPaymentType> SalaryPaymentType { get; set; }
+        public virtual DbSet<SalaryPeriodCompute> SalaryPeriodCompute { get; set; }
     
         public virtual ObjectResult<GetFromList_Result> GetFromList(Nullable<int> ourCompanyID)
         {
@@ -3057,6 +3058,15 @@ namespace ActionForce.Entity
                 new ObjectParameter("RecordIP", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SalaryPeriodComputeSetTotal", salaryPeriodIDParameter, recordEmployeeIDParameter, recordIPParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> SalaryPeriodFoodComputeSetTotal(Nullable<int> salaryPeriodID)
+        {
+            var salaryPeriodIDParameter = salaryPeriodID.HasValue ?
+                new ObjectParameter("SalaryPeriodID", salaryPeriodID) :
+                new ObjectParameter("SalaryPeriodID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SalaryPeriodFoodComputeSetTotal", salaryPeriodIDParameter);
         }
     }
 }

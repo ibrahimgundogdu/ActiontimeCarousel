@@ -463,7 +463,7 @@ namespace ActionForce.PosLocation.Controllers
 
             if (id != null && locationId != null)
             {
-                var employee = Db.Employee.FirstOrDefault(x => x.EmployeeUID == id && x.IsActive == true && x.IsDismissal == false && (x.AreaCategoryID == 1 || x.AreaCategoryID == 3));
+                var employee = Db.Employee.FirstOrDefault(x => x.EmployeeUID == id && x.IsActive == true && x.IsDismissal != true && (x.AreaCategoryID == 1 || x.AreaCategoryID == 3));
                 var location = Db.Location.FirstOrDefault(x => x.LocationUID == locationId && x.IsActive == true);
 
 

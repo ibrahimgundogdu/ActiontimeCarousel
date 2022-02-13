@@ -332,6 +332,23 @@
                                         <div class="col-sm-3">
                                         </div>
                                     </div>
+
+                                    <div class="form-group row mg-b-5 bg-gray-50">
+                                        <label for="SalaryPaymentTypeID" class="col-sm-3 col-form-label">Ücretini Ödeme Yöntemi</label>
+                                        <div class="col-sm-6">
+                                            <select class="form-control" id="SalaryPaymentTypeID" name="SalaryPaymentTypeID">
+                                                <option value="">Ödeme Yöntemi Seçiniz</option>
+                                                @foreach (var item in Model.SalaryPaymentTypes)
+                                                {
+                                                    <option value="@item.ID" @(item.ID == Model.Employee.SalaryPaymentTypeID ? "selected" : "")>@($"{item.SalaryPaymentTypeName}" )</option>
+                                                }
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-3">
+                                        </div>
+                                    </div>
+
+
                                     <div class="form-group row bg-gray-50">
                                         <label for="SequenceID" class="col-sm-3 col-form-label">Oryantasyon Seviyesi</label>
                                         <div class="col-sm-6">

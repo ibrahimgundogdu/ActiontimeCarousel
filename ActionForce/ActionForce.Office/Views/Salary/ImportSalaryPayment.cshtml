@@ -6,7 +6,7 @@
 
 <div class="content-header">
     <div class="content-search">
-        <span class="tx-20">Maaş Hakedişi Import Et</span>
+        <span class="tx-20">Maaş Ödemesi Import Et</span>
     </div>
     <nav class="nav">
         @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
@@ -24,8 +24,8 @@
             <a href="/Salary/DetailSalaryPeriod/@(Model.SalaryPeriod.UID)" class="btn btn-info btn-uppercase">
                 Detaya Dön
             </a> &nbsp;
-            <a href="/Salary/GetDataPeriodTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning btn-uppercase">
-                Hakediş Şablonu İndir
+            <a href="/Salary/GetDataPeriodPaymentTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning btn-uppercase">
+                Ödeme Şablonu İndir
             </a>
         </div>
     </div>
@@ -34,7 +34,7 @@
 
         <div>
 
-            @using (Html.BeginForm("ImportSalaryEarnFile", "Salary", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            @using (Html.BeginForm("ImportSalaryPaymentFile", "Salary", FormMethod.Post, new { enctype = "multipart/form-data" }))
             {
                 @Html.AntiForgeryToken()
 
@@ -50,7 +50,7 @@
                         </div>
 
                         <div class="form-group row mg-b-3">
-                            <label for="SalaryFile" class="col-sm-3 col-form-label">Maaş Hakediş Excel Dosyası</label>
+                            <label for="SalaryFile" class="col-sm-3 col-form-label">Maaş Ödeme Excel Dosyası</label>
                             <div class="col-sm-9">
                                 <input type="file" id="SalaryFile" name="SalaryFile" class="form-control" required />
                             </div>
@@ -59,7 +59,7 @@
                         <div class="form-group row mg-b-3">
                             <div class="col-sm-3"></div>
                             <div class="col-sm-9">
-                                <button type="submit" class="btn btn-primary btn-block">Maaş Hakedişi Import Et</button>
+                                <button type="submit" class="btn btn-primary btn-block">Maaş Ödeme Import Et</button>
                             </div>
                         </div>
 

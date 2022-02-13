@@ -470,6 +470,7 @@ namespace ActionForce.Office
         public int RoleGroupID { get; set; }
         public int DepartmentID { get; set; }
         public int AreaCategoryID { get; set; }
+        public short SalaryPaymentTypeID { get; set; }
         public int SalaryCategoryID { get; set; }
         public int SequenceID { get; set; }
         public int PositionID { get; set; }
@@ -501,6 +502,7 @@ namespace ActionForce.Office
         public int DepartmentID { get; set; }
         public int AreaCategoryID { get; set; }
         public int SalaryCategoryID { get; set; }
+        public short SalaryPaymentTypeID { get; set; }
         public int SequenceID { get; set; }
         public int PositionID { get; set; }
         public string Description { get; set; }

@@ -28,22 +28,34 @@ namespace ActionForce.Entity
         public Nullable<double> ExtraShiftTotal { get; set; }
         public Nullable<double> PremiumTotal { get; set; }
         public Nullable<double> FormalTotal { get; set; }
-        public Nullable<double> TotalProgress { get; set; }
+        public Nullable<double> OtherTotal { get; set; }
+        public double TotalProgress { get; set; }
         public Nullable<double> PrePaymentAmount { get; set; }
         public Nullable<double> SalaryCutAmount { get; set; }
+        public Nullable<double> PermitPaymentAmount { get; set; }
+        public Nullable<double> ExtraShiftPaymentAmount { get; set; }
+        public Nullable<double> PremiumPaymentAmount { get; set; }
+        public Nullable<double> FormalPaymentAmount { get; set; }
+        public Nullable<double> OtherPaymentAmount { get; set; }
+        public double TotalPaymentAmount { get; set; }
+        public double TotalBalance { get; set; }
         public Nullable<double> BankPaymentAmount { get; set; }
         public Nullable<double> ManuelPaymentAmount { get; set; }
-        public Nullable<double> OtherPaymentAmount { get; set; }
-        public Nullable<double> TotalPaymentAmount { get; set; }
-        public Nullable<double> TotalBalance { get; set; }
+        public Nullable<double> TransferBalance { get; set; }
+        public double GrossBalance { get; set; }
+        public Nullable<double> FoodCardTotal { get; set; }
+        public Nullable<double> FoodCardPaymentAmount { get; set; }
+        public double FoodcardBalance { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<int> RecordEmployeeID { get; set; }
         public string RecordIP { get; set; }
         public Nullable<System.Guid> UID { get; set; }
-        public Nullable<double> OtherTotal { get; set; }
         public string Currency { get; set; }
-        public Nullable<double> FoodCardTotal { get; set; }
-        public Nullable<double> FoodCardPaymentAmount { get; set; }
         public Nullable<System.DateTime> UpdateDate { get; set; }
+        public Nullable<double> SSK { get; set; }
+        public Nullable<double> GV { get; set; }
+        public Nullable<double> DV { get; set; }
+        public Nullable<double> TotalCost { get; set; }
+        public Nullable<System.DateTime> CostDate { get; set; }
     }
 }

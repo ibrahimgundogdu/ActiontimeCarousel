@@ -40,6 +40,7 @@ namespace ActionForce.Office
         public IEnumerable<EmployeeStatus> StatusList { get; set; }
         public IEnumerable<EmployeeShiftType> ShiftTypeList { get; set; }
         public IEnumerable<EmployeeSalaryCategory> SalaryCategoryList { get; set; }
+        public IEnumerable<SalaryPaymentType> SalaryPaymentTypes { get; set; }
         public IEnumerable<EmployeeSequence> SequenceList { get; set; }
         public IEnumerable<Bank> BankList { get; set; }
         public Bank Bank { get; set; }
