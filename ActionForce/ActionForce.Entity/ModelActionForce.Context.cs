@@ -3068,5 +3068,14 @@ namespace ActionForce.Entity
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("SalaryPeriodFoodComputeSetTotal", salaryPeriodIDParameter);
         }
+    
+        public virtual int SetSalaryPeriodComputePayed(Nullable<int> salaryPeriodID)
+        {
+            var salaryPeriodIDParameter = salaryPeriodID.HasValue ?
+                new ObjectParameter("SalaryPeriodID", salaryPeriodID) :
+                new ObjectParameter("SalaryPeriodID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SetSalaryPeriodComputePayed", salaryPeriodIDParameter);
+        }
     }
 }

@@ -41,6 +41,19 @@ namespace ActionForce.Office
 
     }
 
+ public class ExcelSalaryPeriodCost
+    {
+        public int SalaryPeriodID { get; set; }
+        public int EmployeeID { get; set; }
+        public string EmployeeName { get; set; }
+        public double? NetCost { get; set; }
+        public double? SSK { get; set; }
+        public double? GV { get; set; }
+        public double? DV { get; set; }
+
+    }
+
+
     public class ExcelSalaryPeriodFoodEarn
     {
         public int SalaryPeriodID { get; set; }

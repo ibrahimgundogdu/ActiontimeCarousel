@@ -8570,6 +8570,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Parameter Name="WeekNumber" Type="int" Mode="In" />
           <Parameter Name="EmployeeID" Type="int" Mode="In" />
         </Function>
+        <Function Name="SetSalaryPeriodComputePayed" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="SalaryPeriodID" Type="int" Mode="In" />
+        </Function>
         <Function Name="SetShiftDates" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SetTicketSaleAmount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="SaleID" Type="bigint" Mode="In" />
@@ -12913,6 +12916,9 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           </FunctionImport>
           <EntitySet Name="SalaryPaymentType" EntityType="db293_ActionTimeDbModel.SalaryPaymentType" />
           <EntitySet Name="SalaryPeriodCompute" EntityType="db293_ActionTimeDbModel.SalaryPeriodCompute" />
+          <FunctionImport Name="SetSalaryPeriodComputePayed">
+            <Parameter Name="SalaryPeriodID" Mode="In" Type="Int32" />
+          </FunctionImport>
         
           </EntityContainer>
         <EntityType Name="Action">
@@ -29574,6 +29580,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SetSalaryPeriodComputePayed" FunctionName="db293_ActionTimeDbModel.Store.SetSalaryPeriodComputePayed" />
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

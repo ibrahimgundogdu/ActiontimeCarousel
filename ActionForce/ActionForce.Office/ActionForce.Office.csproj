@@ -2831,6 +2831,7 @@
     <Content Include="Views\Salary\ImportSalaryPayment.cshtml" />
     <Content Include="Views\Salary\ImportFoodcardEarn.cshtml" />
     <Content Include="Views\Salary\ImportFoodcardPayment.cshtml" />
+    <Content Include="Views\Salary\ImportSalaryCost.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

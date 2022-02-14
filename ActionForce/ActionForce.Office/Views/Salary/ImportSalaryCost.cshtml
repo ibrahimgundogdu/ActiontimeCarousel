@@ -1,0 +1,119 @@
+﻿@model SalaryControlModel
+
+@section style{
+
+}
+
+<div class="content-header">
+    <div class="content-search">
+        <span class="tx-20">Maaş Maliyeti Import Et</span>
+    </div>
+    <nav class="nav">
+        @(DateTime.UtcNow.AddHours(Model.Authentication.ActionEmployee.OurCompany.TimeZone.Value).ToLongDateString())
+    </nav>
+</div>
+<div class="content-body">
+
+
+    <div class="d-sm-flex align-items-center justify-content-between mg-b-20 mg-lg-b-25 mg-xl-b-30">
+        <div>
+            <h4 class="mg-b-0 tx-spacing--1">@($"{Model.SalaryPeriod.PeriodCode}" ) &nbsp; | &nbsp; @($"{Model.SalaryPeriod.GroupName}" ) &nbsp; | &nbsp; @($"{Model.SalaryPeriod.StatusName}" )</h4>
+        </div>
+        <div class="d-none d-md-block">
+            <a href="/Salary/SalaryPeriods" class="btn btn-primary btn-uppercase"><i data-feather="list"></i> &nbsp; Periyot Listesi</a> &nbsp;
+            <a href="/Salary/DetailSalaryPeriod/@(Model.SalaryPeriod.UID)" class="btn btn-info btn-uppercase">
+                Detaya Dön
+            </a> &nbsp;
+            <a href="/Salary/GetDataPeriodCostTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning btn-uppercase">
+                Maliyet Şablonu İndir
+            </a>
+        </div>
+    </div>
+
+    <div>
+
+        <div>
+
+            @using (Html.BeginForm("ImportSalaryCostFile", "Salary", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="row row-xs">
+                    <div class="col-lg-12">
+
+                        <div class="form-group row mg-b-3">
+                            <label for="SalaryPeriodName" class="col-sm-3 col-form-label">Maaş Periyodu</label>
+                            <div class="col-sm-9">
+                                <input id="SalaryPeriodID" name="SalaryPeriodID" type="hidden" value="@(Model.SalaryPeriod.ID)" />
+                                <input type="text" id="SalaryPeriodName" name="SalaryPeriodName" class="form-control" value="@($"{Model.SalaryPeriod.PeriodCode} {Model.SalaryPeriod.GroupName}")" readonly />
+                            </div>
+                        </div>
+
+                        <div class="form-group row mg-b-3">
+                            <label for="SalaryFile" class="col-sm-3 col-form-label">Maaş Maliyet Excel Dosyası</label>
+                            <div class="col-sm-9">
+                                <input type="file" id="SalaryFile" name="SalaryFile" class="form-control" required />
+                            </div>
+                        </div>
+
+                        <div class="form-group row mg-b-3">
+                            <div class="col-sm-3"></div>
+                            <div class="col-sm-9">
+                                <button type="submit" class="btn btn-primary btn-block">Maaş Maliyeti Import Et</button>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+
+
+            }
+        </div>
+
+        @if (Model.Result != null && Model.Result.InfoKeyList != null)
+        {
+            <div class="table mt-5">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Durum</th>
+                            <th>Konu</th>
+                            <th>Mesaj</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Result.InfoKeyList)
+                        {
+                            <tr>
+                                <td>@(item.IsSuccess)</td>
+                                <td>@(item.Name)</td>
+                                <td>@(item.Message)</td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        }
+
+
+        <footer class="content-footer">
+            <div>
+                <span>&copy; @DateTime.Now.Year UFE Group LLC </span>
+            </div>
+
+        </footer>
+
+    </div>
+</div>
+
+
+
+@section scripts {
+    <script>
+
+
+    </script>
+}
