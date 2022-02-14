@@ -27,7 +27,7 @@
             @if (Model.SalaryPeriod.SalaryPeriodStatusID != Model.SalaryPeriodNextStatus.ID)
             {
                 <a href="/Salary/StatusSalaryPeriod/@(Model.SalaryPeriod.UID) " class="btn btn-info btn-uppercase" onclick="return confirm('Durumunu Güncellemek İstediğinize Emin misiniz?')">
-                    Durumunu <b class="tx-16"> @(Model.SalaryPeriodNextStatus.StatusName) </b> Olarak Güncelle
+                    <b class="tx-16"> @(Model.SalaryPeriod.StatusName) </b> Durumunu <b class="tx-16"> @(Model.SalaryPeriodNextStatus.StatusName) </b> Olarak Güncelle
                 </a>
             }
             else
@@ -45,18 +45,17 @@
 
         @if (Model.SalaryPeriod != null && Model.SalaryPeriod.GroupType == 1)
         {
-            if (Model.SalaryPeriod.SalaryPeriodGroupID == 2)
+            if (Model.SalaryPeriod.SalaryPeriodGroupID == 2)  // Maaşlı
             {
                 <div class="table">
                     <table class="table table-sm table-hover">
                         <thead>
 
                             <tr>
-                                <th colspan="13">
+                                <th colspan="18">
                                     <a href="/Salary/ExportDataPeriod120/@(Model.SalaryPeriod.UID)" class="btn btn-success"><img src="~/images/excel.png" class="rounded-10" style="width:24px;"> &nbsp;&nbsp; Aylık Maaşlı Grubu Excel Olarak İndir</a> &nbsp;
-                                    @*<a href="/Salary/ExportDataPeriod121/@(Model.SalaryPeriod.UID)" class="btn btn-success"><img src="~/images/excel.png"> Aylık Maaşlı Grubu Haciz Excel Olarak İndir</a> &nbsp;*@
                                 </th>
-                                <th colspan="9" style="text-align:right;">
+                                <th colspan="17" style="text-align:right;">
                                     @if (Model.SalaryPeriod.SalaryPeriodStatusID == 1)
                                     {
                                         <a href="/Salary/GetDataPeriodTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Hakediş Şablonu İndir</a>
@@ -70,12 +69,12 @@
                                 </th>
                             </tr>
                             <tr>
-                                <th colspan="6" style="border-left:1px solid #808080;">Personel Bilgisi</th>
-                                <th colspan="7" class="bg-warning-light" style="border-left:1px solid #808080;">Hakedişler</th>
-                                <th colspan="6" class="bg-primary-light" style="border-left:1px solid #808080;">Ödemeler</th>
-                                <th style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Bakiye</th>
-                                <th style="border-left: 1px solid #808080; border-right: 1px solid #808080;"></th>
-                                <th style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Güncellenme</th>
+                                <th colspan="7" style="border-left:1px solid #808080;">Personel Bilgisi</th>
+                                <th colspan="7" class="" style="border-left:1px solid #808080;">Hakedişler</th>
+                                <th colspan="8" class="" style="border-left:1px solid #808080;">Avans Ödemeler</th>
+                                <th colspan="5" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Bakiye</th>
+                                <th colspan="6" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Maliyet</th>
+                                <th colspan="2" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Güncellenme</th>
                             </tr>
                             <tr>
                                 <th style="border-left:1px solid #808080;">Adı</th>
@@ -84,29 +83,44 @@
                                 <th>FoodCard</th>
                                 <th>IBAN</th>
                                 <th>Bank</th>
+                                <th></th>
 
-                                <th class="text-right bg-warning-light" style="border-left:1px solid #808080;">Maaş</th>
-                                <th class="text-right bg-warning-light">İzin</th>
-                                <th class="text-right bg-warning-light">F.Mesai</th>
-                                <th class="text-right bg-warning-light">Prim</th>
-                                <th class="text-right bg-warning-light">Resmi</th>
-                                <th class="text-right bg-warning-light">Diğer</th>
-                                <th class="text-right bg-warning-light">Toplam</th>
+                                <th class="text-right" style="border-left:1px solid #808080;">Maaş</th>
+                                <th class="text-right">İzin</th>
+                                <th class="text-right">F.Mesai</th>
+                                <th class="text-right">Prim</th>
+                                <th class="text-right">Resmi</th>
+                                <th class="text-right">Diğer</th>
+                                <th class="text-right">Toplam</th>
 
-                                <th class="text-right bg-primary-light" style="border-left:1px solid #808080;">Avans Maaş</th>
-                                <th class="text-right bg-primary-light">Kesinti</th>
-                                <th class="text-right bg-primary-light">Banka</th>
-                                <th class="text-right bg-primary-light">Manuel</th>
-                                <th class="text-right bg-primary-light">Diğer</th>
-                                <th class="text-right bg-primary-light">Toplam</th>
+                                <th class="text-right" style="border-left:1px solid #808080;">Avans Maaş</th>
+                                <th class="text-right">Kesinti</th>
+                                <th class="text-right">İzin</th>
+                                <th class="text-right">F.Mesai</th>
+                                <th class="text-right">Prim</th>
+                                <th class="text-right">Resmi</th>
+                                <th class="text-right">Diğer</th>
+                                <th class="text-right">Toplam</th>
 
-                                <th class="text-right" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Kalan </th>
+                                <th class="text-right" style="border-left: 1px solid #808080;">Bakiye</th>
+                                <th class="text-right" style="border-left: 1px solid #808080;">Banka</th>
+                                <th class="text-right">Manuel</th>
+                                <th class="text-right">Devir</th>
+                                <th class="text-right" style="border-left: 1px solid #808080;">Final </th>
+
+                                <th class="text-right" style="border-left:1px solid #808080;">Net</th>
+                                <th class="text-right">SSK</th>
+                                <th class="text-right">GV</th>
+                                <th class="text-right">DV</th>
+                                <th class="text-right">Toplam</th>
+                                <th class="text-right">M.Tarihi</th>
+
+                                <th class="text-right" style="border-left: 1px solid #808080;">Tarih </th>
                                 <th class="text-right" style="border-left: 1px solid #808080; border-right: 1px solid #808080;"> </th>
-                                <th class="text-right" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Tarih </th>
+
                             </tr>
                             <tr class="table-secondary">
-                                <td class="tx-sm-13 bold" style="border-left:1px solid #808080;" colspan="6">Toplam</td>
-
+                                <td class="tx-sm-13 bold" style="border-left:1px solid #808080;" colspan="7">Toplam</td>
 
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.SalaryTotal?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.PermitTotal?.ToString("N2"))</td>
@@ -116,18 +130,30 @@
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.OtherTotal?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TotalProgress?.ToString("N2"))</td>
 
-
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.PrePaymentAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.SalaryCutAmount?.ToString("N2"))</td>
-                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.BankPaymentAmount?.ToString("N2"))</td>
-                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.ManuelPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.PermitPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.ExtraShiftPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.PremiumPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.FormalPaymentAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.OtherPaymentAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TotalPaymentAmount?.ToString("N2"))</td>
 
-                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.TotalBalance?.ToString("N2"))</td>
-                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;"></td>
-                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;"></td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.TotalBalance?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.BankPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.ManuelPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TransferBalance?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.GrossBalance?.ToString("N2"))</td>
 
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.NetCost?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.SSK?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.GV?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.DV?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TotalCost?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold"></td>
+
+                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080;"></td>
+                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;"></td>
                             </tr>
                         </thead>
                         <tbody>
@@ -143,6 +169,7 @@
                                     <td class="tx-sm-13">@(emp.FoodCard?.Length > 5 ? $"{emp.FoodCard.Substring(0, 5)}..":"")</td>
                                     <td class="tx-sm-13">@(emp.IBAN?.Length > 4 ? $"{emp.IBAN.Substring(0, 4)}..":"")</td>
                                     <td class="tx-sm-13">@(emp.BankName?.Length > 4 ? $"{emp.BankName.Substring(0, 4)}..":"")</td>
+                                    <td class="tx-sm-13">@(emp.SalaryPaymentTypeID == 1 ? "B":"")</td>
 
                                     <td class="tx-sm-13 text-right bg-warning-light @(emp.SalaryTotal != 0 ? "font-weight-bold":"")" style="border-left:1px solid #808080;">@(emp.SalaryTotal?.ToString("N2"))</td>
                                     <td class="tx-sm-13 text-right bg-warning-light @(emp.PermitTotal != 0 ? "font-weight-bold":"")">@(emp.PermitTotal?.ToString("N2"))</td>
@@ -150,21 +177,37 @@
                                     <td class="tx-sm-13 text-right bg-warning-light @(emp.PremiumTotal != 0 ? "font-weight-bold":"")">@(emp.PremiumTotal?.ToString("N2"))</td>
                                     <td class="tx-sm-13 text-right bg-warning-light @(emp.FormalTotal != 0 ? "font-weight-bold":"")">@(emp.FormalTotal?.ToString("N2"))</td>
                                     <td class="tx-sm-13 text-right bg-warning-light @(emp.OtherTotal != 0 ? "font-weight-bold":"")">@(emp.OtherTotal?.ToString("N2"))</td>
-                                    <td class="tx-sm-13 text-right bg-warning-light @(emp.TotalProgress != 0 ? "font-weight-bold":"")">@(emp.TotalProgress?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-warning-light @(emp.TotalProgress != 0 ? "font-weight-bold":"")">@(emp.TotalProgress.ToString("N2"))</td>
 
                                     <td class="tx-sm-13 text-right bg-primary-light @(emp.PrePaymentAmount != 0 ? "font-weight-bold":"")" style="border-left:1px solid #808080;">@(emp.PrePaymentAmount?.ToString("N2"))</td>
                                     <td class="tx-sm-13 text-right bg-primary-light @(emp.SalaryCutAmount != 0 ? "font-weight-bold":"")">@(emp.SalaryCutAmount?.ToString("N2"))</td>
-                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.BankPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.BankPaymentAmount?.ToString("N2"))</td>
-                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.ManuelPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.ManuelPaymentAmount?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.PermitPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.PermitPaymentAmount?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.ExtraShiftPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.ExtraShiftPaymentAmount?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.PremiumPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.PremiumPaymentAmount?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.FormalPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.FormalPaymentAmount?.ToString("N2"))</td>
                                     <td class="tx-sm-13 text-right bg-primary-light @(emp.OtherPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.OtherPaymentAmount?.ToString("N2"))</td>
-                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.TotalPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.TotalPaymentAmount?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.TotalPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.TotalPaymentAmount.ToString("N2"))</td>
 
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.TotalBalance != 0 ? "font-weight-bold":"")" style="border-left:1px solid #808080;">@(emp.TotalBalance.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.BankPaymentAmount != 0 ? "font-weight-bold":"")" style="border-left: 1px solid #808080;">@(emp.BankPaymentAmount?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.ManuelPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.ManuelPaymentAmount?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.TransferBalance != 0 ? "font-weight-bold":"")">@(emp.TransferBalance?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.GrossBalance != 0 ? "font-weight-bold":"")" style="border-left: 1px solid #808080;">@(emp.GrossBalance.ToString("N2"))</td>
 
-                                    <td class="tx-sm-13 text-right @(emp.TotalBalance != 0 ? "font-weight-bold":"")" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(emp.TotalBalance?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right @(emp.NetCost != 0 ? "font-weight-bold":"")" style="border-left:1px solid #808080;">@(emp.NetCost?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right @(emp.SSK != 0 ? "font-weight-bold":"")">@(emp.SSK?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right @(emp.GV != 0 ? "font-weight-bold":"")">@(emp.GV?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right @(emp.DV != 0 ? "font-weight-bold":"")">@(emp.DV?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right @(emp.TotalCost != 0 ? "font-weight-bold":"")">@(emp.TotalCost.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right">@(emp.CostDate?.ToString("G"))</td>
+
+                                    <td class="tx-sm-13 text-right" style="border-left: 1px solid #808080;">@(emp.RecordDate?.ToString("G"))</td>
                                     <td class="tx-sm-13 text-right" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">
-                                        <a href="#modalEmployeeSalary" data-toggle="modal" onclick="SetEmployeeSalary(@(emp.SalaryPeriodID), @(emp.EmployeeID))"><i data-feather="edit"></i></a>
+                                        @if (Model.SalaryPeriod.SalaryPeriodStatusID > 0)
+                                        {
+                                            <a href="#modalEmployeeSalary" data-toggle="modal" onclick="SetEmployeeSalary(@(emp.SalaryPeriodID), @(emp.EmployeeID))"><i data-feather="edit"></i></a>
+                                        }
                                     </td>
-                                    <td class="tx-sm-13 text-right" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(emp.RecordDate?.ToString("G"))</td>
                                 </tr>
                             }
 
@@ -172,8 +215,7 @@
                         </tbody>
                         <tfoot>
                             <tr class="table-secondary">
-                                <td class="tx-sm-13 bold" style="border-left:1px solid #808080;" colspan="6">Toplam</td>
-
+                                <td class="tx-sm-13 bold" style="border-left:1px solid #808080;" colspan="7">Toplam</td>
 
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.SalaryTotal?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.PermitTotal?.ToString("N2"))</td>
@@ -183,26 +225,36 @@
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.OtherTotal?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TotalProgress?.ToString("N2"))</td>
 
-
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.PrePaymentAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.SalaryCutAmount?.ToString("N2"))</td>
-                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.BankPaymentAmount?.ToString("N2"))</td>
-                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.ManuelPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.PermitPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.ExtraShiftPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.PremiumPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.FormalPaymentAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.OtherPaymentAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TotalPaymentAmount?.ToString("N2"))</td>
 
-                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.TotalBalance?.ToString("N2"))</td>
-                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;"></td>
-                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;"></td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.TotalBalance?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.BankPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.ManuelPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TransferBalance?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.GrossBalance?.ToString("N2"))</td>
 
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.NetCost?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.SSK?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.GV?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.DV?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TotalCost?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold"></td>
 
+                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080;"></td>
+                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;"></td>
                             </tr>
                             <tr>
-                                <td colspan="13">
+                                <td colspan="18">
                                     <a href="/Salary/ExportDataPeriod120/@(Model.SalaryPeriod.UID)" class="btn btn-success"><img src="~/images/excel.png" class="rounded-10" style="width:24px;"> Aylık Maaşlı Grubu Excel Olarak İndir</a> &nbsp;
-                                    @*<a href="/Salary/ExportDataPeriod121/@(Model.SalaryPeriod.UID)" class="btn btn-success"><i data-feather="download"></i>Aylık Maaşlı Grubu Haciz Excel Olarak İndir</a> &nbsp;*@
                                 </td>
-                                <td colspan="9" style="text-align:right;">
+                                <td colspan="17" style="text-align:right;">
                                     @if (Model.SalaryPeriod.SalaryPeriodStatusID == 1)
                                     {
                                         <a href="/Salary/GetDataPeriodTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Hakediş Şablonu İndir</a>
@@ -227,11 +279,10 @@
                         <thead>
 
                             <tr>
-                                <th colspan="13">
+                                <th colspan="18">
                                     <a href="/Salary/ExportDataPeriod110/@(Model.SalaryPeriod.UID)" class="btn btn-success"><img src="~/images/excel.png" class="rounded-10" style="width:24px;"> &nbsp;&nbsp; Saatlik Maaşlı Grubu Excel Olarak İndir</a> &nbsp;
-                                    @*<a href="/Salary/ExportDataPeriod111/@(Model.SalaryPeriod.UID)" class="btn btn-success"><i data-feather="download"></i>Aylık Maaşlı Grubu Haciz Excel Olarak İndir</a> &nbsp;*@
                                 </th>
-                                <th colspan="7" style="text-align:right;">
+                                <th colspan="17" style="text-align:right;">
                                     @if (Model.SalaryPeriod.SalaryPeriodStatusID == 1)
                                     {
                                         <a href="/Salary/GetDataPeriodTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Hakediş Şablonu İndir</a>
@@ -245,10 +296,12 @@
                                 </th>
                             </tr>
                             <tr>
-                                <th colspan="6" style="border-left:1px solid #808080;">Personel Bilgisi</th>
-                                <th colspan="7" class="bg-warning-light" style="border-left:1px solid #808080;">Hakedişler</th>
-                                <th colspan="6" class="bg-primary-light" style="border-left:1px solid #808080;">Ödemeler</th>
-                                <th style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Bakiye</th>
+                                <th colspan="7" style="border-left:1px solid #808080;">Personel Bilgisi</th>
+                                <th colspan="7" class="" style="border-left:1px solid #808080;">Hakedişler</th>
+                                <th colspan="8" class="" style="border-left:1px solid #808080;">Avans Ödemeler</th>
+                                <th colspan="5" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Bakiye</th>
+                                <th colspan="6" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Maliyet</th>
+                                <th colspan="2" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Güncellenme</th>
                             </tr>
                             <tr>
                                 <th style="border-left:1px solid #808080;">Adı</th>
@@ -257,27 +310,44 @@
                                 <th>FoodCard</th>
                                 <th>IBAN</th>
                                 <th>Bank</th>
+                                <th></th>
 
-                                <th class="text-right bg-warning-light" style="border-left:1px solid #808080;">Maaş</th>
-                                <th class="text-right bg-warning-light">İzin</th>
-                                <th class="text-right bg-warning-light">F.Mesai</th>
-                                <th class="text-right bg-warning-light">Prim</th>
-                                <th class="text-right bg-warning-light">Resmi</th>
-                                <th class="text-right bg-warning-light">Diğer</th>
-                                <th class="text-right bg-warning-light">Toplam</th>
+                                <th class="text-right" style="border-left:1px solid #808080;">Maaş</th>
+                                <th class="text-right">İzin</th>
+                                <th class="text-right">F.Mesai</th>
+                                <th class="text-right">Prim</th>
+                                <th class="text-right">Resmi</th>
+                                <th class="text-right">Diğer</th>
+                                <th class="text-right">Toplam</th>
 
-                                <th class="text-right bg-primary-light" style="border-left:1px solid #808080;">Avans Maaş</th>
-                                <th class="text-right bg-primary-light">Kesinti</th>
-                                <th class="text-right bg-primary-light">Banka</th>
-                                <th class="text-right bg-primary-light">Manuel</th>
-                                <th class="text-right bg-primary-light">Diğer</th>
-                                <th class="text-right bg-primary-light">Toplam</th>
+                                <th class="text-right" style="border-left:1px solid #808080;">Av. Maaş</th>
+                                <th class="text-right">Kesinti</th>
+                                <th class="text-right">İzin</th>
+                                <th class="text-right">F.Mesai</th>
+                                <th class="text-right">Prim</th>
+                                <th class="text-right">Resmi</th>
+                                <th class="text-right">Diğer</th>
+                                <th class="text-right">Toplam</th>
 
-                                <th class="text-right" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Kalan </th>
+                                <th class="text-right" style="border-left: 1px solid #808080;">Bakiye</th>
+                                <th class="text-right" style="border-left: 1px solid #808080;">Banka</th>
+                                <th class="text-right">Manuel</th>
+                                <th class="text-right">Devir</th>
+                                <th class="text-right" style="border-left: 1px solid #808080;">Final </th>
+
+                                <th class="text-right" style="border-left:1px solid #808080;">Net</th>
+                                <th class="text-right">SSK</th>
+                                <th class="text-right">GV</th>
+                                <th class="text-right">DV</th>
+                                <th class="text-right">Toplam</th>
+                                <th class="text-right">M.Tarihi</th>
+
+                                <th class="text-right" style="border-left: 1px solid #808080;">Tarih </th>
+                                <th class="text-right" style="border-left: 1px solid #808080; border-right: 1px solid #808080;"> </th>
+
                             </tr>
                             <tr class="table-secondary">
-                                <td class="tx-sm-13 bold" style="border-left:1px solid #808080;" colspan="6">Toplam</td>
-
+                                <td class="tx-sm-13 bold" style="border-left:1px solid #808080;" colspan="7">Toplam</td>
 
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.SalaryTotal?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.PermitTotal?.ToString("N2"))</td>
@@ -287,16 +357,30 @@
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.OtherTotal?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TotalProgress?.ToString("N2"))</td>
 
-
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.PrePaymentAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.SalaryCutAmount?.ToString("N2"))</td>
-                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.BankPaymentAmount?.ToString("N2"))</td>
-                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.ManuelPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.PermitPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.ExtraShiftPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.PremiumPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.FormalPaymentAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.OtherPaymentAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TotalPaymentAmount?.ToString("N2"))</td>
 
-                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.TotalBalance?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.TotalBalance?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.BankPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.ManuelPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TransferBalance?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.GrossBalance?.ToString("N2"))</td>
 
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.NetCost?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.SSK?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.GV?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.DV?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TotalCost?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold"></td>
+
+                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080;"></td>
+                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;"></td>
                             </tr>
                         </thead>
                         <tbody>
@@ -312,6 +396,7 @@
                                     <td class="tx-sm-13">@(emp.FoodCard?.Length > 5 ? $"{emp.FoodCard.Substring(0, 5)}..":"")</td>
                                     <td class="tx-sm-13">@(emp.IBAN?.Length > 4 ? $"{emp.IBAN.Substring(0, 4)}..":"")</td>
                                     <td class="tx-sm-13">@(emp.BankName?.Length > 4 ? $"{emp.BankName.Substring(0, 4)}..":"")</td>
+                                    <td class="tx-sm-13">@(emp.SalaryPaymentTypeID == 1 ? "B":"")</td>
 
                                     <td class="tx-sm-13 text-right bg-warning-light @(emp.SalaryTotal != 0 ? "font-weight-bold":"")" style="border-left:1px solid #808080;">@(emp.SalaryTotal?.ToString("N2"))</td>
                                     <td class="tx-sm-13 text-right bg-warning-light @(emp.PermitTotal != 0 ? "font-weight-bold":"")">@(emp.PermitTotal?.ToString("N2"))</td>
@@ -319,17 +404,37 @@
                                     <td class="tx-sm-13 text-right bg-warning-light @(emp.PremiumTotal != 0 ? "font-weight-bold":"")">@(emp.PremiumTotal?.ToString("N2"))</td>
                                     <td class="tx-sm-13 text-right bg-warning-light @(emp.FormalTotal != 0 ? "font-weight-bold":"")">@(emp.FormalTotal?.ToString("N2"))</td>
                                     <td class="tx-sm-13 text-right bg-warning-light @(emp.OtherTotal != 0 ? "font-weight-bold":"")">@(emp.OtherTotal?.ToString("N2"))</td>
-                                    <td class="tx-sm-13 text-right bg-warning-light @(emp.TotalProgress != 0 ? "font-weight-bold":"")">@(emp.TotalProgress?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-warning-light @(emp.TotalProgress != 0 ? "font-weight-bold":"")">@(emp.TotalProgress.ToString("N2"))</td>
 
                                     <td class="tx-sm-13 text-right bg-primary-light @(emp.PrePaymentAmount != 0 ? "font-weight-bold":"")" style="border-left:1px solid #808080;">@(emp.PrePaymentAmount?.ToString("N2"))</td>
                                     <td class="tx-sm-13 text-right bg-primary-light @(emp.SalaryCutAmount != 0 ? "font-weight-bold":"")">@(emp.SalaryCutAmount?.ToString("N2"))</td>
-                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.BankPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.BankPaymentAmount?.ToString("N2"))</td>
-                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.ManuelPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.ManuelPaymentAmount?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.PermitPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.PermitPaymentAmount?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.ExtraShiftPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.ExtraShiftPaymentAmount?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.PremiumPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.PremiumPaymentAmount?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.FormalPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.FormalPaymentAmount?.ToString("N2"))</td>
                                     <td class="tx-sm-13 text-right bg-primary-light @(emp.OtherPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.OtherPaymentAmount?.ToString("N2"))</td>
-                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.TotalPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.TotalPaymentAmount?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.TotalPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.TotalPaymentAmount.ToString("N2"))</td>
 
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.TotalBalance != 0 ? "font-weight-bold":"")" style="border-left:1px solid #808080;">@(emp.TotalBalance.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.BankPaymentAmount != 0 ? "font-weight-bold":"")" style="border-left: 1px solid #808080;">@(emp.BankPaymentAmount?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.ManuelPaymentAmount != 0 ? "font-weight-bold":"")">@(emp.ManuelPaymentAmount?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.TransferBalance != 0 ? "font-weight-bold":"")">@(emp.TransferBalance?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right bg-primary-light @(emp.GrossBalance != 0 ? "font-weight-bold":"")" style="border-left: 1px solid #808080;">@(emp.GrossBalance.ToString("N2"))</td>
 
-                                    <td class="tx-sm-13 text-right @(emp.TotalBalance != 0 ? "font-weight-bold":"")" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(emp.TotalBalance?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right @(emp.TotalProgress != 0 ? "font-weight-bold":"")" style="border-left:1px solid #808080;">@(emp.NetCost?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right @(emp.SSK != 0 ? "font-weight-bold":"")">@(emp.SSK?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right @(emp.GV != 0 ? "font-weight-bold":"")">@(emp.GV?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right @(emp.DV != 0 ? "font-weight-bold":"")">@(emp.DV?.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right @(emp.TotalCost != 0 ? "font-weight-bold":"")">@(emp.TotalCost.ToString("N2"))</td>
+                                    <td class="tx-sm-13 text-right">@(emp.CostDate?.ToString("G"))</td>
+
+                                    <td class="tx-sm-13 text-right" style="border-left: 1px solid #808080;">@(emp.RecordDate?.ToString("G"))</td>
+                                    <td class="tx-sm-13 text-right" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">
+                                        @if (Model.SalaryPeriod.SalaryPeriodStatusID > 0)
+                                        {
+                                            <a href="#modalEmployeeSalary" data-toggle="modal" onclick="SetEmployeeSalary(@(emp.SalaryPeriodID), @(emp.EmployeeID))"><i data-feather="edit"></i></a>
+                                        }
+                                    </td>
                                 </tr>
                             }
 
@@ -337,8 +442,7 @@
                         </tbody>
                         <tfoot>
                             <tr class="table-secondary">
-                                <td class="tx-sm-13 bold" style="border-left:1px solid #808080;" colspan="6">Toplam</td>
-
+                                <td class="tx-sm-13 bold" style="border-left:1px solid #808080;" colspan="7">Toplam</td>
 
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.SalaryTotal?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.PermitTotal?.ToString("N2"))</td>
@@ -348,23 +452,36 @@
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.OtherTotal?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TotalProgress?.ToString("N2"))</td>
 
-
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.PrePaymentAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.SalaryCutAmount?.ToString("N2"))</td>
-                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.BankPaymentAmount?.ToString("N2"))</td>
-                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.ManuelPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.PermitPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.ExtraShiftPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.PremiumPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.FormalPaymentAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.OtherPaymentAmount?.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TotalPaymentAmount?.ToString("N2"))</td>
 
-                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.TotalBalance?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.TotalBalance?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.BankPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.ManuelPaymentAmount?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TransferBalance?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.GrossBalance?.ToString("N2"))</td>
 
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.NetCost?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.SSK?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.GV?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.DV?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold">@(Model.SalaryPeriodComputeSum.TotalCost?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right bg-warning-light font-weight-bold"></td>
+
+                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080;"></td>
+                                <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;"></td>
                             </tr>
                             <tr>
-                                <td colspan="13">
+                                <td colspan="18">
                                     <a href="/Salary/ExportDataPeriod110/@(Model.SalaryPeriod.UID)" class="btn btn-success"><img src="~/images/excel.png" class="rounded-10" style="width:24px;"> &nbsp;&nbsp; Saatlik Ücretli Grubu Excel Olarak İndir</a> &nbsp;
-                                    @*<a href="/Salary/ExportDataPeriod111/@(Model.SalaryPeriod.UID)" class="btn btn-success"><i data-feather="download"></i>Saatlik Ücretli Grubu Haciz Excel Olarak İndir</a> &nbsp;*@
                                 </td>
-                                <td colspan="7" style="text-align:right;">
+                                <td colspan="17" style="text-align:right;">
                                     @if (Model.SalaryPeriod.SalaryPeriodStatusID == 1)
                                     {
                                         <a href="/Salary/GetDataPeriodTemplate/@(Model.SalaryPeriod.UID)" class="btn btn-warning">Hakediş Şablonu İndir</a>
@@ -390,7 +507,7 @@
             <div class="table">
                 <table class="table table-sm table-hover">
                     <thead>
-                        <tr>
+                        <tr class="table-borderless">
                             <th colspan="6">
                                 <a href="/Salary/ExportDataPeriod210/@(Model.SalaryPeriod.UID)" class="btn btn-success"><img src="~/images/excel.png" class="rounded-10" style="width:24px;"> &nbsp;&nbsp; Yemek Kartı Grubu Ödeme Excel Olarak İndir</a> &nbsp;
                             </th>
@@ -410,13 +527,7 @@
                             </th>
                         </tr>
 
-                        <tr>
-                            <th colspan="6" style="border-left:1px solid #808080;">Personel Bilgisi</th>
-                            <th colspan="1" class="bg-warning-light" style="border-left:1px solid #808080;">Hakedişler</th>
-                            <th colspan="1" class="bg-primary-light" style="border-left:1px solid #808080;">Ödemeler</th>
-                            <th style="border-left: 1px solid #808080; border-right: 1px solid #808080;">Bakiye</th>
-                            <th></th>
-                        </tr>
+
                         <tr>
                             <th style="border-left:1px solid #808080;">Adı</th>
                             <th>TCKN</th>
@@ -436,7 +547,7 @@
 
                             <td class="tx-sm-13 text-right bg-warning-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.FoodCardTotal?.ToString("N2"))</td>
                             <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.FoodCardPaymentAmount?.ToString("N2"))</td>
-                            <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.TotalBalance?.ToString("N2"))</td>
+                            <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.FoodcardBalance?.ToString("N2"))</td>
                             <th></th>
                         </tr>
                     </thead>
@@ -456,7 +567,7 @@
 
                                 <td class="tx-sm-13 text-right bg-primary-light @(emp.FoodCardPaymentAmount != 0 ? "font-weight-bold":"")" style="border-left:1px solid #808080;">@(emp.FoodCardPaymentAmount?.ToString("N2"))</td>
 
-                                <td class="tx-sm-13 text-right @(emp.TotalBalance != 0 ? "font-weight-bold":"")" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(emp.TotalBalance?.ToString("N2"))</td>
+                                <td class="tx-sm-13 text-right @(emp.TotalBalance != 0 ? "font-weight-bold":"")" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(emp.FoodcardBalance.ToString("N2"))</td>
                                 <td class="tx-sm-13 text-right">
                                     @if (Model.SalaryPeriod.SalaryPeriodStatusID <= 1)
                                     {
@@ -477,7 +588,7 @@
 
                             <td class="tx-sm-13 text-right bg-primary-light font-weight-bold" style="border-left:1px solid #808080;">@(Model.SalaryPeriodComputeSum.FoodCardPaymentAmount?.ToString("N2"))</td>
 
-                            <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.TotalBalance?.ToString("N2"))</td>
+                            <td class="tx-sm-13 text-right font-weight-bold" style="border-left: 1px solid #808080; border-right: 1px solid #808080;">@(Model.SalaryPeriodComputeSum.FoodcardBalance?.ToString("N2"))</td>
                             <td></td>
                         </tr>
                         <tr>

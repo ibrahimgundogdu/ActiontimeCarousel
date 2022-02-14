@@ -55,7 +55,9 @@ namespace ActionForce.Entity
         public Nullable<double> SSK { get; set; }
         public Nullable<double> GV { get; set; }
         public Nullable<double> DV { get; set; }
-        public Nullable<double> TotalCost { get; set; }
+        public double TotalCost { get; set; }
         public Nullable<System.DateTime> CostDate { get; set; }
+        public Nullable<short> SalaryPaymentTypeID { get; set; }
+        public Nullable<double> NetCost { get; set; }
     }
 }

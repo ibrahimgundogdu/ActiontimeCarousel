@@ -3506,6 +3506,7 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="FoodCard" Type="nvarchar" MaxLength="30" />
           <Property Name="IBAN" Type="nvarchar" MaxLength="30" />
           <Property Name="BankName" Type="nvarchar" MaxLength="80" />
+          <Property Name="SalaryPaymentTypeID" Type="smallint" />
           <Property Name="SalaryTotal" Type="float" />
           <Property Name="PermitTotal" Type="float" />
           <Property Name="ExtraShiftTotal" Type="float" />
@@ -3535,10 +3536,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.EmployeeX' does not have a 
           <Property Name="UID" Type="uniqueidentifier" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
           <Property Name="UpdateDate" Type="datetime" />
+          <Property Name="NetCost" Type="float" />
           <Property Name="SSK" Type="float" />
           <Property Name="GV" Type="float" />
           <Property Name="DV" Type="float" />
-          <Property Name="TotalCost" Type="float" />
+          <Property Name="TotalCost" Type="float" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CostDate" Type="datetime" />
         </EntityType>
         <EntityType Name="SalaryPeriodComputeActions">
@@ -7025,6 +7027,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.VSalaryPeriodComputeSum' do
           <Property Name="ManuelPaymentAmount" Type="float" />
           <Property Name="TransferBalance" Type="float" />
           <Property Name="GrossBalance" Type="float" />
+          <Property Name="NetCost" Type="float" />
+          <Property Name="SSK" Type="float" />
+          <Property Name="GV" Type="float" />
+          <Property Name="DV" Type="float" />
+          <Property Name="TotalCost" Type="float" />
           <Property Name="Currency" Type="nvarchar" MaxLength="4" />
         </EntityType>
         <!--Errors Found During Generation:
@@ -11142,6 +11149,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
     [VSalaryPeriodComputeSum].[ManuelPaymentAmount] AS [ManuelPaymentAmount], 
     [VSalaryPeriodComputeSum].[TransferBalance] AS [TransferBalance], 
     [VSalaryPeriodComputeSum].[GrossBalance] AS [GrossBalance], 
+    [VSalaryPeriodComputeSum].[NetCost] AS [NetCost], 
+    [VSalaryPeriodComputeSum].[SSK] AS [SSK], 
+    [VSalaryPeriodComputeSum].[GV] AS [GV], 
+    [VSalaryPeriodComputeSum].[DV] AS [DV], 
+    [VSalaryPeriodComputeSum].[TotalCost] AS [TotalCost], 
     [VSalaryPeriodComputeSum].[Currency] AS [Currency]
     FROM [dbo].[VSalaryPeriodComputeSum] AS [VSalaryPeriodComputeSum]</DefiningQuery>
           </EntitySet>
@@ -21218,6 +21230,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="FoodcardBalance" Type="Double" />
           <Property Name="TransferBalance" Type="Double" />
           <Property Name="GrossBalance" Type="Double" />
+          <Property Name="SSK" Type="Double" />
+          <Property Name="GV" Type="Double" />
+          <Property Name="DV" Type="Double" />
+          <Property Name="TotalCost" Type="Double" />
+          <Property Name="NetCost" Type="Double" />
         </EntityType>
         <EntityType Name="LocationCardReaderParameter">
           <Key>
@@ -21364,8 +21381,10 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <Property Name="SSK" Type="Double" />
           <Property Name="GV" Type="Double" />
           <Property Name="DV" Type="Double" />
-          <Property Name="TotalCost" Type="Double" />
+          <Property Name="TotalCost" Type="Double" Nullable="false" />
           <Property Name="CostDate" Type="DateTime" Precision="3" />
+          <Property Name="SalaryPaymentTypeID" Type="Int16" />
+          <Property Name="NetCost" Type="Double" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -29369,6 +29388,11 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="VSalaryPeriodComputeSum">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.VSalaryPeriodComputeSum">
               <MappingFragment StoreEntitySet="VSalaryPeriodComputeSum">
+                <ScalarProperty Name="NetCost" ColumnName="NetCost" />
+                <ScalarProperty Name="TotalCost" ColumnName="TotalCost" />
+                <ScalarProperty Name="DV" ColumnName="DV" />
+                <ScalarProperty Name="GV" ColumnName="GV" />
+                <ScalarProperty Name="SSK" ColumnName="SSK" />
                 <ScalarProperty Name="GrossBalance" ColumnName="GrossBalance" />
                 <ScalarProperty Name="TransferBalance" ColumnName="TransferBalance" />
                 <ScalarProperty Name="FoodcardBalance" ColumnName="FoodcardBalance" />
@@ -29502,6 +29526,8 @@ warning 6002: The table/view 'db293_ActionTimeDb.dbo.WeekList' does not have a p
           <EntitySetMapping Name="SalaryPeriodCompute">
             <EntityTypeMapping TypeName="db293_ActionTimeDbModel.SalaryPeriodCompute">
               <MappingFragment StoreEntitySet="SalaryPeriodCompute">
+                <ScalarProperty Name="NetCost" ColumnName="NetCost" />
+                <ScalarProperty Name="SalaryPaymentTypeID" ColumnName="SalaryPaymentTypeID" />
                 <ScalarProperty Name="CostDate" ColumnName="CostDate" />
                 <ScalarProperty Name="TotalCost" ColumnName="TotalCost" />
                 <ScalarProperty Name="DV" ColumnName="DV" />

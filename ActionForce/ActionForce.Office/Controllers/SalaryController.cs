@@ -1771,7 +1771,7 @@ namespace ActionForce.Office.Controllers
                         worksheet.Cell("D" + rownum).Value = emp.FoodCardNumber;
                         worksheet.Cell("E" + rownum).Value = emp.IBAN;
                         worksheet.Cell("F" + rownum).Value = emp.BankName;
-                        worksheet.Cell("G" + rownum).Value = emp.SalaryPaymentTypeID == 1 ? "B":"";
+                        worksheet.Cell("G" + rownum).Value = emp.SalaryPaymentTypeID == 1 ? "B" : "";
                         worksheet.Cell("H" + rownum).Value = maashakedis;
                         worksheet.Cell("I" + rownum).Value = izinhakedis;
                         worksheet.Cell("J" + rownum).Value = mesaihakedis;
@@ -1967,19 +1967,19 @@ namespace ActionForce.Office.Controllers
                 return RedirectToAction("SalaryResult");
             }
 
-            if (model.SalaryPeriod.GroupType == 1 && model.SalaryPeriod.SalaryPeriodGroupID == 1)
+            if (model.SalaryPeriod.GroupType == 1 && model.SalaryPeriod.SalaryPeriodGroupID == 1) // saat
             {
                 Db.AddSalaryPeriodCompute(model.SalaryPeriod.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
 
             }
 
-            if (model.SalaryPeriod.GroupType == 1 && model.SalaryPeriod.SalaryPeriodGroupID == 2)
+            if (model.SalaryPeriod.GroupType == 1 && model.SalaryPeriod.SalaryPeriodGroupID == 2) // aylık
             {
                 Db.AddSalaryPeriodMonthCompute(model.SalaryPeriod.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
 
             }
 
-            if (model.SalaryPeriod.GroupType == 2)
+            if (model.SalaryPeriod.GroupType == 2) // yemek kartı
             {
                 Db.AddSalaryPeriodFoodCompute(model.SalaryPeriod.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
             }
@@ -2155,9 +2155,6 @@ namespace ActionForce.Office.Controllers
             return PartialView("_PartialSetEmployeeSalary", model);
         }
 
-
-
-
         [HttpPost]
         [AllowAnonymous]
         public ActionResult EditSalaryPaymentPeriod(FormSalaryPeriod perSalary)
@@ -2212,11 +2209,23 @@ namespace ActionForce.Office.Controllers
                     TotalBalance = salaryComputed.TotalBalance,
                     TotalPaymentAmount = salaryComputed.TotalPaymentAmount,
                     TotalProgress = salaryComputed.TotalProgress,
-                    UID = salaryComputed.UID
+                    UID = salaryComputed.UID,
+                    CostDate = salaryComputed.CostDate,
+                    DV = salaryComputed.DV,
+                    ExtraShiftPaymentAmount = salaryComputed.ExtraShiftPaymentAmount,
+                    FoodcardBalance = salaryComputed.FoodcardBalance,
+                    TotalCost = salaryComputed.TotalCost,
+                    GV = salaryComputed.GV,
+                    SSK = salaryComputed.SSK,
+                    FormalPaymentAmount = salaryComputed.FormalPaymentAmount,
+                    GrossBalance = salaryComputed.GrossBalance,
+                    PermitPaymentAmount = salaryComputed.PermitPaymentAmount,
+                    PremiumPaymentAmount = salaryComputed.PremiumPaymentAmount,
+                    SalaryPaymentTypeID = salaryComputed.SalaryPaymentTypeID,
+                    TransferBalance = salaryComputed.TransferBalance,
+                    UpdateDate = salaryComputed.UpdateDate,
+                    NetCost = salaryComputed.NetCost
                 };
-
-
-
 
                 var SalaryTotal = Convert.ToDouble((perSalary.SalaryTotal ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var PermitTotal = Convert.ToDouble((perSalary.PermitTotal ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
@@ -2224,14 +2233,26 @@ namespace ActionForce.Office.Controllers
                 var PremiumTotal = Convert.ToDouble((perSalary.PremiumTotal ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var FormalTotal = Convert.ToDouble((perSalary.FormalTotal ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var OtherTotal = Convert.ToDouble((perSalary.OtherTotal ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                //var TotalProgress = SalaryTotal + PermitTotal + ExtraShiftTotal + PremiumTotal + FormalTotal + OtherTotal;
+
                 var PrePaymentAmount = Convert.ToDouble((perSalary.PrePaymentAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var SalaryCutAmount = Convert.ToDouble((perSalary.SalaryCutAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var PermitPaymentAmount = Convert.ToDouble((perSalary.PermitPaymentAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var ExtraShiftPaymentAmount = Convert.ToDouble((perSalary.ExtraShiftPaymentAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var PremiumPaymentAmount = Convert.ToDouble((perSalary.PremiumPaymentAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var FormalPaymentAmount = Convert.ToDouble((perSalary.FormalPaymentAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var OtherPaymentAmount = Convert.ToDouble((perSalary.OtherPaymentAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
                 var BankPaymentAmount = Convert.ToDouble((perSalary.BankPaymentAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
                 var ManuelPaymentAmount = Convert.ToDouble((perSalary.ManuelPaymentAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                var OtherPaymentAmount = Convert.ToDouble((perSalary.OtherPaymentAmount ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
-                //var TotalPaymentAmount = PrePaymentAmount + SalaryCutAmount + BankPaymentAmount + ManuelPaymentAmount + OtherPaymentAmount;
-                //var TotalBalance = TotalProgress + TotalPaymentAmount;
+                var TransferBalance = Convert.ToDouble((perSalary.TransferBalance ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
+                var NetCost = Convert.ToDouble((perSalary.NetCost ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var SSK = Convert.ToDouble((perSalary.SSK ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var GV = Convert.ToDouble((perSalary.GV ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+                var DV = Convert.ToDouble((perSalary.DV ?? "0").Replace(".", "").Replace(",", "."), CultureInfo.InvariantCulture);
+
+
+
 
                 salaryComputed.SalaryTotal = SalaryTotal;
                 salaryComputed.PermitTotal = PermitTotal;
@@ -2239,27 +2260,32 @@ namespace ActionForce.Office.Controllers
                 salaryComputed.PremiumTotal = PremiumTotal;
                 salaryComputed.FormalTotal = FormalTotal;
                 salaryComputed.OtherTotal = OtherTotal;
-                salaryComputed.TotalProgress = SalaryTotal + PermitTotal + ExtraShiftTotal + PremiumTotal + FormalTotal + OtherTotal;
+
                 salaryComputed.PrePaymentAmount = PrePaymentAmount * -1;
                 salaryComputed.SalaryCutAmount = SalaryCutAmount * -1;
+                salaryComputed.PermitPaymentAmount = PermitPaymentAmount * -1;
+                salaryComputed.ExtraShiftPaymentAmount = ExtraShiftPaymentAmount * -1;
+                salaryComputed.PremiumPaymentAmount = PremiumPaymentAmount * -1;
+                salaryComputed.FormalPaymentAmount = FormalPaymentAmount * -1;
+                salaryComputed.OtherPaymentAmount = OtherPaymentAmount * -1;
+
+
                 salaryComputed.BankPaymentAmount = BankPaymentAmount * -1;
                 salaryComputed.ManuelPaymentAmount = ManuelPaymentAmount * -1;
-                salaryComputed.OtherPaymentAmount = OtherPaymentAmount * -1;
-                salaryComputed.TotalPaymentAmount = (PrePaymentAmount + SalaryCutAmount + BankPaymentAmount + ManuelPaymentAmount + OtherPaymentAmount) * -1;
-                salaryComputed.TotalBalance = salaryComputed.TotalProgress + salaryComputed.TotalPaymentAmount;
+                salaryComputed.TransferBalance = TransferBalance;
+
+                salaryComputed.NetCost = NetCost;
+                salaryComputed.SSK = SSK;
+                salaryComputed.GV = GV;
+                salaryComputed.DV = DV;
+
                 salaryComputed.RecordDate = DateTime.UtcNow.AddHours(model.Authentication.ActionEmployee.OurCompany.TimeZone ?? 3);
                 salaryComputed.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
                 salaryComputed.RecordIP = OfficeHelper.GetIPAddress();
 
                 Db.SaveChanges();
 
-                var totalsum = Db.VSalaryPeriodComputeSum.FirstOrDefault(x => x.SalaryPeriodID == perSalary.SalaryPeriodID);
-
-                salaryperiod.TotalAmount = totalsum?.TotalProgress ?? 0;
-                salaryperiod.PaymentAmount = totalsum?.TotalPaymentAmount ?? 0;
-                salaryperiod.BalanceAmount = totalsum?.TotalBalance ?? 0;
-
-                Db.SaveChanges();
+                Db.SalaryPeriodComputeSetTotal(salaryperiod.ID, model.Authentication.ActionEmployee.EmployeeID, OfficeHelper.GetIPAddress());
 
                 result.IsSuccess = true;
                 result.Message = $"{salaryComputed.FullName} adlı Çalışanın Maaş bilgisi başarı ile güncellendi";
@@ -2352,21 +2378,33 @@ namespace ActionForce.Office.Controllers
                         worksheet.Cell("E1").Value = "FoodCard";
                         worksheet.Cell("F1").Value = "IBAN";
                         worksheet.Cell("G1").Value = "Bank";
-                        worksheet.Cell("H1").Value = "Maaş";
-                        worksheet.Cell("I1").Value = "İzin";
-                        worksheet.Cell("J1").Value = "F.Mesai";
-                        worksheet.Cell("K1").Value = "Prim";
-                        worksheet.Cell("L1").Value = "Resmi";
-                        worksheet.Cell("M1").Value = "Diğer";
-                        worksheet.Cell("N1").Value = "Toplam";
-                        worksheet.Cell("O1").Value = "Avans Maaş";
-                        worksheet.Cell("P1").Value = "Kesinti";
-                        worksheet.Cell("Q1").Value = "Banka";
-                        worksheet.Cell("R1").Value = "Manuel";
-                        worksheet.Cell("S1").Value = "Diğer";
-                        worksheet.Cell("T1").Value = "Toplam";
-                        worksheet.Cell("U1").Value = "Bakiye";
-                        worksheet.Cell("V1").Value = "Güncellenme";
+                        worksheet.Cell("H1").Value = "B";
+                        worksheet.Cell("I1").Value = "Maaş";
+                        worksheet.Cell("J1").Value = "İzin";
+                        worksheet.Cell("K1").Value = "F.Mesai";
+                        worksheet.Cell("L1").Value = "Prim";
+                        worksheet.Cell("M1").Value = "Resmi";
+                        worksheet.Cell("N1").Value = "Diğer";
+                        worksheet.Cell("O1").Value = "Toplam";
+                        worksheet.Cell("P1").Value = "Avans Maaş";
+                        worksheet.Cell("Q1").Value = "Kesinti";
+                        worksheet.Cell("R1").Value = "İzin";
+                        worksheet.Cell("S1").Value = "F.Mesai";
+                        worksheet.Cell("T1").Value = "Prim";
+                        worksheet.Cell("U1").Value = "Resmi";
+                        worksheet.Cell("V1").Value = "Diğer";
+                        worksheet.Cell("W1").Value = "Toplam";
+                        worksheet.Cell("X1").Value = "Bakiye";
+                        worksheet.Cell("Y1").Value = "Bankadan";
+                        worksheet.Cell("Z1").Value = "Elden";
+                        worksheet.Cell("AA1").Value = "Devir";
+                        worksheet.Cell("AB1").Value = "Final";
+                        worksheet.Cell("AC1").Value = "Net Maliyet";
+                        worksheet.Cell("AD1").Value = "SSK";
+                        worksheet.Cell("AE1").Value = "GV";
+                        worksheet.Cell("AF1").Value = "DV";
+                        worksheet.Cell("AG1").Value = "Toplam Maliyet";
+                        worksheet.Cell("AH1").Value = "Güncellenme";
 
                         //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
 
@@ -2382,47 +2420,80 @@ namespace ActionForce.Office.Controllers
                             worksheet.Cell("E" + rownum).Value = item.FoodCard;
                             worksheet.Cell("F" + rownum).Value = item.IBAN;
                             worksheet.Cell("G" + rownum).Value = item.BankName;
-                            worksheet.Cell("H" + rownum).Value = item.SalaryTotal;
-                            worksheet.Cell("I" + rownum).Value = item.PermitTotal;
-                            worksheet.Cell("J" + rownum).Value = item.ExtraShiftTotal;
-                            worksheet.Cell("K" + rownum).Value = item.PremiumTotal;
-                            worksheet.Cell("L" + rownum).Value = item.FormalTotal;
-                            worksheet.Cell("M" + rownum).Value = item.OtherTotal;
-                            worksheet.Cell("N" + rownum).Value = item.TotalProgress;
-                            worksheet.Cell("O" + rownum).Value = item.PrePaymentAmount;
-                            worksheet.Cell("P" + rownum).Value = item.SalaryCutAmount;
-                            worksheet.Cell("Q" + rownum).Value = item.BankPaymentAmount;
-                            worksheet.Cell("R" + rownum).Value = item.ManuelPaymentAmount;
-                            worksheet.Cell("S" + rownum).Value = item.OtherPaymentAmount;
-                            worksheet.Cell("T" + rownum).Value = item.TotalPaymentAmount;
-                            worksheet.Cell("U" + rownum).Value = item.TotalBalance;
-                            worksheet.Cell("V" + rownum).Value = item.RecordDate;
+                            worksheet.Cell("H" + rownum).Value = item.SalaryPaymentTypeID == 1 ? "B" : "";
+                            worksheet.Cell("I" + rownum).Value = item.SalaryTotal;
+                            worksheet.Cell("J" + rownum).Value = item.PermitTotal;
+                            worksheet.Cell("K" + rownum).Value = item.ExtraShiftTotal;
+                            worksheet.Cell("L" + rownum).Value = item.PremiumTotal;
+                            worksheet.Cell("M" + rownum).Value = item.FormalTotal;
+                            worksheet.Cell("N" + rownum).Value = item.OtherTotal;
+                            worksheet.Cell("O" + rownum).Value = item.TotalProgress;
+
+                            worksheet.Cell("P" + rownum).Value = item.PrePaymentAmount;
+                            worksheet.Cell("Q" + rownum).Value = item.SalaryCutAmount;
+                            worksheet.Cell("R" + rownum).Value = item.PermitPaymentAmount;
+                            worksheet.Cell("S" + rownum).Value = item.ExtraShiftPaymentAmount;
+                            worksheet.Cell("T" + rownum).Value = item.PremiumPaymentAmount;
+                            worksheet.Cell("U" + rownum).Value = item.FormalPaymentAmount;
+                            worksheet.Cell("V" + rownum).Value = item.OtherPaymentAmount;
+                            worksheet.Cell("W" + rownum).Value = item.TotalPaymentAmount;
+                            worksheet.Cell("X" + rownum).Value = item.TotalBalance;
+
+                            worksheet.Cell("Y" + rownum).Value = item.BankPaymentAmount;
+                            worksheet.Cell("Z" + rownum).Value = item.ManuelPaymentAmount;
+                            worksheet.Cell("AA" + rownum).Value = item.TransferBalance;
+                            worksheet.Cell("AB" + rownum).Value = item.GrossBalance;
+
+                            worksheet.Cell("AC" + rownum).Value = item.NetCost;
+                            worksheet.Cell("AD" + rownum).Value = item.SSK;
+                            worksheet.Cell("AE" + rownum).Value = item.GV;
+                            worksheet.Cell("AF" + rownum).Value = item.DV;
+                            worksheet.Cell("AG" + rownum).Value = item.TotalCost;
+
+                            worksheet.Cell("AH" + rownum).Value = item.UpdateDate;
 
                             rownum++;
                         }
 
                         worksheet.Cell("A" + rownum).Value = null;
-                        worksheet.Cell("B" + rownum).Value = "Toplam";
+                        worksheet.Cell("B" + rownum).Value = null;
                         worksheet.Cell("C" + rownum).Value = null;
                         worksheet.Cell("D" + rownum).Value = null;
                         worksheet.Cell("E" + rownum).Value = null;
                         worksheet.Cell("F" + rownum).Value = null;
-                        worksheet.Cell("G" + rownum).Value = null;
-                        worksheet.Cell("H" + rownum).Value = model.SalaryPeriodComputeSum.SalaryTotal;
-                        worksheet.Cell("I" + rownum).Value = model.SalaryPeriodComputeSum.PermitTotal;
-                        worksheet.Cell("J" + rownum).Value = model.SalaryPeriodComputeSum.ExtraShiftTotal;
-                        worksheet.Cell("K" + rownum).Value = model.SalaryPeriodComputeSum.PremiumTotal;
-                        worksheet.Cell("L" + rownum).Value = model.SalaryPeriodComputeSum.FormalTotal;
-                        worksheet.Cell("M" + rownum).Value = model.SalaryPeriodComputeSum.OtherTotal;
-                        worksheet.Cell("N" + rownum).Value = model.SalaryPeriodComputeSum.TotalProgress;
-                        worksheet.Cell("O" + rownum).Value = model.SalaryPeriodComputeSum.PrePaymentAmount;
-                        worksheet.Cell("P" + rownum).Value = model.SalaryPeriodComputeSum.SalaryCutAmount;
-                        worksheet.Cell("Q" + rownum).Value = model.SalaryPeriodComputeSum.BankPaymentAmount;
-                        worksheet.Cell("R" + rownum).Value = model.SalaryPeriodComputeSum.ManuelPaymentAmount;
-                        worksheet.Cell("S" + rownum).Value = model.SalaryPeriodComputeSum.OtherPaymentAmount;
-                        worksheet.Cell("T" + rownum).Value = model.SalaryPeriodComputeSum.TotalPaymentAmount;
-                        worksheet.Cell("U" + rownum).Value = model.SalaryPeriodComputeSum.TotalBalance;
-                        worksheet.Cell("V" + rownum).Value = null;
+                        worksheet.Cell("G" + rownum).Value = "Toplam";
+                        worksheet.Cell("H" + rownum).Value = null;
+                        worksheet.Cell("I" + rownum).Value = model.SalaryPeriodComputeSum.SalaryTotal;
+                        worksheet.Cell("J" + rownum).Value = model.SalaryPeriodComputeSum.PermitTotal;
+                        worksheet.Cell("K" + rownum).Value = model.SalaryPeriodComputeSum.ExtraShiftTotal;
+                        worksheet.Cell("L" + rownum).Value = model.SalaryPeriodComputeSum.PremiumTotal;
+                        worksheet.Cell("M" + rownum).Value = model.SalaryPeriodComputeSum.FormalTotal;
+                        worksheet.Cell("N" + rownum).Value = model.SalaryPeriodComputeSum.OtherTotal;
+                        worksheet.Cell("O" + rownum).Value = model.SalaryPeriodComputeSum.TotalProgress;
+
+                        worksheet.Cell("P" + rownum).Value = model.SalaryPeriodComputeSum.PrePaymentAmount;
+                        worksheet.Cell("Q" + rownum).Value = model.SalaryPeriodComputeSum.SalaryCutAmount;
+                        worksheet.Cell("R" + rownum).Value = model.SalaryPeriodComputeSum.PermitPaymentAmount;
+                        worksheet.Cell("S" + rownum).Value = model.SalaryPeriodComputeSum.ExtraShiftPaymentAmount;
+                        worksheet.Cell("T" + rownum).Value = model.SalaryPeriodComputeSum.PremiumPaymentAmount;
+                        worksheet.Cell("U" + rownum).Value = model.SalaryPeriodComputeSum.FormalPaymentAmount;
+                        worksheet.Cell("V" + rownum).Value = model.SalaryPeriodComputeSum.OtherPaymentAmount;
+                        worksheet.Cell("W" + rownum).Value = model.SalaryPeriodComputeSum.TotalPaymentAmount;
+                        worksheet.Cell("X" + rownum).Value = model.SalaryPeriodComputeSum.TotalBalance;
+
+                        worksheet.Cell("Y" + rownum).Value = model.SalaryPeriodComputeSum.BankPaymentAmount;
+                        worksheet.Cell("Z" + rownum).Value = model.SalaryPeriodComputeSum.ManuelPaymentAmount;
+                        worksheet.Cell("AA" + rownum).Value = model.SalaryPeriodComputeSum.TransferBalance;
+                        worksheet.Cell("AB" + rownum).Value = model.SalaryPeriodComputeSum.GrossBalance;
+
+                        worksheet.Cell("AC" + rownum).Value = model.SalaryPeriodComputeSum.NetCost;
+                        worksheet.Cell("AD" + rownum).Value = model.SalaryPeriodComputeSum.SSK;
+                        worksheet.Cell("AE" + rownum).Value = model.SalaryPeriodComputeSum.GV;
+                        worksheet.Cell("AF" + rownum).Value = model.SalaryPeriodComputeSum.DV;
+                        worksheet.Cell("AG" + rownum).Value = model.SalaryPeriodComputeSum.TotalCost;
+
+                        worksheet.Cell("AH" + rownum).Value = null;
+
 
                         workbook.SaveAs(pathToExcelFile);
                     }
@@ -2473,21 +2544,33 @@ namespace ActionForce.Office.Controllers
                         worksheet.Cell("E1").Value = "FoodCard";
                         worksheet.Cell("F1").Value = "IBAN";
                         worksheet.Cell("G1").Value = "Bank";
-                        worksheet.Cell("H1").Value = "Maaş";
-                        worksheet.Cell("I1").Value = "İzin";
-                        worksheet.Cell("J1").Value = "F.Mesai";
-                        worksheet.Cell("K1").Value = "Prim";
-                        worksheet.Cell("L1").Value = "Resmi";
-                        worksheet.Cell("M1").Value = "Diğer";
-                        worksheet.Cell("N1").Value = "Toplam";
-                        worksheet.Cell("O1").Value = "Avans Maaş";
-                        worksheet.Cell("P1").Value = "Kesinti";
-                        worksheet.Cell("Q1").Value = "Banka";
-                        worksheet.Cell("R1").Value = "Manuel";
-                        worksheet.Cell("S1").Value = "Diğer";
-                        worksheet.Cell("T1").Value = "Toplam";
-                        worksheet.Cell("U1").Value = "Bakiye";
-                        worksheet.Cell("V1").Value = "Güncellenme";
+                        worksheet.Cell("H1").Value = "B";
+                        worksheet.Cell("I1").Value = "Maaş";
+                        worksheet.Cell("J1").Value = "İzin";
+                        worksheet.Cell("K1").Value = "F.Mesai";
+                        worksheet.Cell("L1").Value = "Prim";
+                        worksheet.Cell("M1").Value = "Resmi";
+                        worksheet.Cell("N1").Value = "Diğer";
+                        worksheet.Cell("O1").Value = "Toplam";
+                        worksheet.Cell("P1").Value = "Avans Maaş";
+                        worksheet.Cell("Q1").Value = "Kesinti";
+                        worksheet.Cell("R1").Value = "İzin";
+                        worksheet.Cell("S1").Value = "F.Mesai";
+                        worksheet.Cell("T1").Value = "Prim";
+                        worksheet.Cell("U1").Value = "Resmi";
+                        worksheet.Cell("V1").Value = "Diğer";
+                        worksheet.Cell("W1").Value = "Toplam";
+                        worksheet.Cell("X1").Value = "Bakiye";
+                        worksheet.Cell("Y1").Value = "Bankadan";
+                        worksheet.Cell("Z1").Value = "Elden";
+                        worksheet.Cell("AA1").Value = "Devir";
+                        worksheet.Cell("AB1").Value = "Final";
+                        worksheet.Cell("AC1").Value = "Net Maliyet";
+                        worksheet.Cell("AD1").Value = "SSK";
+                        worksheet.Cell("AE1").Value = "GV";
+                        worksheet.Cell("AF1").Value = "DV";
+                        worksheet.Cell("AG1").Value = "Toplam Maliyet";
+                        worksheet.Cell("AH1").Value = "Güncellenme";
 
                         //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
 
@@ -2503,47 +2586,81 @@ namespace ActionForce.Office.Controllers
                             worksheet.Cell("E" + rownum).Value = item.FoodCard;
                             worksheet.Cell("F" + rownum).Value = item.IBAN;
                             worksheet.Cell("G" + rownum).Value = item.BankName;
-                            worksheet.Cell("H" + rownum).Value = item.SalaryTotal;
-                            worksheet.Cell("I" + rownum).Value = item.PermitTotal;
-                            worksheet.Cell("J" + rownum).Value = item.ExtraShiftTotal;
-                            worksheet.Cell("K" + rownum).Value = item.PremiumTotal;
-                            worksheet.Cell("L" + rownum).Value = item.FormalTotal;
-                            worksheet.Cell("M" + rownum).Value = item.OtherTotal;
-                            worksheet.Cell("N" + rownum).Value = item.TotalProgress;
-                            worksheet.Cell("O" + rownum).Value = item.PrePaymentAmount;
-                            worksheet.Cell("P" + rownum).Value = item.SalaryCutAmount;
-                            worksheet.Cell("Q" + rownum).Value = item.BankPaymentAmount;
-                            worksheet.Cell("R" + rownum).Value = item.ManuelPaymentAmount;
-                            worksheet.Cell("S" + rownum).Value = item.OtherPaymentAmount;
-                            worksheet.Cell("T" + rownum).Value = item.TotalPaymentAmount;
-                            worksheet.Cell("U" + rownum).Value = item.TotalBalance;
-                            worksheet.Cell("V" + rownum).Value = item.RecordDate;
+                            worksheet.Cell("H" + rownum).Value = item.SalaryPaymentTypeID == 1 ? "B" : "";
+                            worksheet.Cell("I" + rownum).Value = item.SalaryTotal;
+                            worksheet.Cell("J" + rownum).Value = item.PermitTotal;
+                            worksheet.Cell("K" + rownum).Value = item.ExtraShiftTotal;
+                            worksheet.Cell("L" + rownum).Value = item.PremiumTotal;
+                            worksheet.Cell("M" + rownum).Value = item.FormalTotal;
+                            worksheet.Cell("N" + rownum).Value = item.OtherTotal;
+                            worksheet.Cell("O" + rownum).Value = item.TotalProgress;
+
+                            worksheet.Cell("P" + rownum).Value = item.PrePaymentAmount;
+                            worksheet.Cell("Q" + rownum).Value = item.SalaryCutAmount;
+                            worksheet.Cell("R" + rownum).Value = item.PermitPaymentAmount;
+                            worksheet.Cell("S" + rownum).Value = item.ExtraShiftPaymentAmount;
+                            worksheet.Cell("T" + rownum).Value = item.PremiumPaymentAmount;
+                            worksheet.Cell("U" + rownum).Value = item.FormalPaymentAmount;
+                            worksheet.Cell("V" + rownum).Value = item.OtherPaymentAmount;
+                            worksheet.Cell("W" + rownum).Value = item.TotalPaymentAmount;
+                            worksheet.Cell("X" + rownum).Value = item.TotalBalance;
+
+                            worksheet.Cell("Y" + rownum).Value = item.BankPaymentAmount;
+                            worksheet.Cell("Z" + rownum).Value = item.ManuelPaymentAmount;
+                            worksheet.Cell("AA" + rownum).Value = item.TransferBalance;
+                            worksheet.Cell("AB" + rownum).Value = item.GrossBalance;
+
+                            worksheet.Cell("AC" + rownum).Value = item.NetCost;
+                            worksheet.Cell("AD" + rownum).Value = item.SSK;
+                            worksheet.Cell("AE" + rownum).Value = item.GV;
+                            worksheet.Cell("AF" + rownum).Value = item.DV;
+                            worksheet.Cell("AG" + rownum).Value = item.TotalCost;
+
+                            worksheet.Cell("AH" + rownum).Value = item.UpdateDate;
 
                             rownum++;
                         }
 
                         worksheet.Cell("A" + rownum).Value = null;
-                        worksheet.Cell("B" + rownum).Value = "Toplam";
+                        worksheet.Cell("B" + rownum).Value = null;
                         worksheet.Cell("C" + rownum).Value = null;
                         worksheet.Cell("D" + rownum).Value = null;
                         worksheet.Cell("E" + rownum).Value = null;
                         worksheet.Cell("F" + rownum).Value = null;
-                        worksheet.Cell("G" + rownum).Value = null;
-                        worksheet.Cell("H" + rownum).Value = model.SalaryPeriodComputeSum.SalaryTotal;
-                        worksheet.Cell("I" + rownum).Value = model.SalaryPeriodComputeSum.PermitTotal;
-                        worksheet.Cell("J" + rownum).Value = model.SalaryPeriodComputeSum.ExtraShiftTotal;
-                        worksheet.Cell("K" + rownum).Value = model.SalaryPeriodComputeSum.PremiumTotal;
-                        worksheet.Cell("L" + rownum).Value = model.SalaryPeriodComputeSum.FormalTotal;
-                        worksheet.Cell("M" + rownum).Value = model.SalaryPeriodComputeSum.OtherTotal;
-                        worksheet.Cell("N" + rownum).Value = model.SalaryPeriodComputeSum.TotalProgress;
-                        worksheet.Cell("O" + rownum).Value = model.SalaryPeriodComputeSum.PrePaymentAmount;
-                        worksheet.Cell("P" + rownum).Value = model.SalaryPeriodComputeSum.SalaryCutAmount;
-                        worksheet.Cell("Q" + rownum).Value = model.SalaryPeriodComputeSum.BankPaymentAmount;
-                        worksheet.Cell("R" + rownum).Value = model.SalaryPeriodComputeSum.ManuelPaymentAmount;
-                        worksheet.Cell("S" + rownum).Value = model.SalaryPeriodComputeSum.OtherPaymentAmount;
-                        worksheet.Cell("T" + rownum).Value = model.SalaryPeriodComputeSum.TotalPaymentAmount;
-                        worksheet.Cell("U" + rownum).Value = model.SalaryPeriodComputeSum.TotalBalance;
-                        worksheet.Cell("V" + rownum).Value = null;
+                        worksheet.Cell("G" + rownum).Value = "Toplam";
+                        worksheet.Cell("H" + rownum).Value = null;
+                        worksheet.Cell("I" + rownum).Value = model.SalaryPeriodComputeSum.SalaryTotal;
+                        worksheet.Cell("J" + rownum).Value = model.SalaryPeriodComputeSum.PermitTotal;
+                        worksheet.Cell("K" + rownum).Value = model.SalaryPeriodComputeSum.ExtraShiftTotal;
+                        worksheet.Cell("L" + rownum).Value = model.SalaryPeriodComputeSum.PremiumTotal;
+                        worksheet.Cell("M" + rownum).Value = model.SalaryPeriodComputeSum.FormalTotal;
+                        worksheet.Cell("N" + rownum).Value = model.SalaryPeriodComputeSum.OtherTotal;
+                        worksheet.Cell("O" + rownum).Value = model.SalaryPeriodComputeSum.TotalProgress;
+
+                        worksheet.Cell("P" + rownum).Value = model.SalaryPeriodComputeSum.PrePaymentAmount;
+                        worksheet.Cell("Q" + rownum).Value = model.SalaryPeriodComputeSum.SalaryCutAmount;
+                        worksheet.Cell("R" + rownum).Value = model.SalaryPeriodComputeSum.PermitPaymentAmount;
+                        worksheet.Cell("S" + rownum).Value = model.SalaryPeriodComputeSum.ExtraShiftPaymentAmount;
+                        worksheet.Cell("T" + rownum).Value = model.SalaryPeriodComputeSum.PremiumPaymentAmount;
+                        worksheet.Cell("U" + rownum).Value = model.SalaryPeriodComputeSum.FormalPaymentAmount;
+                        worksheet.Cell("V" + rownum).Value = model.SalaryPeriodComputeSum.OtherPaymentAmount;
+                        worksheet.Cell("W" + rownum).Value = model.SalaryPeriodComputeSum.TotalPaymentAmount;
+                        worksheet.Cell("X" + rownum).Value = model.SalaryPeriodComputeSum.TotalBalance;
+
+                        worksheet.Cell("Y" + rownum).Value = model.SalaryPeriodComputeSum.BankPaymentAmount;
+                        worksheet.Cell("Z" + rownum).Value = model.SalaryPeriodComputeSum.ManuelPaymentAmount;
+                        worksheet.Cell("AA" + rownum).Value = model.SalaryPeriodComputeSum.TransferBalance;
+                        worksheet.Cell("AB" + rownum).Value = model.SalaryPeriodComputeSum.GrossBalance;
+
+                        worksheet.Cell("AC" + rownum).Value = model.SalaryPeriodComputeSum.NetCost;
+                        worksheet.Cell("AD" + rownum).Value = model.SalaryPeriodComputeSum.SSK;
+                        worksheet.Cell("AE" + rownum).Value = model.SalaryPeriodComputeSum.GV;
+                        worksheet.Cell("AF" + rownum).Value = model.SalaryPeriodComputeSum.DV;
+                        worksheet.Cell("AG" + rownum).Value = model.SalaryPeriodComputeSum.TotalCost;
+
+                        worksheet.Cell("AH" + rownum).Value = null;
+
+
 
                         workbook.SaveAs(pathToExcelFile);
                     }
@@ -2618,7 +2735,7 @@ namespace ActionForce.Office.Controllers
                             worksheet.Cell("G" + rownum).Value = item.BankName;
                             worksheet.Cell("H" + rownum).Value = item.FoodCardTotal;
                             worksheet.Cell("I" + rownum).Value = item.FoodCardPaymentAmount;
-                            worksheet.Cell("J" + rownum).Value = item.TotalBalance;
+                            worksheet.Cell("J" + rownum).Value = item.FoodCardTotal;
                             worksheet.Cell("K" + rownum).Value = item.RecordDate;
 
                             rownum++;
@@ -2633,7 +2750,7 @@ namespace ActionForce.Office.Controllers
                         worksheet.Cell("G" + rownum).Value = null;
                         worksheet.Cell("H" + rownum).Value = model.SalaryPeriodComputeSum.FoodCardTotal;
                         worksheet.Cell("I" + rownum).Value = model.SalaryPeriodComputeSum.FoodCardPaymentAmount;
-                        worksheet.Cell("J" + rownum).Value = model.SalaryPeriodComputeSum.TotalBalance;
+                        worksheet.Cell("J" + rownum).Value = model.SalaryPeriodComputeSum.FoodCardTotal;
                         worksheet.Cell("K" + rownum).Value = null;
 
                         workbook.SaveAs(pathToExcelFile);
@@ -2765,61 +2882,83 @@ namespace ActionForce.Office.Controllers
                 {
                     var worksheet = workbook.Worksheets.Add("SalaryPeriod");
 
-                    worksheet.Cell("A1").Value = "SalaryPeriodID";
-                    worksheet.Cell("B1").Value = "EmployeeID";
-                    worksheet.Cell("C1").Value = "EmployeeName";
-                    worksheet.Cell("D1").Value = "SalaryTotal";
-                    worksheet.Cell("E1").Value = "PermitTotal";
-                    worksheet.Cell("F1").Value = "ExtraShiftTotal";
-                    worksheet.Cell("G1").Value = "PremiumTotal";
-                    worksheet.Cell("H1").Value = "FormalTotal";
-                    worksheet.Cell("I1").Value = "OtherTotal";
-                    worksheet.Cell("J1").Value = "FoodCardTotal";
-                    worksheet.Cell("K1").Value = "PrePaymentAmount";
-                    worksheet.Cell("L1").Value = "SalaryCutAmount";
-                    worksheet.Cell("M1").Value = "Currency";
-
-                    //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
-
-                    int rownum = 2;
-
-                    foreach (var item in SalaryRows.OrderBy(x => x.FullName))
+                    if (SalaryPeriodGroupType == 1)
                     {
+                        worksheet.Cell("A1").Value = "SalaryPeriodID";
+                        worksheet.Cell("B1").Value = "EmployeeID";
+                        worksheet.Cell("C1").Value = "EmployeeName";
+                        worksheet.Cell("D1").Value = "SalaryTotal";
+                        worksheet.Cell("E1").Value = "PermitTotal";
+                        worksheet.Cell("F1").Value = "ExtraShiftTotal";
+                        worksheet.Cell("G1").Value = "PremiumTotal";
+                        worksheet.Cell("H1").Value = "FormalTotal";
+                        worksheet.Cell("I1").Value = "OtherTotal";
+                        worksheet.Cell("J1").Value = "PrePaymentAmount";
+                        worksheet.Cell("K1").Value = "SalaryCutAmount";
+                        worksheet.Cell("L1").Value = "PermitPaymentAmount";
+                        worksheet.Cell("M1").Value = "ExtraShiftPaymentAmount";
+                        worksheet.Cell("N1").Value = "PremiumPaymentAmount";
+                        worksheet.Cell("O1").Value = "FormalPaymentAmount";
+                        worksheet.Cell("P1").Value = "OtherPaymentAmount";
+                        worksheet.Cell("Q1").Value = "Currency";
 
-                        worksheet.Cell("A" + rownum).Value = item.SalaryPeriodID;
-                        worksheet.Cell("B" + rownum).Value = item.EmployeeID;
-                        worksheet.Cell("C" + rownum).Value = item.FullName;
+                        //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
 
-                        if (SalaryPeriodGroupType == 1)
+                        int rownum = 2;
+
+                        foreach (var item in SalaryRows.OrderBy(x => x.FullName))
                         {
+
+                            worksheet.Cell("A" + rownum).Value = item.SalaryPeriodID;
+                            worksheet.Cell("B" + rownum).Value = item.EmployeeID;
+                            worksheet.Cell("C" + rownum).Value = item.FullName;
                             worksheet.Cell("D" + rownum).Value = item.SalaryTotal;
                             worksheet.Cell("E" + rownum).Value = item.PermitTotal;
                             worksheet.Cell("F" + rownum).Value = item.ExtraShiftTotal;
                             worksheet.Cell("G" + rownum).Value = item.PremiumTotal;
                             worksheet.Cell("H" + rownum).Value = item.FormalTotal;
                             worksheet.Cell("I" + rownum).Value = item.OtherTotal;
-                            worksheet.Cell("J" + rownum).Value = null;
-                            worksheet.Cell("K" + rownum).Value = item.PrePaymentAmount;
-                            worksheet.Cell("L" + rownum).Value = item.SalaryCutAmount;
+                            worksheet.Cell("J" + rownum).Value = item.PrePaymentAmount;
+                            worksheet.Cell("K" + rownum).Value = item.SalaryCutAmount;
+                            worksheet.Cell("L" + rownum).Value = item.PermitPaymentAmount;
+                            worksheet.Cell("M" + rownum).Value = item.ExtraShiftPaymentAmount;
+                            worksheet.Cell("N" + rownum).Value = item.PremiumPaymentAmount;
+                            worksheet.Cell("O" + rownum).Value = item.FormalPaymentAmount;
+                            worksheet.Cell("P" + rownum).Value = item.OtherPaymentAmount;
+                            worksheet.Cell("Q" + rownum).Value = item.Currency;
+
+                            rownum++;
                         }
-
-                        if (SalaryPeriodGroupType == 2)
-                        {
-                            worksheet.Cell("D" + rownum).Value = null;
-                            worksheet.Cell("E" + rownum).Value = null;
-                            worksheet.Cell("F" + rownum).Value = null;
-                            worksheet.Cell("G" + rownum).Value = null;
-                            worksheet.Cell("H" + rownum).Value = null;
-                            worksheet.Cell("I" + rownum).Value = null;
-                            worksheet.Cell("J" + rownum).Value = item.FoodCardTotal;
-                            worksheet.Cell("K" + rownum).Value = null;
-                            worksheet.Cell("L" + rownum).Value = null;
-                        }
-
-                        worksheet.Cell("M" + rownum).Value = item.Currency;
-
-                        rownum++;
                     }
+
+                    if (SalaryPeriodGroupType == 2)
+                    {
+                        worksheet.Cell("A1").Value = "SalaryPeriodID";
+                        worksheet.Cell("B1").Value = "EmployeeID";
+                        worksheet.Cell("C1").Value = "EmployeeName";
+                        worksheet.Cell("D1").Value = "FoodCardTotal";
+                        worksheet.Cell("E1").Value = "FoodCardPaymentAmount";
+                        worksheet.Cell("F1").Value = "Currency";
+
+                        //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
+
+                        int rownum = 2;
+
+                        foreach (var item in SalaryRows.OrderBy(x => x.FullName))
+                        {
+
+                            worksheet.Cell("A" + rownum).Value = item.SalaryPeriodID;
+                            worksheet.Cell("B" + rownum).Value = item.EmployeeID;
+                            worksheet.Cell("C" + rownum).Value = item.FullName;
+                            worksheet.Cell("D" + rownum).Value = item.FoodCardTotal;
+                            worksheet.Cell("E" + rownum).Value = item.FoodCardPaymentAmount;
+                            worksheet.Cell("F" + rownum).Value = item.Currency; ;
+
+                            rownum++;
+                        }
+                    }
+
+
 
                     string targetpath = Server.MapPath("~/Document/Salary/");
                     string pathToExcelFile = targetpath + FileName;
@@ -2846,52 +2985,60 @@ namespace ActionForce.Office.Controllers
                 {
                     var worksheet = workbook.Worksheets.Add("SalaryPeriodPayment");
 
-                    worksheet.Cell("A1").Value = "SalaryPeriodID";
-                    worksheet.Cell("B1").Value = "EmployeeID";
-                    worksheet.Cell("C1").Value = "EmployeeName";
-                    worksheet.Cell("D1").Value = "PrePaymentAmount";
-                    worksheet.Cell("E1").Value = "SalaryCutAmount";
-                    worksheet.Cell("F1").Value = "BankPaymentAmount";
-                    worksheet.Cell("G1").Value = "ManuelPaymentAmount";
-                    worksheet.Cell("H1").Value = "OtherPaymentAmount";
-                    worksheet.Cell("I1").Value = "FoodCardPaymentAmount";
-                    worksheet.Cell("J1").Value = "Currency";
-
-                    //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
-
-                    int rownum = 2;
-
-                    foreach (var item in SalaryRows.OrderBy(x => x.FullName))
+                    if (SalaryPeriodGroupType == 1)
                     {
 
-                        worksheet.Cell("A" + rownum).Value = item.SalaryPeriodID;
-                        worksheet.Cell("B" + rownum).Value = item.EmployeeID;
-                        worksheet.Cell("C" + rownum).Value = item.FullName;
 
-                        if (SalaryPeriodGroupType == 1)
+                        worksheet.Cell("A1").Value = "SalaryPeriodID";
+                        worksheet.Cell("B1").Value = "EmployeeID";
+                        worksheet.Cell("C1").Value = "EmployeeName";
+                        worksheet.Cell("D1").Value = "BankPaymentAmount";
+                        worksheet.Cell("E1").Value = "ManuelPaymentAmount";
+                        worksheet.Cell("F1").Value = "TransferBalance";
+                        worksheet.Cell("G1").Value = "Currency";
+
+                        int rownum = 2;
+
+                        foreach (var item in SalaryRows.OrderBy(x => x.FullName))
                         {
-                            worksheet.Cell("D" + rownum).Value = item.PrePaymentAmount;
-                            worksheet.Cell("E" + rownum).Value = item.SalaryCutAmount;
-                            worksheet.Cell("F" + rownum).Value = item.BankPaymentAmount;
-                            worksheet.Cell("G" + rownum).Value = item.ManuelPaymentAmount;
-                            worksheet.Cell("H" + rownum).Value = item.OtherPaymentAmount;
-                            worksheet.Cell("I" + rownum).Value = null;
+
+                            worksheet.Cell("A" + rownum).Value = item.SalaryPeriodID;
+                            worksheet.Cell("B" + rownum).Value = item.EmployeeID;
+                            worksheet.Cell("C" + rownum).Value = item.FullName;
+                            worksheet.Cell("D" + rownum).Value = item.BankPaymentAmount;
+                            worksheet.Cell("E" + rownum).Value = item.ManuelPaymentAmount;
+                            worksheet.Cell("F" + rownum).Value = item.TransferBalance;
+                            worksheet.Cell("G" + rownum).Value = item.Currency;
+
+                            rownum++;
                         }
-
-                        if (SalaryPeriodGroupType == 2)
-                        {
-                            worksheet.Cell("D" + rownum).Value = null;
-                            worksheet.Cell("E" + rownum).Value = null;
-                            worksheet.Cell("F" + rownum).Value = null;
-                            worksheet.Cell("G" + rownum).Value = null;
-                            worksheet.Cell("H" + rownum).Value = null;
-                            worksheet.Cell("I" + rownum).Value = item.FoodCardPaymentAmount;
-                        }
-
-                        worksheet.Cell("J" + rownum).Value = item.Currency;
-
-                        rownum++;
                     }
+
+                    if (SalaryPeriodGroupType == 2)
+                    {
+                        worksheet.Cell("A1").Value = "SalaryPeriodID";
+                        worksheet.Cell("B1").Value = "EmployeeID";
+                        worksheet.Cell("C1").Value = "EmployeeName";
+                        worksheet.Cell("D1").Value = "FoodCardTotal";
+                        worksheet.Cell("E1").Value = "FoodCardPaymentAmount";
+                        worksheet.Cell("F1").Value = "Currency";
+
+                        int rownum = 2;
+
+                        foreach (var item in SalaryRows.OrderBy(x => x.FullName))
+                        {
+
+                            worksheet.Cell("A" + rownum).Value = item.SalaryPeriodID;
+                            worksheet.Cell("B" + rownum).Value = item.EmployeeID;
+                            worksheet.Cell("C" + rownum).Value = item.FullName;
+                            worksheet.Cell("D" + rownum).Value = item.FoodCardTotal;
+                            worksheet.Cell("E" + rownum).Value = item.FoodCardPaymentAmount;
+                            worksheet.Cell("F" + rownum).Value = item.Currency; ;
+
+                            rownum++;
+                        }
+                    }
+
 
                     string targetpath = Server.MapPath("~/Document/Salary/");
                     string pathToExcelFile = targetpath + FileName;
@@ -3013,7 +3160,7 @@ namespace ActionForce.Office.Controllers
 
         }
 
-        public bool CreateExcelFoodEarn(string FileName, List<SalaryPeriodCompute> SalaryRows)  // SalaryPeriodGroupType; 1 maaş, 2 setcard
+        public bool CreateExcelFoodEarn(string FileName, List<SalaryPeriodCompute> SalaryRows)  
         {
             bool isSuccess = false;
 
@@ -3028,8 +3175,6 @@ namespace ActionForce.Office.Controllers
                     worksheet.Cell("C1").Value = "EmployeeName";
                     worksheet.Cell("D1").Value = "FoodCardTotal";
                     worksheet.Cell("E1").Value = "Currency";
-
-                    //worksheet.Cell("A2").FormulaA1 = "=MID(A1, 7, 5)";
 
                     int rownum = 2;
 
@@ -3227,8 +3372,11 @@ namespace ActionForce.Office.Controllers
 
                                     compute.PrePaymentAmount = item.PrePaymentAmount != null ? item.PrePaymentAmount : compute.PrePaymentAmount;
                                     compute.SalaryCutAmount = item.SalaryCutAmount != null ? item.SalaryCutAmount : compute.SalaryCutAmount;
-
-                                    compute.TotalBalance = (compute.TotalProgress + compute.TotalPaymentAmount);
+                                    compute.PermitPaymentAmount = item.PermitPaymentAmount != null ? item.PermitPaymentAmount : compute.PermitPaymentAmount;
+                                    compute.ExtraShiftPaymentAmount = item.ExtraShiftPaymentAmount != null ? item.ExtraShiftPaymentAmount : compute.ExtraShiftPaymentAmount;
+                                    compute.PremiumPaymentAmount = item.PremiumPaymentAmount != null ? item.PremiumPaymentAmount : compute.PremiumPaymentAmount;
+                                    compute.FormalPaymentAmount = item.FormalPaymentAmount != null ? item.FormalPaymentAmount : compute.FormalPaymentAmount;
+                                    compute.OtherPaymentAmount = item.OtherPaymentAmount != null ? item.OtherPaymentAmount : compute.OtherPaymentAmount;
 
                                     model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.EmployeeName}", Message = $"Güncellendi" });
                                 }
@@ -3251,6 +3399,7 @@ namespace ActionForce.Office.Controllers
                                         newcompute.FoodCard = employee.FoodCardNumber;
                                         newcompute.IBAN = employee.IBAN;
                                         newcompute.BankName = bankName;
+                                        newcompute.SalaryPaymentTypeID = employee.SalaryPaymentTypeID;
 
                                         newcompute.SalaryTotal = item.SalaryTotal != null ? item.SalaryTotal : 0;
                                         newcompute.PermitTotal = item.PermitTotal != null ? item.PermitTotal : 0;
@@ -3258,18 +3407,26 @@ namespace ActionForce.Office.Controllers
                                         newcompute.PremiumTotal = item.PremiumTotal != null ? item.PremiumTotal : 0;
                                         newcompute.FormalTotal = item.FormalTotal != null ? item.FormalTotal : 0;
                                         newcompute.OtherTotal = item.OtherTotal != null ? item.OtherTotal : 0;
+
                                         newcompute.PrePaymentAmount = item.PrePaymentAmount != null ? item.PrePaymentAmount : 0;
                                         newcompute.SalaryCutAmount = item.SalaryCutAmount != null ? item.SalaryCutAmount : 0;
+                                        newcompute.PermitPaymentAmount = item.PermitPaymentAmount != null ? item.PermitPaymentAmount : 0;
+                                        newcompute.ExtraShiftPaymentAmount = item.ExtraShiftPaymentAmount != null ? item.ExtraShiftPaymentAmount : 0;
+                                        newcompute.PremiumPaymentAmount = item.PremiumPaymentAmount != null ? item.PremiumPaymentAmount : 0;
+                                        newcompute.FormalPaymentAmount = item.FormalPaymentAmount != null ? item.FormalPaymentAmount : 0;
+                                        newcompute.OtherPaymentAmount = item.OtherPaymentAmount != null ? item.OtherPaymentAmount : 0;
 
                                         newcompute.FoodCardTotal = 0;
-                                        newcompute.BankPaymentAmount = 0;
-                                        newcompute.ManuelPaymentAmount = 0;
-                                        newcompute.OtherPaymentAmount = 0;
                                         newcompute.FoodCardPaymentAmount = 0;
 
-                                        //newcompute.TotalProgress = (newcompute.SalaryTotal + newcompute.PermitTotal + newcompute.ExtraShiftTotal + newcompute.PremiumTotal + newcompute.FormalTotal + newcompute.OtherTotal);
-                                        //newcompute.TotalPaymentAmount = (newcompute.PrePaymentAmount + newcompute.SalaryCutAmount + newcompute.BankPaymentAmount + newcompute.ManuelPaymentAmount + newcompute.OtherPaymentAmount);
-                                        newcompute.TotalBalance = (newcompute.TotalProgress + newcompute.TotalPaymentAmount);
+                                        newcompute.BankPaymentAmount = 0;
+                                        newcompute.ManuelPaymentAmount = 0;
+                                        newcompute.TransferBalance = 0;
+
+                                        newcompute.NetCost = 0;
+                                        newcompute.SSK = 0;
+                                        newcompute.GV = 0;
+                                        newcompute.DV = 0;
 
                                         newcompute.RecordDate = DateTime.UtcNow.AddHours(3);
                                         newcompute.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
@@ -3445,69 +3602,13 @@ namespace ActionForce.Office.Controllers
                             {
                                 if (compute != null)
                                 {
-                                    compute.PrePaymentAmount = item.PrePaymentAmount != null ? item.PrePaymentAmount : compute.PrePaymentAmount;
-                                    compute.SalaryCutAmount = item.SalaryCutAmount != null ? item.SalaryCutAmount : compute.SalaryCutAmount;
                                     compute.BankPaymentAmount = item.BankPaymentAmount != null ? item.BankPaymentAmount : compute.BankPaymentAmount;
                                     compute.ManuelPaymentAmount = item.ManuelPaymentAmount != null ? item.ManuelPaymentAmount : compute.ManuelPaymentAmount;
-                                    compute.OtherPaymentAmount = item.OtherPaymentAmount != null ? item.OtherPaymentAmount : compute.OtherPaymentAmount;
-
+                                    compute.TransferBalance = item.TransferBalance != null ? item.TransferBalance : compute.TransferBalance;
                                     compute.Currency = item.Currency;
-
-                                    //compute.TotalPaymentAmount = (compute.PrePaymentAmount + compute.SalaryCutAmount + compute.BankPaymentAmount + compute.ManuelPaymentAmount + compute.OtherPaymentAmount);
-                                    compute.TotalBalance = (compute.TotalProgress + compute.TotalPaymentAmount);
 
                                     model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.EmployeeName}", Message = $"Güncellendi" });
                                 }
-                                //else
-                                //{
-                                //    var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
-                                //    string bankName = "";
-
-                                //    if (employee != null)
-                                //    {
-                                //        bankName = Db.Bank.FirstOrDefault(x => x.ID == employee.BankID)?.ShortName ?? "";
-
-                                //        SalaryPeriodCompute newcompute = new SalaryPeriodCompute();
-
-                                //        newcompute.SalaryPeriodID = salaryPeriod.ID;
-                                //        newcompute.EmployeeID = employee.EmployeeID;
-                                //        newcompute.FullName = employee.FullName;
-                                //        newcompute.IdentityNumber = employee.IdentityNumber;
-                                //        newcompute.PhoneNumber = employee.CountryPhoneCode + employee.SmsNumber;
-                                //        newcompute.FoodCard = employee.FoodCardNumber;
-                                //        newcompute.IBAN = employee.IBAN;
-                                //        newcompute.BankName = bankName;
-
-                                //        newcompute.SalaryTotal = item.SalaryTotal != null ? item.SalaryTotal : 0;
-                                //        newcompute.PermitTotal = item.PermitTotal != null ? item.PermitTotal : 0;
-                                //        newcompute.ExtraShiftTotal = item.ExtraShiftTotal != null ? item.ExtraShiftTotal : 0;
-                                //        newcompute.PremiumTotal = item.PremiumTotal != null ? item.PremiumTotal : 0;
-                                //        newcompute.FormalTotal = item.FormalTotal != null ? item.FormalTotal : 0;
-                                //        newcompute.OtherTotal = item.OtherTotal != null ? item.OtherTotal : 0;
-                                //        newcompute.PrePaymentAmount = item.PrePaymentAmount != null ? item.PrePaymentAmount : 0;
-                                //        newcompute.SalaryCutAmount = item.SalaryCutAmount != null ? item.SalaryCutAmount : 0;
-
-                                //        newcompute.FoodCardTotal = 0;
-                                //        newcompute.BankPaymentAmount = 0;
-                                //        newcompute.ManuelPaymentAmount = 0;
-                                //        newcompute.OtherPaymentAmount = 0;
-                                //        newcompute.FoodCardPaymentAmount = 0;
-
-                                //        newcompute.TotalProgress = (newcompute.SalaryTotal + newcompute.PermitTotal + newcompute.ExtraShiftTotal + newcompute.PremiumTotal + newcompute.FormalTotal + newcompute.OtherTotal);
-                                //        newcompute.TotalPaymentAmount = (newcompute.PrePaymentAmount + newcompute.SalaryCutAmount + newcompute.BankPaymentAmount + newcompute.ManuelPaymentAmount + newcompute.OtherPaymentAmount);
-                                //        newcompute.TotalBalance = (newcompute.TotalProgress + newcompute.TotalPaymentAmount);
-
-                                //        newcompute.RecordDate = DateTime.UtcNow.AddHours(3);
-                                //        newcompute.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                                //        newcompute.RecordIP = OfficeHelper.GetIPAddress();
-                                //        newcompute.UID = Guid.NewGuid();
-                                //        newcompute.Currency = item.Currency;
-
-                                //        computeList.Add(newcompute);
-
-                                //        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.EmployeeName}", Message = $"Eklendi" });
-                                //    }
-                                //}
                             }
                             catch (DbEntityValidationException ex)
                             {
@@ -3668,7 +3769,6 @@ namespace ActionForce.Office.Controllers
                                 {
 
                                     compute.FoodCardTotal = item.FoodCardTotal != null ? item.FoodCardTotal : compute.FoodCardTotal;
-                                    //compute.TotalBalance = (compute.FoodCardTotal + compute.FoodCardPaymentAmount);
 
                                     model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.EmployeeName}", Message = $"Güncellendi" });
                                 }
@@ -3691,6 +3791,7 @@ namespace ActionForce.Office.Controllers
                                         newcompute.FoodCard = employee.FoodCardNumber;
                                         newcompute.IBAN = employee.IBAN;
                                         newcompute.BankName = bankName;
+                                        newcompute.SalaryPaymentTypeID = employee.SalaryPaymentTypeID;
 
                                         newcompute.SalaryTotal = 0;
                                         newcompute.PermitTotal = 0;
@@ -3698,18 +3799,25 @@ namespace ActionForce.Office.Controllers
                                         newcompute.PremiumTotal = 0;
                                         newcompute.FormalTotal = 0;
                                         newcompute.OtherTotal = 0;
+
                                         newcompute.PrePaymentAmount = 0;
                                         newcompute.SalaryCutAmount = 0;
+                                        newcompute.PermitPaymentAmount = 0;
+                                        newcompute.ExtraShiftPaymentAmount = 0;
+                                        newcompute.PremiumPaymentAmount = 0;
+                                        newcompute.FormalPaymentAmount = 0;
+                                        newcompute.OtherPaymentAmount = 0;
 
-                                        newcompute.FoodCardTotal = item.FoodCardTotal != null ? item.FoodCardTotal : 0;
                                         newcompute.BankPaymentAmount = 0;
                                         newcompute.ManuelPaymentAmount = 0;
-                                        newcompute.OtherPaymentAmount = 0;
-                                        newcompute.FoodCardPaymentAmount = 0;
+                                        newcompute.TransferBalance = 0;
+                                        newcompute.FoodCardTotal = item.FoodCardTotal != null ? item.FoodCardTotal : 0;
+                                        newcompute.FoodCardPaymentAmount = 0; 
 
-                                        newcompute.TotalProgress = 0;
-                                        newcompute.TotalPaymentAmount = 0;
-                                        //newcompute.TotalBalance = (newcompute.FoodCardTotal + newcompute.FoodCardPaymentAmount);
+                                        newcompute.NetCost = 0;
+                                        newcompute.SSK = 0;
+                                        newcompute.GV = 0;
+                                        newcompute.DV = 0;
 
                                         newcompute.RecordDate = DateTime.UtcNow.AddHours(3);
                                         newcompute.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
@@ -3881,60 +3989,10 @@ namespace ActionForce.Office.Controllers
                                 {
 
                                     compute.FoodCardPaymentAmount = item.FoodCardPaymentAmount != null ? item.FoodCardPaymentAmount : compute.FoodCardPaymentAmount;
-                                   // compute.TotalBalance = (compute.FoodCardTotal + compute.FoodCardPaymentAmount);
 
                                     model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.EmployeeName}", Message = $"Güncellendi" });
                                 }
-                                //else
-                                //{
-                                //    var employee = Db.Employee.FirstOrDefault(x => x.EmployeeID == item.EmployeeID);
-                                //    string bankName = "";
-
-                                //    if (employee != null)
-                                //    {
-                                //        bankName = Db.Bank.FirstOrDefault(x => x.ID == employee.BankID)?.ShortName ?? "";
-
-                                //        SalaryPeriodCompute newcompute = new SalaryPeriodCompute();
-
-                                //        newcompute.SalaryPeriodID = salaryPeriod.ID;
-                                //        newcompute.EmployeeID = employee.EmployeeID;
-                                //        newcompute.FullName = employee.FullName;
-                                //        newcompute.IdentityNumber = employee.IdentityNumber;
-                                //        newcompute.PhoneNumber = employee.CountryPhoneCode + employee.SmsNumber;
-                                //        newcompute.FoodCard = employee.FoodCardNumber;
-                                //        newcompute.IBAN = employee.IBAN;
-                                //        newcompute.BankName = bankName;
-
-                                //        newcompute.SalaryTotal = 0;
-                                //        newcompute.PermitTotal = 0;
-                                //        newcompute.ExtraShiftTotal = 0;
-                                //        newcompute.PremiumTotal = 0;
-                                //        newcompute.FormalTotal = 0;
-                                //        newcompute.OtherTotal = 0;
-                                //        newcompute.PrePaymentAmount = 0;
-                                //        newcompute.SalaryCutAmount = 0;
-
-                                //        newcompute.FoodCardTotal = item.FoodCardTotal != null ? item.FoodCardTotal : 0;
-                                //        newcompute.BankPaymentAmount = 0;
-                                //        newcompute.ManuelPaymentAmount = 0;
-                                //        newcompute.OtherPaymentAmount = 0;
-                                //        newcompute.FoodCardPaymentAmount = 0;
-
-                                //        newcompute.TotalProgress = 0;
-                                //        newcompute.TotalPaymentAmount = 0;
-                                //        newcompute.TotalBalance = (newcompute.FoodCardTotal + newcompute.FoodCardPaymentAmount);
-
-                                //        newcompute.RecordDate = DateTime.UtcNow.AddHours(3);
-                                //        newcompute.RecordEmployeeID = model.Authentication.ActionEmployee.EmployeeID;
-                                //        newcompute.RecordIP = OfficeHelper.GetIPAddress();
-                                //        newcompute.UID = Guid.NewGuid();
-                                //        newcompute.Currency = item.Currency;
-
-                                //        computeList.Add(newcompute);
-
-                                //        model.Result.InfoKeyList.Add(new InfoKey() { IsSuccess = true, Name = $"{item.EmployeeName}", Message = $"Eklendi" });
-                                //    }
-                                //}
+                                
                             }
                             catch (DbEntityValidationException ex)
                             {
